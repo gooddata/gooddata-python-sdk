@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
+**conditional_formatting** | [**JsonApiAttributeOutAttributesConditionalFormatting**](JsonApiAttributeOutAttributesConditionalFormatting.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **granularity** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 

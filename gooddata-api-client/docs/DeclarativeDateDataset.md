@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **granularities_formatting** | [**GranularitiesFormatting**](GranularitiesFormatting.md) |  | 
 **id** | **str** | Date dataset ID. | 
 **title** | **str** | Date dataset title. | 
+**conditional_formatting** | [**ObjectConditionalFormatting**](ObjectConditionalFormatting.md) |  | [optional] 
 **description** | **str** | Date dataset description. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]

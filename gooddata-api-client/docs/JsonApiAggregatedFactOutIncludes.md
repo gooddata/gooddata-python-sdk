@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**meta** | [**JsonApiAggregatedFactOutMeta**](JsonApiAggregatedFactOutMeta.md) |  | [optional] 
+**meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiFactOutRelationships**](JsonApiFactOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **attributes** | [**JsonApiFactOutAttributes**](JsonApiFactOutAttributes.md) |  | [optional] 

@@ -52,6 +52,48 @@ def test_an_unmodelled_part_type_is_kept_not_dropped():
     assert "kda" in render_answer_text(result)
 
 
+def test_a_document_part_is_kept_verbatim_without_an_unknown_type_warning(caplog: pytest.LogCaptureFixture) -> None:
+    part = {
+        "type": "document",
+        "document_ref": "document_1",
+        "format": "aac-v1",
+        "document": {
+            "id": "sales_overview",
+            "type": "document",
+            "title": "Sales overview",
+            "period": {"start": "2026-01-01", "end": "2026-06-30"},
+            "pages": [
+                {
+                    "id": "page1",
+                    "kind": "cover",
+                    "format": "widescreen",
+                    "layout": {
+                        "column": [{"id": "coverTitle", "weight": 2, "heading": "{documentName}", "style": "h1"}]
+                    },
+                },
+                {
+                    "id": "page2",
+                    "kind": "content",
+                    "format": "widescreen",
+                    "layout": {
+                        "column": [
+                            {"id": "pageTitle", "weight": 2, "heading": "Revenue", "style": "h1"},
+                            {"id": "widget1", "weight": 9, "visualization": "revenue_trend", "date": "date"},
+                        ]
+                    },
+                },
+            ],
+        },
+        "page_count": 2,
+        "base_document_id": None,
+        "saved_document_id": None,
+    }
+    with caplog.at_level("WARNING", logger="gooddata_eval.core.chat.sse_client"):
+        result = parse_sse_lines(_multipart_lines({"type": "text", "text": "I've put together a document."}, part))
+    assert result.unhandled_parts == [part]
+    assert "unknown multipart part type" not in caplog.text
+
+
 def test_an_unresolved_visualization_part_is_not_treated_as_content():
     result = parse_sse_lines(_multipart_lines({"type": "visualization", "visualization": None}))
     assert result.unhandled_parts == []
@@ -70,6 +112,7 @@ def test_known_part_types_matches_the_documented_gen_ai_union():
         "visualization",
         "dashboard",
         "dashboardPatch",
+        "document",
         "kda",
         "whatIf",
         "searchResults",
@@ -112,7 +155,7 @@ def test_a_huge_unmodelled_part_is_truncated():
     assert len(rendered) < 3_000
 
 
-@pytest.mark.parametrize("ptype", ["dashboard", "dashboardPatch", "kda", "whatIf", "clarifyingQuestions"])
+@pytest.mark.parametrize("ptype", ["dashboard", "dashboardPatch", "report", "kda", "whatIf", "clarifyingQuestions"])
 def test_no_known_part_type_is_silently_dropped(ptype):
     result = parse_sse_lines(_multipart_lines({"type": ptype, "payload": {"a": 1}}))
     assert result.unhandled_parts, f"{ptype} was dropped"

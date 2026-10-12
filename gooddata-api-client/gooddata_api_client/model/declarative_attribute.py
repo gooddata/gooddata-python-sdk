@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_label import DeclarativeLabel
     from gooddata_api_client.model.label_identifier import LabelIdentifier
+    from gooddata_api_client.model.object_conditional_formatting import ObjectConditionalFormatting
     globals()['DeclarativeLabel'] = DeclarativeLabel
     globals()['LabelIdentifier'] = LabelIdentifier
+    globals()['ObjectConditionalFormatting'] = ObjectConditionalFormatting
 
 
 class DeclarativeAttribute(ModelNormal):
@@ -129,6 +131,7 @@ class DeclarativeAttribute(ModelNormal):
             'id': (str,),  # noqa: E501
             'labels': ([DeclarativeLabel],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'conditional_formatting': (ObjectConditionalFormatting,),  # noqa: E501
             'default_view': (LabelIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
@@ -151,6 +154,7 @@ class DeclarativeAttribute(ModelNormal):
         'id': 'id',  # noqa: E501
         'labels': 'labels',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'default_view': 'defaultView',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
@@ -210,6 +214,7 @@ class DeclarativeAttribute(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this attribute is hidden from AI search results.. [optional]  # noqa: E501
@@ -314,6 +319,7 @@ class DeclarativeAttribute(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
             is_hidden (bool): If true, this attribute is hidden from AI search results.. [optional]  # noqa: E501

@@ -184,6 +184,17 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Log scores and traces to Langfuse (requires --langfuse-dataset and LANGFUSE_* env vars).",
     )
     run.add_argument(
+        "--tag",
+        dest="tags",
+        action="append",
+        default=[],
+        type=_parse_tag,
+        metavar="TAG",
+        help="Custom tag for every Langfuse trace gd-eval writes, next to the automatic ones. "
+        "Repeat for several tags. Applied wherever traces are written: single-turn kinds only "
+        "with --langfuse, agentic kinds whenever LANGFUSE_* env vars are set.",
+    )
+    run.add_argument(
         "--agent-id",
         dest="agent_id",
         help=(
@@ -377,6 +388,14 @@ def _parse_model_arg(val: str) -> tuple[str | None, str]:
     return None, val
 
 
+def _parse_tag(val: str) -> str:
+    """Strip one --tag value and reject a blank one, which Langfuse would store as an empty tag."""
+    tag = val.strip()
+    if not tag:
+        raise argparse.ArgumentTypeError("tag must not be blank")
+    return tag
+
+
 def _make_progress_callbacks(console: Console):
     """Build (on_item_start, on_run_done, on_item_done) callbacks that stream progress.
 
@@ -549,6 +568,7 @@ def _run(config: RunConfig) -> int:
                     model_id=resolved.model_id,
                     provider_type=resolved.provider_type,
                     reasoning_effort=config.reasoning_effort,
+                    tags=config.tags,
                 )
 
                 def on_langfuse_item_done(
@@ -574,6 +594,7 @@ def _run(config: RunConfig) -> int:
                     model_version=resolved.model_id,
                     reasoning_effort=config.reasoning_effort,
                     use_langfuse=config.log_to_langfuse,
+                    tags=config.tags,
                     run_ts=run_ts,
                     on_item_start=on_item_start,
                     on_item_done=on_item_done,
@@ -728,6 +749,7 @@ def main(argv: list[str] | None = None) -> int:
             agent_id=args.agent_id or os.environ.get("GD_EVAL_AGENT_ID"),
             turn_timeout_s=args.turn_timeout,
             item_timeout_s=args.item_timeout,
+            tags=tuple(dict.fromkeys(args.tags)),
         )
         return _run(config)
     except (

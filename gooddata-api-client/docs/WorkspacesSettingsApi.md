@@ -141,7 +141,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_workspace_setting_post_optional_id_document = JsonApiWorkspaceSettingPostOptionalIdDocument(
         data=JsonApiWorkspaceSettingPostOptionalId(
-            attributes=JsonApiOrganizationSettingInAttributes(
+            attributes=JsonApiUserSettingInAttributes(
                 content={},
                 type="TIMEZONE",
             ),
@@ -804,7 +804,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_workspace_setting_patch_document = JsonApiWorkspaceSettingPatchDocument(
         data=JsonApiWorkspaceSettingPatch(
-            attributes=JsonApiOrganizationSettingInAttributes(
+            attributes=JsonApiUserSettingInAttributes(
                 content={},
                 type="TIMEZONE",
             ),
@@ -1182,7 +1182,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_workspace_setting_in_document = JsonApiWorkspaceSettingInDocument(
         data=JsonApiWorkspaceSettingIn(
-            attributes=JsonApiOrganizationSettingInAttributes(
+            attributes=JsonApiUserSettingInAttributes(
                 content={},
                 type="TIMEZONE",
             ),

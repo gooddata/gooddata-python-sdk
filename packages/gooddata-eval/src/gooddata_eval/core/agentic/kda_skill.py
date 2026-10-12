@@ -7,6 +7,9 @@ import logging
 import os
 from dataclasses import dataclass, field
 
+import httpx
+
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -25,12 +28,13 @@ from gooddata_eval.core.agentic._trace_linker import (
     utc_now,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatClient
+from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
     ChatResult,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     build_latency_breakdown,
@@ -191,6 +195,10 @@ class KdaRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # Why the simulated-user loop stopped -- see LoopExit. `triggered=False` alone cannot
+    # separate a refusal from a run that hit max_iterations while still on track.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    turns_used: int = 0
 
 
 @dataclass
@@ -232,6 +240,7 @@ def run_agentic_kda_skill(
     initial_conversation_id: str | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
+    user_context: dict | None = None,
 ) -> AgenticKdaSummary:
     """Run the KDA-skill agentic evaluation K times and return a summary.
 
@@ -249,7 +258,12 @@ def run_agentic_kda_skill(
         raise ValueError(f"k must be >= 1, got {k}")
     run_results: list[KdaRunResult] = []
     client = ChatClient(
-        host=host, token=token, workspace_id=workspace_id, reasoning_effort=reasoning_effort, agent_id=agent_id
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
     )
 
     def _run_once(conv_id: str) -> KdaRunResult:
@@ -278,13 +292,24 @@ def run_agentic_kda_skill(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
+        # simply runs out of range() is labelled correctly with no trailing else.
+        exit_reason = LoopExit.BUDGET_EXHAUSTED
+        turns_used = 0
         turns = 0
         steps = 0
 
         for iteration in range(max_iterations):
+            turns_used = iteration + 1
             try:
                 chat_result = client.send_message(conv_id, current_question)
-            except Exception as exc:  # noqa: BLE001 -- end this run, not the whole assertion
+            except (ChatError, httpx.HTTPError) as exc:
+                # Narrow on purpose. A bare `except Exception` here also swallowed bugs in
+                # this package -- a TypeError in the accumulator came back as a tidy failed
+                # run with exit_reason=CHAT_ERROR, indistinguishable from a real GoodData
+                # fault. ChatError covers what ChatClient raises deliberately; httpx.HTTPError
+                # covers the transport faults it re-raises untouched mid-stream
+                # (RemoteProtocolError, ReadError). Anything else is ours and should surface.
                 _log.warning("KDA send_message failed for conversation %s: %s", conv_id, exc)
                 partial = getattr(exc, "partial_result", None)
                 if partial is not None:
@@ -295,6 +320,7 @@ def run_agentic_kda_skill(
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
+                exit_reason = LoopExit.CHAT_ERROR
                 break
             turns += 1
             steps += chat_result.reasoning_step_count
@@ -311,8 +337,10 @@ def run_agentic_kda_skill(
                 # final either way -- execute_result may still be None (e.g. the skill's
                 # execute tool isn't available at all when data-sharing is off for the org).
                 turn_wall_clock_sec = chat_result.turn_wall_clock_sec
+                exit_reason = LoopExit.SUCCESS
                 break
             if not response_text:
+                exit_reason = LoopExit.AGENT_SILENT
                 break
             if iteration >= max_iterations - 1:
                 break
@@ -328,6 +356,7 @@ def run_agentic_kda_skill(
                 disambiguated = True
             except Exception as exc:  # noqa: BLE001 -- safety net, not the assertion; end only this run
                 _log.warning("Simulated KDA user reply failed for conversation %s: %s", conv_id, exc)
+                exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
 
         ev = _evaluate_run(create_args, execute_result, turn_completed, disambiguated)
@@ -343,6 +372,8 @@ def run_agentic_kda_skill(
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            exit_reason=exit_reason,
+            turns_used=turns_used,
         )
 
     try:
@@ -382,6 +413,29 @@ class KdaSkillAssertionError(AgenticAssertionError):
     """Raised when a KDA-skill evaluation fails."""
 
 
+def _run_detail(run: KdaRunResult) -> dict:
+    """The diagnostic fields for ONE run, shared by the best run and every failing one.
+
+    Extracted so a failing run is described by exactly the same keys as the winning run --
+    for this kind that means which phase the run reached before it stopped.
+    """
+    ev = run.evaluation
+    return {
+        "triggered": ev.triggered,
+        "executed": ev.executed,
+        "success": ev.success,
+        "turn_completed": ev.turn_completed,
+        "disambiguated": ev.disambiguated,
+        "actual_create_args": run.actual_create_args,
+        "actual_execute_result": run.actual_execute_result,
+        # Why the loop stopped -- see LoopExit. Per-run rather than best-only: on a failing
+        # run it is the first thing worth reading.
+        "exit_reason": run.exit_reason.value,
+        "turns_used": run.turns_used,
+        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+    }
+
+
 def evaluate_agentic_kda_skill(
     host: str,
     token: str,
@@ -400,6 +454,7 @@ def evaluate_agentic_kda_skill(
     run_metadata_extra: dict | None = None,
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
+    user_context: dict | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run KDA-skill evaluation, log to Langfuse, and raise KdaSkillAssertionError on failure.
@@ -420,6 +475,7 @@ def evaluate_agentic_kda_skill(
         initial_conversation_id=initial_conversation_id,
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
+        user_context=user_context,
     )
 
     if langfuse is not None and dataset_item_id:
@@ -497,16 +553,16 @@ def evaluate_agentic_kda_skill(
 
     best = summary.best
     ev = best.evaluation
-    detail = {
-        "triggered": ev.triggered,
-        "executed": ev.executed,
-        "success": ev.success,
-        "turn_completed": ev.turn_completed,
-        "disambiguated": ev.disambiguated,
-        "actual_create_args": best.actual_create_args,
-        "actual_execute_result": best.actual_execute_result,
-        "latency_breakdown": build_latency_breakdown(best.tool_call_events, best.reasoning_step_events),
-    }
+    # max_iterations is the same for every run, so it stays at the item level rather than
+    # being repeated into each failing run's detail.
+    detail = {**_run_detail(best), "max_iterations": max_iterations}
+    # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
+    # cannot disagree about which runs failed.
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
@@ -524,6 +580,7 @@ def evaluate_agentic_kda_skill(
         exc.detail = detail
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
+        exc.failed_runs = failed_runs
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -532,4 +589,7 @@ def evaluate_agentic_kda_skill(
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        # Also on the success path: pass@K clears the gate with one passing run, so a
+        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        failed_runs=failed_runs,
     )

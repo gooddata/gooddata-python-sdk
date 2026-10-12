@@ -32,9 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_agent_out import JsonApiAgentOut
+    from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
     from gooddata_api_client.model.json_api_agent_out_includes import JsonApiAgentOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAgentOut'] = JsonApiAgentOut
+    globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
     globals()['JsonApiAgentOutIncludes'] = JsonApiAgentOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -97,6 +99,7 @@ class JsonApiAgentOutDocument(ModelNormal):
             'data': (JsonApiAgentOut,),  # noqa: E501
             'included': ([JsonApiAgentOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class JsonApiAgentOutDocument(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -156,6 +160,7 @@ class JsonApiAgentOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiAgentOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,6 +252,7 @@ class JsonApiAgentOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiAgentOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

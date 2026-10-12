@@ -38,6 +38,24 @@ def test_parse_args_agent_id_defaults_to_none():
     assert args.agent_id is None
 
 
+def test_parse_args_tag_is_repeatable():
+    args = cli_main.parse_args(
+        ["run", "--host", "h", "--workspace", "w", "--dataset", "d", "--tag", "acme", "--tag", "nightly"]
+    )
+    assert args.tags == ["acme", "nightly"]
+
+
+def test_parse_args_tags_default_to_empty():
+    args = cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d"])
+    assert args.tags == []
+
+
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_parse_args_rejects_a_blank_tag(blank):
+    with pytest.raises(SystemExit):
+        cli_main.parse_args(["run", "--host", "h", "--workspace", "w", "--dataset", "d", "--tag", blank])
+
+
 def test_cli_run_end_to_end(monkeypatch, tmp_path, fixtures_dir):
     # Stub connection + model activation + chat backend so no network is needed.
     monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
@@ -372,7 +390,7 @@ def test_cli_langfuse_sink_called_per_item(monkeypatch, fixtures_dir):
     langfuse_calls: list = []
 
     class _FakeSink:
-        def __init__(self, dataset_name, run_name, model_id="", provider_type="", reasoning_effort=None): ...
+        def __init__(self, dataset_name, run_name, model_id="", provider_type="", reasoning_effort=None, tags=()): ...
         def log_item(self, report, *, dataset_item_id):
             langfuse_calls.append(dataset_item_id)
 
@@ -878,6 +896,77 @@ def test_cli_passes_concurrency_to_the_agentic_runner(monkeypatch, tmp_path):
 
     assert exit_code == 0
     assert captured["concurrency"] == 3
+
+
+def test_cli_passes_custom_tags_to_both_langfuse_paths(monkeypatch):
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())
+    monkeypatch.setattr(
+        cli_main,
+        "_load_dataset",
+        lambda config: [
+            DatasetItem(
+                id="q1", dataset_name="d", test_kind="agentic_general_question", question="q", expected_output="a"
+            )
+        ],
+    )
+    monkeypatch.setattr(cli_main, "run_items", lambda items, backend, **kw: EvalReport(model="gpt-5.2"))
+
+    sink_kwargs: dict = {}
+
+    class _FakeSink:
+        def __init__(self, **kwargs):
+            sink_kwargs.update(kwargs)
+
+        def log_item(self, report, *, dataset_item_id): ...
+
+    monkeypatch.setattr(cli_main, "LangfuseSink", _FakeSink)
+
+    agentic_kwargs: dict = {}
+
+    def _fake_run_agentic(items, **kwargs):
+        agentic_kwargs.update(kwargs)
+        return EvalReport(model="gpt-5.2")
+
+    monkeypatch.setattr(cli_main, "run_agentic_items", _fake_run_agentic)
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--langfuse-dataset",
+            "my_dataset",
+            "--langfuse",
+            "--tag",
+            "acme",
+            "--tag",
+            " nightly ",
+            "--tag",
+            "acme",
+        ]
+    )
+
+    assert exit_code == 0
+    assert sink_kwargs["tags"] == ("acme", "nightly")
+    assert agentic_kwargs["tags"] == ("acme", "nightly")
 
 
 def test_cli_timers_flag_enables_timer_output(monkeypatch):

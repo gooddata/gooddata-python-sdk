@@ -24,7 +24,7 @@ from datetime import date
 from typing import ClassVar, Literal
 
 from gooddata_sdk import GoodDataSdk
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
@@ -61,6 +61,7 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ChatResult,
     CreatedVisualization,
+    LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
     shift_and_index_events,
@@ -99,6 +100,12 @@ class TurnDefinition(BaseModel):
     over. ``set_answers`` are what the user replies, in order, when the assistant asks a
     legitimate question on this turn -- the only knowledge the context-mode simulated user
     has beyond the conversation itself.
+
+    ``user_context`` is the ``userContext`` (dashboard/widget scope) the user has attached
+    from this turn on, as in the UI: it sticks to later turns until another turn sets it,
+    and setting it to null clears it. A turn that leaves it out keeps the current one. Its
+    clarification replies carry it too, since gen-ai treats a message without a context as
+    cleared.
     """
 
     turn_id: str
@@ -111,6 +118,7 @@ class TurnDefinition(BaseModel):
     expected_tool_args: dict | None = None
     depends_on: list[str] = Field(default_factory=list)
     set_answers: list[str] = Field(default_factory=list)
+    user_context: dict | None = None
 
 
 class ConversationFixture(BaseModel):
@@ -120,6 +128,17 @@ class ConversationFixture(BaseModel):
     dataset_name: str = "conversation"
     expected_skills: list[str]
     turns: list[TurnDefinition]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _reject_fixture_level_user_context(cls, data: object) -> object:
+        # Unknown keys are ignored, so a context placed here would be dropped without a trace.
+        if isinstance(data, dict) and "user_context" in data:
+            raise ValueError(
+                "user_context is not read from the conversation fixture; put it in the item "
+                "metadata or input (the context of the first turn), or on a turn"
+            )
+        return data
 
 
 ReplyRecordKind = Literal["confirmation", "question", "no_action", "turn_incomplete"]
@@ -168,6 +187,10 @@ class TurnResult(BaseModel):
     active_skills: list[str] = Field(default_factory=list)
     clarification_turns_used: int = 0
     output_correct: bool | None = None
+    # Why this turn's clarification loop stopped -- see LoopExit. output_present=False alone
+    # cannot separate a turn that ran out of clarification budget from one where the agent
+    # went silent, and skill_success folds both into the same failure.
+    exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     mismatches: list[str] = Field(default_factory=list)
     clarifications: list[ClarificationRecord] = Field(default_factory=list)
     depends_on: list[str] = Field(default_factory=list)
@@ -219,6 +242,9 @@ class TurnResult(BaseModel):
         # What skill_routing was judged against -- without it, a turn showing
         # skill_routing=True and activated_skills=[] looks like a scoring bug.
         "active_skills",
+        # Why the clarification loop ended on this turn, and how much of the budget it
+        # took to get there -- exit_reason alone cannot be related to the limit without it.
+        "exit_reason",
         "clarification_turns_used",
         "mismatches",
         "clarifications",
@@ -569,6 +595,10 @@ class ConversationResult:
     full_skill_coverage: bool
     conversation_success: bool
     total_clarification_turns: int
+    # The configured per-turn clarification budget, so a reader can tell a turn that used
+    # its whole allowance from one that stopped early. Every other agentic kind reports its
+    # limit in detail; without this, conversation is the exception to that contract.
+    max_clarification_turns: int = _DEFAULT_MAX_CLARIFICATION_TURNS
     total_steps: int = 0
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
@@ -684,6 +714,7 @@ def run_agentic_conversation(
     mode: ConversationMode | None = None,
     clarification_judge: ClarificationJudge | None = None,
     fresh_conversation_per_turn: bool = False,
+    user_context: dict | None = None,
 ) -> ConversationResult:
     """Run a multi-turn, multi-skill conversation evaluation (no K-runs).
 
@@ -694,6 +725,9 @@ def run_agentic_conversation(
     ``fresh_conversation_per_turn`` sends every turn into a new conversation instead, so the
     agent sees no history. It is the no-memory baseline a context score is calibrated
     against: context-dependent turns are expected to fail there.
+
+    ``user_context`` is the context attached when the conversation starts; a turn's own
+    ``user_context`` replaces it from that turn on.
     """
     resolved_mode = resolve_conversation_mode(mode)
     if fresh_conversation_per_turn and initial_conversation_id is not None:
@@ -735,6 +769,7 @@ def run_agentic_conversation(
     turn_offset = 0.0
     tool_index_offset = 0
     reasoning_index_offset = 0
+    current_context = user_context
 
     try:
         if initial_conversation_id is not None:
@@ -749,6 +784,10 @@ def run_agentic_conversation(
                 conversation_id = client.create_conversation()
                 transcript = []
                 active_skills = set()
+            # Before the skip below: a turn whose expectation cannot resolve still changed what
+            # the user has attached. Only a turn that names the field changes it; null clears it.
+            if "user_context" in turn.model_fields_set:
+                current_context = turn.user_context
             try:
                 resolved_expected = _resolve_refs(turn.expected_output, turn_outputs)
                 resolved_alternatives = [
@@ -770,6 +809,10 @@ def run_agentic_conversation(
                         # read as "nothing was active", which is a different claim.
                         active_skills=sorted(active_skills),
                         output_correct=False,
+                        # This turn's loop never ran at all -- a $ref pointing at an earlier
+                        # turn's output could not be resolved. Labelling it BUDGET_EXHAUSTED
+                        # (the field default) would claim it ran out of clarification turns.
+                        exit_reason=LoopExit.NOT_RUN,
                         mismatches=[str(exc)],
                         depends_on=list(turn.depends_on),
                     )
@@ -790,20 +833,48 @@ def run_agentic_conversation(
             records: list[ClarificationRecord] = []
             answers_left = list(turn.set_answers)
 
+            # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop
+            # that simply runs out of range() is labelled correctly with no trailing else.
+            turn_exit = LoopExit.BUDGET_EXHAUSTED
             for _iter in range(max_clarification_turns + 1):
                 transcript.append(TranscriptEntry("user", current_message))
                 incomplete = False
                 try:
-                    chat_result = client.send_message(conversation_id, current_message)
+                    chat_result = client.send_message(conversation_id, current_message, user_context=current_context)
                 except TurnIncompleteError as exc:
                     chat_result = exc.partial_result or ChatResult()
                     incomplete = True
                 except ChatError as exc:
-                    # The stream can die after create_metric ran server-side; keep what the
-                    # accumulator saw so the cleanup still knows what to delete.
-                    if exc.partial_result is not None:
-                        created.record(exc.partial_result.tool_call_events or [])
-                    raise
+                    # Recorded rather than raised so the turns already completed keep their
+                    # results, and so this turn is distinguishable from one where the agent
+                    # simply failed to produce output. no_error below reads this back.
+                    print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
+                    partial = exc.partial_result
+                    if partial is not None:
+                        # Shifted and indexed exactly as a completed turn is, before anything
+                        # reads the events. What the stream managed to deliver before it died
+                        # is still this turn's work: left raw, its `call_ts` would restart near
+                        # zero and its indexes at zero, so `timeline_detail` would report a
+                        # late turn as overlapping the first one. The steps count for the same
+                        # reason -- they were taken.
+                        total_steps += partial.reasoning_step_count
+                        turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                            partial,
+                            turn_offset=turn_offset,
+                            tool_index_offset=tool_index_offset,
+                            reasoning_index_offset=reasoning_index_offset,
+                        )
+                        # The stream can die after create_metric ran server-side; keep what
+                        # the accumulator saw so the cleanup still knows what to delete.
+                        created.record(partial.tool_call_events or [])
+                        final_result = partial
+                        all_tool_calls.extend(partial.tool_call_events or [])
+                        conversation_tool_call_events.extend(partial.tool_call_events or [])
+                        conversation_reasoning_step_events.extend(partial.reasoning_step_events or [])
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                    turn_exit = LoopExit.CHAT_ERROR
+                    break
                 final_result = chat_result
                 total_steps += chat_result.reasoning_step_count
                 turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
@@ -833,6 +904,13 @@ def run_agentic_conversation(
                 if _check_output_present(resolved_turn, chat_result):
                     if incomplete:
                         records.append(ClarificationRecord(kind="turn_incomplete", agent_message=clip(response_text)))
+                    turn_exit = LoopExit.SUCCESS
+                    break
+
+                # `incomplete` is excluded deliberately: a turn the server cut short is a
+                # known stall with its own nudge path below, not an agent that said nothing.
+                if not incomplete and not response_text and not chat_result.tool_call_events:
+                    turn_exit = LoopExit.AGENT_SILENT
                     break
 
                 kind: ReplyRecordKind = "turn_incomplete" if incomplete else classify_reply(chat_result, response_text)
@@ -912,11 +990,15 @@ def run_agentic_conversation(
                     expected_skill=turn.expected_skill,
                     skill_routing=skill_routing,
                     output_present=output_present,
-                    no_error=True,  # SDK raises on errors; reaching here means no critical error.
+                    # A chat fault used to escape the whole run, so reaching here did mean no
+                    # error. Now that it is caught and recorded, this has to read it back --
+                    # otherwise a turn whose chat call failed reports no_error=True.
+                    no_error=turn_exit is not LoopExit.CHAT_ERROR,
                     activated_skills=declared or [],
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,
                     output_correct=output_correct,
+                    exit_reason=turn_exit,
                     mismatches=mismatches,
                     clarifications=records,
                     depends_on=list(turn.depends_on),
@@ -943,6 +1025,7 @@ def run_agentic_conversation(
         full_skill_coverage=full_skill_coverage,
         conversation_success=conversation_success,
         total_clarification_turns=total_clarification_turns,
+        max_clarification_turns=max_clarification_turns,
         total_steps=total_steps,
         reasoning_steps=reasoning_steps,
         response_id=response_id,
@@ -969,6 +1052,7 @@ def _conversation_detail(result: ConversationResult) -> dict:
         "lost_context_clarifications": result.lost_context_clarifications,
         "stalled_turns": result.stalled_turns,
         "total_clarification_turns": result.total_clarification_turns,
+        "max_clarification_turns": result.max_clarification_turns,
         "judge_model": result.judge_model,
         "turns": [tr.detail() for tr in result.turn_results],
         **timeline_detail(result.tool_call_events, result.reasoning_step_events),
@@ -997,6 +1081,7 @@ def evaluate_agentic_conversation(
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     mode: ConversationMode | None = None,
     clarification_judge: ClarificationJudge | None = None,
+    user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run conversation evaluation, log to Langfuse, and raise on failure.
 
@@ -1021,6 +1106,7 @@ def evaluate_agentic_conversation(
         agent_id=agent_id,
         mode=resolved_mode,
         clarification_judge=clarification_judge,
+        user_context=user_context,
     )
     passed = result.context_success if resolved_mode == "context" else result.conversation_success
 
@@ -1033,7 +1119,6 @@ def evaluate_agentic_conversation(
         failed_turns = {tr.turn_id: tr.failure_reasons() for tr in result.turn_results if not tr.context_success}
 
         def _write_scores(ctx: RunTraceContext) -> None:
-
             pt = ctx.trace(result.conversation_id)
             with ctx.observe(
                 pt,

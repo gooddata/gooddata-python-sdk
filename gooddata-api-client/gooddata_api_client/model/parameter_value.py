@@ -85,6 +85,7 @@ class ParameterValue(ModelNormal):
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'value': (str,),  # noqa: E501
+            'value_title': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -96,6 +97,7 @@ class ParameterValue(ModelNormal):
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
         'value': 'value',  # noqa: E501
+        'value_title': 'valueTitle',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +146,7 @@ class ParameterValue(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            value_title (str): Human-readable form of `value` (e.g. a constrained string's allowedValues title). Never used to drive execution. Falls back to `value` when absent.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -237,6 +240,7 @@ class ParameterValue(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            value_title (str): Human-readable form of `value` (e.g. a constrained string's allowedValues title). Never used to drive execution. Falls back to `value` when absent.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

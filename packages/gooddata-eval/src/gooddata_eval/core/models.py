@@ -6,11 +6,52 @@ Ported from gdc-nas tavern-e2e app/llm_as_judge/schemas/chat.py.
 
 import json
 import re
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from gooddata_eval.core.timing import PhaseTimings
+
+
+class LoopExit(str, Enum):
+    """Why an agentic evaluator's simulated-user loop stopped.
+
+    Every agentic kind drives the agent through a loop of simulated-user turns that can end
+    several ways, but the result only ever recorded *whether* the agent produced its output
+    -- so a run that ran out of turns while doing the right thing was reported identically
+    to one that refused, and identically to one that answered wrongly. Downstream checks are
+    all of the form ``produced_output and <check>``, so an exhausted run also reports every
+    per-field check as False: specific-sounding content failures for work the agent was
+    never given the chance to do.
+
+    This does not change any verdict -- an exhausted run still fails. It makes the three
+    cases countable, so "is the turn budget too tight" becomes a question the data can
+    answer rather than one that has to be argued.
+    """
+
+    SUCCESS = "success"
+    """The agent produced the expected output; the loop broke early."""
+
+    AGENT_SILENT = "agent_silent"
+    """The agent returned neither text nor a tool call -- genuinely stuck."""
+
+    BUDGET_EXHAUSTED = "budget_exhausted"
+    """The loop hit ``max_iterations`` without the agent producing its output. Says nothing
+    about whether the agent was on track; it may have been one turn away."""
+
+    SIMULATED_USER_FAILED = "simulated_user_failed"
+    """The harness's own simulated-user model failed to produce a follow-up. A harness-side
+    fault, not an agent one -- reporting should treat it as an error, not a scored failure."""
+
+    CHAT_ERROR = "chat_error"
+    """The chat call itself raised mid-conversation. Like SIMULATED_USER_FAILED this is
+    infrastructure rather than agent capability, but it comes from the GoodData side."""
+
+    NOT_RUN = "not_run"
+    """The loop never started -- e.g. an agentic_conversation turn whose $ref to an earlier
+    turn's output could not be resolved, so the turn was skipped before any message was
+    sent. Distinct from every other member, which all imply at least one turn happened."""
 
 
 class AacQueryField(BaseModel):
@@ -367,6 +408,7 @@ class AgenticAssertionError(AssertionError):
     timings: PhaseTimings
     runs_passed: int
     runs_effective: int
+    failed_runs: list[dict]
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -392,6 +434,12 @@ class AgenticEvalOutcome(BaseModel):
     # ran -- agentic_conversation drives its fixture once whatever --runs says.
     runs_passed: int = 0
     runs_effective: int = 0
+    # One record per run that did not pass. ``detail`` above describes only the winning run,
+    # so without this a 1/K item and a 0/K item carry identical diagnostics and neither says
+    # anything about the K-1 attempts that failed. Built by
+    # ``core.agentic._failed_runs.build_failed_runs``; mirrors the single-shot path's
+    # ``ItemReport.failed_runs``, which ``core/runner.py`` fills for the non-agentic kinds.
+    failed_runs: list[dict] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):

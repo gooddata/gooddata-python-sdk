@@ -409,10 +409,11 @@ with gooddata_api_client.ApiClient() as api_client:
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
         timezone="Europe/Prague",
+        type="label",
         validate_by=[
             ValidateByItem(
                 id="id_example",
-                type="fact",
+                type="label",
             ),
         ],
     ) # ElementsRequest | 

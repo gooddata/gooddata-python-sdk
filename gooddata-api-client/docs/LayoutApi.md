@@ -1896,6 +1896,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         value="value_example",
                     ),
                 ],
+                disable_statistics=True,
                 id="pg_local_docker-demo",
                 name="postgres demo",
                 parameters=[
@@ -2356,6 +2357,42 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Count of goods",
                 ),
             ],
+            computed_attributes=[
+                DeclarativeComputedAttribute(
+                    certification="CERTIFIED",
+                    certification_message="certification_message_example",
+                    certified_at="0480-72-88 80:01",
+                    certified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    content=DeclarativeComputedAttributeContent(
+                        format="%0.2f",
+                        maql="SELECT 1",
+                        metric_type="UNSPECIFIED",
+                    ),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    data_type="STRING",
+                    description="Sales for all the data available.",
+                    id="total-sales",
+                    is_hidden=False,
+                    is_nullable=False,
+                    locale="en-US",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    null_value="empty_value",
+                    tags=["Revenues"],
+                    title="Total sales",
+                    value_type="TEXT",
+                ),
+            ],
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content=JsonNode(),
@@ -2436,6 +2473,21 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="employee123",
                         type="user",
                     ),
+                    conditional_formatting=ObjectConditionalFormatting(
+                        conditions=[
+                            ConditionalFormattingCondition(
+                                format=ConditionalFormattingFormat(
+                                    background_color="#3DB36B",
+                                    color="#E54D40",
+                                    scope="cell",
+                                ),
+                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                operator="ALL",
+                                value=ConditionalFormattingValue(),
+                            ),
+                        ],
+                        enabled=True,
+                    ),
                     content=JsonNode(),
                     created_at="2023-07-20 12:30",
                     created_by=DeclarativeUserIdentifier(
@@ -2474,6 +2526,44 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Discount Rate",
                 ),
             ],
+            report_page_layouts=[
+                DeclarativeReportPageLayout(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="brand-cover",
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                ),
+            ],
+            report_templates=[
+                DeclarativeReportTemplate(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="quarterly-review-template",
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                ),
+            ],
+            reports=[
+                DeclarativeReport(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="quarterly-review-2026-h1",
+                    period_end=dateutil_parser('Tue Jun 30 00:00:00 UTC 2026').date(),
+                    period_start=dateutil_parser('Thu Jan 01 00:00:00 UTC 2026').date(),
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                    variable_values={
+                        "key": "key_example",
+                    },
+                ),
+            ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     certification="CERTIFIED",
@@ -2482,6 +2572,27 @@ with gooddata_api_client.ApiClient() as api_client:
                     certified_by=DeclarativeUserIdentifier(
                         id="employee123",
                         type="user",
+                    ),
+                    conditional_formatting=ConditionalFormatting(
+                        enabled=True,
+                        rules=[
+                            ConditionalFormattingRule(
+                                conditions=[
+                                    ConditionalFormattingCondition(
+                                        format=ConditionalFormattingFormat(
+                                            background_color="#3DB36B",
+                                            color="#E54D40",
+                                            scope="cell",
+                                        ),
+                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                        operator="ALL",
+                                        value=ConditionalFormattingValue(),
+                                    ),
+                                ],
+                                id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                target=ConditionalFormattingTarget(),
+                            ),
+                        ],
                     ),
                     content=JsonNode(),
                     created_at="2023-07-20 12:30",
@@ -2553,6 +2664,21 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     attributes=[
                         DeclarativeAttribute(
+                            conditional_formatting=ObjectConditionalFormatting(
+                                conditions=[
+                                    ConditionalFormattingCondition(
+                                        format=ConditionalFormattingFormat(
+                                            background_color="#3DB36B",
+                                            color="#E54D40",
+                                            scope="cell",
+                                        ),
+                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                        operator="ALL",
+                                        value=ConditionalFormattingValue(),
+                                    ),
+                                ],
+                                enabled=True,
+                            ),
                             default_view=LabelIdentifier(
                                 id="label_id",
                                 type="label",
@@ -2563,6 +2689,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
+                                    conditional_formatting=ObjectConditionalFormatting(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        enabled=True,
+                                    ),
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
                                         collection=GeoCollectionIdentifier(
@@ -2678,6 +2819,21 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             date_instances=[
                 DeclarativeDateDataset(
+                    conditional_formatting=ObjectConditionalFormatting(
+                        conditions=[
+                            ConditionalFormattingCondition(
+                                format=ConditionalFormattingFormat(
+                                    background_color="#3DB36B",
+                                    color="#E54D40",
+                                    scope="cell",
+                                ),
+                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                operator="ALL",
+                                value=ConditionalFormattingValue(),
+                            ),
+                        ],
+                        enabled=True,
+                    ),
                     description="A customer order date",
                     granularities=[
                         "SECOND",
@@ -2775,6 +2931,14 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="description_example",
                 enabled=True,
                 id="default-ai-assistant",
+                instructions=[
+                    Instruction(
+                        content="content_example",
+                        is_disabled=True,
+                        strategy="ALWAYS",
+                        title="title_example",
+                    ),
+                ],
                 modified_at="2023-07-20 12:30",
                 modified_by=DeclarativeUserIdentifier(
                     id="employee123",
@@ -2917,6 +3081,42 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Count of goods",
                 ),
             ],
+            computed_attributes=[
+                DeclarativeComputedAttribute(
+                    certification="CERTIFIED",
+                    certification_message="certification_message_example",
+                    certified_at="0480-72-88 80:01",
+                    certified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    content=DeclarativeComputedAttributeContent(
+                        format="%0.2f",
+                        maql="SELECT 1",
+                        metric_type="UNSPECIFIED",
+                    ),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    data_type="STRING",
+                    description="Sales for all the data available.",
+                    id="total-sales",
+                    is_hidden=False,
+                    is_nullable=False,
+                    locale="en-US",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    null_value="empty_value",
+                    tags=["Revenues"],
+                    title="Total sales",
+                    value_type="TEXT",
+                ),
+            ],
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content=JsonNode(),
@@ -2997,6 +3197,21 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="employee123",
                         type="user",
                     ),
+                    conditional_formatting=ObjectConditionalFormatting(
+                        conditions=[
+                            ConditionalFormattingCondition(
+                                format=ConditionalFormattingFormat(
+                                    background_color="#3DB36B",
+                                    color="#E54D40",
+                                    scope="cell",
+                                ),
+                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                operator="ALL",
+                                value=ConditionalFormattingValue(),
+                            ),
+                        ],
+                        enabled=True,
+                    ),
                     content=JsonNode(),
                     created_at="2023-07-20 12:30",
                     created_by=DeclarativeUserIdentifier(
@@ -3035,6 +3250,44 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Discount Rate",
                 ),
             ],
+            report_page_layouts=[
+                DeclarativeReportPageLayout(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="brand-cover",
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                ),
+            ],
+            report_templates=[
+                DeclarativeReportTemplate(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="quarterly-review-template",
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                ),
+            ],
+            reports=[
+                DeclarativeReport(
+                    content=JsonNode(),
+                    description="description_example",
+                    id="quarterly-review-2026-h1",
+                    period_end=dateutil_parser('Tue Jun 30 00:00:00 UTC 2026').date(),
+                    period_start=dateutil_parser('Thu Jan 01 00:00:00 UTC 2026').date(),
+                    tags=[
+                        "["brand"]",
+                    ],
+                    title="title_example",
+                    variable_values={
+                        "key": "key_example",
+                    },
+                ),
+            ],
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     certification="CERTIFIED",
@@ -3043,6 +3296,27 @@ with gooddata_api_client.ApiClient() as api_client:
                     certified_by=DeclarativeUserIdentifier(
                         id="employee123",
                         type="user",
+                    ),
+                    conditional_formatting=ConditionalFormatting(
+                        enabled=True,
+                        rules=[
+                            ConditionalFormattingRule(
+                                conditions=[
+                                    ConditionalFormattingCondition(
+                                        format=ConditionalFormattingFormat(
+                                            background_color="#3DB36B",
+                                            color="#E54D40",
+                                            scope="cell",
+                                        ),
+                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                        operator="ALL",
+                                        value=ConditionalFormattingValue(),
+                                    ),
+                                ],
+                                id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                target=ConditionalFormattingTarget(),
+                            ),
+                        ],
                     ),
                     content=JsonNode(),
                     created_at="2023-07-20 12:30",
@@ -3168,6 +3442,11 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                 ),
                 interval="DAY",
+                settings=ExecutionSettings(
+                    data_sampling_percentage=0,
+                    timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                    timezone="Europe/Prague",
+                ),
                 trigger="ALWAYS",
             ),
             analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -3366,6 +3645,27 @@ with gooddata_api_client.ApiClient() as api_client:
             tabular_exports=[
                 AutomationTabularExport(
                     request_payload=TabularExportRequest(
+                        conditional_formatting=ConditionalFormatting(
+                            enabled=True,
+                            rules=[
+                                ConditionalFormattingRule(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                    target=ConditionalFormattingTarget(),
+                                ),
+                            ],
+                        ),
                         custom_override=CustomOverride(
                             labels={
                                 "key": CustomLabel(
@@ -4042,6 +4342,21 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     attributes=[
                         DeclarativeAttribute(
+                            conditional_formatting=ObjectConditionalFormatting(
+                                conditions=[
+                                    ConditionalFormattingCondition(
+                                        format=ConditionalFormattingFormat(
+                                            background_color="#3DB36B",
+                                            color="#E54D40",
+                                            scope="cell",
+                                        ),
+                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                        operator="ALL",
+                                        value=ConditionalFormattingValue(),
+                                    ),
+                                ],
+                                enabled=True,
+                            ),
                             default_view=LabelIdentifier(
                                 id="label_id",
                                 type="label",
@@ -4052,6 +4367,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
+                                    conditional_formatting=ObjectConditionalFormatting(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        enabled=True,
+                                    ),
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
                                         collection=GeoCollectionIdentifier(
@@ -4167,6 +4497,21 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             date_instances=[
                 DeclarativeDateDataset(
+                    conditional_formatting=ObjectConditionalFormatting(
+                        conditions=[
+                            ConditionalFormattingCondition(
+                                format=ConditionalFormattingFormat(
+                                    background_color="#3DB36B",
+                                    color="#E54D40",
+                                    scope="cell",
+                                ),
+                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                operator="ALL",
+                                value=ConditionalFormattingValue(),
+                            ),
+                        ],
+                        enabled=True,
+                    ),
                     description="A customer order date",
                     granularities=[
                         "SECOND",
@@ -4344,6 +4689,14 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="description_example",
                 enabled=True,
                 id="default-ai-assistant",
+                instructions=[
+                    Instruction(
+                        content="content_example",
+                        is_disabled=True,
+                        strategy="ALWAYS",
+                        title="title_example",
+                    ),
+                ],
                 modified_at="2023-07-20 12:30",
                 modified_by=DeclarativeUserIdentifier(
                     id="employee123",
@@ -4382,6 +4735,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         value="value_example",
                     ),
                 ],
+                disable_statistics=True,
                 id="pg_local_docker-demo",
                 name="postgres demo",
                 parameters=[
@@ -4711,6 +5065,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ],
                             ),
                             interval="DAY",
+                            settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             trigger="ALWAYS",
                         ),
                         analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -4909,6 +5268,27 @@ with gooddata_api_client.ApiClient() as api_client:
                         tabular_exports=[
                             AutomationTabularExport(
                                 request_payload=TabularExportRequest(
+                                    conditional_formatting=ConditionalFormatting(
+                                        enabled=True,
+                                        rules=[
+                                            ConditionalFormattingRule(
+                                                conditions=[
+                                                    ConditionalFormattingCondition(
+                                                        format=ConditionalFormattingFormat(
+                                                            background_color="#3DB36B",
+                                                            color="#E54D40",
+                                                            scope="cell",
+                                                        ),
+                                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                        operator="ALL",
+                                                        value=ConditionalFormattingValue(),
+                                                    ),
+                                                ],
+                                                id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                                target=ConditionalFormattingTarget(),
+                                            ),
+                                        ],
+                                    ),
                                     custom_override=CustomOverride(
                                         labels={
                                             "key": CustomLabel(
@@ -5188,6 +5568,42 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Count of goods",
                             ),
                         ],
+                        computed_attributes=[
+                            DeclarativeComputedAttribute(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                content=DeclarativeComputedAttributeContent(
+                                    format="%0.2f",
+                                    maql="SELECT 1",
+                                    metric_type="UNSPECIFIED",
+                                ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                data_type="STRING",
+                                description="Sales for all the data available.",
+                                id="total-sales",
+                                is_hidden=False,
+                                is_nullable=False,
+                                locale="en-US",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                null_value="empty_value",
+                                tags=["Revenues"],
+                                title="Total sales",
+                                value_type="TEXT",
+                            ),
+                        ],
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content=JsonNode(),
@@ -5268,6 +5684,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                     id="employee123",
                                     type="user",
                                 ),
+                                conditional_formatting=ObjectConditionalFormatting(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    enabled=True,
+                                ),
                                 content=JsonNode(),
                                 created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
@@ -5306,6 +5737,44 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Discount Rate",
                             ),
                         ],
+                        report_page_layouts=[
+                            DeclarativeReportPageLayout(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="brand-cover",
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                            ),
+                        ],
+                        report_templates=[
+                            DeclarativeReportTemplate(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="quarterly-review-template",
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                            ),
+                        ],
+                        reports=[
+                            DeclarativeReport(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="quarterly-review-2026-h1",
+                                period_end=dateutil_parser('Tue Jun 30 00:00:00 UTC 2026').date(),
+                                period_start=dateutil_parser('Thu Jan 01 00:00:00 UTC 2026').date(),
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                                variable_values={
+                                    "key": "key_example",
+                                },
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -5314,6 +5783,27 @@ with gooddata_api_client.ApiClient() as api_client:
                                 certified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
+                                ),
+                                conditional_formatting=ConditionalFormatting(
+                                    enabled=True,
+                                    rules=[
+                                        ConditionalFormattingRule(
+                                            conditions=[
+                                                ConditionalFormattingCondition(
+                                                    format=ConditionalFormattingFormat(
+                                                        background_color="#3DB36B",
+                                                        color="#E54D40",
+                                                        scope="cell",
+                                                    ),
+                                                    id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                    operator="ALL",
+                                                    value=ConditionalFormattingValue(),
+                                                ),
+                                            ],
+                                            id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                            target=ConditionalFormattingTarget(),
+                                        ),
+                                    ],
                                 ),
                                 content=JsonNode(),
                                 created_at="2023-07-20 12:30",
@@ -5385,6 +5875,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ],
                                 attributes=[
                                     DeclarativeAttribute(
+                                        conditional_formatting=ObjectConditionalFormatting(
+                                            conditions=[
+                                                ConditionalFormattingCondition(
+                                                    format=ConditionalFormattingFormat(
+                                                        background_color="#3DB36B",
+                                                        color="#E54D40",
+                                                        scope="cell",
+                                                    ),
+                                                    id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                    operator="ALL",
+                                                    value=ConditionalFormattingValue(),
+                                                ),
+                                            ],
+                                            enabled=True,
+                                        ),
                                         default_view=LabelIdentifier(
                                             id="label_id",
                                             type="label",
@@ -5395,6 +5900,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                         is_nullable=False,
                                         labels=[
                                             DeclarativeLabel(
+                                                conditional_formatting=ObjectConditionalFormatting(
+                                                    conditions=[
+                                                        ConditionalFormattingCondition(
+                                                            format=ConditionalFormattingFormat(
+                                                                background_color="#3DB36B",
+                                                                color="#E54D40",
+                                                                scope="cell",
+                                                            ),
+                                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                            operator="ALL",
+                                                            value=ConditionalFormattingValue(),
+                                                        ),
+                                                    ],
+                                                    enabled=True,
+                                                ),
                                                 description="Customer name",
                                                 geo_area_config=GeoAreaConfig(
                                                     collection=GeoCollectionIdentifier(
@@ -5510,6 +6030,21 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         date_instances=[
                             DeclarativeDateDataset(
+                                conditional_formatting=ObjectConditionalFormatting(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    enabled=True,
+                                ),
                                 description="A customer order date",
                                 granularities=[
                                     "SECOND",
@@ -6197,6 +6732,11 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ],
                             ),
                             interval="DAY",
+                            settings=ExecutionSettings(
+                                data_sampling_percentage=0,
+                                timestamp=dateutil_parser('1970-01-01T00:00:00.00Z'),
+                                timezone="Europe/Prague",
+                            ),
                             trigger="ALWAYS",
                         ),
                         analytical_dashboard=DeclarativeAnalyticalDashboardIdentifier(
@@ -6395,6 +6935,27 @@ with gooddata_api_client.ApiClient() as api_client:
                         tabular_exports=[
                             AutomationTabularExport(
                                 request_payload=TabularExportRequest(
+                                    conditional_formatting=ConditionalFormatting(
+                                        enabled=True,
+                                        rules=[
+                                            ConditionalFormattingRule(
+                                                conditions=[
+                                                    ConditionalFormattingCondition(
+                                                        format=ConditionalFormattingFormat(
+                                                            background_color="#3DB36B",
+                                                            color="#E54D40",
+                                                            scope="cell",
+                                                        ),
+                                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                        operator="ALL",
+                                                        value=ConditionalFormattingValue(),
+                                                    ),
+                                                ],
+                                                id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                                target=ConditionalFormattingTarget(),
+                                            ),
+                                        ],
+                                    ),
                                     custom_override=CustomOverride(
                                         labels={
                                             "key": CustomLabel(
@@ -6674,6 +7235,42 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Count of goods",
                             ),
                         ],
+                        computed_attributes=[
+                            DeclarativeComputedAttribute(
+                                certification="CERTIFIED",
+                                certification_message="certification_message_example",
+                                certified_at="0480-72-88 80:01",
+                                certified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                content=DeclarativeComputedAttributeContent(
+                                    format="%0.2f",
+                                    maql="SELECT 1",
+                                    metric_type="UNSPECIFIED",
+                                ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                data_type="STRING",
+                                description="Sales for all the data available.",
+                                id="total-sales",
+                                is_hidden=False,
+                                is_nullable=False,
+                                locale="en-US",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                null_value="empty_value",
+                                tags=["Revenues"],
+                                title="Total sales",
+                                value_type="TEXT",
+                            ),
+                        ],
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content=JsonNode(),
@@ -6754,6 +7351,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                     id="employee123",
                                     type="user",
                                 ),
+                                conditional_formatting=ObjectConditionalFormatting(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    enabled=True,
+                                ),
                                 content=JsonNode(),
                                 created_at="2023-07-20 12:30",
                                 created_by=DeclarativeUserIdentifier(
@@ -6792,6 +7404,44 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Discount Rate",
                             ),
                         ],
+                        report_page_layouts=[
+                            DeclarativeReportPageLayout(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="brand-cover",
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                            ),
+                        ],
+                        report_templates=[
+                            DeclarativeReportTemplate(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="quarterly-review-template",
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                            ),
+                        ],
+                        reports=[
+                            DeclarativeReport(
+                                content=JsonNode(),
+                                description="description_example",
+                                id="quarterly-review-2026-h1",
+                                period_end=dateutil_parser('Tue Jun 30 00:00:00 UTC 2026').date(),
+                                period_start=dateutil_parser('Thu Jan 01 00:00:00 UTC 2026').date(),
+                                tags=[
+                                    "["brand"]",
+                                ],
+                                title="title_example",
+                                variable_values={
+                                    "key": "key_example",
+                                },
+                            ),
+                        ],
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 certification="CERTIFIED",
@@ -6800,6 +7450,27 @@ with gooddata_api_client.ApiClient() as api_client:
                                 certified_by=DeclarativeUserIdentifier(
                                     id="employee123",
                                     type="user",
+                                ),
+                                conditional_formatting=ConditionalFormatting(
+                                    enabled=True,
+                                    rules=[
+                                        ConditionalFormattingRule(
+                                            conditions=[
+                                                ConditionalFormattingCondition(
+                                                    format=ConditionalFormattingFormat(
+                                                        background_color="#3DB36B",
+                                                        color="#E54D40",
+                                                        scope="cell",
+                                                    ),
+                                                    id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                    operator="ALL",
+                                                    value=ConditionalFormattingValue(),
+                                                ),
+                                            ],
+                                            id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                                            target=ConditionalFormattingTarget(),
+                                        ),
+                                    ],
                                 ),
                                 content=JsonNode(),
                                 created_at="2023-07-20 12:30",
@@ -6871,6 +7542,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ],
                                 attributes=[
                                     DeclarativeAttribute(
+                                        conditional_formatting=ObjectConditionalFormatting(
+                                            conditions=[
+                                                ConditionalFormattingCondition(
+                                                    format=ConditionalFormattingFormat(
+                                                        background_color="#3DB36B",
+                                                        color="#E54D40",
+                                                        scope="cell",
+                                                    ),
+                                                    id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                    operator="ALL",
+                                                    value=ConditionalFormattingValue(),
+                                                ),
+                                            ],
+                                            enabled=True,
+                                        ),
                                         default_view=LabelIdentifier(
                                             id="label_id",
                                             type="label",
@@ -6881,6 +7567,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                         is_nullable=False,
                                         labels=[
                                             DeclarativeLabel(
+                                                conditional_formatting=ObjectConditionalFormatting(
+                                                    conditions=[
+                                                        ConditionalFormattingCondition(
+                                                            format=ConditionalFormattingFormat(
+                                                                background_color="#3DB36B",
+                                                                color="#E54D40",
+                                                                scope="cell",
+                                                            ),
+                                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                            operator="ALL",
+                                                            value=ConditionalFormattingValue(),
+                                                        ),
+                                                    ],
+                                                    enabled=True,
+                                                ),
                                                 description="Customer name",
                                                 geo_area_config=GeoAreaConfig(
                                                     collection=GeoCollectionIdentifier(
@@ -6996,6 +7697,21 @@ with gooddata_api_client.ApiClient() as api_client:
                         ],
                         date_instances=[
                             DeclarativeDateDataset(
+                                conditional_formatting=ObjectConditionalFormatting(
+                                    conditions=[
+                                        ConditionalFormattingCondition(
+                                            format=ConditionalFormattingFormat(
+                                                background_color="#3DB36B",
+                                                color="#E54D40",
+                                                scope="cell",
+                                            ),
+                                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                            operator="ALL",
+                                            value=ConditionalFormattingValue(),
+                                        ),
+                                    ],
+                                    enabled=True,
+                                ),
                                 description="A customer order date",
                                 granularities=[
                                     "SECOND",

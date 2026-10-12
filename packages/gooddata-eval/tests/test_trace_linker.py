@@ -115,10 +115,12 @@ _EVALUATE_FUNCS = [
     ("metric_skill", "evaluate_agentic_metric_skill"),
     ("alert_skill", "evaluate_agentic_alert_skill"),
     ("dashboard_skill", "evaluate_agentic_dashboard_skill"),
+    ("document_skill", "evaluate_agentic_document_skill"),
     ("search_tool", "evaluate_agentic_search_tool"),
     ("visualization", "evaluate_agentic_visualization"),
     ("kda_skill", "evaluate_agentic_kda_skill"),
     ("conversation", "evaluate_agentic_conversation"),
+    ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
     ("what_if", "evaluate_agentic_what_if"),
 ]
 

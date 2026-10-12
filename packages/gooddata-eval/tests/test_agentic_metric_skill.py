@@ -7,6 +7,8 @@ from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_api_client.exceptions import NotFoundException
+from gooddata_eval.core.agentic import metric_skill as metric_skill_mod
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
@@ -20,7 +22,8 @@ from gooddata_eval.core.agentic.metric_skill import (
     generate_simulated_response,
     run_agentic_metric_skill,
 )
-from gooddata_eval.core.models import ChatResult, ToolCallEvent
+from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
 
 # --- time.monotonic() side effects ---------------------------------------------------
@@ -439,6 +442,61 @@ def test_delete_metric_uses_sdk_entities_api():
     sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
 
 
+def test_delete_metric_deletes_again_when_a_concurrent_write_restores_it(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0, 0.0))
+    sdk = MagicMock()
+    # Present after the first delete, gone after the second.
+    sdk._client.entities_api.get_entity_metrics.side_effect = [object(), NotFoundException(status=404)]
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 2
+    assert sdk._client.entities_api.get_entity_metrics.call_count == 2
+
+
+def test_delete_metric_checks_once_when_the_delete_holds(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0, 0.0))
+    sdk = MagicMock()
+    sdk._client.entities_api.get_entity_metrics.side_effect = NotFoundException(status=404)
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_gives_up_after_the_last_recheck(monkeypatch, capsys):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0))
+    sdk = MagicMock()  # get_entity_metrics always succeeds: the metric keeps coming back
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 3
+    assert "back or unchecked at all 2 checks" in capsys.readouterr().out
+    # No check after the last delete: a check right after it would always pass.
+    assert sdk._client.entities_api.get_entity_metrics.call_count == 2
+
+
+def test_a_failed_lookup_is_not_read_as_a_deleted_metric(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0, 0.0))
+    sdk = MagicMock()
+    # A transient lookup failure, then a confirmed 404.
+    sdk._client.entities_api.get_entity_metrics.side_effect = [RuntimeError("503"), NotFoundException(status=404)]
+    _delete_metric(sdk, "ws1", "foo_metric")
+    assert sdk._client.entities_api.delete_entity_metrics.call_count == 2
+
+
+def test_a_404_on_delete_counts_as_deleted(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0,))
+    sdk = MagicMock()
+    sdk._client.entities_api.delete_entity_metrics.side_effect = NotFoundException(status=404)
+    sdk._client.entities_api.get_entity_metrics.side_effect = NotFoundException(status=404)
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_called_once_with("ws1", "foo_metric")
+
+
+def test_delete_metric_does_not_recheck_a_failed_delete(monkeypatch):
+    monkeypatch.setattr(metric_skill_mod, "_DELETE_RECHECK_DELAYS_S", (0.0,))
+    sdk = MagicMock()
+    sdk._client.entities_api.delete_entity_metrics.side_effect = RuntimeError("500")
+    _delete_metric(sdk, "ws1", "foo_metric")
+    sdk._client.entities_api.get_entity_metrics.assert_not_called()
+
+
 def test_delete_metric_swallows_failures():
     sdk = MagicMock()
     sdk._client.entities_api.delete_entity_metrics.side_effect = RuntimeError("500")
@@ -662,6 +720,9 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
         "maql_correct": True,
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "SELECT {metric/foo}",
+        "exit_reason": "success",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
         "tool_calls": [],
     }
@@ -692,6 +753,9 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
         "maql_correct": False,
         "expected_maql_candidates": ["SELECT {metric/foo}"],
         "actual_maql": "",
+        "exit_reason": "budget_exhausted",
+        "turns_used": 1,
+        "max_iterations": 1,
         "latency_breakdown": [],
         "tool_calls": [],
     }
@@ -768,6 +832,94 @@ def test_no_timer_output_by_default(monkeypatch, capsys):
     assert "[timer]" not in capsys.readouterr().out
     # Silenced, not un-measured.
     assert summary.run_results[0].timings.agent_s == 3.0
+
+
+# --- LoopExit: a harness fault must not read as an agent failure -----------------------------
+
+
+def test_exit_reason_simulated_user_failed_is_not_an_agent_failure():
+    """metric_skill catches SimulatedResponseError and breaks -- silently, before this field.
+
+    The harness's own simulated user failing produced exactly the same result as the agent
+    getting the MAQL wrong: metric_created=False, maql_correct=False. That is a harness
+    outage scored against the product, and nothing in the output said so.
+    """
+    mock_client = _client()
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which measure did you mean?", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    with (
+        _patched(mock_client, simulated_error=SimulatedResponseError("simulated user unavailable")),
+        pytest.raises(MetricSkillAssertionError) as exc_info,
+    ):
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=6,
+        )
+
+    detail = exc_info.value.detail
+    assert detail["exit_reason"] == "simulated_user_failed"
+    # Broke on turn 1 of a 6-turn budget: not the agent running out of room, and not a refusal.
+    assert detail["turns_used"] == 1
+    assert detail["max_iterations"] == 6
+    assert detail["metric_created"] is False
+
+
+def test_exit_reason_budget_exhausted_differs_from_simulated_user_failure():
+    """Same scored booleans, different cause -- the distinction the field exists to make."""
+    mock_client = _client()
+    mock_client.send_message.return_value = ChatResult.model_validate(
+        {"textResponse": "Which measure did you mean?", "toolCallEvents": [], "reasoningSteps": []}
+    )
+
+    with _patched(mock_client, simulated_reply="the revenue one"), pytest.raises(MetricSkillAssertionError) as exc:
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    detail = exc.value.detail
+    assert detail["exit_reason"] == "budget_exhausted"
+    assert detail["turns_used"] == 3
+    assert detail["max_iterations"] == 3
+    assert detail["metric_created"] is False
+
+
+def test_chat_error_ends_the_run_and_is_recorded_rather_than_raised():
+    """A mid-run chat fault used to escape run_agentic_metric_skill entirely.
+
+    That discarded every K-run already completed. It is now recorded like the
+    simulated-user fault beside it, so an infrastructure blip stays distinguishable from
+    the agent failing to create the metric.
+    """
+    mock_client = _client()
+    mock_client.send_message.side_effect = ChatError("gen-ai fell over")
+
+    with _patched(mock_client):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    assert summary.run_results[0].exit_reason is LoopExit.CHAT_ERROR
+    assert summary.run_results[0].metric_created is False
+    assert summary.pass_at_k is False
 
 
 def test_run_agentic_metric_skill_counts_the_turns_and_reasoning_steps_it_used():
@@ -855,6 +1007,37 @@ def test_metric_skill_writes_the_turn_and_step_counts_to_langfuse():
     # they are counts, and a float reads as though a fraction of a turn were possible.
     assert isinstance(scores["turns"], int)
     assert isinstance(scores["steps"], int)
+
+
+def test_a_metric_created_before_the_stream_broke_is_still_cleaned_up():
+    """The stream can break AFTER create_metric already succeeded server-side.
+
+    The id reached created_metric_ids only from the normal path, so the ChatError branch
+    used to leave a real metric behind in the workspace -- an object leaking out of a
+    failed run, which the next run then sees.
+    """
+    mock_client = _client()
+    partial = ChatResult.model_validate(
+        {
+            "textResponse": "",
+            "toolCallEvents": [_create_metric_call('{"data": {"metric_id": "m1", "maql": "SELECT {metric/foo}"}}')],
+        }
+    )
+    mock_client.send_message.side_effect = ChatError("stream died after create", partial_result=partial)
+
+    with _patched(mock_client, sdk=True) as (_, mock_sdk_cls):
+        run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=1,
+        )
+
+    sdk = mock_sdk_cls.create.return_value
+    sdk._client.entities_api.delete_entity_metrics.assert_called_once_with("ws1", "m1")
 
 
 def test_extract_created_metric_ids_skips_a_metric_updated_in_place() -> None:

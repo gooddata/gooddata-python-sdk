@@ -32,9 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
+    from gooddata_api_client.model.json_api_user_setting_in_attributes import JsonApiUserSettingInAttributes
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiOrganizationSettingInAttributes'] = JsonApiOrganizationSettingInAttributes
+    globals()['JsonApiUserSettingInAttributes'] = JsonApiUserSettingInAttributes
 
 
 class JsonApiWorkspaceSettingOut(ModelNormal):
@@ -100,7 +100,7 @@ class JsonApiWorkspaceSettingOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiOrganizationSettingInAttributes,),  # noqa: E501
+            'attributes': (JsonApiUserSettingInAttributes,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
         }
 
@@ -161,7 +161,7 @@ class JsonApiWorkspaceSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
         """
 
@@ -255,7 +255,7 @@ class JsonApiWorkspaceSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
         """
 

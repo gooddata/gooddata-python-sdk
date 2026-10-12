@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.alert_afm import AlertAfm
     from gooddata_api_client.model.alert_condition import AlertCondition
+    from gooddata_api_client.model.execution_settings import ExecutionSettings
     globals()['AlertAfm'] = AlertAfm
     globals()['AlertCondition'] = AlertCondition
+    globals()['ExecutionSettings'] = ExecutionSettings
 
 
 class AutomationAlert(ModelNormal):
@@ -105,6 +107,7 @@ class AutomationAlert(ModelNormal):
             'condition': (AlertCondition,),  # noqa: E501
             'execution': (AlertAfm,),  # noqa: E501
             'interval': (str,),  # noqa: E501
+            'settings': (ExecutionSettings,),  # noqa: E501
             'trigger': (str,),  # noqa: E501
         }
 
@@ -117,6 +120,7 @@ class AutomationAlert(ModelNormal):
         'condition': 'condition',  # noqa: E501
         'execution': 'execution',  # noqa: E501
         'interval': 'interval',  # noqa: E501
+        'settings': 'settings',  # noqa: E501
         'trigger': 'trigger',  # noqa: E501
     }
 
@@ -166,6 +170,7 @@ class AutomationAlert(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             interval (str): Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.. [optional]  # noqa: E501
+            settings (ExecutionSettings): [optional]  # noqa: E501
             trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. ONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
         """
 
@@ -259,6 +264,7 @@ class AutomationAlert(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             interval (str): Date granularity for the interval of ONCE_PER_INTERVAL trigger. Supported granularities: DAY, WEEK, MONTH, QUARTER, YEAR.. [optional]  # noqa: E501
+            settings (ExecutionSettings): [optional]  # noqa: E501
             trigger (str): Trigger behavior for the alert. ALWAYS - alert is triggered every time the condition is met. ONCE - alert is triggered only once when the condition is met. ONCE_PER_INTERVAL - alert is triggered when the condition is met, then suppressed for the interval. If no interval is specified, it behaves as ALWAYS. . [optional] if omitted the server will use the default value of "ALWAYS"  # noqa: E501
         """
 

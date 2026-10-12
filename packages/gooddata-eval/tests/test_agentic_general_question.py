@@ -710,21 +710,11 @@ def test_an_item_with_no_gradeable_run_raises_instead_of_reporting_failures():
     # Carried so the runner can still report what the item cost before it became
     # unevaluable.
     assert err.value.timings.agent_s == 7.0  # 4.0 + 3.0
-
-
-def test_run_agentic_general_question_forwards_the_user_context_to_the_chat_client():
-    attachment = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "campaign_spend"}]}]}
-    client, judge = _pass_client_and_judge(text_response="It shows campaign spend by channel.")
-
-    with _patched(client, judge):
-        run_agentic_general_question(
-            host="https://h",
-            token="tok",
-            workspace_id="ws1",
-            question="What does the visualization I attached show?",
-            expected_output="Describes the attached chart.",
-            k=1,
-            user_context=attachment,
-        )
-
-    assert client.send_message.call_args.kwargs["user_context"] == attachment
+    # And the per-run records, for the same reason. The judge breaking says nothing about
+    # what the agent did, so an item with no verdict at all is still worth reading -- these
+    # carry each run's own output and conversation id. Asserted behaviourally because the
+    # cross-kind source check cannot see whether this branch attaches them: its
+    # `_attach_diagnostics(` match is also satisfied by the helper's own definition.
+    assert [r["run_index"] for r in err.value.failed_runs] == [1, 2]
+    assert [r["error"] for r in err.value.failed_runs] == ["empty body twice", "no 'score' key"]
+    assert (err.value.runs_passed, err.value.runs_effective) == (0, 2)

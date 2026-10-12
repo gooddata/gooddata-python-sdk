@@ -83,6 +83,9 @@ class FilterContextApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
+                        "METRICS": "metrics",
+                        "FACTS": "facts",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -236,6 +239,9 @@ class FilterContextApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
+                        "METRICS": "metrics",
+                        "FACTS": "facts",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -347,6 +353,9 @@ class FilterContextApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
+                        "METRICS": "metrics",
+                        "FACTS": "facts",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -439,6 +448,9 @@ class FilterContextApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
+                        "METRICS": "metrics",
+                        "FACTS": "facts",
                         "ALL": "ALL"
                     },
                 },
@@ -596,6 +608,9 @@ class FilterContextApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
+                        "METRICS": "metrics",
+                        "FACTS": "facts",
                         "ALL": "ALL"
                     },
                 },

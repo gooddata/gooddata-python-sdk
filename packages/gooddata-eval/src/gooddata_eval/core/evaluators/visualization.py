@@ -1,8 +1,10 @@
 # (C) 2026 GoodData Corporation
 """Agentic visualization evaluator — ported from gdc-nas tavern-e2e app/vis_agentic.py."""
 
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
 from datetime import date
+from typing import Any
 
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import (
@@ -51,6 +53,14 @@ class EvaluationResult:
     actual_filters: dict[str, list[str]]
     expected_sorts: list[str]
     actual_sorts: list[str]
+    # Whether the agent ran the chart it built (see `execution_signals`). It gates
+    # `strict_pass` only on an item whose expected output sets `requires_execution`: a
+    # chart the user only looks at needs no run, a question that asks for a number does.
+    executed: bool = False
+    requires_execution: bool = False
+    # Whether a number in the reply matches a value the chart returned. None when the reply
+    # states no number. Reported only: reading numbers out of prose has false hits.
+    stated_value_matches: bool | None = None
 
     @property
     def strict_pass(self) -> bool:
@@ -62,6 +72,7 @@ class EvaluationResult:
             and self.filters_correct
             and self.sorts_correct
             and self.viz_type_hard
+            and (self.executed or not self.requires_execution)
         )
 
     @property
@@ -76,6 +87,128 @@ class EvaluationResult:
                 self.viz_type_hard,
             ]
         )
+
+
+# A number as prose writes it: a sign before or after an optional currency symbol, thousands
+# separators, decimals, then an optional K/M/B scale or a percent sign. Not preceded or
+# followed by a word character, so "Q3", "viz_1" and "2x" are not read as numbers.
+_NUMBER_RE = re.compile(
+    r"(?<![\w.])(?P<sign>[-+]?)[$€£]?(?P<sign2>[-+]?)(?P<int>\d{1,3}(?:,\d{3})+|\d+)(?:\.(?P<frac>\d+))?"
+    r"\s?(?P<suffix>[kKmMbB%])?(?!\w)"
+)
+_SCALES = {"k": 1e3, "m": 1e6, "b": 1e9}
+
+
+def _numbers_in(text: str) -> list[tuple[float, int, str]]:
+    """(value, decimals, suffix) for every number written in ``text``; suffix is lowercased."""
+    out: list[tuple[float, int, str]] = []
+    for m in _NUMBER_RE.finditer(text):
+        integer, fraction = m.group("int").replace(",", ""), m.group("frac") or ""
+        suffix = (m.group("suffix") or "").lower()
+        value = float(f"{integer}.{fraction}" if fraction else integer)
+        if "-" in (m.group("sign"), m.group("sign2")):
+            value = -value
+        out.append((value, len(fraction), suffix))
+    return out
+
+
+def _stated_matches(stated: tuple[float, int, str], raw: list[float], formatted: list[tuple[float, str]]) -> bool:
+    """Whether one number from the reply is a rounding of a returned value."""
+    value, decimals, suffix = stated
+    half_step = 0.5 * 10**-decimals + 1e-9
+    # Same number and same scale: "1.2" does not quote a formatted "1.2M".
+    if any(abs(f - value) < 1e-9 and f_suffix == suffix for f, f_suffix in formatted):
+        return True
+    for v in raw:
+        # A percent states the fraction times 100: "10%" quotes 0.1, and "0.1%" does not.
+        if suffix == "%":
+            if abs(v * 100 - value) <= half_step:
+                return True
+            continue
+        scale = _SCALES.get(suffix, 1.0)
+        if abs(v - value * scale) <= half_step * scale:
+            return True
+    return False
+
+
+def _row_values(data: Any) -> tuple[list[float], list[tuple[float, str]]]:
+    """Numeric cells of an execution result: the raw `rows`, and the (number, scale suffix)
+    pairs read out of `formatted_rows` -- the display strings the agent is told to quote.
+    A malformed result yields nothing rather than raising."""
+    raw: list[float] = []
+    formatted: list[tuple[float, str]] = []
+    if not isinstance(data, dict):
+        return raw, formatted
+    rows, formatted_rows = data.get("rows"), data.get("formatted_rows")
+    for row in rows if isinstance(rows, list) else []:
+        if isinstance(row, dict):
+            raw += [float(v) for v in row.values() if isinstance(v, (int, float)) and not isinstance(v, bool)]
+    for row in formatted_rows if isinstance(formatted_rows, list) else []:
+        if isinstance(row, dict):
+            for v in row.values():
+                if isinstance(v, str):
+                    formatted += [(n[0], n[2]) for n in _numbers_in(v)]
+    return raw, formatted
+
+
+def execution_signals(tool_call_events: list[ToolCallEvent], reply_text: str | None) -> tuple[bool, bool | None]:
+    """``(executed, stated_value_matches)`` for one conversation.
+
+    ``executed`` is True when ``execute_visualization`` succeeded for a ref that a successful
+    ``create_adhoc_visualization`` in the same conversation returned. The chart part of the
+    answer carries no ref, so this cannot tell which of several built charts was shown.
+
+    ``stated_value_matches`` is None when the reply states no number. Otherwise it is True
+    when one of those numbers is a rounding of a value an execution returned, and False when
+    none is -- including when nothing was executed, so the agent could not know the value.
+    """
+    created: set[str] = set()
+    for tc in tool_call_events:
+        if tc.function_name == "create_adhoc_visualization":
+            result = tc.parsed_result()
+            if not isinstance(result, dict):
+                continue
+            ref = result.get("ref") if result.get("status", "success") == "success" else None
+            if isinstance(ref, str):
+                created.add(ref)
+    raw: list[float] = []
+    formatted: list[tuple[float, str]] = []
+    executed = False
+    for tc in tool_call_events:
+        if tc.function_name != "execute_visualization":
+            continue
+        result = tc.parsed_result()
+        args = tc.parsed_arguments()
+        if not isinstance(result, dict) or not isinstance(args, dict):
+            continue
+        ref = args.get("visualization_ref")
+        if result.get("success") is True and isinstance(ref, str) and ref in created:
+            executed = True
+            r, f = _row_values(result.get("data"))
+            raw += r
+            formatted += f
+    stated = _numbers_in(reply_text or "")
+    if not stated:
+        return executed, None
+    return executed, any(_stated_matches(n, raw, formatted) for n in stated)
+
+
+def with_execution(
+    ev: EvaluationResult,
+    tool_call_events: list[ToolCallEvent],
+    reply_text: str | None,
+    requires_execution: bool,
+) -> EvaluationResult:
+    """``ev`` with the execution signals of the conversation that produced it."""
+    executed, stated_value_matches = execution_signals(tool_call_events, reply_text)
+    return replace(
+        ev, executed=executed, requires_execution=requires_execution, stated_value_matches=stated_value_matches
+    )
+
+
+def requires_execution_of(expected_output: object) -> bool:
+    """The item-level `requires_execution` flag; absent or not a boolean reads as False."""
+    return isinstance(expected_output, dict) and expected_output.get("requires_execution") is True
 
 
 def _check_visualization_skill_activated(tool_call_events: list[ToolCallEvent]) -> bool:
@@ -216,6 +349,14 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "actual_filters": ev.actual_filters,
         "expected_sorts": ev.expected_sorts,
         "actual_sorts": ev.actual_sorts,
+        # Nested: `quality_score` counts every top-level boolean, and a check an item does not
+        # gate on must not lower it. `executed` joins the top level only when it gates.
+        "execution": {
+            "executed": ev.executed,
+            "required": ev.requires_execution,
+            "stated_value_matches": ev.stated_value_matches,
+        },
+        **({"executed": ev.executed} if ev.requires_execution else {}),
     }
 
 
@@ -227,6 +368,9 @@ class VisualizationEvaluator:
         actual = _extract_actual(chat_result)
         skill_activated = _check_visualization_skill_activated(chat_result.tool_call_events)
         ev, _best_expected = _evaluate_against_candidates(candidates, actual, skill_activated)
+        ev = with_execution(
+            ev, chat_result.tool_call_events, chat_result.text_response, requires_execution_of(item.expected_output)
+        )
         return ItemEvaluation(
             passed=ev.strict_pass,
             rank_key=(ev.strict_pass, ev.strict_checks_passed_count),

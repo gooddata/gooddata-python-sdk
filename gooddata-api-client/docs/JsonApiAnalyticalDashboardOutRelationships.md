@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **analytical_dashboards** | [**JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards**](JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md) |  | [optional] 
 **certified_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
+**computed_attributes** | [**JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes**](JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes.md) |  | [optional] 
 **created_by** | [**JsonApiAgentOutRelationshipsCreatedBy**](JsonApiAgentOutRelationshipsCreatedBy.md) |  | [optional] 
 **dashboard_plugins** | [**JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins**](JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins.md) |  | [optional] 
 **datasets** | [**JsonApiAnalyticalDashboardOutRelationshipsDatasets**](JsonApiAnalyticalDashboardOutRelationshipsDatasets.md) |  | [optional] 
