@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **client_id** | **str, none_type** | The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account). | [optional] 
 **date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this. | [optional] 
 **decoded_parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Decoded parameters to be used when connecting to the database providing the data for the data source. | [optional] 
+**disable_statistics** | **bool, none_type** | Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset. | [optional] 
 **managed** | **bool** | Whether the object is platform-managed and read-only. | [optional] 
 **parameters** | [**[JsonApiDataSourceInAttributesParametersInner], none_type**](JsonApiDataSourceInAttributesParametersInner.md) | Additional parameters to be used when connecting to the database providing the data for the data source. | [optional] 
 **url** | **str, none_type** | The URL of the database providing the data for the data source. | [optional] 

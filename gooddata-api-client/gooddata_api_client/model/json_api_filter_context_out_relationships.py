@@ -31,12 +31,18 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_computed_attributes import JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
+    from gooddata_api_client.model.json_api_automation_out_relationships_facts import JsonApiAutomationOutRelationshipsFacts
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes'] = JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
     globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
+    globals()['JsonApiAutomationOutRelationshipsFacts'] = JsonApiAutomationOutRelationshipsFacts
 
 
 class JsonApiFilterContextOutRelationships(ModelNormal):
@@ -93,8 +99,11 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
         lazy_import()
         return {
             'attributes': (JsonApiAttributeHierarchyOutRelationshipsAttributes,),  # noqa: E501
+            'computed_attributes': (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
+            'facts': (JsonApiAutomationOutRelationshipsFacts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
+            'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
         }
 
     @cached_property
@@ -104,8 +113,11 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
 
     attribute_map = {
         'attributes': 'attributes',  # noqa: E501
+        'computed_attributes': 'computedAttributes',  # noqa: E501
         'datasets': 'datasets',  # noqa: E501
+        'facts': 'facts',  # noqa: E501
         'labels': 'labels',  # noqa: E501
+        'metrics': 'metrics',  # noqa: E501
     }
 
     read_only_vars = {
@@ -150,8 +162,11 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            facts (JsonApiAutomationOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -238,8 +253,11 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            facts (JsonApiAutomationOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

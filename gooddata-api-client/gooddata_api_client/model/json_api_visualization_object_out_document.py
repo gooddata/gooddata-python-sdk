@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
+    from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
+    from gooddata_api_client.model.json_api_computed_attribute_out_includes import JsonApiComputedAttributeOutIncludes
     from gooddata_api_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
+    globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
+    globals()['JsonApiComputedAttributeOutIncludes'] = JsonApiComputedAttributeOutIncludes
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -95,8 +97,9 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiVisualizationObjectOut,),  # noqa: E501
-            'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
+            'included': ([JsonApiComputedAttributeOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -154,8 +158,9 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiComputedAttributeOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -245,8 +250,9 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiComputedAttributeOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

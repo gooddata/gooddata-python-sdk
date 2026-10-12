@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
+    from gooddata_api_client.model.json_api_user_setting_in_attributes import JsonApiUserSettingInAttributes
     from gooddata_api_client.model.json_api_user_setting_out import JsonApiUserSettingOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiOrganizationSettingInAttributes'] = JsonApiOrganizationSettingInAttributes
+    globals()['JsonApiUserSettingInAttributes'] = JsonApiUserSettingInAttributes
     globals()['JsonApiUserSettingOut'] = JsonApiUserSettingOut
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
@@ -104,7 +104,7 @@ class JsonApiUserSettingOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiOrganizationSettingInAttributes,),  # noqa: E501
+            'attributes': (JsonApiUserSettingInAttributes,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -161,7 +161,7 @@ class JsonApiUserSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -269,7 +269,7 @@ class JsonApiUserSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

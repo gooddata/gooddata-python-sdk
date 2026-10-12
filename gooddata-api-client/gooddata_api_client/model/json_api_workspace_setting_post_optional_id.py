@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
-    globals()['JsonApiOrganizationSettingInAttributes'] = JsonApiOrganizationSettingInAttributes
+    from gooddata_api_client.model.json_api_user_setting_in_attributes import JsonApiUserSettingInAttributes
+    globals()['JsonApiUserSettingInAttributes'] = JsonApiUserSettingInAttributes
 
 
 class JsonApiWorkspaceSettingPostOptionalId(ModelNormal):
@@ -97,7 +97,7 @@ class JsonApiWorkspaceSettingPostOptionalId(ModelNormal):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiOrganizationSettingInAttributes,),  # noqa: E501
+            'attributes': (JsonApiUserSettingInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
         }
 
@@ -156,7 +156,7 @@ class JsonApiWorkspaceSettingPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
         """
 
@@ -248,7 +248,7 @@ class JsonApiWorkspaceSettingPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiUserSettingInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
         """
 

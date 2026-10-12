@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **certification_message** | **str, none_type** | Optional message associated with the certification. | [optional] 
 **certified_at** | **str, none_type** | Time when the certification was set. | [optional] 
 **certified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**conditional_formatting** | [**ConditionalFormatting**](ConditionalFormatting.md) |  | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Visualization object description. | [optional] 

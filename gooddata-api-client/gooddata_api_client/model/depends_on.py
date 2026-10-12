@@ -62,6 +62,10 @@ class DependsOn(ModelComposed):
     """
 
     allowed_values = {
+        ('type',): {
+            'LABEL': "label",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
+        },
     }
 
     validations = {
@@ -93,6 +97,7 @@ class DependsOn(ModelComposed):
             'label': (str,),  # noqa: E501
             'values': ([str, none_type],),  # noqa: E501
             'complement_filter': (bool,),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +109,7 @@ class DependsOn(ModelComposed):
         'label': 'label',  # noqa: E501
         'values': 'values',  # noqa: E501
         'complement_filter': 'complementFilter',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -148,6 +154,7 @@ class DependsOn(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +261,7 @@ class DependsOn(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

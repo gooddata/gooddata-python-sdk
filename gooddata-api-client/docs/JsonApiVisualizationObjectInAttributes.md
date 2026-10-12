@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Free-form JSON content. Maximum supported length is 250000 characters. | 
 **are_relations_valid** | **bool** |  | [optional] 
+**conditional_formatting** | [**JsonApiVisualizationObjectInAttributesConditionalFormatting**](JsonApiVisualizationObjectInAttributesConditionalFormatting.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
 **tags** | **[str]** |  | [optional] 

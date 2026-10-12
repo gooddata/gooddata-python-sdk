@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_label_translation import DeclarativeLabelTranslation
     from gooddata_api_client.model.geo_area_config import GeoAreaConfig
+    from gooddata_api_client.model.object_conditional_formatting import ObjectConditionalFormatting
     globals()['DeclarativeLabelTranslation'] = DeclarativeLabelTranslation
     globals()['GeoAreaConfig'] = GeoAreaConfig
+    globals()['ObjectConditionalFormatting'] = ObjectConditionalFormatting
 
 
 class DeclarativeLabel(ModelNormal):
@@ -132,6 +134,7 @@ class DeclarativeLabel(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'conditional_formatting': (ObjectConditionalFormatting,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'geo_area_config': (GeoAreaConfig,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
@@ -153,6 +156,7 @@ class DeclarativeLabel(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'description': 'description',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
@@ -211,6 +215,7 @@ class DeclarativeLabel(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             description (str): Label description.. [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501
@@ -313,6 +318,7 @@ class DeclarativeLabel(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             description (str): Label description.. [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             is_hidden (bool): Determines if the label is hidden from AI features.. [optional]  # noqa: E501

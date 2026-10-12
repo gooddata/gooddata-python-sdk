@@ -88,6 +88,7 @@ class TestDefinitionRequest(ModelNormal):
             'CRATEDB': "CRATEDB",
             'AILAKEHOUSE': "AILAKEHOUSE",
             'DENODO': "DENODO",
+            'TRINO': "TRINO",
         },
         ('authentication_type',): {
             'None': None,

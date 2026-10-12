@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_metric_in_attributes_content import JsonApiMetricInAttributesContent
-    globals()['JsonApiMetricInAttributesContent'] = JsonApiMetricInAttributesContent
+    from gooddata_api_client.model.json_api_computed_attribute_in_attributes_content import JsonApiComputedAttributeInAttributesContent
+    from gooddata_api_client.model.json_api_metric_in_attributes_conditional_formatting import JsonApiMetricInAttributesConditionalFormatting
+    globals()['JsonApiComputedAttributeInAttributesContent'] = JsonApiComputedAttributeInAttributesContent
+    globals()['JsonApiMetricInAttributesConditionalFormatting'] = JsonApiMetricInAttributesConditionalFormatting
 
 
 class JsonApiMetricInAttributes(ModelNormal):
@@ -94,8 +96,9 @@ class JsonApiMetricInAttributes(ModelNormal):
         """
         lazy_import()
         return {
-            'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
+            'content': (JsonApiComputedAttributeInAttributesContent,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
+            'conditional_formatting': (JsonApiMetricInAttributesConditionalFormatting,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
             'is_hidden_from_kda': (bool,),  # noqa: E501
@@ -111,6 +114,7 @@ class JsonApiMetricInAttributes(ModelNormal):
     attribute_map = {
         'content': 'content',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
         'is_hidden_from_kda': 'isHiddenFromKda',  # noqa: E501
@@ -129,7 +133,7 @@ class JsonApiMetricInAttributes(ModelNormal):
         """JsonApiMetricInAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -163,6 +167,7 @@ class JsonApiMetricInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            conditional_formatting (JsonApiMetricInAttributesConditionalFormatting): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
             is_hidden_from_kda (bool): [optional]  # noqa: E501
@@ -224,7 +229,7 @@ class JsonApiMetricInAttributes(ModelNormal):
         """JsonApiMetricInAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -258,6 +263,7 @@ class JsonApiMetricInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
+            conditional_formatting (JsonApiMetricInAttributesConditionalFormatting): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
             is_hidden_from_kda (bool): [optional]  # noqa: E501
