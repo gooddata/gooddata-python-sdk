@@ -813,6 +813,10 @@ class _FakeCtx:
         self.score_types: dict[str, str] = {}
         self.quality_checks: dict[str, bool] = {}
         self.observed: list[str] = []
+        self.unscored: list[str] = []
+
+    def export_unscored(self, _run_idx: int, conversation_id: str) -> None:
+        self.unscored.append(conversation_id)
 
     def trace(self, _conversation_id: str) -> None:
         return None
@@ -1067,6 +1071,7 @@ def test_an_ungraded_run_keeps_pass_at_k_but_not_pass_power_k(monkeypatch: pytes
 def test_an_ungraded_run_writes_no_scores(monkeypatch: pytest.MonkeyPatch) -> None:
     ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, _narrative_turns(), k=2, judge=_SequenceJudge())
     assert ctx.observed == ["conv-2"]
+    assert ctx.unscored == ["conv-1"]
     assert ctx.scores["document_narrative_judged"] == 1.0
     assert ctx.scores["document_summaries_present"] == 1.0
 
