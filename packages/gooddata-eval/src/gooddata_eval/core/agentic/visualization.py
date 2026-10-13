@@ -23,7 +23,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -38,6 +38,7 @@ from gooddata_eval.core.evaluators.visualization import (
     evaluation_result_detail,
     with_execution,
 )
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -430,21 +431,32 @@ def evaluate_agentic_visualization(
     """
     import json as _json  # noqa: PLC0415
 
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_visualization(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_outputs=expected_outputs,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
-        requires_execution=requires_execution,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=True)
+    with item_scope(scope):
+        summary = run_agentic_visualization(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_outputs=expected_outputs,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+            requires_execution=requires_execution,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -494,16 +506,7 @@ def evaluate_agentic_visualization(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
@@ -512,6 +515,7 @@ def evaluate_agentic_visualization(
             # Unlike the other runners, this one suffixes every run, K=1 included.
             suffix_runs=True,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 

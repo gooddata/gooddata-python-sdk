@@ -44,7 +44,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -52,6 +52,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -530,20 +531,31 @@ def evaluate_agentic_anomaly_detection(
     user_context: dict | None = None,
 ) -> AgenticEvalOutcome:
     """Run anomaly-detection evaluation, log to Langfuse, and raise on failure."""
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_anomaly_detection(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_anomaly_detection(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -574,7 +586,7 @@ def evaluate_agentic_anomaly_detection(
                         if name in ev.asserted
                     }
                 )
-                with ctx.observe(pt, run_idx) as tid:
+                with ctx.observe(pt, run_idx, conversation_id=run.conversation_id) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
@@ -595,23 +607,15 @@ def evaluate_agentic_anomaly_detection(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             # The question this run answered, so a score is readable without resolving the
             # conversation back to its item.
             item_input=question,

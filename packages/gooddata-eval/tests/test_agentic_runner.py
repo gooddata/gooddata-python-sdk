@@ -5,6 +5,7 @@ import inspect
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
 from typing import Any
 from unittest.mock import patch
 
@@ -20,7 +21,8 @@ from gooddata_eval.cli.agentic_runner import (
 )
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
+from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, current_scope
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.timing import PhaseTimings
 
 
@@ -980,3 +982,83 @@ def test_run_agentic_items_passes_custom_tags_as_run_metadata(tags, expected_ext
             [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", tags=tags
         )
     assert mock_eval.call_args.kwargs["run_metadata_extra"] == expected_extra
+
+
+class _FirstSend(BaseException):
+    """Ends a run at its first chat turn; BaseException so no kind's error handling keeps it."""
+
+
+class _FirstSendClient:
+    def __init__(self, **_kwargs: Any) -> None:
+        self.sent: list[str] = []
+
+    def create_conversation(self) -> str:
+        return "conv-created"
+
+    def send_message(self, conversation_id: str, *_args: Any, **_kwargs: Any) -> None:
+        self.sent.append(conversation_id)
+        raise _FirstSend
+
+    def delete_conversation(self, _conversation_id: str) -> None:
+        pass
+
+    def close(self) -> None:
+        pass
+
+
+_RUN_ZERO_KINDS = [
+    (m, run_fn, expected or [CreatedVisualization.model_validate(_MIN_VIZ)] if m == "visualization" else expected)
+    for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS
+] + [("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "expected"), _RUN_ZERO_KINDS)
+def test_every_kind_sends_run_zero_first(
+    module_name: str, run_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """ChatClient numbers runs by the order their conversations are first sent to, which
+    names each run's experiment; that only matches the scorer's run index if run 0 goes first."""
+    # The guardrail and general-question kinds build their LLM judge before the first send.
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    client = _FirstSendClient()
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+        kwargs: dict[str, Any] = {}
+    else:
+        args, kwargs = ("q", expected), {"k": 2}
+    with patch.object(module, "ChatClient", return_value=client), pytest.raises(_FirstSend):
+        getattr(module, run_fn)("https://h", "tok", "ws1", *args, initial_conversation_id="conv-run0", **kwargs)
+    assert client.sent == ["conv-run0"]
+
+
+_SCOPED_KINDS = [(m, run_fn, evaluate_fn, expected) for m, run_fn, evaluate_fn, expected in _CLIENT_CONTEXT_KINDS] + [
+    ("conversation", "run_agentic_conversation", "evaluate_agentic_conversation", _MIN_CONVERSATION_FIXTURE)
+]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _SCOPED_KINDS)
+def test_evaluate_agentic_runs_its_k_runs_inside_the_item_scope(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    scope = ItemTraceScope("ds", True, "ds-1", "item-1")
+    seen: list[ItemTraceScope | None] = []
+
+    def run(*_args: Any, **_kwargs: Any) -> None:
+        seen.append(current_scope())
+        raise _Stop
+
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+    else:
+        args = ("q", expected)
+    with (
+        patch.object(module, "open_item_trace", return_value=(None, datetime.now(timezone.utc), scope)),
+        patch.object(module, run_fn, side_effect=run),
+        pytest.raises(_Stop),
+    ):
+        getattr(module, evaluate_fn)("https://h", "tok", "ws1", *args)
+
+    assert seen == [scope]
