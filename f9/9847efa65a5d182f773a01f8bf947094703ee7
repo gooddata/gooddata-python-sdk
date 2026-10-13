@@ -1,31 +1,41 @@
 packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_ba26c1bd500bfe::t_2c100c2233bcd1 70-72,126-150,152-155,159-160,169-182,184,186-187,190,203-209,211-212,224,227,232-249,252,255-256,261,509-511,519,536,539,552-559
-  s_6942d73c7f07bc::t_29de41a6252392 216
+  s_ba26c1bd500bfe::t_2c100c2233bcd1 70-72,126-150,152-155,159-160,169-182,184,186-187,190,203-209,211-212,224,227,232-254,257,260-261,266,514-516,524,541,544,557-564
   s_6942d73c7f07bc::t_5dbef32af76703 217-218
+  s_6942d73c7f07bc::t_29de41a6252392 216
 packages/gooddata-eval/tests/test_agentic_document_skill.py
-  s_6942d73c7f07bc::t_485e0ff3ab24fe 23
-  s_6942d73c7f07bc::t_856803215e2278 211,301-302,316,319,386,1215-1220
-  s_6942d73c7f07bc::t_73f9df6c4a6e04 409-413
-  s_6942d73c7f07bc::t_719aadd02b097b 98-210,212
+  s_b4ef09eebe7513::t_ab457666e5dedb 1228
   s_6942d73c7f07bc::t_e71e6b74820012 387
-  s_6942d73c7f07bc::t_40abbda56c83a1 388,1102-1214
-  s_6942d73c7f07bc::t_089ced2723fa78 947-948,950-954
-  s_6942d73c7f07bc::t_59827f4f8d99be 300
-  s_6942d73c7f07bc::t_aaeec93acef942 317
-  s_6942d73c7f07bc::t_2a67a466cc4aa6 720-721,729-732,737-739
+  s_6942d73c7f07bc::t_73f9df6c4a6e04 409-413
+  s_6942d73c7f07bc::t_40abbda56c83a1 388,1102-1166,1174-1221
+  s_6942d73c7f07bc::t_485e0ff3ab24fe 23
   s_6942d73c7f07bc::t_73461225313129 395-396,398
+  s_6942d73c7f07bc::t_719aadd02b097b 98-210,212
+  s_6942d73c7f07bc::t_856803215e2278 211,301-302,316,319,386,1222-1227
   s_6942d73c7f07bc::t_37d7fd2670ab8f 906,909
+  s_6942d73c7f07bc::t_089ced2723fa78 947-948,950-954
+  s_6942d73c7f07bc::t_aaeec93acef942 317
+  s_6942d73c7f07bc::t_59827f4f8d99be 300
+  s_6942d73c7f07bc::t_2a67a466cc4aa6 720-721,729-732,737-739
+  s_6942d73c7f07bc::t_0d726d91f06b55 1167-1173
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "759c42b3dabdaa3a7253295faebf608b38200523",
+  "base_commit_sha": "f99847efa65a5d182f773a01f8bf947094703ee7",
   "prompts": {},
   "sessions": {
     "s_6942d73c7f07bc": {
       "agent_id": {
         "tool": "claude",
         "id": "7d242fef-efad-4ca2-9342-3b7875c48b7a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    },
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
         "model": "claude-opus-5-5"
       },
       "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
