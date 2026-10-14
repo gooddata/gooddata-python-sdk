@@ -12,6 +12,7 @@ Credentials are read from the standard Langfuse environment variables:
   LANGFUSE_HOST         — base URL, legacy alias for LANGFUSE_BASE_URL
 """
 
+from collections.abc import Collection, Mapping
 from typing import Any, TypeVar, cast
 
 import httpx
@@ -22,6 +23,19 @@ from gooddata_eval.core.models import DatasetItem, SummaryInput
 _PAGE_SIZE = 100
 
 _T = TypeVar("_T")
+
+
+class DatasetItemNotFoundError(LookupError):
+    """Named item ids were asked for and the dataset does not have them.
+
+    Raised rather than silently returning the ids that did exist: asking for twelve items
+    and evaluating nine, with nothing said, reads downstream as a pass-rate change.
+    """
+
+    def __init__(self, dataset_name: str, missing: Collection[str]) -> None:
+        self.dataset_name = dataset_name
+        self.missing = sorted(missing)
+        super().__init__(f"Langfuse dataset {dataset_name!r} has no item(s) with id: {', '.join(self.missing)}")
 
 
 def _make_client() -> httpx.Client:
@@ -124,21 +138,52 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         expected_output=expected_output,
         summary_input=_summary_input_from_raw(raw, expected_output),
         user_context=_user_context_from_raw(raw),
+        metadata=metadata if isinstance(metadata := raw.get("metadata"), dict) else {},
     )
 
 
-def load_langfuse_dataset(name: str, *, default_test_kind: str = "visualization") -> list[DatasetItem]:
-    """Pull all items from a Langfuse dataset by name via the REST API.
+def _matches_metadata(item: DatasetItem, metadata_filter: Mapping[str, str]) -> bool:
+    """True when the item's metadata carries every wanted key with the wanted value.
+
+    Values are compared as strings because the filter arrives from a CLI `KEY=VALUE` pair,
+    where everything is a string, while the item side may hold a number or a bool. A key
+    the item does not have never matches -- an item with no `language` is not an item in
+    every language.
+    """
+    return all(key in item.metadata and str(item.metadata[key]) == value for key, value in metadata_filter.items())
+
+
+def load_langfuse_dataset(
+    name: str,
+    *,
+    default_test_kind: str = "visualization",
+    item_ids: Collection[str] | None = None,
+    metadata_filter: Mapping[str, str] | None = None,
+) -> list[DatasetItem]:
+    """Pull items from a Langfuse dataset by name via the REST API.
+
+    Both filters are applied client-side, after the fetch: the Langfuse dataset-items
+    endpoint can select by dataset but not by item id or item metadata, so narrowing has
+    to happen here. The fetch cost is the whole dataset either way; what the filters save
+    is the part that actually costs -- evaluating an item against a live agent.
 
     Args:
         name: The Langfuse dataset name (as shown in the Langfuse UI).
         default_test_kind: Fallback test_kind when the item doesn't specify one.
+        item_ids: Keep only these item ids. Every id must exist, or it raises -- see
+            `DatasetItemNotFoundError`.
+        metadata_filter: Keep only items whose metadata carries all of these key/value
+            pairs, compared as strings.
+
+    Given both, an item has to satisfy both.
 
     Returns:
-        Parsed dataset items.
+        Parsed dataset items, in the order Langfuse returned them.
 
     Raises:
         RuntimeError: Missing Langfuse credentials or dataset not found.
+        ValueError: The dataset is empty, or the filters selected nothing from it.
+        DatasetItemNotFoundError: `item_ids` named an id the dataset does not have.
     """
     items: list[dict] = []
     page = 1
@@ -165,4 +210,21 @@ def load_langfuse_dataset(name: str, *, default_test_kind: str = "visualization"
     if not items:
         raise ValueError(f"Langfuse dataset '{name}' exists but contains no items.")
 
-    return [_item_from_raw(raw, dataset_name=name, test_kind=default_test_kind) for raw in items]
+    parsed = [_item_from_raw(raw, dataset_name=name, test_kind=default_test_kind) for raw in items]
+
+    if item_ids is not None:
+        wanted = set(item_ids)
+        if missing := wanted - {item.id for item in parsed}:
+            raise DatasetItemNotFoundError(name, missing)
+        parsed = [item for item in parsed if item.id in wanted]
+
+    if metadata_filter:
+        parsed = [item for item in parsed if _matches_metadata(item, metadata_filter)]
+
+    if not parsed:
+        raise ValueError(
+            f"Langfuse dataset '{name}' has items, but none matched the requested filter "
+            f"(metadata_filter={dict(metadata_filter or {})!r})."
+        )
+
+    return parsed
