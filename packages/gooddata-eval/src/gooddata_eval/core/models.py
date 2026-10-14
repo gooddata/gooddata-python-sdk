@@ -341,6 +341,8 @@ class ChatResult(BaseModel):
     reasoning_step_events: list[ReasoningStepEvent] = Field(default_factory=list, alias="reasoningStepEvents")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
+    # The Langfuse trace gen-ai opened the turn in, from its response_started event.
+    trace_id: str | None = Field(default=None, alias="traceId")
     # True once gen-ai's response_ended event arrived.
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.

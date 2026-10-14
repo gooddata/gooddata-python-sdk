@@ -20,6 +20,7 @@ from gooddata_eval.core.agentic.document_skill import (
     evaluate_agentic_document_skill,
     evaluate_document_response,
     legacy_wire_names,
+    render_document_text,
     run_agentic_document_skill,
 )
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
@@ -92,6 +93,124 @@ def _document_part(
         "base_document_id": base_document_id,
         "saved_document_id": saved_document_id,
     }
+
+
+# v2 shapes follow the Publisher content v2 model: a top-level `version`, an absolute or relative
+# `period`, and `content` holding the pages, whose layout nests `row` and `column` containers
+# through `children` down to typed widgets.
+_V2_PERIOD = {"type": "absolute", "granularity": "GDC.time.date", "from": "2026-01-01", "to": "2026-06-30"}
+
+
+def _v2_cover_page() -> dict:
+    return {
+        "id": "page1",
+        "kind": "cover",
+        "layout": {
+            "type": "column",
+            "children": [{"type": "title", "id": "coverTitle", "proportion": 2, "markdown": "{documentName}"}],
+        },
+    }
+
+
+def _v2_content_page(page_id: str, *visualizations: str, takeaway: str | None = None, bare_ids: bool = False) -> dict:
+    """A content page; ``takeaway`` adds a takeaway widget, and ``""`` adds one with no text written."""
+    widgets: list[dict] = [
+        {
+            "type": "visualization",
+            "id": f"widget{i}",
+            "visualization": v if bare_ids else {"identifier": v, "type": "insight"},
+            "title": {"visible": True},
+        }
+        for i, v in enumerate(visualizations, start=1)
+    ]
+    row: list[dict] = [{"type": "row", "proportion": 2, "children": widgets}]
+    if takeaway is not None:
+        row.append(
+            {
+                "type": "takeaway",
+                "id": "takeaway",
+                "title": {"text": "Key takeaway"},
+                **({"markdown": takeaway} if takeaway else {}),
+                "generation": {"context": {"widgets": ["widget1"]}},
+            }
+        )
+    return {
+        "id": page_id,
+        "kind": "content",
+        "layout": {
+            "type": "column",
+            "children": [
+                {"type": "title", "id": "pageTitle", "proportion": 2, "markdown": "Revenue"},
+                {"type": "row", "proportion": 9, "children": row},
+                {
+                    "type": "text",
+                    "id": "footerPageNumber",
+                    "markdown": "{currentPageNumber} / {totalPages}",
+                    "decorative": True,
+                },
+            ],
+        },
+    }
+
+
+def _v2_document(pages: list[dict], *, period: Any = None, form: str = "entity") -> dict:
+    """A v2 document: ``entity`` keeps the pages in ``content``, ``flat`` lifts the content keys to
+    the top level, and ``sections`` groups the cover and the remaining pages into two sections."""
+    content: dict[str, Any] = {"pages": pages}
+    if form == "sections":
+        content = {
+            "sections": [
+                {"id": "section_intro", "title": "Intro", "pages": pages[:1]},
+                {"id": "section_body", "pages": pages[1:]},
+            ]
+        }
+    document: dict[str, Any] = {
+        "type": "document",
+        "id": "sales_overview",
+        "version": "2",
+        "title": "Sales overview",
+        "period": period if period is not None else _V2_PERIOD,
+    }
+    return {**document, **content} if form == "flat" else {**document, "content": content}
+
+
+def _v2_document_part(
+    pages: list[dict] | None = None, *, period: Any = None, form: str = "entity", **kwargs: Any
+) -> dict:
+    """A v2 part; ``page_count`` defaults to the visible pages, as a reader counts them."""
+    pages = pages if pages is not None else [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND)]
+    kwargs.setdefault("page_count", sum(1 for page in pages if page.get("visible") is not False))
+    part = _document_part(pages, document=_v2_document(pages, period=period, form=form), **kwargs)
+    return {**part, "format": "aac-v2"}
+
+
+# Builders keyed by schema version, for the tests whose assertion is the same for v1 and v2.
+_VERSIONS = ["v1", "v2"]
+
+
+def _versioned_cover(version: str) -> dict:
+    return _cover_page() if version == "v1" else _v2_cover_page()
+
+
+def _versioned_content(version: str, page_id: str, *visualizations: str, summary: str | None = None) -> dict:
+    if version == "v1":
+        return (
+            _content_page(page_id, *visualizations)
+            if summary is None
+            else _summary_page(page_id, summary, *visualizations)
+        )
+    return _v2_content_page(page_id, *visualizations, takeaway=summary)
+
+
+def _versioned_part(
+    version: str, pages: list[dict] | None = None, *, period: tuple[str, str] | None = None, **kwargs: Any
+) -> dict:
+    if version == "v1":
+        return _document_part(
+            pages, period=None if period is None else {"start": period[0], "end": period[1]}, **kwargs
+        )
+    v2_period = None if period is None else {**_V2_PERIOD, "from": period[0], "to": period[1]}
+    return _v2_document_part(pages, period=v2_period, **kwargs)
 
 
 def _draft_result(*, ref: str = "document_1", page_count: int = 2, summaries_from_data: int = 1) -> dict:
@@ -181,8 +300,9 @@ def _evaluate(
     )
 
 
-def test_a_drafted_document_returned_in_the_chat_item_passes() -> None:
-    evaluation = _evaluate(_document_part())
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_a_drafted_document_returned_in_the_chat_item_passes(version: str) -> None:
+    evaluation = _evaluate(_versioned_part(version))
     assert evaluation.strict_checks == {
         "document_drafted": True,
         "document_part_present": True,
@@ -196,9 +316,10 @@ def test_a_drafted_document_returned_in_the_chat_item_passes() -> None:
     assert evaluation.failures == []
 
 
-def test_period_and_charts_are_scored_only_when_the_fixture_states_them() -> None:
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_period_and_charts_are_scored_only_when_the_fixture_states_them(version: str) -> None:
     expected = {"period": _PERIOD, "visualizations": [{"id": _REVENUE_TREND, "title": "Revenue trend"}]}
-    checks = _evaluate(_document_part(), expected=expected).strict_checks
+    checks = _evaluate(_versioned_part(version), expected=expected).strict_checks
     assert checks["document_period_correct"] is True
     assert checks["document_charts_matched"] is True
 
@@ -265,19 +386,19 @@ def test_a_new_draft_must_not_edit_a_saved_document() -> None:
     ]
 
 
-def test_a_wrong_period_fails() -> None:
-    evaluation = _evaluate(
-        _document_part(period={"start": "2025-07-01", "end": "2025-12-31"}), expected={"period": _PERIOD}
-    )
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_a_wrong_period_fails(version: str) -> None:
+    evaluation = _evaluate(_versioned_part(version, period=("2025-07-01", "2025-12-31")), expected={"period": _PERIOD})
     assert evaluation.strict_checks["document_period_correct"] is False
     assert evaluation.failures == [
         "the document covers 2025-07-01 to 2025-12-31, expected 2026-01-01 to 2026-06-30",
     ]
 
 
-def test_a_missing_chart_fails_and_is_named() -> None:
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_a_missing_chart_fails_and_is_named(version: str) -> None:
     expected = {"visualizations": [{"id": _RETURNS_BY_CATEGORY, "title": "Returns by category"}]}
-    evaluation = _evaluate(_document_part(), expected=expected)
+    evaluation = _evaluate(_versioned_part(version), expected=expected)
     assert evaluation.strict_checks["document_charts_matched"] is False
     assert evaluation.failures == ["the document does not show chart 'returns_by_category' ('Returns by category')"]
 
@@ -288,9 +409,11 @@ def test_a_routing_miss_fails_the_skill_check_alone() -> None:
     assert [name for name, ok in evaluation.strict_checks.items() if not ok] == ["document_skill_activated"]
 
 
-def test_visualizations_are_found_however_deep_the_layout_nests_them() -> None:
-    page = _content_page("page2", _REVENUE_TREND, _RETURNS_BY_CATEGORY)
-    assert _visualizations_of({"pages": [_cover_page(), page]}) == {_REVENUE_TREND, _RETURNS_BY_CATEGORY}
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_visualizations_are_found_however_deep_the_layout_nests_them(version: str) -> None:
+    page = _versioned_content(version, "page2", _REVENUE_TREND, _RETURNS_BY_CATEGORY)
+    document = _versioned_part(version, [_versioned_cover(version), page])["document"]
+    assert _visualizations_of(document) == {_REVENUE_TREND, _RETURNS_BY_CATEGORY}
 
 
 def _legacy_part() -> dict:
@@ -400,7 +523,7 @@ def test_a_failing_item_on_the_report_names_points_at_the_rename_not_the_flags(
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
 
     assert "gen-ai still sends the Report names" in str(raised.value)
-    assert "enableGenAiDocumentBuilderSkill" not in str(raised.value)
+    assert "enableGenAiReportBuilderSkill" not in str(raised.value)
 
 
 def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -546,7 +669,7 @@ def test_a_failing_item_without_document_builder_points_at_the_flags(monkeypatch
     _install_client(monkeypatch, _ScriptedChatClient([turn]))
     with pytest.raises(
         DocumentSkillAssertionError,
-        match="enableGenAiDocumentBuilderSkill and the org.s enableBusinessBriefingReportsApp",
+        match="enableGenAiReportBuilderSkill and the org.s enableBusinessBriefingReportsApp",
     ):
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
 
@@ -597,8 +720,8 @@ def test_a_structured_clarifying_question_counts_as_asking() -> None:
 # ── page kinds, fixture keys, asking, two drafts in one turn ───────────────
 
 
-def _page(page_id: str, kind: str | None) -> dict:
-    page = _content_page(page_id, _REVENUE_TREND)
+def _page(page_id: str, kind: str | None, version: str = "v1") -> dict:
+    page = _versioned_content(version, page_id, _REVENUE_TREND)
     if kind is None:
         del page["kind"]
     else:
@@ -606,14 +729,17 @@ def _page(page_id: str, kind: str | None) -> dict:
     return page
 
 
-def test_a_document_that_does_not_open_with_a_cover_fails() -> None:
-    evaluation = _evaluate(_document_part([_page("page1", "content"), _page("page2", "content")]))
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_a_document_that_does_not_open_with_a_cover_fails(version: str) -> None:
+    pages = [_page("page1", "content", version), _page("page2", "content", version)]
+    evaluation = _evaluate(_versioned_part(version, pages))
     assert evaluation.strict_checks["document_pages_consistent"] is False
     assert evaluation.failures == ["the document opens with a 'content' page, not a cover"]
 
 
-def test_a_document_without_a_content_page_fails() -> None:
-    evaluation = _evaluate(_document_part([_cover_page(), _page("page2", "section")]))
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_a_document_without_a_content_page_fails(version: str) -> None:
+    evaluation = _evaluate(_versioned_part(version, [_versioned_cover(version), _page("page2", "section", version)]))
     assert evaluation.strict_checks["document_pages_consistent"] is False
     assert evaluation.failures == ["the document has no content page"]
 
@@ -687,6 +813,10 @@ class _FakeCtx:
         self.score_types: dict[str, str] = {}
         self.quality_checks: dict[str, bool] = {}
         self.observed: list[str] = []
+        self.unscored: list[str] = []
+
+    def export_unscored(self, _run_idx: int, conversation_id: str) -> None:
+        self.unscored.append(conversation_id)
 
     def trace(self, _conversation_id: str) -> None:
         return None
@@ -780,10 +910,10 @@ class _FakeJudge:
         return self._passed, "fine" if self._passed else "the summaries ignore returns"
 
 
-def _narrative_turn(*pages: dict) -> ChatResult:
+def _narrative_turn(*pages: dict, version: str = "v1") -> ChatResult:
     return _chat_result(
         tool_calls=[_tool_call("draft_document", _draft_result(page_count=len(pages)))],
-        parts=[_document_part(list(pages))],
+        parts=[_versioned_part(version, list(pages))],
         text="I've put together a document.",
     )
 
@@ -821,9 +951,14 @@ def test_summaries_are_not_checked_unless_the_fixture_asks_for_the_narrative() -
     assert "document_narrative_judged" not in evaluation.strict_checks
 
 
-def test_the_judge_reads_the_document_as_text() -> None:
+@pytest.mark.parametrize("version", _VERSIONS)
+def test_the_judge_reads_the_document_as_text(version: str) -> None:
     judge = _FakeJudge()
-    turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
+    turn = _narrative_turn(
+        _versioned_cover(version),
+        _versioned_content(version, "page2", _REVENUE_TREND, summary="Revenue grew 12%."),
+        version=version,
+    )
     run = _execute_single_document_run(
         _ScriptedChatClient([turn]), "c", "Document on revenue", {"narrative": _NARRATIVE}, 4, judge=judge
     )
@@ -936,6 +1071,7 @@ def test_an_ungraded_run_keeps_pass_at_k_but_not_pass_power_k(monkeypatch: pytes
 def test_an_ungraded_run_writes_no_scores(monkeypatch: pytest.MonkeyPatch) -> None:
     ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, _narrative_turns(), k=2, judge=_SequenceJudge())
     assert ctx.observed == ["conv-2"]
+    assert ctx.unscored == ["conv-1"]
     assert ctx.scores["document_narrative_judged"] == 1.0
     assert ctx.scores["document_summaries_present"] == 1.0
 
@@ -969,6 +1105,203 @@ def test_only_content_pages_count_for_summaries() -> None:
     evaluation = _evaluate(_document_part(pages), expected={"narrative": _NARRATIVE})
     assert evaluation.strict_checks["document_summaries_present"] is False
     assert evaluation.failures == ["the document has no summary slot"]
+
+
+# ── v2 documents ────────────────────────────────────────────────────────────
+
+_V2_EXPECTED = {
+    "period": _PERIOD,
+    "visualizations": [{"id": _REVENUE_TREND, "title": "Revenue trend"}],
+    "narrative": _NARRATIVE,
+}
+
+
+def _v2_written_pages() -> list[dict]:
+    return [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND, takeaway="Revenue grew 12%.")]
+
+
+@pytest.mark.parametrize("form", ["entity", "flat", "sections"])
+def test_a_v2_document_scores_on_every_check_whatever_form_holds_its_pages(form: str) -> None:
+    evaluation = _evaluate(_v2_document_part(_v2_written_pages(), form=form), expected=_V2_EXPECTED)
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_pages_consistent"] is True
+    assert evaluation.strict_checks["document_period_correct"] is True
+    assert evaluation.strict_checks["document_charts_matched"] is True
+    assert evaluation.strict_checks["document_summaries_present"] is True
+
+
+def test_sections_are_read_in_order_as_one_list_of_pages() -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY),
+    ]
+    document = _v2_document(pages, form="sections")
+    assert _visualizations_of(document) == {_REVENUE_TREND, _RETURNS_BY_CATEGORY}
+    assert render_document_text(document).splitlines()[3:] == [
+        "Page 2: Revenue",
+        "Charts: revenue_trend",
+        "",
+        "Page 3: Revenue",
+        "Charts: returns_by_category",
+    ]
+
+
+def test_a_v2_document_that_does_not_open_with_a_cover_fails_across_sections() -> None:
+    pages = [_v2_content_page("page1", _REVENUE_TREND), _v2_cover_page()]
+    evaluation = _evaluate(_v2_document_part(pages, form="sections"))
+    assert evaluation.failures == ["the document opens with a 'content' page, not a cover"]
+
+
+def test_a_bare_visualization_id_is_matched_as_in_as_code() -> None:
+    pages = [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND, bare_ids=True)]
+    expected = {"visualizations": [{"id": _REVENUE_TREND, "title": "Revenue trend"}]}
+    assert _evaluate(_v2_document_part(pages), expected=expected).strict_checks["document_charts_matched"] is True
+
+
+def test_a_relative_period_never_matches_the_expected_dates() -> None:
+    relative = {"type": "relative", "granularity": "GDC.time.month", "from": -6, "to": -1}
+    part = _v2_document_part(period=relative)
+    evaluation = _evaluate(part, expected={"period": _PERIOD})
+    assert evaluation.strict_checks["document_period_correct"] is False
+    assert evaluation.failures == [
+        "the document covers the relative range GDC.time.month -6 to -1, expected 2026-01-01 to 2026-06-30"
+    ]
+    assert render_document_text(part["document"]).splitlines()[1] == (
+        "Period: the relative range GDC.time.month -6 to -1"
+    )
+
+
+def test_a_period_that_is_not_an_object_fails_instead_of_crashing() -> None:
+    part = _v2_document_part()
+    part["document"]["period"] = "last six months"
+    evaluation = _evaluate(part, expected={"period": _PERIOD})
+    assert evaluation.strict_checks["document_period_correct"] is False
+    assert render_document_text(part["document"]).splitlines()[1] == "Period: None to None"
+
+
+def test_every_takeaway_needs_written_text() -> None:
+    pages = [*_v2_written_pages(), _v2_content_page("page3", _RETURNS_BY_CATEGORY, takeaway="")]
+    evaluation = _evaluate(
+        _v2_document_part(pages), expected={"narrative": _NARRATIVE}, tool=_draft_result(page_count=3)
+    )
+    assert evaluation.strict_checks["document_summaries_present"] is False
+    assert evaluation.failures == ["page 'page3' has a takeaway with no written text"]
+
+
+def test_a_takeaway_made_only_of_placeholders_is_not_written() -> None:
+    pages = [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND, takeaway="{periodStart} – {periodEnd}")]
+    evaluation = _evaluate(_v2_document_part(pages), expected={"narrative": _NARRATIVE})
+    assert evaluation.failures == ["page 'page2' has a takeaway with no written text"]
+
+
+def _with_summary_text(page: dict, markdown: str | None) -> dict:
+    """``page`` plus the default template's ``text`` widget with id ``summary``, which is not a takeaway."""
+    page["layout"]["children"].append(
+        {"type": "text", "id": "summary", **({"markdown": markdown} if markdown is not None else {})}
+    )
+    return page
+
+
+def test_a_v2_document_without_a_takeaway_has_no_summaries() -> None:
+    page = _with_summary_text(_v2_content_page("page2", _REVENUE_TREND), "Revenue grew 12%.")
+    part = _v2_document_part([_v2_cover_page(), page])
+    evaluation = _evaluate(part, expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is False
+    assert evaluation.failures == ["the document has no takeaway"]
+    assert "Summary:" not in render_document_text(part["document"])
+
+
+def test_an_empty_summary_text_beside_a_written_takeaway_is_ignored() -> None:
+    page = _with_summary_text(_v2_content_page("page2", _REVENUE_TREND, takeaway="Revenue grew 12%."), None)
+    part = _v2_document_part([_v2_cover_page(), page])
+    evaluation = _evaluate(part, expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is True
+    assert render_document_text(part["document"]).splitlines()[-1] == "Summary: Revenue grew 12%."
+
+
+def test_a_written_summary_text_does_not_stand_in_for_an_empty_takeaway() -> None:
+    page = _with_summary_text(_v2_content_page("page2", _REVENUE_TREND, takeaway=""), "Revenue grew 12%.")
+    evaluation = _evaluate(_v2_document_part([_v2_cover_page(), page]), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is False
+    assert evaluation.failures == ["page 'page2' has a takeaway with no written text"]
+
+
+def test_every_takeaway_on_a_page_is_checked() -> None:
+    page = _v2_content_page("page2", _REVENUE_TREND, takeaway="Revenue grew 12%.")
+    page["layout"]["children"][1]["children"].append({"type": "takeaway", "id": "takeaway2"})
+    evaluation = _evaluate(_v2_document_part([_v2_cover_page(), page]), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is False
+    assert evaluation.failures == ["page 'page2' has a takeaway with no written text"]
+
+
+def test_a_v2_heading_widget_is_a_page_heading() -> None:
+    page = _v2_content_page("page2", _REVENUE_TREND)
+    page["layout"]["children"][0] = {"type": "heading", "id": "pageHeading", "markdown": "Returns", "level": 1}
+    document = _v2_document([_v2_cover_page(), page])
+    assert render_document_text(document).splitlines()[3] == "Page 2: Returns"
+
+
+def test_sections_win_over_pages_when_a_document_has_both() -> None:
+    document = _v2_document([_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND)], form="sections")
+    document["content"]["pages"] = [_v2_cover_page(), _v2_content_page("page9", _RETURNS_BY_CATEGORY)]
+    assert _visualizations_of(document) == {_REVENUE_TREND}
+
+
+def test_a_layout_whose_children_is_not_a_list_is_read_as_a_leaf() -> None:
+    page = _v2_content_page("page2", _REVENUE_TREND)
+    page["layout"]["children"].append({"type": "row", "children": 5})
+    assert _visualizations_of(_v2_document([_v2_cover_page(), page])) == {_REVENUE_TREND}
+
+
+def _hidden(page: dict) -> dict:
+    return {**page, "visible": False}
+
+
+def _pages_with_a_hidden_one() -> list[dict]:
+    return [
+        _v2_cover_page(),
+        _hidden(_v2_content_page("page2", _RETURNS_BY_CATEGORY, takeaway="")),
+        _v2_content_page("page3", _REVENUE_TREND, takeaway="Revenue grew 12%."),
+    ]
+
+
+def test_a_hidden_page_is_left_out_of_every_check_and_of_the_judge_text() -> None:
+    part = _v2_document_part(_pages_with_a_hidden_one())
+    evaluation = _evaluate(part, expected={"narrative": _NARRATIVE}, tool=_draft_result(page_count=2))
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_pages_consistent"] is True
+    assert evaluation.strict_checks["document_summaries_present"] is True
+    assert _visualizations_of(part["document"]) == {_REVENUE_TREND}
+    assert render_document_text(part["document"]) == (
+        "Document: Sales overview\n"
+        "Period: 2026-01-01 to 2026-06-30\n"
+        "\n"
+        "Page 2: Revenue\n"
+        "Charts: revenue_trend\n"
+        "Summary: Revenue grew 12%."
+    )
+
+
+def test_a_page_count_that_includes_a_hidden_page_fails() -> None:
+    evaluation = _evaluate(
+        _v2_document_part(_pages_with_a_hidden_one(), page_count=3), tool=_draft_result(page_count=3)
+    )
+    assert evaluation.strict_checks["document_pages_consistent"] is False
+    assert evaluation.failures == ["the document has 2 page(s), but the part says 3 and draft_document said 3"]
+
+
+def test_a_hidden_cover_does_not_open_the_document() -> None:
+    pages = [_hidden(_v2_cover_page()), _v2_content_page("page2", _REVENUE_TREND)]
+    evaluation = _evaluate(_v2_document_part(pages), tool=_draft_result(page_count=1))
+    assert evaluation.strict_checks["document_pages_consistent"] is False
+    assert evaluation.failures == ["the document opens with a 'content' page, not a cover"]
+
+
+def test_a_document_whose_only_content_page_is_hidden_has_no_content_page() -> None:
+    pages = [_v2_cover_page(), _hidden(_v2_content_page("page2", _REVENUE_TREND))]
+    evaluation = _evaluate(_v2_document_part(pages), tool=_draft_result(page_count=1))
+    assert evaluation.failures == ["the document has no content page"]
 
 
 def test_the_report_skill_module_still_exports_the_old_names() -> None:

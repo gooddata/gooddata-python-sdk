@@ -20,7 +20,8 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    conversations_to_link,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -29,6 +30,7 @@ from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -282,19 +284,30 @@ def evaluate_agentic_general_question(
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_general_question(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_general_question(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -307,6 +320,7 @@ def evaluate_agentic_general_question(
                 if run.judge_error is not None:
                     # No verdict for this run: float(run.passed) would write a 0 the judge
                     # never returned.
+                    ctx.export_unscored(run_idx, run.conversation_id)
                     continue
                 pt = ctx.trace(run.conversation_id)
                 with ctx.observe(
@@ -325,25 +339,19 @@ def evaluate_agentic_general_question(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
-            # Ungraded runs are skipped above, so polling for their traces would only spend
-            # the item's shared retry budget on scores that never get written.
-            conversation_ids=[r.conversation_id for r in summary.scored_run_results],
+            # An ungraded run is read only when it joined: its root still has to be exported.
+            conversation_ids=conversations_to_link(
+                [r.conversation_id for r in summary.scored_run_results],
+                [r.conversation_id for r in summary.run_results if r.judge_error is not None],
+            ),
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
