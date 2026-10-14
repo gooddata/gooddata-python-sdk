@@ -59,7 +59,7 @@
   .floattip .diffhead { margin-top: 8px; color: var(--warn-ink); }
   .latestpill { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--lime); color: var(--on-lime);
     font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
-  .lat-table tr.latest td:first-child { font-weight: 700; color: var(--ink-strong); }
+  .lat-table tr.latest td:first-child, .out-table tr.latest td:first-child { font-weight: 700; color: var(--ink-strong); }
   .ext { display: inline-block; padding: 1px 6px; margin: -1px -6px; border-radius: 3px; }
   .ext.best { background: var(--pass-bg); color: var(--pass-ink); }
   .ext.same { background: var(--track); color: var(--ink); }
@@ -136,6 +136,33 @@
   h3.cap { margin: 14px 0 6px; }
   #latency h2:not(:first-child) { margin-top: 26px; }
   .note { font-size: 12px; color: var(--dim); margin-top: 8px; }
+  /* Response-time line chart: Median, P70, P90 and P99 per run. One measure at four depths, so one blue hue that
+     darkens towards the tail (an ordinal ramp, checked for lightness steps and contrast on white), never four
+     unrelated colours. Text stays in ink; the coloured line key beside it carries identity. */
+  .latchart { position: relative; margin: 0 0 14px; }
+  .latchart .s1 { --c: #6da7ec; } .latchart .s2 { --c: #3987e5; } .latchart .s3 { --c: #1c5cab; } .latchart .s4 { --c: #0d366b; }
+  .lclegend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 4px; font-size: 12px; color: var(--ink); }
+  .lckey { display: inline-block; width: 16px; height: 2px; margin-right: 6px; vertical-align: middle; background: var(--c); border-radius: 1px; }
+  .latchart svg { display: block; width: 100%; height: auto; overflow: visible; font: 11px/1 var(--font); }
+  .latchart .lcgrid { stroke: var(--line); stroke-width: 1; }
+  .latchart .lcbase { stroke: var(--dim); stroke-width: 1; opacity: .5; }
+  .latchart text { fill: var(--dim); }
+  .latchart text.lcnow { fill: var(--ink-strong); font-weight: 700; }
+  .latchart .lcend { fill: var(--ink); }
+  .latchart .lcl { fill: none; stroke: var(--c); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .latchart .lcm { fill: var(--c); stroke: var(--panel); stroke-width: 2; }
+  .latchart .lcm.on { transform-box: fill-box; transform-origin: center; transform: scale(1.3); }
+  .latchart .lcx { stroke: var(--ink-strong); stroke-width: 1; opacity: 0; pointer-events: none; }
+  .latchart .lcx.on { opacity: .35; }
+  .latchart .lchit { fill: transparent; outline: none; }
+  .latchart .lchit:focus-visible { fill: var(--hover); }
+  .lctip { position: absolute; top: 28px; z-index: 2; display: none; gap: 3px; width: max-content; max-width: 220px; margin-left: 12px; padding: 8px 10px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 4px 16px var(--shadow); font-size: 12px; pointer-events: none; }
+  .lctip.on { display: grid; }
+  .lctip.left { margin-left: 0; transform: translateX(calc(-100% - 12px)); }
+  .lctip b { color: var(--ink-strong); font-variant-numeric: tabular-nums; }
+  .lctip .lcrun { color: var(--ink-strong); font-weight: 700; }
+  .lctip .lcn { color: var(--dim); font-size: 11.5px; margin-bottom: 2px; }
   /* The filters sit above the whole dashboard and stay in view: every table below follows them. */
   #filterbar {
     margin: 0 0 20px; padding: 10px 14px;
@@ -222,6 +249,41 @@
   .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
   .empty { color: var(--dim); padding: 20px 0; }
   #drawer section { margin-top: 16px; }
+  /* View by: switches the whole page between following runs over dates and comparing models side by side. */
+  .viewrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .viewrow[hidden] { display: none; }
+  .viewrow select { font-weight: 600; min-width: 8.5em; }
+  .viewhint { flex: 1 1 260px; font-size: 12px; color: var(--dim); }
+  /* By model: stacked outcome bars, percentile bars, the quality-against-speed plot and the category heat map. The
+     colour rules are the page's own: green passed, red failed, orange could not be graded, and one blue that darkens
+     towards the tail for response time. A model never gets a colour of its own; its name is the label. */
+  .cmp .s1 { --c: #6da7ec; } .cmp .s2 { --c: #3987e5; } .cmp .s3 { --c: #1c5cab; } .cmp .s4 { --c: #0d366b; }
+  .cmp td.mname { min-width: 12ch; font-weight: 600; color: var(--ink-strong); overflow-wrap: anywhere; }
+  td.barcell { width: 38%; min-width: 180px; }
+  .stack { display: flex; height: 14px; border-radius: 3px; overflow: hidden; background: var(--track); }
+  .stack i { display: block; height: 100%; box-shadow: inset -1px 0 0 var(--panel); }
+  .stack .p { background: var(--pass); } .stack .f { background: var(--fail); } .stack .e { background: var(--warn); }
+  .pbars { display: grid; gap: 3px; padding: 3px 0; }
+  .pbar .tr { height: 7px; }
+  .pbar .tr > i { display: block; height: 100%; min-width: 2px; border-radius: 0 2px 2px 0; background: var(--c); }
+  .heat td.hc { text-align: center; min-width: 92px; font-variant-numeric: tabular-nums; color: var(--ink-strong); }
+  .heat td.hc .n { display: block; font-size: 10.5px; color: var(--ink); }
+  .heat th.mh { max-width: 16ch; text-align: center; text-transform: none; letter-spacing: 0; overflow-wrap: anywhere; }
+  .heat th[scope=row] { font-size: 14px; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink); background: none; }
+  .heat tr.all th, .heat tr.all td { font-weight: 700; border-bottom: 2px solid var(--ink-strong); }
+  .scatter { position: relative; margin: 0 0 6px; }
+  .scatter svg { display: block; width: 100%; height: auto; overflow: visible; font: 11px/1 var(--font); }
+  .scatter .sgrid { stroke: var(--line); stroke-width: 1; }
+  .scatter .sbase { stroke: var(--dim); stroke-width: 1; opacity: .5; }
+  .scatter text { fill: var(--dim); }
+  .scatter text.nm { fill: var(--ink); font-size: 12px; }
+  .scatter text.nm.front { fill: var(--ink-strong); font-weight: 700; }
+  .scatter .edge { fill: none; stroke: var(--ink-strong); stroke-width: 1.25; stroke-dasharray: 4 3; opacity: .45; }
+  .scatter .dot { fill: var(--ink-strong); stroke: var(--panel); stroke-width: 2; }
+  .scatter .dot.off { fill: var(--panel); stroke: var(--dim); }
+  .scatter .dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .sw { display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0; border-radius: 50%; border: 2px solid var(--ink-strong); background: var(--ink-strong); vertical-align: -1px; }
+  .sw.off { border-color: var(--dim); background: var(--panel); }
   @media (max-width: 700px) { header.masthead { padding: 28px 18px 16px; } #left { padding: 14px 18px 60px; } h1 { font-size: 24px; } }
   @media print {
     #filterbar, #items-section .filters, #items-section .hint, #items-section .blurb, #drawer { display: none !important; }
@@ -242,6 +304,14 @@
 <main>
   <div id="left">
     <div id="filterbar">
+      <div class="viewrow" id="viewrow">
+        <label class="fl" for="viewby">View by</label>
+        <select id="viewby">
+          <option value="model">By model</option>
+          <option value="date">By date</option>
+        </select>
+        <span class="viewhint" id="viewhint"></span>
+      </div>
       <div class="filters" role="group" aria-label="Page filters">
         <span class="fl" title="These filters decide what every section on this page covers">Filter the report</span>
         <span class="controls" id="top-controls"></span>
@@ -251,6 +321,10 @@
     </div>
     <div class="scope" id="scope" hidden></div>
     <section id="summary"></section>
+    <section id="outcomes"></section>
+    <section id="tradeoff" hidden></section>
+    <section id="categories" hidden></section>
+    <section id="consistency" hidden></section>
     <section id="latency"></section>
     <section id="items-section">
       <h2>Test cases</h2>
@@ -276,7 +350,11 @@
 
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
-const LABELS = Object.keys(DATA.runs);
+// Every run in the report, oldest first. LABELS is the columns the page compares right now: all of them when viewed by
+// date, one per model when viewed by model (setView switches between the two).
+const ALL_LABELS = Object.keys(DATA.runs);
+let LABELS = ALL_LABELS;
+let VIEW = 'date';
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
@@ -293,7 +371,7 @@ function median(xs) {
 // ---------- rows: one per item id, holding that id's result in every run ----------
 const rows = [];
 const byId = new Map();
-for (const label of LABELS) {
+for (const label of ALL_LABELS) {
   for (const [id, item] of Object.entries(DATA.runs[label].items || {})) {
     let r = byId.get(id);
     if (!r) {
@@ -307,6 +385,9 @@ for (const label of LABELS) {
     if (!r.mode) r.mode = item.mode || '';
   }
 }
+// The test cases the page can cover: those present in at least one compared column (all of them, unless a model view
+// leaves out the older runs of a model).
+let scopeRows = rows;
 // The verdict an item was decided on: gate_passed (pass^K under --gate power), else pass_at_k for older reports.
 const passedOf = (item) => !!(item.gate_passed ?? item.pass_at_k);
 const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : passedOf(item) ? 'pass' : 'fail';
@@ -331,20 +412,42 @@ function runName(name) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(name);
   return m ? humanDate(new Date(+m[1], +m[2] - 1, +m[3])) : name;
 }
-const roleOf = (l) => runName(l.includes(' · ') ? l.split(' · ')[0] : l);
+// By model a column is named for its model; by date, for its run, with the model added when the report holds several
+// (two models run on the same date would otherwise both read "Oct 5").
+const roleOf = (l) => (VIEW === 'model' ? MODEL_LABEL[l]
+  : runName(l.includes(' · ') ? l.split(' · ')[0] : l) + (MULTI_MODEL && l.includes(' · ') ? ' · ' + MODEL_LABEL[l] : ''));
+const sourceOf = (l) => (l.includes(' · ') ? l.split(' · ')[0] : '');
 const uniq = (xs) => [...new Set(xs.filter(Boolean))];
 
+// ---------- models ----------
+// A run's model is read from the run itself, never from its file name, so a file named for its model and one named for
+// its date both work.
+const modelOfRun = (l) => DATA.runs[l].model || (l.includes(' · ') ? l.split(' · ').slice(1).join(' · ') : l);
+const providerOfRun = (l) => ((DATA.comparison || {})[l] || {}).provider_name || '';
+const modelKeyOf = (l) => providerOfRun(l) + '/' + modelOfRun(l);
+// The name a model goes by: its id, with the provider in front only when two providers serve the same id.
+const MULTI_MODEL = new Set(ALL_LABELS.map(modelKeyOf)).size > 1;
+const MODEL_LABEL = (() => {
+  const servedBy = {};
+  for (const l of ALL_LABELS) (servedBy[modelOfRun(l)] ||= new Set()).add(providerOfRun(l));
+  return Object.fromEntries(ALL_LABELS.map((l) => [l,
+    servedBy[modelOfRun(l)].size > 1 && providerOfRun(l) ? providerOfRun(l) + '/' + modelOfRun(l) : modelOfRun(l)]));
+})();
+
 // ---------- header ----------
-{
+// The title and the Run setup tooltip describe the columns being compared, so renderMasthead writes them again
+// whenever the view changes.
+function mastheadTitle() {
   const runsList = LABELS.map((l) => DATA.runs[l]);
   const models = uniq(runsList.map((r) => r.model));
   const wss = uniq(runsList.map((r) => r.workspace_id));
   const subject = `${models.join(', ') || 'Model'}${wss.length ? ' on ' + wss.join(', ') : ''}`;
   // An explicit --title wins. Otherwise a fixed template says what kind of report this is and what was tested;
   // the result itself is in the Results cards, not in prose up here.
-  const title = DATA.title && DATA.title !== 'gd-eval report'
-    ? DATA.title
-    : `${LABELS.length > 2 ? 'Run history' : LABELS.length > 1 ? 'Run comparison' : 'Run results'}: ${subject}`;
+  const kind = VIEW === 'model'
+    ? (LABELS.length > 1 ? 'Model comparison' : 'Run results')
+    : LABELS.length > 2 ? 'Run history' : LABELS.length > 1 ? 'Run comparison' : 'Run results';
+  const title = DATA.title && DATA.title !== 'gd-eval report' ? DATA.title : `${kind}: ${subject}`;
   $('#title').textContent = title;
   document.title = title + ' · GoodData.AI evaluation';
 }
@@ -358,7 +461,7 @@ const genDate = (() => {
 })();
 // Everything that should be identical across runs lives behind one "Run setup" tooltip. If any of it differs,
 // a warning names what changed, because results from different setups are not directly comparable.
-const SETUP = [
+const setupFacts = () => [
   ['Model', (l) => DATA.runs[l].model],
   ['Provider', (l) => ((DATA.comparison || {})[l] || {}).provider_name],
   ['Workspace', (l) => DATA.runs[l].workspace_id],
@@ -368,11 +471,17 @@ const SETUP = [
   ['Pass rule', (l) => ({ any: 'passes if any attempt passes', power: 'passes only if every attempt passes' })[DATA.runs[l].gate] || DATA.runs[l].gate],
 ].map(([k, f]) => {
   const vals = LABELS.map((l) => f(l)).map((v) => (v == null || v === '' ? '\u2013' : String(v)));
-  return { k, vals, same: uniq(vals).length <= 1 };
+  // By model the model (and its provider) is what is being compared, so it is expected to differ and is not flagged.
+  return { k, vals, same: uniq(vals).length <= 1, compared: VIEW === 'model' && (k === 'Model' || k === 'Provider') };
 }).filter((x) => x.vals.some((v) => v !== '\u2013'));  // a field the report does not carry (redacted) is not listed
-const setupDiff = SETUP.filter((x) => !x.same);
 // Consecutive runs with the same value collapse into one range: "ws_a (Aug 31 – Sep 28), then ws_b (Oct 5)".
 function setupRanges(x) {
+  // By model there is no order to collapse over, so each value names the models that have it: "ws_a (model_a, model_b)".
+  if (VIEW === 'model') {
+    const byValue = {};
+    LABELS.forEach((l, i) => (byValue[x.vals[i]] ||= []).push(roleOf(l)));
+    return Object.entries(byValue).map(([v, names]) => `${esc(v)} (${names.map(esc).join(', ')})`).join(', ');
+  }
   const segs = [];
   LABELS.forEach((l, i) => {
     const last = segs[segs.length - 1];
@@ -392,13 +501,17 @@ function suiteChange(a, b, mode) {
   return `Not the same test cases: ${A.size} in ${esc(roleOf(a))}, ${B.size} in ${esc(roleOf(b))}` +
     ` (${[added && `${added} added`, removed && `${removed} removed`].filter(Boolean).join(', ')}).`;
 }
-const setupTip = '<span class="info" tabindex="0">Run setup <span class="ico" aria-hidden="true">i</span>' +
-  `<span class="tip" role="tooltip" id="setup-tip"><b>${LABELS.length > 1 ? 'Same in every run' : 'Setup of this run'}</b>` +
-  (SETUP.filter((x) => x.same).map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${esc(x.vals[0])}</span></span>`).join('') || '<span class="sub2">nothing</span>') +
-  (setupDiff.length ? '<b class="diffhead">Differs between runs</b>' + setupDiff.map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${setupRanges(x)}</span></span>`).join('') : '') +
-  '</span></span>';
-$('#meta').innerHTML = `<span title="${esc(DATA.generated_at)} (your local time is shown)">Generated ${esc(genDate)}</span> \u00b7 ` + setupTip +
-  (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
+function renderMasthead() {
+  mastheadTitle();
+  const facts = setupFacts(), diff = facts.filter((x) => !x.same && !x.compared), byModel = VIEW === 'model';
+  const setupTip = '<span class="info" tabindex="0">Run setup <span class="ico" aria-hidden="true">i</span>' +
+    `<span class="tip" role="tooltip" id="setup-tip"><b>${byModel ? 'Same for every model' : LABELS.length > 1 ? 'Same in every run' : 'Setup of this run'}</b>` +
+    (facts.filter((x) => x.same).map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${esc(x.vals[0])}</span></span>`).join('') || '<span class="sub2">nothing</span>') +
+    (diff.length ? `<b class="diffhead">${byModel ? 'Differs between models' : 'Differs between runs'}</b>` + diff.map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${setupRanges(x)}</span></span>`).join('') : '') +
+    '</span></span>';
+  $('#meta').innerHTML = `<span title="${esc(DATA.generated_at)} (your local time is shown)">Generated ${esc(genDate)}</span> \u00b7 ` + setupTip +
+    (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
+}
 
 // ---------- the figures behind the dashboard ----------
 // Unfiltered, every figure is read from the report (summary, comparison and by_mode), so this page cannot
@@ -413,8 +526,11 @@ let runsShown = LABELS;  // the runs the dashboard covers; narrowed by the Runs 
 function reported(label) {
   const c = DATA.comparison[label] || {}, s = DATA.runs[label].summary || {};
   const total = c.total ?? s.total ?? 0, passed = c.passed ?? s.passed ?? 0;
+  const errored = s.errored ?? 0, skipped = s.skipped ?? 0;
   return {
-    total, passed, errored: s.errored ?? 0, skipped: s.skipped ?? 0,
+    total, passed, errored, skipped,
+    // A report from before `failed` was written has no such field; what is left once the other three are taken out is it.
+    failed: s.failed ?? Math.max(0, total - passed - errored - skipped),
     avg_quality_score: c.avg_quality_score,
     avg_latency_s: c.avg_latency_s ?? s.avg_latency_s,
     total_latency_s: c.total_latency_s ?? s.latency_s,
@@ -461,6 +577,8 @@ function recompute(label, ids) {
   }
   return {
     total: items.length, passed, errored: items.filter((it) => it.error != null).length,
+    // Graded and not passed: neither skipped nor errored, as the JSON's own `failed` counts it.
+    failed: items.filter((it) => !passedOf(it) && !it.skipped && it.error == null).length,
     skipped: items.filter((it) => it.skipped).length,
     avg_quality_score: evaluated.length ? mean(evaluated.map(qualityOf)) : 0,
     avg_latency_s: runs ? latency / runs : 0, total_latency_s: latency, by_mode,
@@ -521,6 +639,7 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
     ${change ? `<div class="kpi-delta">${change}</div>` : ''}${spark}</figure>`;
 }
 function renderSummary() {
+  if (VIEW === 'model') return renderModelSummary();
   const base = runsShown.length > 1 ? compareBase() : null;
   $('#summary').innerHTML = '<h2>Results</h2><div class="trendgrid">' +
     kpiCard({ title: 'Test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true,
@@ -554,23 +673,107 @@ $('#summary').addEventListener('keydown', (e) => {
 // conversation, simulated-user replies and judge included).
 const HEAD_HELP = {
   Median: 'Half were faster than this, half slower (P50).',
+  P70: '70% finished within this time.',
   P90: '90% finished within this time.',
+  P99: '99% finished within this time. Over a small sample this is close to the slowest one.',
 };
 // Colour rules for the whole report: green = better / quickest, red = worse / slowest, lime = the latest run (and the
 // row open in the side panel). Direction is always a chevron, up or down, so colour is never the only signal.
 const CHEVRON = (dir) => `<svg class="exi" viewBox="0 0 12 12" aria-hidden="true"><path d="${dir === 'up' ? 'M2.5 8 6 4.5 9.5 8' : 'M2.5 4 6 7.5 9.5 4'}"/></svg>`;
 // Marks the latest run wherever runs are listed.
 const LATEST_PILL = ' <span class="latestpill">Latest</span>';
+// The four figures the chart draws and the table lists, in that order: the median (P50) and three percentiles. One
+// measure at four depths, so the chart gives them one hue that darkens towards the tail (the .s1-.s4 classes).
+// Width the charts were drawn at: the width of the latency section, read when it renders.
+let latW = 720;
+const LAT_SERIES = [
+  { key: 'p50', name: 'Median' }, { key: 'p70', name: 'P70' }, { key: 'p90', name: 'P90' }, { key: 'p99', name: 'P99' },
+];
+// Response time as one line per figure across the runs shown, oldest on the left and the latest on the right, so a
+// slow tail that is growing slopes upwards. It plots exactly the numbers in the table below it (same source, same
+// rounding) and the table is its text alternative. A line needs two runs with timings; with fewer there is no
+// trend to draw and the table says it all.
+function latencyChart({ mode, field, sample }) {
+  const pts = runsShown.map((l) => ({ l, st: (modeOf(l, mode) || {})[field] || null }));
+  if (pts.filter((p) => p.st).length < 2) return '';
+  // Drawn at the row's own width (1 unit = 1 pixel), so the text keeps its size however wide the row is.
+  const W = latW, H = Math.min(300, Math.max(220, Math.round(W * 0.24))), M = { l: 44, r: 16, t: 12, b: 30 };
+  const innerH = H - M.t - M.b;
+  const top = Math.max(...pts.filter((p) => p.st).map((p) => p.st.p99));
+  // Round ticks (1, 2, 5 x 10^n) from zero, so line heights compare honestly.
+  const raw = (top || 1) / 4, mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+  const ticks = Math.max(1, Math.ceil(top / step - 1e-9)), yMax = ticks * step;
+  const y = (v) => M.t + innerH * (1 - v / yMax);
+  const last = pts.length - 1, unit = sample.toLowerCase();
+  // End labels name the line and give its latest value, but only while no two would touch: stacked or nudged labels
+  // detach from their lines, and the legend, the tooltip and the table carry the same figures anyway. Without them
+  // the plot runs on to the edge of the row; with them it leaves room on the right.
+  const ends = pts[last].st ? LAT_SERIES.map((s) => ({ s, py: y(pts[last].st[s.key]) })) : [];
+  const touching = ends.some((a, i) => ends.some((b, j) => j > i && Math.abs(a.py - b.py) < 13));
+  const withEnds = ends.length > 0 && !touching;
+  if (withEnds) M.r = 92;
+  const innerW = W - M.l - M.r, band = innerW / pts.length;
+  const x = (i) => M.l + band * (i + 0.5);
+  // x labels: as many as fit without touching, always including the latest run.
+  const every = Math.ceil(pts.length / Math.max(2, Math.floor(innerW / 84)));
+  const clip = (s) => (s.length > 13 ? s.slice(0, 12) + '…' : s);
+  const grid = Array.from({ length: ticks + 1 }, (_, t) => {
+    const v = t * step;
+    return `<line class="${t ? 'lcgrid' : 'lcbase'}" x1="${M.l}" x2="${W - M.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"></line>` +
+      `<text x="${M.l - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${v ? secs(v) : '0'}</text>`;
+  }).join('');
+  const xlab = pts.map((p, i) => ((last - i) % every === 0
+    ? `<text class="${i === last ? 'lcnow' : ''}" x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(clip(roleOf(p.l)))}</text>` : '')).join('');
+  const lines = LAT_SERIES.map((s, k) => {
+    const got = pts.map((p, i) => (p.st ? [x(i), y(p.st[s.key])] : null)).filter(Boolean);
+    return `<polyline class="lcl s${k + 1}" points="${got.map(([px, py]) => `${px.toFixed(1)},${py.toFixed(1)}`).join(' ')}"></polyline>`;
+  }).join('');
+  const dots = LAT_SERIES.map((s, k) => pts.map((p, i) => (p.st
+    ? `<circle class="lcm s${k + 1}" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(p.st[s.key]).toFixed(1)}" r="5"></circle>` : '')).join('')).join('');
+  const endLabels = withEnds
+    ? ends.map(({ s, py }) => `<text class="lcend" x="${(x(last) + 14).toFixed(1)}" y="${(py + 4).toFixed(1)}">${s.name} ${secs(pts[last].st[s.key])}</text>`).join('') : '';
+  const cols = pts.map((p, i) => {
+    const label = p.st ? `${roleOf(p.l)}: ` + [...LAT_SERIES].reverse().map((s) => `${s.name} ${secs(p.st[s.key])}`).join(', ') + `, based on ${p.st.n} ${unit}`
+      : `${roleOf(p.l)}: no timings`;
+    return `<line class="lcx" data-i="${i}" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${M.t}" y2="${H - M.b}"></line>` +
+      `<rect class="lchit" data-i="${i}" x="${(M.l + band * i).toFixed(1)}" y="0" width="${band.toFixed(1)}" height="${H}" tabindex="0" role="img" aria-label="${esc(label)}"></rect>`;
+  }).join('');
+  // Values lead and names follow, highest line first so the list reads like the chart.
+  const tips = pts.map((p, i) => `<div class="lctip${x(i) > W * 0.55 ? ' left' : ''}" data-i="${i}" style="left:${(x(i) / W * 100).toFixed(2)}%" aria-hidden="true">` +
+    `<span class="lcrun">${esc(roleOf(p.l))}</span>` +
+    (p.st ? `<span class="lcn">Based on ${p.st.n} ${unit}</span>` +
+      [...LAT_SERIES].reverse().map((s) => `<span><i class="lckey s${LAT_SERIES.indexOf(s) + 1}"></i><b>${secs(p.st[s.key])}</b> ${s.name}</span>`).join('')
+      : '<span class="lcn">No timings</span>') + `</div>`).join('');
+  return `<div class="latchart"><div class="lclegend">` +
+    LAT_SERIES.map((s, k) => `<span><i class="lckey s${k + 1}"></i>${s.name}</span>`).join('') + `</div>` +
+    `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Response time by run: median, P70, P90 and P99. The table below lists every figure.">` +
+    grid + xlab + lines + dots + endLabels + cols + `</svg>${tips}</div>`;
+}
+// Hover or focus on a run lights its crosshair, markers and tooltip in that chart only; leaving clears every chart.
+function latHover(hit) {
+  const chart = hit && hit.closest('.latchart');
+  document.querySelectorAll('#latency .latchart [data-i]').forEach((el) => {
+    if (el.classList.contains('lchit')) return;
+    el.classList.toggle('on', !!chart && chart.contains(el) && el.dataset.i === hit.dataset.i);
+  });
+}
+$('#latency').addEventListener('mouseover', (e) => latHover(e.target.closest('.lchit')));
+$('#latency').addEventListener('focusin', (e) => latHover(e.target.closest('.lchit')));
+$('#latency').addEventListener('mouseleave', () => latHover(null));
+$('#latency').addEventListener('focusout', () => latHover(null));
 function latencyTable({ mode, field, sample }) {
-  // Plain figures only. P99 is left out: with a few dozen
-  // samples it is just the slowest one again.
-  const heads = ['Run', 'Fastest', 'Median', 'P90', 'Slowest'];
+  // By model the runs are not a time series: one ranked table with a bar per figure replaces the chart and the rows by date.
+  if (VIEW === 'model') return modelLatencyTable({ mode, field, sample });
+  // The same four percentiles the chart above draws; the fastest and slowest single response are not shown, P99 is
+  // the tail. The average and trimmed average stay in the JSON and the console.
+  const heads = ['Run', ...LAT_SERIES.map((s) => s.name)];
   const unit = sample.toLowerCase();
   const dash = '<td class="num">\u2013</td>';
   // In each column, the quickest run is marked lime and the slowest red, so the best and worst runs stand out at a
   // glance. Compared on the rounded figure the reader sees, so ties are marked alike; nothing is marked when every
   // run shows the same value or there is only one run.
-  const KEYS = ['min', 'p50', 'p90', 'max'];
+  const KEYS = LAT_SERIES.map((s) => s.key);
   // Icons carry the meaning as well as the colour: down = least time (quickest), up = most time (slowest).
   const EXT_ICON = { best: CHEVRON('down'), worst: CHEVRON('up') };
   const statsOf = (l) => (modeOf(l, mode) || {})[field] || null;
@@ -587,14 +790,14 @@ function latencyTable({ mode, field, sample }) {
       const m = mark(j, st[k]), txt = secs(st[k]);
       const why = m === 'best' ? ' \u00b7 quickest of the runs shown' : m === 'worst' ? ' \u00b7 slowest of the runs shown' : '';
       return `<td class="num" title="${basis}${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${txt}</span>` : txt}</td>`;
-    }).join('') : dash.repeat(4);
+    }).join('') : dash.repeat(KEYS.length);
     const flag = st && prev && prev.n !== st.n
       ? ' ' + caution(`${st.n} ${unit} timed here, ${prev.n} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, mode) ? '<br>' + suiteChange(prevL, l, mode) : ''))
       : '';
     const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
     return `<tr${isLatest ? ' class="latest"' : ''}><td>${esc(roleOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${stats}</tr>`;
   }).reverse().join('');  // newest run first
-  return `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
+  return latencyChart({ mode, field, sample }) + `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
     heads.map((h, i) => `<th class="${i > 0 ? 'num' : ''}"${HEAD_HELP[h] ? ` title="${esc(HEAD_HELP[h])}"` : ''}>${h}</th>`).join('') +
     `</tr></thead><tbody>${rows}</tbody></table></div>` +
     (ext.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest run</span> <span class="ext worst">${EXT_ICON.worst}slowest run</span> in each column</p>` : '');
@@ -605,6 +808,7 @@ function modeSection(mode, title, blurb, tables) {
     tables.map(([caption, spec]) => (caption ? `<h3 class="cap">${caption}</h3>` : '') + latencyTable({ mode, ...spec })).join('');
 }
 function renderLatency() {
+  latW = Math.max(320, Math.round($('#latency').clientWidth) || latW);
   $('#latency').innerHTML = !hasModes
     ? '<h2>Latency</h2><p class="blurb">This report was written before gd-eval split latency into single-shot and multi-turn. Re-run to get per-trace percentiles.</p>'
     : modeSection('single_shot', 'Single-question tests · response time',
@@ -614,6 +818,63 @@ function renderLatency() {
         'The assistant holds a back-and-forth with a simulated user over several messages. Time is shown two ways: per response (each assistant reply, comparable with single-question tests) and per conversation (start to finish, including the simulated user\'s replies and grading).',
         [['Per response · each assistant reply', { field: 'traces_s', sample: 'Responses' }],
          ['Per conversation · start to finish', { field: 'runs_s', sample: 'Conversations' }]]);
+}
+// The charts are drawn at the section's width, so redraw them when it changes (the window resized, the side panel
+// opened). A few pixels of drift, such as a scrollbar appearing, is not worth a redraw.
+if (window.ResizeObserver) {
+  new ResizeObserver(() => {
+    if (Math.abs(Math.max(320, $('#latency').clientWidth) - latW) > 24) renderLatency();
+  }).observe($('#latency'));
+}
+
+// ---------- outcomes ----------
+// How every test case ended, laid out like the latency tables: one row per run, newest first, the latest marked in
+// lime. The four outcomes are the four the Result filter offers, and the pass rate is the one the first card shows
+// (passed out of evaluated, skipped left out), so the three can never disagree. Counts come from `figures`, which
+// is the report's own summary unfiltered and a recomputation from the selected items otherwise.
+const OUTCOMES = [
+  ['passed', 'Passed', 'passed', 'Test cases that met the run\'s pass rule (see Run setup).'],
+  ['failed', 'Failed', 'failed', 'Test cases that were graded and did not meet the pass rule.'],
+  ['errored', 'Could not be graded', 'could not be graded', 'Test cases left without a verdict by an error in the assistant or the judge.'],
+  ['skipped', 'Skipped', 'were skipped', 'Test cases that were not run, because gd-eval has no evaluator for their category.'],
+];
+function outcomesTable() {
+  const dash = '<td class="num">–</td>';
+  const evaluatedOf = (l) => figures[l].total - figures[l].skipped;
+  // As in the latency tables, the best and worst run are marked on the figure the reader sees, so ties are marked
+  // alike, and nothing is marked when every run reads the same or there is only one run.
+  const shown = (l) => { const r = passRateOf(figures[l]); return r == null ? null : Math.round(r * 100); };
+  const seen = runsShown.map(shown).filter((v) => v != null);
+  const spread = seen.length > 1 && Math.min(...seen) !== Math.max(...seen) ? { lo: Math.min(...seen), hi: Math.max(...seen) } : null;
+  // Up = most passed (best), down = fewest (worst): the chevron says it as well as the colour.
+  const EXT_ICON = { best: CHEVRON('up'), worst: CHEVRON('down') };
+  const rows = runsShown.map((l, i) => {
+    const f = figures[l], ev = evaluatedOf(l), v = shown(l), prevL = runsShown[i - 1];
+    const counts = OUTCOMES.map(([k, , verb]) => `<td class="num" title="${f[k]} of ${f.total} test cases ${verb}">${f[k]}</td>`).join('');
+    const m = spread && v != null ? (v === spread.hi ? 'best' : v === spread.lo ? 'worst' : '') : '';
+    const why = m === 'best' ? ' · highest of the runs shown' : m === 'worst' ? ' · lowest of the runs shown' : '';
+    const rate = v == null ? dash
+      : `<td class="num" title="${f.passed} of ${ev} evaluated test cases${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${v}%</span>` : v + '%'}</td>`;
+    // A pass rate over a different set of test cases is not a like-for-like change, so say so.
+    const flag = prevL && evaluatedOf(prevL) !== ev
+      ? ' ' + caution(`${ev} test cases evaluated here, ${evaluatedOf(prevL)} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, '') ? '<br>' + suiteChange(prevL, l, '') : ''))
+      : '';
+    const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
+    return `<tr${isLatest ? ' class="latest"' : ''}><td>${esc(roleOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${counts}${rate}</tr>`;
+  }).reverse().join('');  // newest run first
+  const heads = [['Run', ''], ...OUTCOMES.map(([, name, , help]) => [name, help]), ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+  return `<div class="tablewrap flat"><table class="out-table"><thead><tr>` +
+    heads.map(([h, help], j) => `<th class="${j > 0 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    `</tr></thead><tbody>${rows}</tbody></table></div>` +
+    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '');
+}
+function renderOutcomes() {
+  if (VIEW === 'model') { $('#outcomes').innerHTML = modelOutcomesHtml(); return; }
+  $('#outcomes').innerHTML = '<h2>Outcomes</h2>' +
+    '<p class="blurb">How every test case ended. It <b>passed</b> when it met the run\'s pass rule, <b>failed</b> when it was graded and did not, ' +
+    '<b>could not be graded</b> when an error left it without a verdict, and was <b>skipped</b> when it was not run. ' +
+    'The pass rate is the passed test cases out of those evaluated, so skipped ones are left out, as in the console.</p>' +
+    outcomesTable();
 }
 
 // ---------- per-item latency ----------
@@ -667,12 +928,13 @@ const FILTER_TITLE = { kinds: 'Category', statuses: 'Result', runs: 'Run' };
 function makeMulti(el, noun, onChange) {
   const summary = el.querySelector('summary'), menu = el.querySelector('.menu');
   const m = { el, sel: new Set(), opts: [], sig: null };
-  const title = FILTER_TITLE[noun] || noun;
+  // The run filter is the model filter when the page is viewed by model.
+  const titleNow = () => (noun === 'runs' && VIEW === 'model' ? 'Model' : FILTER_TITLE[noun] || noun);
   let dAll = true, dSel = new Set();  // the draft: All, or the ticked values
   const refresh = () => {
     const picked = m.opts.filter((o) => m.sel.has(o.value));
     const val = picked.length === 0 ? 'All' : picked.length === 1 ? picked[0].text : `${picked.length} selected`;
-    summary.innerHTML = `<span class="ft">${esc(title)}:</span> ${esc(val)}`;
+    summary.innerHTML = `<span class="ft">${esc(titleNow())}:</span> ${esc(val)}`;
     summary.title = picked.length > 1 ? picked.map((o) => o.text).join(', ') : '';
   };
   const sync = () => {
@@ -692,7 +954,7 @@ function makeMulti(el, noun, onChange) {
     const sig = opts.map((o) => o.value).join('\n');
     if (sig !== m.sig) {
       m.sig = sig;
-      menu.innerHTML = `<input type="search" class="search" placeholder="Search…" aria-label="Search ${esc(title.toLowerCase())} values">` +
+      menu.innerHTML = `<input type="search" class="search" placeholder="Search…" aria-label="Search ${esc(titleNow().toLowerCase())} values">` +
         '<label class="allrow"><input type="checkbox"><span>All</span></label><div class="optlist">' +
         opts.map((o) => `<label class="opt"><input type="checkbox" value="${esc(o.value)}"><span>${esc(o.text)}</span>` +
           `<button type="button" class="only" data-v="${esc(o.value)}" aria-label="Only ${esc(o.text)}">Only</button><i></i></label>`).join('') +
@@ -836,7 +1098,7 @@ function itemRows(runList) {
 }
 function activeSortKey(runList) {
   const c = sortKey.indexOf(':');
-  if (sortKey === 'chg') return runList.length > 1 ? 'chg' : 'id';
+  if (sortKey === 'chg' || sortKey === 'agree') return runList.length > 1 ? sortKey : 'id';
   return c < 0 || runList.includes(sortKey.slice(c + 1)) ? sortKey : 'id';
 }
 function sortRows(list, key) {
@@ -872,6 +1134,7 @@ function changeOf(r, runList) {
 const CHANGE_CLASS = { Regressed: 'fail', Fixed: 'pass', Flaky: 'err', New: 'err', Removed: 'err', 'Still failing': 'none', 'Still passing': 'none' };
 function sortVal(r, key) {
   if (key === 'chg') return CHANGE_ORDER[changeOf(r, itemRuns())];
+  if (key === 'agree') return AGREE_ORDER[agreementOf(itemRuns().map((l) => statusOf(r.per[l])))];
   const c = key.indexOf(':');
   if (c < 0) return r[key] || '';  // id, kind, mode, question
   const tag = key.slice(0, c), it = r.per[key.slice(c + 1)];
@@ -884,16 +1147,17 @@ const topActive = () => !!(T.kind.sel.size || T.mode.value || T.status.sel.size 
 const itemsActive = () => !!($('#q').value.trim() || $('#expr').value.trim() || I.kind.sel.size || I.mode.value ||
   I.status.sel.size || I.runs.sel.size);
 function renderScope() {
-  $('#top-count').textContent = dashRows.length !== rows.length ? `Showing ${dashRows.length} of ${rows.length} test cases` : '';
+  const byModel = VIEW === 'model';
+  $('#top-count').textContent = dashRows.length !== scopeRows.length ? `Showing ${dashRows.length} of ${scopeRows.length} test cases` : '';
   $('#top-reset').hidden = !topActive();
   const parts = [];
-  if (dashRows.length !== rows.length) parts.push(`every section covers ${dashRows.length} of the ${rows.length} test cases`);
-  if (runsShown.length !== LABELS.length) parts.push(`showing ${runsShown.length} of ${LABELS.length} runs`);
+  if (dashRows.length !== scopeRows.length) parts.push(`every section covers ${dashRows.length} of the ${scopeRows.length} test cases`);
+  if (runsShown.length !== LABELS.length) parts.push(`showing ${runsShown.length} of ${LABELS.length} ${byModel ? 'models' : 'runs'}`);
   const several = runsShown.length > 1 && T.status.sel.size;
   // Ticking every run is the same as ticking none: say nothing unless the selection really is narrower.
   $('#scope').hidden = parts.length === 0;
   $('#scope').innerHTML = parts.length
-    ? `Filtered: ${parts.join('; ')}.` + (several ? ' With several runs, a test case matches a result when any of the runs shown has it.' : '')
+    ? `Filtered: ${parts.join('; ')}.` + (several ? ` With several ${byModel ? 'models' : 'runs'}, a test case matches a result when any of the ${byModel ? 'models' : 'runs'} shown has it.` : '')
     : '';
 }
 // The table's own options follow the top selection: only kinds that survive it are offered (with how many items
@@ -912,13 +1176,17 @@ function syncItemControls() {
 // item table (renderItems).
 function render() {
   runsShown = T.runs.sel.size ? LABELS.filter((l) => T.runs.sel.has(l)) : LABELS;
-  dashRows = rows.filter(rowMatcher({ kinds: T.kind.sel, mode: T.mode.value, statuses: T.status.sel }, runsShown));
-  const filtered = dashRows.length !== rows.length;
+  dashRows = scopeRows.filter(rowMatcher({ kinds: T.kind.sel, mode: T.mode.value, statuses: T.status.sel }, runsShown));
+  const filtered = dashRows.length !== scopeRows.length;
   const ids = dashRows.map((r) => r.id);
   for (const l of runsShown) figures[l] = filtered ? recompute(l, ids) : reported(l);
+  // By model, the models are ranked best first on the figures they are shown with, so every table reads in one order.
+  if (VIEW === 'model') runsShown = [...runsShown].sort((a, b) => byStanding(figures[a], figures[b]));
   syncItemControls();
   renderScope();
   renderSummary();
+  renderOutcomes();
+  renderModelSections();
   renderLatency();
   renderItems();
 }
@@ -928,16 +1196,21 @@ function renderItems() {
   const key = activeSortKey(runList), multi = runList.length > 1;
   $('#items-count').textContent = list.length !== dashRows.length ? `Showing ${list.length} of ${dashRows.length}` : '';
   $('#items-reset').hidden = !itemsActive();
-  const timeRuns = runList.length > 2 ? runList.slice(-1) : runList;
-  const runHdr = (l) => (multi ? `<span class="runlbl" title="${esc(l)}">${runList.length > 2 ? 'latest run' : esc(roleOf(l))}</span>` : '');
+  // By date the latest run leads and the earlier ones follow it; by model every model is a peer, in ranked order.
+  const byDate = VIEW !== 'model';
+  const timeRuns = byDate && runList.length > 2 ? runList.slice(-1) : runList;
+  const runHdr = (l) => (multi ? `<span class="runlbl" title="${esc(l)}">${byDate && runList.length > 2 ? 'latest run' : esc(roleOf(l))}</span>` : '');
   const heads = [
     { k: 'id', html: 'Test case' }, { k: 'kind', html: 'Category' }, { k: 'mode', html: 'Format' }, { k: 'question', html: 'Question' },
     // Newest first: the latest result, what changed since the previous run, then earlier runs going back in time.
-    ...(multi ? [{ k: 's:' + runList[runList.length - 1], html: esc(roleOf(runList[runList.length - 1])) + LATEST_PILL }] : []),
-    ...(multi ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case first appears in the latest run, or was in an earlier run and is gone from the latest. A test case skipped in the latest run has no label.' }] : []),
-    ...(multi ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: esc(roleOf(l)) })),
+    ...(multi && byDate ? [{ k: 's:' + runList[runList.length - 1], html: esc(roleOf(runList[runList.length - 1])) + LATEST_PILL }] : []),
+    ...(multi && byDate ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case first appears in the latest run, or was in an earlier run and is gone from the latest. A test case skipped in the latest run has no label.' }] : []),
+    ...(multi && byDate ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: esc(roleOf(l)) })),
+    ...(multi && !byDate ? [{ k: 'agree', html: 'Across models', help: 'Whether the models agree on this test case. All pass and All fail: every model that was graded got the same verdict. Mixed: some passed and some did not, so this is where the models differ; hover the label to see who. A model that skipped the test case or could not be graded on it is left out.' }] : []),
     ...timeRuns.map((l) => ({ k: 'lt:' + l, html: 'Response time' + runHdr(l), help: TRACE_HELP, num: true })),
-    ...timeRuns.map((l) => ({ k: 'lr:' + l, html: 'Time per attempt' + runHdr(l), help: RUN_HELP, num: true })),
+    // By model one time column per model keeps the table readable; the per-attempt figure is in the latency tables above
+    // and in the drawer.
+    ...(byDate ? timeRuns : []).map((l) => ({ k: 'lr:' + l, html: 'Time per attempt' + runHdr(l), help: RUN_HELP, num: true })),
   ];
   $('#items thead').innerHTML = '<tr>' + heads.map((h) =>
     `<th data-k="${esc(h.k)}" tabindex="0" class="${h.num ? 'num' : ''}"${h.help ? ` title="${esc(h.help)}"` : ''}>${h.html}${key === h.k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
@@ -948,11 +1221,12 @@ function renderItems() {
       <td>${esc(kindName(r.kind))}</td>
       <td>${r.mode ? `<span class="chip">${esc(MODE_NAME[r.mode] || r.mode)}</span>` : ''}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
-      (multi ? [runList[runList.length - 1]] : []).map(stCell(r)).join('') +
-      (multi ? (() => { const c = changeOf(r, runList); return `<td>${c ? `<span class="st ${CHANGE_CLASS[c]}">${c}</span>` : ''}</td>`; })() : '') +
-      (multi ? runList.slice(0, -1).reverse() : runList).map(stCell(r)).join('') +
+      (multi && byDate ? [runList[runList.length - 1]] : []).map(stCell(r)).join('') +
+      (multi && byDate ? (() => { const c = changeOf(r, runList); return `<td>${c ? `<span class="st ${CHANGE_CLASS[c]}">${c}</span>` : ''}</td>`; })() : '') +
+      (multi && byDate ? runList.slice(0, -1).reverse() : runList).map(stCell(r)).join('') +
+      (multi && !byDate ? (() => { const a = agreementOf(runList.map((l) => statusOf(r.per[l]))); return `<td>${a ? `<span class="st ${AGREE_CLASS[a]}" title="${esc(agreeTip(r, runList))}">${a}</span>` : ''}</td>`; })() : '') +
       timeRuns.map((l) => latencyCell(traceLatency(r.per[l]), samplesTitle((r.per[l] || {}).trace_latencies_s, 'response'))).join('') +
-      timeRuns.map((l) => latencyCell(runLatency(r.per[l]), samplesTitle((r.per[l] || {}).run_latencies_s, 'attempt'))).join('') +
+      (byDate ? timeRuns : []).map((l) => latencyCell(runLatency(r.per[l]), samplesTitle((r.per[l] || {}).run_latencies_s, 'attempt'))).join('') +
       '</tr>').join('');
   $('#noitems').hidden = list.length > 0;
   // The drawer follows the table's runs: if the run it shows was filtered out, move it to one that is still there.
@@ -1205,7 +1479,349 @@ function idsHtml(it) {
   return `<section><h2>Ids</h2><div class="id">conversation ${esc(it.conversation_id || '–')}<br>response ${esc(it.response_id || '–')}</div></section>`;
 }
 
-render();
+// ---------- view by: model or date ----------
+// The page has two layouts for one report. By date follows runs over time: a column per run, the latest last. By model
+// compares language models: a column per model, ranked best first, with no time axis. Where a model has several runs,
+// its latest stands for it, so every model is read at its most recent state. Nothing here adds a figure the report
+// does not carry: it re-reads the same items, and `figures` is still the one source for the pass rate and the time.
+
+const AGREE_ORDER = { Mixed: 0, 'All fail': 1, 'All pass': 2, '': 3 };
+const AGREE_CLASS = { Mixed: 'err', 'All fail': 'none', 'All pass': 'none' };
+
+// The latest run for each key, in the order the keys first appear (a report lists its runs oldest first).
+function latestPerKey(labels, keyOf) {
+  const latest = new Map();
+  for (const l of labels) latest.set(keyOf(l), l);
+  return [...latest.values()];
+}
+// A report that compares several models, each seen once, opens by model. One model followed over time, or a mix of
+// models and dates, opens by date as it always did.
+function defaultView(keys) {
+  const models = new Set(keys);
+  return models.size > 1 && models.size === keys.length ? 'model' : 'date';
+}
+// The console's winner rule, best first: pass rate, then quality, then the quicker average.
+function byStanding(a, b) {
+  const rate = (f) => passRateOf(f) ?? -1;
+  if (rate(a) !== rate(b)) return rate(b) - rate(a);
+  const quality = (f) => f.avg_quality_score ?? -1;
+  if (quality(a) !== quality(b)) return quality(b) - quality(a);
+  return (a.avg_latency_s ?? Infinity) - (b.avg_latency_s ?? Infinity);
+}
+// Whether the models agree on one test case. Only graded verdicts count: a skipped test case, or one that could not be
+// graded, says nothing about the model.
+function agreementOf(statuses) {
+  const graded = statuses.filter((s) => s === 'pass' || s === 'fail');
+  if (graded.length < 2) return '';
+  const passed = graded.filter((s) => s === 'pass').length;
+  return passed === graded.length ? 'All pass' : passed === 0 ? 'All fail' : 'Mixed';
+}
+// The points no other point beats on both axes: x is better when lower, y when higher. They are the speed-quality frontier.
+function frontierOf(points) {
+  const out = [];
+  points.forEach((p, i) => {
+    const beaten = points.some((q, j) => j !== i && q.x <= p.x && q.y >= p.y && (q.x < p.x || q.y > p.y));
+    if (!beaten) out.push(i);
+  });
+  return out;
+}
+// A round axis step (1, 2 or 5 times a power of ten) that puts about n ticks between zero and top.
+function niceStep(top, n) {
+  const raw = (top || 1) / n, mag = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+}
+// Who passed and who did not on one test case, for the "Across models" label's hover text.
+function agreeTip(r, runList) {
+  const named = (s) => runList.filter((l) => statusOf(r.per[l]) === s).map(roleOf);
+  const passed = named('pass'), failed = named('fail');
+  return [passed.length && `Passed: ${passed.join(', ')}`, failed.length && `Failed: ${failed.join(', ')}`].filter(Boolean).join(' · ');
+}
+
+// The model the others are held against when the test cases differ: the one with the most (the first of them if tied),
+// so it is the model that ran a smaller suite that gets the caution, not everyone else.
+const suiteRef = (labels, mode) => labels.reduce((a, l) => (idsIn(l, mode).size > idsIn(a, mode).size ? l : a), labels[0]);
+
+function viewHint() {
+  if (VIEW === 'date') {
+    return 'How the results change from run to run, oldest to latest.' +
+      (MULTI_MODEL ? ' This report holds more than one model, so neighbouring runs can be different models: use By model to compare them.' : '');
+  }
+  if (LABELS.length < 2) return 'This report has one model, so there is nothing to compare. Switch to By date to follow it over time.';
+  const dates = uniq(LABELS.map(sourceOf));
+  return 'How the models compare' + (ALL_LABELS.length > LABELS.length ? ', each at its latest run' : '') + '.' +
+    (dates.length > 1 ? ` Those runs are from different dates (${LABELS.map((l) => `${roleOf(l)}: ${runName(sourceOf(l))}`).join(', ')}), so check Run setup before reading a gap as the model’s.` : '');
+}
+// Switch layout: pick the columns being compared, drop what was selected against the other layout, and draw it all again.
+function setView(v) {
+  VIEW = v === 'model' ? 'model' : 'date';
+  LABELS = VIEW === 'model'
+    ? latestPerKey(ALL_LABELS, modelKeyOf).sort((a, b) => byStanding(reported(a), reported(b)))
+    : ALL_LABELS;
+  scopeRows = rows.filter((r) => LABELS.some((l) => r.per[l]));
+  cmpPick = null; selected = null; drawerRun = null;
+  $('#drawer').classList.remove('open');
+  $('#viewby').value = VIEW;
+  $('#viewhint').textContent = viewHint();
+  $('#viewrow').hidden = ALL_LABELS.length < 2;  // one run has nothing to switch between
+  $('#top-runs').hidden = $('#items-runs').hidden = LABELS.length < 2;
+  // The run filter now lists the columns being compared; a selection made against the other layout falls away. The menus
+  // are rebuilt so their title ("Run" or "Model") is current.
+  T.runs.sig = I.runs.sig = null;
+  T.runs.set(LABELS.map((l) => ({ value: l, text: roleOf(l) })));
+  const byKind = countBy(scopeRows);
+  T.kind.set(Object.keys(byKind).filter(Boolean).sort().map((k) => ({ value: k, text: kindName(k), count: byKind[k] })));
+  sortKey = LABELS.length < 2 ? 's:' + LABELS[0] : VIEW === 'model' ? 'agree' : 'chg';
+  sortDir = 1;
+  renderMasthead();
+  render();
+}
+$('#viewby').addEventListener('input', () => setView($('#viewby').value));
+
+// A section the current layout has no use for is emptied and hidden, so it leaves no gap.
+function setSection(id, html) {
+  const el = $('#' + id);
+  el.innerHTML = html;
+  el.hidden = !html;
+}
+function renderModelSections() {
+  const on = VIEW === 'model';
+  setSection('tradeoff', on ? tradeoffHtml() : '');
+  setSection('categories', on ? categoryHtml() : '');
+  setSection('consistency', on ? consistencyHtml() : '');
+}
+
+// ---------- by model: results ----------
+// Each card names the leading model on one figure and who follows. The figures are the date view's three, read from the
+// same sources, so a card cannot disagree with the tables below it.
+function leaderCard({ title, get, fmt, higher, word }) {
+  const vals = runsShown.map((l) => ({ l, v: get(l) })).filter((p) => p.v != null);
+  if (!vals.length) return `<figure class="kpi"><figcaption>${title}</figcaption><div class="kpi-val">–</div></figure>`;
+  const best = (higher ? Math.max : Math.min)(...vals.map((p) => p.v));
+  const tied = (p) => fmt(p.v) === fmt(best);  // ties are read off the figure the reader sees
+  const lead = vals.filter(tied);
+  const rest = vals.filter((p) => !tied(p)).sort((a, b) => (higher ? b.v - a.v : a.v - b.v));
+  const names = lead.map((p) => esc(roleOf(p.l))).join(', ');
+  const line = vals.length === 1 ? names
+    : !rest.length ? '<span class="ext same">the same for every model</span>'
+    : `<span class="ext best">${CHEVRON(higher ? 'up' : 'down')}${names}</span> ${word}, ${esc(roleOf(rest[0].l))} next at ${fmt(rest[0].v)}`;
+  return `<figure class="kpi"><figcaption>${title}</figcaption><div class="kpi-val">${fmt(best)}</div><div class="kpi-delta">${line}</div></figure>`;
+}
+function renderModelSummary() {
+  $('#summary').innerHTML = '<h2>Results</h2><div class="trendgrid">' +
+    leaderCard({ title: 'Highest share of test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true, word: 'highest' }) +
+    leaderCard({ title: 'Highest average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true, word: 'highest' }) +
+    leaderCard({ title: 'Quickest median time per attempt', get: medTimeOf, fmt: secs, higher: false, word: 'quickest' }) +
+    '</div>';
+}
+
+// ---------- by model: outcomes ----------
+// One row per model, best pass rate first. The bar is the model's evaluated test cases split by how they ended, so its
+// green part is the pass rate beside it; skipped test cases never ran and are left out of it, as they are of the rate.
+function modelOutcomesHtml() {
+  const evaluated = (l) => figures[l].total - figures[l].skipped;
+  const shown = (l) => { const r = passRateOf(figures[l]); return r == null ? null : Math.round(r * 100); };
+  const seen = runsShown.map(shown).filter((v) => v != null);
+  const spread = seen.length > 1 && Math.min(...seen) !== Math.max(...seen) ? { lo: Math.min(...seen), hi: Math.max(...seen) } : null;
+  const EXT_ICON = { best: CHEVRON('up'), worst: CHEVRON('down') };
+  // A pass rate over a different set of test cases is not like-for-like, so a model that differs from the one with the
+  // most test cases is flagged.
+  const ref = suiteRef(runsShown, '');
+  const body = runsShown.map((l) => {
+    const f = figures[l], n = evaluated(l), v = shown(l);
+    const seg = (cls, count, what) => (count && n ? `<i class="${cls}" style="width:${(count / n * 100).toFixed(2)}%" title="${count} ${what}"></i>` : '');
+    const bar = `<div class="stack" role="img" aria-label="${esc(roleOf(l))}: ${f.passed} passed, ${f.failed} failed, ${f.errored} could not be graded">` +
+      seg('p', f.passed, 'passed') + seg('f', f.failed, 'failed') + seg('e', f.errored, 'could not be graded') + '</div>';
+    const counts = OUTCOMES.map(([k, , verb]) => `<td class="num" title="${f[k]} of ${f.total} test cases ${verb}">${f[k]}</td>`).join('');
+    const m = spread && v != null ? (v === spread.hi ? 'best' : v === spread.lo ? 'worst' : '') : '';
+    const why = m === 'best' ? ' · highest of the models shown' : m === 'worst' ? ' · lowest of the models shown' : '';
+    const rate = v == null ? '<td class="num">–</td>'
+      : `<td class="num" title="${f.passed} of ${n} evaluated test cases${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${v}%</span>` : v + '%'}</td>`;
+    const gap = l !== ref ? suiteChange(ref, l, '') : '';
+    const flag = l !== ref && (n !== evaluated(ref) || gap)
+      ? ' ' + caution(`${n} test cases evaluated here, ${evaluated(ref)} for ${esc(roleOf(ref))}.` + (gap ? '<br>' + gap : '')) : '';
+    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bar}</td>${counts}${rate}</tr>`;
+  }).join('');
+  const heads = [['Model', ''], ['Outcomes', 'The evaluated test cases split into passed (green), failed (red) and could not be graded (orange).'],
+    ...OUTCOMES.map(([, name, , help]) => [name, help]),
+    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+  return '<h2>Outcomes</h2>' +
+    '<p class="blurb">How every test case ended for each model, best pass rate first. It <b>passed</b> when it met the run\'s pass rule, ' +
+    '<b>failed</b> when it was graded and did not, <b>could not be graded</b> when an error left it without a verdict, and was <b>skipped</b> when it was not run. ' +
+    'The bar covers the evaluated test cases, so its green part is the pass rate.</p>' +
+    `<div class="cmp"><div class="tablewrap flat"><table class="out-table"><thead><tr>` +
+    heads.map(([h, help], j) => `<th class="${j > 1 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    `</tr></thead><tbody>${body}</tbody></table></div>` +
+    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '') + '</div>';
+}
+
+// ---------- by model: quality against speed ----------
+// The one picture that settles "is the better model worth waiting for": each model as a point, the share of test cases
+// it passed against the median time of one attempt, the same two figures as the first and third card. Up and to the
+// left is better. Models no other model beats on both are on the frontier; the rest are beaten by one of them.
+let tradeW = 720;
+function tradeoffHtml() {
+  const pts = runsShown.map((l) => ({ l, x: medTimeOf(l), y: passRateOf(figures[l]) })).filter((p) => p.x != null && p.y != null);
+  if (pts.length < 2) return '';
+  tradeW = Math.max(320, Math.round($('#latency').clientWidth) || tradeW);
+  const W = tradeW, H = Math.min(400, Math.max(260, Math.round(W * 0.4))), M = { l: 58, r: 24, t: 14, b: 46 };
+  const innerW = W - M.l - M.r, innerH = H - M.t - M.b, r2 = (v) => Math.round(v * 100) / 100;
+  // Time runs from zero, so the distances between models are honest. The pass rate gets the range the models span,
+  // padded by one step: models that all sit above 70% would crowd the top of a 0-100% axis.
+  const xTop = Math.max(...pts.map((p) => p.x)), xStep = niceStep(xTop, 5);
+  const xTicks = Math.max(1, Math.ceil((xTop * 1.08) / xStep - 1e-9)), xMax = xTicks * xStep;
+  const ys = pts.map((p) => p.y), yStep = Math.max(...ys) - Math.min(...ys) > 0.5 ? 0.2 : 0.1;
+  const yLo = r2(Math.max(0, Math.floor(Math.min(...ys) / yStep + 1e-9) * yStep - yStep));
+  const yHi = r2(Math.min(1, Math.ceil(Math.max(...ys) / yStep - 1e-9) * yStep + yStep));
+  const X = (v) => M.l + innerW * (v / xMax), Y = (v) => M.t + innerH * (1 - (v - yLo) / (yHi - yLo));
+  const yAt = Array.from({ length: Math.round((yHi - yLo) / yStep) + 1 }, (_, i) => r2(yLo + i * yStep));
+  const xAt = Array.from({ length: xTicks + 1 }, (_, i) => i * xStep);
+  const grid = yAt.map((v, i) => `<line class="${i ? 'sgrid' : 'sbase'}" x1="${M.l}" x2="${W - M.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"></line>` +
+      `<text x="${M.l - 8}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${pct(v)}</text>`).join('') +
+    xAt.map((v, i) => `<line class="${i ? 'sgrid' : 'sbase'}" x1="${X(v).toFixed(1)}" x2="${X(v).toFixed(1)}" y1="${M.t}" y2="${H - M.b}"></line>` +
+      `<text x="${X(v).toFixed(1)}" y="${H - M.b + 16}" text-anchor="middle">${v ? secs(v) : '0'}</text>`).join('') +
+    `<text x="${(M.l + innerW / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">Median time per attempt, shorter is faster</text>` +
+    `<text transform="translate(13 ${(M.t + innerH / 2).toFixed(1)}) rotate(-90)" text-anchor="middle">Test cases passed, higher is better</text>`;
+  const front = frontierOf(pts);
+  // The frontier as a dashed staircase through its points, from the fastest model to the most accurate.
+  const edge = front.map((i) => pts[i]).sort((a, b) => a.x - b.x || a.y - b.y);
+  const stair = edge.flatMap((p, i) => (i ? [[X(p.x), Y(edge[i - 1].y)], [X(p.x), Y(p.y)]] : [[X(p.x), Y(p.y)]]));
+  const edgeSvg = edge.length > 1 ? `<polyline class="edge" points="${stair.map(([px, py]) => `${px.toFixed(1)},${py.toFixed(1)}`).join(' ')}"></polyline>` : '';
+  // Names sit beside their points, on the left of any point near the right edge, nudged apart where two would touch.
+  const dots = pts.map((p, i) => ({ ...p, px: X(p.x), py: Y(p.y), side: X(p.x) > M.l + innerW * 0.62 ? 'l' : 'r', on: front.includes(i) }));
+  for (const side of ['l', 'r']) {
+    let last = -Infinity;
+    for (const d of dots.filter((t) => t.side === side).sort((a, b) => a.py - b.py)) { d.ly = Math.max(d.py, last + 15); last = d.ly; }
+  }
+  const clip = (s) => (s.length > 26 ? s.slice(0, 25) + '…' : s);
+  const marks = dots.map((d) => {
+    const name = roleOf(d.l);
+    const desc = `${name}: ${pct(d.y)} of test cases passed, median ${secs(d.x)} per attempt, ${d.on ? 'on the frontier' : 'beaten by another model'}`;
+    return `<circle class="dot${d.on ? '' : ' off'}" cx="${d.px.toFixed(1)}" cy="${d.py.toFixed(1)}" r="6" tabindex="0" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title></circle>` +
+      `<text class="nm${d.on ? ' front' : ''}" x="${(d.side === 'r' ? d.px + 11 : d.px - 11).toFixed(1)}" y="${(d.ly + 4).toFixed(1)}" text-anchor="${d.side === 'r' ? 'start' : 'end'}">${esc(clip(name))}</text>`;
+  }).join('');
+  return '<h2>Quality against speed</h2>' +
+    '<p class="blurb">Each point is a model: the share of test cases it passed, against the median time of one attempt. Up and to the left is better. ' +
+    'The dashed line joins the models worth weighing against each other; every other model is beaten by one of them on both counts. The tables list every figure.</p>' +
+    `<div class="scatter"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Test cases passed against median time per attempt, one point per model. The tables list every figure.">${grid}${edgeSvg}${marks}</svg></div>` +
+    '<p class="note extkey"><span class="sw"></span>On the frontier: no other model passes more in less time &nbsp; <span class="sw off"></span>Beaten: another model passes at least as many in no more time, and is better on one of the two</p>';
+}
+
+// Drawn at the section's width, like the latency chart, so redraw it when that changes.
+if (window.ResizeObserver) {
+  new ResizeObserver(() => {
+    if (VIEW === 'model' && Math.abs(Math.max(320, $('#latency').clientWidth) - tradeW) > 24) renderModelSections();
+  }).observe($('#latency'));
+}
+
+// ---------- by model: categories ----------
+// Where each model is strong or weak, which one overall rate hides: the pass rate per category, a row each. The darker the
+// green the higher the rate, and the figures are in the cells, so the shade is never the only signal. Categories where
+// the models differ most come first. A cell is read from the same items as the table at the bottom.
+function categoryHtml() {
+  const cats = uniq(dashRows.map((r) => r.kind));
+  if (cats.length < 2) return '';
+  const stat = (l, kind) => {
+    const its = dashRows.filter((r) => r.kind === kind).map((r) => r.per[l]).filter((it) => it && !it.skipped);
+    return { n: its.length, passed: its.filter(passedOf).length, rate: its.length ? its.filter(passedOf).length / its.length : null };
+  };
+  const spreadOf = (cells) => { const rs = cells.map((c) => c.rate).filter((v) => v != null); return rs.length > 1 ? Math.max(...rs) - Math.min(...rs) : 0; };
+  const data = cats.map((k) => ({ k, cells: runsShown.map((l) => stat(l, k)) }))
+    .sort((a, b) => spreadOf(b.cells) - spreadOf(a.cells) || kindName(a.k).localeCompare(kindName(b.k)));
+  const overall = { k: '', cells: runsShown.map((l) => ({ n: figures[l].total - figures[l].skipped, passed: figures[l].passed, rate: passRateOf(figures[l]) })) };
+  const cells = (row) => {
+    const shown = row.cells.map((c) => (c.rate == null ? null : Math.round(c.rate * 100))).filter((v) => v != null);
+    const hi = shown.length > 1 && Math.min(...shown) !== Math.max(...shown) ? Math.max(...shown) : null;
+    return row.cells.map((c, i) => {
+      if (c.rate == null) return '<td class="hc">–</td>';
+      const label = Math.round(c.rate * 100) + '%';
+      return `<td class="hc" style="background:rgba(0,193,141,${(0.06 + 0.34 * c.rate).toFixed(2)})" title="${c.passed} of ${c.n} evaluated test cases passed (${esc(roleOf(runsShown[i]))})">` +
+        `${hi === Math.round(c.rate * 100) ? `<span class="ext best">${CHEVRON('up')}${label}</span>` : label}<span class="n">${c.passed}/${c.n}</span></td>`;
+    }).join('');
+  };
+  return '<h2>By category</h2>' +
+    '<p class="blurb">The share of test cases each model passed in each category, with the best model in a row marked. Categories where the models differ most come first, ' +
+    'and skipped test cases are left out.</p>' +
+    '<div class="cmp"><div class="tablewrap flat"><table class="heat"><thead><tr><th>Category</th>' +
+    runsShown.map((l) => `<th class="mh" title="${esc(roleOf(l))}">${esc(roleOf(l))}</th>`).join('') + '</tr></thead><tbody>' +
+    `<tr class="all"><th scope="row">All categories</th>${cells(overall)}</tr>` +
+    data.map((row) => `<tr><th scope="row">${esc(kindName(row.k))}</th>${cells(row)}</tr>`).join('') +
+    '</tbody></table></div></div>';
+}
+
+// ---------- by model: consistency ----------
+// Language models do not answer the same way twice, so a test case is attempted several times. The light bar is the share
+// that passed on at least one attempt (pass@K) and the dark bar the share that passed on every attempt (pass^K); a long
+// gap is a model that can do the task but not reliably. It needs a report that recorded both and attempted more than once.
+function consistencyHtml() {
+  const stat = (l) => {
+    const its = dashRows.map((r) => r.per[l]).filter((it) => it && !it.skipped);
+    return {
+      n: its.length, once: its.filter((it) => it.pass_at_k).length, every: its.filter((it) => it.pass_power_k === true).length,
+      some: its.filter((it) => it.pass_at_k && it.pass_power_k === false).length,
+      repeated: its.some((it) => typeof it.pass_power_k === 'boolean' && (it.runs || 0) > 1),
+    };
+  };
+  const st = runsShown.map((l) => [l, stat(l)]);
+  if (!st.some(([, s]) => s.repeated)) return '';
+  const share = (s, v) => (s.n ? v / s.n : null);
+  const body = st.map(([l, s]) => {
+    const w = (v) => (s.n ? (v / s.n * 100).toFixed(1) : 0);
+    const bars = `<div class="pbars" role="img" aria-label="${esc(roleOf(l))}: ${pct(share(s, s.once))} passed on at least one attempt, ${pct(share(s, s.every))} on every attempt">` +
+      `<div class="pbar s1" title="${s.once} of ${s.n} passed on at least one attempt"><div class="tr"><i style="width:${w(s.once)}%"></i></div></div>` +
+      `<div class="pbar s4" title="${s.every} of ${s.n} passed on every attempt"><div class="tr"><i style="width:${w(s.every)}%"></i></div></div></div>`;
+    return `<tr><td class="mname">${esc(roleOf(l))}</td><td class="barcell">${bars}</td>` +
+      `<td class="num" title="${s.once} of ${s.n}">${pct(share(s, s.once))}</td><td class="num" title="${s.every} of ${s.n}">${pct(share(s, s.every))}</td>` +
+      `<td class="num" title="Test cases that passed some attempts but not all of them">${s.some}</td></tr>`;
+  }).join('');
+  return '<h2>Consistency across attempts</h2>' +
+    '<p class="blurb">Each test case is attempted more than once. The light bar is the share that passed on at least one attempt and the dark bar the share that passed on every attempt. ' +
+    'A long gap means the model can do the task but not reliably.</p>' +
+    '<div class="cmp"><div class="lclegend"><span><i class="lckey s1"></i>At least one attempt</span><span><i class="lckey s4"></i>Every attempt</span></div>' +
+    '<div class="tablewrap flat"><table><thead><tr><th>Model</th><th></th><th class="num">At least one attempt</th><th class="num">Every attempt</th>' +
+    '<th class="num" title="Test cases that passed some attempts but not all of them">Passed only some attempts</th></tr></thead>' +
+    `<tbody>${body}</tbody></table></div></div>`;
+}
+
+// ---------- by model: response time ----------
+// The same four percentiles as the date view, laid out for choosing: models quickest first, a bar per figure from zero so
+// the lengths compare, and the numbers beside them. Quickest and slowest in each column are marked as elsewhere.
+function modelLatencyTable({ mode, field, sample }) {
+  const statsOf = (l) => (modeOf(l, mode) || {})[field] || null;
+  const timed = runsShown.filter((l) => statsOf(l));
+  if (!timed.length) return '<p class="note">No timings in this report.</p>';
+  const unit = sample.toLowerCase(), KEYS = LAT_SERIES.map((s) => s.key);
+  const order = [...timed].sort((a, b) => statsOf(a).p50 - statsOf(b).p50);
+  const top = Math.max(...order.map((l) => statsOf(l).p99)) || 1;
+  const ref = suiteRef(order, mode);
+  const spread = KEYS.map((k) => {
+    const vs = order.map((l) => +statsOf(l)[k].toFixed(1));
+    return vs.length > 1 && Math.min(...vs) !== Math.max(...vs) ? { lo: Math.min(...vs), hi: Math.max(...vs) } : null;
+  });
+  const EXT_ICON = { best: CHEVRON('down'), worst: CHEVRON('up') };
+  const body = [...order, ...runsShown.filter((l) => !statsOf(l))].map((l) => {
+    const st = statsOf(l);
+    if (!st) return `<tr><td class="mname">${esc(roleOf(l))}</td><td class="barcell"></td>${'<td class="num">–</td>'.repeat(KEYS.length)}</tr>`;
+    const bars = '<div class="pbars">' + LAT_SERIES.map((s, k) =>
+      `<div class="pbar s${k + 1}" title="${s.name} ${secs(st[s.key])}"><div class="tr"><i style="width:${(st[s.key] / top * 100).toFixed(1)}%"></i></div></div>`).join('') + '</div>';
+    const nums = KEYS.map((k, j) => {
+      const v = +st[k].toFixed(1), sp = spread[j];
+      const m = !sp ? '' : v === sp.lo ? 'best' : v === sp.hi ? 'worst' : '';
+      const why = m === 'best' ? ' · quickest of the models shown' : m === 'worst' ? ' · slowest of the models shown' : '';
+      return `<td class="num" title="Based on ${st.n} ${unit}${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${secs(st[k])}</span>` : secs(st[k])}</td>`;
+    }).join('');
+    const same = l === ref ? '' : suiteChange(ref, l, mode);
+    const flag = l !== ref && (st.n !== statsOf(ref).n || same)
+      ? ' ' + caution(`${st.n} ${unit} timed here, ${statsOf(ref).n} for ${esc(roleOf(ref))}.` + (same ? '<br>' + same : '')) : '';
+    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bars}</td>${nums}</tr>`;
+  }).join('');
+  return '<div class="cmp"><div class="lclegend">' + LAT_SERIES.map((s, k) => `<span><i class="lckey s${k + 1}"></i>${s.name}</span>`).join('') + '</div>' +
+    '<div class="tablewrap flat"><table class="lat-table"><thead><tr><th>Model</th><th>Response time, from zero</th>' +
+    LAT_SERIES.map((s) => `<th class="num" title="${esc(HEAD_HELP[s.name])}">${s.name}</th>`).join('') + `</tr></thead><tbody>${body}</tbody></table></div>` +
+    (spread.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest model</span> <span class="ext worst">${EXT_ICON.worst}slowest model</span> in each column, quickest first</p>` : '') + '</div>';
+}
+
+// First paint: a report that compares several models opens by model, anything else by date.
+setView(defaultView(ALL_LABELS.map(modelKeyOf)));
 
 // ---------- tooltips as a page overlay ----------
 // Every .info element keeps its tooltip content in a hidden .tip child. On hover or keyboard focus that content is
