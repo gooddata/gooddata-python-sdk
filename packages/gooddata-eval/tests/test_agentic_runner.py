@@ -1104,6 +1104,36 @@ def test_run_agentic_items_passes_custom_tags_as_run_metadata(tags, expected_ext
     assert mock_eval.call_args.kwargs["run_metadata_extra"] == expected_extra
 
 
+@pytest.mark.parametrize(
+    ("run_metadata", "tags", "expected_extra"),
+    [
+        # --run-metadata-json alone: reaches the dataset-run metadata with no tags key.
+        ({"agent_id": "a-1", "child_workspace_id": "ws-1"}, (), {"agent_id": "a-1", "child_workspace_id": "ws-1"}),
+        # Both: merged, not one replacing the other.
+        ({"agent_id": "a-1"}, ("nightly",), {"agent_id": "a-1", "tags": ["nightly"]}),
+        # A "tags" key in the JSON file loses -- tags is derived here from --tag.
+        ({"tags": ["from-json"]}, ("nightly",), {"tags": ["nightly"]}),
+        # Neither: unchanged from before this argument existed.
+        ({}, (), None),
+    ],
+)
+def test_run_agentic_items_merges_run_metadata_with_tags(run_metadata, tags, expected_extra):
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        return_value=AgenticEvalOutcome(detail={"alert_created": True}),
+    ) as mock_eval:
+        run_agentic_items(
+            [_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+            tags=tags,
+            run_metadata=run_metadata,
+        )
+    assert mock_eval.call_args.kwargs["run_metadata_extra"] == expected_extra
+
+
 class _FirstSend(BaseException):
     """Ends a run at its first chat turn; BaseException so no kind's error handling keeps it."""
 
