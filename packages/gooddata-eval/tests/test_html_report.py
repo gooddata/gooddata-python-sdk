@@ -253,7 +253,7 @@ def test_the_page_has_single_question_and_conversation_sections_read_from_the_re
         "Per conversation",
     ):
         assert text in html
-    for label in ("Fastest", "Median", "P90", "Slowest"):
+    for label in ("Median", "P70", "P90", "P99"):
         assert label in html
     # The table renderers only lay out figures they are handed; the one place that computes any is `recompute`.
     renderers = html.split("// ---------- latency by mode")[1].split("function renderLatency")[0]
@@ -282,11 +282,11 @@ def test_the_filters_sit_above_the_dashboard_and_drive_every_table():
     html = build_html(_doc_with_modes("gpt-5"))
 
     bar = html.index('id="filterbar"')
-    for section in ('id="summary"', 'id="latency"', 'id="items"'):
+    for section in ('id="summary"', 'id="outcomes"', 'id="latency"', 'id="items"'):
         assert bar < html.index(section), f"the filter bar must come before {section}"
-    # One render path feeds the result cards, the latency tables and the item table.
+    # One render path feeds the result cards, the outcome table, the latency tables and the item table.
     render = html.split("function render() {")[1].split("function renderItems")[0]
-    for call in ("renderSummary()", "renderLatency()", "renderItems()"):
+    for call in ("renderSummary()", "renderOutcomes()", "renderLatency()", "renderItems()"):
         assert call in render
 
 
@@ -345,16 +345,51 @@ def test_the_tables_filters_combine_with_the_top_ones_without_widening_them():
     assert "rows.filter(" not in items
 
 
-def test_the_latency_tables_show_plain_figures_and_leave_the_long_tail_to_the_json():
-    """The tables carry the fastest, the median, P90 and the slowest. P99 over a few dozen samples is just the
-    slowest one again, and the average and trimmed average stay in the JSON and the console. A filtered view
-    still recomputes the full distribution, so its `by_mode` has the shape the report's own would."""
+def test_the_latency_tables_show_the_median_p70_p90_and_p99():
+    """The tables carry the median, P70, P90 and P99 -- the same four figures the chart draws -- and no longer the
+    fastest and slowest single response; P99 is the tail. The average and trimmed average stay in the JSON and the
+    console. A filtered view still recomputes the full distribution, so its `by_mode` has the shape the report's own
+    would."""
     html = build_html(_doc_with_modes("gpt-5"))
 
     table = html.split("function latencyTable(")[1].split("function modeSection")[0]
-    assert "const heads = ['Run', 'Fastest', 'Median', 'P90', 'Slowest']" in table
-    assert "const KEYS = ['min', 'p50', 'p90', 'max']" in table
+    assert "const heads = ['Run', ...LAT_SERIES.map((s) => s.name)]" in table
+    assert "const KEYS = LAT_SERIES.map((s) => s.key)" in table
+    assert "'Fastest'" not in table and "'Slowest'" not in table
+    chart = html.split("const LAT_SERIES = [")[1].split("function latencyChart")[0]
+    assert "key: 'p50', name: 'Median'" in chart
+    assert "key: 'p70', name: 'P70'" in chart
+    assert "key: 'p90', name: 'P90'" in chart
+    assert "key: 'p99', name: 'P99'" in chart
+    # The run with no timings gets one dash per figure, however many columns there are.
+    assert "dash.repeat(KEYS.length)" in table
     assert "trimmed_mean:" in html.split("function latencyStats(samples)")[1].split("function qualityOf")[0]
+
+
+def test_each_latency_table_is_preceded_by_a_line_chart_of_the_same_four_figures():
+    """The chart sits between the section's text and its table, draws one line per figure from the same `by_mode`
+    numbers the table prints, and needs two runs with timings to have a line to draw."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    table = html.split("function latencyTable(")[1].split("function modeSection")[0]
+    assert "latencyChart({ mode, field, sample }) +" in table
+    chart = html.split("function latencyChart(")[1].split("// Hover or focus on a run")[0]
+    # Same source as the table, no arithmetic of its own.
+    assert "modeOf(l, mode)" in chart and "[field]" in chart
+    assert "sort(" not in chart and "percentile(" not in chart
+    # Two runs with timings are needed for a line; fewer and the table says it all.
+    assert "pts.filter((p) => p.st).length < 2) return ''" in chart
+    # Always from zero, one polyline per figure, a legend, and the table as the text alternative.
+    assert "const x = (i) =>" in chart and "y = (v) => M.t + innerH * (1 - v / yMax)" in chart
+    assert "<polyline" in chart and "lclegend" in chart
+    assert "The table below lists every figure." in chart
+    # Drawn at the row's own width and redrawn when it changes, so the chart spans the row without stretching its text.
+    assert "const W = latW" in chart
+    assert "max-width" not in html.split(".latchart {")[1].split("}")[0]
+    assert "new ResizeObserver" in html.split("function renderLatency")[1].split("// ---------- outcomes")[0]
+    # Hover and keyboard focus show every figure of that run.
+    assert "tabindex=\"0\"" in chart and "lctip" in chart
+    assert "focusin" in html.split("function latHover")[1].split("function latencyTable")[0]
 
 
 def test_the_latency_tables_mark_the_quickest_and_slowest_run_by_icon_as_well_as_colour():
@@ -447,7 +482,9 @@ def _run_page_js(html: str, definitions: list[str], expression: str):
     rules are exercised as written rather than asserted as text. There is no JS test runner in this package."""
     parts = []
     for name in definitions:
-        found = re.search(rf"^(?:const {name} = [^\n]*;|function {name}\(.*?^\}})$", html, re.M | re.S)
+        found = re.search(
+            rf"^(?:const {name} = [^\n]*;|const {name} = \[\n.*?^\];|function {name}\(.*?^\}})$", html, re.M | re.S
+        )
         assert found, f"{name} not found in the page"
         parts.append(found.group(0))
     script = "\n".join(parts) + f"\nconsole.log(JSON.stringify({expression}));"
@@ -476,6 +513,145 @@ def test_the_pass_rate_card_leaves_skipped_test_cases_out_like_the_console():
     # Both the reported and the recomputed figures carry `skipped`, which is what the card divides by.
     assert "get: (l) => passRateOf(figures[l])" in html
     assert "passed / items.length" not in html
+
+
+def test_the_outcomes_section_sits_between_the_result_cards_and_latency_and_reads_the_same_figures():
+    """The section answers "how did each test case end" the way the latency tables answer "how long": one row per
+    run, newest first, latest in lime. It reads `figures` (the report's own summary, or a recomputation when
+    filtered) and takes its pass rate from `passRateOf`, the function behind the first card."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert html.index('id="summary"') < html.index('id="outcomes"') < html.index('id="latency"')
+    section = html.split("function outcomesTable()")[1].split("function renderOutcomes")[0]
+    assert "passRateOf(figures[l])" in section
+    assert ".reverse().join('')" in section  # newest run first, like the latency tables
+    assert "LATEST_PILL" in section
+    for outcome in ("Passed", "Failed", "Could not be graded", "Skipped"):
+        assert f"'{outcome}'" in html.split("const OUTCOMES = [")[1].split("function outcomesTable")[0]
+    assert "'Pass rate'" in section
+    # The table lays out figures it is handed; nothing here counts items or sorts samples.
+    assert "sort(" not in section
+    assert "items.filter(" not in section
+
+
+def test_the_outcome_names_match_the_result_filter():
+    """The four outcomes are the four values of the Result filter, in the same words, so a reader can go from a
+    count in the table to the test cases behind it."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    filter_text = {
+        t
+        for _, t in re.findall(
+            r"\{ value: '(\w+)', text: '([^']+)' \}", html.split("const STATUS_OPTIONS")[1].split("];")[0]
+        )
+    }
+    outcome_names = set(re.findall(r"^  \['(?:passed|failed|errored|skipped)', '([^']+)'", html, re.M))
+    assert outcome_names == {"Passed", "Failed", "Could not be graded", "Skipped"}
+    assert outcome_names == filter_text
+
+
+@_needs_node
+def test_a_report_without_a_failed_count_gets_it_from_what_the_other_three_leave():
+    """`failed` was added to the summary after the first reports were written; an older file still shows four
+    outcomes that add up to its total."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    def reported(summary, comparison):
+        data = {"comparison": {"r": comparison}, "runs": {"r": {"summary": summary}}}
+        return _run_page_js(html, ["reported"], f"(globalThis.DATA = {json.dumps(data)}, reported('r'))")
+
+    # Written by gd-eval today: the report's own count wins.
+    current = reported({"total": 10, "passed": 6, "failed": 2, "errored": 1, "skipped": 1}, {})
+    assert (current["passed"], current["failed"], current["errored"], current["skipped"]) == (6, 2, 1, 1)
+    # Written before `failed` existed: it is what remains.
+    older = reported({"total": 10, "passed": 6, "errored": 1, "skipped": 1}, {})
+    assert older["failed"] == 2
+    # Never negative, even if the other counts overlap (an item that passed and then errored is in both).
+    assert reported({"total": 4, "passed": 3, "errored": 2}, {})["failed"] == 0
+
+
+@_needs_node
+def test_a_filtered_view_counts_failed_as_graded_and_not_passed():
+    """Under a filter the outcomes are recounted from the selected items, by the JSON's own definition of `failed`:
+    not passed, not skipped, no error. The four then add up to the selection."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    items = {
+        "a": {"gate_passed": True},
+        "b": {"gate_passed": False},
+        # Under --gate power: some attempts passed (pass_at_k) but the gate did not, so it failed.
+        "c": {"pass_at_k": True, "gate_passed": False},
+        "d": {"gate_passed": False, "error": "JudgeResponseError: no run of this item could be graded"},
+        "e": {"skipped": True},
+    }
+
+    figures = _run_page_js(
+        html,
+        ["passedOf", "mean", "r3", "percentile", "latencyStats", "qualityOf", "MODES", "recompute"],
+        f"(globalThis.DATA = {{runs: {{r: {{items: {json.dumps(items)}}}}}}}, recompute('r', {json.dumps(list(items))}))",
+    )
+
+    assert {k: figures[k] for k in ("total", "passed", "failed", "errored", "skipped")} == {
+        "total": 5,
+        "passed": 1,
+        "failed": 2,
+        "errored": 1,
+        "skipped": 1,
+    }
+
+
+@_needs_node
+def test_the_outcome_table_lists_the_runs_newest_first_with_a_pass_rate_that_leaves_skipped_out():
+    html = build_html(_doc_with_modes("gpt-5"))
+    figures = {
+        "Sep 28": {"total": 20, "passed": 14, "failed": 4, "errored": 1, "skipped": 1},
+        "Oct 5": {"total": 20, "passed": 16, "failed": 3, "errored": 1, "skipped": 0},
+        "Oct 12": {"total": 20, "passed": 15, "failed": 4, "errored": 0, "skipped": 1},
+    }
+    stubs = (
+        "globalThis.figures = " + json.dumps(figures) + ", globalThis.runsShown = " + json.dumps(list(figures)) + ", "
+        "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
+        "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
+        "globalThis.LATEST_PILL = ' LATEST'"
+    )
+    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "outcomesTable"], f"({stubs}, outcomesTable())")
+
+    # Newest first.
+    assert page.index("Oct 12") < page.index("Oct 5") < page.index("Sep 28")
+    rows = {}
+    for m in re.finditer(r"<tr[^>]*><td>(.*?)</td>(.*?)</tr>", page):
+        rows[next(label for label in figures if m.group(1).startswith(label))] = m.group(1) + m.group(2)
+    assert rows["Oct 12"].count("<td") == 5  # four outcomes and the pass rate (the run cell is captured apart)
+    assert "LATEST" in rows["Oct 12"] and "LATEST" not in rows["Oct 5"]
+    # 15 of the 19 evaluated is 79%, not 15 of 20 (75%): the skipped one never ran.
+    assert "79%" in rows["Oct 12"]
+    assert "80%" in rows["Oct 5"]  # 16 of 20
+    assert "74%" in rows["Sep 28"]  # 14 of 19
+    # The best run is marked up, the worst down, and the key says so.
+    assert 'class="ext best"><up>80%' in rows["Oct 5"]
+    assert 'class="ext worst"><down>74%' in rows["Sep 28"]
+    assert "highest pass rate" in page and "lowest pass rate" in page
+    # A run over a different number of evaluated test cases than the one before carries a caution; the first run has
+    # nothing before it.
+    assert "[!" in rows["Oct 5"] and "[!" in rows["Oct 12"]
+    assert "[!" not in rows["Sep 28"]
+
+
+@_needs_node
+def test_the_outcome_table_marks_nothing_when_every_run_reads_the_same():
+    html = build_html(_doc_with_modes("gpt-5"))
+    same = {"total": 10, "passed": 8, "failed": 2, "errored": 0, "skipped": 0}
+    stubs = (
+        f"globalThis.figures = {json.dumps({'a': same, 'b': same})}, globalThis.runsShown = ['a', 'b'], "
+        "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
+        "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
+        "globalThis.LATEST_PILL = ' LATEST'"
+    )
+
+    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "outcomesTable"], f"({stubs}, outcomesTable())")
+
+    assert "80%" in page
+    assert 'class="ext' not in page
+    assert "[!" not in page  # same number of test cases: nothing to caution about
 
 
 _ITEM_RESULT = {"pass": {"gate_passed": True}, "fail": {"gate_passed": False}, "skip": {"skipped": True}}
@@ -577,3 +753,253 @@ def test_building_the_html_does_not_invent_a_mode_split_for_an_older_report():
 
     assert "by_mode" not in data["runs"]["gpt-5"]["summary"]
     assert "by_mode" not in data["comparison"]["gpt-5"]
+
+
+# --- View by: model or date -------------------------------------------------------------------------------------
+
+
+def test_view_by_sits_above_the_filters_with_a_choice_of_model_or_date():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert html.index('id="filterbar"') < html.index('id="viewby"') < html.index('aria-label="Page filters"')
+    select = html.split('<select id="viewby">')[1].split("</select>")[0]
+    assert '<option value="model">By model</option>' in select
+    assert '<option value="date">By date</option>' in select
+    assert 'for="viewby">View by</label>' in html
+    # One run has nothing to switch between, so the row hides itself rather than offering two identical views.
+    assert "$('#viewrow').hidden = ALL_LABELS.length < 2" in html
+
+
+def test_the_page_opens_by_model_only_for_a_report_that_compares_models():
+    """Several models each seen once is a model comparison; one model over time, or a mix, keeps the date view the
+    page always had."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "setView(defaultView(ALL_LABELS.map(modelKeyOf)))" in html
+
+
+@_needs_node
+@pytest.mark.parametrize(
+    ("keys", "view"),
+    [
+        (["a", "b", "c"], "model"),
+        (["a", "b"], "model"),
+        (["a", "a", "a"], "date"),  # one model followed over time
+        (["a"], "date"),
+        ([], "date"),
+        (["a", "b", "a", "b"], "date"),  # two models on two dates: ambiguous, so the page keeps its old default
+    ],
+)
+def test_the_default_view_follows_what_the_report_holds(keys, view):
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert _run_page_js(html, ["defaultView"], f"defaultView({json.dumps(keys)})") == view
+
+
+@_needs_node
+def test_by_model_compares_each_models_latest_run():
+    """A report lists its runs oldest first, so the last run of a model is its latest. The models keep the order
+    they first appear in."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    keys = {"d1 · a": "m1", "d1 · b": "m2", "d2 · a": "m1", "d2 · b": "m2", "d3 · c": "m3"}
+
+    latest = _run_page_js(
+        html, ["latestPerKey"], f"latestPerKey({json.dumps(list(keys))}, (l) => ({json.dumps(keys)})[l])"
+    )
+
+    assert latest == ["d2 · a", "d2 · b", "d3 · c"]
+
+
+@_needs_node
+def test_a_model_is_read_from_the_run_not_from_its_file_name():
+    html = build_html(_doc_with_modes("gpt-5"))
+    data = {
+        "runs": {"2026-09-28 · p/m": {"model": "m"}, "m.json · p/m": {"model": "m"}, "x · q/m": {"model": "m"}},
+        "comparison": {
+            "2026-09-28 · p/m": {"provider_name": "p"},
+            "m.json · p/m": {"provider_name": "p"},
+            "x · q/m": {"provider_name": "q"},
+        },
+    }
+
+    keys = _run_page_js(
+        html,
+        ["modelOfRun", "providerOfRun", "modelKeyOf"],
+        f"(globalThis.DATA = {json.dumps(data)}, Object.keys(DATA.runs).map(modelKeyOf))",
+    )
+
+    # The same model id behind two providers is two models; the same model on two dates is one.
+    assert keys == ["p/m", "p/m", "q/m"]
+
+
+@_needs_node
+def test_models_are_ranked_by_the_consoles_winner_rule():
+    """Pass rate, then quality, then the quicker average: the order the console names its winner by."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    figures = [
+        {"n": "slow", "total": 10, "skipped": 0, "passed": 8, "avg_quality_score": 0.9, "avg_latency_s": 9},
+        {"n": "best", "total": 10, "skipped": 0, "passed": 9, "avg_quality_score": 0.5, "avg_latency_s": 30},
+        {"n": "good-quality", "total": 10, "skipped": 0, "passed": 8, "avg_quality_score": 0.95, "avg_latency_s": 30},
+        {"n": "quick", "total": 10, "skipped": 0, "passed": 8, "avg_quality_score": 0.9, "avg_latency_s": 3},
+        # A skipped test case never ran, so 8 of 8 evaluated beats 9 of 10.
+        {"n": "fewer-skipped-out", "total": 10, "skipped": 2, "passed": 8, "avg_quality_score": 0.1, "avg_latency_s": 99},
+    ]
+
+    ranked = _run_page_js(
+        html, ["passRateOf", "byStanding"], f"{json.dumps(figures)}.sort(byStanding).map((f) => f.n)"
+    )
+
+    assert ranked == ["fewer-skipped-out", "best", "good-quality", "quick", "slow"]
+
+
+@_needs_node
+@pytest.mark.parametrize(
+    ("statuses", "label"),
+    [
+        (["pass", "pass", "pass"], "All pass"),
+        (["fail", "fail"], "All fail"),
+        (["pass", "fail", "pass"], "Mixed"),
+        # Only graded verdicts count: a skip, an ungraded error or an absent model says nothing about a model.
+        (["pass", "skip", "none"], ""),
+        (["pass", "err", "pass"], "All pass"),
+        (["fail", "err", "pass"], "Mixed"),
+        (["pass"], ""),
+        ([], ""),
+    ],
+)
+def test_across_models_says_whether_the_models_agree_on_a_test_case(statuses, label):
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert _run_page_js(html, ["agreementOf"], f"agreementOf({json.dumps(statuses)})") == label
+
+
+def test_the_test_case_table_opens_on_the_disagreements_when_viewed_by_model():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "AGREE_ORDER = { Mixed: 0" in html
+    assert "'Across models'" in html
+    # By model the models are peers in ranked order: no "latest run" lead column, no "Since previous run" column.
+    assert "(multi && byDate ? [runList[runList.length - 1]] : [])" in html
+    assert "(multi && !byDate ? (() => { const a = agreementOf(" in html
+    assert "sortKey = LABELS.length < 2 ? 's:' + LABELS[0] : VIEW === 'model' ? 'agree' : 'chg'" in html
+
+
+@_needs_node
+@pytest.mark.parametrize(
+    ("points", "frontier"),
+    [
+        # 8 of 10 in 1s, 9 of 10 in 2s, 8.5 of 10 in 3s: the last is slower and weaker than the second.
+        ([{"x": 1, "y": 0.8}, {"x": 2, "y": 0.9}, {"x": 3, "y": 0.85}], [0, 1]),
+        # Faster and better beats slower and worse; a fast weak model and a slow strong one both stay.
+        ([{"x": 1, "y": 0.5}, {"x": 9, "y": 0.9}, {"x": 9, "y": 0.6}], [0, 1]),
+        # Two models at the same point beat neither the other: both stay.
+        ([{"x": 2, "y": 0.9}, {"x": 2, "y": 0.9}], [0, 1]),
+        # Equal quality: the quicker one wins; equal time: the better one wins.
+        ([{"x": 2, "y": 0.9}, {"x": 3, "y": 0.9}, {"x": 2, "y": 0.7}], [0]),
+        ([{"x": 4, "y": 0.7}], [0]),
+    ],
+)
+def test_the_speed_quality_frontier_keeps_the_models_nothing_beats(points, frontier):
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert _run_page_js(html, ["frontierOf"], f"frontierOf({json.dumps(points)})") == frontier
+
+
+@_needs_node
+@pytest.mark.parametrize(("top", "step"), [(36.5, 10), (0.8, 0.2), (120, 50), (4.4, 1), (0, 0.2)])
+def test_axis_steps_are_round_numbers(top, step):
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert _run_page_js(html, ["niceStep"], f"niceStep({top}, 5)") == pytest.approx(step)
+
+
+def test_by_model_has_a_section_for_each_chart_between_outcomes_and_latency():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    order = [html.index(f'id="{s}"') for s in ("outcomes", "tradeoff", "categories", "consistency", "latency")]
+    assert order == sorted(order)
+    # They start hidden and a layout that has no use for one empties it, so nothing leaves a gap.
+    for section in ("tradeoff", "categories", "consistency"):
+        assert f'<section id="{section}" hidden></section>' in html
+    set_section = html.split("function setSection(")[1].split("function renderModelSections")[0]
+    assert "el.hidden = !html" in set_section
+    sections = html.split("function renderModelSections() {")[1].split("// ---------- by model: results")[0]
+    for call in ("tradeoffHtml()", "categoryHtml()", "consistencyHtml()"):
+        assert call in sections
+    assert "on ? " in sections and ": ''" in sections  # the date view gets an empty string for each
+
+
+def test_the_model_charts_read_the_same_figures_as_the_cards_and_tables():
+    """Nothing here is a second source of truth: the speed-quality plot plots the first and third card, the
+    outcome bar is the outcome table's own counts, and the latency bars are the table's own percentiles."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    tradeoff = html.split("function tradeoffHtml()")[1].split("// Drawn at the section's width")[0]
+    assert "x: medTimeOf(l), y: passRateOf(figures[l])" in tradeoff
+    # Two models are the least a comparison can use; with fewer there is no plot.
+    assert "if (pts.length < 2) return ''" in tradeoff
+    assert "frontierOf(pts)" in tradeoff
+    # Time runs from zero, so the distances between models are honest.
+    assert "const X = (v) => M.l + innerW * (v / xMax)" in tradeoff
+    outcomes = html.split("function modelOutcomesHtml()")[1].split("// ---------- by model: quality against speed")[0]
+    assert "f.passed" in outcomes and "f.failed" in outcomes and "f.errored" in outcomes
+    assert "passRateOf(figures[l])" in outcomes
+    latency = html.split("function modelLatencyTable(")[1].split("// First paint")[0]
+    assert "modeOf(l, mode)" in latency and "LAT_SERIES" in latency
+    # The date view's table hands over to it, and keeps nothing of its own from the model view.
+    assert "if (VIEW === 'model') return modelLatencyTable({ mode, field, sample });" in html
+
+
+def test_the_category_heat_map_leaves_skipped_test_cases_out_and_shows_the_figure_in_every_cell():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    categories = html.split("function categoryHtml()")[1].split("// ---------- by model: consistency")[0]
+    assert ".filter((it) => it && !it.skipped)" in categories
+    # The shade is never the only signal: the share and the counts are printed in the cell, and the best model in a
+    # row is marked with a chevron as well as the text.
+    assert "class=\"n\"" in categories and "CHEVRON('up')" in categories
+    # With one category there is nothing to break down.
+    assert "if (cats.length < 2) return ''" in categories
+
+
+def test_the_consistency_chart_needs_a_report_that_recorded_repeated_attempts():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    consistency = html.split("function consistencyHtml()")[1].split("// ---------- by model: response time")[0]
+    assert "typeof it.pass_power_k === 'boolean' && (it.runs || 0) > 1" in consistency
+    assert "if (!st.some(([, s]) => s.repeated)) return ''" in consistency
+    # pass@K and pass^K are the two bars; the count of test cases between them is the number a reader acts on.
+    assert "it.pass_at_k" in consistency and "it.pass_power_k === true" in consistency
+    assert "Passed only some attempts" in consistency
+
+
+def test_switching_view_drops_selections_made_against_the_other_layout():
+    """A run picked in the date view means nothing in the model view, and the other way round, so the switch clears
+    them, closes the drawer (it may show a run that is no longer a column) and draws everything again."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    switch = html.split("function setView(v) {")[1].split("$('#viewby').addEventListener")[0]
+    for step in (
+        "T.runs.set(LABELS.map(",
+        "T.runs.sig = I.runs.sig = null",
+        "cmpPick = null; selected = null; drawerRun = null",
+        "$('#drawer').classList.remove('open')",
+        "renderMasthead()",
+        "render()",
+    ):
+        assert step in switch
+    assert "$('#viewby').addEventListener('input', () => setView($('#viewby').value))" in html
+    # The run filter is the model filter by model.
+    assert "noun === 'runs' && VIEW === 'model' ? 'Model'" in html
+
+
+def test_a_report_with_several_models_says_so_where_the_date_view_could_mislead():
+    """Two models on two dates read as "Oct 5, Oct 5, Oct 12, Oct 12" by date, with neighbouring runs of different
+    models compared as if one changed into the other. The names carry the model and the hint points at By model."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    assert "MULTI_MODEL && l.includes(' · ')" in html
+    assert "use By model to compare them" in html
+    # The setup tooltip does not flag the model as a difference when the model is what is being compared.
+    assert "compared: VIEW === 'model' && (k === 'Model' || k === 'Provider')" in html
+    assert "'Same for every model'" in html and "'Differs between models'" in html
