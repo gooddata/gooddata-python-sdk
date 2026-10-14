@@ -1017,7 +1017,7 @@ def evaluate_agentic_document_skill(
         elif not best.evaluation.skill_activated:
             skill_note = (
                 f" set_skills never activated {_BUILDER_SKILL}: either the copilot routed elsewhere, or the skill"
-                " is not registered. It registers only with enableGenAiDocumentBuilderSkill and the org's"
+                " is not registered. It registers only with enableGenAiReportBuilderSkill and the org's"
                 " enableBusinessBriefingReportsApp both on."
             )
         exc = DocumentSkillAssertionError(
