@@ -1,0 +1,42 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_732b0ecf528d18::t_5c371c4d55c632 208
+  s_732b0ecf528d18::t_ac3fe388965a13 209-210
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_732b0ecf528d18::t_0bfcf74921d068 110-113,115-116
+  s_732b0ecf528d18::t_f0067087fc07c2 33-36
+  s_732b0ecf528d18::t_c5cbb44804245e 105-109,114,117-123,147-151,156
+  s_732b0ecf528d18::t_6a34cd6c6f1b00 124,144,152-155
+  s_732b0ecf528d18::t_6642fc95cd9139 313
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_732b0ecf528d18::t_afaacc78abf0dc 11
+  s_732b0ecf528d18::t_cbcfad94636901 111-134
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_732b0ecf528d18::t_cc6de770a77eaa 318
+  s_732b0ecf528d18::t_a0e85e8f131747 212-213
+  s_732b0ecf528d18::t_11af740c86ec73 108-118
+  s_732b0ecf528d18::t_f70775ca08420f 154,160-180,182
+  s_732b0ecf528d18::t_65d1368c811d3f 498,506
+  s_732b0ecf528d18::t_9e0ff1673fd574 16
+  s_732b0ecf528d18::t_5d2f78f8fea193 147
+  s_732b0ecf528d18::t_a3fcff3087f746 155-156,181,183-211
+  s_732b0ecf528d18::t_c5f948cf1aebdb 95,97-107
+  s_732b0ecf528d18::t_3447aa701506c7 119-126
+  s_732b0ecf528d18::t_e9b0d9ce0c23ed 96
+  s_732b0ecf528d18::t_924bd6d7f2e8da 538-540
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "4b1beddfa6113fe739b64196b09ce8a7277d2b4d",
+  "prompts": {},
+  "sessions": {
+    "s_732b0ecf528d18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03501712-58cc-4278-ac9a-527c4366c8bb",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": null
+    }
+  }
+}

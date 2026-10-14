@@ -1,0 +1,22 @@
+MAINTENANCE.md
+  s_fce9de74d9bf0c::t_026dc15d4c4524 43-45
+  s_fce9de74d9bf0c::t_40203e48135293 100-103
+.github/actions/release-tag-checks/action.yaml
+  s_fce9de74d9bf0c::t_d9ec73cacb1c40 47-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "9b06388626d4c5119f447c8143a699454a7ee774",
+  "prompts": {},
+  "sessions": {
+    "s_fce9de74d9bf0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "511a5e37-6989-489e-9989-c08961cc0446",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

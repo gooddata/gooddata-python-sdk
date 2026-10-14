@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_432d8c3f88b767::t_cdca44fcda8ce8 352-375
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_432d8c3f88b767::t_9b05f506b5b169 18-23,94-101,117
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "b6de8f741f108c59714c72a23a55a5ee84d42e57",
+  "prompts": {},
+  "sessions": {
+    "s_432d8c3f88b767": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c72b1a6-1245-4c60-a340-0991813b99f6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

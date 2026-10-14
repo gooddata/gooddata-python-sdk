@@ -1,0 +1,45 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_152f0704157226::t_7e7bdb640e44e5 369
+  s_152f0704157226::t_db7cfb0713ec02 408
+  s_152f0704157226::t_bde93e74a64472 362-368,382
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_152f0704157226::t_1d881d7eb07b85 486
+  s_152f0704157226::t_063ceb36219efd 451-456
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_152f0704157226::t_71f5943207ca3d 266
+  s_152f0704157226::t_9364fddb1f60d1 232-234
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_152f0704157226::t_ab9bf5d2e6f72b 431
+  s_152f0704157226::t_d1f2673ed47ef1 470
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_152f0704157226::t_43f320ece4678d 191-203
+  s_152f0704157226::t_05dffb2e9c0680 190
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_152f0704157226::t_6f665a48cd00b2 841
+  s_152f0704157226::t_99f4b66e52200a 871
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_152f0704157226::t_26731c1007af02 260-262
+  s_152f0704157226::t_7ee26397eb6306 294
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_152f0704157226::t_9d6f3ab581ea07 208-210
+  s_152f0704157226::t_97042e905807e3 240
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_152f0704157226::t_38cbcc0f780e15 593-601
+  s_152f0704157226::t_e72eab4295f465 651
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "7078c9664ac69af59df5e540a330cd69c6afa9d2",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
