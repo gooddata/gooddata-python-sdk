@@ -523,7 +523,7 @@ def test_a_failing_item_on_the_report_names_points_at_the_rename_not_the_flags(
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
 
     assert "gen-ai still sends the Report names" in str(raised.value)
-    assert "enableGenAiDocumentBuilderSkill" not in str(raised.value)
+    assert "enableGenAiReportBuilderSkill" not in str(raised.value)
 
 
 def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -669,7 +669,7 @@ def test_a_failing_item_without_document_builder_points_at_the_flags(monkeypatch
     _install_client(monkeypatch, _ScriptedChatClient([turn]))
     with pytest.raises(
         DocumentSkillAssertionError,
-        match="enableGenAiDocumentBuilderSkill and the org.s enableBusinessBriefingReportsApp",
+        match="enableGenAiReportBuilderSkill and the org.s enableBusinessBriefingReportsApp",
     ):
         evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, max_iterations=1)
 
