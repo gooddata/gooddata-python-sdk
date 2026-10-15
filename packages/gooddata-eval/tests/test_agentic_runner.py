@@ -98,9 +98,18 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_guardrail", "Ignore prior instructions", "evaluate_agentic_guardrail"),
     ("agentic_kda_skill", {"Measure": {"type": "metric", "id": "revenue"}}, "evaluate_agentic_kda_skill"),
     ("agentic_conversation", {"fixture": _MIN_CONVERSATION_FIXTURE}, "evaluate_agentic_conversation"),
+    (
+        "agentic_dashboard_summary",
+        {"must_include": ["States the overall trend."]},
+        "evaluate_agentic_dashboard_summary",
+    ),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
+
+# The one kind whose dispatch needs more than question/expected_output: the dashboard to
+# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
+_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
 
 
 def test_all_agentic_kind_cases_covers_every_registered_kind():
@@ -119,6 +128,7 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}") as mock_eval:
         _dispatch_agentic(
@@ -224,6 +234,7 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], conversation_id="c1", response_id="r1", detail={"k": "v"})
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned) as mock_eval:
@@ -775,6 +786,7 @@ _KIND_EVALUATORS = [
     ("agentic_what_if", "evaluate_agentic_what_if", {}),
     ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("agentic_document_skill", "evaluate_agentic_document_skill", {}),
+    ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
@@ -797,6 +809,7 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
         question="What does the visualization I attached show?",
         expected_output=expected_output,
         user_context=user_context,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{evaluator}") as mock_eval:
         _dispatch_agentic(
@@ -809,7 +822,16 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
             run_ts="2026-01-01",
             model_version_override=None,
         )
+    if kind in _KINDS_WITHOUT_USER_CONTEXT:
+        assert "user_context" not in mock_eval.call_args.kwargs
+        return
     assert mock_eval.call_args.kwargs["user_context"] == user_context
+
+
+# agentic_dashboard_summary builds its own context from the dashboard it summarises and
+# takes its scope from summary_input, so relaying the item's context would override the
+# thing under test rather than add to it. Excluded on purpose, not by omission.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
 
 
 class _Stop(Exception):
@@ -941,7 +963,14 @@ def test_failed_runs_reaches_the_report_for_every_kind(kind, expected_output, ta
     field empty on every item (confirmed live: 135 agentic_guardrail results, all with
     `failed_runs: []`, including 16 items that passed 1 of 3 runs). A kind whose evaluator
     stops attaching them fails here rather than quietly reporting nothing."""
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, failed_runs=[_A_FAILED_RUN])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
