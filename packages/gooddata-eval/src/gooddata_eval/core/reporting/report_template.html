@@ -277,13 +277,8 @@
   .scatter .sbase { stroke: var(--dim); stroke-width: 1; opacity: .5; }
   .scatter text { fill: var(--dim); }
   .scatter text.nm { fill: var(--ink); font-size: 12px; }
-  .scatter text.nm.front { fill: var(--ink-strong); font-weight: 700; }
-  .scatter .edge { fill: none; stroke: var(--ink-strong); stroke-width: 1.25; stroke-dasharray: 4 3; opacity: .45; }
   .scatter .dot { fill: var(--ink-strong); stroke: var(--panel); stroke-width: 2; }
-  .scatter .dot.off { fill: var(--panel); stroke: var(--dim); }
   .scatter .dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-  .sw { display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0; border-radius: 50%; border: 2px solid var(--ink-strong); background: var(--ink-strong); vertical-align: -1px; }
-  .sw.off { border-color: var(--dim); background: var(--panel); }
   @media (max-width: 700px) { header.masthead { padding: 28px 18px 16px; } #left { padding: 14px 18px 60px; } h1 { font-size: 24px; } }
   @media print {
     #filterbar, #items-section .filters, #items-section .hint, #items-section .blurb, #drawer { display: none !important; }
@@ -1519,15 +1514,6 @@ function agreementOf(statuses) {
   const passed = graded.filter((s) => s === 'pass').length;
   return passed === graded.length ? 'All pass' : passed === 0 ? 'All fail' : 'Mixed';
 }
-// The points no other point beats on both axes: x is better when lower, y when higher. They are the speed-quality frontier.
-function frontierOf(points) {
-  const out = [];
-  points.forEach((p, i) => {
-    const beaten = points.some((q, j) => j !== i && q.x <= p.x && q.y >= p.y && (q.x < p.x || q.y > p.y));
-    if (!beaten) out.push(i);
-  });
-  return out;
-}
 // A round axis step (1, 2 or 5 times a power of ten) that puts about n ticks between zero and top.
 function niceStep(top, n) {
   const raw = (top || 1) / n, mag = 10 ** Math.floor(Math.log10(raw));
@@ -1660,7 +1646,7 @@ function modelOutcomesHtml() {
 // ---------- by model: quality against speed ----------
 // The one picture that settles "is the better model worth waiting for": each model as a point, the share of test cases
 // it passed against the median time of one attempt, the same two figures as the first and third card. Up and to the
-// left is better. Models no other model beats on both are on the frontier; the rest are beaten by one of them.
+// left is better.
 let tradeW = 720;
 function tradeoffHtml() {
   const pts = runsShown.map((l) => ({ l, x: medTimeOf(l), y: passRateOf(figures[l]) })).filter((p) => p.x != null && p.y != null);
@@ -1684,13 +1670,8 @@ function tradeoffHtml() {
       `<text x="${X(v).toFixed(1)}" y="${H - M.b + 16}" text-anchor="middle">${v ? secs(v) : '0'}</text>`).join('') +
     `<text x="${(M.l + innerW / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">Median time per attempt, shorter is faster</text>` +
     `<text transform="translate(13 ${(M.t + innerH / 2).toFixed(1)}) rotate(-90)" text-anchor="middle">Test cases passed, higher is better</text>`;
-  const front = frontierOf(pts);
-  // The frontier as a dashed staircase through its points, from the fastest model to the most accurate.
-  const edge = front.map((i) => pts[i]).sort((a, b) => a.x - b.x || a.y - b.y);
-  const stair = edge.flatMap((p, i) => (i ? [[X(p.x), Y(edge[i - 1].y)], [X(p.x), Y(p.y)]] : [[X(p.x), Y(p.y)]]));
-  const edgeSvg = edge.length > 1 ? `<polyline class="edge" points="${stair.map(([px, py]) => `${px.toFixed(1)},${py.toFixed(1)}`).join(' ')}"></polyline>` : '';
   // Names sit beside their points, on the left of any point near the right edge, nudged apart where two would touch.
-  const dots = pts.map((p, i) => ({ ...p, px: X(p.x), py: Y(p.y), side: X(p.x) > M.l + innerW * 0.62 ? 'l' : 'r', on: front.includes(i) }));
+  const dots = pts.map((p) => ({ ...p, px: X(p.x), py: Y(p.y), side: X(p.x) > M.l + innerW * 0.62 ? 'l' : 'r' }));
   for (const side of ['l', 'r']) {
     let last = -Infinity;
     for (const d of dots.filter((t) => t.side === side).sort((a, b) => a.py - b.py)) { d.ly = Math.max(d.py, last + 15); last = d.ly; }
@@ -1698,15 +1679,14 @@ function tradeoffHtml() {
   const clip = (s) => (s.length > 26 ? s.slice(0, 25) + '…' : s);
   const marks = dots.map((d) => {
     const name = roleOf(d.l);
-    const desc = `${name}: ${pct(d.y)} of test cases passed, median ${secs(d.x)} per attempt, ${d.on ? 'on the frontier' : 'beaten by another model'}`;
-    return `<circle class="dot${d.on ? '' : ' off'}" cx="${d.px.toFixed(1)}" cy="${d.py.toFixed(1)}" r="6" tabindex="0" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title></circle>` +
-      `<text class="nm${d.on ? ' front' : ''}" x="${(d.side === 'r' ? d.px + 11 : d.px - 11).toFixed(1)}" y="${(d.ly + 4).toFixed(1)}" text-anchor="${d.side === 'r' ? 'start' : 'end'}">${esc(clip(name))}</text>`;
+    const desc = `${name}: ${pct(d.y)} of test cases passed, median ${secs(d.x)} per attempt`;
+    return `<circle class="dot" cx="${d.px.toFixed(1)}" cy="${d.py.toFixed(1)}" r="6" tabindex="0" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title></circle>` +
+      `<text class="nm" x="${(d.side === 'r' ? d.px + 11 : d.px - 11).toFixed(1)}" y="${(d.ly + 4).toFixed(1)}" text-anchor="${d.side === 'r' ? 'start' : 'end'}">${esc(clip(name))}</text>`;
   }).join('');
   return '<h2>Quality against speed</h2>' +
     '<p class="blurb">Each point is a model: the share of test cases it passed, against the median time of one attempt. Up and to the left is better. ' +
-    'The dashed line joins the models worth weighing against each other; every other model is beaten by one of them on both counts. The tables list every figure.</p>' +
-    `<div class="scatter"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Test cases passed against median time per attempt, one point per model. The tables list every figure.">${grid}${edgeSvg}${marks}</svg></div>` +
-    '<p class="note extkey"><span class="sw"></span>On the frontier: no other model passes more in less time &nbsp; <span class="sw off"></span>Beaten: another model passes at least as many in no more time, and is better on one of the two</p>';
+    'The tables list every figure.</p>' +
+    `<div class="scatter"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Test cases passed against median time per attempt, one point per model. The tables list every figure.">${grid}${marks}</svg></div>`;
 }
 
 // Drawn at the section's width, like the latency chart, so redraw it when that changes.
