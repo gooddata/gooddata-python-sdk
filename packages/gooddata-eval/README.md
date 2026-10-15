@@ -418,8 +418,7 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
     caution icon (a model evaluated on different test cases than the one with the most) are the date view's.
   - **Quality against speed** — each model as a point: the share of test cases it passed against the median time of
     one attempt, the same two figures as the first and third card. Up and to the left is better. Time runs from zero;
-    the pass rate uses the range the models span. A filled point is on the *frontier*: no other model passes more in
-    less time. A hollow one is beaten by another model on both counts. It needs two models with timings.
+    the pass rate uses the range the models span. It needs two models with timings.
   - **By category** — a heat map of the pass rate per category and model, the best model in each row marked, the
     categories where the models differ most first. Every cell prints its share and its counts, so the shade is never the
     only signal. This is where a model that wins overall but loses on one category shows.
