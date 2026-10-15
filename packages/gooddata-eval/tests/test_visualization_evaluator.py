@@ -1,4 +1,5 @@
 # (C) 2026 GoodData Corporation
+import json
 import re
 from datetime import date
 
@@ -104,6 +105,103 @@ def test_evaluator_skill_not_activated_when_wrong_skill_name():
     )
     result = ev.evaluate(_item(_expected()), chat)
     assert result.detail["skill_activated"] is False
+
+
+def test_evaluator_skill_unrecognised_name_in_arguments_dropped_by_result():
+    """When arguments requested 'visualization' but the service result dropped it,
+    it must not be credited as active."""
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["visualization"]}',
+                    "result": json.dumps({"skills_to_activate": ["search"]}),
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is False
+
+
+def test_evaluator_skill_dependency_pulled_in_by_result_is_credited():
+    """When arguments did not name 'visualization' but the service result pulled it in
+    as a dependency, it must be credited as active."""
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["dashboard_builder"]}',
+                    "result": json.dumps({"skills_to_activate": ["dashboard_builder", "visualization"]}),
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is True
+
+
+def test_evaluator_skill_fallback_when_result_missing():
+    """When the result is missing (legacy trace), fallback to arguments."""
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["visualization"]}',
+                    "result": None,
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is True
+
+
+def test_evaluator_skill_fallback_when_result_unparseable():
+    """When the result is unparseable non-JSON text, fallback to arguments."""
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["visualization"]}',
+                    "result": "502 Bad Gateway",
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is True
+
+
+def test_evaluator_skill_fallback_when_call_errored():
+    """When the result indicates the tool call errored, fallback to arguments."""
+    ev = get_evaluator("visualization")
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [_expected()], "reasoning": ""},
+            "toolCallEvents": [
+                {
+                    "functionName": "set_skills",
+                    "functionArguments": '{"skill_names": ["visualization"]}',
+                    "result": json.dumps({"status": "error", "message": "Failed to set skills"}),
+                }
+            ],
+        }
+    )
+    result = ev.evaluate(_item(_expected()), chat)
+    assert result.detail["skill_activated"] is True
 
 
 def _ranked(attribute: str | None, dim_alias: str = "d_q"):
