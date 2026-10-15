@@ -79,7 +79,7 @@
   .kpi-val { font-family: var(--font-display); font-size: 34px; line-height: 1.15; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; }
   .kpi-delta { font-size: 13px; margin: 4px 0 8px; }
   .kpi .spark { display: block; width: 100%; height: 44px; overflow: visible; }
-  .kpi .spark .ln { fill: none; stroke: var(--dim); stroke-width: 1.75; vector-effect: non-scaling-stroke; }
+  .kpi .spark .ln { fill: none; stroke: var(--dim); stroke-width: 1.75; stroke-linecap: round; }
   .kpi .spark circle.pt { fill: var(--dim); }
   .kpi .spark circle.pt.on, .kpi .spark circle.pt.picked { fill: var(--ink-strong); }
   .kpi .spark circle.pt.picked:not(.latest) { fill: var(--panel); stroke: var(--ink-strong); stroke-width: 1.5; }
@@ -628,10 +628,13 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
     if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
     const x = (i) => P + (i * (W - 2 * P)) / lastI, y = (v) => P + (1 - (v - lo) / (hi - lo)) * (H - 2 * P);
     const step = (W - 2 * P) / lastI;
-    spark = `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(title)} over ${pts.length} runs: ${seq.map(([p]) => `${esc(roleOf(p.l))} ${fmt(p.v)}`).join(', ')}">
-      <polyline points="${seq.map(([p, i]) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ')}" class="ln"></polyline>` +
-      seq.map(([p, i]) => `<circle data-run="${esc(p.l)}" cx="${x(i).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="${i === lastI ? 5 : 2.5}" class="pt${i === lastI ? ' latest' : ''}${p.l === base ? ' picked' : ''}"></circle>`).join('') +
-      pts.map((p, i) => `<rect class="hit" data-run="${esc(p.l)}" x="${(x(i) - step / 2).toFixed(1)}" y="0" width="${step.toFixed(1)}" height="${H}" tabindex="0" role="button" aria-label="${esc(roleOf(p.l))}: ${p.v == null ? 'no data' : fmt(p.v)}${i === lastI ? ', latest run' : '. Compare the latest run with this one'}"><title>${esc(roleOf(p.l))}: ${p.v == null ? '\u2013' : fmt(p.v)}${i === lastI ? ' (latest)' : '. Click to compare with it.'}</title></rect>`).join('') +
+    // No viewBox: heights are real pixels and widths are percentages of the card, so the dots stay round at any
+    // card width (a viewBox stretched with preserveAspectRatio="none" squashes every circle into an ellipse).
+    const pc = (u) => `${((u / W) * 100).toFixed(2)}%`;
+    spark = `<svg class="spark" role="img" aria-label="${esc(title)} over ${pts.length} runs: ${seq.map(([p]) => `${esc(roleOf(p.l))} ${fmt(p.v)}`).join(', ')}">` +
+      seq.slice(1).map(([p, i], k) => { const [q, j] = seq[k]; return `<line class="ln" x1="${pc(x(j))}" y1="${y(q.v).toFixed(1)}" x2="${pc(x(i))}" y2="${y(p.v).toFixed(1)}"></line>`; }).join('') +
+      seq.map(([p, i]) => `<circle data-run="${esc(p.l)}" cx="${pc(x(i))}" cy="${y(p.v).toFixed(1)}" r="${i === lastI ? 5 : 2.5}" class="pt${i === lastI ? ' latest' : ''}${p.l === base ? ' picked' : ''}"></circle>`).join('') +
+      pts.map((p, i) => `<rect class="hit" data-run="${esc(p.l)}" x="${pc(x(i) - step / 2)}" y="0" width="${pc(step)}" height="${H}" tabindex="0" role="button" aria-label="${esc(roleOf(p.l))}: ${p.v == null ? 'no data' : fmt(p.v)}${i === lastI ? ', latest run' : '. Compare the latest run with this one'}"><title>${esc(roleOf(p.l))}: ${p.v == null ? '\u2013' : fmt(p.v)}${i === lastI ? ' (latest)' : '. Click to compare with it.'}</title></rect>`).join('') +
       `</svg><div class="kpi-range"><span>${esc(roleOf(pts[0].l))}</span><span>${esc(roleOf(latest.l))}</span></div>`;
   }
   return `<figure class="kpi"><figcaption>${title}</figcaption>
