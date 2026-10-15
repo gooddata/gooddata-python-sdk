@@ -885,27 +885,6 @@ def test_the_test_case_table_opens_on_the_disagreements_when_viewed_by_model():
 
 
 @_needs_node
-@pytest.mark.parametrize(
-    ("points", "frontier"),
-    [
-        # 8 of 10 in 1s, 9 of 10 in 2s, 8.5 of 10 in 3s: the last is slower and weaker than the second.
-        ([{"x": 1, "y": 0.8}, {"x": 2, "y": 0.9}, {"x": 3, "y": 0.85}], [0, 1]),
-        # Faster and better beats slower and worse; a fast weak model and a slow strong one both stay.
-        ([{"x": 1, "y": 0.5}, {"x": 9, "y": 0.9}, {"x": 9, "y": 0.6}], [0, 1]),
-        # Two models at the same point beat neither the other: both stay.
-        ([{"x": 2, "y": 0.9}, {"x": 2, "y": 0.9}], [0, 1]),
-        # Equal quality: the quicker one wins; equal time: the better one wins.
-        ([{"x": 2, "y": 0.9}, {"x": 3, "y": 0.9}, {"x": 2, "y": 0.7}], [0]),
-        ([{"x": 4, "y": 0.7}], [0]),
-    ],
-)
-def test_the_speed_quality_frontier_keeps_the_models_nothing_beats(points, frontier):
-    html = build_html(_doc_with_modes("gpt-5"))
-
-    assert _run_page_js(html, ["frontierOf"], f"frontierOf({json.dumps(points)})") == frontier
-
-
-@_needs_node
 @pytest.mark.parametrize(("top", "step"), [(36.5, 10), (0.8, 0.2), (120, 50), (4.4, 1), (0, 0.2)])
 def test_axis_steps_are_round_numbers(top, step):
     html = build_html(_doc_with_modes("gpt-5"))
@@ -938,7 +917,6 @@ def test_the_model_charts_read_the_same_figures_as_the_cards_and_tables():
     assert "x: medTimeOf(l), y: passRateOf(figures[l])" in tradeoff
     # Two models are the least a comparison can use; with fewer there is no plot.
     assert "if (pts.length < 2) return ''" in tradeoff
-    assert "frontierOf(pts)" in tradeoff
     # Time runs from zero, so the distances between models are honest.
     assert "const X = (v) => M.l + innerW * (v / xMax)" in tradeoff
     outcomes = html.split("function modelOutcomesHtml()")[1].split("// ---------- by model: quality against speed")[0]
