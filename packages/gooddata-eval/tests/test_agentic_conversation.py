@@ -199,7 +199,7 @@ def test_run_agentic_conversation_single_turn():
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["visualization"]}
     mock_chat_result = MagicMock()
     mock_chat_result.text_response = "Here is your visualization"
     mock_chat_result.created_visualizations = [MagicMock()]
@@ -243,7 +243,7 @@ def test_run_agentic_conversation_uses_initial_conversation_id():
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["visualization"]}
     mock_chat_result.tool_call_events = [tc]
     mock_chat_result.reasoning_step_events = []
     mock_chat_result.turn_wall_clock_sec = None
@@ -285,7 +285,7 @@ def test_run_agentic_conversation_creates_and_deletes_conversation():
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["visualization"]}
     mock_chat_result.tool_call_events = [tc]
     mock_chat_result.reasoning_step_events = []
     mock_chat_result.turn_wall_clock_sec = None
@@ -680,7 +680,7 @@ def test_run_agentic_conversation_treats_alert_proposal_as_a_clarification():
             "text_response": None,
             "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
             "toolCallEvents": [
-                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "set_skills", "functionArguments": '{"skill_names": ["alert"]}', "result": None},
                 {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
             ],
         }
@@ -883,7 +883,7 @@ def test_run_agentic_conversation_accumulates_reasoning_steps_across_turns():
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["visualization"]}
 
     turn1_result = MagicMock()
     turn1_result.text_response = "Here is your visualization"
@@ -940,7 +940,7 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["visualization"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["visualization"]}
     chat_result = MagicMock()
     chat_result.text_response = "Here is your visualization"
     chat_result.created_visualizations = [MagicMock()]
@@ -1016,7 +1016,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     tc.result_ts = None
     tc.index = None
     tc.function_name = "set_skills"
-    tc.parsed_arguments = lambda: {"skills": ["other_skill"]}
+    tc.parsed_arguments = lambda: {"skill_names": ["other_skill"]}
     chat_result = MagicMock()
     chat_result.text_response = "Here is something else"
     chat_result.created_visualizations = None
@@ -1221,7 +1221,7 @@ def test_run_agentic_conversation_sums_the_reasoning_steps_of_every_turn():
             "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
             "reasoningStepCount": 2,
             "toolCallEvents": [
-                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "set_skills", "functionArguments": '{"skill_names": ["alert"]}', "result": None},
                 {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
             ],
         }
@@ -1267,7 +1267,7 @@ def test_conversation_writes_the_turn_step_and_clarification_counts_to_langfuse(
             "alertProposals": [{"cta": "Should I create this alert?", "recipients": [{"email": "a@b.com"}]}],
             "reasoningStepCount": 2,
             "toolCallEvents": [
-                {"functionName": "set_skills", "functionArguments": '{"skills": ["alert"]}', "result": None},
+                {"functionName": "set_skills", "functionArguments": '{"skill_names": ["alert"]}', "result": None},
                 {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None},
             ],
         }
