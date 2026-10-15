@@ -257,6 +257,7 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
         "judge_reasoning": "Correct answer",
         "actual_output": "42",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -284,6 +285,7 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
         "judge_reasoning": "Wrong answer",
         "actual_output": "I don't know",
         "latency_breakdown": [],
+        "tool_calls": [],
     }
 
 
@@ -400,6 +402,9 @@ def test_evaluate_general_question_aggregates_timings_across_k_runs():
 
     assert outcome.timings.agent_s == 5.0  # 2.0 + 3.0
     assert outcome.timings.judge_s == 1.5  # 1.0 + 0.5
+    # best_run_latency_s is the rank-selected run's own time (agent_s=2.0 + judge_s=1.0
+    # from the first, tied-best run), not the item total above (both runs summed).
+    assert outcome.best_run_latency_s == 3.0
 
 
 def test_evaluate_general_question_attaches_timings_to_the_failure_exception():
@@ -423,6 +428,7 @@ def test_evaluate_general_question_attaches_timings_to_the_failure_exception():
 
     assert exc_info.value.timings.agent_s == 4.0
     assert exc_info.value.timings.judge_s == 2.0
+    assert exc_info.value.best_run_latency_s == 6.0
 
 
 def test_trace_link_window_is_pinned_at_submit_time_not_when_the_task_runs():

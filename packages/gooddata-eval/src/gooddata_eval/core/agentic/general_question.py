@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -35,9 +36,9 @@ from gooddata_eval.core.models import (
     AgenticEvalOutcome,
     ReasoningStepEvent,
     ToolCallEvent,
-    build_latency_breakdown,
+    timeline_detail,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 _DEFAULT_K = 1
 
@@ -251,7 +252,9 @@ def _run_detail(run: GeneralQuestionResult) -> dict:
         "judge_passed": run.passed,
         "judge_reasoning": run.reasoning,
         "actual_output": run.actual_output,
-        "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
+        # timeline_detail rather than build_latency_breakdown: it carries tool_calls too, and
+        # a per-run record without it cannot say which tools the failing run actually ran.
+        **timeline_detail(run.tool_call_events, run.reasoning_step_events),
     }
 
 
@@ -355,12 +358,6 @@ def evaluate_agentic_general_question(
     item_timings = sum_timings([r.timings for r in summary.run_results])
     unscored = summary.judge_errors
 
-    # Computed BEFORE the all-ungraded raise below, not after. An item whose every run went
-    # ungraded is the one where these matter most -- the judge broke, and the conversation
-    # ids are what someone needs to go read what the agent actually said -- but the raise
-    # used to happen first, so the runner caught a bare error and reported runs=0 with no
-    # records at all. `summary.best` already falls back to the unscored runs, and
-    # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
 
@@ -391,23 +388,34 @@ def evaluate_agentic_general_question(
         )
         _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
         error.timings = item_timings
+        # This kind measures the best run from its PhaseTimings rather than carrying a
+        # run_latency_s attribute, so it cannot reuse the summary.best.run_latency_s form.
+        error.best_run_latency_s = run_latency_s(summary.best.timings)
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        exc = GeneralQuestionAssertionError(
-            f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
+        raise_agentic_failure(
+            GeneralQuestionAssertionError,
+            f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=run_latency_s(best.timings),
+            timings=item_timings,
+            failed_runs=failed_runs,
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective)
-        exc.timings = item_timings
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=run_latency_s(best.timings),
         timings=item_timings,
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
