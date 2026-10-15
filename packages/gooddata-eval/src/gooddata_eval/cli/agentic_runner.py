@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import sys
 import time
+from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, TypedDict
 
@@ -405,6 +406,7 @@ def run_agentic_items(
     concurrency: int = 1,
     gate: EvalGate = DEFAULT_GATE,
     tags: tuple[str, ...] = (),
+    run_metadata: Mapping[str, Any] | None = None,
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
@@ -417,10 +419,16 @@ def run_agentic_items(
     automatic ones. They reach Langfuse whenever trace linking runs, with or without
     ``use_langfuse``.
 
+    ``run_metadata`` is merged into the Langfuse dataset-run metadata, once per run rather
+    than once per item. ``tags`` wins on a "tags" key, since that one is derived here.
+
     Results are collected in dataset order regardless of completion order.
     """
     langfuse = make_langfuse_client() if use_langfuse else None
-    run_metadata_extra: dict[str, Any] | None = {"tags": list(tags)} if tags else None
+    extra: dict[str, Any] = dict(run_metadata or {})
+    if tags:
+        extra["tags"] = list(tags)
+    run_metadata_extra: dict[str, Any] | None = extra or None
 
     report = EvalReport(model=model_version, gate=normalize_gate(gate))
     total = len(items)

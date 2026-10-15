@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.dataset.langfuse_source import (
+    DatasetItemNotFoundError,
     _infer_test_kind,
     _item_from_raw,
     _make_client,
@@ -211,6 +212,123 @@ def test_a_blank_test_kind_declaration_falls_back_to_the_default():
     assert _infer_test_kind({}, "visualization", {"test_kind": ""}) == "visualization"
     # A real declaration still wins, and is stripped.
     assert _infer_test_kind({"test_kind": " agentic_guardrail "}, "visualization") == "agentic_guardrail"
+
+
+_EXPECTED = {"visualization": {"id": "x", "type": "", "query": {"fields": {}}}}
+
+# One question, four locales -- the shape every published fixture dataset actually has.
+_LOCALE_ITEMS = [
+    {**_raw_item(f"q1-{lang}", "Show revenue", _EXPECTED), "metadata": {"language": lang, "complexity": "Basic"}}
+    for lang in ("en", "es", "fr", "pt")
+]
+
+
+@pytest.fixture
+def locale_dataset(monkeypatch):
+    """Serve `_LOCALE_ITEMS` from a mocked REST API, and hand back the mock client."""
+    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
+    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
+    monkeypatch.setenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {"data": _LOCALE_ITEMS, "meta": {"totalItems": len(_LOCALE_ITEMS)}}
+
+    mock_client = MagicMock()
+    mock_client.__enter__ = MagicMock(return_value=mock_client)
+    mock_client.__exit__ = MagicMock(return_value=False)
+    mock_client.get.return_value = mock_resp
+
+    with patch("gooddata_eval.core.dataset.langfuse_source.httpx.Client", return_value=mock_client):
+        yield mock_client
+
+
+def test_item_metadata_survives_the_load(locale_dataset):
+    """DatasetItem used to be `extra="ignore"` with no metadata field, so this was dropped."""
+    items = load_langfuse_dataset("mastercard_search_tool")
+    assert items[0].metadata == {"language": "en", "complexity": "Basic"}
+
+
+def test_an_item_without_metadata_gets_an_empty_dict(monkeypatch):
+    item = _item_from_raw(_raw_item("lf-nometa", "Show revenue", _EXPECTED), dataset_name="ds", test_kind="vis_agentic")
+    assert item.metadata == {}
+
+
+def test_no_filter_returns_every_item(locale_dataset):
+    assert len(load_langfuse_dataset("mastercard_search_tool")) == 4
+
+
+def test_metadata_filter_selects_one_locale(locale_dataset):
+    items = load_langfuse_dataset("mastercard_search_tool", metadata_filter={"language": "es"})
+    assert [item.id for item in items] == ["q1-es"]
+
+
+def test_metadata_filter_requires_every_key_to_match(locale_dataset):
+    """Keys are ANDed; a dataset-wide key plus a selective one still narrows."""
+    items = load_langfuse_dataset("mastercard_search_tool", metadata_filter={"language": "fr", "complexity": "Basic"})
+    assert [item.id for item in items] == ["q1-fr"]
+
+
+def test_metadata_filter_matching_nothing_raises_rather_than_running_zero_items(locale_dataset):
+    with pytest.raises(ValueError, match="none matched the requested filter"):
+        load_langfuse_dataset("mastercard_search_tool", metadata_filter={"language": "de"})
+
+
+def test_item_ids_selects_a_subset_and_keeps_source_order(locale_dataset):
+    items = load_langfuse_dataset("mastercard_search_tool", item_ids=["q1-pt", "q1-en"])
+    assert [item.id for item in items] == ["q1-en", "q1-pt"]
+
+
+def test_item_ids_and_metadata_filter_intersect(locale_dataset):
+    items = load_langfuse_dataset(
+        "mastercard_search_tool", item_ids=["q1-en", "q1-es"], metadata_filter={"language": "es"}
+    )
+    assert [item.id for item in items] == ["q1-es"]
+
+
+def test_an_unknown_item_id_raises_and_names_what_is_missing(locale_dataset):
+    """Silently returning the ids that did exist would read downstream as a pass-rate change."""
+    with pytest.raises(DatasetItemNotFoundError) as excinfo:
+        load_langfuse_dataset("mastercard_search_tool", item_ids=["q1-en", "q1-de", "q1-zz"])
+    assert excinfo.value.missing == ["q1-de", "q1-zz"]
+    assert "q1-de, q1-zz" in str(excinfo.value)
+
+
+def test_a_filter_key_the_item_does_not_have_never_matches(locale_dataset):
+    """An item with no `runner` is not an item for every runner."""
+    with pytest.raises(ValueError, match="none matched the requested filter"):
+        load_langfuse_dataset("mastercard_search_tool", metadata_filter={"runner": "1"})
+
+
+def test_metadata_values_compare_as_strings(monkeypatch):
+    """The filter arrives from a CLI `KEY=VALUE`, so the item's own int/bool must still match."""
+    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
+    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
+    monkeypatch.setenv("LANGFUSE_HOST", "https://cloud.langfuse.com")
+
+    raw = [{**_raw_item("q-num", "Show revenue", _EXPECTED), "metadata": {"runner": 1, "critical": False}}]
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.json.return_value = {"data": raw, "meta": {"totalItems": 1}}
+    mock_client = MagicMock()
+    mock_client.__enter__ = MagicMock(return_value=mock_client)
+    mock_client.__exit__ = MagicMock(return_value=False)
+    mock_client.get.return_value = mock_resp
+
+    with patch("gooddata_eval.core.dataset.langfuse_source.httpx.Client", return_value=mock_client):
+        items = load_langfuse_dataset("ds", metadata_filter={"runner": "1", "critical": "False"})
+    assert [item.id for item in items] == ["q-num"]
+
+
+def test_filtering_does_not_change_the_request_sent_to_langfuse(locale_dataset):
+    """The endpoint cannot select by item id or metadata; filtering is ours, after the fetch.
+
+    Guards against a later "optimisation" that passes these through as query params, which
+    Langfuse would ignore -- the filter would silently stop working.
+    """
+    load_langfuse_dataset("mastercard_search_tool", item_ids=["q1-en"], metadata_filter={"language": "en"})
+    params = locale_dataset.get.call_args[1]["params"]
+    assert set(params) == {"datasetName", "limit", "page"}
 
 
 def test_a_blank_declaration_does_not_hide_a_real_one_behind_it():
