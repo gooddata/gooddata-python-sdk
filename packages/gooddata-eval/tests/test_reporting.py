@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation
 import io
+from datetime import datetime, timezone
 
 import orjson
 from gooddata_eval.core.reporting.console import render_comparison, render_console
@@ -488,3 +489,21 @@ def test_json_report_failed_runs_is_empty_for_a_clean_item():
         ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=2)
     )
     assert build_json_report(report)["items"]["i1"]["failed_runs"] == []
+
+
+def test_json_summary_carries_when_the_run_started_and_finished():
+    report = _report()
+    report.started_at = datetime(2026, 10, 14, 9, 30, 0, tzinfo=timezone.utc)
+    report.finished_at = datetime(2026, 10, 14, 9, 47, 12, tzinfo=timezone.utc)
+
+    summary = build_json_report(report)["summary"]
+
+    assert summary["started_at"] == "2026-10-14T09:30:00+00:00"
+    assert summary["finished_at"] == "2026-10-14T09:47:12+00:00"
+
+
+def test_json_summary_has_null_bounds_for_a_run_that_was_never_timed():
+    summary = build_json_report(_report())["summary"]
+
+    assert summary["started_at"] is None
+    assert summary["finished_at"] is None

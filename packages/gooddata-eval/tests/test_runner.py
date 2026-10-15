@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 import threading
 import time
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 from gooddata_eval.core.evaluators import supported_test_kinds
@@ -510,3 +511,17 @@ def test_an_ungraded_run_is_recorded_as_a_failure_with_its_judge_error():
     item = report.items[0]
     assert item.pass_at_k is True and item.pass_power_k is False
     assert [r["error"] for r in item.failed_runs] == ["empty body"]
+
+
+def test_run_items_records_when_the_run_started_and_finished():
+    # wall_clock_s is a duration with no anchor, so a finished run could not say when it
+    # ended. The bounds are timezone-aware UTC, taken around the same span wall_clock_s times.
+    before = datetime.now(timezone.utc)
+    report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
+    after = datetime.now(timezone.utc)
+
+    assert report.started_at is not None
+    assert report.finished_at is not None
+    assert report.started_at.utcoffset() == timedelta(0)
+    assert report.finished_at.utcoffset() == timedelta(0)
+    assert before <= report.started_at <= report.finished_at <= after
