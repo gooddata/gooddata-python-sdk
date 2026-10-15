@@ -1,0 +1,40 @@
+# Main header navigation. Consumed by the theme's partials/header-menu.html
+# (data-driven menu). Mirrors the links that were previously hardcoded in the
+# local header-menu.html override.
+
+[[main]]
+  name = "Learn"
+  url = "https://www.gooddata.ai/learn/"
+  weight = 10
+  [main.params]
+    ismobiletitle = true
+    mobileonly = true
+
+[[main]]
+  name = "University"
+  url = "https://university.gooddata.com/"
+  weight = 20
+
+[[main]]
+  name = "Community"
+  url = "https://community.gooddata.com/"
+  weight = 30
+
+[[main]]
+  name = "Documentation"
+  url = "https://www.gooddata.ai/docs/"
+  weight = 40
+  [main.params]
+    ishome = true
+
+[[main]]
+  name = "Support"
+  url = "https://support.gooddata.com/hc/en-us"
+  weight = 50
+
+[[main]]
+  name = "Go to GoodData.com"
+  url = "https://www.gooddata.ai/"
+  weight = 60
+  [main.params]
+    mobileonly = true

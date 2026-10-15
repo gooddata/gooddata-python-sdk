@@ -1,0 +1,227 @@
+// Project-local overrides layered on top of gooddata-docs-theme.
+
+@import "variables/variables";
+
+// ---------------------------------------------------------------------------
+// Header — custom GitHub button + icon spacing (not provided by the theme)
+// ---------------------------------------------------------------------------
+.gd-docs-header-nav {
+    &__secondary,
+    &__slack {
+        svg {
+            margin-right: 10px;
+        }
+    }
+
+    &__github {
+        align-self: center;
+        color: $color-black;
+        border-color: $color-black;
+        font-size: 14px;
+        line-height: 1;
+        height: 2rem;
+        padding: 0.5rem 0.8rem;
+
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $color-white;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            color: $color-marlin-black;
+            border-color: $color-marlin-black;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba($color-black, 0);
+        }
+
+        svg {
+            margin-right: 10px;
+        }
+    }
+}
+
+// Dark mode — outlined header buttons (GitHub + Ask AI, which share the
+// __github class) match the theme's secondary/slack buttons: lime-green
+// outline, filled lime-green on hover.
+[data-theme="dark"] {
+    .gd-docs-header-nav__github,
+    .ask-ai-button {
+        color: $color-lime-green;
+        border-color: $color-lime-green;
+        background-color: transparent;
+
+        &:hover,
+        &:focus,
+        &:active {
+            color: $color-black;
+            border-color: $color-lime-green;
+            background-color: $color-lime-green;
+        }
+
+        svg path {
+            fill: currentColor;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Alert — tighter padding + custom warning label variant
+// ---------------------------------------------------------------------------
+.alert,
+.td-content > blockquote {
+    padding: 10px 10px 10px 45px;
+}
+
+// The icon is absolutely positioned by the theme for its larger 68px/24px
+// padding; re-anchor it to match the tighter padding above.
+.alert > svg {
+    top: 13px;
+    left: 15px;
+}
+
+.alert-label-warning {
+    border-left-color: $color-alert-warning !important;
+    background-color: $color-alert-warning-bg;
+    color: black;
+
+    a {
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            color: black;
+            text-decoration: underline;
+        }
+    }
+
+    svg path {
+        fill: $color-alert-warning !important;
+    }
+
+    &::before {
+        background-color: $color-alert-warning !important;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Tooltip — custom dark tooltip for all arrow directions.
+// NOTE: kept deep-purple to preserve the previous look; swap to $color-tooltip
+// to track the rebranded theme default.
+// ---------------------------------------------------------------------------
+.tooltip {
+    font-family: inherit;
+
+    .tooltip-inner {
+        padding: 12px 15px;
+        max-width: 300px;
+        font-family: inherit;
+        color: $color-white;
+        text-align: center;
+        background-color: $color-deep-purple;
+    }
+
+    &.bs-tooltip-top .tooltip-arrow::before,
+    &.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+        border-top-color: $color-deep-purple;
+    }
+
+    &.bs-tooltip-right .tooltip-arrow::before,
+    &.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
+        border-right-color: $color-deep-purple;
+    }
+
+    &.bs-tooltip-bottom .tooltip-arrow::before,
+    &.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
+        border-bottom-color: $color-deep-purple;
+    }
+
+    &.bs-tooltip-left .tooltip-arrow::before,
+    &.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+        border-left-color: $color-deep-purple;
+    }
+}
+
+// Fallback for older Bootstrap markup (non-nested arrow selectors)
+.bs-tooltip-top .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: $color-deep-purple;
+}
+.bs-tooltip-right .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
+    border-right-color: $color-deep-purple;
+}
+.bs-tooltip-bottom .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
+    border-bottom-color: $color-deep-purple;
+}
+.bs-tooltip-left .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+    border-left-color: $color-deep-purple;
+}
+
+// ---------------------------------------------------------------------------
+// Tables — custom table styling (compact, no row striping, scrollable wide)
+// ---------------------------------------------------------------------------
+.table-responsive,
+.td-content {
+    table {
+        font-size: 14px;
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid $color-gray-bg;
+        }
+
+        thead {
+            th {
+                border-bottom: 1px solid $color-gray-bg;
+                background-color: $color-gray-bg;
+            }
+        }
+
+        tbody {
+            tr {
+                &:nth-child(even),
+                &:nth-child(odd) {
+                    background: none;
+                }
+            }
+        }
+    }
+}
+
+.table-responsive {
+    @include media-breakpoint-up(lg) {
+        max-width: 80%;
+    }
+
+    &__inner {
+        overflow: auto;
+        display: flex;
+    }
+
+    &__wide {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 20px;
+            background: linear-gradient(90deg, rgba($color-white, 0) 0%, rgba($color-white, 1) 100%);
+        }
+    }
+
+    &__wide &__inner {
+        padding-right: 20px;
+    }
+}
