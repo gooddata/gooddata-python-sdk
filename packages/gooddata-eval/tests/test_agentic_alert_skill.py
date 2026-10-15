@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic.alert_skill import (
     _check_trigger,
     _deep_subset,
     _normalize_expected_output,
+    _resolve_current_user_id,
     _to_number,
     evaluate_agentic_alert_skill,
     generate_simulated_alert_response,
@@ -289,6 +290,202 @@ def test_check_recipients_resolution_failure_fails_gracefully():
     assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is False
 
 
+def test_check_recipients_logs_when_no_user_has_the_expected_email(capsys: pytest.CaptureFixture[str]) -> None:
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = []
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is False
+    out = capsys.readouterr().out
+    assert "No user has any of the 1 recipient email(s)" in out
+    assert "user@example.com" not in out
+
+
+def test_check_recipients_logs_a_failed_email_lookup(capsys: pytest.CaptureFixture[str]) -> None:
+    expected = _normalize_expected_output({"Recipients": ["user@example.com"]})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.side_effect = RuntimeError("boom")
+    assert _check_recipients(expected, {"internal_recipients": ["user.abc123"]}, sdk=mock_sdk) is False
+    assert "failed: boom" in capsys.readouterr().out
+
+
+# --- Current user as the recipient ------------------------------------------------------
+
+
+@pytest.mark.parametrize("spelling", ["me", "Me", " current user ", "current_user", "myself"])
+def test_current_user_recipient_spellings_normalize_to_me(spelling: str) -> None:
+    assert _normalize_expected_output({"Recipient(s)": spelling}).recipients == ["me"]
+
+
+def test_check_recipients_accepts_the_current_user_by_id() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    mock_sdk = MagicMock()
+    assert _check_recipients(expected, {"internal_recipients": ["admin"]}, sdk=mock_sdk, current_user_id="admin")
+    assert _check_recipients(expected, {"internal_recipients": "admin"}, sdk=mock_sdk, current_user_id="admin")
+    mock_sdk._client.entities_api.get_all_entities_users.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "actual_args",
+    [
+        {"internal_recipients": ["someone.else"]},
+        {"external_recipients": ["admin@gooddata.com"]},
+        {"internal_recipients": ["admin", "someone.else"]},
+        {"internal_recipients": ["admin"], "external_recipients": ["admin@gooddata.com"]},
+        {},
+    ],
+)
+def test_check_recipients_rejects_anything_but_exactly_the_current_user(actual_args: dict) -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    assert _check_recipients(expected, actual_args, sdk=MagicMock(), current_user_id="admin") is False
+
+
+def test_check_recipients_fails_when_the_current_user_is_unknown() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    assert _check_recipients(expected, {"internal_recipients": ["admin"]}, current_user_id=None) is False
+
+
+def test_check_recipients_accepts_the_current_user_alongside_an_email() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
+    args = {"internal_recipients": ["admin"], "external_recipients": ["bob@example.com"]}
+    assert _check_recipients(expected, args, current_user_id="admin") is True
+    assert _check_recipients(expected, {"internal_recipients": ["admin"]}, current_user_id="admin") is False
+    extra = {"internal_recipients": ["admin", "carol.id"], "external_recipients": ["bob@example.com"]}
+    assert _check_recipients(expected, extra, current_user_id="admin") is False
+
+
+def test_check_recipients_accepts_an_email_delivered_as_a_user_id_next_to_the_current_user() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [MagicMock(id="bob.id")]
+    args = {"internal_recipients": ["admin", "bob.id"]}
+    assert _check_recipients(expected, args, sdk=mock_sdk, current_user_id="admin") is True
+    mock_sdk._client.entities_api.get_all_entities_users.assert_called_once_with(filter="email=in=('bob@example.com')")
+
+
+def test_check_recipients_rejects_a_user_id_that_matches_no_expected_email() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
+    mock_sdk = MagicMock()
+    mock_sdk._client.entities_api.get_all_entities_users.return_value.data = [MagicMock(id="bob.id")]
+    args = {"internal_recipients": ["admin", "bob.id", "carol.id"]}
+    assert _check_recipients(expected, args, sdk=mock_sdk, current_user_id="admin") is False
+
+
+def test_check_recipients_rejects_an_expected_email_that_resolves_to_no_user() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com, carol@example.com"})
+    mock_sdk = MagicMock()
+    bob, nobody = MagicMock(data=[MagicMock(id="bob.id")]), MagicMock(data=[])
+    mock_sdk._client.entities_api.get_all_entities_users.side_effect = [bob, nobody]
+    args = {"internal_recipients": ["admin", "bob.id"]}
+    assert _check_recipients(expected, args, sdk=mock_sdk, current_user_id="admin") is False
+
+
+def test_resolve_current_user_id_reads_the_profile() -> None:
+    with patch("gooddata_eval.core.agentic.alert_skill.httpx.get") as mock_get:
+        mock_get.return_value.json.return_value = {"userId": "admin", "organizationId": "org"}
+        assert _resolve_current_user_id("http://host/", "tok") == "admin"
+    mock_get.assert_called_once_with(
+        "http://host/api/v1/profile", headers={"Authorization": "Bearer tok"}, timeout=30.0
+    )
+
+
+def test_resolve_current_user_id_logs_and_returns_none_on_failure(capsys: pytest.CaptureFixture[str]) -> None:
+    with patch("gooddata_eval.core.agentic.alert_skill.httpx.get", side_effect=RuntimeError("down")):
+        assert _resolve_current_user_id("http://host", "tok") is None
+    assert "Resolving the current user failed: down" in capsys.readouterr().out
+
+
+def test_sim_user_for_a_current_user_alert_gives_no_email() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Recipient(s)": "me"}, current_user_id="admin")
+    assert "recipients=me (yourself, the current user, user id admin)" in prompt
+    assert "Never give an email address" in prompt
+    assert "'You'" in prompt
+    assert "Proactively include your email recipient" not in prompt
+
+
+def test_sim_user_still_volunteers_an_email_recipient() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Recipient(s)": "bob@example.com"})
+    assert "recipients=bob@example.com" in prompt
+    assert "Proactively include your email recipient" in prompt
+
+
+def test_run_agentic_alert_skill_scores_a_current_user_alert() -> None:
+    asked_turn = ChatResult.model_validate({"text_response": "Which dashboard?", "tool_call_events": []})
+    created_turn = ChatResult.model_validate(
+        {
+            "text_response": "Alert created.",
+            "tool_call_events": [
+                {
+                    "functionName": "create_metric_alert",
+                    "functionArguments": '{"operator": "LESS_THAN", "threshold": 30000, "internal_recipients": ["admin"]}',
+                    "result": '{"id": "alert-1"}',
+                }
+            ],
+        }
+    )
+    mock_client = MagicMock()
+    mock_client.send_message.side_effect = [asked_turn, created_turn]
+
+    with (
+        _patched(mock_client, simulated_reply="Any dashboard is fine.", delete_alert=True) as mock_sim,
+        patch("gooddata_eval.core.agentic.alert_skill._resolve_current_user_id", return_value="admin") as mock_me,
+    ):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Alert me when profit drops below 30000.",
+            expected_output={"Operator": "LESS_THAN", "Threshold": "30000", "Recipient(s)": "me"},
+            k=1,
+            max_iterations=6,
+            initial_conversation_id="conv-1",
+        )
+
+    mock_me.assert_called_once_with("http://host", "tok")
+    assert mock_sim.call_args.kwargs["current_user_id"] == "admin"
+    assert summary.best.eval.recipients_correct is True
+
+
+def test_run_agentic_alert_skill_skips_the_profile_lookup_for_email_recipients() -> None:
+    mock_client = MagicMock()
+    mock_client.send_message.return_value = _no_alert_chat_result()
+    with (
+        _patched(mock_client, simulated_reply="ok"),
+        patch("gooddata_eval.core.agentic.alert_skill._resolve_current_user_id") as mock_me,
+    ):
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Alert me",
+            expected_output={"Operator": "LESS_THAN", "Recipient(s)": "admin@gooddata.com"},
+            k=1,
+            max_iterations=1,
+            initial_conversation_id="conv-1",
+        )
+    mock_me.assert_not_called()
+
+
+def test_run_agentic_alert_skill_errors_when_the_current_user_cannot_be_resolved() -> None:
+    mock_client = MagicMock()
+    with (
+        _patched(mock_client, simulated_reply="ok") as mock_sim,
+        patch("gooddata_eval.core.agentic.alert_skill._resolve_current_user_id", return_value=None),
+        pytest.raises(RuntimeError, match="user id could not be resolved"),
+    ):
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Alert me",
+            expected_output={"Operator": "LESS_THAN", "Recipient(s)": "me"},
+            k=1,
+            max_iterations=1,
+            initial_conversation_id="conv-1",
+        )
+    mock_client.send_message.assert_not_called()
+    mock_sim.assert_not_called()
+
+
 def test_alert_evaluation_strict_pass():
     ev = AlertEvaluation(
         alert_created=True,
@@ -382,7 +579,7 @@ def test_run_agentic_alert_skill_creates_fresh_conversations_for_remaining_runs(
 # summary that plainly read "Trigger: once per month".
 
 
-def _sim_user_prompt(expected_output: dict, question: str = "") -> str:
+def _sim_user_prompt(expected_output: dict, question: str = "", current_user_id: str | None = None) -> str:
     """Run the sim-user against a stub OpenAI client and return the system prompt it built."""
     fake_openai = MagicMock()
     fake_openai.return_value.chat.completions.create.return_value = MagicMock(
@@ -397,6 +594,7 @@ def _sim_user_prompt(expected_output: dict, question: str = "") -> str:
             _normalize_expected_output(expected_output),
             [],
             question=question,
+            current_user_id=current_user_id,
         )
     call = fake_openai.return_value.chat.completions.create.call_args
     return call.kwargs["messages"][0]["content"]
@@ -940,6 +1138,16 @@ def test_sim_user_still_refuses_an_unrequested_granularity_for_a_normal_alert():
     prompt = _sim_user_prompt({"Operator": "GREATER_THAN", "Time window/Filters": "None (All time)"})
     assert "Do not invent an evaluation period, a granularity" in prompt
     assert "no date filter at all" in prompt
+
+
+@pytest.mark.parametrize("operator", ["INCREASES_BY", "DECREASES_BY", "CHANGES_BY"])
+def test_sim_user_delegates_the_comparison_period_of_a_relative_alert(operator: str) -> None:
+    prompt = _sim_user_prompt({"Operator": operator, "Time window/Filters": "None (All time)"})
+    rule_7 = prompt.split("7.", 1)[1]
+    assert "NOT a date filter" in rule_7
+    assert "never applies to the comparison" in rule_7
+    assert "Pick whichever date and period fit best" in rule_7
+    assert "Do not invent an evaluation period, a granularity" not in prompt
 
 
 def test_sim_user_falls_back_to_day_when_an_anomaly_item_states_no_granularity():
