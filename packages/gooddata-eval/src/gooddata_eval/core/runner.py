@@ -5,6 +5,7 @@ import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from functools import partial
 from typing import Callable, Protocol
 
@@ -135,6 +136,9 @@ class EvalReport:
     gate: EvalGate = DEFAULT_GATE
     items: list[ItemReport] = field(default_factory=list)
     wall_clock_s: float = 0.0  # actual elapsed time; differs from latency_s under concurrency
+    # Calendar bounds of the run (timezone-aware UTC); None until the run has been timed.
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
 
     @property
     def total(self) -> int:
@@ -345,6 +349,7 @@ def run_items(
             traceback.print_exc()
         return item_report
 
+    report.started_at = datetime.now(timezone.utc)
     _t0 = time.perf_counter()
     if concurrency <= 1:
         for index, item in enumerate(items, start=1):
@@ -360,4 +365,5 @@ def run_items(
         for index in range(1, total + 1):
             report.items.append(results[index])
     report.wall_clock_s = time.perf_counter() - _t0
+    report.finished_at = datetime.now(timezone.utc)
     return report

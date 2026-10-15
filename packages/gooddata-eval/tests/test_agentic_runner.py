@@ -330,6 +330,24 @@ def test_run_agentic_items_records_phase_timings_and_wall_clock():
     assert report.wall_clock_s > 0.0
 
 
+def test_run_agentic_items_records_when_the_run_started_and_finished():
+    outcome = AgenticEvalOutcome(conversation_id="c1", detail={"alert_created": True})
+    before = datetime.now(timezone.utc)
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
+        report = run_agentic_items(
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+        )
+    after = datetime.now(timezone.utc)
+
+    assert report.started_at is not None
+    assert report.finished_at is not None
+    assert before <= report.started_at <= report.finished_at <= after
+
+
 def test_run_agentic_items_records_phase_timings_when_the_item_fails():
     exc = AlertSkillAssertionError("nope")
     exc.detail = {"alert_created": False}
