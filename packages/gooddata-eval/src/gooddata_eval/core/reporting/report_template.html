@@ -302,8 +302,8 @@
       <div class="viewrow" id="viewrow">
         <label class="fl" for="viewby">View by</label>
         <select id="viewby">
-          <option value="model">By model</option>
-          <option value="date">By date</option>
+          <option value="date">Date</option>
+          <option value="model">Model</option>
         </select>
         <span class="viewhint" id="viewhint"></span>
       </div>
@@ -345,9 +345,25 @@
 
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
+// A run's place in time: when it started (`summary.started_at` in its JSON), else the date its file is named for
+// ("2026-09-28"). NaN when it has neither.
+function runStamp(l) {
+  const started = Date.parse((DATA.runs[l].summary || {}).started_at);
+  if (!isNaN(started)) return started;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(l.includes(' · ') ? l.split(' · ')[0] : l);
+  return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
+}
+// The runs oldest first, by timestamp, so the order the files were given in does not decide which run is the latest. Runs
+// that started together keep their given order, and a report where any run has no timestamp keeps the given order whole:
+// a partial sort would put the undated runs at an arbitrary place.
+function byTime(labels) {
+  const stamps = labels.map(runStamp);
+  if (stamps.some(isNaN)) return labels;
+  return labels.map((l, i) => ({ l, t: stamps[i], i })).sort((a, b) => a.t - b.t || a.i - b.i).map((x) => x.l);
+}
 // Every run in the report, oldest first. LABELS is the columns the page compares right now: all of them when viewed by
 // date, one per model when viewed by model (setView switches between the two).
-const ALL_LABELS = Object.keys(DATA.runs);
+const ALL_LABELS = byTime(Object.keys(DATA.runs));
 let LABELS = ALL_LABELS;
 let VIEW = 'date';
 const $ = (s) => document.querySelector(s);
@@ -1492,12 +1508,6 @@ function latestPerKey(labels, keyOf) {
   for (const l of labels) latest.set(keyOf(l), l);
   return [...latest.values()];
 }
-// A report that compares several models, each seen once, opens by model. One model followed over time, or a mix of
-// models and dates, opens by date as it always did.
-function defaultView(keys) {
-  const models = new Set(keys);
-  return models.size > 1 && models.size === keys.length ? 'model' : 'date';
-}
 // The console's winner rule, best first: pass rate, then quality, then the quicker average.
 function byStanding(a, b) {
   const rate = (f) => passRateOf(f) ?? -1;
@@ -1533,9 +1543,9 @@ const suiteRef = (labels, mode) => labels.reduce((a, l) => (idsIn(l, mode).size 
 function viewHint() {
   if (VIEW === 'date') {
     return 'How the results change from run to run, oldest to latest.' +
-      (MULTI_MODEL ? ' This report holds more than one model, so neighbouring runs can be different models: use By model to compare them.' : '');
+      (MULTI_MODEL ? ' This report holds more than one model, so neighbouring runs can be different models: use Model to compare them.' : '');
   }
-  if (LABELS.length < 2) return 'This report has one model, so there is nothing to compare. Switch to By date to follow it over time.';
+  if (LABELS.length < 2) return 'This report has one model, so there is nothing to compare. Switch to Date to follow it over time.';
   const dates = uniq(LABELS.map(sourceOf));
   return 'How the models compare' + (ALL_LABELS.length > LABELS.length ? ', each at its latest run' : '') + '.' +
     (dates.length > 1 ? ` Those runs are from different dates (${LABELS.map((l) => `${roleOf(l)}: ${runName(sourceOf(l))}`).join(', ')}), so check Run setup before reading a gap as the model’s.` : '');
@@ -1803,8 +1813,8 @@ function modelLatencyTable({ mode, field, sample }) {
     (spread.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest model</span> <span class="ext worst">${EXT_ICON.worst}slowest model</span> in each column, quickest first</p>` : '') + '</div>';
 }
 
-// First paint: a report that compares several models opens by model, anything else by date.
-setView(defaultView(ALL_LABELS.map(modelKeyOf)));
+// First paint: every report opens by date; the Model view is one choice away.
+setView('date');
 
 // ---------- tooltips as a page overlay ----------
 // Every .info element keeps its tooltip content in a hidden .tip child. On hover or keyboard focus that content is
