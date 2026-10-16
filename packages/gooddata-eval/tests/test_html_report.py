@@ -463,6 +463,34 @@ def test_a_sparkline_appears_from_three_runs_and_a_click_picks_the_run_to_compar
     assert "runsShown.includes(cmpPick)" in base
 
 
+def test_a_key_under_the_cards_explains_the_dots_and_that_the_white_one_can_be_moved():
+    """The white dot is the run the change lines compare the latest run with; it starts on the previous run and a
+    click on another dot moves it. Nothing on the sparkline says so, so a key sits under the cards. It describes
+    the dots the page draws, so it appears only when a sparkline does."""
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    legend = html.split("function sparkLegend()")[1].split("function renderSummary")[0]
+    for key in ("dotkey latest", "dotkey base", "dotkey other"):
+        assert key in legend
+    assert "the white dot, which starts on the previous run" in legend
+    assert "Click any other dot to move the comparison to that run." in legend
+    # The swatches carry no text of their own, so they are hidden from screen readers; the words beside them stay.
+    assert legend.count('aria-hidden="true"') == 3
+    # It follows the cards, and only when one of them drew a sparkline.
+    summary = html.split("function renderSummary()")[1].split("function sparkHover")[0]
+    assert "cards.includes('class=\"spark\"') ? sparkLegend() : ''" in summary
+    assert summary.index("'</div>' + (cards.includes") > summary.index("<h2>Results</h2>")
+    # The swatches match the chart: the white dot is the panel colour with a dark ring, as `circle.pt.picked` is.
+    assert (
+        ".dotkey.base { width: 8px; height: 8px; background: var(--panel); border: 1.5px solid var(--ink-strong); }"
+        in html
+    )
+    assert (
+        ".kpi .spark circle.pt.picked:not(.latest) { fill: var(--panel); stroke: var(--ink-strong); stroke-width: 1.5; }"
+        in html
+    )
+
+
 def test_seconds_drop_a_redundant_decimal():
     html = build_html(_doc_with_modes("gpt-5"))
 

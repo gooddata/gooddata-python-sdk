@@ -87,6 +87,12 @@
   .kpi .spark .hit { fill: transparent; cursor: pointer; outline: none; }
   .kpi .spark .hit:focus-visible { fill: var(--hover); }
   .kpi-range { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--dim); margin-top: 2px; }
+  /* Key to the sparkline dots, drawn at the sizes and colours the chart uses so the eye matches them. */
+  .sparklegend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin: 16px 0 4px; font-size: 12px; color: var(--ink); }
+  .dotkey { display: inline-block; box-sizing: border-box; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dotkey.latest { width: 12px; height: 12px; background: var(--lime); border: 1.5px solid var(--ink-strong); }
+  .dotkey.base { width: 8px; height: 8px; background: var(--panel); border: 1.5px solid var(--ink-strong); }
+  .dotkey.other { width: 5px; height: 5px; background: var(--dim); }
   .trendgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
   .badge {
     display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 3px;
@@ -683,17 +689,27 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
     <div class="kpi-val">${latest.v == null ? '\u2013' : fmt(latest.v)}</div>
     ${change ? `<div class="kpi-delta">${change}</div>` : ''}${spark}</figure>`;
 }
+// The key under the cards: what each kind of dot on the sparklines is, and that the white one can be moved.
+function sparkLegend() {
+  return '<div class="sparklegend">' +
+    '<span><i class="dotkey latest" aria-hidden="true"></i>Latest run</span>' +
+    '<span><i class="dotkey base" aria-hidden="true"></i>Compared with</span>' +
+    '<span><i class="dotkey other" aria-hidden="true"></i>Other runs</span></div>' +
+    '<p class="blurb">The change lines above measure the latest run against the white dot, which starts on the previous run. ' +
+    'Click any other dot to move the comparison to that run.</p>';
+}
 function renderSummary() {
   if (VIEW === 'model') return setSection('summary', '');  // the model view opens on its Results table instead of cards
   const base = runsShown.length > 1 ? compareBase() : null;
-  setSection('summary', '<h2>Results</h2><div class="trendgrid">' +
+  const cards =
     kpiCard({ title: 'Test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true,
       isSame: (d) => Math.round(d * 100) === 0, base, after: ' <a href="#items-section" class="which">which?</a>' }) +
     kpiCard({ title: 'Average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true,
       isSame: (d) => Math.abs(d) < 0.01, base }) +
     kpiCard({ title: 'Median time per attempt', get: medTimeOf, fmt: secs, higher: false,
-      isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base }) +
-    '</div>');
+      isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base });
+  // The key only makes sense when a sparkline is drawn: from three runs, and only on a card that has two values.
+  setSection('summary', '<h2>Results</h2><div class="trendgrid">' + cards + '</div>' + (cards.includes('class="spark"') ? sparkLegend() : ''));
 }
 function sparkHover(run) {
   $('#summary').querySelectorAll('circle[data-run]').forEach((el) => el.classList.toggle('on', el.dataset.run === run));
