@@ -414,13 +414,12 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   Run setup tooltip does not flag the model itself as a difference. Every report opens on Date, including one that
   compares several models (`gd-eval run --model a --model b --html`); choose Model to compare them. A single run has
   nothing to switch between, so the dropdown is hidden. In the Model view the page reads, top to bottom:
-  - **Results** — three cards, each naming the leading model on one figure and who follows: the highest share of test
-    cases passed, the highest average quality score and the quickest median time per attempt.
-  - **Outcomes** — one row per model, best pass rate first, with a bar of how its evaluated test cases ended (passed
+  - **Results** — one row per model, best pass rate first, with a bar of how its evaluated test cases ended (passed
     green, failed red, could not be graded orange), so the green part is the pass rate beside it. The counts and the
-    caution icon (a model evaluated on different test cases than the one with the most) are the date view's.
+    caution icon (a model evaluated on different test cases than the one with the most) are the date view's Outcomes
+    table. There are no headline cards by model: the table is the first thing on the page.
   - **Quality against speed** — each model as a point: the share of test cases it passed against the median time of
-    one attempt, the same two figures as the first and third card. Up and to the left is better. Time runs from zero;
+    one attempt, the same pass rate as the Results table and the same median as the latency tables. Up and to the left is better. Time runs from zero;
     the pass rate uses the range the models span. It needs two models with timings.
   - **By category** — a heat map of the pass rate per category and model, the best model in each row marked, the
     categories where the models differ most first. Every cell prints its share and its counts, so the shade is never the
@@ -454,7 +453,10 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   pass-rate card links to the test case table to see *which* ones changed; the split by format lives in that table's
   filters.
 - **Outcomes** — how every test case ended, as a table with one row per run, newest first, in the same layout as the
-  latency tables: **Passed**, **Failed**, **Could not be graded** (an error left it without a verdict) and
+  latency tables. A run is identified by two columns: the **Run date**, the day and time it started (`summary.started_at`,
+  shown in the reader's own time zone, the UTC stamp on hover; a report written before it existed shows the date its file is
+  named for, without a time), and the **Run name**, the name the run was given, as given, so a run named `2026-09-28` reads
+  `2026-09-28` here although the charts style it as "Sep 28". Then **Passed**, **Failed**, **Could not be graded** (an error left it without a verdict) and
   **Skipped** (not run), then the **Pass rate**. The four are the values of the Result filter, and the pass rate is
   the card's: passed out of the evaluated test cases, skipped ones left out, as in the console. The highest pass rate
   is marked green with an up chevron and the lowest red with a down chevron, and the latest run is marked in lime. A
