@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 
 import httpx
 import orjson
@@ -896,6 +897,60 @@ def test_cli_passes_concurrency_to_the_agentic_runner(monkeypatch, tmp_path):
 
     assert exit_code == 0
     assert captured["concurrency"] == 3
+
+
+def test_cli_report_spans_the_agentic_and_single_shot_phases(monkeypatch, tmp_path):
+    # The two phases run back to back and are merged into one report, so the run starts
+    # when the earlier phase starts and finishes when the later one does.
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())
+    monkeypatch.setattr(
+        cli_main,
+        "_load_dataset",
+        lambda config: [
+            DatasetItem(
+                id="q1", dataset_name="d", test_kind="agentic_general_question", question="q", expected_output="a"
+            )
+        ],
+    )
+
+    def _at(minute: int, second: int = 0) -> datetime:
+        return datetime(2026, 10, 14, 9, minute, second, tzinfo=timezone.utc)
+
+    monkeypatch.setattr(
+        cli_main,
+        "run_agentic_items",
+        lambda items, **kw: EvalReport(model="gpt-5.2", started_at=_at(30), finished_at=_at(45)),
+    )
+    monkeypatch.setattr(
+        cli_main,
+        "run_items",
+        lambda items, backend, **kw: EvalReport(model="gpt-5.2", started_at=_at(45, 1), finished_at=_at(45, 2)),
+    )
+    json_path = tmp_path / "report.json"
+
+    exit_code = cli_main.main(
+        ["run", "--host", "https://h", "--token", "tok", "--workspace", "ws1", "--dataset", str(tmp_path)]
+        + ["--json", str(json_path)]
+    )
+
+    assert exit_code == 0
+    summary = orjson.loads(json_path.read_bytes())["runs"]["P/gpt-5.2"]["summary"]
+    assert summary["started_at"] == "2026-10-14T09:30:00+00:00"
+    assert summary["finished_at"] == "2026-10-14T09:45:02+00:00"
 
 
 def test_cli_passes_custom_tags_to_both_langfuse_paths(monkeypatch):

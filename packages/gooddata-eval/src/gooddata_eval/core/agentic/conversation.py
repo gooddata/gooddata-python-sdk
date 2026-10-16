@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import date
 from typing import ClassVar, Literal
@@ -612,6 +613,9 @@ class ConversationResult:
     stalled_turns: int = 0
     mode: ConversationMode = "legacy"
     judge_model: str | None = None
+    # The whole conversation's wall time, from just before its first message to the end of its
+    # last turn's scoring; conversation create/delete is not part of it.
+    run_latency_s: float = 0.0
 
 
 def _metric_creations(tool_call_events: list[ToolCallEvent]) -> list[tuple[str, bool]]:
@@ -771,6 +775,7 @@ def run_agentic_conversation(
     tool_index_offset = 0
     reasoning_index_offset = 0
     current_context = user_context
+    run_latency_s = 0.0
 
     try:
         if initial_conversation_id is not None:
@@ -779,10 +784,14 @@ def run_agentic_conversation(
             conversation_id = client.create_conversation()
             owns_conversation = True
 
+        run_started = time.monotonic()
+        conversation_swap_s = 0.0  # fresh_conversation_per_turn's delete/create, which is not the run's work
         for turn_index, turn in enumerate(fixture.turns):
             if fresh_conversation_per_turn and turn_index > 0:
+                swap_started = time.monotonic()
                 client.delete_conversation(conversation_id)
                 conversation_id = client.create_conversation()
+                conversation_swap_s += time.monotonic() - swap_started
                 transcript = []
                 active_skills = set()
             # Before the skip below: a turn whose expectation cannot resolve still changed what
@@ -1006,6 +1015,8 @@ def run_agentic_conversation(
                 )
             )
 
+        # Taken here, not after the finally: its cleanup is not part of the run.
+        run_latency_s = time.monotonic() - run_started - conversation_swap_s
     finally:
         if owns_conversation and conversation_id:
             client.delete_conversation(conversation_id)
@@ -1039,6 +1050,7 @@ def run_agentic_conversation(
         stalled_turns=stalled,
         mode=resolved_mode,
         judge_model=judge.model_name if judged else None,
+        run_latency_s=run_latency_s,
     )
 
 
@@ -1246,6 +1258,7 @@ def evaluate_agentic_conversation(
         # for. Saying so explicitly stops the report claiming K runs that never happened.
         exc.runs_passed = 0
         exc.runs_effective = 1
+        exc.run_latencies_s = [result.run_latency_s]
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
@@ -1254,4 +1267,5 @@ def evaluate_agentic_conversation(
         detail=detail,
         runs_passed=1,
         runs_effective=1,
+        run_latencies_s=[result.run_latency_s],
     )

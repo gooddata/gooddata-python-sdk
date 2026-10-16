@@ -1,12 +1,14 @@
 # (C) 2026 GoodData Corporation
 import threading
 import time
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
+import pytest
 from gooddata_eval.core.evaluators import supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
-from gooddata_eval.core.runner import ItemReport, run_items
+from gooddata_eval.core.runner import EvalReport, ItemReport, run_items
 
 
 def _viz_obj():
@@ -58,6 +60,15 @@ def test_run_items_pass_at_k_true_if_any_run_passes():
     assert report.passed == 1
     assert report.items[0].pass_at_k is True
     assert backend.calls == 2
+
+
+def test_run_items_stamps_when_the_run_started():
+    before = datetime.now(timezone.utc)
+    report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
+    after = datetime.now(timezone.utc)
+    assert report.started_at is not None
+    assert report.started_at.tzinfo is not None
+    assert before <= report.started_at <= after
 
 
 def test_run_items_marks_unsupported_test_kind_skipped():
@@ -510,3 +521,191 @@ def test_an_ungraded_run_is_recorded_as_a_failure_with_its_judge_error():
     item = report.items[0]
     assert item.pass_at_k is True and item.pass_power_k is False
     assert [r["error"] for r in item.failed_runs] == ["empty body"]
+
+
+def test_run_items_records_when_the_run_started_and_finished():
+    # wall_clock_s is a duration with no anchor, so a finished run could not say when it
+    # ended. The bounds are timezone-aware UTC, taken around the same span wall_clock_s times.
+    before = datetime.now(timezone.utc)
+    report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
+    after = datetime.now(timezone.utc)
+
+    assert report.started_at is not None
+    assert report.finished_at is not None
+    assert report.started_at.utcoffset() == timedelta(0)
+    assert report.finished_at.utcoffset() == timedelta(0)
+    assert before <= report.started_at <= report.finished_at <= after
+
+
+# --- every completed run is timed, passing or not: the latency percentiles are over these ---
+
+
+def test_every_run_is_timed_whether_it_passed_or_not():
+    report, _ = _run_scripted([_graded(True), _graded(False), _ungraded()], runs=3)
+
+    item = report.items[0]
+    assert len(item.run_latencies_s) == item.runs == 3
+    assert all(latency >= 0 for latency in item.run_latencies_s)
+    # latency_s is the sum of the same measurements, so the list cannot disagree with it.
+    assert sum(item.run_latencies_s) == pytest.approx(item.latency_s)
+
+
+def test_a_run_that_raised_is_not_timed_and_is_not_counted():
+    class _SecondRunBoomsBackend:
+        def __init__(self):
+            self.calls = 0
+
+        def ask(self, item: DatasetItem) -> ChatResult:
+            self.calls += 1
+            if self.calls == 2:
+                raise RuntimeError("network down")
+            return _empty_chat()
+
+    report = run_items([_item()], _SecondRunBoomsBackend(), runs=2)
+
+    item = report.items[0]
+    assert item.error is not None
+    # `runs` and the sample agree about what completed: a run with no verdict has no latency.
+    assert len(item.run_latencies_s) == item.runs == 1
+
+
+def _timed_chat(seconds: float | None) -> ChatResult:
+    result = _chat_with(_viz_obj())
+    result.turn_wall_clock_sec = seconds
+    return result
+
+
+def test_a_single_shot_run_records_its_chat_turn_as_the_trace_latency():
+    """One trace per run: the turn's own response time, not the run's wall clock, which also
+    holds scoring and conversation set-up."""
+    backend = _FakeBackend([_timed_chat(2.5), _timed_chat(4.0)])
+
+    report = run_items([_item()], backend, runs=2)
+
+    item = report.items[0]
+    assert item.trace_latencies_s == [2.5, 4.0]
+    assert len(item.run_latencies_s) == 2
+    assert item.run_latencies_s != item.trace_latencies_s
+
+
+def test_a_turn_with_no_timing_adds_no_trace_latency():
+    # A backend that reports no turn time leaves the sample empty rather than inventing a zero.
+    report = run_items([_item()], _FakeBackend([_timed_chat(None)]), runs=2)
+
+    assert report.items[0].trace_latencies_s == []
+
+
+def test_a_turn_whose_scoring_raised_still_counts_as_a_trace():
+    """The agent answered; only our scoring failed afterwards. That response time is real."""
+
+    class _ScoringBooms:
+        test_kind = "visualization"
+
+        def evaluate(self, item, chat_result):
+            raise RuntimeError("scorer broke")
+
+    with patch("gooddata_eval.core.runner.get_evaluator", return_value=_ScoringBooms()):
+        report = run_items([_item()], _FakeBackend([_timed_chat(3.0)]), runs=1)
+
+    item = report.items[0]
+    assert item.error is not None
+    assert item.trace_latencies_s == [3.0]
+    assert item.run_latencies_s == []  # the run never completed, so it has no whole-run time
+
+
+def test_skipped_items_time_nothing():
+    skipped = DatasetItem(id="s1", dataset_name="d", test_kind="unknown_kind", question="q", expected_output={})
+
+    report = run_items([skipped], _FakeBackend([_timed_chat(1.0)]), runs=2)
+
+    assert report.items[0].trace_latencies_s == []
+    assert report.items[0].run_latencies_s == []
+
+
+# --- the report splits single-shot from multi-turn ---
+
+
+def _item_report(kind: str, *, traces: list[float], runs: list[float], passed: bool = True, **extra) -> ItemReport:
+    return ItemReport(
+        id=f"{kind}-{len(traces)}",
+        dataset_name="d",
+        test_kind=kind,
+        question="q",
+        pass_at_k=passed,
+        runs=max(len(runs), 1),
+        trace_latencies_s=traces,
+        run_latencies_s=runs,
+        **extra,
+    )
+
+
+def test_an_item_is_single_shot_or_multi_turn_by_its_kind():
+    assert _item_report("visualization", traces=[], runs=[]).interaction_mode == "single_shot"
+    assert _item_report("agentic_guardrail", traces=[], runs=[]).interaction_mode == "single_shot"
+    assert _item_report("agentic_visualization", traces=[], runs=[]).interaction_mode == "multi_turn"
+
+
+def test_by_mode_keeps_single_shot_and_multi_turn_apart():
+    report = EvalReport(model="m")
+    report.items = [
+        _item_report("visualization", traces=[1.0], runs=[1.5]),
+        _item_report("agentic_search", traces=[3.0], runs=[3.5], passed=False),
+        # A multi-turn conversation: three traces, one whole run.
+        _item_report("agentic_metric_skill", traces=[2.0, 4.0, 6.0], runs=[20.0]),
+    ]
+
+    by_mode = report.by_mode
+
+    assert (by_mode["single_shot"]["total"], by_mode["single_shot"]["passed"]) == (2, 1)
+    assert by_mode["single_shot"]["traces_s"]["n"] == 2
+    assert by_mode["single_shot"]["traces_s"]["p50"] == 2.0
+    # Per-run is a multi-turn figure only: a single-shot run is its one trace.
+    assert "runs_s" not in by_mode["single_shot"]
+    assert (by_mode["multi_turn"]["total"], by_mode["multi_turn"]["passed"]) == (1, 1)
+    assert by_mode["multi_turn"]["traces_s"]["n"] == 3
+    assert by_mode["multi_turn"]["runs_s"]["n"] == 1
+    assert by_mode["multi_turn"]["runs_s"]["max"] == 20.0
+
+
+def test_by_mode_is_computed_once_per_report():
+    """The console, the comparison and both JSON builders all read it; each read used to sort
+    every latency sample again."""
+    report = EvalReport(model="m")
+    report.items = [_item_report("visualization", traces=[1.0, 2.0], runs=[1.5])]
+
+    assert report.by_mode is report.by_mode
+
+
+def test_by_mode_never_mixes_the_populations():
+    """Single-shot traces must not be pulled up by a conversation's turns, or the main per-trace
+    figure would describe nothing in particular."""
+    report = EvalReport(model="m")
+    report.items = [
+        _item_report("visualization", traces=[1.0, 1.0], runs=[1.0, 1.0]),
+        _item_report("agentic_conversation", traces=[50.0, 60.0], runs=[110.0]),
+    ]
+
+    by_mode = report.by_mode
+
+    assert by_mode["single_shot"]["traces_s"]["max"] == 1.0
+    assert by_mode["multi_turn"]["traces_s"]["min"] == 50.0
+
+
+def test_by_mode_counts_evaluated_items_only_and_states_no_latency_for_an_empty_mode():
+    report = EvalReport(model="m")
+    report.items = [
+        _item_report("visualization", traces=[1.0], runs=[1.0]),
+        _item_report("some_new_kind", traces=[], runs=[], skipped=True),
+    ]
+
+    by_mode = report.by_mode
+
+    assert by_mode["single_shot"]["total"] == 1  # the skipped item belongs to neither section
+    assert by_mode["multi_turn"] == {"total": 0, "passed": 0, "traces_s": None, "runs_s": None}
+
+
+def test_a_report_with_nothing_timed_has_no_latency_distributions():
+    report = EvalReport(model="m")
+    report.items = [_item_report("visualization", traces=[], runs=[])]
+
+    assert report.by_mode["single_shot"]["traces_s"] is None

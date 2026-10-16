@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation
 import io
+from datetime import datetime, timezone
 
 import orjson
 from gooddata_eval.core.reporting.console import render_comparison, render_console
@@ -54,6 +55,16 @@ def test_build_json_report_keyed_by_item_id():
     assert data["items"]["i1"]["avg_latency_s"] == 1.25
     assert data["items"]["i1"]["reasoning"] == ["step one", "step two"]
     assert data["items"]["i2"]["reasoning"] == []
+
+
+def test_build_json_report_writes_started_at_as_utc_iso():
+    report = _report()
+    report.started_at = datetime(2026, 10, 14, 14, 30, 21, 412873, tzinfo=timezone.utc)
+    assert build_json_report(report)["summary"]["started_at"] == "2026-10-14T14:30:21.412873+00:00"
+
+
+def test_build_json_report_started_at_is_null_when_the_run_was_never_timed():
+    assert build_json_report(_report())["summary"]["started_at"] is None
 
 
 def test_write_json_report_creates_file(tmp_path):
@@ -488,3 +499,151 @@ def test_json_report_failed_runs_is_empty_for_a_clean_item():
         ItemReport(id="i1", dataset_name="d", test_kind="visualization", question="q", pass_at_k=True, runs=2)
     )
     assert build_json_report(report)["items"]["i1"]["failed_runs"] == []
+
+
+def test_json_summary_carries_when_the_run_started_and_finished():
+    report = _report()
+    report.started_at = datetime(2026, 10, 14, 9, 30, 0, tzinfo=timezone.utc)
+    report.finished_at = datetime(2026, 10, 14, 9, 47, 12, tzinfo=timezone.utc)
+
+    summary = build_json_report(report)["summary"]
+
+    assert summary["started_at"] == "2026-10-14T09:30:00+00:00"
+    assert summary["finished_at"] == "2026-10-14T09:47:12+00:00"
+
+
+def test_json_summary_has_null_bounds_for_a_run_that_was_never_timed():
+    summary = build_json_report(_report())["summary"]
+
+    assert summary["started_at"] is None
+    assert summary["finished_at"] is None
+
+
+def _mixed_report(model: str = "gpt-5.2", *, single: list[float] | None = None) -> EvalReport:
+    """Two single-shot items (one trace each) and one multi-turn conversation (three turns)."""
+    single = single if single is not None else [1.0, 3.0]
+    items = [
+        ItemReport(
+            id=f"s{n}",
+            dataset_name="d",
+            test_kind="visualization",
+            question=f"q{n}",
+            pass_at_k=n == 1,
+            runs=1,
+            latency_s=latency + 0.5,
+            trace_latencies_s=[latency],
+            run_latencies_s=[latency + 0.5],
+        )
+        for n, latency in enumerate(single, start=1)
+    ]
+    items.append(
+        ItemReport(
+            id="m1",
+            dataset_name="d",
+            test_kind="agentic_metric_skill",
+            question="converse",
+            pass_at_k=True,
+            runs=1,
+            latency_s=30.0,
+            trace_latencies_s=[2.0, 4.0, 6.0],
+            run_latencies_s=[30.0],
+        )
+    )
+    return EvalReport(model=model, workspace_id="ws1", items=items)
+
+
+def test_json_report_splits_pass_counts_and_latency_by_mode():
+    summary = build_multi_model_report([_mixed_report()])["runs"]["gpt-5.2"]["summary"]
+
+    single = summary["by_mode"]["single_shot"]
+    assert (single["total"], single["passed"]) == (2, 1)
+    # Two single-shot items, one trace each: the main per-trace figure.
+    assert single["traces_s"] == {
+        "n": 2,
+        "mean": 2.0,
+        "trimmed_mean": None,
+        "min": 1.0,
+        "p50": 2.0,
+        "p70": 2.4,
+        "p90": 2.8,
+        "p99": 2.98,
+        "max": 3.0,
+    }
+    assert "runs_s" not in single
+
+    multi = summary["by_mode"]["multi_turn"]
+    assert (multi["total"], multi["passed"]) == (1, 1)
+    # Three turns of one conversation are three traces, and one full run.
+    assert multi["traces_s"]["n"] == 3 and multi["traces_s"]["p50"] == 4.0
+    assert multi["runs_s"]["n"] == 1 and multi["runs_s"]["max"] == 30.0
+
+
+def test_json_comparison_entry_repeats_the_mode_split():
+    # The HTML reads the comparison entry and falls back to the summary, so both carry it.
+    data = build_multi_model_report([_mixed_report()])
+
+    assert data["comparison"]["gpt-5.2"]["by_mode"] == data["runs"]["gpt-5.2"]["summary"]["by_mode"]
+
+
+def test_json_items_state_their_mode_and_trace_latencies():
+    items = build_multi_model_report([_mixed_report()])["runs"]["gpt-5.2"]["items"]
+
+    assert items["s1"]["mode"] == "single_shot"
+    assert items["s1"]["trace_latencies_s"] == [1.0]
+    assert items["m1"]["mode"] == "multi_turn"
+    assert items["m1"]["trace_latencies_s"] == [2.0, 4.0, 6.0]
+    assert items["m1"]["run_latencies_s"] == [30.0]
+
+
+def test_json_report_states_no_latency_distribution_when_nothing_was_timed():
+    # null, not zeroes: a P99 of 0s would claim a measurement that never happened.
+    by_mode = build_multi_model_report([_report()])["runs"]["gpt-5.2"]["summary"]["by_mode"]
+
+    assert by_mode["single_shot"]["traces_s"] is None
+    assert by_mode["multi_turn"] == {"total": 0, "passed": 0, "traces_s": None, "runs_s": None}
+
+
+def test_json_report_leaves_the_existing_latency_figures_alone():
+    summary = build_json_report(_mixed_report())["summary"]
+
+    assert summary["latency_s"] == 1.5 + 3.5 + 30.0
+    assert summary["avg_latency_s"] == round(35.0 / 3, 3)
+
+
+def test_console_prints_each_modes_latency_beneath_the_summary():
+    text = render_console(_mixed_report())
+
+    assert "By mode: single-shot 1/2 passed · multi-turn 1/1 passed" in text
+    assert "Latency, single-shot per trace (n=2): P50 2.00s · P70 2.40s · P90 2.80s · P99 2.98s" in text
+    assert "Latency, multi-turn per trace (n=3): P50 4.00s" in text
+    assert "Latency, multi-turn per full run (n=1): P50 30.00s" in text
+    assert text.index("Summary:") < text.index("By mode:") < text.index("per trace (n=2)")
+
+
+def test_console_leaves_out_a_mode_with_no_items_and_a_distribution_with_no_samples():
+    only_single = EvalReport(model="m", items=[_mixed_report().items[0]])
+
+    text = render_console(only_single)
+
+    assert "single-shot 0/1 passed" not in text and "single-shot 1/1 passed" in text
+    assert "multi-turn" not in text
+
+
+def test_console_omits_the_mode_lines_when_nothing_was_evaluated():
+    assert "By mode" not in render_console(EvalReport(model="m"))
+
+
+def test_comparison_table_sets_single_shot_trace_median_and_tail_side_by_side():
+    reports = [
+        _mixed_report("gpt-5.2", single=[10.0, 20.0]),
+        _mixed_report("gpt-4o", single=[8.0, 12.0]),
+    ]
+
+    text = render_comparison(reports, console=Console(record=True, width=200))
+
+    for column in ("Trace P50", "Trace P90", "Trace P99"):
+        assert column in text
+    assert "15.00s" in text  # gpt-5.2 median of its single-shot traces 10 and 20
+    assert "19.00s" in text  # gpt-5.2 P90
+    assert "10.00s" in text  # gpt-4o median of 8 and 12
+    assert "single-shot chat-turn response time" in text

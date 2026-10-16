@@ -24,6 +24,7 @@ from gooddata_eval.core.langfuse.item_scope import (
     trace_ids_for,
 )
 from gooddata_eval.core.models import DatasetItem, ReasoningStepEvent, ToolCallEvent, build_latency_breakdown
+from gooddata_eval.core.timing import TraceRecorder
 
 
 def test_parse_sse_lines_collects_text_and_visualization(fixtures_dir):
@@ -646,6 +647,62 @@ def test_send_message_stamps_turn_wall_clock_sec_on_partial_result_too(monkeypat
         client.send_message("conv", "q")
     assert ei.value.partial_result is not None
     assert ei.value.partial_result.turn_wall_clock_sec == pytest.approx(1.0)
+
+
+def test_send_message_records_the_turn_as_a_trace_latency(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([100.0, 100.0, 102.5]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_OK_SSE))
+    recorder = TraceRecorder()
+    client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(2.5)]
+
+
+def test_send_message_records_a_turn_that_ended_in_a_chat_error(monkeypatch):
+    # Evaluators score the partial result of such a turn as a run, so the response population has to
+    # hold it too, or the two disagree about which turns happened.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 50.0, 51.0]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_NONRETRY_SSE))
+    recorder = TraceRecorder()
+    with pytest.raises(ChatError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(1.0)]
+
+
+def test_send_message_records_a_turn_cut_off_by_its_deadline(monkeypatch):
+    """The slowest turns are the ones that hit the budget; leaving them out would make the tail
+    look shorter exactly when the agent is slowest."""
+    # monotonic() calls: t0, the accumulator's own t0, the deadline check on the first line, the wall-clock.
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([0.0, 0.0, 61.0, 61.0]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_OK_SSE), turn_timeout_s=60)
+    recorder = TraceRecorder()
+    with pytest.raises(sse_mod.TurnTimeoutError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(61.0)]
+
+
+def test_send_message_records_nothing_for_a_turn_that_failed_without_a_partial_result():
+    # An HTTP error before any stream opens leaves no partial result: no response to time.
+    client = _client_with_handler(lambda request: httpx.Response(400))
+    recorder = TraceRecorder()
+    with pytest.raises(httpx.HTTPStatusError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == []
+
+
+def test_send_message_records_only_the_successful_attempt_of_a_retried_turn(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([1000.0, 1000.0, 1000.5, 2000.0, 2000.0, 2001.2]).__next__)
+    calls = {"n": 0}
+
+    def handler(request):
+        calls["n"] += 1
+        return httpx.Response(200, content=_TRANSIENT_SSE if calls["n"] < 2 else _OK_SSE)
+
+    client = _client_with_handler(handler)
+    recorder = TraceRecorder()
+    client.send_message("conv", "q")
+    # One trace, timed on the attempt that answered: the failed attempt and the backoff are not it.
+    assert recorder.stop() == [pytest.approx(1.2)]
 
 
 def test_create_conversation_retries_then_succeeds(monkeypatch):

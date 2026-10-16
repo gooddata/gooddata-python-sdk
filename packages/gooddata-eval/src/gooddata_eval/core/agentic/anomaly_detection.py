@@ -28,6 +28,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -284,6 +285,8 @@ class AnomalyRunResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -393,6 +396,7 @@ def run_agentic_anomaly_detection(
             all_tool_call_events.extend(result.tool_call_events or [])
             all_reasoning_step_events.extend(result.reasoning_step_events or [])
 
+        run_started = time.monotonic()
         for iteration in range(max_iterations):
             try:
                 chat_result = client.send_message(conv_id, current_question)
@@ -440,6 +444,7 @@ def run_agentic_anomaly_detection(
             response_id=response_id,
             tool_call_events=all_tool_call_events,
             reasoning_step_events=all_reasoning_step_events,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -651,6 +656,7 @@ def evaluate_agentic_anomaly_detection(
         exc.runs_passed = runs_passed
         exc.runs_effective = len(summary.run_results)
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
 
     return AgenticEvalOutcome(
@@ -661,4 +667,5 @@ def evaluate_agentic_anomaly_detection(
         response_id=best.response_id,
         detail=detail,
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

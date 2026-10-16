@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -587,6 +588,8 @@ class AlertRunResult:
     # also report operator/threshold/metric/recipients as False.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -802,6 +805,7 @@ def run_agentic_alert_skill(
             # that simply runs out of range() is correctly labelled without a trailing else.
             exit_reason = LoopExit.BUDGET_EXHAUSTED
             turns_used = 0
+            run_started = time.monotonic()
             for _iteration in range(max_iterations):
                 turns_used = _iteration + 1
                 try:
@@ -903,6 +907,7 @@ def run_agentic_alert_skill(
                 reasoning_step_events=all_reasoning_step_events,
                 exit_reason=exit_reason,
                 turns_used=turns_used,
+                run_latency_s=time.monotonic() - run_started,
             )
         finally:
             if alert_id_to_delete:
@@ -1122,6 +1127,7 @@ def evaluate_agentic_alert_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -1133,4 +1139,5 @@ def evaluate_agentic_alert_skill(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

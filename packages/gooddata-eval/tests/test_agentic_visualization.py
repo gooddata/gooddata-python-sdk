@@ -342,6 +342,10 @@ def test_evaluate_agentic_visualization_returns_reasoning_steps_on_pass():
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    # One wall-clock sample per run, passing runs included -- the latency distribution is over
+    # these, and a kind that forgot to report them would silently drop out of it.
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on_fail():
@@ -403,6 +407,7 @@ def test_evaluate_agentic_visualization_attaches_reasoning_steps_to_exception_on
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 
 
 # --- turns_used counts every send_message, including the pre-loop one ------------------------
