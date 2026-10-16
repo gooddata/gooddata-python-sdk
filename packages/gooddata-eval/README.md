@@ -504,7 +504,8 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
 - **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
   step. Every step has a chevron that opens its full record in place, joined by `index`: the
   paragraph a reasoning step was summarised from, or a tool call's arguments and result from
-  `detail.tool_calls`. Any number of steps can be open at once, and the chevron above the list
+  `detail.tool_calls`. A reasoning paragraph's markdown `**title**` is shown as bold text,
+  not as asterisks. Any number of steps can be open at once, and the chevron above the list
   opens or closes all of them. The reasoning therefore lives on the timeline; a separate
   Reasoning section appears only for paragraphs no step points at (or when a run recorded no
   timeline).

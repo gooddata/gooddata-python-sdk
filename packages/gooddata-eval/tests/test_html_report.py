@@ -1158,7 +1158,7 @@ def test_a_report_with_several_models_says_so_where_the_date_view_could_mislead(
     assert "'Same for every model'" in html and "'Differs between models'" in html
 
 
-_TIMELINE_FNS = ["esc", "secs", "CHEVRON", "unwrapJson", "fmt", "timelineHtml", "reasoningHtml"]
+_TIMELINE_FNS = ["esc", "bold", "secs", "CHEVRON", "unwrapJson", "fmt", "timelineHtml", "reasoningHtml"]
 
 
 def _timeline_item() -> dict:
@@ -1201,6 +1201,27 @@ def test_every_timeline_step_opens_in_place_and_starts_shut():
     assert '<div class="sub">arguments</div>' in out and "&quot;query&quot;: &quot;revenue&quot;" in out
     assert '<div class="sub">result</div>' in out and "&quot;results&quot;: []" in out
     assert "tl-detail" not in out and "data-text" not in out
+
+
+@_needs_node
+def test_reasoning_renders_markdown_bold_instead_of_showing_the_asterisks():
+    """Reasoning paragraphs open with a markdown **title**. The page shows that as bold text, on the timeline step and
+    in the leftover Reasoning section alike, and never lets anything but its own <strong> through as markup."""
+    html = build_html(_doc("gpt-5", True))
+    item = _timeline_item()
+
+    on_step = _run_page_js(html, _TIMELINE_FNS, f"timelineHtml({json.dumps(item)})")
+    assert "<strong>Plan</strong>\n\nwork out the metric" in on_step
+    assert "<strong>Check</strong>" in on_step and "**" not in on_step
+
+    item["reasoning"][2] = "**Leftover** <b>not markup</b>"
+    leftover = _run_page_js(html, _TIMELINE_FNS, f"reasoningHtml({json.dumps(item)})")
+    assert "<strong>Leftover</strong>" in leftover
+    assert "&lt;b&gt;not markup&lt;/b&gt;" in leftover and "<b>" not in leftover
+
+    # An unpaired marker, or one split across paragraphs, stays as written.
+    stray = _run_page_js(html, ["esc", "bold"], 'bold("a ** b\\n\\n**c")')
+    assert "<strong>" not in stray
 
 
 @_needs_node
