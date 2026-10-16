@@ -62,6 +62,15 @@ def test_run_items_pass_at_k_true_if_any_run_passes():
     assert backend.calls == 2
 
 
+def test_run_items_stamps_when_the_run_started():
+    before = datetime.now(timezone.utc)
+    report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
+    after = datetime.now(timezone.utc)
+    assert report.started_at is not None
+    assert report.started_at.tzinfo is not None
+    assert before <= report.started_at <= after
+
+
 def test_run_items_marks_unsupported_test_kind_skipped():
     item = DatasetItem(id="s1", dataset_name="d", test_kind="unknown_kind", question="q", expected_output={})
     backend = _FakeBackend([_empty_chat()])

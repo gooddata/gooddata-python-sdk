@@ -156,7 +156,8 @@ class EvalReport:
     gate: EvalGate = DEFAULT_GATE
     items: list[ItemReport] = field(default_factory=list)
     wall_clock_s: float = 0.0  # actual elapsed time; differs from latency_s under concurrency
-    # Calendar bounds of the run (timezone-aware UTC); None until the run has been timed.
+    # Calendar bounds of the run (timezone-aware UTC); None until the run has been timed. The HTML
+    # report orders runs by started_at, so the file order does not decide which is latest.
     started_at: datetime | None = None
     finished_at: datetime | None = None
 

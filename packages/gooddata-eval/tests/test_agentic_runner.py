@@ -328,6 +328,8 @@ def test_run_agentic_items_records_phase_timings_and_wall_clock():
     item = report.items[0]
     assert (item.agent_latency_s, item.judge_latency_s, item.simulated_user_latency_s) == (2.0, 1.0, 0.5)
     assert report.wall_clock_s > 0.0
+    assert report.started_at is not None
+    assert report.started_at.tzinfo is not None
 
 
 def test_run_agentic_items_records_when_the_run_started_and_finished():

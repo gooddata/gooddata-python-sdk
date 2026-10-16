@@ -30,7 +30,8 @@ def _build_run_dict(report: EvalReport) -> dict:
             "avg_latency_s": round(report.avg_latency_s, 3),
             "wall_clock_s": round(report.wall_clock_s, 3),
             # ISO 8601 UTC, null when the run was never timed. finished_at is the only
-            # record of when a run ended; wall_clock_s is a duration with no anchor.
+            # record of when a run ended; wall_clock_s is a duration with no anchor. The HTML
+            # report shows started_at as the Run date and orders runs by it.
             "started_at": report.started_at.isoformat() if report.started_at else None,
             "finished_at": report.finished_at.isoformat() if report.finished_at else None,
             # Pass counts and latency distributions split by single-shot and multi-turn:

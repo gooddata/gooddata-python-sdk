@@ -59,7 +59,7 @@
   .floattip .diffhead { margin-top: 8px; color: var(--warn-ink); }
   .latestpill { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--lime); color: var(--on-lime);
     font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
-  .lat-table tr.latest td:first-child, .out-table tr.latest td:nth-child(-n+2) { font-weight: 700; color: var(--ink-strong); }
+  .lat-table tr.latest td:nth-child(-n+3), .out-table tr.latest td:nth-child(-n+3) { font-weight: 700; color: var(--ink-strong); }
   .ext { display: inline-block; padding: 1px 6px; margin: -1px -6px; border-radius: 3px; }
   .ext.best { background: var(--pass-bg); color: var(--pass-ink); }
   .ext.same { background: var(--track); color: var(--ink); }
@@ -132,6 +132,8 @@
   .st.none { padding: 0; color: var(--dim); font-weight: 400; }
   .sub2 { font-size: 12px; color: var(--dim); }
   .blurb { font-size: 12px; color: var(--dim); margin: 0 0 10px; max-width: 100ch; }
+  ul.blurb.legend { padding-left: 18px; margin-top: 12px; }
+  ul.blurb.legend li { margin: 0 0 2px; }
   .tablewrap.flat { max-height: none; margin-bottom: 4px; }
   h3.cap { margin: 14px 0 6px; }
   #latency h2:not(:first-child) { margin-top: 26px; }
@@ -217,6 +219,8 @@
   .multi .menu .foot button { cursor: pointer; }
   .multi .menu .apply { background: var(--primary-ink); border-color: var(--primary-ink); color: #fff; font-weight: 600; }
   .multi .menu .apply:disabled { opacity: .45; cursor: default; }
+  .runhead > span { display: block; white-space: nowrap; }
+  .runhead + .latestpill { display: table; margin: 4px 0 0; }
   .runlbl { display: block; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--dim); }
   #q { flex: 1 1 200px; min-width: 140px; }
   #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
@@ -231,13 +235,30 @@
     font-family: var(--mono); font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
   }
   .tl { font-size: 12px; }
-  .tl .row { display: grid; grid-template-columns: 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; }
+  .tl .row { display: grid; grid-template-columns: 18px 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; }
   .tl .row:hover { background: var(--hover); }
   .tl .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .tl .track { background: var(--track); border-radius: 3px; height: 12px; }
   .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--primary); }
   .tl .row.reasoning .track > i { background: var(--dim); opacity: .55; }
   .tl .d { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
+  /* Each step opens in place under its own row; the chevron points right when shut and down when open. */
+  .tl .chev, .tlall { padding: 0; border: 0; background: none; color: var(--dim); cursor: pointer; border-radius: 3px; }
+  .tl .chev { width: 18px; height: 18px; }
+  .tl .chev, .tlall .ico { display: inline-flex; align-items: center; justify-content: center; }
+  .tlall .ico { width: 18px; height: 18px; }
+  .tl .chev .exi, .tlall .exi {
+    width: 12px; height: 12px; margin: 0; transform: rotate(-90deg);
+    fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .tl .chev[aria-expanded="true"] .exi, .tlall[aria-expanded="true"] .exi { transform: none; }
+  @media (prefers-reduced-motion: no-preference) { .tl .chev .exi, .tlall .exi { transition: transform .12s; } }
+  .tlall { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 12px; }
+  .tlall:hover, .tl .chev:hover { color: var(--ink-strong); }
+  .tl .body { margin: 2px 0 8px 26px; }
+  .tl .body[hidden] { display: none; }
+  .tl .body .sub { margin-top: 6px; }
+  .tl .body .sub:first-child { margin-top: 0; }
   .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: var(--bg); border-radius: 0 3px 3px 0; }
   .turn.assistant { border-left-color: var(--primary); background: var(--primary-tint); }
   .turn.simulated_user { border-left-color: var(--warn); background: var(--warn-bg); }
@@ -436,8 +457,8 @@ const roleOf = (l) => (VIEW === 'model' ? MODEL_LABEL[l]
   : runName(l.includes(' · ') ? l.split(' · ')[0] : l) + (MULTI_MODEL && l.includes(' · ') ? ' · ' + MODEL_LABEL[l] : ''));
 const sourceOf = (l) => (l.includes(' · ') ? l.split(' · ')[0] : '');
 // The name a run was given, as given: roleOf styles a date-named run as "Sep 28", this keeps "2026-09-28". A merged report
-// names a run "<file> · <model>"; the file is the name, and the model is added only when the report holds several.
-const givenNameOf = (l) => (sourceOf(l) ? sourceOf(l) + (MULTI_MODEL ? ' · ' + MODEL_LABEL[l] : '') : l);
+// names a run "<file> · <model>"; the file is the name, and the model has a column of its own beside it.
+const givenNameOf = (l) => sourceOf(l) || l;
 const uniq = (xs) => [...new Set(xs.filter(Boolean))];
 
 // ---------- models ----------
@@ -789,7 +810,7 @@ function latencyTable({ mode, field, sample }) {
   if (VIEW === 'model') return modelLatencyTable({ mode, field, sample });
   // The same four percentiles the chart above draws; the fastest and slowest single response are not shown, P99 is
   // the tail. The average and trimmed average stay in the JSON and the console.
-  const heads = ['Run', ...LAT_SERIES.map((s) => s.name)];
+  const heads = [...RUN_HEADS, ...LAT_SERIES.map((s) => [s.name, HEAD_HELP[s.name]])];
   const unit = sample.toLowerCase();
   const dash = '<td class="num">\u2013</td>';
   // In each column, the quickest run is marked lime and the slowest red, so the best and worst runs stand out at a
@@ -817,10 +838,10 @@ function latencyTable({ mode, field, sample }) {
       ? ' ' + caution(`${st.n} ${unit} timed here, ${prev.n} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, mode) ? '<br>' + suiteChange(prevL, l, mode) : ''))
       : '';
     const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
-    return `<tr${isLatest ? ' class="latest"' : ''}><td>${esc(roleOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${stats}</tr>`;
+    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${modelCell(l)}${stats}</tr>`;
   }).reverse().join('');  // newest run first
   return latencyChart({ mode, field, sample }) + `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
-    heads.map((h, i) => `<th class="${i > 0 ? 'num' : ''}"${HEAD_HELP[h] ? ` title="${esc(HEAD_HELP[h])}"` : ''}>${h}</th>`).join('') +
+    heads.map(([h, help], j) => `<th class="${j > 2 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
     `</tr></thead><tbody>${rows}</tbody></table></div>` +
     (ext.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest run</span> <span class="ext worst">${EXT_ICON.worst}slowest run</span> in each column</p>` : '');
 }
@@ -862,14 +883,32 @@ const OUTCOMES = [
 ];
 // When a run started, in the viewer's own time zone, the report's own UTC stamp on hover. A report written before
 // `started_at` existed has only the date its file is named for, shown without a time.
+function runDateText(l) {
+  const started = startedAt(l);
+  if (!isNaN(started)) return humanDateTime(new Date(started));
+  const named = runStamp(l);
+  if (isNaN(named)) return '–';
+  const u = new Date(named);
+  return humanDate(new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate()));
+}
 function runDateCell(l) {
   const started = startedAt(l);
-  if (!isNaN(started)) return `<td title="${esc(DATA.runs[l].summary.started_at)}">${humanDateTime(new Date(started))}</td>`;
-  const named = runStamp(l);
-  if (isNaN(named)) return '<td>–</td>';
-  const u = new Date(named);
-  return `<td>${humanDate(new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate()))}</td>`;
+  return `<td${!isNaN(started) ? ` title="${esc(DATA.runs[l].summary.started_at)}"` : ''}>${esc(runDateText(l))}</td>`;
 }
+// A run's column heading in a wide table, one line each: when it started and the name it was given. By model the
+// columns are the models themselves, so they keep the model's name.
+function runHeadHtml(l) {
+  if (VIEW === 'model') return esc(roleOf(l));
+  return `<span class="runhead" title="${esc(l)}"><span>${esc(runDateText(l))}</span><span>${esc(givenNameOf(l))}</span></span>`;
+}
+// The model a run evaluated, its provider on hover.
+function modelCell(l) {
+  const provider = providerOfRun(l);
+  return `<td${provider ? ` title="${esc('Provider: ' + provider)}"` : ''}>${esc(MODEL_LABEL[l])}</td>`;
+}
+// The three columns that identify a run, the first three of every by-date table (outcomes and response time).
+const RUN_HEADS = [['Run date', 'When the run started, in your time zone.'], ['Run name', 'The name the run was given.'],
+  ['Model', 'The language model the run evaluated. Hover for its provider.']];
 function outcomesTable() {
   const dash = '<td class="num">–</td>';
   const evaluatedOf = (l) => figures[l].total - figures[l].skipped;
@@ -892,12 +931,12 @@ function outcomesTable() {
       ? ' ' + caution(`${ev} test cases evaluated here, ${evaluatedOf(prevL)} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, '') ? '<br>' + suiteChange(prevL, l, '') : ''))
       : '';
     const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
-    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${counts}${rate}</tr>`;
+    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${modelCell(l)}${counts}${rate}</tr>`;
   }).reverse().join('');  // newest run first
-  const heads = [['Run date', 'When the run started, in your time zone.'], ['Run name', 'The name the run was given.'],
-    ...OUTCOMES.map(([, name, , help]) => [name, help]), ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+  const heads = [...RUN_HEADS, ...OUTCOMES.map(([, name, , help]) => [name, help]),
+    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
   return `<div class="tablewrap flat"><table class="out-table"><thead><tr>` +
-    heads.map(([h, help], j) => `<th class="${j > 1 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    heads.map(([h, help], j) => `<th class="${j > 2 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
     `</tr></thead><tbody>${rows}</tbody></table></div>` +
     (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '');
 }
@@ -1236,9 +1275,9 @@ function renderItems() {
   const heads = [
     { k: 'id', html: 'Test case' }, { k: 'kind', html: 'Category' }, { k: 'mode', html: 'Format' }, { k: 'question', html: 'Question' },
     // Newest first: the latest result, what changed since the previous run, then earlier runs going back in time.
-    ...(multi && byDate ? [{ k: 's:' + runList[runList.length - 1], html: esc(roleOf(runList[runList.length - 1])) + LATEST_PILL }] : []),
+    ...(multi && byDate ? [{ k: 's:' + runList[runList.length - 1], html: runHeadHtml(runList[runList.length - 1]) + LATEST_PILL }] : []),
     ...(multi && byDate ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case first appears in the latest run, or was in an earlier run and is gone from the latest. A test case skipped in the latest run has no label.' }] : []),
-    ...(multi && byDate ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: esc(roleOf(l)) })),
+    ...(multi && byDate ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: runHeadHtml(l) })),
     ...(multi && !byDate ? [{ k: 'agree', html: 'Across models', help: 'Whether the models agree on this test case. All pass and All fail: every model that was graded got the same verdict. Mixed: some passed and some did not, so this is where the models differ; hover the label to see who. A model that skipped the test case or could not be graded on it is left out.' }] : []),
     ...timeRuns.map((l) => ({ k: 'lt:' + l, html: 'Response time' + runHdr(l), help: TRACE_HELP, num: true })),
     // By model one time column per model keeps the table readable; the per-attempt figure is in the latency tables above
@@ -1353,14 +1392,14 @@ function openDrawer(r) {
     if (pick) pick.onchange = () => { drawerRun = pick.value; openDrawer(r); };
   };
   if (!it) {
-    d.innerHTML = `<button class="close" aria-label="Close">×</button>${heading}<div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div><p class="empty">Not present in ${esc(run)}.</p>`;
+    d.innerHTML = `<button class="close" aria-label="Close">×</button>${heading}<div style="font-family:var(--mono);font-size:12px;margin-top:6px">${esc(r.id)}</div><p class="empty">Not present in ${esc(run)}.</p>`;
     wire();
     return;
   }
   const st = statusOf(it);
   d.innerHTML = `<button class="close" aria-label="Close">×</button>
     ${heading}
-    <div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div>
+    <div style="font-family:var(--mono);font-size:12px;margin-top:6px">${esc(r.id)}</div>
     <p style="margin:6px 0 10px">${esc(r.question)}</p>
     <div>${chipHtml(st)}
       <span class="chip">${esc(kindName(r.kind))}</span>
@@ -1375,14 +1414,29 @@ function openDrawer(r) {
     ${reasoningHtml(it)}
     ${idsHtml(it)}`;
   wire();
-  d.querySelectorAll('.tl .row').forEach((el) => {
-    el.onclick = () => {
-      const box = $('#tl-detail');
-      box.innerHTML = el.dataset.text
-        ? `<pre>${esc(el.dataset.text)}</pre>`
-        : `<div class="sub">${esc(el.dataset.note || 'No expanded record for this step.')}</div>`;
-    };
-  });
+  wireTimeline(d);
+}
+
+// Each step opens in place under its own row, any number at once. The control above the list opens every step, or, when
+// they all are open already, shuts them again; it reads "Collapse all" only while that is what a click would do.
+function wireTimeline(root) {
+  const all = root.querySelector('.tlall');
+  if (!all) return;
+  const steps = [...root.querySelectorAll('.tl .step')];
+  const shut = (step) => step.querySelector('.body').hidden;
+  const open = (step, on) => {
+    step.querySelector('.chev').setAttribute('aria-expanded', on);
+    step.querySelector('.body').hidden = !on;
+  };
+  const sync = () => {
+    const every = steps.every((s) => !shut(s));
+    all.setAttribute('aria-expanded', every);
+    all.querySelector('.lbl').textContent = every ? 'Collapse all' : 'Expand all';
+  };
+  // The whole row is the target; the chevron button inside it is what keyboard and screen-reader users reach, and its
+  // click bubbles up to here, so a step toggles exactly once either way.
+  steps.forEach((s) => { s.querySelector('.row').onclick = () => { open(s, shut(s)); sync(); }; });
+  all.onclick = () => { const on = steps.some(shut); steps.forEach((s) => open(s, on)); sync(); };
 }
 
 // The agentic path drives a real multi-turn exchange: an answer without a visualization
@@ -1470,40 +1524,48 @@ function timelineHtml(it) {
   // A step with nothing to show has three quite different causes, and "no record" alone
   // sends you looking for a bug in the report instead of at the run that produced it.
   const noToolCalls = calls.length === 0;
-  const rows = tl.map((s) => {
-    let text = '', note = '';
+  const note = (text) => `<div class="sub">${esc(text)}</div>`;
+  const rows = tl.map((s, n) => {
+    let body;
     if (s.kind === 'reasoning') {
-      text = (s.index != null && (it.reasoning || [])[s.index]) || '';
-      if (!text) {
-        note = s.index == null
-          ? 'Time before the first reasoning step — nothing had been emitted yet.'
-          : 'No reasoning paragraph was recorded for this step.';
-      }
+      const text = (s.index != null && (it.reasoning || [])[s.index]) || '';
+      body = text ? `<pre>${esc(text)}</pre>` : note(s.index == null
+        ? 'Time before the first reasoning step — nothing had been emitted yet.'
+        : 'No reasoning paragraph was recorded for this step.');
     } else if (byIndex[s.index]) {
       const c = byIndex[s.index];
-      text = `${c.name}\n\nARGUMENTS\n${fmt(c.arguments)}\n\nRESULT\n${c.result == null ? '(none)' : c.result}`;
+      body = `<div class="sub">arguments</div><pre>${esc(fmt(c.arguments))}</pre>` +
+        `<div class="sub">result</div><pre>${esc(c.result == null ? '(none)' : fmt(c.result))}</pre>`;
     } else {
-      note = noToolCalls
+      body = note(noToolCalls
         ? 'This run predates tool-call capture: it recorded the timeline but not what each ' +
           'call was given. Re-run the eval to get arguments and results — re-rendering an ' +
           'existing JSON report cannot add them.'
-        : 'This call arrived without an index, so nothing can be joined to it.';
+        : 'This call arrived without an index, so nothing can be joined to it.');
     }
-    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}" data-note="${esc(note)}">
+    return `<div class="step"><div class="row ${esc(s.kind)}">
+      <button type="button" class="chev" aria-expanded="false" aria-controls="tl-step-${n}" aria-label="${esc(s.name)} details">${CHEVRON('down')}</button>
       <div class="nm" title="${esc(s.name)}">${esc(s.name)}</div>
       <div class="track"><i style="width:${((s.duration_s || 0) / max * 100).toFixed(1)}%"></i></div>
-      <div class="d">${secs(s.duration_s)}</div></div>`;
+      <div class="d">${secs(s.duration_s)}</div></div>
+      <div class="body" id="tl-step-${n}" hidden>${body}</div></div>`;
   }).join('');
-  return `<section><h2>Latency timeline</h2><div class="tl">${rows}</div>
+  return `<section><h2>Latency timeline</h2>
+    <button type="button" class="tlall" aria-expanded="false"><span class="ico">${CHEVRON('down')}</span><span class="lbl">Expand all</span></button>
+    <div class="tl">${rows}</div>
     <div class="sub" style="margin-top:6px">${tl.length} step(s), ${secs(sum)} accounted` +
     (gap != null ? ` of ${secs(total)} (${secs(gap)} setup/teardown)` : '') +
-    `</div><div id="tl-detail"></div></section>`;
+    `</div></section>`;
 }
 
+// A reasoning step on the timeline opens to its own paragraph, so the paragraphs are not repeated here. This section is
+// for what the timeline cannot show: all of the reasoning when a run has no timeline, or a paragraph no step points at.
 function reasoningHtml(it) {
-  const rs = it.reasoning || [];
-  if (!rs.length) return '';
-  return '<section><h2>Reasoning</h2>' + rs.map((t, n) =>
+  const onTimeline = new Set(((it.detail || {}).latency_breakdown || [])
+    .filter((s) => s.kind === 'reasoning' && s.index != null).map((s) => s.index));
+  const rest = (it.reasoning || []).map((t, n) => [t, n]).filter(([, n]) => !onTimeline.has(n));
+  if (!rest.length) return '';
+  return '<section><h2>Reasoning</h2>' + rest.map(([t, n]) =>
     `<div class="sub">#${n}</div><pre>${esc(t)}</pre>`).join('') + '</section>';
 }
 
@@ -1611,6 +1673,7 @@ function renderModelSections() {
 // ---------- by model: results ----------
 // One row per model, best pass rate first. The bar is the model's evaluated test cases split by how they ended, so its
 // green part is the pass rate beside it; skipped test cases never ran and are left out of it, as they are of the rate.
+const MEDIAN_HELP = 'Half of this model\'s attempts at a test case were faster than this, half slower (P50). One attempt runs from the first message to the end of the answer, including the simulated user\'s replies and grading.';
 function modelOutcomesHtml() {
   const evaluated = (l) => figures[l].total - figures[l].skipped;
   const shown = (l) => { const r = passRateOf(figures[l]); return r == null ? null : Math.round(r * 100); };
@@ -1633,19 +1696,28 @@ function modelOutcomesHtml() {
     const gap = l !== ref ? suiteChange(ref, l, '') : '';
     const flag = l !== ref && (n !== evaluated(ref) || gap)
       ? ' ' + caution(`${n} test cases evaluated here, ${evaluated(ref)} for ${esc(roleOf(ref))}.` + (gap ? '<br>' + gap : '')) : '';
-    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bar}</td>${counts}${rate}</tr>`;
+    const med = medTimeOf(l);
+    const time = `<td class="num"${med == null ? '' : ` title="${esc(MEDIAN_HELP)}"`}>${med == null ? '–' : secs(med)}</td>`;
+    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bar}</td>${counts}${rate}${time}</tr>`;
   }).join('');
   const heads = [['Model', ''], ['Outcomes', 'The evaluated test cases split into passed (green), failed (red) and could not be graded (orange).'],
     ...OUTCOMES.map(([, name, , help]) => [name, help]),
-    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.'],
+    ['Median latency', MEDIAN_HELP]];
   return '<h2>Results</h2>' +
-    '<p class="blurb">How every test case ended for each model, best pass rate first. It <b>passed</b> when it met the run\'s pass rule, ' +
-    '<b>failed</b> when it was graded and did not, <b>could not be graded</b> when an error left it without a verdict, and was <b>skipped</b> when it was not run. ' +
-    'The bar covers the evaluated test cases, so its green part is the pass rate.</p>' +
+    '<p class="blurb">How every test case ended for each model, best pass rate first.</p>' +
     `<div class="cmp"><div class="tablewrap flat"><table class="out-table"><thead><tr>` +
     heads.map(([h, help], j) => `<th class="${j > 1 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
     `</tr></thead><tbody>${body}</tbody></table></div>` +
-    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '') + '</div>';
+    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '') +
+    '<ul class="blurb legend">' +
+    '<li>A test case <b>passed</b> when it met the run\'s pass rule.</li>' +
+    '<li>It <b>failed</b> when it was graded and did not.</li>' +
+    '<li>It <b>could not be graded</b> when an error left it without a verdict.</li>' +
+    '<li>It was <b>skipped</b> when it was not run.</li>' +
+    '<li>The bar covers the evaluated test cases, so its green part is the pass rate.</li>' +
+    '<li><b>Median latency</b> is the median time of one attempt at a test case: half of the attempts were faster, half slower.</li>' +
+    '</ul></div>';
 }
 
 // ---------- by model: quality against speed ----------
