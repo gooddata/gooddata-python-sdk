@@ -391,6 +391,8 @@ let LABELS = ALL_LABELS;
 let VIEW = 'date';
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// Reasoning arrives as markdown, with a **bold** title line. Escaped first, so the only markup that reaches the page is the <strong> added here.
+const bold = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
 const pct = (v) => (typeof v === 'number' ? Math.round(v * 100) + '%' : '–');
 // Seconds, two decimals under 10s and one above, so a 117.8s tail and a 0.84s median both read.
@@ -1529,7 +1531,7 @@ function timelineHtml(it) {
     let body;
     if (s.kind === 'reasoning') {
       const text = (s.index != null && (it.reasoning || [])[s.index]) || '';
-      body = text ? `<pre>${esc(text)}</pre>` : note(s.index == null
+      body = text ? `<pre>${bold(text)}</pre>` : note(s.index == null
         ? 'Time before the first reasoning step — nothing had been emitted yet.'
         : 'No reasoning paragraph was recorded for this step.');
     } else if (byIndex[s.index]) {
@@ -1566,7 +1568,7 @@ function reasoningHtml(it) {
   const rest = (it.reasoning || []).map((t, n) => [t, n]).filter(([, n]) => !onTimeline.has(n));
   if (!rest.length) return '';
   return '<section><h2>Reasoning</h2>' + rest.map(([t, n]) =>
-    `<div class="sub">#${n}</div><pre>${esc(t)}</pre>`).join('') + '</section>';
+    `<div class="sub">#${n}</div><pre>${bold(t)}</pre>`).join('') + '</section>';
 }
 
 function idsHtml(it) {
