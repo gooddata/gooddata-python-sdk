@@ -234,6 +234,10 @@ The JSON report always uses the nested multi-model shape:
 
 Winner is selected by **pass rate → quality score → latency** (lower latency wins all-equal ties).
 
+The HTML report orders runs by when they started (`summary.started_at`, UTC), so the order the files are passed to
+`gd-eval report` does not decide which run is the latest. A report without it falls back to the date a run's file is
+named for (`2026-09-28.json`), and if any run has neither it keeps the order the files were given in.
+
 Each item reports **how many of its runs passed**, not only whether one did:
 
 ```json
@@ -401,16 +405,15 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   is the same in every run (model, provider, workspace, dataset, test cases, attempts per test case, pass rule) and
   what differs. Results from different setups are not directly comparable, so a caution icon on a latency row and the
   *New* / *Removed* marks in the test case table say where two runs stopped being alike.
-- **View by** — a dropdown above the filters that lays the same report out two ways. **By date** is the layout the
-  rest of this list describes: a column per run, oldest to latest, with change lines, sparklines and the latency line
-  chart. **By model** compares language models instead: a column per model, ranked best first by the console's winner
+- **View by** — a dropdown above the filters that lays the same report out two ways. **Date** is the layout the
+  rest of this list describes: a column per run, oldest to latest by start time, with change lines, sparklines and the latency line
+  chart. **Model** compares language models instead: a column per model, ranked best first by the console's winner
   rule (pass rate, then quality, then the quicker average), with no time axis. Where a model has several runs its
   latest stands for it, so each model is read at its most recent state. The Run filter becomes a Model filter, the hint
   beside the dropdown says what is being compared (and names the dates when the compared runs differ in date), and the
-  Run setup tooltip does not flag the model itself as a difference. A report that compares several models, each seen
-  once (`gd-eval run --model a --model b --html`), opens By model; one model followed over time, or a mix of models and
-  dates, opens By date as before. A single run has nothing to switch between, so the dropdown is hidden. By model the
-  page reads, top to bottom:
+  Run setup tooltip does not flag the model itself as a difference. Every report opens on Date, including one that
+  compares several models (`gd-eval run --model a --model b --html`); choose Model to compare them. A single run has
+  nothing to switch between, so the dropdown is hidden. In the Model view the page reads, top to bottom:
   - **Results** — three cards, each naming the leading model on one figure and who follows: the highest share of test
     cases passed, the highest average quality score and the quickest median time per attempt.
   - **Outcomes** — one row per model, best pass rate first, with a bar of how its evaluated test cases ended (passed
@@ -501,9 +504,9 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
 
 A report that merges several files names each run after its file, and a file named for its date (`2026-09-28.json`)
 reads as "Sep 28". A model is read from the run itself (`model` and the provider), never from the file name, so files
-named for their model work as well as files named for their date. By date the page treats the runs as one model
-followed over time; when a report holds several models it adds the model to each run's name and points at **By
-model** (see above) for the comparison.
+named for their model work as well as files named for their date. In the Date view the page treats the runs as one
+model followed over time; when a report holds several models it adds the model to each run's name and points at
+**Model** (see above) for the comparison.
 
 `--redact` additionally drops `transcript` and `tool_calls`: the exchange shows that the
 simulated user is primed with the expected output, and a tool result carries
