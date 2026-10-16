@@ -388,7 +388,7 @@ def test_each_latency_table_is_preceded_by_a_line_chart_of_the_same_four_figures
     assert "max-width" not in html.split(".latchart {")[1].split("}")[0]
     assert "new ResizeObserver" in html.split("function renderLatency")[1].split("// ---------- outcomes")[0]
     # Hover and keyboard focus show every figure of that run.
-    assert "tabindex=\"0\"" in chart and "lctip" in chart
+    assert 'tabindex="0"' in chart and "lctip" in chart
     assert "focusin" in html.split("function latHover")[1].split("function latencyTable")[0]
 
 
@@ -758,48 +758,102 @@ def test_building_the_html_does_not_invent_a_mode_split_for_an_older_report():
 # --- View by: model or date -------------------------------------------------------------------------------------
 
 
-def test_view_by_sits_above_the_filters_with_a_choice_of_model_or_date():
+def test_view_by_sits_above_the_filters_with_a_choice_of_date_or_model():
     html = build_html(_doc_with_modes("gpt-5"))
 
     assert html.index('id="filterbar"') < html.index('id="viewby"') < html.index('aria-label="Page filters"')
     select = html.split('<select id="viewby">')[1].split("</select>")[0]
-    assert '<option value="model">By model</option>' in select
-    assert '<option value="date">By date</option>' in select
+    assert select.index('<option value="date">Date</option>') < select.index('<option value="model">Model</option>')
+    assert "By date" not in select and "By model" not in select
     assert 'for="viewby">View by</label>' in html
     # One run has nothing to switch between, so the row hides itself rather than offering two identical views.
     assert "$('#viewrow').hidden = ALL_LABELS.length < 2" in html
 
 
-def test_the_page_opens_by_model_only_for_a_report_that_compares_models():
-    """Several models each seen once is a model comparison; one model over time, or a mix, keeps the date view the
-    page always had."""
+def test_the_page_always_opens_by_date():
+    """Even a report that compares several models, each seen once, opens on the Date view; Model is one choice away."""
     html = build_html(_doc_with_modes("gpt-5"))
 
-    assert "setView(defaultView(ALL_LABELS.map(modelKeyOf)))" in html
+    assert "\nsetView('date');\n" in html
+    assert "defaultView" not in html
+
+
+_RUN_ORDER = ["runStamp", "byTime"]
 
 
 @_needs_node
-@pytest.mark.parametrize(
-    ("keys", "view"),
-    [
-        (["a", "b", "c"], "model"),
-        (["a", "b"], "model"),
-        (["a", "a", "a"], "date"),  # one model followed over time
-        (["a"], "date"),
-        ([], "date"),
-        (["a", "b", "a", "b"], "date"),  # two models on two dates: ambiguous, so the page keeps its old default
-    ],
-)
-def test_the_default_view_follows_what_the_report_holds(keys, view):
+def test_runs_are_ordered_by_their_start_time_not_by_the_order_the_files_were_given_in():
+    """The page reads "last run" as "latest", so the order has to come from the clock: files passed newest first, or
+    in any order a shell glob gives them, must still draw the oldest on the left of every chart and the latest on top
+    of every table."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    data = {
+        "runs": {
+            "c · p/m": {"summary": {"started_at": "2026-10-14T14:30:00.412873+00:00"}},
+            "a · p/m": {"summary": {"started_at": "2026-10-06T09:15:00Z"}},
+            "d · p/m": {"summary": {"started_at": "2026-10-14T14:31:00.007+00:00"}},
+            "b · p/m": {"summary": {"started_at": "2026-10-08T11:40:00Z"}},
+        }
+    }
+
+    order = _run_page_js(html, _RUN_ORDER, f"(globalThis.DATA = {json.dumps(data)}, byTime(Object.keys(DATA.runs)))")
+
+    assert order == ["a · p/m", "b · p/m", "c · p/m", "d · p/m"]
+
+
+@_needs_node
+def test_runs_that_started_together_keep_the_order_they_were_given_in():
+    html = build_html(_doc_with_modes("gpt-5"))
+    data = {
+        "runs": {
+            "y": {"summary": {"started_at": "2026-10-14T14:30:00Z"}},
+            "x": {"summary": {"started_at": "2026-10-14T14:30:00Z"}},
+        }
+    }
+
+    order = _run_page_js(html, _RUN_ORDER, f"(globalThis.DATA = {json.dumps(data)}, byTime(Object.keys(DATA.runs)))")
+
+    assert order == ["y", "x"]
+
+
+@_needs_node
+def test_a_run_without_a_start_time_is_placed_by_the_date_its_file_is_named_for():
+    """Reports written before `started_at` existed are usually kept as one file per day, named for it."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    data = {"runs": {"2026-10-12 · p/m": {}, "2026-09-28 · p/m": {}, "2026-10-05": {}}}
+
+    order = _run_page_js(html, _RUN_ORDER, f"(globalThis.DATA = {json.dumps(data)}, byTime(Object.keys(DATA.runs)))")
+
+    assert order == ["2026-09-28 · p/m", "2026-10-05", "2026-10-12 · p/m"]
+
+
+@_needs_node
+def test_a_report_with_an_unplaceable_run_keeps_the_order_it_was_given_in():
+    """Sorting only the runs that can be placed would put the others at an arbitrary spot, which reads as a claim."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    data = {
+        "runs": {
+            "b · p/m": {"summary": {"started_at": "2026-10-14T14:30:00Z"}},
+            "notes.json · p/m": {"summary": {"started_at": None}},  # a report that was never timed
+            "a · p/m": {"summary": {"started_at": "2026-10-06T09:15:00Z"}},
+        }
+    }
+
+    order = _run_page_js(html, _RUN_ORDER, f"(globalThis.DATA = {json.dumps(data)}, byTime(Object.keys(DATA.runs)))")
+
+    assert order == ["b · p/m", "notes.json · p/m", "a · p/m"]
+
+
+def test_the_page_builds_its_run_list_through_the_timestamp_order():
     html = build_html(_doc_with_modes("gpt-5"))
 
-    assert _run_page_js(html, ["defaultView"], f"defaultView({json.dumps(keys)})") == view
+    assert "const ALL_LABELS = byTime(Object.keys(DATA.runs));" in html
 
 
 @_needs_node
 def test_by_model_compares_each_models_latest_run():
-    """A report lists its runs oldest first, so the last run of a model is its latest. The models keep the order
-    they first appear in."""
+    """The page lists its runs oldest first (by start time), so the last run of a model is its latest. The models
+    keep the order they first appear in."""
     html = build_html(_doc_with_modes("gpt-5"))
     keys = {"d1 · a": "m1", "d1 · b": "m2", "d2 · a": "m1", "d2 · b": "m2", "d3 · c": "m3"}
 
@@ -842,12 +896,17 @@ def test_models_are_ranked_by_the_consoles_winner_rule():
         {"n": "good-quality", "total": 10, "skipped": 0, "passed": 8, "avg_quality_score": 0.95, "avg_latency_s": 30},
         {"n": "quick", "total": 10, "skipped": 0, "passed": 8, "avg_quality_score": 0.9, "avg_latency_s": 3},
         # A skipped test case never ran, so 8 of 8 evaluated beats 9 of 10.
-        {"n": "fewer-skipped-out", "total": 10, "skipped": 2, "passed": 8, "avg_quality_score": 0.1, "avg_latency_s": 99},
+        {
+            "n": "fewer-skipped-out",
+            "total": 10,
+            "skipped": 2,
+            "passed": 8,
+            "avg_quality_score": 0.1,
+            "avg_latency_s": 99,
+        },
     ]
 
-    ranked = _run_page_js(
-        html, ["passRateOf", "byStanding"], f"{json.dumps(figures)}.sort(byStanding).map((f) => f.n)"
-    )
+    ranked = _run_page_js(html, ["passRateOf", "byStanding"], f"{json.dumps(figures)}.sort(byStanding).map((f) => f.n)")
 
     assert ranked == ["fewer-skipped-out", "best", "good-quality", "quick", "slow"]
 
@@ -935,7 +994,7 @@ def test_the_category_heat_map_leaves_skipped_test_cases_out_and_shows_the_figur
     assert ".filter((it) => it && !it.skipped)" in categories
     # The shade is never the only signal: the share and the counts are printed in the cell, and the best model in a
     # row is marked with a chevron as well as the text.
-    assert "class=\"n\"" in categories and "CHEVRON('up')" in categories
+    assert 'class="n"' in categories and "CHEVRON('up')" in categories
     # With one category there is nothing to break down.
     assert "if (cats.length < 2) return ''" in categories
 
@@ -973,11 +1032,11 @@ def test_switching_view_drops_selections_made_against_the_other_layout():
 
 def test_a_report_with_several_models_says_so_where_the_date_view_could_mislead():
     """Two models on two dates read as "Oct 5, Oct 5, Oct 12, Oct 12" by date, with neighbouring runs of different
-    models compared as if one changed into the other. The names carry the model and the hint points at By model."""
+    models compared as if one changed into the other. The names carry the model and the hint points at Model."""
     html = build_html(_doc_with_modes("gpt-5"))
 
     assert "MULTI_MODEL && l.includes(' · ')" in html
-    assert "use By model to compare them" in html
+    assert "use Model to compare them" in html
     # The setup tooltip does not flag the model as a difference when the model is what is being compared.
     assert "compared: VIEW === 'model' && (k === 'Model' || k === 'Provider')" in html
     assert "'Same for every model'" in html and "'Differs between models'" in html
