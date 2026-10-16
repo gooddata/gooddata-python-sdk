@@ -234,7 +234,8 @@ The JSON report always uses the nested multi-model shape:
 
 Winner is selected by **pass rate → quality score → latency** (lower latency wins all-equal ties).
 
-The HTML report orders runs by when they started (`summary.started_at`, UTC), so the order the files are passed to
+The HTML report orders runs by when they started (`summary.started_at`, an ISO 8601 UTC timestamp that `gd-eval run` writes
+into each run's `summary`, `null` when a run was never timed), so the order the files are passed to
 `gd-eval report` does not decide which run is the latest. A report without it falls back to the date a run's file is
 named for (`2026-09-28.json`), and if any run has neither it keeps the order the files were given in.
 
@@ -415,7 +416,8 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   compares several models (`gd-eval run --model a --model b --html`); choose Model to compare them. A single run has
   nothing to switch between, so the dropdown is hidden. In the Model view the page reads, top to bottom:
   - **Results** — one row per model, best pass rate first, with a bar of how its evaluated test cases ended (passed
-    green, failed red, could not be graded orange), so the green part is the pass rate beside it. The counts and the
+    green, failed red, could not be graded orange), so the green part is the pass rate beside it, and the **Median
+    latency** of one attempt (half the attempts were faster, half slower). A list under the table says what each term means. The counts and the
     caution icon (a model evaluated on different test cases than the one with the most) are the date view's Outcomes
     table. There are no headline cards by model: the table is the first thing on the page.
   - **Quality against speed** — each model as a point: the share of test cases it passed against the median time of
@@ -453,10 +455,10 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   pass-rate card links to the test case table to see *which* ones changed; the split by format lives in that table's
   filters.
 - **Outcomes** — how every test case ended, as a table with one row per run, newest first, in the same layout as the
-  latency tables. A run is identified by two columns: the **Run date**, the day and time it started (`summary.started_at`,
+  latency tables. A run is identified by three columns: the **Run date**, the day and time it started (`summary.started_at`,
   shown in the reader's own time zone, the UTC stamp on hover; a report written before it existed shows the date its file is
   named for, without a time), and the **Run name**, the name the run was given, as given, so a run named `2026-09-28` reads
-  `2026-09-28` here although the charts style it as "Sep 28". Then **Passed**, **Failed**, **Could not be graded** (an error left it without a verdict) and
+  `2026-09-28` here although the charts style it as "Sep 28", and the **Model** it evaluated, its provider on hover. Then **Passed**, **Failed**, **Could not be graded** (an error left it without a verdict) and
   **Skipped** (not run), then the **Pass rate**. The four are the values of the Result filter, and the pass rate is
   the card's: passed out of the evaluated test cases, skipped ones left out, as in the console. The highest pass rate
   is marked green with an up chevron and the lowest red with a down chevron, and the latest run is marked in lime. A
@@ -471,7 +473,7 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   share one blue that darkens towards the tail. Hover or focus a run for its crosshair and every figure, in a tooltip
   that says how many responses it rests on. A line needs two runs with timings, so with one run the chart is left
   out. End labels name each line and give its latest value, and are dropped when two would touch. Under the chart a
-  table has one row per run, newest first, with the same four figures. The quickest run in each column is marked
+  table has one row per run, newest first, identified by the same **Run date**, **Run name** and **Model** columns as the outcomes table, with the same four figures. The quickest run in each column is marked
   green and the slowest red, each with a chevron (down for least time, up for most) so colour is not the only
   signal, and the latest run is marked in lime. A caution icon flags a run timed on a different number of samples
   than the one before. Unfiltered they are read from `by_mode`; a filtered view recomputes them in the page by the
@@ -479,7 +481,8 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   over a few dozen samples sits close to the slowest one, which is why `n` travels with it in the tooltip and
   the cell hint). Seconds read with one decimal and no redundant ".0" (`3s`, `4.6s`).
 - **A test case table**, newest first: the latest run's result, a **Since previous run** column, then the earlier runs
-  going back in time (click any result to open the drawer on that run). The change column reads *Regressed* (passed in
+  going back in time (click any result to open the drawer on that run). Each run's column is headed by its run date over
+  its run name, one to a line (hover the heading for the full run label); by model the columns are headed by the model. The change column reads *Regressed* (passed in
   the previous run, not in the latest), *Fixed*, *Flaky* (flipped between pass and fail more than once), *New*
   (in no earlier run) or *Removed* (in an earlier run, gone from the latest). A test case skipped in the latest run
   has no label, since the change would describe earlier runs. With several runs the table opens on the regressions. Two time columns
@@ -497,11 +500,14 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   order, with the simulated user marked apart from a real question, so you can see
   whether the agent got there or was handed the answer.
 - **A per-test-case drawer** — checks as pass/fail chips, expected vs actual side by side,
-  full reasoning, conversation/response ids.
+  the latency timeline, conversation/response ids.
 - **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
-  step. Clicking a step expands its full record, joined by `index`: the paragraph a
-  reasoning step was summarised from, or a tool call's arguments and result from
-  `detail.tool_calls`.
+  step. Every step has a chevron that opens its full record in place, joined by `index`: the
+  paragraph a reasoning step was summarised from, or a tool call's arguments and result from
+  `detail.tool_calls`. Any number of steps can be open at once, and the chevron above the list
+  opens or closes all of them. The reasoning therefore lives on the timeline; a separate
+  Reasoning section appears only for paragraphs no step points at (or when a run recorded no
+  timeline).
 - **A print stylesheet** that drops the filters and the drawer, so "Save as PDF" gives a clean page.
 
 A report that merges several files names each run after its file, and a file named for its date (`2026-09-28.json`)
