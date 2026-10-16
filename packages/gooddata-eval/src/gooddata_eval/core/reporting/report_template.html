@@ -59,7 +59,7 @@
   .floattip .diffhead { margin-top: 8px; color: var(--warn-ink); }
   .latestpill { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--lime); color: var(--on-lime);
     font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
-  .lat-table tr.latest td:first-child, .out-table tr.latest td:first-child { font-weight: 700; color: var(--ink-strong); }
+  .lat-table tr.latest td:first-child, .out-table tr.latest td:nth-child(-n+2) { font-weight: 700; color: var(--ink-strong); }
   .ext { display: inline-block; padding: 1px 6px; margin: -1px -6px; border-radius: 3px; }
   .ext.best { background: var(--pass-bg); color: var(--pass-ink); }
   .ext.same { background: var(--track); color: var(--ink); }
@@ -345,10 +345,12 @@
 
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
+// When a run started (`summary.started_at`), in ms; NaN when the report does not carry it.
+const startedAt = (l) => Date.parse((DATA.runs[l].summary || {}).started_at);
 // A run's place in time: when it started (`summary.started_at` in its JSON), else the date its file is named for
 // ("2026-09-28"). NaN when it has neither.
 function runStamp(l) {
-  const started = Date.parse((DATA.runs[l].summary || {}).started_at);
+  const started = startedAt(l);
   if (!isNaN(started)) return started;
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(l.includes(' · ') ? l.split(' · ')[0] : l);
   return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
@@ -418,6 +420,11 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 function humanDate(d) {
   return `${MONTHS[d.getMonth()]} ${d.getDate()}` + (d.getFullYear() !== new Date().getFullYear() ? `, ${d.getFullYear()}` : '');
 }
+// "Oct 11, 23:47" in the viewer's own time zone, the same date style with the time of day.
+function humanDateTime(d) {
+  const z = (n) => String(n).padStart(2, '0');
+  return `${humanDate(d)}, ${z(d.getHours())}:${z(d.getMinutes())}`;
+}
 // A run named by an ISO date (2026-09-28) is shown as "Sep 28"; any other name is shown as it is.
 function runName(name) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(name);
@@ -428,6 +435,9 @@ function runName(name) {
 const roleOf = (l) => (VIEW === 'model' ? MODEL_LABEL[l]
   : runName(l.includes(' · ') ? l.split(' · ')[0] : l) + (MULTI_MODEL && l.includes(' · ') ? ' · ' + MODEL_LABEL[l] : ''));
 const sourceOf = (l) => (l.includes(' · ') ? l.split(' · ')[0] : '');
+// The name a run was given, as given: roleOf styles a date-named run as "Sep 28", this keeps "2026-09-28". A merged report
+// names a run "<file> · <model>"; the file is the name, and the model is added only when the report holds several.
+const givenNameOf = (l) => (sourceOf(l) ? sourceOf(l) + (MULTI_MODEL ? ' · ' + MODEL_LABEL[l] : '') : l);
 const uniq = (xs) => [...new Set(xs.filter(Boolean))];
 
 // ---------- models ----------
@@ -466,9 +476,7 @@ function mastheadTitle() {
 const genDate = (() => {
   const m = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})(?::\d{2})?\s*(UTC|Z)?$/.exec(String(DATA.generated_at || '').trim());
   const d = m ? new Date(`${m[1]}T${m[2]}:00Z`) : null;
-  // "Oct 11, 23:47" in the viewer's own time zone, the same date style as the run names.
-  const z = (n) => String(n).padStart(2, '0');
-  return d && !isNaN(d) ? `${humanDate(d)}, ${z(d.getHours())}:${z(d.getMinutes())}` : DATA.generated_at;
+  return d && !isNaN(d) ? humanDateTime(d) : DATA.generated_at;
 })();
 // Everything that should be identical across runs lives behind one "Run setup" tooltip. If any of it differs,
 // a warning names what changed, because results from different setups are not directly comparable.
@@ -653,16 +661,16 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
     ${change ? `<div class="kpi-delta">${change}</div>` : ''}${spark}</figure>`;
 }
 function renderSummary() {
-  if (VIEW === 'model') return renderModelSummary();
+  if (VIEW === 'model') return setSection('summary', '');  // the model view opens on its Results table instead of cards
   const base = runsShown.length > 1 ? compareBase() : null;
-  $('#summary').innerHTML = '<h2>Results</h2><div class="trendgrid">' +
+  setSection('summary', '<h2>Results</h2><div class="trendgrid">' +
     kpiCard({ title: 'Test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true,
       isSame: (d) => Math.round(d * 100) === 0, base, after: ' <a href="#items-section" class="which">which?</a>' }) +
     kpiCard({ title: 'Average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true,
       isSame: (d) => Math.abs(d) < 0.01, base }) +
     kpiCard({ title: 'Median time per attempt', get: medTimeOf, fmt: secs, higher: false,
       isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base }) +
-    '</div>';
+    '</div>');
 }
 function sparkHover(run) {
   $('#summary').querySelectorAll('circle[data-run]').forEach((el) => el.classList.toggle('on', el.dataset.run === run));
@@ -852,6 +860,16 @@ const OUTCOMES = [
   ['errored', 'Could not be graded', 'could not be graded', 'Test cases left without a verdict by an error in the assistant or the judge.'],
   ['skipped', 'Skipped', 'were skipped', 'Test cases that were not run, because gd-eval has no evaluator for their category.'],
 ];
+// When a run started, in the viewer's own time zone, the report's own UTC stamp on hover. A report written before
+// `started_at` existed has only the date its file is named for, shown without a time.
+function runDateCell(l) {
+  const started = startedAt(l);
+  if (!isNaN(started)) return `<td title="${esc(DATA.runs[l].summary.started_at)}">${humanDateTime(new Date(started))}</td>`;
+  const named = runStamp(l);
+  if (isNaN(named)) return '<td>–</td>';
+  const u = new Date(named);
+  return `<td>${humanDate(new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate()))}</td>`;
+}
 function outcomesTable() {
   const dash = '<td class="num">–</td>';
   const evaluatedOf = (l) => figures[l].total - figures[l].skipped;
@@ -874,11 +892,12 @@ function outcomesTable() {
       ? ' ' + caution(`${ev} test cases evaluated here, ${evaluatedOf(prevL)} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, '') ? '<br>' + suiteChange(prevL, l, '') : ''))
       : '';
     const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
-    return `<tr${isLatest ? ' class="latest"' : ''}><td>${esc(roleOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${counts}${rate}</tr>`;
+    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${counts}${rate}</tr>`;
   }).reverse().join('');  // newest run first
-  const heads = [['Run', ''], ...OUTCOMES.map(([, name, , help]) => [name, help]), ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+  const heads = [['Run date', 'When the run started, in your time zone.'], ['Run name', 'The name the run was given.'],
+    ...OUTCOMES.map(([, name, , help]) => [name, help]), ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
   return `<div class="tablewrap flat"><table class="out-table"><thead><tr>` +
-    heads.map(([h, help], j) => `<th class="${j > 0 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    heads.map(([h, help], j) => `<th class="${j > 1 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
     `</tr></thead><tbody>${rows}</tbody></table></div>` +
     (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '');
 }
@@ -1590,30 +1609,6 @@ function renderModelSections() {
 }
 
 // ---------- by model: results ----------
-// Each card names the leading model on one figure and who follows. The figures are the date view's three, read from the
-// same sources, so a card cannot disagree with the tables below it.
-function leaderCard({ title, get, fmt, higher, word }) {
-  const vals = runsShown.map((l) => ({ l, v: get(l) })).filter((p) => p.v != null);
-  if (!vals.length) return `<figure class="kpi"><figcaption>${title}</figcaption><div class="kpi-val">–</div></figure>`;
-  const best = (higher ? Math.max : Math.min)(...vals.map((p) => p.v));
-  const tied = (p) => fmt(p.v) === fmt(best);  // ties are read off the figure the reader sees
-  const lead = vals.filter(tied);
-  const rest = vals.filter((p) => !tied(p)).sort((a, b) => (higher ? b.v - a.v : a.v - b.v));
-  const names = lead.map((p) => esc(roleOf(p.l))).join(', ');
-  const line = vals.length === 1 ? names
-    : !rest.length ? '<span class="ext same">the same for every model</span>'
-    : `<span class="ext best">${CHEVRON(higher ? 'up' : 'down')}${names}</span> ${word}, ${esc(roleOf(rest[0].l))} next at ${fmt(rest[0].v)}`;
-  return `<figure class="kpi"><figcaption>${title}</figcaption><div class="kpi-val">${fmt(best)}</div><div class="kpi-delta">${line}</div></figure>`;
-}
-function renderModelSummary() {
-  $('#summary').innerHTML = '<h2>Results</h2><div class="trendgrid">' +
-    leaderCard({ title: 'Highest share of test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true, word: 'highest' }) +
-    leaderCard({ title: 'Highest average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true, word: 'highest' }) +
-    leaderCard({ title: 'Quickest median time per attempt', get: medTimeOf, fmt: secs, higher: false, word: 'quickest' }) +
-    '</div>';
-}
-
-// ---------- by model: outcomes ----------
 // One row per model, best pass rate first. The bar is the model's evaluated test cases split by how they ended, so its
 // green part is the pass rate beside it; skipped test cases never ran and are left out of it, as they are of the rate.
 function modelOutcomesHtml() {
@@ -1643,7 +1638,7 @@ function modelOutcomesHtml() {
   const heads = [['Model', ''], ['Outcomes', 'The evaluated test cases split into passed (green), failed (red) and could not be graded (orange).'],
     ...OUTCOMES.map(([, name, , help]) => [name, help]),
     ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
-  return '<h2>Outcomes</h2>' +
+  return '<h2>Results</h2>' +
     '<p class="blurb">How every test case ended for each model, best pass rate first. It <b>passed</b> when it met the run\'s pass rule, ' +
     '<b>failed</b> when it was graded and did not, <b>could not be graded</b> when an error left it without a verdict, and was <b>skipped</b> when it was not run. ' +
     'The bar covers the evaluated test cases, so its green part is the pass rate.</p>' +
@@ -1655,8 +1650,8 @@ function modelOutcomesHtml() {
 
 // ---------- by model: quality against speed ----------
 // The one picture that settles "is the better model worth waiting for": each model as a point, the share of test cases
-// it passed against the median time of one attempt, the same two figures as the first and third card. Up and to the
-// left is better.
+// it passed against the median time of one attempt, the same two figures as the Results table's pass rate and the
+// latency tables' median. Up and to the left is better.
 let tradeW = 720;
 function tradeoffHtml() {
   const pts = runsShown.map((l) => ({ l, x: medTimeOf(l), y: passRateOf(figures[l]) })).filter((p) => p.x != null && p.y != null);

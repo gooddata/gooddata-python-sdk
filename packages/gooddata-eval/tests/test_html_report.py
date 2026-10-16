@@ -611,6 +611,7 @@ def test_the_outcome_table_lists_the_runs_newest_first_with_a_pass_rate_that_lea
         "globalThis.figures = " + json.dumps(figures) + ", globalThis.runsShown = " + json.dumps(list(figures)) + ", "
         "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
         "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
+        "globalThis.runDateCell = (l) => '<td>date ' + l + '</td>', globalThis.givenNameOf = (l) => 'name ' + l, "
         "globalThis.LATEST_PILL = ' LATEST'"
     )
     page = _run_page_js(html, ["passRateOf", "OUTCOMES", "outcomesTable"], f"({stubs}, outcomesTable())")
@@ -618,9 +619,14 @@ def test_the_outcome_table_lists_the_runs_newest_first_with_a_pass_rate_that_lea
     # Newest first.
     assert page.index("Oct 12") < page.index("Oct 5") < page.index("Sep 28")
     rows = {}
-    for m in re.finditer(r"<tr[^>]*><td>(.*?)</td>(.*?)</tr>", page):
-        rows[next(label for label in figures if m.group(1).startswith(label))] = m.group(1) + m.group(2)
-    assert rows["Oct 12"].count("<td") == 5  # four outcomes and the pass rate (the run cell is captured apart)
+    for m in re.finditer(r"<tr[^>]*><td>date (.*?)</td>(.*?)</tr>", page):
+        rows[m.group(1)] = m.group(2)
+    # The run name, four outcomes and the pass rate (the run date is captured apart).
+    assert rows["Oct 12"].count("<td") == 6
+    assert "name Oct 12" in rows["Oct 12"]
+    # The run is identified by two columns, when it ran and what it is called, in place of the single "Run" column.
+    assert page.index(">Run date</th>") < page.index(">Run name</th>") < page.index(">Passed</th>")
+    assert ">Run</th>" not in page
     assert "LATEST" in rows["Oct 12"] and "LATEST" not in rows["Oct 5"]
     # 15 of the 19 evaluated is 79%, not 15 of 20 (75%): the skipped one never ran.
     assert "79%" in rows["Oct 12"]
@@ -644,6 +650,7 @@ def test_the_outcome_table_marks_nothing_when_every_run_reads_the_same():
         f"globalThis.figures = {json.dumps({'a': same, 'b': same})}, globalThis.runsShown = ['a', 'b'], "
         "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
         "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
+        "globalThis.runDateCell = (l) => '<td>date ' + l + '</td>', globalThis.givenNameOf = (l) => 'name ' + l, "
         "globalThis.LATEST_PILL = ' LATEST'"
     )
 
@@ -652,6 +659,46 @@ def test_the_outcome_table_marks_nothing_when_every_run_reads_the_same():
     assert "80%" in page
     assert 'class="ext' not in page
     assert "[!" not in page  # same number of test cases: nothing to caution about
+
+
+@_needs_node
+def test_the_run_date_cell_says_when_the_run_started_and_falls_back_to_the_date_its_file_is_named_for(monkeypatch):
+    monkeypatch.setenv("TZ", "UTC")
+    html = build_html(_doc_with_modes("gpt-5"))
+    runs = {
+        "a": {"summary": {"started_at": "2026-10-14T14:30:21.412873+00:00"}},
+        "2026-09-28": {"summary": {}},  # written before started_at existed: the file is named for its day
+        "notes": {"summary": {"started_at": None}},  # a report that was never timed
+    }
+    definitions = ["MONTHS", "esc", "startedAt", "runStamp", "humanDate", "humanDateTime", "runDateCell"]
+
+    cells = _run_page_js(
+        html,
+        definitions,
+        f"(globalThis.DATA = {json.dumps({'runs': runs})}, {json.dumps(list(runs))}.map(runDateCell))",
+    )
+
+    # The day and the time, in the viewer's time zone, with the report's own UTC stamp on hover.
+    assert re.fullmatch(r'<td title="2026-10-14T14:30:21.412873\+00:00">Oct 14(, 2026)?, 14:30</td>', cells[0])
+    # Only the day is known for an older report, so no time is invented.
+    assert re.fullmatch(r"<td>Sep 28(, 2026)?</td>", cells[1])
+    assert cells[2] == "<td>–</td>"
+
+
+@_needs_node
+def test_the_run_name_is_the_name_the_run_was_given_not_a_styled_date():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    names = _run_page_js(
+        html,
+        ["sourceOf", "givenNameOf"],
+        "(globalThis.MODEL_LABEL = {'2026-09-28 · p/m': 'm'}, globalThis.MULTI_MODEL = false, "
+        "[givenNameOf('nightly-baseline'), givenNameOf('2026-09-28 · p/m'), "
+        "(globalThis.MULTI_MODEL = true, givenNameOf('2026-09-28 · p/m'))])",
+    )
+
+    # roleOf would show a date-named run as "Sep 28"; the name column keeps what the run was called.
+    assert names == ["nightly-baseline", "2026-09-28", "2026-09-28 · m"]
 
 
 _ITEM_RESULT = {"pass": {"gate_passed": True}, "fail": {"gate_passed": False}, "skip": {"skipped": True}}
@@ -778,7 +825,7 @@ def test_the_page_always_opens_by_date():
     assert "defaultView" not in html
 
 
-_RUN_ORDER = ["runStamp", "byTime"]
+_RUN_ORDER = ["startedAt", "runStamp", "byTime"]
 
 
 @_needs_node
@@ -967,9 +1014,24 @@ def test_by_model_has_a_section_for_each_chart_between_outcomes_and_latency():
     assert "on ? " in sections and ": ''" in sections  # the date view gets an empty string for each
 
 
+def test_by_model_opens_on_one_results_table_instead_of_leader_cards():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    # The three leader cards are gone; the model view leaves their section empty (and so hidden) rather than drawing them.
+    assert "leaderCard" not in html and "renderModelSummary" not in html
+    summary = html.split("function renderSummary()")[1].split("function sparkHover")[0]
+    assert "if (VIEW === 'model') return setSection('summary', '')" in summary
+    # What the date view calls Outcomes is, by model, the Results section; the date view keeps its own two.
+    by_model = html.split("function modelOutcomesHtml()")[1].split("// ---------- by model: quality against speed")[0]
+    assert "'<h2>Results</h2>'" in by_model and "Outcomes</h2>" not in by_model
+    by_date = html.split("function renderOutcomes()")[1].split("// ---------- per-item latency")[0]
+    assert "'<h2>Outcomes</h2>'" in by_date
+    assert "'<h2>Results</h2><div class=\"trendgrid\">'" in summary
+
+
 def test_the_model_charts_read_the_same_figures_as_the_cards_and_tables():
-    """Nothing here is a second source of truth: the speed-quality plot plots the first and third card, the
-    outcome bar is the outcome table's own counts, and the latency bars are the table's own percentiles."""
+    """Nothing here is a second source of truth: the speed-quality plot plots the pass rate and the median time per
+    attempt, the outcome bar is the outcome table's own counts, and the latency bars are the table's own percentiles."""
     html = build_html(_doc_with_modes("gpt-5"))
 
     tradeoff = html.split("function tradeoffHtml()")[1].split("// Drawn at the section's width")[0]
