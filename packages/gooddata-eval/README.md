@@ -451,7 +451,9 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   than a signed number. The line is green when that direction is good and red when it is not, with a chevron and
   screen-reader text (*Better* / *Worse*) so colour is not the only signal. From three runs each card also has a
   sparkline of every run: hover a point for its value, click it to compare the latest run with that one instead of the
-  previous. A pick that a filter has removed, or that has become the latest run, falls back to the previous run. The
+  previous. The dot being compared with is drawn white, and a key under the cards says so (latest run, compared with,
+  other runs) and that a click on any other dot moves the comparison; it shows only when a sparkline does. A pick that
+  a filter has removed, or that has become the latest run, falls back to the previous run. The
   pass-rate card links to the test case table to see *which* ones changed; the split by format lives in that table's
   filters.
 - **Outcomes** — how every test case ended, as a table with one row per run, newest first, in the same layout as the
