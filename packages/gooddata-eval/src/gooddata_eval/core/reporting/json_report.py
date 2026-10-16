@@ -29,6 +29,9 @@ def _build_run_dict(report: EvalReport) -> dict:
             "latency_s": round(report.latency_s, 3),
             "avg_latency_s": round(report.avg_latency_s, 3),
             "wall_clock_s": round(report.wall_clock_s, 3),
+            # When the run began, ISO 8601 in UTC; null when it was never timed. The HTML report shows it as the
+            # Run date and orders runs by it.
+            "started_at": report.started_at.isoformat() if report.started_at else None,
             # Pass counts and latency distributions split by single-shot and multi-turn:
             # avg_latency_s above is one number over a mixed population and says nothing about
             # its tail. Each distribution is None when nothing was timed, so a report cannot

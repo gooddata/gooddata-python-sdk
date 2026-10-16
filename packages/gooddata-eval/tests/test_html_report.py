@@ -353,7 +353,11 @@ def test_the_latency_tables_show_the_median_p70_p90_and_p99():
     html = build_html(_doc_with_modes("gpt-5"))
 
     table = html.split("function latencyTable(")[1].split("function modeSection")[0]
-    assert "const heads = ['Run', ...LAT_SERIES.map((s) => s.name)]" in table
+    # A run is the first three columns of the table -- when it ran, what it is called, the model -- then the four figures.
+    assert "const heads = [...RUN_HEADS, ...LAT_SERIES.map((s) => [s.name, HEAD_HELP[s.name]])]" in table
+    assert (
+        "${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${modelCell(l)}" in table
+    )
     assert "const KEYS = LAT_SERIES.map((s) => s.key)" in table
     assert "'Fastest'" not in table and "'Slowest'" not in table
     chart = html.split("const LAT_SERIES = [")[1].split("function latencyChart")[0]
@@ -483,7 +487,9 @@ def _run_page_js(html: str, definitions: list[str], expression: str):
     parts = []
     for name in definitions:
         found = re.search(
-            rf"^(?:const {name} = [^\n]*;|const {name} = \[\n.*?^\];|function {name}\(.*?^\}})$", html, re.M | re.S
+            rf"^(?:const {name} = [^\n]*;|const {name} = \[\n.*?^\];|const {name} = \[\[.*?\]\];|function {name}\(.*?^\}})$",
+            html,
+            re.M | re.S,
         )
         assert found, f"{name} not found in the page"
         parts.append(found.group(0))
@@ -612,20 +618,21 @@ def test_the_outcome_table_lists_the_runs_newest_first_with_a_pass_rate_that_lea
         "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
         "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
         "globalThis.runDateCell = (l) => '<td>date ' + l + '</td>', globalThis.givenNameOf = (l) => 'name ' + l, "
-        "globalThis.LATEST_PILL = ' LATEST'"
+        "globalThis.modelCell = (l) => '<td>model ' + l + '</td>', globalThis.LATEST_PILL = ' LATEST'"
     )
-    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "outcomesTable"], f"({stubs}, outcomesTable())")
+    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "RUN_HEADS", "outcomesTable"], f"({stubs}, outcomesTable())")
 
     # Newest first.
     assert page.index("Oct 12") < page.index("Oct 5") < page.index("Sep 28")
     rows = {}
     for m in re.finditer(r"<tr[^>]*><td>date (.*?)</td>(.*?)</tr>", page):
         rows[m.group(1)] = m.group(2)
-    # The run name, four outcomes and the pass rate (the run date is captured apart).
-    assert rows["Oct 12"].count("<td") == 6
-    assert "name Oct 12" in rows["Oct 12"]
-    # The run is identified by two columns, when it ran and what it is called, in place of the single "Run" column.
-    assert page.index(">Run date</th>") < page.index(">Run name</th>") < page.index(">Passed</th>")
+    # The run name, the model, four outcomes and the pass rate (the run date is captured apart).
+    assert rows["Oct 12"].count("<td") == 7
+    assert "name Oct 12" in rows["Oct 12"] and "model Oct 12" in rows["Oct 12"]
+    # The run is identified by three columns, when it ran, what it is called and the model, in place of a single "Run".
+    assert page.index(">Run date</th>") < page.index(">Run name</th>") < page.index(">Model</th>")
+    assert page.index(">Model</th>") < page.index(">Passed</th>")
     assert ">Run</th>" not in page
     assert "LATEST" in rows["Oct 12"] and "LATEST" not in rows["Oct 5"]
     # 15 of the 19 evaluated is 79%, not 15 of 20 (75%): the skipped one never ran.
@@ -651,10 +658,10 @@ def test_the_outcome_table_marks_nothing_when_every_run_reads_the_same():
         "globalThis.roleOf = (l) => l, globalThis.esc = (s) => String(s), globalThis.suiteChange = () => '', "
         "globalThis.caution = (h) => '[!' + h + ']', globalThis.CHEVRON = (d) => '<' + d + '>', "
         "globalThis.runDateCell = (l) => '<td>date ' + l + '</td>', globalThis.givenNameOf = (l) => 'name ' + l, "
-        "globalThis.LATEST_PILL = ' LATEST'"
+        "globalThis.modelCell = (l) => '<td>model ' + l + '</td>', globalThis.LATEST_PILL = ' LATEST'"
     )
 
-    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "outcomesTable"], f"({stubs}, outcomesTable())")
+    page = _run_page_js(html, ["passRateOf", "OUTCOMES", "RUN_HEADS", "outcomesTable"], f"({stubs}, outcomesTable())")
 
     assert "80%" in page
     assert 'class="ext' not in page
@@ -670,7 +677,7 @@ def test_the_run_date_cell_says_when_the_run_started_and_falls_back_to_the_date_
         "2026-09-28": {"summary": {}},  # written before started_at existed: the file is named for its day
         "notes": {"summary": {"started_at": None}},  # a report that was never timed
     }
-    definitions = ["MONTHS", "esc", "startedAt", "runStamp", "humanDate", "humanDateTime", "runDateCell"]
+    definitions = ["MONTHS", "esc", "startedAt", "runStamp", "humanDate", "humanDateTime", "runDateText", "runDateCell"]
 
     cells = _run_page_js(
         html,
@@ -697,8 +704,55 @@ def test_the_run_name_is_the_name_the_run_was_given_not_a_styled_date():
         "(globalThis.MULTI_MODEL = true, givenNameOf('2026-09-28 · p/m'))])",
     )
 
-    # roleOf would show a date-named run as "Sep 28"; the name column keeps what the run was called.
-    assert names == ["nightly-baseline", "2026-09-28", "2026-09-28 · m"]
+    # roleOf would show a date-named run as "Sep 28"; the name column keeps what the run was called. The model has a
+    # column of its own beside it, so a report holding several models does not repeat it in the name.
+    assert names == ["nightly-baseline", "2026-09-28", "2026-09-28"]
+
+
+@_needs_node
+def test_a_run_column_heading_stacks_the_run_date_over_the_run_name_and_leaves_the_model_out(monkeypatch):
+    monkeypatch.setenv("TZ", "UTC")
+    html = build_html(_doc_with_modes("gpt-5"))
+    label = "2026-10-14 · p/m"
+    definitions = [
+        *["MONTHS", "esc", "startedAt", "runStamp", "humanDate", "humanDateTime", "runDateText"],
+        *["sourceOf", "givenNameOf", "runHeadHtml"],
+    ]
+    stubs = (
+        f"globalThis.DATA = {json.dumps({'runs': {label: {'summary': {'started_at': '2026-10-14T14:30:21Z'}}}})}, "
+        "globalThis.MODEL_LABEL = {'2026-10-14 · p/m': 'm'}, globalThis.roleOf = (l) => 'role ' + l"
+    )
+
+    heads = _run_page_js(
+        html,
+        definitions,
+        f"({stubs}, [(globalThis.VIEW = 'date', runHeadHtml({json.dumps(label)})), "
+        f"(globalThis.VIEW = 'model', runHeadHtml({json.dumps(label)}))])",
+    )
+
+    # By date: the run date, then the run name, each in a block of its own so they sit on separate lines.
+    assert re.fullmatch(
+        r'<span class="runhead" title="2026-10-14 · p/m"><span>Oct 14(, 2026)?, 14:30</span><span>2026-10-14</span></span>',
+        heads[0],
+    )
+    # By model the columns are the models themselves, so they keep the model's name.
+    assert heads[1] == "role 2026-10-14 · p/m"
+    # The test case table heads every run column with it, the latest run first.
+    assert "html: runHeadHtml(runList[runList.length - 1]) + LATEST_PILL" in html
+    assert "html: runHeadHtml(l)" in html
+    assert ".runhead > span { display: block; white-space: nowrap; }" in html
+
+
+def test_the_model_outcomes_table_adds_the_median_latency_and_lists_what_each_term_means():
+    html = build_html(_doc_with_modes("gpt-5"))
+
+    section = html.split("function modelOutcomesHtml()")[1].split("function ")[0]
+    assert "['Median latency', MEDIAN_HELP]" in section
+    assert "medTimeOf(l)" in section
+    # One line per term rather than one run-on sentence.
+    assert '<ul class="blurb legend">' in section
+    for term in ("passed", "failed", "could not be graded", "skipped", "Median latency"):
+        assert f"<b>{term}</b>" in section
 
 
 _ITEM_RESULT = {"pass": {"gate_passed": True}, "fail": {"gate_passed": False}, "skip": {"skipped": True}}
@@ -1102,3 +1156,82 @@ def test_a_report_with_several_models_says_so_where_the_date_view_could_mislead(
     # The setup tooltip does not flag the model as a difference when the model is what is being compared.
     assert "compared: VIEW === 'model' && (k === 'Model' || k === 'Provider')" in html
     assert "'Same for every model'" in html and "'Differs between models'" in html
+
+
+_TIMELINE_FNS = ["esc", "secs", "CHEVRON", "unwrapJson", "fmt", "timelineHtml", "reasoningHtml"]
+
+
+def _timeline_item() -> dict:
+    return {
+        "best_run_latency_s": 12.0,
+        "reasoning": [
+            "**Plan**\n\nwork out the metric",
+            "**Check**\n\nverify the numbers",
+            "a paragraph no step points at",
+        ],
+        "detail": {
+            "latency_breakdown": [
+                {"seq": 0, "kind": "reasoning", "name": "thinking", "index": 0, "duration_s": 2.0},
+                {"seq": 1, "kind": "tool", "name": "search_objects", "index": 0, "duration_s": 3.0},
+                {"seq": 2, "kind": "reasoning", "name": "thinking", "index": 1, "duration_s": 1.0},
+            ],
+            "tool_calls": [
+                {"index": 0, "name": "search_objects", "arguments": {"query": "revenue"}, "result": '{"results": []}'}
+            ],
+        },
+    }
+
+
+@_needs_node
+def test_every_timeline_step_opens_in_place_and_starts_shut():
+    """Each step carries its own record under its own row, hidden until opened, instead of one shared box below the
+    list. The chevron is a real button (keyboard-reachable) that says what it controls and whether that is open."""
+    html = build_html(_doc("gpt-5", True))
+
+    out = _run_page_js(html, _TIMELINE_FNS, f"timelineHtml({json.dumps(_timeline_item())})")
+
+    assert out.count('class="chev"') == 3
+    assert out.count('aria-expanded="false"') == 3 + 1  # the three steps and the expand-all control
+    assert out.count('class="body"') == 3 and out.count(" hidden>") == 3
+    controls = re.findall(r'aria-controls="([^"]+)"', out)
+    assert len(set(controls)) == 3
+    assert all(f'id="{c}"' in out for c in controls)
+    # The reasoning step opens to its own paragraph, the tool step to what it was given and what came back.
+    assert "work out the metric" in out and "verify the numbers" in out
+    assert '<div class="sub">arguments</div>' in out and "&quot;query&quot;: &quot;revenue&quot;" in out
+    assert '<div class="sub">result</div>' in out and "&quot;results&quot;: []" in out
+    assert "tl-detail" not in out and "data-text" not in out
+
+
+@_needs_node
+def test_the_timeline_has_one_control_to_open_or_shut_every_step():
+    html = build_html(_doc("gpt-5", True))
+
+    out = _run_page_js(html, _TIMELINE_FNS, f"timelineHtml({json.dumps(_timeline_item())})")
+
+    assert out.count('class="tlall"') == 1 and "Expand all" in out
+    # The label only reads "Collapse all" once every step is open, so it always names what a click would do.
+    wiring = html.split("function wireTimeline(root) {")[1].split("\n}\n")[0]
+    assert "steps.some(shut)" in wiring and "every ? 'Collapse all' : 'Expand all'" in wiring
+    assert "wireTimeline(d);" in html
+
+
+@_needs_node
+def test_reasoning_is_not_repeated_below_a_timeline_that_already_shows_it():
+    """The drawer used to print every reasoning paragraph in full under the timeline. They now sit on the reasoning
+    steps, so that section only catches what the timeline cannot show."""
+    html = build_html(_doc("gpt-5", True))
+    item = _timeline_item()
+
+    leftover = _run_page_js(html, _TIMELINE_FNS, f"reasoningHtml({json.dumps(item)})")
+    assert "a paragraph no step points at" in leftover and "#2" in leftover
+    assert "work out the metric" not in leftover and "verify the numbers" not in leftover
+
+    item["reasoning"] = item["reasoning"][:2]
+    assert _run_page_js(html, _TIMELINE_FNS, f"reasoningHtml({json.dumps(item)})") == ""
+
+    # No timeline to put them on: nothing is lost, all of it is listed.
+    del item["detail"]["latency_breakdown"]
+    item["reasoning"] = _timeline_item()["reasoning"]
+    everything = _run_page_js(html, _TIMELINE_FNS, f"reasoningHtml({json.dumps(item)})")
+    assert "work out the metric" in everything and "a paragraph no step points at" in everything

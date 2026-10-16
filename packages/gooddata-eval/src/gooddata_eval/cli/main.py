@@ -649,6 +649,10 @@ def _run(config: RunConfig) -> int:
                 report.items.extend(agentic_report.items)
             report.items.extend(single_report.items)
             report.wall_clock_s = (agentic_report.wall_clock_s if agentic_report else 0.0) + single_report.wall_clock_s
+            report.started_at = min(
+                (r.started_at for r in (agentic_report, single_report) if r is not None and r.started_at is not None),
+                default=None,
+            )
 
             skipped_kinds = sorted({i.test_kind for i in report.items if i.skipped})
             if skipped_kinds:
