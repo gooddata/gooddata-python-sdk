@@ -332,7 +332,7 @@ def test_run_agentic_items_records_phase_timings_and_wall_clock():
     assert report.started_at.tzinfo is not None
 
 
-def test_run_agentic_items_records_when_the_run_started_and_finished():
+def test_run_agentic_items_records_when_the_run_started_and_finished() -> None:
     outcome = AgenticEvalOutcome(conversation_id="c1", detail={"alert_created": True})
     before = datetime.now(timezone.utc)
     with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):

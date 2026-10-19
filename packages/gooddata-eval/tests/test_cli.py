@@ -899,21 +899,21 @@ def test_cli_passes_concurrency_to_the_agentic_runner(monkeypatch, tmp_path):
     assert captured["concurrency"] == 3
 
 
-def test_cli_report_spans_the_agentic_and_single_shot_phases(monkeypatch, tmp_path):
+def test_cli_report_spans_the_agentic_and_single_shot_phases(monkeypatch, tmp_path) -> None:
     # The two phases run back to back and are merged into one report, so the run starts
     # when the earlier phase starts and finishes when the later one does.
     monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
 
     class _FakeController:
-        def __init__(self, *a, **k): ...
-        def get_active(self):
+        def __init__(self, *a: object, **k: object) -> None: ...
+        def get_active(self) -> ActiveLlmProvider | None:
             return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
 
-        def resolve_and_activate(self, requested, provider=None):
+        def resolve_and_activate(self, requested: str | None, provider: str | None = None) -> ResolvedModel:
             return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
 
-        def restore(self, original): ...
-        def close(self): ...
+        def restore(self, original: ActiveLlmProvider | None) -> None: ...
+        def close(self) -> None: ...
 
     monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
     monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())

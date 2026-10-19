@@ -501,7 +501,7 @@ def test_json_report_failed_runs_is_empty_for_a_clean_item():
     assert build_json_report(report)["items"]["i1"]["failed_runs"] == []
 
 
-def test_json_summary_carries_when_the_run_started_and_finished():
+def test_json_summary_carries_when_the_run_started_and_finished() -> None:
     report = _report()
     report.started_at = datetime(2026, 10, 14, 9, 30, 0, tzinfo=timezone.utc)
     report.finished_at = datetime(2026, 10, 14, 9, 47, 12, tzinfo=timezone.utc)
@@ -512,7 +512,7 @@ def test_json_summary_carries_when_the_run_started_and_finished():
     assert summary["finished_at"] == "2026-10-14T09:47:12+00:00"
 
 
-def test_json_summary_has_null_bounds_for_a_run_that_was_never_timed():
+def test_json_summary_has_null_bounds_for_a_run_that_was_never_timed() -> None:
     summary = build_json_report(_report())["summary"]
 
     assert summary["started_at"] is None

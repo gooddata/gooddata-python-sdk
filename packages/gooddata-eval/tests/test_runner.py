@@ -523,7 +523,7 @@ def test_an_ungraded_run_is_recorded_as_a_failure_with_its_judge_error():
     assert [r["error"] for r in item.failed_runs] == ["empty body"]
 
 
-def test_run_items_records_when_the_run_started_and_finished():
+def test_run_items_records_when_the_run_started_and_finished() -> None:
     # wall_clock_s is a duration with no anchor, so a finished run could not say when it
     # ended. The bounds are timezone-aware UTC, taken around the same span wall_clock_s times.
     before = datetime.now(timezone.utc)
