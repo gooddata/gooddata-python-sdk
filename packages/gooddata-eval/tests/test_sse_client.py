@@ -657,15 +657,39 @@ def test_send_message_records_the_turn_as_a_trace_latency(monkeypatch):
     assert recorder.stop() == [pytest.approx(2.5)]
 
 
-def test_send_message_records_a_turn_that_ended_in_a_chat_error(monkeypatch):
-    # Evaluators score the partial result of such a turn as a run, so the response population has to
-    # hold it too, or the two disagree about which turns happened.
+def test_send_message_records_a_turn_that_ended_without_a_final_answer(monkeypatch) -> None:
+    # The agent ran out of iterations: the slowest kind of turn, and evaluators score its partial
+    # result as a run, so the response population has to hold it too.
+    incomplete = b'data: {"statusCode": 502, "detail": "iteration limit", "reason": "max_iterations"}\n'
+    monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 50.0, 51.0]).__next__)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=incomplete))
+    recorder = TraceRecorder()
+    with pytest.raises(TurnIncompleteError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(1.0)]
+
+
+def test_send_message_records_nothing_for_a_turn_that_ended_in_an_error_event(monkeypatch) -> None:
+    # An error event is a failed request, not a response: its time says nothing about how long the
+    # agent takes to answer, so it stays out of the percentiles. The partial result still carries it.
     monkeypatch.setattr(sse_mod.time, "monotonic", iter([50.0, 50.0, 51.0]).__next__)
     client = _client_with_handler(lambda request: httpx.Response(200, content=_NONRETRY_SSE))
     recorder = TraceRecorder()
     with pytest.raises(ChatError):
         client.send_message("conv", "q")
-    assert recorder.stop() == [pytest.approx(1.0)]
+    assert recorder.stop() == []
+
+
+def test_send_message_records_nothing_when_a_503_outlasts_its_retries(monkeypatch) -> None:
+    # The last attempt fails at once, so the figure on its partial result is ~0s. Recording it would
+    # put a very fast response into the percentiles for a turn that never answered.
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(lambda request: httpx.Response(200, content=_TRANSIENT_SSE))
+    recorder = TraceRecorder()
+    with pytest.raises(TransientChatError) as ei:
+        client.send_message("conv", "q")
+    assert ei.value.partial_result is not None
+    assert recorder.stop() == []
 
 
 def test_send_message_records_a_turn_cut_off_by_its_deadline(monkeypatch):

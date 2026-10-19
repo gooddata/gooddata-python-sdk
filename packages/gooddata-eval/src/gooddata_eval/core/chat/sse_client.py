@@ -607,18 +607,20 @@ class ChatClient:
         except ChatError as exc:
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)
-            # A turn that ended in a ChatError (a turn or item deadline, an error event, an
-            # incomplete turn) is still one gen-ai trace, and several evaluators score its
-            # partial result as a run. Recording it keeps the response population matching the
-            # runs that were scored: left out, the slowest turns -- the ones that hit a deadline --
-            # would vanish and pull the tail down exactly when the agent is slowest.
-            if exc.partial_result is not None:
+            # Only a turn the agent itself ran long or left unanswered has a response time worth
+            # reporting: one that hit a turn or item deadline, or ended without a final answer.
+            # Those are the slowest turns, and leaving them out would pull the tail down exactly
+            # when the agent is slowest. Any other ChatError is a failed request, not a response:
+            # when a 503 outlasts its retries, the figure on the partial result is the last
+            # attempt's ~0s, and recording it would put a fast response into the percentiles for a
+            # turn that never answered. Evaluators may still score that partial result as a run.
+            if isinstance(exc, (TurnTimeoutError, TurnIncompleteError)) and exc.partial_result is not None:
                 note_trace_latency(exc.partial_result.turn_wall_clock_sec)
             raise
         # One turn is one gen-ai trace. Recorded here, from the figure the turn already carries,
         # so every caller is covered and no extra clock is read. A turn that failed without a
         # ChatError carries no partial result, so there is no response to time and it is not
-        # recorded.
+        # recorded; nor is one that ended in a ChatError other than a timeout or an incomplete turn.
         note_trace_latency(result.turn_wall_clock_sec)
         if joined is not None:
             self._record_join(conversation_id, result.trace_id, joined)

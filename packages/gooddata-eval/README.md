@@ -345,9 +345,13 @@ Each item also states its `mode`, its `trace_latencies_s` and its `run_latencies
   Its latency is that turn's response time, from sending the message to the end of its stream
   (`turn_wall_clock_sec`), recorded where the chat client completes the turn. It holds none of the LLM judge,
   the simulated user or conversation create/delete. `dashboard_summary` is timed the same way around its one
-  request. A turn cut off by its turn or item deadline (or ended by an error event) still counts, with the
-  time it ran for: those are the slowest turns, and the run that scored them is in the per-run figures too. An
-  item that errored outside its evaluator's own failure reporting contributes neither.
+  request. A turn cut off by its turn or item deadline, or one that ended without a final answer (the agent's
+  iteration or token limit, a content filter), still counts, with the time it ran for: those are the slowest
+  turns, and the run that scored them is in the per-run figures too. A turn that ended in any other error (an
+  error event, or a 503 that outlasted its retries) does not: the time is that of a failed request, not a
+  response, and would only add a fast outlier. On the single-shot path such a turn ends its item as an error, so
+  it has no per-run figure either. An item that errored outside its evaluator's own failure reporting
+  contributes neither.
 - **Single-shot** runs are exactly one trace, so `traces_s` is also the latency of a run.
 - **Multi-turn** runs span several traces, so they get both views: `traces_s` over every turn of every
   conversation (comparable with single-shot), and `runs_s`, the wall clock of each whole conversation from just
@@ -392,7 +396,7 @@ gd-eval report results.json -o customer.html --redact
 |---|---|
 | `-o, --out PATH` | Where to write the HTML. Required. |
 | `--title TEXT` | Title shown in the report header. |
-| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … Pass rate, per-item results, questions and latency survive. |
+| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … A model keeps its letter across all its runs, which are then numbered (`Run 1 · Model A`, `Run 2 · Model A`). Pass rate, per-item results, questions and latency survive. |
 
 The report is a *view* over the JSON. Unfiltered, every figure on it is read from the report, so it cannot
 disagree with the console or the JSON. Narrow the selection with a filter and the figures are recomputed in the
@@ -447,7 +451,9 @@ simulated user), which are `single_shot` and `multi_turn` in the JSON.
   expression is evaluated once per run in play with the same any-run rule. A filtered page states how many test cases
   it covers, and each tier has its own Reset.
 - **Results** — three headline cards for the latest run: test cases passed (of those evaluated: skipped ones are not
-  counted, as in the console's percentage), the average quality score and the median time per attempt. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
+  counted, as in the console's percentage), the average quality score and the median time per attempt. That last one
+  pools every format on the page and counts whole attempts, grading included, so it matches neither per-response latency table
+  below it; its tooltip says which formats it covers. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
   than a signed number. The line is green when that direction is good and red when it is not, with a chevron and
   screen-reader text (*Better* / *Worse*) so colour is not the only signal. From three runs each card also has a
   sparkline of every run: hover a point for its value, click it to compare the latest run with that one instead of the

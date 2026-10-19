@@ -649,12 +649,24 @@ function medTimeOf(l) {
   return xs.length ? median(xs) : null;
 }
 
+// What the time card is made of, for its tooltip. It pools every format the page covers, so with both it matches
+// neither latency table below it (those split the formats and time the assistant's replies, not whole attempts).
+function medTimeHelp() {
+  const last = runsShown[runsShown.length - 1];
+  const names = MODES.filter(([m]) => dashRows.some((r) => r.mode === m && ((r.per[last] || {}).run_latencies_s || []).length))
+    .map(([m]) => MODE_NAME[m]);
+  const covers = names.length > 1 ? `${names.join(' and ')} test cases together, so it matches neither latency table below`
+    : names.length ? `${names[0]} test cases` : 'the test cases';
+  return `Median wall-clock of one attempt at a test case, over ${covers}. An attempt is the whole thing, grading included ` +
+    '(and, in a conversation, the simulated user\'s replies), so it runs longer than a response time, which times only the assistant\'s replies.';
+}
+
 // ---------- results: three headline cards ----------
 // The report opens with three figures for the latest run: pass rate, quality and time. With an earlier run there is
 // a change line against it (the previous run unless the reader picks another), and with three or more runs a
 // sparkline of every run (hover a point for its value, click it to compare the latest run with that one). The
 // per-format split lives in the test-case table's filters.
-function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
+function kpiCard({ title, get, fmt, higher, isSame, base, after = '', help = '' }) {
   const pts = runsShown.map((l) => ({ l, v: get(l) }));
   const lastI = pts.length - 1, latest = pts[lastI];
   const b = base ? pts.find((p) => p.l === base) : null;
@@ -685,7 +697,8 @@ function kpiCard({ title, get, fmt, higher, isSame, base, after = '' }) {
       pts.map((p, i) => `<rect class="hit" data-run="${esc(p.l)}" x="${pc(x(i) - step / 2)}" y="0" width="${pc(step)}" height="${H}" tabindex="0" role="button" aria-label="${esc(roleOf(p.l))}: ${p.v == null ? 'no data' : fmt(p.v)}${i === lastI ? ', latest run' : '. Compare the latest run with this one'}"><title>${esc(roleOf(p.l))}: ${p.v == null ? '\u2013' : fmt(p.v)}${i === lastI ? ' (latest)' : '. Click to compare with it.'}</title></rect>`).join('') +
       `</svg><div class="kpi-range"><span>${esc(roleOf(pts[0].l))}</span><span>${esc(roleOf(latest.l))}</span></div>`;
   }
-  return `<figure class="kpi"><figcaption>${title}</figcaption>
+  const caption = help ? `<span class="info" tabindex="0">${title}<span class="tip" role="tooltip">${help}</span></span>` : title;
+  return `<figure class="kpi"><figcaption>${caption}</figcaption>
     <div class="kpi-val">${latest.v == null ? '\u2013' : fmt(latest.v)}</div>
     ${change ? `<div class="kpi-delta">${change}</div>` : ''}${spark}</figure>`;
 }
@@ -707,7 +720,7 @@ function renderSummary() {
     kpiCard({ title: 'Average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true,
       isSame: (d) => Math.abs(d) < 0.01, base }) +
     kpiCard({ title: 'Median time per attempt', get: medTimeOf, fmt: secs, higher: false,
-      isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base });
+      isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base, help: medTimeHelp() });
   // The key only makes sense when a sparkline is drawn: from three runs, and only on a card that has two values.
   setSection('summary', '<h2>Results</h2><div class="trendgrid">' + cards + '</div>' + (cards.includes('class="spark"') ? sparkLegend() : ''));
 }

@@ -68,10 +68,17 @@ class ItemReport:
     # The response time of every chat turn the item completed, in order -- one gen-ai trace
     # each, timed from sending the message to the end of its stream. For a single-shot item that
     # is one value per run; a multi-turn run contributes one per turn. Unlike `run_latencies_s`
-    # it holds none of the judge, simulated-user or conversation set-up time. A turn that ended in
-    # a ChatError carrying a partial result has an entry, because evaluators score that result as a
-    # run; so does a turn whose scoring raised afterwards. An item that errored outside the
-    # evaluator's own failure reporting has none: it reports no runs for them to sit beside.
+    # it holds none of the judge, simulated-user or conversation set-up time.
+    #
+    # Which turns have an entry depends on the path. On the agentic path (cli/agentic_runner.py,
+    # which opens a TraceRecorder around the evaluator) a turn that hit its turn or item deadline,
+    # or ended without a final answer, has one, because evaluators score its partial result as a
+    # run; so does a turn whose scoring raised afterwards. A turn that ended in any other ChatError
+    # (an error event, or a 503 that outlasted its retries) has none: its time is a failed
+    # request's, not a response's. An agentic item that errored outside the evaluator's own failure
+    # reporting has none either: it reports no runs for them to sit beside. On the single-shot
+    # path (`_run_one_item`) there is no recorder: the figure is read off the ChatResult that `ask`
+    # returns, so a ChatError ends the item as an error and that turn has no entry at all.
     trace_latencies_s: list[float] = field(default_factory=list)
     # Per-phase breakdown of what the item's time was spent on. Additive to latency_s,
     # which remains the item's own critical path. langfuse_latency_s is

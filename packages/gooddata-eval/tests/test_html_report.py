@@ -7,7 +7,7 @@ import subprocess
 import orjson
 import pytest
 from gooddata_eval.cli.main import main
-from gooddata_eval.core.reporting.html_report import build_html, load_report_files
+from gooddata_eval.core.reporting.html_report import build_html, load_report_files, merge_docs
 
 
 def _doc(model: str, passed: bool) -> dict:
@@ -111,6 +111,56 @@ def test_redact_drops_ids_reasoning_and_model_name():
     # The evaluation itself survives redaction -- only identity goes.
     assert data["runs"]["Model A"]["items"]["item-1"]["question"] == "How many orders?"
     assert data["runs"]["Model A"]["items"]["item-1"]["detail"]["latency_breakdown"]
+
+
+def test_redact_gives_one_model_one_alias_across_its_runs() -> None:
+    """The alias follows the model, not the run, or one model's history reads as several models and the page
+    says the report holds more than one. The runs are numbered instead."""
+    merged = merge_docs([("2026-09-28", _doc("gpt-5", True)), ("2026-10-05", _doc("gpt-5", False))])
+
+    html = build_html(merged, redact=True)
+
+    assert "gpt-5" not in html
+    data = _embedded(html)
+    assert list(data["runs"]) == ["Run 1 · Model A", "Run 2 · Model A"]
+    assert list(data["comparison"]) == ["Run 1 · Model A", "Run 2 · Model A"]
+    # What the page counts models by (its provider and its model name) is the same for both runs.
+    assert {run["model"] for run in data["runs"].values()} == {"Model A"}
+    assert {entry["provider_name"] for entry in data["comparison"].values()} == {""}
+
+
+def test_redact_gives_each_model_its_own_letter_and_numbers_only_a_repeated_model() -> None:
+    merged = merge_docs([("a", _doc("gpt-5", True)), ("b", _doc("claude", True)), ("c", _doc("gpt-5", False))])
+
+    data = _embedded(build_html(merged, redact=True))
+
+    assert list(data["runs"]) == ["Run 1 · Model A", "Model B", "Run 2 · Model A"]
+    assert [run["model"] for run in data["runs"].values()] == ["Model A", "Model B", "Model A"]
+    # Each run keeps its own results under its new label.
+    assert data["comparison"]["Run 2 · Model A"]["passed"] == 0
+    assert data["comparison"]["Run 1 · Model A"]["passed"] == 1
+
+
+def test_redact_keeps_apart_a_model_id_served_by_two_providers() -> None:
+    """The page tells models apart by provider as well as id, so redaction must not merge them."""
+    openai, azure = _doc("gpt-5", True), _doc("gpt-5", True)
+    openai["comparison"]["gpt-5"]["provider_name"] = "OpenAI"
+    azure["comparison"]["gpt-5"]["provider_name"] = "Azure"
+
+    html = build_html(merge_docs([("a", openai), ("b", azure)]), redact=True)
+
+    assert "OpenAI" not in html and "Azure" not in html
+    assert list(_embedded(html)["runs"]) == ["Model A", "Model B"]
+
+
+def test_redact_reads_the_model_from_the_label_of_a_run_that_does_not_name_it() -> None:
+    """An older report has no `model` on the run; the page falls back to the part of the label after the source."""
+    first, second = _doc("gpt-5", True), _doc("gpt-5", False)
+    del first["runs"]["gpt-5"]["model"], second["runs"]["gpt-5"]["model"]
+
+    data = _embedded(build_html(merge_docs([("a", first), ("b", second)]), redact=True))
+
+    assert list(data["runs"]) == ["Run 1 · Model A", "Run 2 · Model A"]
 
 
 def test_redact_drops_the_transcript_but_keeps_the_turn_count():
@@ -528,6 +578,31 @@ def _run_page_js(html: str, definitions: list[str], expression: str):
 
 _needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="the page's script is run in Node")
 _PAGE_STATUS = ["passedOf", "statusOf"]
+
+
+_TIME_CARD_PAGE = "(() => {{ globalThis.runsShown = ['r']; globalThis.dashRows = {rows}; return medTimeHelp(); }})()"
+
+
+@_needs_node
+def test_the_time_card_says_which_formats_it_pools_and_why_it_differs_from_the_tables() -> None:
+    """The card is the median of whole attempts over every format the page covers, so beside the per-format
+    response tables it reads as a different number. Its tooltip says what it covers."""
+    html = build_html(_doc_with_modes("gpt-5"))
+    both = "[{mode: 'single_shot', per: {r: {run_latencies_s: [1]}}}, {mode: 'multi_turn', per: {r: {run_latencies_s: [2]}}}]"
+    single = "[{mode: 'single_shot', per: {r: {run_latencies_s: [1]}}}, {mode: 'multi_turn', per: {}}]"
+
+    pooled = _run_page_js(html, ["MODES", "MODE_NAME", "medTimeHelp"], _TIME_CARD_PAGE.format(rows=both))
+    one_format = _run_page_js(html, ["MODES", "MODE_NAME", "medTimeHelp"], _TIME_CARD_PAGE.format(rows=single))
+
+    assert "single-question and conversation test cases together" in pooled
+    assert "matches neither latency table" in pooled
+    assert "single-question test cases." in one_format
+    assert "neither" not in one_format
+    # Both say what an attempt is, so a reader can see why it runs longer than a response time.
+    assert "grading included" in pooled and "grading included" in one_format
+    # Only the time card carries the tooltip.
+    cards = html.split("function renderSummary()")[1].split("function sparkHover")[0]
+    assert cards.count("help:") == 1 and "help: medTimeHelp()" in cards
 
 
 @_needs_node
