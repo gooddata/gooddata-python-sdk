@@ -800,6 +800,9 @@ def _changes(html: str, runs: dict[str, str | None]) -> str:
         ({"a": "pass", "b": "fail", "c": "skip"}, ""),
         ({"a": "fail", "b": "pass", "c": "skip"}, ""),
         ({"a": "pass", "b": "pass", "c": "skip"}, ""),
+        # Skipped in the latest run and in no earlier one: not New, the SKIP cell is all there is to say.
+        ({"a": None, "b": "skip"}, ""),
+        ({"a": None, "b": None, "c": "skip"}, ""),
         # A skip in the middle is looked through: the latest run still decides the label.
         ({"a": "pass", "b": "skip", "c": "fail"}, "Regressed"),
         ({"a": "pass", "b": "fail"}, "Regressed"),

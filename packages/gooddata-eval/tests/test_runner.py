@@ -62,7 +62,7 @@ def test_run_items_pass_at_k_true_if_any_run_passes():
     assert backend.calls == 2
 
 
-def test_run_items_stamps_when_the_run_started():
+def test_run_items_stamps_when_the_run_started() -> None:
     before = datetime.now(timezone.utc)
     report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
     after = datetime.now(timezone.utc)

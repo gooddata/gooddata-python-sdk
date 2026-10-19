@@ -57,13 +57,13 @@ def test_build_json_report_keyed_by_item_id():
     assert data["items"]["i2"]["reasoning"] == []
 
 
-def test_build_json_report_writes_started_at_as_utc_iso():
+def test_build_json_report_writes_started_at_as_utc_iso() -> None:
     report = _report()
     report.started_at = datetime(2026, 10, 14, 14, 30, 21, 412873, tzinfo=timezone.utc)
     assert build_json_report(report)["summary"]["started_at"] == "2026-10-14T14:30:21.412873+00:00"
 
 
-def test_build_json_report_started_at_is_null_when_the_run_was_never_timed():
+def test_build_json_report_started_at_is_null_when_the_run_was_never_timed() -> None:
     assert build_json_report(_report())["summary"]["started_at"] is None
 
 

@@ -1205,12 +1205,12 @@ function changeOf(r, runList) {
   // New and Removed look at every earlier run, not just the one before: a test case that skipped a run and came back
   // is not new, and its pass or fail history still says whether it was fixed or is flaky.
   const earlier = runList.slice(0, -1).some((l) => r.per[l]);
-  if (runList.length > 1) {
-    if (cur && !earlier) return 'New';
-    if (!cur && earlier) return 'Removed';
-  }
+  // Removed first: a case missing from the latest run also reads as 'none' below, and must keep this label.
+  if (runList.length > 1 && !cur && earlier) return 'Removed';
   // Skipped in the latest run (or missing from it): the earlier runs alone would label a result the row does not show.
+  // Before New, so a case first seen in the latest run and skipped there is not called New beside a SKIP cell.
   if (['none', 'skip'].includes(statusOf(cur))) return '';
+  if (runList.length > 1 && cur && !earlier) return 'New';
   const st = runList.map((l) => statusOf(r.per[l])).filter((x) => x !== 'none' && x !== 'skip');
   if (st.length < 2) return '';
   const ok = st.map((x) => x === 'pass');
