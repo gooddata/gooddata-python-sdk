@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_chat_render.py
+  s_d304dfb111b63b::t_47119e9f594f2e 55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d46533d9e1d2815dbd3076a366cbda2ab15bfa2b",
+  "prompts": {},
+  "sessions": {
+    "s_d304dfb111b63b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75fa5c98-2591-42be-9aa0-fa2875502c12",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

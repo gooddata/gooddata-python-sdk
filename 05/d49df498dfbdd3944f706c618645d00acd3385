@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_328fe1dadf98b7::t_78047afda1ddd0 460,462-464,596
+  s_328fe1dadf98b7::t_c675d711d52590 75
+packages/gooddata-eval/tests/test_sse_client.py
+  s_328fe1dadf98b7::t_c675d711d52590 543-552
+  s_328fe1dadf98b7::t_a477218e11414c 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "05d49df498dfbdd3944f706c618645d00acd3385",
+  "prompts": {},
+  "sessions": {
+    "s_328fe1dadf98b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e92dd-9274-4415-a3ca-cbd1592d1c5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
