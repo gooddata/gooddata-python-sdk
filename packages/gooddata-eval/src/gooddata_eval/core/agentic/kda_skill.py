@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 
 import httpx
@@ -200,6 +201,8 @@ class KdaRunResult:
     # separate a refusal from a run that hit max_iterations while still on track.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -300,6 +303,7 @@ def run_agentic_kda_skill(
         turns = 0
         steps = 0
 
+        run_started = time.monotonic()
         for iteration in range(max_iterations):
             turns_used = iteration + 1
             try:
@@ -375,6 +379,7 @@ def run_agentic_kda_skill(
             reasoning_step_events=all_reasoning_step_events,
             exit_reason=exit_reason,
             turns_used=turns_used,
+            run_latency_s=time.monotonic() - run_started,
         )
 
     try:
@@ -585,6 +590,7 @@ def evaluate_agentic_kda_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -596,4 +602,5 @@ def evaluate_agentic_kda_skill(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )
