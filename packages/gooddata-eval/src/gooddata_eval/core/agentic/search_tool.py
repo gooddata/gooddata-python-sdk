@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -77,6 +78,8 @@ class SearchResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -115,6 +118,7 @@ def run_agentic_search_tool(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
+            run_started = time.monotonic()
             chat_result = client.send_message(conv_id_0, question)
             tcs = chat_result.tool_call_events or []
             selected = _tool_selection(tcs)
@@ -129,6 +133,7 @@ def run_agentic_search_tool(
                     response_id=chat_result.response_id,
                     tool_call_events=list(chat_result.tool_call_events or []),
                     reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                    run_latency_s=time.monotonic() - run_started,
                 )
             )
         finally:
@@ -138,6 +143,7 @@ def run_agentic_search_tool(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
+                run_started = time.monotonic()
                 chat_result = client.send_message(conv_id, question)
                 tcs = chat_result.tool_call_events or []
                 selected = _tool_selection(tcs)
@@ -152,6 +158,7 @@ def run_agentic_search_tool(
                         response_id=chat_result.response_id,
                         tool_call_events=list(chat_result.tool_call_events or []),
                         reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                        run_latency_s=time.monotonic() - run_started,
                     )
                 )
             finally:
@@ -306,6 +313,7 @@ def evaluate_agentic_search_tool(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -317,4 +325,5 @@ def evaluate_agentic_search_tool(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

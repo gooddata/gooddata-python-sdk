@@ -168,8 +168,11 @@ A gitignored `.env` at the repo root is the normal place for these; load it with
 **Adding an evaluator is a registry change, not a naming convention.** Single-shot kinds go
 into `_EAGER_EVALUATORS`, or `_LAZY_EVALUATOR_MODULES` plus `_LAZY_EVALUATOR_CLASSES`, in
 `core/evaluators/__init__.py`. Agentic kinds need the string added to `AGENTIC_TEST_KINDS`
-and a new branch in `_dispatch_agentic`. Test file naming follows the capability, but
-naming a test file correctly registers nothing.
+and a new branch in `_dispatch_agentic`, and must also be classified in `core/interaction.py`:
+add it to `SINGLE_TURN_AGENTIC_KINDS` (one chat message per run) or `MULTI_TURN_KINDS` (a
+simulated user or several turns). That decides which latency section its items land in;
+`test_every_agentic_kind_is_classified_on_purpose` fails until it is done. Test file naming
+follows the capability, but naming a test file correctly registers nothing.
 
 **Parallel-safety is a reviewed allowlist, and getting it wrong corrupts results.**
 `WORKSPACE_MUTATING_TEST_KINDS` is computed as `AGENTIC_TEST_KINDS - PARALLEL_SAFE_TEST_KINDS`,

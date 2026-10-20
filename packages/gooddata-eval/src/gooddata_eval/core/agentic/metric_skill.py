@@ -181,6 +181,8 @@ class MetricRunResult:
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
     timings: PhaseTimings = field(default_factory=PhaseTimings)
+    # This run's own wall time, from just before its first chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -326,6 +328,7 @@ def _execute_single_metric_run(
         # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
         # simply runs out of range() is labelled correctly with no trailing else.
         exit_reason = LoopExit.BUDGET_EXHAUSTED
+        run_started = time.monotonic()
         for _iteration in range(max_iterations):
             turns += 1
             agent_started = time.monotonic()
@@ -427,6 +430,7 @@ def _execute_single_metric_run(
             timings=timings,
             exit_reason=exit_reason,
             turns_used=turns,
+            run_latency_s=time.monotonic() - run_started,
         )
     finally:
         for metric_id in created_metric_ids:
@@ -605,6 +609,7 @@ def evaluate_agentic_metric_skill(
 
     runs_passed = sum(1 for r in summary.run_results if r.metric_created and r.maql_correct)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     expected_outputs_list: list[dict] = expected_output if isinstance(expected_output, list) else [expected_output]
@@ -655,6 +660,7 @@ def evaluate_agentic_metric_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = run_latencies_s
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -667,4 +673,5 @@ def evaluate_agentic_metric_skill(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )
