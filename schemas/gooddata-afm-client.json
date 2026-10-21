@@ -103,7 +103,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -932,6 +932,20 @@
                 "description": "Attribute name.",
                 "type": "string"
               },
+              "dataType": {
+                "description": "Data type of the attribute values, only filled for computed attributes.",
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
               },
@@ -994,6 +1008,10 @@
               "localIdentifier": {
                 "description": "Local identifier of the attribute this header relates to.",
                 "pattern": "^[.a-zA-Z0-9_-]+$",
+                "type": "string"
+              },
+              "numberFormat": {
+                "description": "Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.",
                 "type": "string"
               },
               "primaryLabel": {
@@ -1956,6 +1974,20 @@
             "description": "The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.",
             "type": "string"
           },
+          "dataType": {
+            "description": "Data type of the element values, only filled for computed attributes.",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN",
+              "HLL"
+            ],
+            "type": "string"
+          },
           "elements": {
             "description": "List of returned elements.",
             "items": {
@@ -2010,6 +2042,10 @@
               "FISCAL_SEMESTER_OF_FISCAL_YEAR",
               "FISCAL_YEAR"
             ],
+            "type": "string"
+          },
+          "numberFormat": {
+            "description": "Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.",
             "type": "string"
           },
           "paging": {

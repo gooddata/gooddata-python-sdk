@@ -33,9 +33,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.conditional_formatting import ConditionalFormatting
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
+    from gooddata_api_client.model.declarative_visualization_object_permissions_inner import DeclarativeVisualizationObjectPermissionsInner
     from gooddata_api_client.model.json_node import JsonNode
     globals()['ConditionalFormatting'] = ConditionalFormatting
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
+    globals()['DeclarativeVisualizationObjectPermissionsInner'] = DeclarativeVisualizationObjectPermissionsInner
     globals()['JsonNode'] = JsonNode
 
 
@@ -137,6 +139,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             'is_hidden': (bool,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
+            'permissions': ([DeclarativeVisualizationObjectPermissionsInner], none_type,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -160,6 +163,7 @@ class DeclarativeVisualizationObject(ModelNormal):
         'is_hidden': 'isHidden',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -220,6 +224,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             is_hidden (bool): If true, this visualization object is hidden from AI search results.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            permissions ([DeclarativeVisualizationObjectPermissionsInner], none_type): A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -325,6 +330,7 @@ class DeclarativeVisualizationObject(ModelNormal):
             is_hidden (bool): If true, this visualization object is hidden from AI search results.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            permissions ([DeclarativeVisualizationObjectPermissionsInner], none_type): A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

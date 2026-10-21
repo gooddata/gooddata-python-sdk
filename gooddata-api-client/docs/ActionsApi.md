@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**ai_chat_usage**](ActionsApi.md#ai_chat_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/chatUsage | (REMOVED) Get Chat Usage
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**analyze_csv**](ActionsApi.md#analyze_csv) | **POST** /api/v1/actions/fileStorage/staging/analyzeCsv | Analyze CSV
+[**analyze_sav**](ActionsApi.md#analyze_sav) | **POST** /api/v1/actions/fileStorage/staging/analyzeSav | Analyze SPSS files
 [**anomaly_detection**](ActionsApi.md#anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection
 [**anomaly_detection_result**](ActionsApi.md#anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId} | (EXPERIMENTAL) Smart functions - Anomaly Detection Result
 [**attribute_permissions**](ActionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
@@ -33,6 +34,7 @@ Method | HTTP request | Description
 [**computed_attribute_permissions**](ActionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | (BETA) Get Computed Attribute Permissions
 [**convert_geo_file**](ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 [**create_dashboard_export_request**](ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
+[**create_document_export**](ActionsApi.md#create_document_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/document | (EXPERIMENTAL) Create document export request
 [**create_image_export**](ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
 [**create_pdf_export**](ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 [**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
@@ -56,6 +58,8 @@ Method | HTTP request | Description
 [**get_data_source_schemata**](ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 [**get_dependent_entities_graph**](ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 [**get_dependent_entities_graph_from_entry_points**](ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
+[**get_document_export**](ActionsApi.md#get_document_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/document/{exportId} | (EXPERIMENTAL) Retrieve exported document
+[**get_document_export_metadata**](ActionsApi.md#get_document_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/document/{exportId}/metadata | (EXPERIMENTAL) Retrieve document export metadata
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 [**get_image_export**](ActionsApi.md#get_image_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_image_export_metadata**](ActionsApi.md#get_image_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/image/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
@@ -72,6 +76,7 @@ Method | HTTP request | Description
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 [**import_csv**](ActionsApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
 [**import_custom_geo_collection**](ActionsApi.md#import_custom_geo_collection) | **POST** /api/v1/actions/customGeoCollection/{collectionId}/import | Import custom geo collection
+[**import_sav**](ActionsApi.md#import_sav) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importSav | Import SPSS files
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**key_driver_analysis**](ActionsApi.md#key_driver_analysis) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | (EXPERIMENTAL) Compute key driver analysis
@@ -97,6 +102,10 @@ Method | HTTP request | Description
 [**mark_as_read_notification_all**](ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 [**memory_created_by_users**](ActionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
 [**metric_permissions**](ActionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
+[**organization_localization_statistics**](ActionsApi.md#organization_localization_statistics) | **GET** /api/v1/actions/organization/localization/statistics | (BETA) Languages with translations in the organization.
+[**organization_localization_usage**](ActionsApi.md#organization_localization_usage) | **GET** /api/v1/actions/organization/localization/usage | (BETA) Languages used in the organization.
+[**organization_localization_usage_users**](ActionsApi.md#organization_localization_usage_users) | **GET** /api/v1/actions/organization/localization/usage/users | (BETA) Users who set a language themselves.
+[**organization_localization_usage_workspaces**](ActionsApi.md#organization_localization_usage_workspaces) | **GET** /api/v1/actions/organization/localization/usage/workspaces | (BETA) Workspaces that use a language.
 [**outlier_detection**](ActionsApi.md#outlier_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers | (BETA) Outlier Detection
 [**outlier_detection_result**](ActionsApi.md#outlier_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers/result/{resultId} | (BETA) Outlier Detection Result
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -150,6 +159,9 @@ Method | HTTP request | Description
 [**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint (Removed)
 [**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id (Removed)
 [**visualization_permissions**](ActionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | (BETA) Get Visualization Permissions
+[**workspace_localization_statistics**](ActionsApi.md#workspace_localization_statistics) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/statistics | (BETA) Languages with translations in the workspace.
+[**workspace_localization_usage**](ActionsApi.md#workspace_localization_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage | (BETA) Languages used in the workspace.
+[**workspace_localization_usage_users**](ActionsApi.md#workspace_localization_usage_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage/users | (BETA) Workspace members who get a language.
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -613,6 +625,83 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**[AnalyzeCsvResponse]**](AnalyzeCsvResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful analysis. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **analyze_sav**
+> [AnalyzeSavResponse] analyze_sav(analyze_sav_request)
+
+Analyze SPSS files
+
+Reads the columns, their labels and the first rows of the SPSS (.sav) files at the given locations.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.analyze_sav_response import AnalyzeSavResponse
+from gooddata_api_client.model.analyze_sav_request import AnalyzeSavRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    analyze_sav_request = AnalyzeSavRequest(
+        analyze_requests=[
+            AnalyzeSavRequestItem(
+                config=AnalyzeSavRequestItemConfig(
+                    result_rows=1,
+                ),
+                location="location_example",
+            ),
+        ],
+    ) # AnalyzeSavRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Analyze SPSS files
+        api_response = api_instance.analyze_sav(analyze_sav_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->analyze_sav: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **analyze_sav_request** | [**AnalyzeSavRequest**](AnalyzeSavRequest.md)|  |
+
+### Return type
+
+[**[AnalyzeSavResponse]**](AnalyzeSavResponse.md)
 
 ### Authorization
 
@@ -2526,6 +2615,94 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_document_export**
+> ExportResponse create_document_export(workspace_id, report_export_request)
+
+(EXPERIMENTAL) Create document export request
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. A document export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.export_response import ExportResponse
+from gooddata_api_client.model.report_export_request import ReportExportRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    report_export_request = ReportExportRequest(
+        document_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+        file_name="filename",
+        format="PDF",
+        metadata=JsonNode(),
+        report_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+        timezone_id="Asia/Kolkata",
+    ) # ReportExportRequest | 
+    x_gdc_debug = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Create document export request
+        api_response = api_instance.create_document_export(workspace_id, report_export_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_document_export: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (EXPERIMENTAL) Create document export request
+        api_response = api_instance.create_document_export(workspace_id, report_export_request, x_gdc_debug=x_gdc_debug)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->create_document_export: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **report_export_request** | [**ReportExportRequest**](ReportExportRequest.md)|  |
+ **x_gdc_debug** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**ExportResponse**](ExportResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Document export request created successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_image_export**
 > ExportResponse create_image_export(workspace_id, image_export_request)
 
@@ -2845,7 +3022,7 @@ No authorization required
 
 (EXPERIMENTAL) Create report export request
 
-Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+Deprecated, use createDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
 
 ### Example
 
@@ -2870,6 +3047,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     report_export_request = ReportExportRequest(
+        document_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
         file_name="filename",
         format="PDF",
         metadata=JsonNode(),
@@ -4222,6 +4400,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            default_label_of="gender",
                             description="Customer unique identifier",
                             is_nullable=True,
                             is_primary_key=True,
@@ -4234,6 +4413,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="customers",
                     name_prefix="out_gooddata",
                     path=["table_schema","table_name"],
+                    properties={
+                        "key": "key_example",
+                    },
                     type="TABLE",
                 ),
             ],
@@ -4573,6 +4755,143 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_document_export**
+> file_type get_document_export(workspace_id, export_id)
+
+(EXPERIMENTAL) Retrieve exported document
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    export_id = "exportId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Retrieve exported document
+        api_response = api_instance.get_document_export(workspace_id, export_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_document_export: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **export_id** | **str**|  |
+
+### Return type
+
+**file_type**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/pdf
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Binary export result. |  * Content-Disposition -  <br>  |
+**202** | Request is accepted, provided exportId exists, but export is not yet ready. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_document_export_metadata**
+> get_document_export_metadata(workspace_id, export_id)
+
+(EXPERIMENTAL) Retrieve document export metadata
+
+Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/document endpoint. The metadata structure is not verified.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    export_id = "exportId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Retrieve document export metadata
+        api_instance.get_document_export_metadata(workspace_id, export_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_document_export_metadata: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **export_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Json metadata representation |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_exported_file**
 > file_type get_exported_file(workspace_id, export_id)
 
@@ -4656,7 +4975,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5134,7 +5453,7 @@ No authorization required
 
 (EXPERIMENTAL) Retrieve exported files
 
-Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
+Deprecated, use getDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
 
 ### Example
 
@@ -5143,7 +5462,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5204,7 +5523,7 @@ No authorization required
 
 (EXPERIMENTAL) Retrieve metadata context
 
-Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.
+Deprecated, use getDocumentExportMetadata. Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.
 
 ### Example
 
@@ -5280,7 +5599,7 @@ Note: This API is an experimental and is going to change. Please, use it accordi
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -5543,7 +5862,7 @@ No authorization required
 
 Import CSV
 
-Import the CSV files at the given locations in the staging area to the final location.
+Import the CSV files at the given locations in the staging area to the final location. A table that holds an SPSS file cannot take a CSV file.
 
 ### Example
 
@@ -5734,6 +6053,85 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: */*
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful import. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **import_sav**
+> [ImportSavResponse] import_sav(data_source_id, import_sav_request)
+
+Import SPSS files
+
+Import the SPSS (.sav) files at the given locations in the staging area to the final location. A table that holds a CSV file cannot take an SPSS file.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.import_sav_response import ImportSavResponse
+from gooddata_api_client.model.import_sav_request import ImportSavRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    import_sav_request = ImportSavRequest(
+        tables=[
+            ImportSavRequestTable(
+                name="name_example",
+                source=ImportSavRequestTableSource(
+                    location="location_example",
+                ),
+            ),
+        ],
+    ) # ImportSavRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Import SPSS files
+        api_response = api_instance.import_sav(data_source_id, import_sav_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->import_sav: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **import_sav_request** | [**ImportSavRequest**](ImportSavRequest.md)|  |
+
+### Return type
+
+[**[ImportSavResponse]**](ImportSavResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -7517,6 +7915,288 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**MetricPermissions**](MetricPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **organization_localization_statistics**
+> LocalizationStatistics organization_localization_statistics()
+
+(BETA) Languages with translations in the organization.
+
+(BETA) Lists the languages that have at least one translation, separately for each kind of translation.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_statistics import LocalizationStatistics
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # (BETA) Languages with translations in the organization.
+        api_response = api_instance.organization_localization_statistics()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_statistics: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**LocalizationStatistics**](LocalizationStatistics.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **organization_localization_usage**
+> LocalizationUsage organization_localization_usage()
+
+(BETA) Languages used in the organization.
+
+(BETA) Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_usage import LocalizationUsage
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # (BETA) Languages used in the organization.
+        api_response = api_instance.organization_localization_usage()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_usage: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**LocalizationUsage**](LocalizationUsage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **organization_localization_usage_users**
+> LocalizationUsageUsers organization_localization_usage_users()
+
+(BETA) Users who set a language themselves.
+
+(BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. Users counted in the usage entry without a language are not listed.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_usage_users import LocalizationUsageUsers
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    value = "de-DE" # str | Language tag that the user sets. (optional)
+    name = "ito" # str | Filter by user name, email or login (user ID). Note that the filter is case insensitive. (optional)
+    setting = "LOCALE" # str | One of LOCALE, METADATA_LOCALE and DATA_LOCALE. (optional)
+    source = "USER" # str | Where the value comes from. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Users who set a language themselves.
+        api_response = api_instance.organization_localization_usage_users(value=value, name=name, setting=setting, source=source, page=page, size=size)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_usage_users: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **value** | **str**| Language tag that the user sets. | [optional]
+ **name** | **str**| Filter by user name, email or login (user ID). Note that the filter is case insensitive. | [optional]
+ **setting** | **str**| One of LOCALE, METADATA_LOCALE and DATA_LOCALE. | [optional]
+ **source** | **str**| Where the value comes from. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+
+### Return type
+
+[**LocalizationUsageUsers**](LocalizationUsageUsers.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **organization_localization_usage_workspaces**
+> LocalizationUsageWorkspaces organization_localization_usage_workspaces()
+
+(BETA) Workspaces that use a language.
+
+(BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_usage_workspaces import LocalizationUsageWorkspaces
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    value = "de-DE" # str | Language tag that the workspace gets. (optional)
+    name = "berg" # str | Filter by workspace name. Note that the filter is case insensitive. (optional)
+    setting = "LOCALE" # str | One of LOCALE, METADATA_LOCALE and DATA_LOCALE. (optional)
+    source = "PARENT" # str | Where the value comes from. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Workspaces that use a language.
+        api_response = api_instance.organization_localization_usage_workspaces(value=value, name=name, setting=setting, source=source, page=page, size=size)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_usage_workspaces: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **value** | **str**| Language tag that the workspace gets. | [optional]
+ **name** | **str**| Filter by workspace name. Note that the filter is case insensitive. | [optional]
+ **setting** | **str**| One of LOCALE, METADATA_LOCALE and DATA_LOCALE. | [optional]
+ **source** | **str**| Where the value comes from. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+
+### Return type
+
+[**LocalizationUsageWorkspaces**](LocalizationUsageWorkspaces.md)
 
 ### Authorization
 
@@ -11741,6 +12421,228 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**VisualizationPermissions**](VisualizationPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **workspace_localization_statistics**
+> LocalizationStatistics workspace_localization_statistics(workspace_id)
+
+(BETA) Languages with translations in the workspace.
+
+(BETA) Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_statistics import LocalizationStatistics
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Languages with translations in the workspace.
+        api_response = api_instance.workspace_localization_statistics(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**LocalizationStatistics**](LocalizationStatistics.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **workspace_localization_usage**
+> WorkspaceLocalizationUsage workspace_localization_usage(workspace_id)
+
+(BETA) Languages used in the workspace.
+
+(BETA) Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. Child workspaces are not included.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_localization_usage import WorkspaceLocalizationUsage
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Languages used in the workspace.
+        api_response = api_instance.workspace_localization_usage(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_usage: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**WorkspaceLocalizationUsage**](WorkspaceLocalizationUsage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **workspace_localization_usage_users**
+> LocalizationUsageUsers workspace_localization_usage_users(workspace_id)
+
+(BETA) Workspace members who get a language.
+
+(BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_usage_users import LocalizationUsageUsers
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    value = "de-DE" # str | Language tag that the user gets. (optional)
+    name = "ito" # str | Filter by user name, email or login (user ID). Note that the filter is case insensitive. (optional)
+    setting = "LOCALE" # str | One of LOCALE, METADATA_LOCALE and DATA_LOCALE. (optional)
+    source = "WORKSPACE" # str | Where the value comes from. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Workspace members who get a language.
+        api_response = api_instance.workspace_localization_usage_users(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_usage_users: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Workspace members who get a language.
+        api_response = api_instance.workspace_localization_usage_users(workspace_id, value=value, name=name, setting=setting, source=source, page=page, size=size)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_usage_users: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **value** | **str**| Language tag that the user gets. | [optional]
+ **name** | **str**| Filter by user name, email or login (user ID). Note that the filter is case insensitive. | [optional]
+ **setting** | **str**| One of LOCALE, METADATA_LOCALE and DATA_LOCALE. | [optional]
+ **source** | **str**| Where the value comes from. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+
+### Return type
+
+[**LocalizationUsageUsers**](LocalizationUsageUsers.md)
 
 ### Authorization
 
