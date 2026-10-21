@@ -221,7 +221,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions. A PUT without this property removes all existing permissions.. [optional]  # noqa: E501
             summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
@@ -326,7 +326,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions. A PUT without this property removes all existing permissions.. [optional]  # noqa: E501
             summary (str): AI-generated summary of the dashboard content. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """

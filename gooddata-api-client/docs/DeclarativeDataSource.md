@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **date_time_semantics** | **str, none_type** | Determines how datetime values are interpreted in data sources without native support for specifying this. - LOCAL: The values are assumed to be in local timezone and they are not converted to the user&#39;s timezone. - UTC: The values are assumed to be in UTC and they are converted to the user&#39;s timezone. | [optional] 
 **decoded_parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **disable_statistics** | **bool, none_type** | Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset. | [optional] 
+**ignore_jwt_aud** | **bool, none_type** | Turns off the check that the audience of an OIDC access token names the host of the data source, for the OIDC_PASSTHROUGH authentication type. Only an organization administrator may set it. | [optional] 
 **parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **password** | **str** | Password for the data-source user, property is never returned back. | [optional] 
 **permissions** | [**[DeclarativeDataSourcePermission]**](DeclarativeDataSourcePermission.md) |  | [optional] 

@@ -66,6 +66,16 @@ class ElementsResponse(ModelNormal):
     """
 
     allowed_values = {
+        ('data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
+        },
         ('granularity',): {
             'SECOND': "SECOND",
             'SECOND_OF_MINUTE': "SECOND_OF_MINUTE",
@@ -140,8 +150,10 @@ class ElementsResponse(ModelNormal):
             'paging': (Paging,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
             'cache_id': (str,),  # noqa: E501
+            'data_type': (str,),  # noqa: E501
             'format': (AttributeFormat,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
+            'number_format': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -154,8 +166,10 @@ class ElementsResponse(ModelNormal):
         'paging': 'paging',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
         'cache_id': 'cacheId',  # noqa: E501
+        'data_type': 'dataType',  # noqa: E501
         'format': 'format',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
+        'number_format': 'numberFormat',  # noqa: E501
     }
 
     read_only_vars = {
@@ -205,8 +219,10 @@ class ElementsResponse(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_id (str): The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.. [optional]  # noqa: E501
+            data_type (str): Data type of the element values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -301,8 +317,10 @@ class ElementsResponse(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_id (str): The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.. [optional]  # noqa: E501
+            data_type (str): Data type of the element values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

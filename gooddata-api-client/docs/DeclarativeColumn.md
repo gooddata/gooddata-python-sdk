@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data_type** | **str** | Column type | 
 **name** | **str** | Column name. Must not contain NUL (0x00) characters. | 
+**default_label_of** | **str** | (EXPERIMENTAL) Name of the column whose values this column labels. Logical model generation makes this column the default label of the attribute on that column, sorted by that column. | [optional] 
 **description** | **str** | Column description/comment from database | [optional] 
 **is_nullable** | **bool** | Column is nullable | [optional] 
 **is_primary_key** | **bool** | Is column part of primary key? | [optional] 
