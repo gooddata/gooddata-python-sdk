@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [tool.uv]
-required-version = "~=0.12.0"
+required-version = "~=0.13.4"
 # The root only aggregates the members; it is never built or published.
 package = false
 # So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
