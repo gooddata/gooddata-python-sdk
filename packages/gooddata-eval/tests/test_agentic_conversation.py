@@ -1464,7 +1464,20 @@ def test_output_correct_compares_maql_for_a_metric_turn() -> None:
         (_result(text="Should I retry with {label/customer.region} or {label/region}?"), "question"),
         (_result(text="Should I retry with a 2.5 threshold or a 3.0 one?"), "question"),
         (_result(text="The create failed. Should I retry? Or adjust the formula first?"), "question"),
+        (_result(text="Should I retry? Alternatively, should I adjust the formula first?"), "question"),
+        (_result(text="Should I retry with select sum(units) where status = 'Processed or Shipped'?"), "confirmation"),
+        (_result(text="Should I retry with today's data or last week's?"), "question"),
         (_result(text="The create failed. Should I retry? The formula is fixed."), "confirmation"),
+        (_result(text="Should I retry with this corrected formula, or would you like to adjust it?"), "confirmation"),
+        (_result(text="Should I retry, or not?"), "confirmation"),
+        (_result(text="Should I retry? Or is there anything else to change first?"), "confirmation"),
+        (_result(text="Should I try once more?"), "confirmation"),
+        (
+            _result(text='Should I retry with SELECT SUM({fact/x}) WHERE {label/a} = "A" OR {label/b} = "B"?'),
+            "confirmation",
+        ),
+        (_result(text='Should I retry with {label/status} = "Processed or Shipped"?'), "confirmation"),
+        (_result(text="Should I retry, or would you like me to adjust the formula first?"), "question"),
         (_result(text="Would you like me to add a region filter?"), "question"),
         (_result(text="Which one should I use?"), "question"),
         (_result(text="Should I use gross or net revenue?"), "question"),
@@ -2028,6 +2041,7 @@ def test_reply_restating_returns_the_llm_restatement(monkeypatch: pytest.MonkeyP
         "Use <metric/net_orders> as the denominator.",
         "As I said earlier, use select sum(units) where status = 'Processed'.",
         "As I said earlier, it is SUM(units) / COUNT(orders).",
+        "As I said earlier, it is sum(units) / count(orders).",
         "Use select * from orders.",
         "Run select region, revenue from orders.",
         "As I said earlier: select region from orders where status = 'Processed'.",
@@ -2044,7 +2058,15 @@ def test_simulated_user_never_sends_maql(monkeypatch: pytest.MonkeyPatch, llm_re
         assert "Never write MAQL" in call.kwargs["messages"][0]["content"]
 
 
-@pytest.mark.parametrize("llm_reply", ["Select the first option.", "Select the first option from the list."])
+@pytest.mark.parametrize(
+    "llm_reply",
+    [
+        "Select the first option.",
+        "Select the first option from the list.",
+        "SELECT the second option.",
+        "Count (all) is fine.",
+    ],
+)
 def test_simulated_user_keeps_a_plain_reply_that_mentions_select(
     monkeypatch: pytest.MonkeyPatch, llm_reply: str
 ) -> None:
