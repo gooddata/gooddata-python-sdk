@@ -6,7 +6,7 @@ helpers, managed as one `uv` workspace on a single shared version number.
 ## Tech Stack
 
 - **Python** — `>=3.10` is the published floor; develop on 3.14. Tests run py310–py314.
-- **uv** workspace (`uv ~= 0.12`) — one lock file at the root covers every package.
+- **uv** workspace (`uv ~= 0.13.4`) — one lock file at the root covers every package.
 - **ruff** — lint and format. Line length 120, Google docstring convention.
 - **ty** — type checking. Not mypy; `make type-check` runs `uv run ty check`.
 - **tox + pytest** — per-package test matrix. **vcrpy** records HTTP against a real backend.
