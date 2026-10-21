@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **is_hidden** | **bool** | If true, this visualization object is hidden from AI search results. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**permissions** | [**[DeclarativeVisualizationObjectPermissionsInner], none_type**](DeclarativeVisualizationObjectPermissionsInner.md) | A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

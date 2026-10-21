@@ -101,6 +101,7 @@ class DeclarativeTable(ModelNormal):
             'path': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
             'name_prefix': (str,),  # noqa: E501
+            'properties': ({str: (str,)},),  # noqa: E501
         }
 
     @cached_property
@@ -114,6 +115,7 @@ class DeclarativeTable(ModelNormal):
         'path': 'path',  # noqa: E501
         'type': 'type',  # noqa: E501
         'name_prefix': 'namePrefix',  # noqa: E501
+        'properties': 'properties',  # noqa: E501
     }
 
     read_only_vars = {
@@ -164,6 +166,7 @@ class DeclarativeTable(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name_prefix (str): Table or view name prefix used in scan. Will be stripped when generating LDM.. [optional]  # noqa: E501
+            properties ({str: (str,)}): Additional properties of the table that the data source passes on to the modeler and other callers. The data source decides which keys it sends. A caller uses the keys it understands and skips all other keys.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -260,6 +263,7 @@ class DeclarativeTable(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name_prefix (str): Table or view name prefix used in scan. Will be stripped when generating LDM.. [optional]  # noqa: E501
+            properties ({str: (str,)}): Additional properties of the table that the data source passes on to the modeler and other callers. The data source decides which keys it sends. A caller uses the keys it understands and skips all other keys.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

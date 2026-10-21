@@ -33,6 +33,8 @@ from gooddata_api_client.model.analytics_catalog_created_by import AnalyticsCata
 from gooddata_api_client.model.analytics_catalog_tags import AnalyticsCatalogTags
 from gooddata_api_client.model.analyze_csv_request import AnalyzeCsvRequest
 from gooddata_api_client.model.analyze_csv_response import AnalyzeCsvResponse
+from gooddata_api_client.model.analyze_sav_request import AnalyzeSavRequest
+from gooddata_api_client.model.analyze_sav_response import AnalyzeSavResponse
 from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
 from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
 from gooddata_api_client.model.api_entitlement import ApiEntitlement
@@ -76,7 +78,7 @@ from gooddata_api_client.model.generate_description_response import GenerateDesc
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
 from gooddata_api_client.model.generate_title_request import GenerateTitleRequest
 from gooddata_api_client.model.generate_title_response import GenerateTitleResponse
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
 from gooddata_api_client.model.get_quality_issues_response import GetQualityIssuesResponse
 from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
 from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
@@ -85,6 +87,8 @@ from gooddata_api_client.model.import_csv_request import ImportCsvRequest
 from gooddata_api_client.model.import_csv_response import ImportCsvResponse
 from gooddata_api_client.model.import_geo_collection_request import ImportGeoCollectionRequest
 from gooddata_api_client.model.import_geo_collection_response import ImportGeoCollectionResponse
+from gooddata_api_client.model.import_sav_request import ImportSavRequest
+from gooddata_api_client.model.import_sav_response import ImportSavResponse
 from gooddata_api_client.model.invitation import Invitation
 from gooddata_api_client.model.ip_allowlist_policy_targets import IpAllowlistPolicyTargets
 from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
@@ -94,6 +98,10 @@ from gooddata_api_client.model.label_permissions import LabelPermissions
 from gooddata_api_client.model.list_llm_provider_models_request import ListLlmProviderModelsRequest
 from gooddata_api_client.model.list_llm_provider_models_response import ListLlmProviderModelsResponse
 from gooddata_api_client.model.locale_request import LocaleRequest
+from gooddata_api_client.model.localization_statistics import LocalizationStatistics
+from gooddata_api_client.model.localization_usage import LocalizationUsage
+from gooddata_api_client.model.localization_usage_users import LocalizationUsageUsers
+from gooddata_api_client.model.localization_usage_workspaces import LocalizationUsageWorkspaces
 from gooddata_api_client.model.manage_attribute_permissions_request_inner import ManageAttributePermissionsRequestInner
 from gooddata_api_client.model.manage_computed_attribute_permissions_request_inner import ManageComputedAttributePermissionsRequestInner
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
@@ -146,6 +154,7 @@ from gooddata_api_client.model.visual_export_request import VisualExportRequest
 from gooddata_api_client.model.visualization_object_execution import VisualizationObjectExecution
 from gooddata_api_client.model.visualization_permissions import VisualizationPermissions
 from gooddata_api_client.model.workspace_automation_management_bulk_request import WorkspaceAutomationManagementBulkRequest
+from gooddata_api_client.model.workspace_localization_usage import WorkspaceLocalizationUsage
 from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
 from gooddata_api_client.model.workspace_user_groups import WorkspaceUserGroups
 from gooddata_api_client.model.workspace_users import WorkspaceUsers
@@ -511,6 +520,56 @@ class ActionsApi(object):
                 },
                 'location_map': {
                     'analyze_csv_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.analyze_sav_endpoint = _Endpoint(
+            settings={
+                'response_type': ([AnalyzeSavResponse],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/staging/analyzeSav',
+                'operation_id': 'analyze_sav',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'analyze_sav_request',
+                ],
+                'required': [
+                    'analyze_sav_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'analyze_sav_request':
+                        (AnalyzeSavRequest,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'analyze_sav_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -1915,6 +1974,67 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.create_document_export_endpoint = _Endpoint(
+            settings={
+                'response_type': (ExportResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/document',
+                'operation_id': 'create_document_export',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'report_export_request',
+                    'x_gdc_debug',
+                ],
+                'required': [
+                    'workspace_id',
+                    'report_export_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'report_export_request':
+                        (ReportExportRequest,),
+                    'x_gdc_debug':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'x_gdc_debug': 'X-Gdc-Debug',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'report_export_request': 'body',
+                    'x_gdc_debug': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.create_image_export_endpoint = _Endpoint(
             settings={
                 'response_type': (ExportResponse,),
@@ -3277,6 +3397,116 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.get_document_export_endpoint = _Endpoint(
+            settings={
+                'response_type': (file_type,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/document/{exportId}',
+                'operation_id': 'get_document_export',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'export_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'export_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'export_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'export_id': 'exportId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'export_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/pdf'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_document_export_metadata_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/export/document/{exportId}/metadata',
+                'operation_id': 'get_document_export_metadata',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'export_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'export_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'export_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'export_id': 'exportId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'export_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_exported_file_endpoint = _Endpoint(
             settings={
                 'response_type': (file_type,),
@@ -4194,6 +4424,62 @@ class ActionsApi(object):
             headers_map={
                 'accept': [
                     '*/*'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.import_sav_endpoint = _Endpoint(
+            settings={
+                'response_type': ([ImportSavResponse],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/fileStorage/dataSources/{dataSourceId}/importSav',
+                'operation_id': 'import_sav',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                    'import_sav_request',
+                ],
+                'required': [
+                    'data_source_id',
+                    'import_sav_request',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                    'import_sav_request':
+                        (ImportSavRequest,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                    'import_sav_request': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
                 ],
                 'content_type': [
                     'application/json'
@@ -5593,6 +5879,268 @@ class ActionsApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'metric_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.organization_localization_statistics_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationStatistics,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/statistics',
+                'operation_id': 'organization_localization_statistics',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.organization_localization_usage_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationUsage,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/usage',
+                'operation_id': 'organization_localization_usage',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.organization_localization_usage_users_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationUsageUsers,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/usage/users',
+                'operation_id': 'organization_localization_usage_users',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'value',
+                    'name',
+                    'setting',
+                    'source',
+                    'page',
+                    'size',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'setting',
+                    'source',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('setting',): {
+
+                        "LOCALE": "LOCALE",
+                        "METADATA_LOCALE": "METADATA_LOCALE",
+                        "DATA_LOCALE": "DATA_LOCALE"
+                    },
+                    ('source',): {
+
+                        "USER": "USER",
+                        "WORKSPACE": "WORKSPACE",
+                        "PARENT": "PARENT",
+                        "ORGANIZATION": "ORGANIZATION",
+                        "ENVIRONMENT": "ENVIRONMENT",
+                        "DEFAULT": "DEFAULT"
+                    },
+                },
+                'openapi_types': {
+                    'value':
+                        (str,),
+                    'name':
+                        (str,),
+                    'setting':
+                        (str,),
+                    'source':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                },
+                'attribute_map': {
+                    'value': 'value',
+                    'name': 'name',
+                    'setting': 'setting',
+                    'source': 'source',
+                    'page': 'page',
+                    'size': 'size',
+                },
+                'location_map': {
+                    'value': 'query',
+                    'name': 'query',
+                    'setting': 'query',
+                    'source': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.organization_localization_usage_workspaces_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationUsageWorkspaces,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/usage/workspaces',
+                'operation_id': 'organization_localization_usage_workspaces',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'value',
+                    'name',
+                    'setting',
+                    'source',
+                    'page',
+                    'size',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'setting',
+                    'source',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('setting',): {
+
+                        "LOCALE": "LOCALE",
+                        "METADATA_LOCALE": "METADATA_LOCALE",
+                        "DATA_LOCALE": "DATA_LOCALE"
+                    },
+                    ('source',): {
+
+                        "USER": "USER",
+                        "WORKSPACE": "WORKSPACE",
+                        "PARENT": "PARENT",
+                        "ORGANIZATION": "ORGANIZATION",
+                        "ENVIRONMENT": "ENVIRONMENT",
+                        "DEFAULT": "DEFAULT"
+                    },
+                },
+                'openapi_types': {
+                    'value':
+                        (str,),
+                    'name':
+                        (str,),
+                    'setting':
+                        (str,),
+                    'source':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                },
+                'attribute_map': {
+                    'value': 'value',
+                    'name': 'name',
+                    'setting': 'setting',
+                    'source': 'source',
+                    'page': 'page',
+                    'size': 'size',
+                },
+                'location_map': {
+                    'value': 'query',
+                    'name': 'query',
+                    'setting': 'query',
+                    'source': 'query',
+                    'page': 'query',
+                    'size': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -8490,6 +9038,200 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.workspace_localization_statistics_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationStatistics,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/statistics',
+                'operation_id': 'workspace_localization_statistics',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.workspace_localization_usage_endpoint = _Endpoint(
+            settings={
+                'response_type': (WorkspaceLocalizationUsage,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/usage',
+                'operation_id': 'workspace_localization_usage',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.workspace_localization_usage_users_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationUsageUsers,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/usage/users',
+                'operation_id': 'workspace_localization_usage_users',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'value',
+                    'name',
+                    'setting',
+                    'source',
+                    'page',
+                    'size',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'setting',
+                    'source',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('setting',): {
+
+                        "LOCALE": "LOCALE",
+                        "METADATA_LOCALE": "METADATA_LOCALE",
+                        "DATA_LOCALE": "DATA_LOCALE"
+                    },
+                    ('source',): {
+
+                        "USER": "USER",
+                        "WORKSPACE": "WORKSPACE",
+                        "PARENT": "PARENT",
+                        "ORGANIZATION": "ORGANIZATION",
+                        "ENVIRONMENT": "ENVIRONMENT",
+                        "DEFAULT": "DEFAULT"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'value':
+                        (str,),
+                    'name':
+                        (str,),
+                    'setting':
+                        (str,),
+                    'source':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'value': 'value',
+                    'name': 'name',
+                    'setting': 'setting',
+                    'source': 'source',
+                    'page': 'page',
+                    'size': 'size',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'value': 'query',
+                    'name': 'query',
+                    'setting': 'query',
+                    'source': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.workspace_resolve_all_settings_endpoint = _Endpoint(
             settings={
                 'response_type': ([ResolvedSetting],),
@@ -9184,6 +9926,89 @@ class ActionsApi(object):
         kwargs['analyze_csv_request'] = \
             analyze_csv_request
         return self.analyze_csv_endpoint.call_with_http_info(**kwargs)
+
+    def analyze_sav(
+        self,
+        analyze_sav_request,
+        **kwargs
+    ):
+        """Analyze SPSS files  # noqa: E501
+
+        Reads the columns, their labels and the first rows of the SPSS (.sav) files at the given locations.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.analyze_sav(analyze_sav_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            analyze_sav_request (AnalyzeSavRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [AnalyzeSavResponse]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['analyze_sav_request'] = \
+            analyze_sav_request
+        return self.analyze_sav_endpoint.call_with_http_info(**kwargs)
 
     def anomaly_detection(
         self,
@@ -11108,6 +11933,94 @@ class ActionsApi(object):
             dashboard_tabular_export_request
         return self.create_dashboard_export_request_endpoint.call_with_http_info(**kwargs)
 
+    def create_document_export(
+        self,
+        workspace_id,
+        report_export_request,
+        **kwargs
+    ):
+        """(EXPERIMENTAL) Create document export request  # noqa: E501
+
+        Note: This API is an experimental and is going to change. Please, use it accordingly. A document export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_document_export(workspace_id, report_export_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            report_export_request (ReportExportRequest):
+
+        Keyword Args:
+            x_gdc_debug (bool): [optional] if omitted the server will use the default value of False
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ExportResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['report_export_request'] = \
+            report_export_request
+        return self.create_document_export_endpoint.call_with_http_info(**kwargs)
+
     def create_image_export(
         self,
         workspace_id,
@@ -11379,7 +12292,7 @@ class ActionsApi(object):
     ):
         """(EXPERIMENTAL) Create report export request  # noqa: E501
 
-        Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.  # noqa: E501
+        Deprecated, use createDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -13097,6 +14010,180 @@ class ActionsApi(object):
             dependent_entities_request
         return self.get_dependent_entities_graph_from_entry_points_endpoint.call_with_http_info(**kwargs)
 
+    def get_document_export(
+        self,
+        workspace_id,
+        export_id,
+        **kwargs
+    ):
+        """(EXPERIMENTAL) Retrieve exported document  # noqa: E501
+
+        Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_document_export(workspace_id, export_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            export_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            file_type
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['export_id'] = \
+            export_id
+        return self.get_document_export_endpoint.call_with_http_info(**kwargs)
+
+    def get_document_export_metadata(
+        self,
+        workspace_id,
+        export_id,
+        **kwargs
+    ):
+        """(EXPERIMENTAL) Retrieve document export metadata  # noqa: E501
+
+        Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/document endpoint. The metadata structure is not verified.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_document_export_metadata(workspace_id, export_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            export_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['export_id'] = \
+            export_id
+        return self.get_document_export_metadata_endpoint.call_with_http_info(**kwargs)
+
     def get_exported_file(
         self,
         workspace_id,
@@ -13793,7 +14880,7 @@ class ActionsApi(object):
     ):
         """(EXPERIMENTAL) Retrieve exported files  # noqa: E501
 
-        Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.  # noqa: E501
+        Deprecated, use getDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -13880,7 +14967,7 @@ class ActionsApi(object):
     ):
         """(EXPERIMENTAL) Retrieve metadata context  # noqa: E501
 
-        Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.  # noqa: E501
+        Deprecated, use getDocumentExportMetadata. Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -14311,7 +15398,7 @@ class ActionsApi(object):
     ):
         """Import CSV  # noqa: E501
 
-        Import the CSV files at the given locations in the staging area to the final location.  # noqa: E501
+        Import the CSV files at the given locations in the staging area to the final location. A table that holds an SPSS file cannot take a CSV file.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -14476,6 +15563,93 @@ class ActionsApi(object):
         kwargs['import_geo_collection_request'] = \
             import_geo_collection_request
         return self.import_custom_geo_collection_endpoint.call_with_http_info(**kwargs)
+
+    def import_sav(
+        self,
+        data_source_id,
+        import_sav_request,
+        **kwargs
+    ):
+        """Import SPSS files  # noqa: E501
+
+        Import the SPSS (.sav) files at the given locations in the staging area to the final location. A table that holds a CSV file cannot take an SPSS file.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.import_sav(data_source_id, import_sav_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str):
+            import_sav_request (ImportSavRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [ImportSavResponse]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['import_sav_request'] = \
+            import_sav_request
+        return self.import_sav_endpoint.call_with_http_info(**kwargs)
 
     def inherited_entity_conflicts(
         self,
@@ -16625,6 +17799,330 @@ class ActionsApi(object):
         kwargs['metric_id'] = \
             metric_id
         return self.metric_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def organization_localization_statistics(
+        self,
+        **kwargs
+    ):
+        """(BETA) Languages with translations in the organization.  # noqa: E501
+
+        (BETA) Lists the languages that have at least one translation, separately for each kind of translation.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_statistics(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationStatistics
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.organization_localization_statistics_endpoint.call_with_http_info(**kwargs)
+
+    def organization_localization_usage(
+        self,
+        **kwargs
+    ):
+        """(BETA) Languages used in the organization.  # noqa: E501
+
+        (BETA) Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_usage(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationUsage
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.organization_localization_usage_endpoint.call_with_http_info(**kwargs)
+
+    def organization_localization_usage_users(
+        self,
+        **kwargs
+    ):
+        """(BETA) Users who set a language themselves.  # noqa: E501
+
+        (BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. Users counted in the usage entry without a language are not listed.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_usage_users(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            value (str): Language tag that the user sets.. [optional]
+            name (str): Filter by user name, email or login (user ID). Note that the filter is case insensitive.. [optional]
+            setting (str): One of LOCALE, METADATA_LOCALE and DATA_LOCALE.. [optional]
+            source (str): Where the value comes from.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationUsageUsers
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.organization_localization_usage_users_endpoint.call_with_http_info(**kwargs)
+
+    def organization_localization_usage_workspaces(
+        self,
+        **kwargs
+    ):
+        """(BETA) Workspaces that use a language.  # noqa: E501
+
+        (BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_usage_workspaces(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            value (str): Language tag that the workspace gets.. [optional]
+            name (str): Filter by workspace name. Note that the filter is case insensitive.. [optional]
+            setting (str): One of LOCALE, METADATA_LOCALE and DATA_LOCALE.. [optional]
+            source (str): Where the value comes from.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationUsageWorkspaces
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.organization_localization_usage_workspaces_endpoint.call_with_http_info(**kwargs)
 
     def outlier_detection(
         self,
@@ -21099,6 +22597,261 @@ class ActionsApi(object):
         kwargs['visualization_object_id'] = \
             visualization_object_id
         return self.visualization_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def workspace_localization_statistics(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """(BETA) Languages with translations in the workspace.  # noqa: E501
+
+        (BETA) Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.workspace_localization_statistics(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationStatistics
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.workspace_localization_statistics_endpoint.call_with_http_info(**kwargs)
+
+    def workspace_localization_usage(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """(BETA) Languages used in the workspace.  # noqa: E501
+
+        (BETA) Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. Child workspaces are not included.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.workspace_localization_usage(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            WorkspaceLocalizationUsage
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.workspace_localization_usage_endpoint.call_with_http_info(**kwargs)
+
+    def workspace_localization_usage_users(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """(BETA) Workspace members who get a language.  # noqa: E501
+
+        (BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.workspace_localization_usage_users(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            value (str): Language tag that the user gets.. [optional]
+            name (str): Filter by user name, email or login (user ID). Note that the filter is case insensitive.. [optional]
+            setting (str): One of LOCALE, METADATA_LOCALE and DATA_LOCALE.. [optional]
+            source (str): Where the value comes from.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationUsageUsers
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.workspace_localization_usage_users_endpoint.call_with_http_info(**kwargs)
 
     def workspace_resolve_all_settings(
         self,
