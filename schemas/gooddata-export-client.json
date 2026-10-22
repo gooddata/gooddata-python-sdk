@@ -103,7 +103,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -2029,6 +2029,9 @@
                   "reportPageLayout",
                   "reportTemplate",
                   "report",
+                  "pageTemplate",
+                  "document",
+                  "documentTemplate",
                   "workspaceExportTemplate",
                   "workspaceTheme",
                   "workspaceColorPalette",
@@ -2982,8 +2985,13 @@
         "type": "object"
       },
       "ReportExportRequest": {
-        "description": "Export request object describing the export properties and metadata for report exports.",
+        "description": "Export request object describing the export properties and metadata for document exports.",
         "properties": {
+          "documentId": {
+            "description": "Document identifier; the export renders the Publisher document page.",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
           "fileName": {
             "description": "File name to be used for retrieving the pdf document.",
             "example": "filename",
@@ -3001,7 +3009,8 @@
             "$ref": "#/components/schemas/JsonNode"
           },
           "reportId": {
-            "description": "Report identifier",
+            "deprecated": true,
+            "description": "Document identifier; the export renders the Publisher report page. Deprecated. 'documentId' renders the Publisher document page instead, so switching changes the page the export opens. Must not be set together with 'documentId'.",
             "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
             "type": "string"
           },
@@ -3014,8 +3023,7 @@
         },
         "required": [
           "fileName",
-          "format",
-          "reportId"
+          "format"
         ],
         "type": "object"
       },
@@ -3425,6 +3433,209 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/export/document": {
+      "post": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. A document export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createDocumentExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Gdc-Debug",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Document export request created successfully."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Create document export request",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute document export.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/document/{exportId}": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "operationId": "getDocumentExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.pdf'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "char": {
+                        "type": "string"
+                      },
+                      "direct": {
+                        "type": "boolean"
+                      },
+                      "double": {
+                        "format": "double",
+                        "type": "number"
+                      },
+                      "float": {
+                        "format": "float",
+                        "type": "number"
+                      },
+                      "int": {
+                        "format": "int32",
+                        "type": "integer"
+                      },
+                      "long": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "readOnly": {
+                        "type": "boolean"
+                      },
+                      "short": {
+                        "format": "int32",
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve exported document",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/document/{exportId}/metadata": {
+      "get": {
+        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/document endpoint. The metadata structure is not verified.",
+        "operationId": "getDocumentExportMetadata",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Json metadata representation"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Retrieve document export metadata",
+        "tags": [
+          "Report export",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/export/image": {
       "post": {
         "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. An image export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
@@ -3772,7 +3983,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/export/report": {
       "post": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "deprecated": true,
+        "description": "Deprecated, use createDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. A report export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
         "operationId": "createReportExport",
         "parameters": [
           {
@@ -3830,7 +4042,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}": {
       "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
+        "deprecated": true,
+        "description": "Deprecated, use getDocumentExport. Note: This API is an experimental and is going to change. Please, use it accordingly. After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.",
         "operationId": "getReportExport",
         "parameters": [
           {
@@ -3932,7 +4145,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}/metadata": {
       "get": {
-        "description": "Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.",
+        "deprecated": true,
+        "description": "Deprecated, use getDocumentExportMetadata. Note: This API is an experimental and is going to change. Please, use it accordingly. This endpoint serves as a cache for user-defined metadata of the export for the front end UI to retrieve it, if one was created using the POST ../export/report endpoint. The metadata structure is not verified.",
         "operationId": "getReportExportMetadata",
         "parameters": [
           {

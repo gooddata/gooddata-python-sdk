@@ -1135,6 +1135,8 @@ def test_evaluate_agentic_kda_skill_returns_reasoning_steps_on_pass():
         "max_iterations": 1,
         "latency_breakdown": [],
     }
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -1173,6 +1175,7 @@ def test_evaluate_agentic_kda_skill_attaches_reasoning_steps_to_exception_on_fai
         "max_iterations": 1,
         "latency_breakdown": [],
     }
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 
 
 def test_evaluate_agentic_kda_skill_preserves_reasoning_from_a_chat_error_partial_result():

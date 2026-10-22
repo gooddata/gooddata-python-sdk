@@ -80,6 +80,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     columns=[
                         DeclarativeColumn(
                             data_type="INT",
+                            default_label_of="gender",
                             description="Customer unique identifier",
                             is_nullable=True,
                             is_primary_key=True,
@@ -92,6 +93,9 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="customers",
                     name_prefix="out_gooddata",
                     path=["table_schema","table_name"],
+                    properties={
+                        "key": "key_example",
+                    },
                     type="TABLE",
                 ),
             ],

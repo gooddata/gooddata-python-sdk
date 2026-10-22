@@ -77,6 +77,7 @@ class JsonApiAgentOutAttributes(ModelNormal):
             'DASHBOARD_BUILDER': "dashboard_builder",
             'DASHBOARD_EDITOR': "dashboard_editor",
             'REPORT_BUILDER': "report_builder",
+            'DOCUMENT_BUILDER': "document_builder",
         },
         ('skills_mode',): {
             'ALL': "all",

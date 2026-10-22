@@ -973,6 +973,8 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
     assert outcome.detail == {
         "mode": "legacy",
         "full_skill_coverage": True,
@@ -1054,6 +1056,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     assert exc_info.value.reasoning_steps == ["confused thinking"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
     assert exc_info.value.detail == {
         "mode": "legacy",
         "full_skill_coverage": False,
@@ -1447,6 +1450,37 @@ def test_output_correct_compares_maql_for_a_metric_turn() -> None:
     [
         (_result(text="Formula: SELECT 1. Should I create this metric?"), "confirmation"),
         (_result(text=None, alertProposals=[{"cta": "Create?"}]), "confirmation"),
+        (_result(text="Should I retry with this corrected formula?"), "confirmation"),
+        (_result(text="Do you want me to try again with the corrected formula?"), "confirmation"),
+        (_result(text="Would you like me to try it again?"), "confirmation"),
+        (_result(text="Shall I resubmit it?"), "confirmation"),
+        (_result(text="Shall I try this again?"), "confirmation"),
+        (_result(text="Should I address revenue or margin first?"), "question"),
+        (_result(text="Should I retry with the corrected formula or keep the original?"), "question"),
+        (
+            _result(text='Should I retry with `SELECT SUM({fact/x}) WHERE {label/a} = "A" OR {label/b} = "B"`?'),
+            "confirmation",
+        ),
+        (_result(text="Should I retry with {label/customer.region} or {label/region}?"), "question"),
+        (_result(text="Should I retry with a 2.5 threshold or a 3.0 one?"), "question"),
+        (_result(text="The create failed. Should I retry? Or adjust the formula first?"), "question"),
+        (_result(text="Should I retry? Alternatively, should I adjust the formula first?"), "question"),
+        (_result(text="Should I retry with select sum(units) where status = 'Processed or Shipped'?"), "confirmation"),
+        (_result(text="Should I retry with today's data or last week's?"), "question"),
+        (_result(text="The create failed. Should I retry? The formula is fixed."), "confirmation"),
+        (_result(text="Should I retry with this corrected formula, or would you like to adjust it?"), "confirmation"),
+        (_result(text="Should I retry, or not?"), "confirmation"),
+        (_result(text="Should I retry? Or is there anything else to change first?"), "confirmation"),
+        (_result(text="Should I try once more?"), "confirmation"),
+        (
+            _result(text='Should I retry with SELECT SUM({fact/x}) WHERE {label/a} = "A" OR {label/b} = "B"?'),
+            "confirmation",
+        ),
+        (_result(text='Should I retry with {label/status} = "Processed or Shipped"?'), "confirmation"),
+        (_result(text="Should I retry, or would you like me to adjust the formula first?"), "question"),
+        (_result(text="Would you like me to add a region filter?"), "question"),
+        (_result(text="Which one should I use?"), "question"),
+        (_result(text="Should I use gross or net revenue?"), "question"),
         (_result(text="Which revenue metric do you mean?"), "question"),
         (_result(text="Please select one of the five options by number, name, or ID."), "question"),
         (_result(text="Reply with the number of the dashboard to use."), "question"),
@@ -1562,6 +1596,49 @@ def test_context_mode_answers_a_confirmation_with_yes_and_does_not_count_it_agai
     assert client.send_message.call_args_list[1].args[1] == CONFIRMATION_REPLY
     assert judge.calls == []
     assert result.turn_results[0].context_success is True
+
+
+def test_context_mode_approves_a_retry_after_a_rejected_metric_without_restating_its_formula() -> None:
+    maql = (
+        'SELECT (SELECT SUM({fact/order_unit_quantity}) WHERE {label/order_status} = "Processed") / {metric/net_orders}'
+    )
+    rejected = 'SELECT SUM({fact/order_unit_quantity}) WHERE {label/order_status} = "Processed" / {metric/net_orders}'
+    turns = [
+        TurnDefinition(
+            turn_id="create_metric",
+            message="Create a metric named Units Per Transaction",
+            expected_skill="metric",
+            expected_output_type="metric",
+            expected_output={"maql": maql},
+        )
+    ]
+    skills = _tool("set_skills", {"skill_names": ["metric"]})
+    failed = _tool("create_metric", {"maql": rejected}, {"data": {"isError": True, "error": {"text": "MAQL error"}}})
+    created = _tool("create_metric", {"maql": maql}, {"data": {"metric_id": "units_per_transaction", "maql": maql}})
+    judge = _FakeJudge(lost_context=True)
+    with patch("gooddata_eval.core.agentic.conversation.reply_restating", return_value=rejected) as restate:
+        result, client = _run(
+            [
+                _result(text=f"Formula: `{rejected}`\n\nShould I create this metric?", tools=[skills]),
+                _result(
+                    text=f"The first attempt was rejected. Formula: `{maql}`\n\n"
+                    "Should I retry with this corrected formula?",
+                    tools=[failed],
+                ),
+                _result(text="Created.", tools=[created]),
+            ],
+            turns,
+            judge=judge,
+        )
+    sent = [c.args[1] for c in client.send_message.call_args_list]
+    assert sent[1:] == [CONFIRMATION_REPLY, CONFIRMATION_REPLY]
+    assert not any("SELECT" in m or "{fact/" in m for m in sent)
+    restate.assert_not_called()
+    assert judge.calls == []
+    turn = result.turn_results[0]
+    assert turn.lost_context is False
+    assert turn.stalled is False
+    assert turn.output_correct is True
 
 
 def test_context_mode_records_an_iteration_limit_as_a_stall_and_nudges() -> None:
@@ -1955,6 +2032,47 @@ def test_reply_restating_returns_the_llm_restatement(monkeypatch: pytest.MonkeyP
     monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
     _fake_openai(monkeypatch, _openai_returning("As I said earlier, Express."))
     assert reply_restating("USER: weakest? ASSISTANT: Express", "Which format?") == "As I said earlier, Express."
+
+
+@pytest.mark.parametrize(
+    "llm_reply",
+    [
+        'As I said earlier, the formula is: `SELECT SUM({fact/units}) WHERE {label/status} = "Processed"`.',
+        "Use <metric/net_orders> as the denominator.",
+        "As I said earlier, use select sum(units) where status = 'Processed'.",
+        "As I said earlier, it is SUM(units) / COUNT(orders).",
+        "As I said earlier, it is sum(units) / count(orders).",
+        "Use select * from orders.",
+        "Run select region, revenue from orders.",
+        "As I said earlier: select region from orders where status = 'Processed'.",
+    ],
+)
+def test_simulated_user_never_sends_maql(monkeypatch: pytest.MonkeyPatch, llm_reply: str) -> None:
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    openai_cls = _fake_openai(monkeypatch, _openai_returning(llm_reply))
+    assert reply_restating("h", "Which formula?") == NO_ANSWER_REPLY
+    assert reply_from_facts("h", "Which formula?", ["Processed orders only."]) == NO_ANSWER_REPLY
+    calls = openai_cls.return_value.chat.completions.create.call_args_list
+    assert len(calls) == 2
+    for call in calls:
+        assert "Never write MAQL" in call.kwargs["messages"][0]["content"]
+
+
+@pytest.mark.parametrize(
+    "llm_reply",
+    [
+        "Select the first option.",
+        "Select the first option from the list.",
+        "SELECT the second option.",
+        "Count (all) is fine.",
+    ],
+)
+def test_simulated_user_keeps_a_plain_reply_that_mentions_select(
+    monkeypatch: pytest.MonkeyPatch, llm_reply: str
+) -> None:
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    _fake_openai(monkeypatch, _openai_returning(llm_reply))
+    assert reply_from_facts("h", "Which one?", ["Any is fine."]) == llm_reply
 
 
 def test_simulated_user_reports_a_missing_openai_package(monkeypatch: pytest.MonkeyPatch) -> None:

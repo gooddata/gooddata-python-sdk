@@ -23,7 +23,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     validate_and_convert_types
 )
 from gooddata_api_client.model.export_response import ExportResponse
-from gooddata_api_client.model.get_image_export202_response_inner import GetImageExport202ResponseInner
+from gooddata_api_client.model.get_document_export202_response_inner import GetDocumentExport202ResponseInner
 from gooddata_api_client.model.image_export_request import ImageExportRequest
 
 

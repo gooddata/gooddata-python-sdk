@@ -58,6 +58,7 @@ class GdStorageFile(ModelNormal):
     allowed_values = {
         ('type',): {
             'CSV': "CSV",
+            'SAV': "SAV",
         },
     }
 
@@ -110,16 +111,16 @@ class GdStorageFile(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, modified_at, name, size, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, modified_at, name, size, type, *args, **kwargs):  # noqa: E501
         """GdStorageFile - a model defined in OpenAPI
 
         Args:
             modified_at (datetime): Last modification timestamp of the file.
             name (str): Name of the file.
             size (int): Size of the file in bytes.
+            type (str): Type of the file.
 
         Keyword Args:
-            type (str): Type of the file.. defaults to "CSV", must be one of ["CSV", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -152,7 +153,6 @@ class GdStorageFile(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        type = kwargs.get('type', "CSV")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -206,16 +206,16 @@ class GdStorageFile(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, modified_at, name, size, *args, **kwargs):  # noqa: E501
+    def __init__(self, modified_at, name, size, type, *args, **kwargs):  # noqa: E501
         """GdStorageFile - a model defined in OpenAPI
 
         Args:
             modified_at (datetime): Last modification timestamp of the file.
             name (str): Name of the file.
             size (int): Size of the file in bytes.
+            type (str): Type of the file.
 
         Keyword Args:
-            type (str): Type of the file.. defaults to "CSV", must be one of ["CSV", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -248,7 +248,6 @@ class GdStorageFile(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        type = kwargs.get('type', "CSV")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

@@ -28,16 +28,17 @@ from gooddata_eval.core.timing import TIMERS_ENV_VAR
 
 # --- time.monotonic() side effects ---------------------------------------------------
 #
-# metric_skill reads the clock twice per agent turn (start, stop) and twice more per
-# simulated-user reply, so a two-turn conversation needs six values. Named rather than
+# metric_skill reads the clock twice per agent turn (start, stop), twice more per
+# simulated-user reply, and twice per run (start before the first turn, stop after scoring),
+# so a two-turn conversation needs eight values. Named rather than
 # inlined because a single new clock read on the production path breaks every one of these
 # at once with StopIteration -- and repairing a bare literal means hand-counting clock
 # reads at each call site.
 
 # one turn, metric created straight away: agent 3.0s, no simulated user
-_CLOCK_ONE_TURN = [5.0, 8.0]
+_CLOCK_ONE_TURN = [5.0, 5.0, 8.0, 8.0]
 # two turns: agent 1.0s then 0.5s, with a 2.5s simulated-user reply between them
-_CLOCK_TWO_TURNS = [20.0, 21.0, 21.0, 23.5, 23.5, 24.0]
+_CLOCK_TWO_TURNS = [20.0, 20.0, 21.0, 21.0, 23.5, 23.5, 24.0, 24.0]
 
 
 def _client() -> MagicMock:
@@ -726,6 +727,10 @@ def test_evaluate_agentic_metric_skill_returns_reasoning_steps_on_pass():
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    # One wall-clock sample per run, passing runs included -- the latency distribution is over
+    # these, and a kind that forgot to report them would silently drop out of it.
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_fail():
@@ -761,6 +766,7 @@ def test_evaluate_agentic_metric_skill_attaches_reasoning_steps_to_exception_on_
     }
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id is None
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 
 
 def test_records_agent_and_simulated_user_latency_separately():
@@ -791,6 +797,8 @@ def test_records_agent_and_simulated_user_latency_separately():
     # metric_skill has no judge; conflating its simulated user with one would misreport
     # a blocking call as a deferrable one.
     assert timings.judge_s == 0.0
+    # The run's wall time spans both turns and the simulated-user reply between them.
+    assert summary.run_results[0].run_latency_s == 4.0
 
 
 def test_evaluate_metric_skill_surfaces_timings_on_the_outcome():
