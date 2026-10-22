@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **certification_message** | **str, none_type** | Optional message associated with the certification. | [optional] 
 **certified_at** | **str, none_type** | Time when the certification was set. | [optional] 
 **certified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**conditional_formatting** | [**ObjectConditionalFormatting**](ObjectConditionalFormatting.md) |  | [optional] 
 **created_at** | **str, none_type** | Time of the entity creation. | [optional] 
 **created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Metric description. | [optional] 
@@ -18,6 +19,7 @@ Name | Type | Description | Notes
 **is_hidden_from_kda** | **bool** | If true, this metric is hidden from key drive analysis. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**permissions** | [**[DeclarativeMetricPermissionsInner], none_type**](DeclarativeMetricPermissionsInner.md) | A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -67,10 +67,14 @@ define generate_client
 	./scripts/generate_client.sh gooddata-$(1)-client -f "/local/schemas/gooddata-$(1)-client.json"
 endef
 
+# The OpenAPI generator aborts on a request body that declares no schema, so such bodies are
+# dropped from the merged spec; the per-API specs stay exactly as the backend serves them.
+STRIP_SCHEMALESS_BODIES = .paths |= map_values(map_values(if type == "object" and has("requestBody") and ([.requestBody.content[]?.schema] | all(. == null)) then del(.requestBody) else . end))
+
 .PHONY: _api-client-generate
 _api-client-generate:
 	rm -f schemas/gooddata-api-client.json
-	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' > "schemas/gooddata-api-client.json"
+	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' | jq -S '$(STRIP_SCHEMALESS_BODIES)' > "schemas/gooddata-api-client.json"
 	$(call generate_client,api)
 
 .PHONY: api-client

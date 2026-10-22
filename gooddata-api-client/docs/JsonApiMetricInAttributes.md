@@ -4,8 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**JsonApiMetricInAttributesContent**](JsonApiMetricInAttributesContent.md) |  | 
+**content** | [**JsonApiComputedAttributeInAttributesContent**](JsonApiComputedAttributeInAttributesContent.md) |  | 
 **are_relations_valid** | **bool** |  | [optional] 
+**conditional_formatting** | [**JsonApiMetricInAttributesConditionalFormatting**](JsonApiMetricInAttributesConditionalFormatting.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 
 **is_hidden_from_kda** | **bool** |  | [optional] 

@@ -59,6 +59,7 @@ class AfmObjectIdentifierIdentifier(ModelNormal):
         ('type',): {
             'ANALYTICALDASHBOARD': "analyticalDashboard",
             'ATTRIBUTE': "attribute",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
             'DASHBOARDPLUGIN': "dashboardPlugin",
             'DATASET': "dataset",
             'FACT': "fact",

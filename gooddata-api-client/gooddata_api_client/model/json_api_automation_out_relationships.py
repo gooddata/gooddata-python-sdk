@@ -32,17 +32,31 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_agent_out_relationships_created_by import JsonApiAgentOutRelationshipsCreatedBy
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_analytical_dashboards import JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_computed_attributes import JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_visualization_objects import JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
     from gooddata_api_client.model.json_api_automation_in_relationships_analytical_dashboard import JsonApiAutomationInRelationshipsAnalyticalDashboard
     from gooddata_api_client.model.json_api_automation_in_relationships_export_definitions import JsonApiAutomationInRelationshipsExportDefinitions
     from gooddata_api_client.model.json_api_automation_in_relationships_notification_channel import JsonApiAutomationInRelationshipsNotificationChannel
     from gooddata_api_client.model.json_api_automation_in_relationships_recipients import JsonApiAutomationInRelationshipsRecipients
     from gooddata_api_client.model.json_api_automation_out_relationships_automation_results import JsonApiAutomationOutRelationshipsAutomationResults
+    from gooddata_api_client.model.json_api_automation_out_relationships_facts import JsonApiAutomationOutRelationshipsFacts
     globals()['JsonApiAgentOutRelationshipsCreatedBy'] = JsonApiAgentOutRelationshipsCreatedBy
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards'] = JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes'] = JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects'] = JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
+    globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
     globals()['JsonApiAutomationInRelationshipsAnalyticalDashboard'] = JsonApiAutomationInRelationshipsAnalyticalDashboard
     globals()['JsonApiAutomationInRelationshipsExportDefinitions'] = JsonApiAutomationInRelationshipsExportDefinitions
     globals()['JsonApiAutomationInRelationshipsNotificationChannel'] = JsonApiAutomationInRelationshipsNotificationChannel
     globals()['JsonApiAutomationInRelationshipsRecipients'] = JsonApiAutomationInRelationshipsRecipients
     globals()['JsonApiAutomationOutRelationshipsAutomationResults'] = JsonApiAutomationOutRelationshipsAutomationResults
+    globals()['JsonApiAutomationOutRelationshipsFacts'] = JsonApiAutomationOutRelationshipsFacts
 
 
 class JsonApiAutomationOutRelationships(ModelNormal):
@@ -99,12 +113,19 @@ class JsonApiAutomationOutRelationships(ModelNormal):
         lazy_import()
         return {
             'analytical_dashboard': (JsonApiAutomationInRelationshipsAnalyticalDashboard,),  # noqa: E501
+            'analytical_dashboards': (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards,),  # noqa: E501
+            'attributes': (JsonApiAttributeHierarchyOutRelationshipsAttributes,),  # noqa: E501
             'automation_results': (JsonApiAutomationOutRelationshipsAutomationResults,),  # noqa: E501
+            'computed_attributes': (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes,),  # noqa: E501
             'created_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
             'export_definitions': (JsonApiAutomationInRelationshipsExportDefinitions,),  # noqa: E501
+            'facts': (JsonApiAutomationOutRelationshipsFacts,),  # noqa: E501
+            'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
+            'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
             'modified_by': (JsonApiAgentOutRelationshipsCreatedBy,),  # noqa: E501
             'notification_channel': (JsonApiAutomationInRelationshipsNotificationChannel,),  # noqa: E501
             'recipients': (JsonApiAutomationInRelationshipsRecipients,),  # noqa: E501
+            'visualization_objects': (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects,),  # noqa: E501
         }
 
     @cached_property
@@ -114,12 +135,19 @@ class JsonApiAutomationOutRelationships(ModelNormal):
 
     attribute_map = {
         'analytical_dashboard': 'analyticalDashboard',  # noqa: E501
+        'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'automation_results': 'automationResults',  # noqa: E501
+        'computed_attributes': 'computedAttributes',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'export_definitions': 'exportDefinitions',  # noqa: E501
+        'facts': 'facts',  # noqa: E501
+        'labels': 'labels',  # noqa: E501
+        'metrics': 'metrics',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
         'notification_channel': 'notificationChannel',  # noqa: E501
         'recipients': 'recipients',  # noqa: E501
+        'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
     read_only_vars = {
@@ -164,12 +192,19 @@ class JsonApiAutomationOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
+            analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
+            attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
             automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
+            facts (JsonApiAutomationOutRelationshipsFacts): [optional]  # noqa: E501
+            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
             modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501
+            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -256,12 +291,19 @@ class JsonApiAutomationOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboard (JsonApiAutomationInRelationshipsAnalyticalDashboard): [optional]  # noqa: E501
+            analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
+            attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
             automation_results (JsonApiAutomationOutRelationshipsAutomationResults): [optional]  # noqa: E501
+            computed_attributes (JsonApiAnalyticalDashboardOutRelationshipsComputedAttributes): [optional]  # noqa: E501
             created_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             export_definitions (JsonApiAutomationInRelationshipsExportDefinitions): [optional]  # noqa: E501
+            facts (JsonApiAutomationOutRelationshipsFacts): [optional]  # noqa: E501
+            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
             modified_by (JsonApiAgentOutRelationshipsCreatedBy): [optional]  # noqa: E501
             notification_channel (JsonApiAutomationInRelationshipsNotificationChannel): [optional]  # noqa: E501
             recipients (JsonApiAutomationInRelationshipsRecipients): [optional]  # noqa: E501
+            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

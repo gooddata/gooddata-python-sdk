@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**add_ai_lake_database_data_source**](AILakeDatabasesApi.md#add_ai_lake_database_data_source) | **POST** /api/v1/ailake/database/instances/{instanceId}/dataSources | (BETA) Add a data source to an AILake Database instance
+[**analyze_statistics**](AILakeDatabasesApi.md#analyze_statistics) | **POST** /api/v1/ailake/database/instances/{instanceId}/analyzeStatistics | (BETA) Run ANALYZE TABLE for tables in a database instance
 [**deprovision_ai_lake_database_instance**](AILakeDatabasesApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instances/{instanceId} | (BETA) Delete an existing AILake Database instance
 [**get_ai_lake_database_instance**](AILakeDatabasesApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
 [**list_ai_lake_database_data_sources**](AILakeDatabasesApi.md#list_ai_lake_database_data_sources) | **GET** /api/v1/ailake/database/instances/{instanceId}/dataSources | (BETA) List data sources of an AILake Database instance
@@ -88,12 +89,94 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **analyze_statistics**
+> analyze_statistics(instance_id, analyze_statistics_request)
+
+(BETA) Run ANALYZE TABLE for tables in a database instance
+
+(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_databases_api
+from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
+    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    analyze_statistics_request = AnalyzeStatisticsRequest(
+        table_names=[
+            "table_names_example",
+        ],
+    ) # AnalyzeStatisticsRequest | 
+    operation_id = "operation-id_example" # str |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Run ANALYZE TABLE for tables in a database instance
+        api_instance.analyze_statistics(instance_id, analyze_statistics_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeDatabasesApi->analyze_statistics: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Run ANALYZE TABLE for tables in a database instance
+        api_instance.analyze_statistics(instance_id, analyze_statistics_request, operation_id=operation_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeDatabasesApi->analyze_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **analyze_statistics_request** | [**AnalyzeStatisticsRequest**](AnalyzeStatisticsRequest.md)|  |
+ **operation_id** | **str**|  | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**202** | Statistics analysis scheduled. |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **deprovision_ai_lake_database_instance**
 > deprovision_ai_lake_database_instance(instance_id)
 
 (BETA) Delete an existing AILake Database instance
 
-(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.
+(BETA) Deletes an existing database in the organization's AI Lake. A database that still contains tables is not deleted, unless cascade is set. With cascade, every table in the database is dropped first, which cannot be undone. Returns an operation-id in the operation-id header the client can use to poll for the progress.
 
 ### Example
 
@@ -115,6 +198,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    cascade = True # bool | Drop every table in the database before the database itself. (optional)
     operation_id = "operation-id_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
@@ -128,7 +212,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Delete an existing AILake Database instance
-        api_instance.deprovision_ai_lake_database_instance(instance_id, operation_id=operation_id)
+        api_instance.deprovision_ai_lake_database_instance(instance_id, cascade=cascade, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeDatabasesApi->deprovision_ai_lake_database_instance: %s\n" % e)
 ```
@@ -139,6 +223,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **cascade** | **bool**| Drop every table in the database before the database itself. | [optional]
  **operation_id** | **str**|  | [optional]
 
 ### Return type
@@ -393,7 +478,7 @@ No authorization required
 
 (BETA) List registered AI Lake ObjectStorages
 
-(BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.
+(BETA) Lists ObjectStorages registered for the organization. Pass the returned `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.
 
 ### Example
 

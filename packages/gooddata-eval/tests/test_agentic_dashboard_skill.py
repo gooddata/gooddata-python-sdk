@@ -1891,6 +1891,7 @@ class TestEvaluateEntryPoint:
         assert "the agent never produced a successful draft_dashboard call" in message
         assert excinfo.value.detail["dashboard_drafted"] is False
         assert excinfo.value.conversation_id == "conv-1"
+        assert len(excinfo.value.run_latencies_s) == excinfo.value.runs_effective == 1
 
     def test_a_mis_routed_edit_names_the_skill_the_fixture_asked_for(self):
         """The builder answering an edit activates dashboard_builder perfectly well. Naming it
@@ -1940,6 +1941,8 @@ class TestEvaluateEntryPoint:
         assert outcome.runs_passed == 1
         assert outcome.runs_effective == 1
         assert outcome.detail["charts_matched"] is True
+        assert len(outcome.run_latencies_s) == outcome.runs_effective
+        assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def _as_events(raw: list[dict]) -> list[ToolCallEvent]:

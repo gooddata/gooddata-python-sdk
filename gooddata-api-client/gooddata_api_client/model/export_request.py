@@ -31,6 +31,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.conditional_formatting import ConditionalFormatting
     from gooddata_api_client.model.custom_override import CustomOverride
     from gooddata_api_client.model.execution_settings import ExecutionSettings
     from gooddata_api_client.model.json_node import JsonNode
@@ -39,6 +40,7 @@ def lazy_import():
     from gooddata_api_client.model.tabular_export_execution import TabularExportExecution
     from gooddata_api_client.model.tabular_export_request import TabularExportRequest
     from gooddata_api_client.model.visual_export_request import VisualExportRequest
+    globals()['ConditionalFormatting'] = ConditionalFormatting
     globals()['CustomOverride'] = CustomOverride
     globals()['ExecutionSettings'] = ExecutionSettings
     globals()['JsonNode'] = JsonNode
@@ -110,6 +112,7 @@ class ExportRequest(ModelComposed):
         return {
             'metadata': (JsonNode,),  # noqa: E501
             'timezone_id': (str, none_type,),  # noqa: E501
+            'conditional_formatting': (ConditionalFormatting,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
             'execution_result': (str,),  # noqa: E501
             'execution_settings': (ExecutionSettings,),  # noqa: E501
@@ -132,6 +135,7 @@ class ExportRequest(ModelComposed):
     attribute_map = {
         'metadata': 'metadata',  # noqa: E501
         'timezone_id': 'timezoneId',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
         'execution_result': 'executionResult',  # noqa: E501
         'execution_settings': 'executionSettings',  # noqa: E501
@@ -187,6 +191,7 @@ class ExportRequest(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
             timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
+            conditional_formatting (ConditionalFormatting): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501
@@ -304,6 +309,7 @@ class ExportRequest(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             metadata (JsonNode): [optional]  # noqa: E501
             timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
+            conditional_formatting (ConditionalFormatting): [optional]  # noqa: E501
             custom_override (CustomOverride): [optional]  # noqa: E501
             execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             execution_settings (ExecutionSettings): [optional]  # noqa: E501

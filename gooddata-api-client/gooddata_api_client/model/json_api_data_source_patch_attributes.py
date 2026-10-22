@@ -104,10 +104,10 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
-            'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
             'AILAKEHOUSE': "AILAKEHOUSE",
             'DENODO': "DENODO",
+            'TRINO': "TRINO",
         },
     }
 
@@ -179,6 +179,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             'client_id': (str, none_type,),  # noqa: E501
             'client_secret': (str, none_type,),  # noqa: E501
             'date_time_semantics': (str, none_type,),  # noqa: E501
+            'disable_statistics': (bool, none_type,),  # noqa: E501
+            'ignore_jwt_aud': (bool, none_type,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
             'password': (str, none_type,),  # noqa: E501
@@ -204,6 +206,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
         'client_id': 'clientId',  # noqa: E501
         'client_secret': 'clientSecret',  # noqa: E501
         'date_time_semantics': 'dateTimeSemantics',  # noqa: E501
+        'disable_statistics': 'disableStatistics',  # noqa: E501
+        'ignore_jwt_aud': 'ignoreJwtAud',  # noqa: E501
         'name': 'name',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
@@ -264,6 +268,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
+            disable_statistics (bool, none_type): Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset.. [optional]  # noqa: E501
+            ignore_jwt_aud (bool, none_type): Turns off the check that the audience of an OIDC access token names the host of the data source, for the OIDC_PASSTHROUGH authentication type. Only an organization administrator may set it.. [optional]  # noqa: E501
             name (str): User-facing name of the data source.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
@@ -366,6 +372,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             client_id (str, none_type): The client id to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             client_secret (str, none_type): The client secret to use to connect to the database providing the data for the data source (for example a Databricks Service Account).. [optional]  # noqa: E501
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. Only StarRocks and AI Lakehouse data sources currently support this.. [optional]  # noqa: E501
+            disable_statistics (bool, none_type): Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset.. [optional]  # noqa: E501
+            ignore_jwt_aud (bool, none_type): Turns off the check that the audience of an OIDC access token names the host of the data source, for the OIDC_PASSTHROUGH authentication type. Only an organization administrator may set it.. [optional]  # noqa: E501
             name (str): User-facing name of the data source.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
             password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501

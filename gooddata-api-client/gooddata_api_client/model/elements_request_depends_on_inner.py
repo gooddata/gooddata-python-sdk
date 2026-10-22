@@ -68,6 +68,10 @@ class ElementsRequestDependsOnInner(ModelComposed):
     """
 
     allowed_values = {
+        ('type',): {
+            'LABEL': "label",
+            'COMPUTEDATTRIBUTE': "computedAttribute",
+        },
     }
 
     validations = {
@@ -97,6 +101,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
         lazy_import()
         return {
             'complement_filter': (bool,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'label': (str,),  # noqa: E501
             'values': ([str, none_type],),  # noqa: E501
             'date_filter': (DateFilter,),  # noqa: E501
@@ -110,6 +115,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
 
     attribute_map = {
         'complement_filter': 'complementFilter',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'label': 'label',  # noqa: E501
         'values': 'values',  # noqa: E501
         'date_filter': 'dateFilter',  # noqa: E501
@@ -156,6 +162,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
             label (str): Specifies on which label the filter depends on.. [optional]  # noqa: E501
             values ([str, none_type]): Specifies values of the label for element filtering.. [optional]  # noqa: E501
             date_filter (DateFilter): [optional]  # noqa: E501
@@ -264,6 +271,7 @@ class ElementsRequestDependsOnInner(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
+            type (str): Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.. [optional]  # noqa: E501
             label (str): Specifies on which label the filter depends on.. [optional]  # noqa: E501
             values ([str, none_type]): Specifies values of the label for element filtering.. [optional]  # noqa: E501
             date_filter (DateFilter): [optional]  # noqa: E501

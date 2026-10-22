@@ -31,13 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_attribute_out_relationships import JsonApiAttributeOutRelationships
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_user_identifier_out_attributes import JsonApiUserIdentifierOutAttributes
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiAttributeOutRelationships'] = JsonApiAttributeOutRelationships
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiUserIdentifierOutAttributes'] = JsonApiUserIdentifierOutAttributes
@@ -107,7 +107,7 @@ class JsonApiAttributeHierarchyOutIncludes(ModelComposed):
         lazy_import()
         return {
             'attributes': (JsonApiUserIdentifierOutAttributes,),  # noqa: E501
-            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'relationships': (JsonApiAttributeOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'id': (str,),  # noqa: E501
@@ -168,7 +168,7 @@ class JsonApiAttributeHierarchyOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiUserIdentifierOutAttributes): [optional]  # noqa: E501
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
@@ -277,7 +277,7 @@ class JsonApiAttributeHierarchyOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiUserIdentifierOutAttributes): [optional]  # noqa: E501
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501

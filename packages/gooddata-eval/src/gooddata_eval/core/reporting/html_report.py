@@ -13,6 +13,7 @@ you already have on disk.
 
 from __future__ import annotations
 
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -68,6 +69,40 @@ def _redact_item(item: dict) -> dict:
     return out
 
 
+def _model_of(label: str, run: dict) -> str:
+    """The model a run is of, read as the page reads it: the run's own `model`, else what follows the source in its label."""
+    return run.get("model") or (label.split(" · ", 1)[1] if " · " in label else label)
+
+
+def _aliases(doc: dict) -> dict[str, tuple[str, str]]:
+    """Map each run label to its redacted ``(run label, model name)``.
+
+    The alias follows the model, not the run: a model keeps one letter however many runs it has,
+    so one model's history is never mistaken for several models. A model with a single run is just
+    ``Model A``; one with several has its runs numbered in input order within the model
+    (``Run 1 · Model A``, ``Run 2 · Model A``), which keeps their labels distinct and lets the page
+    read them as one model's history. Letters go out in the order models first appear. As on the page,
+    a model is told apart by its provider as well as its id.
+    """
+    runs = doc.get("runs") or {}
+    comparison = doc.get("comparison") or {}
+    identity = {
+        label: ((comparison.get(label) or {}).get("provider_name") or "", _model_of(label, run))
+        for label, run in runs.items()
+    }
+    letters: dict[tuple[str, str], str] = {}
+    for model in identity.values():
+        letters.setdefault(model, f"Model {chr(65 + len(letters))}")
+    per_model = Counter(identity.values())
+    seen: Counter[tuple[str, str]] = Counter()
+    aliases: dict[str, tuple[str, str]] = {}
+    for label, model in identity.items():
+        seen[model] += 1
+        name = letters[model]
+        aliases[label] = (name if per_model[model] == 1 else f"Run {seen[model]} · {name}", name)
+    return aliases
+
+
 def _redact(doc: dict) -> dict:
     """Strip internal ids and replace model names with stable aliases.
 
@@ -75,18 +110,18 @@ def _redact(doc: dict) -> dict:
     entitled to. What goes is anything that identifies our infrastructure or discloses
     which model was under test.
     """
-    alias = {label: f"Model {chr(65 + n)}" for n, label in enumerate(doc.get("runs", {}))}
+    alias = _aliases(doc)
     runs = {
-        alias[label]: {
+        alias[label][0]: {
             **run,
-            "model": alias[label],
+            "model": alias[label][1],
             "workspace_id": "",
             "items": {item_id: _redact_item(item) for item_id, item in (run.get("items") or {}).items()},
         }
-        for label, run in doc.get("runs", {}).items()
+        for label, run in (doc.get("runs") or {}).items()
     }
     comparison = {
-        alias[label]: {**entry, "provider_name": ""}
+        alias[label][0]: {**entry, "provider_name": ""}
         for label, entry in (doc.get("comparison") or {}).items()
         if label in alias
     }

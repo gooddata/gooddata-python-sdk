@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
     from gooddata_api_client.model.json_api_attribute_hierarchy_out import JsonApiAttributeHierarchyOut
     from gooddata_api_client.model.json_api_attribute_hierarchy_out_includes import JsonApiAttributeHierarchyOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
     globals()['JsonApiAttributeHierarchyOut'] = JsonApiAttributeHierarchyOut
     globals()['JsonApiAttributeHierarchyOutIncludes'] = JsonApiAttributeHierarchyOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
@@ -97,6 +99,7 @@ class JsonApiAttributeHierarchyOutDocument(ModelNormal):
             'data': (JsonApiAttributeHierarchyOut,),  # noqa: E501
             'included': ([JsonApiAttributeHierarchyOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
+            'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class JsonApiAttributeHierarchyOutDocument(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -156,6 +160,7 @@ class JsonApiAttributeHierarchyOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiAttributeHierarchyOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,6 +252,7 @@ class JsonApiAttributeHierarchyOutDocument(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiAttributeHierarchyOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
+            meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

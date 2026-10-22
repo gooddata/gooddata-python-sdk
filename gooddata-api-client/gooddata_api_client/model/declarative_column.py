@@ -72,6 +72,9 @@ class DeclarativeColumn(ModelNormal):
         ('name',): {
             'max_length': 255,
         },
+        ('default_label_of',): {
+            'max_length': 255,
+        },
         ('description',): {
             'max_length': 10000,
         },
@@ -106,6 +109,7 @@ class DeclarativeColumn(ModelNormal):
         return {
             'data_type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'default_label_of': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_nullable': (bool,),  # noqa: E501
             'is_primary_key': (bool,),  # noqa: E501
@@ -122,6 +126,7 @@ class DeclarativeColumn(ModelNormal):
     attribute_map = {
         'data_type': 'dataType',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'default_label_of': 'defaultLabelOf',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_nullable': 'isNullable',  # noqa: E501
         'is_primary_key': 'isPrimaryKey',  # noqa: E501
@@ -175,6 +180,7 @@ class DeclarativeColumn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            default_label_of (str): (EXPERIMENTAL) Name of the column whose values this column labels. Logical model generation makes this column the default label of the attribute on that column, sorted by that column.. [optional]  # noqa: E501
             description (str): Column description/comment from database. [optional]  # noqa: E501
             is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
@@ -272,6 +278,7 @@ class DeclarativeColumn(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            default_label_of (str): (EXPERIMENTAL) Name of the column whose values this column labels. Logical model generation makes this column the default label of the attribute on that column, sorted by that column.. [optional]  # noqa: E501
             description (str): Column description/comment from database. [optional]  # noqa: E501
             is_nullable (bool): Column is nullable. [optional]  # noqa: E501
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501

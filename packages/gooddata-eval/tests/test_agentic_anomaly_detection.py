@@ -319,6 +319,8 @@ def test_detail_reports_the_series_analysed_and_the_flag_count():
     assert outcome.detail["asserted"] == ["metric", "granularity"]
     assert "latency_breakdown" in outcome.detail
     assert outcome.runs_passed == 1
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_the_wrong_series_raises_naming_what_was_analysed():
@@ -330,6 +332,7 @@ def test_the_wrong_series_raises_naming_what_was_analysed():
     assert "DAY" in str(error)
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+    assert len(error.run_latencies_s) == error.runs_effective == 1
 
 
 def test_a_chart_built_on_an_earlier_turn_is_still_the_one_scored():
@@ -417,7 +420,7 @@ class _FakeCtx:
         return None
 
     @contextmanager
-    def observe(self, _trace, _run_idx):
+    def observe(self, _trace, _run_idx, *, conversation_id=None):
         yield "trace-id"
 
     def score(self, _tid, *, name, value, data_type):

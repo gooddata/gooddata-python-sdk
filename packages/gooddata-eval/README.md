@@ -234,6 +234,11 @@ The JSON report always uses the nested multi-model shape:
 
 Winner is selected by **pass rate → quality score → latency** (lower latency wins all-equal ties).
 
+The HTML report orders runs by when they started (`summary.started_at`, an ISO 8601 UTC timestamp that `gd-eval run` writes
+into each run's `summary`, `null` when a run was never timed), so the order the files are passed to
+`gd-eval report` does not decide which run is the latest. A report without it falls back to the date a run's file is
+named for (`2026-09-28.json`), and if any run has neither it keeps the order the files were given in.
+
 Each item reports **how many of its runs passed**, not only whether one did:
 
 ```json
@@ -308,13 +313,73 @@ The other six agentic kinds report `0.0` for the first three. Trace linking itse
 runner rather than by `evaluate_agentic_*`, so a direct library caller sees `langfuse_s: 0.0` even though its
 linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogether.
 
+### Latency: single-shot and multi-turn
+
+`avg_latency_s` is one number over a mixed population. The report instead keeps two kinds of item apart, by
+their eval kind, and states latency for each:
+
+- **Single-shot** — kinds that send exactly one chat message per run: every non-agentic kind, plus
+  `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
+- **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
+  `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
+  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if` and
+  `agentic_conversation`.
+
+```json
+"summary": {
+  "by_mode": {
+    "single_shot": {"total": 12, "passed": 10,
+                    "traces_s": {"n": 24, "mean": 5.39, "trimmed_mean": 5.36, "min": 3.88, "p50": 5.33, "p70": 6.23, "p90": 6.82, "p99": 7.18, "max": 7.22}},
+    "multi_turn":  {"total": 6, "passed": 4,
+                    "traces_s": {"n": 45, "mean": 6.91, "trimmed_mean": 6.84, "min": 2.78, "p50": 6.52, "p70": 8.03, "p90": 10.79, "p99": 13.57, "max": 14.25},
+                    "runs_s":   {"n": 15, "mean": 23.55, "trimmed_mean": 23.31, "min": 12.64, "p50": 21.23, "p70": 28.52, "p90": 33.02, "p99": 36.94, "max": 37.51}}
+  }
+}
+```
+
+`by_mode` is in each run's `summary` and in its `comparison` entry. `total` and `passed` count the evaluated
+items of that mode (skipped ones belong to neither). Every distribution is `null` when nothing was timed.
+Each item also states its `mode`, its `trace_latencies_s` and its `run_latencies_s`.
+
+- **Per trace is the main figure.** gen-ai starts one trace per chat message, so a trace is one chat turn.
+  Its latency is that turn's response time, from sending the message to the end of its stream
+  (`turn_wall_clock_sec`), recorded where the chat client completes the turn. It holds none of the LLM judge,
+  the simulated user or conversation create/delete. `dashboard_summary` is timed the same way around its one
+  request. A turn cut off by its turn or item deadline, or one that ended without a final answer (the agent's
+  iteration or token limit, a content filter), still counts, with the time it ran for: those are the slowest
+  turns, and the run that scored them is in the per-run figures too. A turn that ended in any other error (an
+  error event, or a 503 that outlasted its retries) does not: the time is that of a failed request, not a
+  response, and would only add a fast outlier. On the single-shot path such a turn ends its item as an error, so
+  it has no per-run figure either. An item that errored outside its evaluator's own failure reporting
+  contributes neither.
+- **Single-shot** runs are exactly one trace, so `traces_s` is also the latency of a run.
+- **Multi-turn** runs span several traces, so they get both views: `traces_s` over every turn of every
+  conversation (comparable with single-shot), and `runs_s`, the wall clock of each whole conversation from just
+  before its first message to the end of its scoring — every turn, simulated-user reply and judge call, but not
+  conversation create/delete. `agentic_conversation` drives its fixture once and contributes one run per item.
+  The two single-shot and multi-turn populations are never mixed.
+- **Percentiles** use linear interpolation between closest ranks (NumPy's default), so `p50` is the median and
+  the report carries no separate median field. On a small sample the high percentiles sit at or near the
+  maximum: P99 over fewer than 100 samples is effectively the slowest one, which is why `n` always travels with it.
+- **Trimmed mean** (`trimmed_mean`) is the average of the middle 80%: the fastest 10% and the slowest 10% of the
+  samples are dropped from each end (`n * 10 // 100` of them, so 25 samples drop two each) before averaging. It is
+  not the median, which is one middle value (`p50`). It is `null` below 10 samples, where there is nothing to
+  trim and the figure would only repeat `mean`.
+- **Older reports** have no `by_mode`. The HTML report says so and nothing is backfilled.
+
+`avg_latency_s` and the other existing fields are unchanged. The console prints each run's pass counts per
+mode and one `Latency, <population> (n=...)` line per distribution beneath its summary line, and Trace
+P50/P90/P99 columns (single-shot) in the multi-model comparison.
+
 ---
 
 ## `gd-eval report`
 
 Turns JSON report(s) into one HTML file you can actually navigate. No server, no
 credentials, no external assets — it opens over `file://`, attaches to a Jira issue and
-survives a Slack thread.
+survives a Slack thread. It follows GoodData's product look (colours, type, status chips). The faces are Inter, with
+Funnel Display for headings, named but never loaded, so a viewer without them gets the system sans and the file stays
+self-contained.
 
 ```bash
 # one run
@@ -331,27 +396,134 @@ gd-eval report results.json -o customer.html --redact
 |---|---|
 | `-o, --out PATH` | Where to write the HTML. Required. |
 | `--title TEXT` | Title shown in the report header. |
-| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … Pass rate, per-item results, questions and latency survive. |
+| `--redact` | Drop conversation/response ids and raw reasoning, and rename models to `Model A`, `Model B`, … A model keeps its letter across all its runs, which are then numbered (`Run 1 · Model A`, `Run 2 · Model A`). Pass rate, per-item results, questions and latency survive. |
 
-The report is a *view* over the JSON — it computes no numbers of its own. It gives you:
+The report is a *view* over the JSON. Unfiltered, every figure on it is read from the report, so it cannot
+disagree with the console or the JSON. Narrow the selection with a filter and the figures are recomputed in the
+page from the selected items' own records, by the same rules gd-eval uses. The page reads top to bottom as a
+document, in plain words: a *test case* is one prompt given to the assistant, an *attempt* is one go at it, and the
+two formats are *single-question* tests (one answer, no follow-up) and *conversation* tests (a back-and-forth with a
+simulated user), which are `single_shot` and `multi_turn` in the JSON.
 
-- **Run cards and a comparison table** — pass rate, quality, latency per run.
-- **An item table** with a pass/fail column per run, so a model or run-over-run
-  regression is one glance rather than a hand-assembled spreadsheet.
-- **An expression filter** for cross-cutting questions the fixed filters can't
-  anticipate, e.g. `d.filter_ranking_score === false` or
+- **A masthead** with the report's title (`--title`, or "Run history", "Run comparison", "Model comparison" or
+  "Run results" plus the model and workspace), when it was generated in the reader's own time zone, and a **Run setup** tooltip listing what
+  is the same in every run (model, provider, workspace, dataset, test cases, attempts per test case, pass rule) and
+  what differs. Results from different setups are not directly comparable, so a caution icon on a latency row and the
+  *New* / *Removed* marks in the test case table say where two runs stopped being alike.
+- **View by** — a dropdown above the filters that lays the same report out two ways. **Date** is the layout the
+  rest of this list describes: a column per run, oldest to latest by start time, with change lines, sparklines and the latency line
+  chart. **Model** compares language models instead: a column per model, ranked best first by the console's winner
+  rule (pass rate, then quality, then the quicker average), with no time axis. Where a model has several runs its
+  latest stands for it, so each model is read at its most recent state. The Run filter becomes a Model filter, the hint
+  beside the dropdown says what is being compared (and names the dates when the compared runs differ in date), and the
+  Run setup tooltip does not flag the model itself as a difference. Every report opens on Date, including one that
+  compares several models (`gd-eval run --model a --model b --html`); choose Model to compare them. A single run has
+  nothing to switch between, so the dropdown is hidden. In the Model view the page reads, top to bottom:
+  - **Results** — one row per model, best pass rate first, with a bar of how its evaluated test cases ended (passed
+    green, failed red, could not be graded orange), so the green part is the pass rate beside it, and the **Median
+    latency** of one attempt (half the attempts were faster, half slower). A list under the table says what each term means. The counts and the
+    caution icon (a model evaluated on different test cases than the one with the most) are the date view's Outcomes
+    table. There are no headline cards by model: the table is the first thing on the page.
+  - **Quality against speed** — each model as a point: the share of test cases it passed against the median time of
+    one attempt, the same pass rate as the Results table and the same median as the latency tables. Up and to the left is better. Time runs from zero;
+    the pass rate uses the range the models span. It needs two models with timings.
+  - **By category** — a heat map of the pass rate per category and model, the best model in each row marked, the
+    categories where the models differ most first. Every cell prints its share and its counts, so the shade is never the
+    only signal. This is where a model that wins overall but loses on one category shows.
+  - **Consistency across attempts** — per model, the share of test cases that passed on at least one attempt (pass@K,
+    the light bar) beside the share that passed on every attempt (pass^K, the dark bar), and how many passed only some.
+    A long gap is a model that can do the task but not reliably. It appears only for a report that recorded
+    `pass_power_k` and attempted a test case more than once.
+  - **Latency sections** — the same four percentiles, one row per model, quickest first, with a bar per figure drawn
+    from zero beside the numbers. The quickest and slowest model in each column are marked as in the date view.
+  - **Test cases** — one result column per model in ranked order, a response-time column per model, and an **Across
+    models** column in place of *Since previous run*: *Mixed* (some models passed and some did not; hover to see who),
+    *All pass* or *All fail*. A skipped or ungraded test case is left out of the verdict. The table opens on the
+    *Mixed* ones, the test cases where the models differ.
+- **Filters in two tiers** — the **Filter the report** bar at the top (category, format, result and run) decides what
+  the whole page covers: the Results cards, the outcomes table, the latency tables and the test case table all follow it, so the runs stay
+  comparable. The Test cases section repeats those four and adds the search box and the expression; they narrow the
+  table only, inside whatever the top bar allows, and only offer what the top bar leaves. Category, result and run are
+  attribute filters like the product's: a search box, an All row, the values with an **Only** shortcut and a count,
+  then Cancel and Apply. Changes are staged in the popup and take effect on Apply; closing it any other way discards
+  them. Nothing ticked means all. The run filter chooses which runs are shown; a result matches a test case when any of
+  the runs in play has it (so "Failed" over previous and latest finds every test case that broke in either), and the
+  expression is evaluated once per run in play with the same any-run rule. A filtered page states how many test cases
+  it covers, and each tier has its own Reset.
+- **Results** — three headline cards for the latest run: test cases passed (of those evaluated: skipped ones are not
+  counted, as in the console's percentage), the average quality score and the median time per attempt. That last one
+  pools every format on the page and counts whole attempts, grading included, so it matches neither per-response latency table
+  below it; its tooltip says which formats it covers. With an earlier run each card carries one change line in words, "down from 86% on Sep 28", rather
+  than a signed number. The line is green when that direction is good and red when it is not, with a chevron and
+  screen-reader text (*Better* / *Worse*) so colour is not the only signal. From three runs each card also has a
+  sparkline of every run: hover a point for its value, click it to compare the latest run with that one instead of the
+  previous. The dot being compared with is drawn white, and a key under the cards says so (latest run, compared with,
+  other runs) and that a click on any other dot moves the comparison; it shows only when a sparkline does. A pick that
+  a filter has removed, or that has become the latest run, falls back to the previous run. The
+  pass-rate card links to the test case table to see *which* ones changed; the split by format lives in that table's
+  filters.
+- **Outcomes** — how every test case ended, as a table with one row per run, newest first, in the same layout as the
+  latency tables. A run is identified by three columns: the **Run date**, the day and time it started (`summary.started_at`,
+  shown in the reader's own time zone, the UTC stamp on hover; a report written before it existed shows the date its file is
+  named for, without a time), and the **Run name**, the name the run was given, as given, so a run named `2026-09-28` reads
+  `2026-09-28` here although the charts style it as "Sep 28", and the **Model** it evaluated, its provider on hover. Then **Passed**, **Failed**, **Could not be graded** (an error left it without a verdict) and
+  **Skipped** (not run), then the **Pass rate**. The four are the values of the Result filter, and the pass rate is
+  the card's: passed out of the evaluated test cases, skipped ones left out, as in the console. The highest pass rate
+  is marked green with an up chevron and the lowest red with a down chevron, and the latest run is marked in lime. A
+  caution icon flags a run evaluated over a different number of test cases than the one before, because its pass
+  rate is then not a like-for-like change. The counts are read from the run's `summary` (`passed`, `failed`,
+  `errored`, `skipped`); a filtered view recounts them from the selected test cases, and a report written before
+  `summary.failed` existed shows what the other three leave.
+- **Latency sections** — **Single-question tests · response time** first, then **Conversation tests**, which shows
+  both per response (each assistant reply, one gen-ai trace) and per conversation (start to finish, with the
+  simulated user and the judge). Each opens with a **line chart** of the median (P50), P70, P90 and P99 across the
+  runs, oldest on the left and the latest on the right, drawn from zero so line heights compare honestly; the lines
+  share one blue that darkens towards the tail. Hover or focus a run for its crosshair and every figure, in a tooltip
+  that says how many responses it rests on. A line needs two runs with timings, so with one run the chart is left
+  out. End labels name each line and give its latest value, and are dropped when two would touch. Under the chart a
+  table has one row per run, newest first, identified by the same **Run date**, **Run name** and **Model** columns as the outcomes table, with the same four figures. The quickest run in each column is marked
+  green and the slowest red, each with a chevron (down for least time, up for most) so colour is not the only
+  signal, and the latest run is marked in lime. A caution icon flags a run timed on a different number of samples
+  than the one before. Unfiltered they are read from `by_mode`; a filtered view recomputes them in the page by the
+  same rules. The fastest and slowest single response, the average and the trimmed average stay in the JSON (P99
+  over a few dozen samples sits close to the slowest one, which is why `n` travels with it in the tooltip and
+  the cell hint). Seconds read with one decimal and no redundant ".0" (`3s`, `4.6s`).
+- **A test case table**, newest first: the latest run's result, a **Since previous run** column, then the earlier runs
+  going back in time (click any result to open the drawer on that run). Each run's column is headed by its run date over
+  its run name, one to a line (hover the heading for the full run label); by model the columns are headed by the model. The change column reads *Regressed* (passed in
+  the previous run, not in the latest), *Fixed*, *Flaky* (flipped between pass and fail more than once), *New*
+  (in no earlier run) or *Removed* (in an earlier run, gone from the latest). A test case skipped in the latest run
+  has no label, since the change would describe earlier runs. With several runs the table opens on the regressions. Two time columns
+  keep the populations apart: **Response time** is the median of the test case's assistant responses, and **Time per
+  attempt** is the mean wall-clock of a whole attempt (the responses plus the judge and, for conversations, the
+  simulated user). With more than two runs shown they follow the latest run only. Hover a value to see every sample
+  behind it; the drawer labels its two latency chips the same way. A report written before per-trace timing has no
+  response figure and shows `avg_latency_s` as the attempt figure.
+- **An expression filter**, folded under *Advanced: filter by a check expression* in the Test cases section, for
+  cross-cutting questions the fixed filters can't anticipate, e.g. `d.filter_ranking_score === false` or
   `d.expected_metric_uris.length > 1 && !d.metrics_correct`. Available variables:
-  `d` (the focused run's `detail`), `it` (its item), `i` (the row, `i.per[label]` for any
-  run), `q` (question), `kind`.
-- **The conversation**, when the item ran the agentic multi-turn path — every turn in
+  `d` (the checks of the run being read, its `detail`), `it` (that run's result), `i` (the row, `i.per[label]` for any
+  run), `q` (question), `kind` (category id).
+- **The conversation**, when the test case ran the agentic multi-turn path — every turn in
   order, with the simulated user marked apart from a real question, so you can see
   whether the agent got there or was handed the answer.
-- **A per-item drawer** — checks as pass/fail chips, expected vs actual side by side,
-  full reasoning, conversation/response ids.
+- **A per-test-case drawer** — checks as pass/fail chips, expected vs actual side by side,
+  the latency timeline, conversation/response ids.
 - **A latency timeline** from `detail.latency_breakdown`, in execution order, one bar per
-  step. Clicking a step expands its full record, joined by `index`: the paragraph a
-  reasoning step was summarised from, or a tool call's arguments and result from
-  `detail.tool_calls`.
+  step. Every step has a chevron that opens its full record in place, joined by `index`: the
+  paragraph a reasoning step was summarised from, or a tool call's arguments and result from
+  `detail.tool_calls`. A reasoning paragraph's markdown `**title**` is shown as bold text,
+  not as asterisks. Any number of steps can be open at once, and the chevron above the list
+  opens or closes all of them. The reasoning therefore lives on the timeline; a separate
+  Reasoning section appears only for paragraphs no step points at (or when a run recorded no
+  timeline).
+- **A print stylesheet** that drops the filters and the drawer, so "Save as PDF" gives a clean page.
+
+A report that merges several files names each run after its file, and a file named for its date (`2026-09-28.json`)
+reads as "Sep 28". A model is read from the run itself (`model` and the provider), never from the file name, so files
+named for their model work as well as files named for their date. In the Date view the page treats the runs as one
+model followed over time; when a report holds several models it adds the model to each run's name and points at
+**Model** (see above) for the comparison.
 
 `--redact` additionally drops `transcript` and `tool_calls`: the exchange shows that the
 simulated user is primed with the expected output, and a tool result carries

@@ -331,6 +331,8 @@ class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
 
 @define(kw_only=True)
 class CatalogDeclarativeMetric(CatalogAnalyticsBase):
+    is_hidden_from_kda: bool | None = None
+
     @staticmethod
     def client_class() -> type[DeclarativeMetric]:
         return DeclarativeMetric

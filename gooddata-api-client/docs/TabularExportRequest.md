@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **file_name** | **str** | Filename of downloaded file without extension. | 
 **format** | **str** | Expected file format. | 
+**conditional_formatting** | [**ConditionalFormatting**](ConditionalFormatting.md) |  | [optional] 
 **custom_override** | [**CustomOverride**](CustomOverride.md) |  | [optional] 
 **execution_result** | **str** | Execution result identifier. | [optional] 
 **execution_settings** | [**ExecutionSettings**](ExecutionSettings.md) |  | [optional] 

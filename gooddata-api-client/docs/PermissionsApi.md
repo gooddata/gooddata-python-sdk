@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**attribute_permissions**](PermissionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
 [**available_assignees**](PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
+[**computed_attribute_permissions**](PermissionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | (BETA) Get Computed Attribute Permissions
 [**dashboard_permissions**](PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**fact_permissions**](PermissionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
 [**get_organization_permissions**](PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
@@ -14,18 +15,21 @@ Method | HTTP request | Description
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**label_permissions**](PermissionsApi.md#label_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions | Get Label Permissions
 [**manage_attribute_permissions**](PermissionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
+[**manage_computed_attribute_permissions**](PermissionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | (BETA) Manage Permissions for a Computed Attribute
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](PermissionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](PermissionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
 [**manage_metric_permissions**](PermissionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+[**manage_visualization_permissions**](PermissionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | (BETA) Manage Permissions for a Visualization
 [**manage_workspace_permissions**](PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**metric_permissions**](PermissionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_user_group_permissions**](PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 [**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_permissions**](PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
+[**visualization_permissions**](PermissionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | (BETA) Get Visualization Permissions
 
 
 # **attribute_permissions**
@@ -143,6 +147,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**AvailableAssignees**](AvailableAssignees.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **computed_attribute_permissions**
+> ComputedAttributePermissions computed_attribute_permissions(workspace_id, computed_attribute_id)
+
+(BETA) Get Computed Attribute Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.computed_attribute_permissions import ComputedAttributePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    computed_attribute_id = "computedAttributeId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Computed Attribute Permissions
+        api_response = api_instance.computed_attribute_permissions(workspace_id, computed_attribute_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->computed_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **computed_attribute_id** | **str**|  |
+
+### Return type
+
+[**ComputedAttributePermissions**](ComputedAttributePermissions.md)
 
 ### Authorization
 
@@ -697,6 +768,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_computed_attribute_permissions**
+> manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
+
+(BETA) Manage Permissions for a Computed Attribute
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_computed_attribute_permissions_request_inner import ManageComputedAttributePermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    computed_attribute_id = "computedAttributeId_example" # str | 
+    manage_computed_attribute_permissions_request_inner = [
+        ManageComputedAttributePermissionsRequestInner(None),
+    ] # [ManageComputedAttributePermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Computed Attribute
+        api_instance.manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_computed_attribute_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **computed_attribute_id** | **str**|  |
+ **manage_computed_attribute_permissions_request_inner** | [**[ManageComputedAttributePermissionsRequestInner]**](ManageComputedAttributePermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_dashboard_permissions**
 > manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
@@ -1108,6 +1249,76 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_visualization_permissions**
+> manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
+
+(BETA) Manage Permissions for a Visualization
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.manage_visualization_permissions_request_inner import ManageVisualizationPermissionsRequestInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    visualization_object_id = "visualizationObjectId_example" # str | 
+    manage_visualization_permissions_request_inner = [
+        ManageVisualizationPermissionsRequestInner(None),
+    ] # [ManageVisualizationPermissionsRequestInner] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Manage Permissions for a Visualization
+        api_instance.manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_visualization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **visualization_object_id** | **str**|  |
+ **manage_visualization_permissions_request_inner** | [**[ManageVisualizationPermissionsRequestInner]**](ManageVisualizationPermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -1593,6 +1804,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Workspace permissions successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **visualization_permissions**
+> VisualizationPermissions visualization_permissions(workspace_id, visualization_object_id)
+
+(BETA) Get Visualization Permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.visualization_permissions import VisualizationPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    visualization_object_id = "visualizationObjectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Get Visualization Permissions
+        api_response = api_instance.visualization_permissions(workspace_id, visualization_object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->visualization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **visualization_object_id** | **str**|  |
+
+### Return type
+
+[**VisualizationPermissions**](VisualizationPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

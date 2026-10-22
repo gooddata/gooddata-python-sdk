@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **custom_skills** | **[str]** | List of custom skills when skillsMode is CUSTOM. | [optional] 
 **description** | **str** | Description of the agent. | [optional] 
 **enabled** | **bool** | Whether the agent is enabled. | [optional] 
+**instructions** | [**[Instruction], none_type**](Instruction.md) | Rules this agent follows when answering. | [optional] 
 **modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
 **modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **name** | **str** | Name of the agent. | [optional] 

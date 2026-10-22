@@ -114,7 +114,9 @@ with gooddata_api_client.ApiClient() as api_client:
                         value="value_example",
                     ),
                 ],
+                disable_statistics=True,
                 id="pg_local_docker-demo",
+                ignore_jwt_aud=True,
                 name="postgres demo",
                 parameters=[
                     Parameter(

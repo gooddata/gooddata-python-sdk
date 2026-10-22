@@ -64,6 +64,16 @@ class AttributeHeaderAttributeHeader(ModelNormal):
     """
 
     allowed_values = {
+        ('data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+            'HLL': "HLL",
+        },
         ('granularity',): {
             'SECOND': "SECOND",
             'SECOND_OF_MINUTE': "SECOND_OF_MINUTE",
@@ -156,9 +166,11 @@ class AttributeHeaderAttributeHeader(ModelNormal):
             'label_name': (str,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
+            'data_type': (str,),  # noqa: E501
             'format': (AttributeFormat,),  # noqa: E501
             'geo_area_config': (GeoAreaConfig,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
+            'number_format': (str,),  # noqa: E501
             'value_type': (str,),  # noqa: E501
         }
 
@@ -174,9 +186,11 @@ class AttributeHeaderAttributeHeader(ModelNormal):
         'label_name': 'labelName',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
+        'data_type': 'dataType',  # noqa: E501
         'format': 'format',  # noqa: E501
         'geo_area_config': 'geoAreaConfig',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
+        'number_format': 'numberFormat',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
     }
 
@@ -229,9 +243,11 @@ class AttributeHeaderAttributeHeader(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            data_type (str): Data type of the attribute values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
 
@@ -332,9 +348,11 @@ class AttributeHeaderAttributeHeader(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            data_type (str): Data type of the attribute values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
 

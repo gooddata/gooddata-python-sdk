@@ -3,126 +3,366 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gd-eval report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GoodData.AI evaluation report</title>
 <style>
+  /* Tokens follow GoodData's product UI (sdk-ui-kit default theme) with the brand lime as the
+     accent. Status colours come in two steps: the base for fills and bars, and a darker
+     "-ink" step for text, because the base green, orange and cyan fail contrast on white.
+     --dim is one step darker than the product's secondary grey (#6d7680) and the -ink steps
+     are tuned so every text/background pair here clears 4.5:1, including on the tinted chip,
+     hover and conversation backgrounds, where the product values fall just short. */
   :root {
-    --bg: #fbfbfa; --panel: #fff; --ink: #1c1c1a; --dim: #6b6b66; --line: #e3e2de;
-    --pass: #1a7f4b; --fail: #c0392b; --skip: #8a6d1f; --accent: #2c5fd6;
-    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    --lime: #dafe85; --on-lime: #09090c;
+    --bg: #f5f8fa; --panel: #fff; --ink: #464e56; --ink-strong: #000; --dim: #5f6872;
+    --line: #dde4eb; --thead: #f7f8fa; --hover: rgba(109, 118, 128, .1); --track: #ebeff4;
+    --primary: #14b2e2; --primary-ink: #0c6884; --primary-tint: #e8f7fc;
+    --pass: #00c18d; --pass-ink: #00704f; --pass-bg: rgba(0, 193, 141, .15);
+    --warn: #f18600; --warn-ink: #7d5a2e; --warn-bg: rgba(241, 134, 0, .15);
+    --fail: #e54d42; --fail-ink: #aa2117; --fail-bg: rgba(229, 77, 66, .15);
+    --shadow: rgba(20, 56, 93, .15);
+    /* GoodData.AI brand type: Inter for body, Funnel Display for headings. Named only, never loaded: viewers
+       without them installed get the system sans fallbacks. */
+    --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Funnel Display", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; background: var(--panel); color: var(--ink); font: 14px/1.5 var(--font); }
+  :focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+  /* Report masthead: a document title block, not an app bar. */
+  header.masthead {
+    max-width: 1240px; margin: 0 auto; padding: 40px 32px 20px;
+    border-bottom: 1px solid var(--line);
   }
-  header { padding: 18px 22px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
-  h1 { margin: 0 0 2px; font-size: 17px; font-weight: 600; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  .brand { color: var(--ink-strong); font-weight: 700; padding-bottom: 1px; box-shadow: inset 0 -5px 0 var(--lime); }
+  h1 { margin: 8px 0 6px; font-size: 30px; line-height: 1.2; font-weight: 700; color: var(--ink-strong); letter-spacing: -.01em; overflow-wrap: anywhere; }
   .sub { color: var(--dim); font-size: 12px; }
+  header .sub { font-size: 13px; }
+  .info { position: relative; display: inline-flex; align-items: center; gap: 5px; cursor: help; border-bottom: 1px dotted var(--dim); }
+  .info .ico { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid var(--dim); font-size: 10px; font-weight: 700; font-style: normal; line-height: 1; }
+  .kv2 { display: grid; grid-template-columns: 11em 1fr; gap: 10px; }
+  .kv2 > span:first-child { color: var(--dim); }
+  .caution .ico { border-color: var(--warn); background: var(--warn-bg); color: var(--warn-ink); }
+  .caution { border-bottom: 0; vertical-align: 1px; }
+  /* Tooltip sources stay hidden in place; one page-level overlay shows them, so no table or column can clip them. */
+  .info .tip { display: none !important; }
+  .floattip { position: fixed; z-index: 1000; display: grid; gap: 4px; width: max-content; max-width: min(380px, calc(100vw - 16px));
+    padding: 10px 12px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 4px;
+    box-shadow: 0 4px 16px var(--shadow); font: 400 12.5px/1.45 var(--font); text-align: left; text-transform: none; letter-spacing: 0; }
+  .floattip[hidden] { display: none; }
+  .floattip b { color: var(--ink-strong); }
+  .floattip .diffhead { margin-top: 8px; color: var(--warn-ink); }
+  .latestpill { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--lime); color: var(--on-lime);
+    font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
+  .lat-table tr.latest td:nth-child(-n+3), .out-table tr.latest td:nth-child(-n+3) { font-weight: 700; color: var(--ink-strong); }
+  .ext { display: inline-block; padding: 1px 6px; margin: -1px -6px; border-radius: 3px; }
+  .ext.best { background: var(--pass-bg); color: var(--pass-ink); }
+  .ext.same { background: var(--track); color: var(--ink); }
+  .ext .exi { width: 11px; height: 11px; margin: 0 4px 0 -1px; vertical-align: -1px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .kpi-delta .ext { margin: 0 2px 0 0; font-weight: 600; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ext.worst { background: var(--fail-bg); color: var(--fail-ink); }
+  .extkey .ext { margin: 0 6px 0 0; font-size: 11.5px; }
+  details.adv { margin: 0 0 10px; font-size: 12.5px; }
+  details.adv summary { cursor: pointer; color: var(--primary-ink); }
+  details.adv #expr { width: 100%; max-width: 520px; margin: 8px 0 4px; }
+  a.which { color: var(--primary-ink); font-size: 12px; }
+  #items td.stcell { cursor: pointer; }
+  #items td.stcell:hover .st { outline: 2px solid var(--primary); outline-offset: 1px; }
+  .kpi { margin: 0; border-top: 2px solid var(--ink-strong); padding-top: 8px; min-width: 0; }
+  .kpi figcaption { font-size: 13px; color: var(--dim); }
+  .kpi-val { font-family: var(--font-display); font-size: 34px; line-height: 1.15; font-weight: 700; color: var(--ink-strong); font-variant-numeric: tabular-nums; }
+  .kpi-delta { font-size: 13px; margin: 4px 0 8px; }
+  .kpi .spark { display: block; width: 100%; height: 44px; overflow: visible; }
+  .kpi .spark .ln { fill: none; stroke: var(--dim); stroke-width: 1.75; stroke-linecap: round; }
+  .kpi .spark circle.pt { fill: var(--dim); }
+  .kpi .spark circle.pt.on, .kpi .spark circle.pt.picked { fill: var(--ink-strong); }
+  .kpi .spark circle.pt.picked:not(.latest) { fill: var(--panel); stroke: var(--ink-strong); stroke-width: 1.5; }
+  .kpi .spark circle.pt.latest { fill: var(--lime); stroke: var(--ink-strong); stroke-width: 1.5; }
+  .kpi .spark .hit { fill: transparent; cursor: pointer; outline: none; }
+  .kpi .spark .hit:focus-visible { fill: var(--hover); }
+  .kpi-range { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--dim); margin-top: 2px; }
+  /* Key to the sparkline dots, drawn at the sizes and colours the chart uses so the eye matches them. */
+  .sparklegend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; margin: 16px 0 4px; font-size: 12px; color: var(--ink); }
+  .dotkey { display: inline-block; box-sizing: border-box; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dotkey.latest { width: 12px; height: 12px; background: var(--lime); border: 1.5px solid var(--ink-strong); }
+  .dotkey.base { width: 8px; height: 8px; background: var(--panel); border: 1.5px solid var(--ink-strong); }
+  .dotkey.other { width: 5px; height: 5px; background: var(--dim); }
+  .trendgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
   .badge {
     display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 3px;
-    background: #fdf3d5; color: #7a5c00; font-size: 11px; font-weight: 600;
+    background: var(--lime); color: var(--on-lime); font-size: 11px; font-weight: 700;
   }
-  main { display: flex; align-items: flex-start; gap: 0; }
-  #left { flex: 1 1 auto; min-width: 0; padding: 16px 22px 60px; }
+  main { display: flex; align-items: flex-start; gap: 0; max-width: 1240px; margin: 0 auto; }
+  #left { flex: 1 1 auto; min-width: 0; padding: 18px 32px 80px; }
   #drawer {
     flex: 0 0 44%; max-width: 44%; position: sticky; top: 0; height: 100vh; overflow-y: auto;
     border-left: 1px solid var(--line); background: var(--panel); padding: 16px 20px 60px; display: none;
+    box-shadow: -2px 0 8px var(--shadow);
   }
   #drawer.open { display: block; }
-  section { margin-bottom: 18px; }
-  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 8px; }
+  section { margin-bottom: 36px; }
+  h1, #left > section > h2 { font-family: var(--font-display); }
+  #left > section > h2:first-child { padding-top: 22px; border-top: 1px solid var(--line); }
+  h2 { font-size: 19px; font-weight: 700; color: var(--ink-strong); margin: 0 0 12px; letter-spacing: -.005em; }
+  #drawer h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin-bottom: 8px; }
+  h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 6px; }
   /* Many run columns make the item table wider than the pane; it scrolls inside its own
      box so the page itself never scrolls sideways (which would push the drawer off). */
-  .tablewrap { overflow: auto; max-height: 78vh; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; }
-  th, td { text-align: left; padding: 5px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); }
-  #items thead th { position: sticky; top: 0; background: var(--panel); cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -1px 0 var(--line); }
+  .tablewrap { overflow-x: auto; background: var(--panel); border-top: 2px solid var(--ink-strong); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); background: var(--thead); }
+  #items thead th { position: sticky; top: 0; cursor: pointer; user-select: none; z-index: 1; box-shadow: inset 0 -1px 0 var(--line); }
   #items tbody tr { cursor: pointer; }
-  #items tbody tr:hover { background: #f2f4f9; }
-  #items tbody tr.sel { background: #e8eefc; }
+  #items tbody tr:hover { background: var(--hover); }
+  #items tbody tr.sel { background: rgba(218, 254, 133, .45); }  /* lime: the row open in the side panel */
+  #items tbody tr:last-child td { border-bottom: 0; }
   .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .id { font-family: var(--mono); font-size: 11.5px; color: var(--dim); white-space: nowrap; }
+  .id { font-family: var(--mono); font-size: 12px; color: var(--dim); white-space: nowrap; }
   .q { max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .st { font-weight: 600; font-size: 11px; letter-spacing: .03em; white-space: nowrap; }
-  .st.pass { color: var(--pass); } .st.fail { color: var(--fail); }
-  .st.skip, .st.err { color: var(--skip); } .st.none { color: #c8c8c4; }
-  .bar { height: 5px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 3px; }
-  .bar > i { display: block; height: 100%; background: var(--pass); }
-  .cards { display: flex; flex-wrap: wrap; gap: 10px; }
-  .card { flex: 1 1 170px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
-  .card b { display: block; font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .card .big { font-size: 22px; font-variant-numeric: tabular-nums; margin: 2px 0; }
-  .card .sub2 { font-size: 11px; color: var(--dim); }
-  #filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  /* Status chip: text in the readable "-ink" step on the base colour at 15% alpha. The word
+     itself carries the meaning, so colour is never the only signal. */
+  .st {
+    display: inline-block; padding: 1px 7px; border-radius: 3px; font-weight: 700; font-size: 11px;
+    letter-spacing: .03em; white-space: nowrap;
+  }
+  .st.pass { background: var(--pass-bg); color: var(--pass-ink); }
+  .st.fail { background: var(--fail-bg); color: var(--fail-ink); }
+  .st.skip, .st.err { background: var(--warn-bg); color: var(--warn-ink); }
+  .st.none { padding: 0; color: var(--dim); font-weight: 400; }
+  .sub2 { font-size: 12px; color: var(--dim); }
+  .blurb { font-size: 12px; color: var(--dim); margin: 0 0 10px; max-width: 100ch; }
+  ul.blurb.legend { padding-left: 18px; margin-top: 12px; }
+  ul.blurb.legend li { margin: 0 0 2px; }
+  .tablewrap.flat { max-height: none; margin-bottom: 4px; }
+  h3.cap { margin: 14px 0 6px; }
+  #latency h2:not(:first-child) { margin-top: 26px; }
+  .note { font-size: 12px; color: var(--dim); margin-top: 8px; }
+  /* Response-time line chart: Median, P70, P90 and P99 per run. One measure at four depths, so one blue hue that
+     darkens towards the tail (an ordinal ramp, checked for lightness steps and contrast on white), never four
+     unrelated colours. Text stays in ink; the coloured line key beside it carries identity. */
+  .latchart { position: relative; margin: 0 0 14px; }
+  .latchart .s1 { --c: #6da7ec; } .latchart .s2 { --c: #3987e5; } .latchart .s3 { --c: #1c5cab; } .latchart .s4 { --c: #0d366b; }
+  .lclegend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 4px; font-size: 12px; color: var(--ink); }
+  .lckey { display: inline-block; width: 16px; height: 2px; margin-right: 6px; vertical-align: middle; background: var(--c); border-radius: 1px; }
+  .latchart svg { display: block; width: 100%; height: auto; overflow: visible; font: 11px/1 var(--font); }
+  .latchart .lcgrid { stroke: var(--line); stroke-width: 1; }
+  .latchart .lcbase { stroke: var(--dim); stroke-width: 1; opacity: .5; }
+  .latchart text { fill: var(--dim); }
+  .latchart text.lcnow { fill: var(--ink-strong); font-weight: 700; }
+  .latchart .lcend { fill: var(--ink); }
+  .latchart .lcl { fill: none; stroke: var(--c); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .latchart .lcm { fill: var(--c); stroke: var(--panel); stroke-width: 2; }
+  .latchart .lcm.on { transform-box: fill-box; transform-origin: center; transform: scale(1.3); }
+  .latchart .lcx { stroke: var(--ink-strong); stroke-width: 1; opacity: 0; pointer-events: none; }
+  .latchart .lcx.on { opacity: .35; }
+  .latchart .lchit { fill: transparent; outline: none; }
+  .latchart .lchit:focus-visible { fill: var(--hover); }
+  .lctip { position: absolute; top: 28px; z-index: 2; display: none; gap: 3px; width: max-content; max-width: 220px; margin-left: 12px; padding: 8px 10px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 4px 16px var(--shadow); font-size: 12px; pointer-events: none; }
+  .lctip.on { display: grid; }
+  .lctip.left { margin-left: 0; transform: translateX(calc(-100% - 12px)); }
+  .lctip b { color: var(--ink-strong); font-variant-numeric: tabular-nums; }
+  .lctip .lcrun { color: var(--ink-strong); font-weight: 700; }
+  .lctip .lcn { color: var(--dim); font-size: 11.5px; margin-bottom: 2px; }
+  /* The filters sit above the whole dashboard and stay in view: every table below follows them. */
+  #filterbar {
+    margin: 0 0 20px; padding: 10px 14px;
+    background: var(--bg); border-radius: 4px;
+  }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  #filterbar .filters { margin-bottom: 0; }
+  .controls { display: contents; }
+  .fl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); }
+  #top-reset, #items-reset { cursor: pointer; color: var(--primary-ink); }
+  .scope {
+    margin: 0 0 14px; padding: 6px 10px; font-size: 12px; background: var(--primary-tint);
+    border-left: 3px solid var(--primary); border-radius: 0 3px 3px 0;
+  }
   input, select, button {
-    font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px;
+    font: inherit; padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px;
     background: var(--panel); color: inherit;
   }
+  /* Kind multi-select: a <details> styled like the neighbouring selects, its menu floated over the table. */
+  .multi { position: relative; }
+  .multi > summary {
+    list-style: none; cursor: pointer; padding: 5px 26px 5px 9px; border: 1px solid var(--line); border-radius: 3px;
+    background: var(--panel); max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative;
+  }
+  .multi > summary::-webkit-details-marker { display: none; }
+  .multi > summary::after {
+    content: ""; position: absolute; right: 10px; top: 50%; width: 5px; height: 5px; margin-top: -4px;
+    border: solid var(--dim); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  }
+  .multi[open] > summary { border-color: var(--primary); }
+  .multi .menu label { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+  .multi .menu label:hover { background: var(--hover); }
+  .multi .menu label span { flex: 1 1 auto; font-size: 12.5px; }
+  .multi .menu label i { font-style: normal; font-size: 11px; color: var(--dim); font-variant-numeric: tabular-nums; }
+  .multi .menu input { margin: 0; padding: 0; }
+  .multi .menu label.zero { color: var(--dim); }
+  /* GoodData attribute-filter popup: search, All, values with Only, then Cancel / Apply. */
+  .multi > summary .ft { color: var(--dim); }
+  .multi .menu {
+    position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; width: 290px; max-width: 90vw; padding: 0;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 2px 8px var(--shadow);
+  }
+  .multi .menu .search { display: block; width: calc(100% - 16px); margin: 8px; }
+  .multi .menu .allrow { margin: 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--line); border-radius: 0; font-weight: 600; }
+  .multi .menu .optlist { max-height: 40vh; overflow-y: auto; padding: 4px; }
+  .multi .menu .opt[hidden] { display: none; }
+  .multi .menu .only {
+    padding: 0 4px; border: 0; background: none; color: var(--primary-ink); font-size: 12px; cursor: pointer; opacity: 0;
+  }
+  .multi .menu label:hover .only, .multi .menu .only:focus-visible { opacity: 1; }
+  .multi .menu .foot { display: flex; justify-content: flex-end; gap: 8px; padding: 8px; border-top: 1px solid var(--line); }
+  .multi .menu .foot button { cursor: pointer; }
+  .multi .menu .apply { background: var(--primary-ink); border-color: var(--primary-ink); color: #fff; font-weight: 600; }
+  .multi .menu .apply:disabled { opacity: .45; cursor: default; }
+  .runhead > span { display: block; white-space: nowrap; }
+  .runhead + .latestpill { display: table; margin: 4px 0 0; }
+  .runlbl { display: block; max-width: 18ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--dim); }
   #q { flex: 1 1 200px; min-width: 140px; }
   #expr { flex: 2 1 320px; min-width: 200px; font-family: var(--mono); font-size: 12px; }
-  #expr.bad { border-color: var(--fail); background: #fdf1f0; }
-  .hint { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+  #expr.bad { border-color: var(--fail); background: var(--fail-bg); }
+  .hint { font-size: 11px; color: var(--dim); font-family: var(--mono); margin-bottom: 8px; }
   .count { font-size: 12px; color: var(--dim); margin-left: auto; }
   .kv { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 0 12px; font-size: 12.5px; }
   .kv > div { padding: 3px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-  .kv .k { grid-column: 1 / -1; font-weight: 600; border: 0; padding-top: 8px; }
+  .kv .k { grid-column: 1 / -1; font-weight: 700; border: 0; padding-top: 8px; }
   pre {
-    margin: 4px 0; padding: 8px 10px; background: #f5f5f3; border-radius: 4px; font-family: var(--mono);
-    font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
+    margin: 4px 0; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 3px;
+    font-family: var(--mono); font-size: 11.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 260px; overflow: auto;
   }
   .tl { font-size: 12px; }
-  .tl .row { display: grid; grid-template-columns: 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 1px 0; cursor: pointer; }
-  .tl .row:hover { background: #f2f4f9; }
+  .tl .row { display: grid; grid-template-columns: 18px 15ch 1fr 7ch; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; }
+  .tl .row:hover { background: var(--hover); }
   .tl .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tl .track { background: var(--line); border-radius: 3px; height: 12px; }
-  .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-  .tl .row.reasoning .track > i { background: #9aa5bb; }
+  .tl .track { background: var(--track); border-radius: 3px; height: 12px; }
+  .tl .track > i { display: block; height: 100%; border-radius: 3px; background: var(--primary); }
+  .tl .row.reasoning .track > i { background: var(--dim); opacity: .55; }
   .tl .d { text-align: right; font-variant-numeric: tabular-nums; color: var(--dim); }
-  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: #f7f7f5; border-radius: 0 4px 4px 0; }
-  .turn.assistant { border-left-color: var(--accent); background: #f2f5fd; }
-  .turn.simulated_user { border-left-color: #b07d2b; background: #fdf7ec; }
-  .turn.note { border-left-color: var(--skip); background: #fdf3d5; font-style: italic; }
-  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 600; }
+  /* Each step opens in place under its own row; the chevron points right when shut and down when open. */
+  .tl .chev, .tlall { padding: 0; border: 0; background: none; color: var(--dim); cursor: pointer; border-radius: 3px; }
+  .tl .chev { width: 18px; height: 18px; }
+  .tl .chev, .tlall .ico { display: inline-flex; align-items: center; justify-content: center; }
+  .tlall .ico { width: 18px; height: 18px; }
+  .tl .chev .exi, .tlall .exi {
+    width: 12px; height: 12px; margin: 0; transform: rotate(-90deg);
+    fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .tl .chev[aria-expanded="true"] .exi, .tlall[aria-expanded="true"] .exi { transform: none; }
+  @media (prefers-reduced-motion: no-preference) { .tl .chev .exi, .tlall .exi { transition: transform .12s; } }
+  .tlall { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 12px; }
+  .tlall:hover, .tl .chev:hover { color: var(--ink-strong); }
+  .tl .body { margin: 2px 0 8px 26px; }
+  .tl .body[hidden] { display: none; }
+  .tl .body .sub { margin-top: 6px; }
+  .tl .body .sub:first-child { margin-top: 0; }
+  .turn { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--line); background: var(--bg); border-radius: 0 3px 3px 0; }
+  .turn.assistant { border-left-color: var(--primary); background: var(--primary-tint); }
+  .turn.simulated_user { border-left-color: var(--warn); background: var(--warn-bg); }
+  .turn.note { border-left-color: var(--warn); background: var(--warn-bg); font-style: italic; }
+  .turn .who { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); font-weight: 700; }
   .turn .said { font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 11px; background: #eceae5; margin-right: 4px; }
-  .chip.y { background: #e2f3e9; color: var(--pass); } .chip.n { background: #fbe9e7; color: var(--fail); }
+  .chip { display: inline-block; white-space: nowrap; padding: 0 6px; border-radius: 3px; font-size: 11px; background: var(--track); color: var(--ink); margin-right: 4px; }
+  .chip.y { background: var(--pass-bg); color: var(--pass-ink); } .chip.n { background: var(--fail-bg); color: var(--fail-ink); }
   .close { float: right; cursor: pointer; color: var(--dim); background: none; border: 0; font-size: 18px; line-height: 1; }
   .empty { color: var(--dim); padding: 20px 0; }
+  #drawer section { margin-top: 16px; }
+  /* View by: switches the whole page between following runs over dates and comparing models side by side. */
+  .viewrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .viewrow[hidden] { display: none; }
+  .viewrow select { font-weight: 600; min-width: 8.5em; }
+  .viewhint { flex: 1 1 260px; font-size: 12px; color: var(--dim); }
+  /* By model: stacked outcome bars, percentile bars, the quality-against-speed plot and the category heat map. The
+     colour rules are the page's own: green passed, red failed, orange could not be graded, and one blue that darkens
+     towards the tail for response time. A model never gets a colour of its own; its name is the label. */
+  .cmp .s1 { --c: #6da7ec; } .cmp .s2 { --c: #3987e5; } .cmp .s3 { --c: #1c5cab; } .cmp .s4 { --c: #0d366b; }
+  .cmp td.mname { min-width: 12ch; font-weight: 600; color: var(--ink-strong); overflow-wrap: anywhere; }
+  td.barcell { width: 38%; min-width: 180px; }
+  .stack { display: flex; height: 14px; border-radius: 3px; overflow: hidden; background: var(--track); }
+  .stack i { display: block; height: 100%; box-shadow: inset -1px 0 0 var(--panel); }
+  .stack .p { background: var(--pass); } .stack .f { background: var(--fail); } .stack .e { background: var(--warn); }
+  .pbars { display: grid; gap: 3px; padding: 3px 0; }
+  .pbar .tr { height: 7px; }
+  .pbar .tr > i { display: block; height: 100%; min-width: 2px; border-radius: 0 2px 2px 0; background: var(--c); }
+  .heat td.hc { text-align: center; min-width: 92px; font-variant-numeric: tabular-nums; color: var(--ink-strong); }
+  .heat td.hc .n { display: block; font-size: 10.5px; color: var(--ink); }
+  .heat th.mh { max-width: 16ch; text-align: center; text-transform: none; letter-spacing: 0; overflow-wrap: anywhere; }
+  .heat th[scope=row] { font-size: 14px; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--ink); background: none; }
+  .heat tr.all th, .heat tr.all td { font-weight: 700; border-bottom: 2px solid var(--ink-strong); }
+  .scatter { position: relative; margin: 0 0 6px; }
+  .scatter svg { display: block; width: 100%; height: auto; overflow: visible; font: 11px/1 var(--font); }
+  .scatter .sgrid { stroke: var(--line); stroke-width: 1; }
+  .scatter .sbase { stroke: var(--dim); stroke-width: 1; opacity: .5; }
+  .scatter text { fill: var(--dim); }
+  .scatter text.nm { fill: var(--ink); font-size: 12px; }
+  .scatter .dot { fill: var(--ink-strong); stroke: var(--panel); stroke-width: 2; }
+  .scatter .dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  @media (max-width: 700px) { header.masthead { padding: 28px 18px 16px; } #left { padding: 14px 18px 60px; } h1 { font-size: 24px; } }
+  @media print {
+    #filterbar, #items-section .filters, #items-section .hint, #items-section .blurb, #drawer { display: none !important; }
+    header.masthead, #left { padding-left: 0; padding-right: 0; }
+    section { break-inside: avoid; }
+  }
 </style>
 </head>
 <body>
 <script id="data" type="application/json">__GD_EVAL_DATA__</script>
 
-<header>
+<header class="masthead">
+  <div class="eyebrow"><span class="brand">GoodData.AI</span> · Evaluation report</div>
   <h1 id="title"></h1>
   <div class="sub" id="meta"></div>
 </header>
 
 <main>
   <div id="left">
-    <section id="summary"></section>
-    <section id="comparison"></section>
-    <section>
-      <h2>Items</h2>
-      <div id="filters">
-        <input id="q" placeholder="Search id or question…">
-        <select id="kind"></select>
-        <select id="status">
-          <option value="all">any status</option>
-          <option value="fail">failed</option>
-          <option value="pass">passed</option>
-          <option value="err">errored</option>
-          <option value="skip">skipped</option>
+    <div id="filterbar">
+      <div class="viewrow" id="viewrow">
+        <label class="fl" for="viewby">View by</label>
+        <select id="viewby">
+          <option value="date">Date</option>
+          <option value="model">Model</option>
         </select>
-        <select id="focus" title="Run the drawer and the expression filter read"></select>
-        <input id="expr" placeholder="expression, e.g. d.filter_ranking_score === false">
-        <span class="count" id="count"></span>
+        <span class="viewhint" id="viewhint"></span>
       </div>
-      <div class="hint">
-        expression vars: <b>d</b> detail of focused run · <b>it</b> focused run's item · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b>
+      <div class="filters" role="group" aria-label="Page filters">
+        <span class="fl" title="These filters decide what every section on this page covers">Filter the report</span>
+        <span class="controls" id="top-controls"></span>
+        <button type="button" id="top-reset" hidden>Reset</button>
+        <span class="count" id="top-count"></span>
       </div>
+    </div>
+    <div class="scope" id="scope" hidden></div>
+    <section id="summary"></section>
+    <section id="outcomes"></section>
+    <section id="tradeoff" hidden></section>
+    <section id="categories" hidden></section>
+    <section id="consistency" hidden></section>
+    <section id="latency"></section>
+    <section id="items-section">
+      <h2>Test cases</h2>
+      <p class="blurb">These filters narrow the table only, inside whatever the filters at the top allow.</p>
+      <div class="filters" role="group" aria-label="Item filters">
+        <input id="q" placeholder="Search test case or question…" aria-label="Search test case or question">
+        <span class="controls" id="items-controls"></span>
+        <button type="button" id="items-reset" hidden>Reset</button>
+        <span class="count" id="items-count"></span>
+      </div>
+      <details class="adv"><summary>Advanced: filter by a check expression</summary>
+        <input id="expr" placeholder="e.g. d.filters_correct === false" aria-label="Filter expression">
+        <div class="hint">
+          expression vars: <b>d</b> checks of the run being read · <b>it</b> that run's result · <b>i</b> row (i.per[label]) · <b>q</b> question · <b>kind</b> category id. A test case matches when any shown run does.
+        </div>
+      </details>
       <div class="tablewrap"><table id="items"><thead></thead><tbody></tbody></table></div>
       <div class="empty" id="noitems" hidden>Nothing matches these filters.</div>
     </section>
@@ -132,75 +372,784 @@
 
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
-const LABELS = Object.keys(DATA.runs);
+// When a run started (`summary.started_at`), in ms; NaN when the report does not carry it.
+const startedAt = (l) => Date.parse((DATA.runs[l].summary || {}).started_at);
+// A run's place in time: when it started (`summary.started_at` in its JSON), else the date its file is named for
+// ("2026-09-28"). NaN when it has neither.
+function runStamp(l) {
+  const started = startedAt(l);
+  if (!isNaN(started)) return started;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(l.includes(' · ') ? l.split(' · ')[0] : l);
+  return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
+}
+// The runs oldest first, by timestamp, so the order the files were given in does not decide which run is the latest. Runs
+// that started together keep their given order, and a report where any run has no timestamp keeps the given order whole:
+// a partial sort would put the undated runs at an arbitrary place.
+function byTime(labels) {
+  const stamps = labels.map(runStamp);
+  if (stamps.some(isNaN)) return labels;
+  return labels.map((l, i) => ({ l, t: stamps[i], i })).sort((a, b) => a.t - b.t || a.i - b.i).map((x) => x.l);
+}
+// Every run in the report, oldest first. LABELS is the columns the page compares right now: all of them when viewed by
+// date, one per model when viewed by model (setView switches between the two).
+const ALL_LABELS = byTime(Object.keys(DATA.runs));
+let LABELS = ALL_LABELS;
+let VIEW = 'date';
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// Reasoning arrives as markdown, with a **bold** title line. Escaped first, so the only markup that reaches the page is the <strong> added here.
+const bold = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 const num = (v, d = 2) => (typeof v === 'number' ? v.toFixed(d) : '–');
-const pct = (v) => (typeof v === 'number' ? (v * 100).toFixed(1) + '%' : '–');
+const pct = (v) => (typeof v === 'number' ? Math.round(v * 100) + '%' : '–');
+// Seconds, two decimals under 10s and one above, so a 117.8s tail and a 0.84s median both read.
+// Seconds: one decimal (4.6s, 16.2s), without a redundant ".0" (3s, not 3.0s).
+const secs = (v) => (typeof v === 'number' ? v.toFixed(1).replace(/\.0$/, '') + 's' : '–');
+const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+function median(xs) {
+  const s = [...xs].sort((a, b) => a - b), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
 
 // ---------- rows: one per item id, holding that id's result in every run ----------
 const rows = [];
 const byId = new Map();
-for (const label of LABELS) {
+for (const label of ALL_LABELS) {
   for (const [id, item] of Object.entries(DATA.runs[label].items || {})) {
     let r = byId.get(id);
     if (!r) {
-      r = { id, kind: item.test_kind || '', dataset: item.dataset_name || '', question: item.question || '', per: {} };
+      r = { id, kind: item.test_kind || '', mode: item.mode || '', dataset: item.dataset_name || '', question: item.question || '', per: {} };
       byId.set(id, r);
       rows.push(r);
     }
     r.per[label] = item;
     if (!r.question) r.question = item.question || '';
     if (!r.kind) r.kind = item.test_kind || '';
+    if (!r.mode) r.mode = item.mode || '';
   }
 }
-const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : item.pass_at_k ? 'pass' : 'fail';
-const LBL = { pass: 'PASS', fail: 'FAIL', err: 'ERR', skip: 'SKIP', none: '–' };
+// The test cases the page can cover: those present in at least one compared column (all of them, unless a model view
+// leaves out the older runs of a model).
+let scopeRows = rows;
+// The verdict an item was decided on: gate_passed (pass^K under --gate power), else pass_at_k for older reports.
+const passedOf = (item) => !!(item.gate_passed ?? item.pass_at_k);
+const statusOf = (item) => !item ? 'none' : item.skipped ? 'skip' : item.error ? 'err' : passedOf(item) ? 'pass' : 'fail';
+const LBL = { pass: 'PASS', fail: 'FAIL', err: 'ERROR', skip: 'SKIP', none: '–' };
+// Test categories in words; unknown ones fall back to the raw id made readable.
+const KIND_NAMES = { agentic_visualization: 'Visualization', agentic_metric_skill: 'Metric creation',
+  agentic_alert_skill: 'Alert creation', agentic_general_question: 'General question', agentic_guardrail: 'Guardrail' };
+const kindName = (k) => KIND_NAMES[k] || String(k || '').replace(/^agentic_/, '').replace(/_skill$/, '').replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
+const chipHtml = (s) => `<span class="st ${s}">${LBL[s]}</span>`;
+
+// ---------- run names ----------
+// Runs are identified by name (ideally a date) alone: time order is carried by position, and colour is kept for
+// meaning (pass / fail), not identity. A merged report names a run "<file> · <model>" and the page shows the part
+// before the dot, so a file named for its date reads as "Sep 28".
+// Dates read as people say them: "Oct 13", with the year only when it isn't the current one ("Dec 2, 2025").
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function humanDate(d) {
+  return `${MONTHS[d.getMonth()]} ${d.getDate()}` + (d.getFullYear() !== new Date().getFullYear() ? `, ${d.getFullYear()}` : '');
+}
+// "Oct 11, 23:47" in the viewer's own time zone, the same date style with the time of day.
+function humanDateTime(d) {
+  const z = (n) => String(n).padStart(2, '0');
+  return `${humanDate(d)}, ${z(d.getHours())}:${z(d.getMinutes())}`;
+}
+// A run named by an ISO date (2026-09-28) is shown as "Sep 28"; any other name is shown as it is.
+function runName(name) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(name);
+  return m ? humanDate(new Date(+m[1], +m[2] - 1, +m[3])) : name;
+}
+// By model a column is named for its model; by date, for its run, with the model added when the report holds several
+// (two models run on the same date would otherwise both read "Oct 5").
+const roleOf = (l) => (VIEW === 'model' ? MODEL_LABEL[l]
+  : runName(l.includes(' · ') ? l.split(' · ')[0] : l) + (MULTI_MODEL && l.includes(' · ') ? ' · ' + MODEL_LABEL[l] : ''));
+const sourceOf = (l) => (l.includes(' · ') ? l.split(' · ')[0] : '');
+// The name a run was given, as given: roleOf styles a date-named run as "Sep 28", this keeps "2026-09-28". A merged report
+// names a run "<file> · <model>"; the file is the name, and the model has a column of its own beside it.
+const givenNameOf = (l) => sourceOf(l) || l;
+const uniq = (xs) => [...new Set(xs.filter(Boolean))];
+
+// ---------- models ----------
+// A run's model is read from the run itself, never from its file name, so a file named for its model and one named for
+// its date both work.
+const modelOfRun = (l) => DATA.runs[l].model || (l.includes(' · ') ? l.split(' · ').slice(1).join(' · ') : l);
+const providerOfRun = (l) => ((DATA.comparison || {})[l] || {}).provider_name || '';
+const modelKeyOf = (l) => providerOfRun(l) + '/' + modelOfRun(l);
+// The name a model goes by: its id, with the provider in front only when two providers serve the same id.
+const MULTI_MODEL = new Set(ALL_LABELS.map(modelKeyOf)).size > 1;
+const MODEL_LABEL = (() => {
+  const servedBy = {};
+  for (const l of ALL_LABELS) (servedBy[modelOfRun(l)] ||= new Set()).add(providerOfRun(l));
+  return Object.fromEntries(ALL_LABELS.map((l) => [l,
+    servedBy[modelOfRun(l)].size > 1 && providerOfRun(l) ? providerOfRun(l) + '/' + modelOfRun(l) : modelOfRun(l)]));
+})();
 
 // ---------- header ----------
-$('#title').textContent = DATA.title || 'gd-eval report';
-$('#meta').innerHTML = `${rows.length} item(s) · ${LABELS.length} run(s) · generated ${esc(DATA.generated_at)}` +
-  (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
-
-// ---------- summary cards ----------
-$('#summary').innerHTML = '<h2>Runs</h2><div class="cards">' + LABELS.map((label) => {
-  const s = DATA.runs[label].summary || {};
-  const rate = s.total ? s.passed / s.total : 0;
-  return `<div class="card"><b title="${esc(label)}">${esc(label)}</b>
-    <div class="big">${pct(rate)}</div>
-    <div class="sub2">${s.passed ?? 0}/${s.total ?? 0} passed · ${s.errored ?? 0} err · ${s.skipped ?? 0} skip</div>
-    <div class="sub2">${num(s.avg_latency_s)}s avg latency</div>
-    <div class="bar"><i style="width:${(rate * 100).toFixed(1)}%"></i></div></div>`;
-}).join('') + '</div>';
-
-// ---------- comparison ----------
-if (LABELS.length > 1) {
-  const cols = [
-    ['Run', (l) => esc(l), ''],
-    ['Pass rate', (l) => pct(cmp(l).pass_rate), 'num'],
-    ['Passed', (l) => `${cmp(l).passed ?? 0}/${cmp(l).total ?? 0}`, 'num'],
-    ['Avg quality', (l) => pct(cmp(l).avg_quality_score), 'num'],
-    ['Avg latency', (l) => num(cmp(l).avg_latency_s) + 's', 'num'],
-    ['Total latency', (l) => num(cmp(l).total_latency_s, 1) + 's', 'num'],
-  ];
-  $('#comparison').innerHTML = '<h2>Comparison</h2><table><thead><tr>' +
-    cols.map(([h, , c]) => `<th class="${c}">${h}</th>`).join('') + '</tr></thead><tbody>' +
-    LABELS.map((l) => '<tr>' + cols.map(([, f, c]) => `<td class="${c}">${f(l)}</td>`).join('') + '</tr>').join('') +
-    '</tbody></table>';
+// The title and the Run setup tooltip describe the columns being compared, so renderMasthead writes them again
+// whenever the view changes.
+function mastheadTitle() {
+  const runsList = LABELS.map((l) => DATA.runs[l]);
+  const models = uniq(runsList.map((r) => r.model));
+  const wss = uniq(runsList.map((r) => r.workspace_id));
+  const subject = `${models.join(', ') || 'Model'}${wss.length ? ' on ' + wss.join(', ') : ''}`;
+  // An explicit --title wins. Otherwise a fixed template says what kind of report this is and what was tested;
+  // the result itself is in the Results cards, not in prose up here.
+  const kind = VIEW === 'model'
+    ? (LABELS.length > 1 ? 'Model comparison' : 'Run results')
+    : LABELS.length > 2 ? 'Run history' : LABELS.length > 1 ? 'Run comparison' : 'Run results';
+  const title = DATA.title && DATA.title !== 'gd-eval report' ? DATA.title : `${kind}: ${subject}`;
+  $('#title').textContent = title;
+  document.title = title + ' · GoodData.AI evaluation';
 }
-function cmp(label) {
-  const c = DATA.comparison[label];
-  if (c) return c;
-  const s = DATA.runs[label].summary || {};
-  return { passed: s.passed, total: s.total, pass_rate: s.total ? s.passed / s.total : 0, avg_latency_s: s.avg_latency_s, total_latency_s: s.latency_s };
+// Shown in the viewer's own time zone; the original UTC stamp is on hover.
+const genDate = (() => {
+  const m = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})(?::\d{2})?\s*(UTC|Z)?$/.exec(String(DATA.generated_at || '').trim());
+  const d = m ? new Date(`${m[1]}T${m[2]}:00Z`) : null;
+  return d && !isNaN(d) ? humanDateTime(d) : DATA.generated_at;
+})();
+// Everything that should be identical across runs lives behind one "Run setup" tooltip. If any of it differs,
+// a warning names what changed, because results from different setups are not directly comparable.
+const setupFacts = () => [
+  ['Model', (l) => DATA.runs[l].model],
+  ['Provider', (l) => ((DATA.comparison || {})[l] || {}).provider_name],
+  ['Workspace', (l) => DATA.runs[l].workspace_id],
+  ['Dataset', (l) => uniq(Object.values(DATA.runs[l].items || {}).map((it) => it.dataset_name)).join(', ')],
+  ['Test cases', (l) => (DATA.runs[l].summary || {}).total],
+  ['Attempts per test case', (l) => uniq(Object.values(DATA.runs[l].items || {}).map((it) => it.runs)).join(', ')],
+  ['Pass rule', (l) => ({ any: 'passes if any attempt passes', power: 'passes only if every attempt passes' })[DATA.runs[l].gate] || DATA.runs[l].gate],
+].map(([k, f]) => {
+  const vals = LABELS.map((l) => f(l)).map((v) => (v == null || v === '' ? '\u2013' : String(v)));
+  // By model the model (and its provider) is what is being compared, so it is expected to differ and is not flagged.
+  return { k, vals, same: uniq(vals).length <= 1, compared: VIEW === 'model' && (k === 'Model' || k === 'Provider') };
+}).filter((x) => x.vals.some((v) => v !== '\u2013'));  // a field the report does not carry (redacted) is not listed
+// Consecutive runs with the same value collapse into one range: "ws_a (Aug 31 – Sep 28), then ws_b (Oct 5)".
+function setupRanges(x) {
+  // By model there is no order to collapse over, so each value names the models that have it: "ws_a (model_a, model_b)".
+  if (VIEW === 'model') {
+    const byValue = {};
+    LABELS.forEach((l, i) => (byValue[x.vals[i]] ||= []).push(roleOf(l)));
+    return Object.entries(byValue).map(([v, names]) => `${esc(v)} (${names.map(esc).join(', ')})`).join(', ');
+  }
+  const segs = [];
+  LABELS.forEach((l, i) => {
+    const last = segs[segs.length - 1];
+    if (last && last.v === x.vals[i]) last.to = l; else segs.push({ v: x.vals[i], from: l, to: l });
+  });
+  return segs.map((g) => `${esc(g.v)} (${esc(roleOf(g.from))}${g.to !== g.from ? ` \u2013 ${esc(roleOf(g.to))}` : ''})`).join(', then ');
 }
+// A small "!" next to a number whose basis changed between runs; the tooltip says what changed.
+const caution = (html) => `<span class="info caution" tabindex="0" aria-label="${esc(html.replace(/<[^>]+>/g, ''))}"><span class="ico" aria-hidden="true">!</span><span class="tip" role="tooltip">${html}</span></span>`;
+// Test cases present in a run (optionally of one format), among the rows the page covers.
+const idsIn = (l, mode) => new Set(dashRows.filter((r) => r.per[l] && (!mode || r.mode === mode)).map((r) => r.id));
+// What changed in the set of test cases between two runs, as text; '' when the set is identical.
+function suiteChange(a, b, mode) {
+  const A = idsIn(a, mode), B = idsIn(b, mode);
+  const added = [...B].filter((id) => !A.has(id)).length, removed = [...A].filter((id) => !B.has(id)).length;
+  if (!added && !removed) return '';
+  return `Not the same test cases: ${A.size} in ${esc(roleOf(a))}, ${B.size} in ${esc(roleOf(b))}` +
+    ` (${[added && `${added} added`, removed && `${removed} removed`].filter(Boolean).join(', ')}).`;
+}
+function renderMasthead() {
+  mastheadTitle();
+  const facts = setupFacts(), diff = facts.filter((x) => !x.same && !x.compared), byModel = VIEW === 'model';
+  const setupTip = '<span class="info" tabindex="0">Run setup <span class="ico" aria-hidden="true">i</span>' +
+    `<span class="tip" role="tooltip" id="setup-tip"><b>${byModel ? 'Same for every model' : LABELS.length > 1 ? 'Same in every run' : 'Setup of this run'}</b>` +
+    (facts.filter((x) => x.same).map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${esc(x.vals[0])}</span></span>`).join('') || '<span class="sub2">nothing</span>') +
+    (diff.length ? `<b class="diffhead">${byModel ? 'Differs between models' : 'Differs between runs'}</b>` + diff.map((x) => `<span class="kv2"><span>${esc(x.k)}</span><span>${setupRanges(x)}</span></span>`).join('') : '') +
+    '</span></span>';
+  $('#meta').innerHTML = `<span title="${esc(DATA.generated_at)} (your local time is shown)">Generated ${esc(genDate)}</span> \u00b7 ` + setupTip +
+    (DATA.redacted ? '<span class="badge">REDACTED</span>' : '');
+}
+
+// ---------- the figures behind the dashboard ----------
+// Unfiltered, every figure is read from the report (summary, comparison and by_mode), so this page cannot
+// disagree with the console or the JSON. Once a filter narrows the selection those figures no longer describe it,
+// so they are recomputed from the selected items' own records by the rules EvalReport uses (core/runner.py).
+// A report from an older gd-eval has no by_mode and says so.
+const MODES = [['single_shot', 'Single-question'], ['multi_turn', 'Conversation']];
+const MODE_NAME = { single_shot: 'single-question', multi_turn: 'conversation' };
+const figures = {};
+let runsShown = LABELS;  // the runs the dashboard covers; narrowed by the Runs filter at the top
+
+function reported(label) {
+  const c = DATA.comparison[label] || {}, s = DATA.runs[label].summary || {};
+  const total = c.total ?? s.total ?? 0, passed = c.passed ?? s.passed ?? 0;
+  const errored = s.errored ?? 0, skipped = s.skipped ?? 0;
+  return {
+    total, passed, errored, skipped,
+    // A report from before `failed` was written has no such field; what is left once the other three are taken out is it.
+    failed: s.failed ?? Math.max(0, total - passed - errored - skipped),
+    avg_quality_score: c.avg_quality_score,
+    avg_latency_s: c.avg_latency_s ?? s.avg_latency_s,
+    total_latency_s: c.total_latency_s ?? s.latency_s,
+    by_mode: c.by_mode || s.by_mode || null,
+  };
+}
+// Share of the evaluated test cases that passed, for reported and recomputed figures alike. A skipped test case never
+// ran, so it is left out of the divisor, as the console's percentage does; null when nothing was evaluated.
+const passRateOf = (f) => (f.total - f.skipped > 0 ? f.passed / (f.total - f.skipped) : null);
+const r3 = (v) => Math.round(v * 1000) / 1000;
+// Linear interpolation between closest ranks, as gd-eval computes it, so P50 is the median.
+function percentile(sorted, p) {
+  const rank = (sorted.length - 1) * p / 100, lower = Math.floor(rank), upper = Math.min(lower + 1, sorted.length - 1);
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (rank - lower);
+}
+function latencyStats(samples) {
+  const s = [...samples].sort((a, b) => a - b);
+  if (!s.length) return null;
+  // The mean without the fastest and slowest 10%; null while a sample is too small to drop one from each end.
+  const drop = Math.floor(s.length / 10);
+  const trimmed = drop ? mean(s.slice(drop, s.length - drop)) : null;
+  return { n: s.length, mean: r3(mean(s)), trimmed_mean: trimmed === null ? null : r3(trimmed), min: r3(s[0]), p50: r3(percentile(s, 50)), p70: r3(percentile(s, 70)),
+    p90: r3(percentile(s, 90)), p99: r3(percentile(s, 99)), max: r3(s[s.length - 1]) };
+}
+// Fraction of the best run's boolean checks that held; with none, 1 or 0 by the verdict.
+function qualityOf(it) {
+  const checks = Object.values(it.detail || {}).filter((v) => typeof v === 'boolean');
+  return checks.length ? checks.filter(Boolean).length / checks.length : (passedOf(it) ? 1 : 0);
+}
+function recompute(label, ids) {
+  const items = ids.map((id) => DATA.runs[label].items[id]).filter(Boolean);
+  const evaluated = items.filter((it) => !it.skipped && it.error == null);
+  const passed = items.filter(passedOf).length;
+  const latency = items.reduce((a, it) => a + (it.latency_s || 0), 0);
+  const runs = items.reduce((a, it) => a + (it.runs || 0), 0);
+  const by_mode = {};
+  for (const [m] of MODES) {
+    const inMode = items.filter((it) => it.mode === m && !it.skipped);
+    by_mode[m] = {
+      total: inMode.length, passed: inMode.filter(passedOf).length,
+      traces_s: latencyStats(inMode.flatMap((it) => it.trace_latencies_s || [])),
+    };
+    if (m === 'multi_turn') by_mode[m].runs_s = latencyStats(inMode.flatMap((it) => it.run_latencies_s || []));
+  }
+  return {
+    total: items.length, passed, errored: items.filter((it) => it.error != null).length,
+    // Graded and not passed: neither skipped nor errored, as the JSON's own `failed` counts it.
+    failed: items.filter((it) => !passedOf(it) && !it.skipped && it.error == null).length,
+    skipped: items.filter((it) => it.skipped).length,
+    avg_quality_score: evaluated.length ? mean(evaluated.map(qualityOf)) : 0,
+    avg_latency_s: runs ? latency / runs : 0, total_latency_s: latency, by_mode,
+  };
+}
+function modeOf(label, mode) { return ((figures[label] || {}).by_mode || {})[mode] || null; }
+const hasModes = LABELS.some((l) => reported(l).by_mode);
+
+// The run the headline cards compare the latest run with: the previous run, unless the reader clicked another point on
+// a sparkline. A pick that a filter has since removed, or that has become the latest run itself, is ignored.
+let cmpPick = null;
+function compareBase() {
+  const last = runsShown[runsShown.length - 1];
+  return cmpPick && cmpPick !== last && runsShown.includes(cmpPick) ? cmpPick : runsShown[runsShown.length - 2];
+}
+
+// Median wall-clock of one attempt at a test case, over the test cases the page covers.
+function medTimeOf(l) {
+  const xs = dashRows.flatMap((r) => (r.per[l] || {}).run_latencies_s || []);
+  return xs.length ? median(xs) : null;
+}
+
+// What the time card is made of, for its tooltip. It pools every format the page covers, so with both it matches
+// neither latency table below it (those split the formats and time the assistant's replies, not whole attempts).
+function medTimeHelp() {
+  const last = runsShown[runsShown.length - 1];
+  const names = MODES.filter(([m]) => dashRows.some((r) => r.mode === m && ((r.per[last] || {}).run_latencies_s || []).length))
+    .map(([m]) => MODE_NAME[m]);
+  const covers = names.length > 1 ? `${names.join(' and ')} test cases together, so it matches neither latency table below`
+    : names.length ? `${names[0]} test cases` : 'the test cases';
+  return `Median wall-clock of one attempt at a test case, over ${covers}. An attempt is the whole thing, grading included ` +
+    '(and, in a conversation, the simulated user\'s replies), so it runs longer than a response time, which times only the assistant\'s replies.';
+}
+
+// ---------- results: three headline cards ----------
+// The report opens with three figures for the latest run: pass rate, quality and time. With an earlier run there is
+// a change line against it (the previous run unless the reader picks another), and with three or more runs a
+// sparkline of every run (hover a point for its value, click it to compare the latest run with that one). The
+// per-format split lives in the test-case table's filters.
+function kpiCard({ title, get, fmt, higher, isSame, base, after = '', help = '' }) {
+  const pts = runsShown.map((l) => ({ l, v: get(l) }));
+  const lastI = pts.length - 1, latest = pts[lastI];
+  const b = base ? pts.find((p) => p.l === base) : null;
+  let change = '';
+  if (latest.v != null && b && b.v != null) {
+    const d = latest.v - b.v;
+    // A chevron shows which way the value moved; its colour says whether that is good (green) or bad (red).
+    const good = (d > 0) === higher;
+    // Plain wording: where the value came from, not a difference in points. "▼ from 86% on Sep 28".
+    change = isSame(d, b.v) ? `<span class="ext same">same as ${fmt(b.v)}</span> on ${esc(roleOf(b.l))}`
+      : `<span class="ext ${good ? 'best' : 'worst'}" title="${good ? 'Better' : 'Worse'}"><span class="vh">${good ? 'Better: ' : 'Worse: '}</span>` +
+        `${CHEVRON(d > 0 ? 'up' : 'down')}${d > 0 ? 'up' : 'down'} from ${fmt(b.v)}</span> on ${esc(roleOf(b.l))}` + after;
+  }
+  let spark = '';
+  const seq = pts.map((p, i) => [p, i]).filter(([p]) => p.v != null);
+  if (pts.length >= 3 && seq.length >= 2) {
+    const W = 220, H = 44, P = 6, vals = seq.map(([p]) => p.v);
+    let lo = Math.min(...vals), hi = Math.max(...vals);
+    if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
+    const x = (i) => P + (i * (W - 2 * P)) / lastI, y = (v) => P + (1 - (v - lo) / (hi - lo)) * (H - 2 * P);
+    const step = (W - 2 * P) / lastI;
+    // No viewBox: heights are real pixels and widths are percentages of the card, so the dots stay round at any
+    // card width (a viewBox stretched with preserveAspectRatio="none" squashes every circle into an ellipse).
+    const pc = (u) => `${((u / W) * 100).toFixed(2)}%`;
+    spark = `<svg class="spark" role="img" aria-label="${esc(title)} over ${pts.length} runs: ${seq.map(([p]) => `${esc(roleOf(p.l))} ${fmt(p.v)}`).join(', ')}">` +
+      seq.slice(1).map(([p, i], k) => { const [q, j] = seq[k]; return `<line class="ln" x1="${pc(x(j))}" y1="${y(q.v).toFixed(1)}" x2="${pc(x(i))}" y2="${y(p.v).toFixed(1)}"></line>`; }).join('') +
+      seq.map(([p, i]) => `<circle data-run="${esc(p.l)}" cx="${pc(x(i))}" cy="${y(p.v).toFixed(1)}" r="${i === lastI ? 5 : 2.5}" class="pt${i === lastI ? ' latest' : ''}${p.l === base ? ' picked' : ''}"></circle>`).join('') +
+      pts.map((p, i) => `<rect class="hit" data-run="${esc(p.l)}" x="${pc(x(i) - step / 2)}" y="0" width="${pc(step)}" height="${H}" tabindex="0" role="button" aria-label="${esc(roleOf(p.l))}: ${p.v == null ? 'no data' : fmt(p.v)}${i === lastI ? ', latest run' : '. Compare the latest run with this one'}"><title>${esc(roleOf(p.l))}: ${p.v == null ? '\u2013' : fmt(p.v)}${i === lastI ? ' (latest)' : '. Click to compare with it.'}</title></rect>`).join('') +
+      `</svg><div class="kpi-range"><span>${esc(roleOf(pts[0].l))}</span><span>${esc(roleOf(latest.l))}</span></div>`;
+  }
+  const caption = help ? `<span class="info" tabindex="0">${title}<span class="tip" role="tooltip">${help}</span></span>` : title;
+  return `<figure class="kpi"><figcaption>${caption}</figcaption>
+    <div class="kpi-val">${latest.v == null ? '\u2013' : fmt(latest.v)}</div>
+    ${change ? `<div class="kpi-delta">${change}</div>` : ''}${spark}</figure>`;
+}
+// The key under the cards: what each kind of dot on the sparklines is, and that the white one can be moved.
+function sparkLegend() {
+  return '<div class="sparklegend">' +
+    '<span><i class="dotkey latest" aria-hidden="true"></i>Latest run</span>' +
+    '<span><i class="dotkey base" aria-hidden="true"></i>Compared with</span>' +
+    '<span><i class="dotkey other" aria-hidden="true"></i>Other runs</span></div>' +
+    '<p class="blurb">The change lines above measure the latest run against the white dot, which starts on the previous run. ' +
+    'Click any other dot to move the comparison to that run.</p>';
+}
+function renderSummary() {
+  if (VIEW === 'model') return setSection('summary', '');  // the model view opens on its Results table instead of cards
+  const base = runsShown.length > 1 ? compareBase() : null;
+  const cards =
+    kpiCard({ title: 'Test cases passed', get: (l) => passRateOf(figures[l]), fmt: pct, higher: true,
+      isSame: (d) => Math.round(d * 100) === 0, base, after: ' <a href="#items-section" class="which">which?</a>' }) +
+    kpiCard({ title: 'Average quality score', get: (l) => (figures[l].total ? figures[l].avg_quality_score : null), fmt: pct, higher: true,
+      isSame: (d) => Math.abs(d) < 0.01, base }) +
+    kpiCard({ title: 'Median time per attempt', get: medTimeOf, fmt: secs, higher: false,
+      isSame: (d, b) => Math.abs(d) < Math.max(0.5, 0.05 * b), base, help: medTimeHelp() });
+  // The key only makes sense when a sparkline is drawn: from three runs, and only on a card that has two values.
+  setSection('summary', '<h2>Results</h2><div class="trendgrid">' + cards + '</div>' + (cards.includes('class="spark"') ? sparkLegend() : ''));
+}
+function sparkHover(run) {
+  $('#summary').querySelectorAll('circle[data-run]').forEach((el) => el.classList.toggle('on', el.dataset.run === run));
+}
+function sparkPick(run) {
+  cmpPick = run;
+  renderSummary();
+}
+$('#summary').addEventListener('mouseover', (e) => { const h = e.target.closest('.hit'); if (h) sparkHover(h.dataset.run); });
+$('#summary').addEventListener('focusin', (e) => { const h = e.target.closest('.hit'); if (h) sparkHover(h.dataset.run); });
+$('#summary').addEventListener('mouseleave', () => sparkHover(null));
+$('#summary').addEventListener('click', (e) => { const h = e.target.closest('.hit'); if (h) sparkPick(h.dataset.run); });
+$('#summary').addEventListener('keydown', (e) => {
+  const h = e.target.closest('.hit');
+  if (h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sparkPick(h.dataset.run); }
+});
+
+// ---------- latency by mode ----------
+// Per trace is the main figure. gen-ai opens one trace per chat message, so a single-shot run is exactly one
+// trace and its latency is that trace's response time. A multi-turn conversation spans several traces, so it
+// is shown both ways: per trace (each turn, comparable with single-shot) and per full run (the whole
+// conversation, simulated-user replies and judge included).
+const HEAD_HELP = {
+  Median: 'Half were faster than this, half slower (P50).',
+  P70: '70% finished within this time.',
+  P90: '90% finished within this time.',
+  P99: '99% finished within this time. Over a small sample this is close to the slowest one.',
+};
+// Colour rules for the whole report: green = better / quickest, red = worse / slowest, lime = the latest run (and the
+// row open in the side panel). Direction is always a chevron, up or down, so colour is never the only signal.
+const CHEVRON = (dir) => `<svg class="exi" viewBox="0 0 12 12" aria-hidden="true"><path d="${dir === 'up' ? 'M2.5 8 6 4.5 9.5 8' : 'M2.5 4 6 7.5 9.5 4'}"/></svg>`;
+// Marks the latest run wherever runs are listed.
+const LATEST_PILL = ' <span class="latestpill">Latest</span>';
+// The four figures the chart draws and the table lists, in that order: the median (P50) and three percentiles. One
+// measure at four depths, so the chart gives them one hue that darkens towards the tail (the .s1-.s4 classes).
+// Width the charts were drawn at: the width of the latency section, read when it renders.
+let latW = 720;
+const LAT_SERIES = [
+  { key: 'p50', name: 'Median' }, { key: 'p70', name: 'P70' }, { key: 'p90', name: 'P90' }, { key: 'p99', name: 'P99' },
+];
+// Response time as one line per figure across the runs shown, oldest on the left and the latest on the right, so a
+// slow tail that is growing slopes upwards. It plots exactly the numbers in the table below it (same source, same
+// rounding) and the table is its text alternative. A line needs two runs with timings; with fewer there is no
+// trend to draw and the table says it all.
+function latencyChart({ mode, field, sample }) {
+  const pts = runsShown.map((l) => ({ l, st: (modeOf(l, mode) || {})[field] || null }));
+  if (pts.filter((p) => p.st).length < 2) return '';
+  // Drawn at the row's own width (1 unit = 1 pixel), so the text keeps its size however wide the row is.
+  const W = latW, H = Math.min(300, Math.max(220, Math.round(W * 0.24))), M = { l: 44, r: 16, t: 12, b: 30 };
+  const innerH = H - M.t - M.b;
+  const top = Math.max(...pts.filter((p) => p.st).map((p) => p.st.p99));
+  // Round ticks (1, 2, 5 x 10^n) from zero, so line heights compare honestly.
+  const raw = (top || 1) / 4, mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+  const ticks = Math.max(1, Math.ceil(top / step - 1e-9)), yMax = ticks * step;
+  const y = (v) => M.t + innerH * (1 - v / yMax);
+  const last = pts.length - 1, unit = sample.toLowerCase();
+  // End labels name the line and give its latest value, but only while no two would touch: stacked or nudged labels
+  // detach from their lines, and the legend, the tooltip and the table carry the same figures anyway. Without them
+  // the plot runs on to the edge of the row; with them it leaves room on the right.
+  const ends = pts[last].st ? LAT_SERIES.map((s) => ({ s, py: y(pts[last].st[s.key]) })) : [];
+  const touching = ends.some((a, i) => ends.some((b, j) => j > i && Math.abs(a.py - b.py) < 13));
+  const withEnds = ends.length > 0 && !touching;
+  if (withEnds) M.r = 92;
+  const innerW = W - M.l - M.r, band = innerW / pts.length;
+  const x = (i) => M.l + band * (i + 0.5);
+  // x labels: as many as fit without touching, always including the latest run.
+  const every = Math.ceil(pts.length / Math.max(2, Math.floor(innerW / 84)));
+  const clip = (s) => (s.length > 13 ? s.slice(0, 12) + '…' : s);
+  const grid = Array.from({ length: ticks + 1 }, (_, t) => {
+    const v = t * step;
+    return `<line class="${t ? 'lcgrid' : 'lcbase'}" x1="${M.l}" x2="${W - M.r}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"></line>` +
+      `<text x="${M.l - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${v ? secs(v) : '0'}</text>`;
+  }).join('');
+  const xlab = pts.map((p, i) => ((last - i) % every === 0
+    ? `<text class="${i === last ? 'lcnow' : ''}" x="${x(i).toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(clip(roleOf(p.l)))}</text>` : '')).join('');
+  const lines = LAT_SERIES.map((s, k) => {
+    const got = pts.map((p, i) => (p.st ? [x(i), y(p.st[s.key])] : null)).filter(Boolean);
+    return `<polyline class="lcl s${k + 1}" points="${got.map(([px, py]) => `${px.toFixed(1)},${py.toFixed(1)}`).join(' ')}"></polyline>`;
+  }).join('');
+  const dots = LAT_SERIES.map((s, k) => pts.map((p, i) => (p.st
+    ? `<circle class="lcm s${k + 1}" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(p.st[s.key]).toFixed(1)}" r="5"></circle>` : '')).join('')).join('');
+  const endLabels = withEnds
+    ? ends.map(({ s, py }) => `<text class="lcend" x="${(x(last) + 14).toFixed(1)}" y="${(py + 4).toFixed(1)}">${s.name} ${secs(pts[last].st[s.key])}</text>`).join('') : '';
+  const cols = pts.map((p, i) => {
+    const label = p.st ? `${roleOf(p.l)}: ` + [...LAT_SERIES].reverse().map((s) => `${s.name} ${secs(p.st[s.key])}`).join(', ') + `, based on ${p.st.n} ${unit}`
+      : `${roleOf(p.l)}: no timings`;
+    return `<line class="lcx" data-i="${i}" x1="${x(i).toFixed(1)}" x2="${x(i).toFixed(1)}" y1="${M.t}" y2="${H - M.b}"></line>` +
+      `<rect class="lchit" data-i="${i}" x="${(M.l + band * i).toFixed(1)}" y="0" width="${band.toFixed(1)}" height="${H}" tabindex="0" role="img" aria-label="${esc(label)}"></rect>`;
+  }).join('');
+  // Values lead and names follow, highest line first so the list reads like the chart.
+  const tips = pts.map((p, i) => `<div class="lctip${x(i) > W * 0.55 ? ' left' : ''}" data-i="${i}" style="left:${(x(i) / W * 100).toFixed(2)}%" aria-hidden="true">` +
+    `<span class="lcrun">${esc(roleOf(p.l))}</span>` +
+    (p.st ? `<span class="lcn">Based on ${p.st.n} ${unit}</span>` +
+      [...LAT_SERIES].reverse().map((s) => `<span><i class="lckey s${LAT_SERIES.indexOf(s) + 1}"></i><b>${secs(p.st[s.key])}</b> ${s.name}</span>`).join('')
+      : '<span class="lcn">No timings</span>') + `</div>`).join('');
+  return `<div class="latchart"><div class="lclegend">` +
+    LAT_SERIES.map((s, k) => `<span><i class="lckey s${k + 1}"></i>${s.name}</span>`).join('') + `</div>` +
+    `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Response time by run: median, P70, P90 and P99. The table below lists every figure.">` +
+    grid + xlab + lines + dots + endLabels + cols + `</svg>${tips}</div>`;
+}
+// Hover or focus on a run lights its crosshair, markers and tooltip in that chart only; leaving clears every chart.
+function latHover(hit) {
+  const chart = hit && hit.closest('.latchart');
+  document.querySelectorAll('#latency .latchart [data-i]').forEach((el) => {
+    if (el.classList.contains('lchit')) return;
+    el.classList.toggle('on', !!chart && chart.contains(el) && el.dataset.i === hit.dataset.i);
+  });
+}
+$('#latency').addEventListener('mouseover', (e) => latHover(e.target.closest('.lchit')));
+$('#latency').addEventListener('focusin', (e) => latHover(e.target.closest('.lchit')));
+$('#latency').addEventListener('mouseleave', () => latHover(null));
+$('#latency').addEventListener('focusout', () => latHover(null));
+function latencyTable({ mode, field, sample }) {
+  // By model the runs are not a time series: one ranked table with a bar per figure replaces the chart and the rows by date.
+  if (VIEW === 'model') return modelLatencyTable({ mode, field, sample });
+  // The same four percentiles the chart above draws; the fastest and slowest single response are not shown, P99 is
+  // the tail. The average and trimmed average stay in the JSON and the console.
+  const heads = [...RUN_HEADS, ...LAT_SERIES.map((s) => [s.name, HEAD_HELP[s.name]])];
+  const unit = sample.toLowerCase();
+  const dash = '<td class="num">\u2013</td>';
+  // In each column, the quickest run is marked lime and the slowest red, so the best and worst runs stand out at a
+  // glance. Compared on the rounded figure the reader sees, so ties are marked alike; nothing is marked when every
+  // run shows the same value or there is only one run.
+  const KEYS = LAT_SERIES.map((s) => s.key);
+  // Icons carry the meaning as well as the colour: down = least time (quickest), up = most time (slowest).
+  const EXT_ICON = { best: CHEVRON('down'), worst: CHEVRON('up') };
+  const statsOf = (l) => (modeOf(l, mode) || {})[field] || null;
+  const ext = KEYS.map((k) => {
+    const vs = runsShown.map((l) => statsOf(l)).filter(Boolean).map((st) => +st[k].toFixed(1));
+    return vs.length > 1 && Math.min(...vs) !== Math.max(...vs) ? { lo: Math.min(...vs), hi: Math.max(...vs) } : null;
+  });
+  const mark = (j, v) => (!ext[j] ? '' : +v.toFixed(1) === ext[j].lo ? 'best' : +v.toFixed(1) === ext[j].hi ? 'worst' : '');
+  const rows = runsShown.map((l, i) => {
+    const st = statsOf(l);
+    const prevL = runsShown[i - 1], prev = prevL ? ((modeOf(prevL, mode) || {})[field] || null) : null;
+    const basis = st ? `Based on ${st.n} ${unit}` : '';
+    const stats = st ? KEYS.map((k, j) => {
+      const m = mark(j, st[k]), txt = secs(st[k]);
+      const why = m === 'best' ? ' \u00b7 quickest of the runs shown' : m === 'worst' ? ' \u00b7 slowest of the runs shown' : '';
+      return `<td class="num" title="${basis}${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${txt}</span>` : txt}</td>`;
+    }).join('') : dash.repeat(KEYS.length);
+    const flag = st && prev && prev.n !== st.n
+      ? ' ' + caution(`${st.n} ${unit} timed here, ${prev.n} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, mode) ? '<br>' + suiteChange(prevL, l, mode) : ''))
+      : '';
+    const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
+    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${modelCell(l)}${stats}</tr>`;
+  }).reverse().join('');  // newest run first
+  return latencyChart({ mode, field, sample }) + `<div class="tablewrap flat"><table class="lat-table"><thead><tr>` +
+    heads.map(([h, help], j) => `<th class="${j > 2 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    `</tr></thead><tbody>${rows}</tbody></table></div>` +
+    (ext.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest run</span> <span class="ext worst">${EXT_ICON.worst}slowest run</span> in each column</p>` : '');
+}
+function modeSection(mode, title, blurb, tables) {
+  if (!runsShown.some((l) => (modeOf(l, mode) || {}).total)) return '';
+  return `<h2>${title}</h2><p class="blurb">${blurb}</p>` +
+    tables.map(([caption, spec]) => (caption ? `<h3 class="cap">${caption}</h3>` : '') + latencyTable({ mode, ...spec })).join('');
+}
+function renderLatency() {
+  latW = Math.max(320, Math.round($('#latency').clientWidth) || latW);
+  $('#latency').innerHTML = !hasModes
+    ? '<h2>Latency</h2><p class="blurb">This report was written before gd-eval split latency into single-shot and multi-turn. Re-run to get per-trace percentiles.</p>'
+    : modeSection('single_shot', 'Single-question tests · response time',
+        'The assistant is asked one question and answers once, with no follow-up. Each answer is one <b>response</b> (one assistant reply, as recorded in tracing); its time runs from sending the question to the end of the streamed answer. Grading and test set-up are not included.',
+        [['', { field: 'traces_s', sample: 'Responses' }]]) +
+      modeSection('multi_turn', 'Conversation tests · response time',
+        'The assistant holds a back-and-forth with a simulated user over several messages. Time is shown two ways: per response (each assistant reply, comparable with single-question tests) and per conversation (start to finish, including the simulated user\'s replies and grading).',
+        [['Per response · each assistant reply', { field: 'traces_s', sample: 'Responses' }],
+         ['Per conversation · start to finish', { field: 'runs_s', sample: 'Conversations' }]]);
+}
+// The charts are drawn at the section's width, so redraw them when it changes (the window resized, the side panel
+// opened). A few pixels of drift, such as a scrollbar appearing, is not worth a redraw.
+if (window.ResizeObserver) {
+  new ResizeObserver(() => {
+    if (Math.abs(Math.max(320, $('#latency').clientWidth) - latW) > 24) renderLatency();
+  }).observe($('#latency'));
+}
+
+// ---------- outcomes ----------
+// How every test case ended, laid out like the latency tables: one row per run, newest first, the latest marked in
+// lime. The four outcomes are the four the Result filter offers, and the pass rate is the one the first card shows
+// (passed out of evaluated, skipped left out), so the three can never disagree. Counts come from `figures`, which
+// is the report's own summary unfiltered and a recomputation from the selected items otherwise.
+const OUTCOMES = [
+  ['passed', 'Passed', 'passed', 'Test cases that met the run\'s pass rule (see Run setup).'],
+  ['failed', 'Failed', 'failed', 'Test cases that were graded and did not meet the pass rule.'],
+  ['errored', 'Could not be graded', 'could not be graded', 'Test cases left without a verdict by an error in the assistant or the judge.'],
+  ['skipped', 'Skipped', 'were skipped', 'Test cases that were not run, because gd-eval has no evaluator for their category.'],
+];
+// When a run started, in the viewer's own time zone, the report's own UTC stamp on hover. A report written before
+// `started_at` existed has only the date its file is named for, shown without a time.
+function runDateText(l) {
+  const started = startedAt(l);
+  if (!isNaN(started)) return humanDateTime(new Date(started));
+  const named = runStamp(l);
+  if (isNaN(named)) return '–';
+  const u = new Date(named);
+  return humanDate(new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate()));
+}
+function runDateCell(l) {
+  const started = startedAt(l);
+  return `<td${!isNaN(started) ? ` title="${esc(DATA.runs[l].summary.started_at)}"` : ''}>${esc(runDateText(l))}</td>`;
+}
+// A run's column heading in a wide table, one line each: when it started and the name it was given. By model the
+// columns are the models themselves, so they keep the model's name.
+function runHeadHtml(l) {
+  if (VIEW === 'model') return esc(roleOf(l));
+  return `<span class="runhead" title="${esc(l)}"><span>${esc(runDateText(l))}</span><span>${esc(givenNameOf(l))}</span></span>`;
+}
+// The model a run evaluated, its provider on hover.
+function modelCell(l) {
+  const provider = providerOfRun(l);
+  return `<td${provider ? ` title="${esc('Provider: ' + provider)}"` : ''}>${esc(MODEL_LABEL[l])}</td>`;
+}
+// The three columns that identify a run, the first three of every by-date table (outcomes and response time).
+const RUN_HEADS = [['Run date', 'When the run started, in your time zone.'], ['Run name', 'The name the run was given.'],
+  ['Model', 'The language model the run evaluated. Hover for its provider.']];
+function outcomesTable() {
+  const dash = '<td class="num">–</td>';
+  const evaluatedOf = (l) => figures[l].total - figures[l].skipped;
+  // As in the latency tables, the best and worst run are marked on the figure the reader sees, so ties are marked
+  // alike, and nothing is marked when every run reads the same or there is only one run.
+  const shown = (l) => { const r = passRateOf(figures[l]); return r == null ? null : Math.round(r * 100); };
+  const seen = runsShown.map(shown).filter((v) => v != null);
+  const spread = seen.length > 1 && Math.min(...seen) !== Math.max(...seen) ? { lo: Math.min(...seen), hi: Math.max(...seen) } : null;
+  // Up = most passed (best), down = fewest (worst): the chevron says it as well as the colour.
+  const EXT_ICON = { best: CHEVRON('up'), worst: CHEVRON('down') };
+  const rows = runsShown.map((l, i) => {
+    const f = figures[l], ev = evaluatedOf(l), v = shown(l), prevL = runsShown[i - 1];
+    const counts = OUTCOMES.map(([k, , verb]) => `<td class="num" title="${f[k]} of ${f.total} test cases ${verb}">${f[k]}</td>`).join('');
+    const m = spread && v != null ? (v === spread.hi ? 'best' : v === spread.lo ? 'worst' : '') : '';
+    const why = m === 'best' ? ' · highest of the runs shown' : m === 'worst' ? ' · lowest of the runs shown' : '';
+    const rate = v == null ? dash
+      : `<td class="num" title="${f.passed} of ${ev} evaluated test cases${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${v}%</span>` : v + '%'}</td>`;
+    // A pass rate over a different set of test cases is not a like-for-like change, so say so.
+    const flag = prevL && evaluatedOf(prevL) !== ev
+      ? ' ' + caution(`${ev} test cases evaluated here, ${evaluatedOf(prevL)} in ${esc(roleOf(prevL))}.` + (suiteChange(prevL, l, '') ? '<br>' + suiteChange(prevL, l, '') : ''))
+      : '';
+    const isLatest = runsShown.length > 1 && i === runsShown.length - 1;
+    return `<tr${isLatest ? ' class="latest"' : ''}>${runDateCell(l)}<td>${esc(givenNameOf(l))}${isLatest ? LATEST_PILL : ''}${flag}</td>${modelCell(l)}${counts}${rate}</tr>`;
+  }).reverse().join('');  // newest run first
+  const heads = [...RUN_HEADS, ...OUTCOMES.map(([, name, , help]) => [name, help]),
+    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.']];
+  return `<div class="tablewrap flat"><table class="out-table"><thead><tr>` +
+    heads.map(([h, help], j) => `<th class="${j > 2 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    `</tr></thead><tbody>${rows}</tbody></table></div>` +
+    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '');
+}
+function renderOutcomes() {
+  if (VIEW === 'model') { $('#outcomes').innerHTML = modelOutcomesHtml(); return; }
+  $('#outcomes').innerHTML = '<h2>Outcomes</h2>' +
+    '<p class="blurb">How every test case ended. It <b>passed</b> when it met the run\'s pass rule, <b>failed</b> when it was graded and did not, ' +
+    '<b>could not be graded</b> when an error left it without a verdict, and was <b>skipped</b> when it was not run. ' +
+    'The pass rate is the passed test cases out of those evaluated, so skipped ones are left out, as in the console.</p>' +
+    outcomesTable();
+}
+
+// ---------- per-item latency ----------
+// The same two populations as the latency section above, one figure each per item: its chat turns (traces, the
+// main figure) and its whole runs. Items from a report written before gd-eval recorded either list have no trace
+// figure, and their run figure falls back to the per-run average those reports always carried.
+const traceLatency = (it) => (it && (it.trace_latencies_s || []).length ? median(it.trace_latencies_s) : null);
+function runLatency(it) {
+  if (!it) return null;
+  if ((it.run_latencies_s || []).length) return mean(it.run_latencies_s);
+  return it.runs ? (it.avg_latency_s ?? null) : null;
+}
+// Every sample behind a figure, for the cell's tooltip: a median of three hides a 30s outlier.
+function samplesTitle(xs, noun) {
+  if (!(xs || []).length) return '';
+  const shown = xs.slice(0, 12).map(secs).join(', ');
+  return `${xs.length} ${noun}${xs.length === 1 ? '' : 's'}: ${shown}${xs.length > 12 ? ', …' : ''}`;
+}
+const TRACE_HELP = 'Median time of this test case\'s assistant responses (one per message). Excludes grading, the ' +
+  'simulated user and set-up. Hover a value to see every response.';
+const RUN_HELP = 'Mean wall-clock of a whole run: the chat turns plus the judge, the simulated user\'s replies and ' +
+  'any conversation set-up. Hover a value to see every run.';
+const latencyCell = (v, title) => `<td class="num"${title ? ` title="${esc(title)}"` : ''}>${secs(v)}</td>`;
 
 // ---------- filters ----------
+// Two tiers. The bar at the top decides what the whole page covers; the filters in the Items section narrow the
+// table further and touch nothing else, always inside the top selection. Kind, status and run are multi-selects:
+// a <details> holding one checkbox per option, so they need no widget library and stay keyboard-operable. Nothing
+// ticked means everything.
+const STATUS_OPTIONS = [
+  { value: 'pass', text: 'Passed' }, { value: 'fail', text: 'Failed' },
+  { value: 'err', text: 'Could not be graded' }, { value: 'skip', text: 'Skipped' },
+];
+function controlsHtml(p, runsTitle) {
+  const multi = (id, title) =>
+    `<details id="${p}-${id}" class="multi"><summary title="${title}"></summary><div class="menu"></div></details>`;
+  const modes = [['', 'Any format'], ['single_shot', 'Single question'], ['multi_turn', 'Conversation']];
+  return multi('kind', 'Category; choose as many as you like') +
+    `<select id="${p}-mode" aria-label="Format">${modes.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select>` +
+    multi('status', 'Status; choose as many as you like. With several runs an item matches when it has that status in any of them') +
+    multi('runs', runsTitle);
+}
+$('#top-controls').innerHTML = controlsHtml('top', 'Runs; choose which ones the page shows');
+$('#items-controls').innerHTML = controlsHtml('items',
+  'Runs; choose which ones the table shows and reads status and the expression from');
+
+// GoodData attribute-filter composition: the button reads "Title: selection"; the popup has a search field, an
+// All row, the values (each with an Only shortcut and its count), and Cancel / Apply. Changes are staged in the
+// popup and take effect only on Apply; closing it any other way discards them.
+const FILTER_TITLE = { kinds: 'Category', statuses: 'Result', runs: 'Run' };
+function makeMulti(el, noun, onChange) {
+  const summary = el.querySelector('summary'), menu = el.querySelector('.menu');
+  const m = { el, sel: new Set(), opts: [], sig: null };
+  // The run filter is the model filter when the page is viewed by model.
+  const titleNow = () => (noun === 'runs' && VIEW === 'model' ? 'Model' : FILTER_TITLE[noun] || noun);
+  let dAll = true, dSel = new Set();  // the draft: All, or the ticked values
+  const refresh = () => {
+    const picked = m.opts.filter((o) => m.sel.has(o.value));
+    const val = picked.length === 0 ? 'All' : picked.length === 1 ? picked[0].text : `${picked.length} selected`;
+    summary.innerHTML = `<span class="ft">${esc(titleNow())}:</span> ${esc(val)}`;
+    summary.title = picked.length > 1 ? picked.map((o) => o.text).join(', ') : '';
+  };
+  const sync = () => {
+    menu.querySelectorAll('.opt input').forEach((b) => { b.checked = dAll || dSel.has(b.value); });
+    const all = menu.querySelector('.allrow input');
+    if (all) { all.checked = dAll; all.indeterminate = !dAll && dSel.size > 0; }
+    const ap = menu.querySelector('.apply');
+    if (ap) ap.disabled = !dAll && dSel.size === 0;
+  };
+  const loadDraft = () => { dAll = m.sel.size === 0; dSel = new Set(m.sel); sync(); };
+  // Options can change under a selection (the table's kinds follow the top filters): a ticked value that is no
+  // longer offered is dropped, so what the summary says is what is applied. The menu is only rebuilt when the
+  // offered values change, so a checkbox keeps focus while it is being used.
+  m.set = (opts) => {
+    m.opts = opts;
+    for (const v of [...m.sel]) if (!opts.some((o) => o.value === v)) m.sel.delete(v);
+    const sig = opts.map((o) => o.value).join('\n');
+    if (sig !== m.sig) {
+      m.sig = sig;
+      menu.innerHTML = `<input type="search" class="search" placeholder="Search…" aria-label="Search ${esc(titleNow().toLowerCase())} values">` +
+        '<label class="allrow"><input type="checkbox"><span>All</span></label><div class="optlist">' +
+        opts.map((o) => `<label class="opt"><input type="checkbox" value="${esc(o.value)}"><span>${esc(o.text)}</span>` +
+          `<button type="button" class="only" data-v="${esc(o.value)}" aria-label="Only ${esc(o.text)}">Only</button><i></i></label>`).join('') +
+        '</div><div class="foot"><button type="button" class="cancel">Cancel</button><button type="button" class="apply">Apply</button></div>';
+      loadDraft();
+    }
+    menu.querySelectorAll('.opt').forEach((label, n) => {
+      const c = opts[n].count;
+      label.querySelector('i').textContent = c == null ? '' : c;
+      label.classList.toggle('zero', c === 0);
+    });
+    refresh();
+  };
+  m.clear = () => { m.sel.clear(); loadDraft(); refresh(); };
+  const apply = () => {
+    m.sel.clear();
+    if (!dAll && dSel.size < m.opts.length) dSel.forEach((v) => m.sel.add(v));
+    refresh();
+    el.open = false;
+    summary.focus();
+    onChange();
+  };
+  menu.addEventListener('input', (e) => {
+    const t = e.target;
+    if (t.matches('.search')) {
+      const q = t.value.trim().toLowerCase();
+      menu.querySelectorAll('.opt').forEach((l) => { l.hidden = !!q && !l.querySelector('span').textContent.toLowerCase().includes(q); });
+      return;
+    }
+    if (!t.matches('input[type=checkbox]')) return;
+    if (t.closest('.allrow')) { dAll = t.checked; dSel = new Set(); }
+    else {
+      if (dAll) { dAll = false; dSel = new Set(m.opts.map((o) => o.value)); }
+      if (t.checked) dSel.add(t.value); else dSel.delete(t.value);
+      if (dSel.size === m.opts.length) { dAll = true; dSel = new Set(); }
+    }
+    sync();
+  });
+  menu.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.matches('.only')) { e.preventDefault(); dAll = false; dSel = new Set([b.dataset.v]); sync(); }
+    else if (b.matches('.apply')) apply();
+    else if (b.matches('.cancel')) { el.open = false; summary.focus(); }
+  });
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.matches('.search, input[type=checkbox]')) {
+      e.preventDefault();
+      const ap = menu.querySelector('.apply');
+      if (ap && !ap.disabled) apply();
+    }
+  });
+  el.addEventListener('toggle', () => {
+    if (!el.open) return;
+    document.querySelectorAll('.multi[open]').forEach((o) => { if (o !== el) o.open = false; });
+    const s = menu.querySelector('.search');
+    if (s) { s.value = ''; menu.querySelectorAll('.opt').forEach((l) => { l.hidden = false; }); }
+    loadDraft();
+    if (s) s.focus();
+  });
+  return m;
+}
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('.multi[open]').forEach((d) => { if (!d.contains(e.target)) d.open = false; });
+});
+document.addEventListener('keydown', (e) => {
+  const d = e.key === 'Escape' && document.querySelector('.multi[open]');
+  if (d) { d.open = false; d.querySelector('summary').focus(); }
+});
+
+const T = {  // the filters at the top: they decide what the whole page covers
+  kind: makeMulti($('#top-kind'), 'kinds', render),
+  mode: $('#top-mode'),
+  status: makeMulti($('#top-status'), 'statuses', render),
+  runs: makeMulti($('#top-runs'), 'runs', render),
+};
+const I = {  // the filters in the Items section: the table only
+  kind: makeMulti($('#items-kind'), 'kinds', renderItems),
+  mode: $('#items-mode'),
+  status: makeMulti($('#items-status'), 'statuses', renderItems),
+  runs: makeMulti($('#items-runs'), 'runs', renderItems),
+};
+// With one run there is nothing to choose between.
+$('#top-runs').hidden = $('#items-runs').hidden = LABELS.length < 2;
 const kinds = [...new Set(rows.map((r) => r.kind))].filter(Boolean).sort();
-$('#kind').innerHTML = '<option value="">any kind</option>' + kinds.map((k) => `<option>${esc(k)}</option>`).join('');
-$('#focus').innerHTML = LABELS.map((l) => `<option value="${esc(l)}">${esc(l)}</option>`).join('');
-let focus = LABELS[0];
-let sortKey = 'id', sortDir = 1, selected = null;
+const countBy = (list) => { const c = {}; for (const r of list) c[r.kind] = (c[r.kind] || 0) + 1; return c; };
+T.kind.set(kinds.map((k) => ({ value: k, text: kindName(k), count: countBy(rows)[k] })));
+T.status.set(STATUS_OPTIONS);
+T.runs.set(LABELS.map((l) => ({ value: l, text: roleOf(l) })));
+I.status.set(STATUS_OPTIONS);
+
+let sortKey = LABELS.length > 1 ? 'chg' : 's:' + LABELS[0], sortDir = 1, selected = null, drawerRun = null, drawerSig = '';
 
 function exprFn() {
   const src = $('#expr').value.trim();
@@ -217,89 +1166,276 @@ function exprFn() {
   }
 }
 
-function visible() {
-  const text = $('#q').value.trim().toLowerCase();
-  const kind = $('#kind').value, status = $('#status').value, fn = exprFn();
+// Kind, mode and status for one tier. Kind and mode are properties of the item; status is read from the runs in
+// play and matches when the item has a chosen status in any of them. A row must exist in at least one of those runs.
+function rowMatcher({ kinds: ks, mode, statuses }, runList) {
+  return (r) => {
+    if (!runList.some((l) => r.per[l])) return false;
+    if (ks.size && !ks.has(r.kind)) return false;
+    if (mode && r.mode !== mode) return false;
+    if (statuses.size && !runList.some((l) => statuses.has(statusOf(r.per[l])))) return false;
+    return true;
+  };
+}
+let dashRows = rows;  // the rows the whole page covers: everything that passes the filters at the top
+const itemRuns = () => (I.runs.sel.size ? runsShown.filter((l) => I.runs.sel.has(l)) : runsShown);
+// The rows in the table: the top selection, narrowed by the table's own filters.
+function itemRows(runList) {
+  const text = $('#q').value.trim().toLowerCase(), fn = exprFn();
+  const base = rowMatcher({ kinds: I.kind.sel, mode: I.mode.value, statuses: I.status.sel }, runList);
   let bad = false;
-  const out = rows.filter((r) => {
-    const it = r.per[focus];
-    if (kind && r.kind !== kind) return false;
-    if (status !== 'all' && statusOf(it) !== status) return false;
+  const out = dashRows.filter((r) => {
+    if (!base(r)) return false;
     if (text && !(r.id + ' ' + r.question).toLowerCase().includes(text)) return false;
     if (fn) {
-      try { if (!fn(it && it.detail || {}, it || {}, r, r.question, r.kind)) return false; }
-      catch (e) { bad = true; return false; }
+      const hit = runList.filter((l) => r.per[l]).some((l) => {
+        const it = r.per[l];
+        try { return fn(it.detail || {}, it, r, r.question, r.kind); } catch (e) { bad = true; return false; }
+      });
+      if (!hit) return false;
     }
     return true;
   });
   if (bad) $('#expr').classList.add('bad');
-  const key = sortKey;
-  out.sort((a, b) => {
+  return out;
+}
+function activeSortKey(runList) {
+  const c = sortKey.indexOf(':');
+  if (sortKey === 'chg' || sortKey === 'agree') return runList.length > 1 ? sortKey : 'id';
+  return c < 0 || runList.includes(sortKey.slice(c + 1)) ? sortKey : 'id';
+}
+function sortRows(list, key) {
+  return [...list].sort((a, b) => {
     const va = sortVal(a, key), vb = sortVal(b, key);
     return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
   });
-  return out;
 }
+// How a test case moved between the last two runs it was evaluated in, and whether it has flipped back and forth across
+// all of them. Every label describes the latest run, so none is given when that run skipped the test case or lacks it.
+const CHANGE_ORDER = { Regressed: 0, New: 1, Removed: 2, Flaky: 3, 'Still failing': 4, Fixed: 5, 'Still passing': 6, '': 7 };
+function changeOf(r, runList) {
+  const cur = r.per[runList[runList.length - 1]];
+  // New and Removed look at every earlier run, not just the one before: a test case that skipped a run and came back
+  // is not new, and its pass or fail history still says whether it was fixed or is flaky.
+  const earlier = runList.slice(0, -1).some((l) => r.per[l]);
+  // Removed first: a case missing from the latest run also reads as 'none' below, and must keep this label.
+  if (runList.length > 1 && !cur && earlier) return 'Removed';
+  // Skipped in the latest run (or missing from it): the earlier runs alone would label a result the row does not show.
+  // Before New, so a case first seen in the latest run and skipped there is not called New beside a SKIP cell.
+  if (['none', 'skip'].includes(statusOf(cur))) return '';
+  if (runList.length > 1 && cur && !earlier) return 'New';
+  const st = runList.map((l) => statusOf(r.per[l])).filter((x) => x !== 'none' && x !== 'skip');
+  if (st.length < 2) return '';
+  const ok = st.map((x) => x === 'pass');
+  const flips = ok.slice(1).filter((v, i) => v !== ok[i]).length;
+  const [p, q] = ok.slice(-2);
+  if (p && !q) return 'Regressed';
+  if (!p && q) return flips > 1 ? 'Flaky' : 'Fixed';
+  if (flips > 1) return 'Flaky';
+  return q ? 'Still passing' : 'Still failing';
+}
+const CHANGE_CLASS = { Regressed: 'fail', Fixed: 'pass', Flaky: 'err', New: 'err', Removed: 'err', 'Still failing': 'none', 'Still passing': 'none' };
 function sortVal(r, key) {
-  if (key === 'id' || key === 'kind' || key === 'question') return r[key] || '';
-  if (key === 'latency') return (r.per[focus] || {}).avg_latency_s ?? -1;
-  return LBL[statusOf(r.per[key])] || '';  // a run column
+  if (key === 'chg') return CHANGE_ORDER[changeOf(r, itemRuns())];
+  if (key === 'agree') return AGREE_ORDER[agreementOf(itemRuns().map((l) => statusOf(r.per[l])))];
+  const c = key.indexOf(':');
+  if (c < 0) return r[key] || '';  // id, kind, mode, question
+  const tag = key.slice(0, c), it = r.per[key.slice(c + 1)];
+  if (tag === 'lt') return traceLatency(it) ?? -1;
+  if (tag === 'lr') return runLatency(it) ?? -1;
+  return LBL[statusOf(it)] || '';  // a run's status column
 }
 
+const topActive = () => !!(T.kind.sel.size || T.mode.value || T.status.sel.size || T.runs.sel.size);
+const itemsActive = () => !!($('#q').value.trim() || $('#expr').value.trim() || I.kind.sel.size || I.mode.value ||
+  I.status.sel.size || I.runs.sel.size);
+function renderScope() {
+  const byModel = VIEW === 'model';
+  $('#top-count').textContent = dashRows.length !== scopeRows.length ? `Showing ${dashRows.length} of ${scopeRows.length} test cases` : '';
+  $('#top-reset').hidden = !topActive();
+  const parts = [];
+  if (dashRows.length !== scopeRows.length) parts.push(`every section covers ${dashRows.length} of the ${scopeRows.length} test cases`);
+  if (runsShown.length !== LABELS.length) parts.push(`showing ${runsShown.length} of ${LABELS.length} ${byModel ? 'models' : 'runs'}`);
+  const several = runsShown.length > 1 && T.status.sel.size;
+  // Ticking every run is the same as ticking none: say nothing unless the selection really is narrower.
+  $('#scope').hidden = parts.length === 0;
+  $('#scope').innerHTML = parts.length
+    ? `Filtered: ${parts.join('; ')}.` + (several ? ` With several ${byModel ? 'models' : 'runs'}, a test case matches a result when any of the ${byModel ? 'models' : 'runs'} shown has it.` : '')
+    : '';
+}
+// The table's own options follow the top selection: only kinds that survive it are offered (with how many items
+// each has there), only the runs on show, and only the modes still present.
+function syncItemControls() {
+  const byKind = countBy(dashRows);
+  I.kind.set(Object.keys(byKind).filter(Boolean).sort().map((k) => ({ value: k, text: kindName(k), count: byKind[k] })));
+  I.runs.set(runsShown.map((l) => ({ value: l, text: roleOf(l) })));
+  const present = new Set(dashRows.map((r) => r.mode));
+  const keep = I.mode.value;
+  I.mode.innerHTML = '<option value="">Any format</option>' + MODES.filter(([m]) => present.has(m))
+    .map(([m, name]) => `<option value="${m}">${name === 'Single-question' ? 'Single question' : name}</option>`).join('');
+  I.mode.value = present.has(keep) ? keep : '';
+}
+// Everything on the page follows the top filters. Sorting, the table's filters and selecting a row only touch the
+// item table (renderItems).
 function render() {
-  const list = visible();
-  $('#count').textContent = `${list.length} of ${rows.length}`;
-  const heads = [['id', 'Item'], ['kind', 'Kind'], ['question', 'Question']]
-    .concat(LABELS.map((l) => [l, l]))
-    .concat([['latency', 'Latency']]);
-  $('#items thead').innerHTML = '<tr>' + heads.map(([k, h]) =>
-    `<th data-k="${esc(k)}" class="${k === 'latency' ? 'num' : ''}">${esc(h)}${sortKey === k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
-  $('#items tbody').innerHTML = list.map((r) => {
-    const it = r.per[focus] || {};
-    return `<tr data-id="${esc(r.id)}" class="${selected === r.id ? 'sel' : ''}">
+  runsShown = T.runs.sel.size ? LABELS.filter((l) => T.runs.sel.has(l)) : LABELS;
+  dashRows = scopeRows.filter(rowMatcher({ kinds: T.kind.sel, mode: T.mode.value, statuses: T.status.sel }, runsShown));
+  const filtered = dashRows.length !== scopeRows.length;
+  const ids = dashRows.map((r) => r.id);
+  for (const l of runsShown) figures[l] = filtered ? recompute(l, ids) : reported(l);
+  // By model, the models are ranked best first on the figures they are shown with, so every table reads in one order.
+  if (VIEW === 'model') runsShown = [...runsShown].sort((a, b) => byStanding(figures[a], figures[b]));
+  syncItemControls();
+  renderScope();
+  renderSummary();
+  renderOutcomes();
+  renderModelSections();
+  renderLatency();
+  renderItems();
+}
+function renderItems() {
+  const runList = itemRuns();
+  const list = sortRows(itemRows(runList), activeSortKey(runList));
+  const key = activeSortKey(runList), multi = runList.length > 1;
+  $('#items-count').textContent = list.length !== dashRows.length ? `Showing ${list.length} of ${dashRows.length}` : '';
+  $('#items-reset').hidden = !itemsActive();
+  // By date the latest run leads and the earlier ones follow it; by model every model is a peer, in ranked order.
+  const byDate = VIEW !== 'model';
+  const timeRuns = byDate && runList.length > 2 ? runList.slice(-1) : runList;
+  const runHdr = (l) => (multi ? `<span class="runlbl" title="${esc(l)}">${byDate && runList.length > 2 ? 'latest run' : esc(roleOf(l))}</span>` : '');
+  const heads = [
+    { k: 'id', html: 'Test case' }, { k: 'kind', html: 'Category' }, { k: 'mode', html: 'Format' }, { k: 'question', html: 'Question' },
+    // Newest first: the latest result, what changed since the previous run, then earlier runs going back in time.
+    ...(multi && byDate ? [{ k: 's:' + runList[runList.length - 1], html: runHeadHtml(runList[runList.length - 1]) + LATEST_PILL }] : []),
+    ...(multi && byDate ? [{ k: 'chg', html: 'Since previous run', help: 'Regressed: passed in the previous run, not in the latest. Fixed: the reverse. Flaky: has flipped between pass and fail more than once across the runs shown. New / Removed: the test case first appears in the latest run, or was in an earlier run and is gone from the latest. A test case skipped in the latest run has no label.' }] : []),
+    ...(multi && byDate ? runList.slice(0, -1).reverse() : runList).map((l) => ({ k: 's:' + l, html: runHeadHtml(l) })),
+    ...(multi && !byDate ? [{ k: 'agree', html: 'Across models', help: 'Whether the models agree on this test case. All pass and All fail: every model that was graded got the same verdict. Mixed: some passed and some did not, so this is where the models differ; hover the label to see who. A model that skipped the test case or could not be graded on it is left out.' }] : []),
+    ...timeRuns.map((l) => ({ k: 'lt:' + l, html: 'Response time' + runHdr(l), help: TRACE_HELP, num: true })),
+    // By model one time column per model keeps the table readable; the per-attempt figure is in the latency tables above
+    // and in the drawer.
+    ...(byDate ? timeRuns : []).map((l) => ({ k: 'lr:' + l, html: 'Time per attempt' + runHdr(l), help: RUN_HELP, num: true })),
+  ];
+  $('#items thead').innerHTML = '<tr>' + heads.map((h) =>
+    `<th data-k="${esc(h.k)}" tabindex="0" class="${h.num ? 'num' : ''}"${h.help ? ` title="${esc(h.help)}"` : ''}>${h.html}${key === h.k ? (sortDir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>';
+  const stCell = (r) => (l) => `<td class="stcell" data-run="${esc(l)}" title="Open this run's details">${chipHtml(statusOf(r.per[l]))}</td>`;
+  $('#items tbody').innerHTML = list.map((r) =>
+    `<tr data-id="${esc(r.id)}" tabindex="0" class="${selected === r.id ? 'sel' : ''}">
       <td class="id">${esc(r.id)}</td>
-      <td class="id">${esc(r.kind)}</td>
+      <td>${esc(kindName(r.kind))}</td>
+      <td>${r.mode ? `<span class="chip">${esc(MODE_NAME[r.mode] || r.mode)}</span>` : ''}</td>
       <td class="q" title="${esc(r.question)}">${esc(r.question)}</td>` +
-      LABELS.map((l) => { const s = statusOf(r.per[l]); return `<td class="st ${s}">${LBL[s]}</td>`; }).join('') +
-      `<td class="num">${num(it.avg_latency_s)}s</td></tr>`;
-  }).join('');
+      (multi && byDate ? [runList[runList.length - 1]] : []).map(stCell(r)).join('') +
+      (multi && byDate ? (() => { const c = changeOf(r, runList); return `<td>${c ? `<span class="st ${CHANGE_CLASS[c]}">${c}</span>` : ''}</td>`; })() : '') +
+      (multi && byDate ? runList.slice(0, -1).reverse() : runList).map(stCell(r)).join('') +
+      (multi && !byDate ? (() => { const a = agreementOf(runList.map((l) => statusOf(r.per[l]))); return `<td>${a ? `<span class="st ${AGREE_CLASS[a]}" title="${esc(agreeTip(r, runList))}">${a}</span>` : ''}</td>`; })() : '') +
+      timeRuns.map((l) => latencyCell(traceLatency(r.per[l]), samplesTitle((r.per[l] || {}).trace_latencies_s, 'response'))).join('') +
+      (byDate ? timeRuns : []).map((l) => latencyCell(runLatency(r.per[l]), samplesTitle((r.per[l] || {}).run_latencies_s, 'attempt'))).join('') +
+      '</tr>').join('');
   $('#noitems').hidden = list.length > 0;
+  // The drawer follows the table's runs: if the run it shows was filtered out, move it to one that is still there.
+  const row = selected && byId.get(selected);
+  if (row && $('#drawer').classList.contains('open') && (pickDrawerRun(row) !== drawerRun || drawerSig !== runList.join('\n'))) {
+    drawerRun = pickDrawerRun(row);
+    openDrawer(row);
+  }
 }
 
-$('#items thead').addEventListener('click', (e) => {
-  const k = e.target.closest('th')?.dataset.k;
-  if (!k) return;
+function sortBy(k) {
   sortDir = sortKey === k ? -sortDir : 1;
   sortKey = k;
-  render();
+  renderItems();
+}
+// The run the drawer shows: the one it already shows if the table still includes it and the item ran there.
+function pickDrawerRun(r) {
+  const runList = itemRuns();
+  if (drawerRun && runList.includes(drawerRun) && r.per[drawerRun]) return drawerRun;
+  return runList.find((l) => r.per[l]) || runList[0];
+}
+function openRow(id) {
+  const r = byId.get(id);
+  selected = id; drawerRun = pickDrawerRun(r); renderItems(); openDrawer(r);
+}
+$('#items thead').addEventListener('click', (e) => {
+  const k = e.target.closest('th')?.dataset.k;
+  if (k) sortBy(k);
+});
+$('#items thead').addEventListener('keydown', (e) => {
+  const k = e.target.closest('th')?.dataset.k;
+  if (k && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); sortBy(k); }
 });
 $('#items tbody').addEventListener('click', (e) => {
   const id = e.target.closest('tr')?.dataset.id;
-  if (id) { selected = id; render(); openDrawer(byId.get(id)); }
+  const run = e.target.closest('.stcell')?.dataset.run;
+  if (id && run) { drawerRun = run; selected = id; renderItems(); openDrawer(byId.get(id)); return; }
+  if (id) openRow(id);
 });
-for (const id of ['#q', '#expr', '#kind', '#status']) $(id).addEventListener('input', render);
-$('#focus').addEventListener('change', () => {
-  focus = $('#focus').value;
+$('#items tbody').addEventListener('keydown', (e) => {
+  const id = e.target.closest('tr')?.dataset.id;
+  if (id && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(id); }
+});
+$('#top-mode').addEventListener('input', render);
+for (const id of ['#items-mode', '#q', '#expr']) $(id).addEventListener('input', renderItems);
+$('#top-reset').addEventListener('click', () => {
+  T.kind.clear(); T.status.clear(); T.runs.clear(); T.mode.value = '';
   render();
-  if (selected) openDrawer(byId.get(selected));
+});
+$('#items-reset').addEventListener('click', () => {
+  I.kind.clear(); I.status.clear(); I.runs.clear(); I.mode.value = '';
+  $('#q').value = ''; $('#expr').value = '';
+  renderItems();
 });
 
 // ---------- drawer ----------
+// Two different numbers, so each says what it is: the trace chip is the item's chat turns (the same figure as
+// the table's Latency / trace); the run chip is the one run whose detail and timeline the drawer shows, which
+// also contains the judge and, for multi-turn, the simulated user.
+function drawerLatencyChips(it) {
+  const chip = (text, title) => `<span class="chip" title="${esc(title)}">${text}</span>`;
+  const traces = it.trace_latencies_s || [];
+  const out = [];
+  if (traces.length) {
+    out.push(chip(`${traces.length} response${traces.length === 1 ? '' : 's'} · median ${secs(median(traces))}`,
+      `Time of each assistant response. ${samplesTitle(traces, 'response')}`));
+  }
+  if (typeof it.best_run_latency_s === 'number') {
+    out.push(chip(`run ${secs(it.best_run_latency_s)}`,
+      'Wall-clock of the run described below, including the judge and, for multi-turn, the simulated user.'));
+  } else if (it.runs && typeof it.avg_latency_s === 'number') {
+    out.push(chip(`avg run ${secs(it.avg_latency_s)}`, 'Mean wall-clock of this item\'s runs, including the judge.'));
+  }
+  return out.join('');
+}
 function openDrawer(r) {
   if (!r) return;
-  const it = r.per[focus];
+  const run = drawerRun, runList = itemRuns();
+  const it = r.per[run];
   const d = $('#drawer');
   d.classList.add('open');
-  if (!it) { d.innerHTML = `<button class="close">×</button><h2>${esc(r.id)}</h2><p class="empty">Not present in ${esc(focus)}.</p>`; return; }
+  drawerSig = runList.join('\n');
+  // With several runs in the table the drawer says which one it shows and lets you switch.
+  const heading = runList.length > 1
+    ? `<select id="drawerrun" aria-label="Run shown in the drawer">${runList.map((l) =>
+        `<option value="${esc(l)}"${l === run ? ' selected' : ''}>${esc(roleOf(l))}</option>`).join('')}</select>`
+    : `<h2>${esc(run)}</h2>`;
+  const wire = () => {
+    d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; renderItems(); };
+    const pick = d.querySelector('#drawerrun');
+    if (pick) pick.onchange = () => { drawerRun = pick.value; openDrawer(r); };
+  };
+  if (!it) {
+    d.innerHTML = `<button class="close" aria-label="Close">×</button>${heading}<div style="font-family:var(--mono);font-size:12px;margin-top:6px">${esc(r.id)}</div><p class="empty">Not present in ${esc(run)}.</p>`;
+    wire();
+    return;
+  }
   const st = statusOf(it);
-  d.innerHTML = `<button class="close">×</button>
-    <h2>${esc(focus)}</h2>
-    <div style="font-family:var(--mono);font-size:12px">${esc(r.id)}</div>
+  d.innerHTML = `<button class="close" aria-label="Close">×</button>
+    ${heading}
+    <div style="font-family:var(--mono);font-size:12px;margin-top:6px">${esc(r.id)}</div>
     <p style="margin:6px 0 10px">${esc(r.question)}</p>
-    <div><span class="st ${st}">${LBL[st]}</span>
-      <span class="chip">${esc(r.kind)}</span>
+    <div>${chipHtml(st)}
+      <span class="chip">${esc(kindName(r.kind))}</span>
       <span class="chip">${it.runs ?? 0} run(s)</span>
-      <span class="chip">${num(it.best_run_latency_s ?? it.avg_latency_s)}s</span>
+      ${drawerLatencyChips(it)}
       ${it.classification ? `<span class="chip">${esc(it.classification)}</span>` : ''}
     </div>
     ${it.error ? `<section><h2>Error</h2><pre>${esc(it.error)}</pre></section>` : ''}
@@ -308,15 +1444,30 @@ function openDrawer(r) {
     ${timelineHtml(it)}
     ${reasoningHtml(it)}
     ${idsHtml(it)}`;
-  d.querySelector('.close').onclick = () => { d.classList.remove('open'); selected = null; render(); };
-  d.querySelectorAll('.tl .row').forEach((el) => {
-    el.onclick = () => {
-      const box = $('#tl-detail');
-      box.innerHTML = el.dataset.text
-        ? `<pre>${esc(el.dataset.text)}</pre>`
-        : `<div class="sub">${esc(el.dataset.note || 'No expanded record for this step.')}</div>`;
-    };
-  });
+  wire();
+  wireTimeline(d);
+}
+
+// Each step opens in place under its own row, any number at once. The control above the list opens every step, or, when
+// they all are open already, shuts them again; it reads "Collapse all" only while that is what a click would do.
+function wireTimeline(root) {
+  const all = root.querySelector('.tlall');
+  if (!all) return;
+  const steps = [...root.querySelectorAll('.tl .step')];
+  const shut = (step) => step.querySelector('.body').hidden;
+  const open = (step, on) => {
+    step.querySelector('.chev').setAttribute('aria-expanded', on);
+    step.querySelector('.body').hidden = !on;
+  };
+  const sync = () => {
+    const every = steps.every((s) => !shut(s));
+    all.setAttribute('aria-expanded', every);
+    all.querySelector('.lbl').textContent = every ? 'Collapse all' : 'Expand all';
+  };
+  // The whole row is the target; the chevron button inside it is what keyboard and screen-reader users reach, and its
+  // click bubbles up to here, so a step toggles exactly once either way.
+  steps.forEach((s) => { s.querySelector('.row').onclick = () => { open(s, shut(s)); sync(); }; });
+  all.onclick = () => { const on = steps.some(shut); steps.forEach((s) => open(s, on)); sync(); };
 }
 
 // The agentic path drives a real multi-turn exchange: an answer without a visualization
@@ -404,41 +1555,49 @@ function timelineHtml(it) {
   // A step with nothing to show has three quite different causes, and "no record" alone
   // sends you looking for a bug in the report instead of at the run that produced it.
   const noToolCalls = calls.length === 0;
-  const rows = tl.map((s) => {
-    let text = '', note = '';
+  const note = (text) => `<div class="sub">${esc(text)}</div>`;
+  const rows = tl.map((s, n) => {
+    let body;
     if (s.kind === 'reasoning') {
-      text = (s.index != null && (it.reasoning || [])[s.index]) || '';
-      if (!text) {
-        note = s.index == null
-          ? 'Time before the first reasoning step — nothing had been emitted yet.'
-          : 'No reasoning paragraph was recorded for this step.';
-      }
+      const text = (s.index != null && (it.reasoning || [])[s.index]) || '';
+      body = text ? `<pre>${bold(text)}</pre>` : note(s.index == null
+        ? 'Time before the first reasoning step — nothing had been emitted yet.'
+        : 'No reasoning paragraph was recorded for this step.');
     } else if (byIndex[s.index]) {
       const c = byIndex[s.index];
-      text = `${c.name}\n\nARGUMENTS\n${fmt(c.arguments)}\n\nRESULT\n${c.result == null ? '(none)' : c.result}`;
+      body = `<div class="sub">arguments</div><pre>${esc(fmt(c.arguments))}</pre>` +
+        `<div class="sub">result</div><pre>${esc(c.result == null ? '(none)' : fmt(c.result))}</pre>`;
     } else {
-      note = noToolCalls
+      body = note(noToolCalls
         ? 'This run predates tool-call capture: it recorded the timeline but not what each ' +
           'call was given. Re-run the eval to get arguments and results — re-rendering an ' +
           'existing JSON report cannot add them.'
-        : 'This call arrived without an index, so nothing can be joined to it.';
+        : 'This call arrived without an index, so nothing can be joined to it.');
     }
-    return `<div class="row ${esc(s.kind)}" data-text="${esc(text)}" data-note="${esc(note)}">
+    return `<div class="step"><div class="row ${esc(s.kind)}">
+      <button type="button" class="chev" aria-expanded="false" aria-controls="tl-step-${n}" aria-label="${esc(s.name)} details">${CHEVRON('down')}</button>
       <div class="nm" title="${esc(s.name)}">${esc(s.name)}</div>
       <div class="track"><i style="width:${((s.duration_s || 0) / max * 100).toFixed(1)}%"></i></div>
-      <div class="d">${num(s.duration_s)}s</div></div>`;
+      <div class="d">${secs(s.duration_s)}</div></div>
+      <div class="body" id="tl-step-${n}" hidden>${body}</div></div>`;
   }).join('');
-  return `<section><h2>Latency timeline</h2><div class="tl">${rows}</div>
-    <div class="sub" style="margin-top:6px">${tl.length} step(s), ${num(sum)}s accounted` +
-    (gap != null ? ` of ${num(total)}s (${num(gap)}s setup/teardown)` : '') +
-    `</div><div id="tl-detail"></div></section>`;
+  return `<section><h2>Latency timeline</h2>
+    <button type="button" class="tlall" aria-expanded="false"><span class="ico">${CHEVRON('down')}</span><span class="lbl">Expand all</span></button>
+    <div class="tl">${rows}</div>
+    <div class="sub" style="margin-top:6px">${tl.length} step(s), ${secs(sum)} accounted` +
+    (gap != null ? ` of ${secs(total)} (${secs(gap)} setup/teardown)` : '') +
+    `</div></section>`;
 }
 
+// A reasoning step on the timeline opens to its own paragraph, so the paragraphs are not repeated here. This section is
+// for what the timeline cannot show: all of the reasoning when a run has no timeline, or a paragraph no step points at.
 function reasoningHtml(it) {
-  const rs = it.reasoning || [];
-  if (!rs.length) return '';
-  return '<section><h2>Reasoning</h2>' + rs.map((t, n) =>
-    `<div class="sub">#${n}</div><pre>${esc(t)}</pre>`).join('') + '</section>';
+  const onTimeline = new Set(((it.detail || {}).latency_breakdown || [])
+    .filter((s) => s.kind === 'reasoning' && s.index != null).map((s) => s.index));
+  const rest = (it.reasoning || []).map((t, n) => [t, n]).filter(([, n]) => !onTimeline.has(n));
+  if (!rest.length) return '';
+  return '<section><h2>Reasoning</h2>' + rest.map(([t, n]) =>
+    `<div class="sub">#${n}</div><pre>${bold(t)}</pre>`).join('') + '</section>';
 }
 
 function idsHtml(it) {
@@ -446,7 +1605,356 @@ function idsHtml(it) {
   return `<section><h2>Ids</h2><div class="id">conversation ${esc(it.conversation_id || '–')}<br>response ${esc(it.response_id || '–')}</div></section>`;
 }
 
-render();
+// ---------- view by: model or date ----------
+// The page has two layouts for one report. By date follows runs over time: a column per run, the latest last. By model
+// compares language models: a column per model, ranked best first, with no time axis. Where a model has several runs,
+// its latest stands for it, so every model is read at its most recent state. Nothing here adds a figure the report
+// does not carry: it re-reads the same items, and `figures` is still the one source for the pass rate and the time.
+
+const AGREE_ORDER = { Mixed: 0, 'All fail': 1, 'All pass': 2, '': 3 };
+const AGREE_CLASS = { Mixed: 'err', 'All fail': 'none', 'All pass': 'none' };
+
+// The latest run for each key, in the order the keys first appear (a report lists its runs oldest first).
+function latestPerKey(labels, keyOf) {
+  const latest = new Map();
+  for (const l of labels) latest.set(keyOf(l), l);
+  return [...latest.values()];
+}
+// The console's winner rule, best first: pass rate, then quality, then the quicker average.
+function byStanding(a, b) {
+  const rate = (f) => passRateOf(f) ?? -1;
+  if (rate(a) !== rate(b)) return rate(b) - rate(a);
+  const quality = (f) => f.avg_quality_score ?? -1;
+  if (quality(a) !== quality(b)) return quality(b) - quality(a);
+  return (a.avg_latency_s ?? Infinity) - (b.avg_latency_s ?? Infinity);
+}
+// Whether the models agree on one test case. Only graded verdicts count: a skipped test case, or one that could not be
+// graded, says nothing about the model.
+function agreementOf(statuses) {
+  const graded = statuses.filter((s) => s === 'pass' || s === 'fail');
+  if (graded.length < 2) return '';
+  const passed = graded.filter((s) => s === 'pass').length;
+  return passed === graded.length ? 'All pass' : passed === 0 ? 'All fail' : 'Mixed';
+}
+// A round axis step (1, 2 or 5 times a power of ten) that puts about n ticks between zero and top.
+function niceStep(top, n) {
+  const raw = (top || 1) / n, mag = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw);
+}
+// Who passed and who did not on one test case, for the "Across models" label's hover text.
+function agreeTip(r, runList) {
+  const named = (s) => runList.filter((l) => statusOf(r.per[l]) === s).map(roleOf);
+  const passed = named('pass'), failed = named('fail');
+  return [passed.length && `Passed: ${passed.join(', ')}`, failed.length && `Failed: ${failed.join(', ')}`].filter(Boolean).join(' · ');
+}
+
+// The model the others are held against when the test cases differ: the one with the most (the first of them if tied),
+// so it is the model that ran a smaller suite that gets the caution, not everyone else.
+const suiteRef = (labels, mode) => labels.reduce((a, l) => (idsIn(l, mode).size > idsIn(a, mode).size ? l : a), labels[0]);
+
+function viewHint() {
+  if (VIEW === 'date') {
+    return 'How the results change from run to run, oldest to latest.' +
+      (MULTI_MODEL ? ' This report holds more than one model, so neighbouring runs can be different models: use Model to compare them.' : '');
+  }
+  if (LABELS.length < 2) return 'This report has one model, so there is nothing to compare. Switch to Date to follow it over time.';
+  const dates = uniq(LABELS.map(sourceOf));
+  return 'How the models compare' + (ALL_LABELS.length > LABELS.length ? ', each at its latest run' : '') + '.' +
+    (dates.length > 1 ? ` Those runs are from different dates (${LABELS.map((l) => `${roleOf(l)}: ${runName(sourceOf(l))}`).join(', ')}), so check Run setup before reading a gap as the model’s.` : '');
+}
+// Switch layout: pick the columns being compared, drop what was selected against the other layout, and draw it all again.
+function setView(v) {
+  VIEW = v === 'model' ? 'model' : 'date';
+  LABELS = VIEW === 'model'
+    ? latestPerKey(ALL_LABELS, modelKeyOf).sort((a, b) => byStanding(reported(a), reported(b)))
+    : ALL_LABELS;
+  scopeRows = rows.filter((r) => LABELS.some((l) => r.per[l]));
+  cmpPick = null; selected = null; drawerRun = null;
+  $('#drawer').classList.remove('open');
+  $('#viewby').value = VIEW;
+  $('#viewhint').textContent = viewHint();
+  $('#viewrow').hidden = ALL_LABELS.length < 2;  // one run has nothing to switch between
+  $('#top-runs').hidden = $('#items-runs').hidden = LABELS.length < 2;
+  // The run filter now lists the columns being compared; a selection made against the other layout falls away. The menus
+  // are rebuilt so their title ("Run" or "Model") is current.
+  T.runs.sig = I.runs.sig = null;
+  T.runs.set(LABELS.map((l) => ({ value: l, text: roleOf(l) })));
+  const byKind = countBy(scopeRows);
+  T.kind.set(Object.keys(byKind).filter(Boolean).sort().map((k) => ({ value: k, text: kindName(k), count: byKind[k] })));
+  sortKey = LABELS.length < 2 ? 's:' + LABELS[0] : VIEW === 'model' ? 'agree' : 'chg';
+  sortDir = 1;
+  renderMasthead();
+  render();
+}
+$('#viewby').addEventListener('input', () => setView($('#viewby').value));
+
+// A section the current layout has no use for is emptied and hidden, so it leaves no gap.
+function setSection(id, html) {
+  const el = $('#' + id);
+  el.innerHTML = html;
+  el.hidden = !html;
+}
+function renderModelSections() {
+  const on = VIEW === 'model';
+  setSection('tradeoff', on ? tradeoffHtml() : '');
+  setSection('categories', on ? categoryHtml() : '');
+  setSection('consistency', on ? consistencyHtml() : '');
+}
+
+// ---------- by model: results ----------
+// One row per model, best pass rate first. The bar is the model's evaluated test cases split by how they ended, so its
+// green part is the pass rate beside it; skipped test cases never ran and are left out of it, as they are of the rate.
+const MEDIAN_HELP = 'Half of this model\'s attempts at a test case were faster than this, half slower (P50). One attempt runs from the first message to the end of the answer, including the simulated user\'s replies and grading.';
+function modelOutcomesHtml() {
+  const evaluated = (l) => figures[l].total - figures[l].skipped;
+  const shown = (l) => { const r = passRateOf(figures[l]); return r == null ? null : Math.round(r * 100); };
+  const seen = runsShown.map(shown).filter((v) => v != null);
+  const spread = seen.length > 1 && Math.min(...seen) !== Math.max(...seen) ? { lo: Math.min(...seen), hi: Math.max(...seen) } : null;
+  const EXT_ICON = { best: CHEVRON('up'), worst: CHEVRON('down') };
+  // A pass rate over a different set of test cases is not like-for-like, so a model that differs from the one with the
+  // most test cases is flagged.
+  const ref = suiteRef(runsShown, '');
+  const body = runsShown.map((l) => {
+    const f = figures[l], n = evaluated(l), v = shown(l);
+    const seg = (cls, count, what) => (count && n ? `<i class="${cls}" style="width:${(count / n * 100).toFixed(2)}%" title="${count} ${what}"></i>` : '');
+    const bar = `<div class="stack" role="img" aria-label="${esc(roleOf(l))}: ${f.passed} passed, ${f.failed} failed, ${f.errored} could not be graded">` +
+      seg('p', f.passed, 'passed') + seg('f', f.failed, 'failed') + seg('e', f.errored, 'could not be graded') + '</div>';
+    const counts = OUTCOMES.map(([k, , verb]) => `<td class="num" title="${f[k]} of ${f.total} test cases ${verb}">${f[k]}</td>`).join('');
+    const m = spread && v != null ? (v === spread.hi ? 'best' : v === spread.lo ? 'worst' : '') : '';
+    const why = m === 'best' ? ' · highest of the models shown' : m === 'worst' ? ' · lowest of the models shown' : '';
+    const rate = v == null ? '<td class="num">–</td>'
+      : `<td class="num" title="${f.passed} of ${n} evaluated test cases${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${v}%</span>` : v + '%'}</td>`;
+    const gap = l !== ref ? suiteChange(ref, l, '') : '';
+    const flag = l !== ref && (n !== evaluated(ref) || gap)
+      ? ' ' + caution(`${n} test cases evaluated here, ${evaluated(ref)} for ${esc(roleOf(ref))}.` + (gap ? '<br>' + gap : '')) : '';
+    const med = medTimeOf(l);
+    const time = `<td class="num"${med == null ? '' : ` title="${esc(MEDIAN_HELP)}"`}>${med == null ? '–' : secs(med)}</td>`;
+    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bar}</td>${counts}${rate}${time}</tr>`;
+  }).join('');
+  const heads = [['Model', ''], ['Outcomes', 'The evaluated test cases split into passed (green), failed (red) and could not be graded (orange).'],
+    ...OUTCOMES.map(([, name, , help]) => [name, help]),
+    ['Pass rate', 'Passed test cases out of the evaluated ones. Skipped test cases never ran, so they are left out.'],
+    ['Median latency', MEDIAN_HELP]];
+  return '<h2>Results</h2>' +
+    '<p class="blurb">How every test case ended for each model, best pass rate first.</p>' +
+    `<div class="cmp"><div class="tablewrap flat"><table class="out-table"><thead><tr>` +
+    heads.map(([h, help], j) => `<th class="${j > 1 ? 'num' : ''}"${help ? ` title="${esc(help)}"` : ''}>${h}</th>`).join('') +
+    `</tr></thead><tbody>${body}</tbody></table></div>` +
+    (spread ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}highest pass rate</span> <span class="ext worst">${EXT_ICON.worst}lowest pass rate</span></p>` : '') +
+    '<ul class="blurb legend">' +
+    '<li>A test case <b>passed</b> when it met the run\'s pass rule.</li>' +
+    '<li>It <b>failed</b> when it was graded and did not.</li>' +
+    '<li>It <b>could not be graded</b> when an error left it without a verdict.</li>' +
+    '<li>It was <b>skipped</b> when it was not run.</li>' +
+    '<li>The bar covers the evaluated test cases, so its green part is the pass rate.</li>' +
+    '<li><b>Median latency</b> is the median time of one attempt at a test case: half of the attempts were faster, half slower.</li>' +
+    '</ul></div>';
+}
+
+// ---------- by model: quality against speed ----------
+// The one picture that settles "is the better model worth waiting for": each model as a point, the share of test cases
+// it passed against the median time of one attempt, the same two figures as the Results table's pass rate and the
+// latency tables' median. Up and to the left is better.
+let tradeW = 720;
+function tradeoffHtml() {
+  const pts = runsShown.map((l) => ({ l, x: medTimeOf(l), y: passRateOf(figures[l]) })).filter((p) => p.x != null && p.y != null);
+  if (pts.length < 2) return '';
+  tradeW = Math.max(320, Math.round($('#latency').clientWidth) || tradeW);
+  const W = tradeW, H = Math.min(400, Math.max(260, Math.round(W * 0.4))), M = { l: 58, r: 24, t: 14, b: 46 };
+  const innerW = W - M.l - M.r, innerH = H - M.t - M.b, r2 = (v) => Math.round(v * 100) / 100;
+  // Time runs from zero, so the distances between models are honest. The pass rate gets the range the models span,
+  // padded by one step: models that all sit above 70% would crowd the top of a 0-100% axis.
+  const xTop = Math.max(...pts.map((p) => p.x)), xStep = niceStep(xTop, 5);
+  const xTicks = Math.max(1, Math.ceil((xTop * 1.08) / xStep - 1e-9)), xMax = xTicks * xStep;
+  const ys = pts.map((p) => p.y), yStep = Math.max(...ys) - Math.min(...ys) > 0.5 ? 0.2 : 0.1;
+  const yLo = r2(Math.max(0, Math.floor(Math.min(...ys) / yStep + 1e-9) * yStep - yStep));
+  const yHi = r2(Math.min(1, Math.ceil(Math.max(...ys) / yStep - 1e-9) * yStep + yStep));
+  const X = (v) => M.l + innerW * (v / xMax), Y = (v) => M.t + innerH * (1 - (v - yLo) / (yHi - yLo));
+  const yAt = Array.from({ length: Math.round((yHi - yLo) / yStep) + 1 }, (_, i) => r2(yLo + i * yStep));
+  const xAt = Array.from({ length: xTicks + 1 }, (_, i) => i * xStep);
+  const grid = yAt.map((v, i) => `<line class="${i ? 'sgrid' : 'sbase'}" x1="${M.l}" x2="${W - M.r}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"></line>` +
+      `<text x="${M.l - 8}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${pct(v)}</text>`).join('') +
+    xAt.map((v, i) => `<line class="${i ? 'sgrid' : 'sbase'}" x1="${X(v).toFixed(1)}" x2="${X(v).toFixed(1)}" y1="${M.t}" y2="${H - M.b}"></line>` +
+      `<text x="${X(v).toFixed(1)}" y="${H - M.b + 16}" text-anchor="middle">${v ? secs(v) : '0'}</text>`).join('') +
+    `<text x="${(M.l + innerW / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">Median time per attempt, shorter is faster</text>` +
+    `<text transform="translate(13 ${(M.t + innerH / 2).toFixed(1)}) rotate(-90)" text-anchor="middle">Test cases passed, higher is better</text>`;
+  // Names sit beside their points, on the left of any point near the right edge, nudged apart where two would touch.
+  const dots = pts.map((p) => ({ ...p, px: X(p.x), py: Y(p.y), side: X(p.x) > M.l + innerW * 0.62 ? 'l' : 'r' }));
+  for (const side of ['l', 'r']) {
+    let last = -Infinity;
+    for (const d of dots.filter((t) => t.side === side).sort((a, b) => a.py - b.py)) { d.ly = Math.max(d.py, last + 15); last = d.ly; }
+  }
+  const clip = (s) => (s.length > 26 ? s.slice(0, 25) + '…' : s);
+  const marks = dots.map((d) => {
+    const name = roleOf(d.l);
+    const desc = `${name}: ${pct(d.y)} of test cases passed, median ${secs(d.x)} per attempt`;
+    return `<circle class="dot" cx="${d.px.toFixed(1)}" cy="${d.py.toFixed(1)}" r="6" tabindex="0" role="img" aria-label="${esc(desc)}"><title>${esc(desc)}</title></circle>` +
+      `<text class="nm" x="${(d.side === 'r' ? d.px + 11 : d.px - 11).toFixed(1)}" y="${(d.ly + 4).toFixed(1)}" text-anchor="${d.side === 'r' ? 'start' : 'end'}">${esc(clip(name))}</text>`;
+  }).join('');
+  return '<h2>Quality against speed</h2>' +
+    '<p class="blurb">Each point is a model: the share of test cases it passed, against the median time of one attempt. Up and to the left is better. ' +
+    'The tables list every figure.</p>' +
+    `<div class="scatter"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Test cases passed against median time per attempt, one point per model. The tables list every figure.">${grid}${marks}</svg></div>`;
+}
+
+// Drawn at the section's width, like the latency chart, so redraw it when that changes.
+if (window.ResizeObserver) {
+  new ResizeObserver(() => {
+    if (VIEW === 'model' && Math.abs(Math.max(320, $('#latency').clientWidth) - tradeW) > 24) renderModelSections();
+  }).observe($('#latency'));
+}
+
+// ---------- by model: categories ----------
+// Where each model is strong or weak, which one overall rate hides: the pass rate per category, a row each. The darker the
+// green the higher the rate, and the figures are in the cells, so the shade is never the only signal. Categories where
+// the models differ most come first. A cell is read from the same items as the table at the bottom.
+function categoryHtml() {
+  const cats = uniq(dashRows.map((r) => r.kind));
+  if (cats.length < 2) return '';
+  const stat = (l, kind) => {
+    const its = dashRows.filter((r) => r.kind === kind).map((r) => r.per[l]).filter((it) => it && !it.skipped);
+    return { n: its.length, passed: its.filter(passedOf).length, rate: its.length ? its.filter(passedOf).length / its.length : null };
+  };
+  const spreadOf = (cells) => { const rs = cells.map((c) => c.rate).filter((v) => v != null); return rs.length > 1 ? Math.max(...rs) - Math.min(...rs) : 0; };
+  const data = cats.map((k) => ({ k, cells: runsShown.map((l) => stat(l, k)) }))
+    .sort((a, b) => spreadOf(b.cells) - spreadOf(a.cells) || kindName(a.k).localeCompare(kindName(b.k)));
+  const overall = { k: '', cells: runsShown.map((l) => ({ n: figures[l].total - figures[l].skipped, passed: figures[l].passed, rate: passRateOf(figures[l]) })) };
+  const cells = (row) => {
+    const shown = row.cells.map((c) => (c.rate == null ? null : Math.round(c.rate * 100))).filter((v) => v != null);
+    const hi = shown.length > 1 && Math.min(...shown) !== Math.max(...shown) ? Math.max(...shown) : null;
+    return row.cells.map((c, i) => {
+      if (c.rate == null) return '<td class="hc">–</td>';
+      const label = Math.round(c.rate * 100) + '%';
+      return `<td class="hc" style="background:rgba(0,193,141,${(0.06 + 0.34 * c.rate).toFixed(2)})" title="${c.passed} of ${c.n} evaluated test cases passed (${esc(roleOf(runsShown[i]))})">` +
+        `${hi === Math.round(c.rate * 100) ? `<span class="ext best">${CHEVRON('up')}${label}</span>` : label}<span class="n">${c.passed}/${c.n}</span></td>`;
+    }).join('');
+  };
+  return '<h2>By category</h2>' +
+    '<p class="blurb">The share of test cases each model passed in each category, with the best model in a row marked. Categories where the models differ most come first, ' +
+    'and skipped test cases are left out.</p>' +
+    '<div class="cmp"><div class="tablewrap flat"><table class="heat"><thead><tr><th>Category</th>' +
+    runsShown.map((l) => `<th class="mh" title="${esc(roleOf(l))}">${esc(roleOf(l))}</th>`).join('') + '</tr></thead><tbody>' +
+    `<tr class="all"><th scope="row">All categories</th>${cells(overall)}</tr>` +
+    data.map((row) => `<tr><th scope="row">${esc(kindName(row.k))}</th>${cells(row)}</tr>`).join('') +
+    '</tbody></table></div></div>';
+}
+
+// ---------- by model: consistency ----------
+// Language models do not answer the same way twice, so a test case is attempted several times. The light bar is the share
+// that passed on at least one attempt (pass@K) and the dark bar the share that passed on every attempt (pass^K); a long
+// gap is a model that can do the task but not reliably. It needs a report that recorded both and attempted more than once.
+function consistencyHtml() {
+  const stat = (l) => {
+    const its = dashRows.map((r) => r.per[l]).filter((it) => it && !it.skipped);
+    return {
+      n: its.length, once: its.filter((it) => it.pass_at_k).length, every: its.filter((it) => it.pass_power_k === true).length,
+      some: its.filter((it) => it.pass_at_k && it.pass_power_k === false).length,
+      repeated: its.some((it) => typeof it.pass_power_k === 'boolean' && (it.runs || 0) > 1),
+    };
+  };
+  const st = runsShown.map((l) => [l, stat(l)]);
+  if (!st.some(([, s]) => s.repeated)) return '';
+  const share = (s, v) => (s.n ? v / s.n : null);
+  const body = st.map(([l, s]) => {
+    const w = (v) => (s.n ? (v / s.n * 100).toFixed(1) : 0);
+    const bars = `<div class="pbars" role="img" aria-label="${esc(roleOf(l))}: ${pct(share(s, s.once))} passed on at least one attempt, ${pct(share(s, s.every))} on every attempt">` +
+      `<div class="pbar s1" title="${s.once} of ${s.n} passed on at least one attempt"><div class="tr"><i style="width:${w(s.once)}%"></i></div></div>` +
+      `<div class="pbar s4" title="${s.every} of ${s.n} passed on every attempt"><div class="tr"><i style="width:${w(s.every)}%"></i></div></div></div>`;
+    return `<tr><td class="mname">${esc(roleOf(l))}</td><td class="barcell">${bars}</td>` +
+      `<td class="num" title="${s.once} of ${s.n}">${pct(share(s, s.once))}</td><td class="num" title="${s.every} of ${s.n}">${pct(share(s, s.every))}</td>` +
+      `<td class="num" title="Test cases that passed some attempts but not all of them">${s.some}</td></tr>`;
+  }).join('');
+  return '<h2>Consistency across attempts</h2>' +
+    '<p class="blurb">Each test case is attempted more than once. The light bar is the share that passed on at least one attempt and the dark bar the share that passed on every attempt. ' +
+    'A long gap means the model can do the task but not reliably.</p>' +
+    '<div class="cmp"><div class="lclegend"><span><i class="lckey s1"></i>At least one attempt</span><span><i class="lckey s4"></i>Every attempt</span></div>' +
+    '<div class="tablewrap flat"><table><thead><tr><th>Model</th><th></th><th class="num">At least one attempt</th><th class="num">Every attempt</th>' +
+    '<th class="num" title="Test cases that passed some attempts but not all of them">Passed only some attempts</th></tr></thead>' +
+    `<tbody>${body}</tbody></table></div></div>`;
+}
+
+// ---------- by model: response time ----------
+// The same four percentiles as the date view, laid out for choosing: models quickest first, a bar per figure from zero so
+// the lengths compare, and the numbers beside them. Quickest and slowest in each column are marked as elsewhere.
+function modelLatencyTable({ mode, field, sample }) {
+  const statsOf = (l) => (modeOf(l, mode) || {})[field] || null;
+  const timed = runsShown.filter((l) => statsOf(l));
+  if (!timed.length) return '<p class="note">No timings in this report.</p>';
+  const unit = sample.toLowerCase(), KEYS = LAT_SERIES.map((s) => s.key);
+  const order = [...timed].sort((a, b) => statsOf(a).p50 - statsOf(b).p50);
+  const top = Math.max(...order.map((l) => statsOf(l).p99)) || 1;
+  const ref = suiteRef(order, mode);
+  const spread = KEYS.map((k) => {
+    const vs = order.map((l) => +statsOf(l)[k].toFixed(1));
+    return vs.length > 1 && Math.min(...vs) !== Math.max(...vs) ? { lo: Math.min(...vs), hi: Math.max(...vs) } : null;
+  });
+  const EXT_ICON = { best: CHEVRON('down'), worst: CHEVRON('up') };
+  const body = [...order, ...runsShown.filter((l) => !statsOf(l))].map((l) => {
+    const st = statsOf(l);
+    if (!st) return `<tr><td class="mname">${esc(roleOf(l))}</td><td class="barcell"></td>${'<td class="num">–</td>'.repeat(KEYS.length)}</tr>`;
+    const bars = '<div class="pbars">' + LAT_SERIES.map((s, k) =>
+      `<div class="pbar s${k + 1}" title="${s.name} ${secs(st[s.key])}"><div class="tr"><i style="width:${(st[s.key] / top * 100).toFixed(1)}%"></i></div></div>`).join('') + '</div>';
+    const nums = KEYS.map((k, j) => {
+      const v = +st[k].toFixed(1), sp = spread[j];
+      const m = !sp ? '' : v === sp.lo ? 'best' : v === sp.hi ? 'worst' : '';
+      const why = m === 'best' ? ' · quickest of the models shown' : m === 'worst' ? ' · slowest of the models shown' : '';
+      return `<td class="num" title="Based on ${st.n} ${unit}${why}">${m ? `<span class="ext ${m}">${EXT_ICON[m]}${secs(st[k])}</span>` : secs(st[k])}</td>`;
+    }).join('');
+    const same = l === ref ? '' : suiteChange(ref, l, mode);
+    const flag = l !== ref && (st.n !== statsOf(ref).n || same)
+      ? ' ' + caution(`${st.n} ${unit} timed here, ${statsOf(ref).n} for ${esc(roleOf(ref))}.` + (same ? '<br>' + same : '')) : '';
+    return `<tr><td class="mname">${esc(roleOf(l))}${flag}</td><td class="barcell">${bars}</td>${nums}</tr>`;
+  }).join('');
+  return '<div class="cmp"><div class="lclegend">' + LAT_SERIES.map((s, k) => `<span><i class="lckey s${k + 1}"></i>${s.name}</span>`).join('') + '</div>' +
+    '<div class="tablewrap flat"><table class="lat-table"><thead><tr><th>Model</th><th>Response time, from zero</th>' +
+    LAT_SERIES.map((s) => `<th class="num" title="${esc(HEAD_HELP[s.name])}">${s.name}</th>`).join('') + `</tr></thead><tbody>${body}</tbody></table></div>` +
+    (spread.some(Boolean) ? `<p class="note extkey"><span class="ext best">${EXT_ICON.best}quickest model</span> <span class="ext worst">${EXT_ICON.worst}slowest model</span> in each column, quickest first</p>` : '') + '</div>';
+}
+
+// First paint: every report opens by date; the Model view is one choice away.
+setView('date');
+
+// ---------- tooltips as a page overlay ----------
+// Every .info element keeps its tooltip content in a hidden .tip child. On hover or keyboard focus that content is
+// shown in one fixed-position box on top of the page, placed below the trigger (above it near the bottom edge) and
+// kept inside the window. It stays open while the pointer moves onto it, and Esc closes it (WCAG 1.4.13).
+const floatTip = document.createElement('div');
+floatTip.className = 'floattip'; floatTip.id = 'floattip'; floatTip.setAttribute('role', 'tooltip'); floatTip.hidden = true;
+document.body.appendChild(floatTip);
+let tipAnchor = null, tipTimer = null;
+function showTip(el) {
+  const src = el.querySelector('.tip');
+  if (!src) return;
+  clearTimeout(tipTimer);
+  if (tipAnchor && tipAnchor !== el) tipAnchor.removeAttribute('aria-describedby');
+  tipAnchor = el;
+  floatTip.innerHTML = src.innerHTML;
+  floatTip.hidden = false;
+  el.setAttribute('aria-describedby', 'floattip');
+  const r = el.getBoundingClientRect(), tw = floatTip.offsetWidth, th = floatTip.offsetHeight, m = 8;
+  const left = Math.min(Math.max(m, r.left + r.width / 2 - tw / 2), window.innerWidth - tw - m);
+  let top = r.bottom + 6;
+  if (top + th > window.innerHeight - m) top = Math.max(m, r.top - th - 6);
+  floatTip.style.left = `${left}px`; floatTip.style.top = `${top}px`;
+}
+function hideTip() {
+  clearTimeout(tipTimer);
+  floatTip.hidden = true;
+  if (tipAnchor) tipAnchor.removeAttribute('aria-describedby');
+  tipAnchor = null;
+}
+const hideTipSoon = () => { clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 150); };
+document.addEventListener('mouseover', (e) => {
+  const el = e.target.closest('.info');
+  if (el) showTip(el);
+  else if (floatTip.contains(e.target)) clearTimeout(tipTimer);
+  else if (tipAnchor && document.activeElement !== tipAnchor) hideTipSoon();
+});
+document.addEventListener('focusin', (e) => { const el = e.target.closest('.info'); if (el) showTip(el); });
+document.addEventListener('focusout', (e) => { if (e.target.closest('.info')) hideTip(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !floatTip.hidden) hideTip(); });
+window.addEventListener('scroll', () => { if (!floatTip.hidden) hideTip(); }, true);
+window.addEventListener('resize', () => { if (!floatTip.hidden) hideTip(); });
 </script>
 </body>
 </html>

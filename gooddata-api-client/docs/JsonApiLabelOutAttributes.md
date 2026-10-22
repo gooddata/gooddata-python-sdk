@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **are_relations_valid** | **bool** |  | [optional] 
+**conditional_formatting** | [**JsonApiLabelOutAttributesConditionalFormatting**](JsonApiLabelOutAttributesConditionalFormatting.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **geo_area_config** | [**JsonApiLabelOutAttributesGeoAreaConfig**](JsonApiLabelOutAttributesGeoAreaConfig.md) |  | [optional] 
 **is_hidden** | **bool** |  | [optional] 

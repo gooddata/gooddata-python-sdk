@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Label ID. | 
 **title** | **str** | Label title. | 
+**conditional_formatting** | [**ObjectConditionalFormatting**](ObjectConditionalFormatting.md) |  | [optional] 
 **description** | **str** | Label description. | [optional] 
 **geo_area_config** | [**GeoAreaConfig**](GeoAreaConfig.md) |  | [optional] 
 **is_hidden** | **bool** | Determines if the label is hidden from AI features. | [optional] 

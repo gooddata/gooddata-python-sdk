@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_agent_out_list_meta import JsonApiAgentOutListMeta
+    from gooddata_api_client.model.json_api_api_token_out_list_meta import JsonApiApiTokenOutListMeta
     from gooddata_api_client.model.json_api_workspace_color_palette_out_with_links import JsonApiWorkspaceColorPaletteOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
-    globals()['JsonApiAgentOutListMeta'] = JsonApiAgentOutListMeta
+    globals()['JsonApiApiTokenOutListMeta'] = JsonApiApiTokenOutListMeta
     globals()['JsonApiWorkspaceColorPaletteOutWithLinks'] = JsonApiWorkspaceColorPaletteOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -96,7 +96,7 @@ class JsonApiWorkspaceColorPaletteOutList(ModelNormal):
         return {
             'data': ([JsonApiWorkspaceColorPaletteOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'meta': (JsonApiAgentOutListMeta,),  # noqa: E501
+            'meta': (JsonApiApiTokenOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -155,7 +155,7 @@ class JsonApiWorkspaceColorPaletteOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAgentOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiApiTokenOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -246,7 +246,7 @@ class JsonApiWorkspaceColorPaletteOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            meta (JsonApiAgentOutListMeta): [optional]  # noqa: E501
+            meta (JsonApiApiTokenOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

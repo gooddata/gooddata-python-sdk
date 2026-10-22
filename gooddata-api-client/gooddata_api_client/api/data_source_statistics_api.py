@@ -517,9 +517,9 @@ class DataSourceStatisticsApi(object):
         table_statistics_request,
         **kwargs
     ):
-        """(BETA) Collect physical table and column statistics from a StarRocks data source  # noqa: E501
+        """(BETA) Collect physical table and column statistics from a data source  # noqa: E501
 
-        (BETA) Reads pre-computed CBO statistics from StarRocks. Supports both internal catalog (native/PIPE tables) and external catalog (Iceberg tables). Statistics include row counts, data sizes, NDV (number of distinct values), null counts, and min/max values.  # noqa: E501
+        (BETA) Reads the statistics the database already maintains in its own catalog, without scanning any data. Supported for StarRocks (both internal catalog for native/PIPE tables and external catalog for Iceberg tables), BigQuery, PostgreSQL, Redshift, Snowflake, Vertica, SQL Server, Azure SQL, MySQL, MariaDB and SingleStore. Statistics include row counts and data sizes, and, where the database exposes them, NDV (number of distinct values), null counts and min/max values. Returns an empty result for a data source whose database exposes no such catalog. Also returns an empty result for a data source that sets disableStatistics.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import date
 from typing import ClassVar, Literal
@@ -44,7 +45,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -56,6 +57,7 @@ from gooddata_eval.core.chat.sse_client import ChatClient, ChatError, TurnIncomp
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._deep_subset import deep_subset
 from gooddata_eval.core.evaluators._maql import normalize_maql
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -611,6 +613,9 @@ class ConversationResult:
     stalled_turns: int = 0
     mode: ConversationMode = "legacy"
     judge_model: str | None = None
+    # The whole conversation's wall time, from just before its first message to the end of its
+    # last turn's scoring; conversation create/delete is not part of it.
+    run_latency_s: float = 0.0
 
 
 def _metric_creations(tool_call_events: list[ToolCallEvent]) -> list[tuple[str, bool]]:
@@ -770,6 +775,7 @@ def run_agentic_conversation(
     tool_index_offset = 0
     reasoning_index_offset = 0
     current_context = user_context
+    run_latency_s = 0.0
 
     try:
         if initial_conversation_id is not None:
@@ -778,10 +784,14 @@ def run_agentic_conversation(
             conversation_id = client.create_conversation()
             owns_conversation = True
 
+        run_started = time.monotonic()
+        conversation_swap_s = 0.0  # fresh_conversation_per_turn's delete/create, which is not the run's work
         for turn_index, turn in enumerate(fixture.turns):
             if fresh_conversation_per_turn and turn_index > 0:
+                swap_started = time.monotonic()
                 client.delete_conversation(conversation_id)
                 conversation_id = client.create_conversation()
+                conversation_swap_s += time.monotonic() - swap_started
                 transcript = []
                 active_skills = set()
             # Before the skip below: a turn whose expectation cannot resolve still changed what
@@ -1005,6 +1015,8 @@ def run_agentic_conversation(
                 )
             )
 
+        # Taken here, not after the finally: its cleanup is not part of the run.
+        run_latency_s = time.monotonic() - run_started - conversation_swap_s
     finally:
         if owns_conversation and conversation_id:
             client.delete_conversation(conversation_id)
@@ -1038,6 +1050,7 @@ def run_agentic_conversation(
         stalled_turns=stalled,
         mode=resolved_mode,
         judge_model=judge.model_name if judged else None,
+        run_latency_s=run_latency_s,
     )
 
 
@@ -1094,28 +1107,36 @@ def evaluate_agentic_conversation(
     either way.
     """
     resolved_mode = resolve_conversation_mode(mode)
-    langfuse, window_start = open_trace_window(langfuse)
-    result = run_agentic_conversation(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        fixture=fixture,
-        max_clarification_turns=max_clarification_turns,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        mode=resolved_mode,
-        clarification_judge=clarification_judge,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name or fixture.dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=False)
+    with item_scope(scope):
+        result = run_agentic_conversation(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            fixture=fixture,
+            max_clarification_turns=max_clarification_turns,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            mode=resolved_mode,
+            clarification_judge=clarification_judge,
+            user_context=user_context,
+        )
     passed = result.context_success if resolved_mode == "context" else result.conversation_success
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
-        # Resolved here, not inside the task: deferring it would make the queued task hold
-        # the whole fixture until the drain.
-        ds_name = dataset_name or fixture.dataset_name
         failed_turns = {tr.turn_id: tr.failure_reasons() for tr in result.turn_results if not tr.context_success}
 
         def _write_scores(ctx: RunTraceContext) -> None:
@@ -1203,16 +1224,7 @@ def evaluate_agentic_conversation(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                ds_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[result.conversation_id],
@@ -1220,6 +1232,7 @@ def evaluate_agentic_conversation(
             window_end=window_end,
             suffix_runs=False,
             write_scores=_write_scores,
+            scope=scope,
             item_input=fixture.turns[0].message if fixture.turns else fixture.id,
         )
 
@@ -1245,6 +1258,7 @@ def evaluate_agentic_conversation(
         # for. Saying so explicitly stops the report claiming K runs that never happened.
         exc.runs_passed = 0
         exc.runs_effective = 1
+        exc.run_latencies_s = [result.run_latency_s]
         raise exc
     return AgenticEvalOutcome(
         reasoning_steps=result.reasoning_steps,
@@ -1253,4 +1267,5 @@ def evaluate_agentic_conversation(
         detail=detail,
         runs_passed=1,
         runs_effective=1,
+        run_latencies_s=[result.run_latency_s],
     )

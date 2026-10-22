@@ -86,6 +86,7 @@ class VisualizationObjectControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "PARAMETERS": "parameters",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
@@ -94,6 +95,7 @@ class VisualizationObjectControllerApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ALL": "all",
                         "ALL": "ALL"
@@ -246,6 +248,7 @@ class VisualizationObjectControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "PARAMETERS": "parameters",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
@@ -254,6 +257,7 @@ class VisualizationObjectControllerApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "PAGE": "page",
                         "ALL": "all",
@@ -364,6 +368,7 @@ class VisualizationObjectControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "PARAMETERS": "parameters",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
@@ -372,6 +377,7 @@ class VisualizationObjectControllerApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ALL": "all",
                         "ALL": "ALL"
@@ -463,6 +469,7 @@ class VisualizationObjectControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "PARAMETERS": "parameters",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
@@ -627,6 +634,7 @@ class VisualizationObjectControllerApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "PARAMETERS": "parameters",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "DATASETS": "datasets",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
