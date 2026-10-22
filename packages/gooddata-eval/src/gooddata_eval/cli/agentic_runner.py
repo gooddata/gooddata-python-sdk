@@ -6,6 +6,7 @@ from __future__ import annotations
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
 from typing import Any, TypedDict
 
 from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
@@ -28,6 +29,7 @@ from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.visualization import requires_execution_of
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
+from gooddata_eval.core.timing import TraceRecorder
 
 
 class _LfKw(TypedDict, total=False):
@@ -375,6 +377,18 @@ def _apply_failed_runs(item_report: ItemReport, source: Any) -> None:
         item_report.failed_runs = list(failed_runs)
 
 
+def _apply_run_latencies(item_report: ItemReport, source: Any) -> None:
+    """Copy the per-run wall-clock times off an outcome or a failure, if the kind timed them.
+
+    Read from both like ``_apply_failed_runs``: a failing item reaches the report through the
+    exception. A kind that records none leaves the empty default, so the item adds no sample
+    to the latency distribution rather than a zero.
+    """
+    run_latencies = getattr(source, "run_latencies_s", None)
+    if run_latencies:
+        item_report.run_latencies_s = list(run_latencies)
+
+
 def _apply_timings(item_report: ItemReport, timings: Any) -> None:
     """Copy an outcome's phase breakdown onto the item report, if the kind recorded one.
 
@@ -429,6 +443,7 @@ def run_agentic_items(
     # latency. Drained below before this function returns, so every score is written
     # before the caller renders a report or decides an exit code.
     linker = BackgroundTraceLinker()
+    report.started_at = datetime.now(timezone.utc)
     _t0 = time.perf_counter()
 
     def _process_item(index: int, item: DatasetItem) -> ItemReport:
@@ -447,6 +462,10 @@ def run_agentic_items(
         # None, not False, for the kinds _dispatch_agentic passes no gate to: ItemReport.passed
         # then falls back to pass_at_k and gate_passed keeps meaning "a gate ran".
         gated = item.test_kind not in UNGATED_AGENTIC_TEST_KINDS
+        # Started in this worker, where the item runs, so a concurrent item cannot write into it.
+        # Every kind reaches the chat client the same way, which is why the per-trace latencies are
+        # collected here once rather than handed out by each evaluator.
+        traces = TraceRecorder()
         t0 = time.perf_counter()
         try:
             outcome = _dispatch_agentic(
@@ -482,6 +501,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(outcome, "timings", None))
             _apply_run_counts(item_report, outcome)
             _apply_failed_runs(item_report, outcome)
+            _apply_run_latencies(item_report, outcome)
         except AssertionError as exc:
             item_report.gate_passed = False if gated else None
             item_report.runs = k
@@ -492,6 +512,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
+            _apply_run_latencies(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
             # and reporting those as pass_at_k False would contradict the Langfuse score of
             # the same name. Kinds that report no count read as 0, i.e. a clean failure.
@@ -512,6 +533,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
+            _apply_run_latencies(item_report, exc)
             # Every run ungraded, by definition of this error -- said explicitly rather than
             # left to _apply_run_counts, whose source is detail["unscored_runs"] and which a
             # kind that attaches no diagnostics would leave at 0.
@@ -525,8 +547,15 @@ def run_agentic_items(
             # judge broke should not also report the agent as costing 0s. Kinds that
             # attach no timings to the exception keep their 0.0 defaults.
             _apply_timings(item_report, getattr(exc, "timings", None))
+            # Phase timings stay, but the per-turn response times do not: this item reports no
+            # runs (and so no run latencies), and keeping its turns would put them in the
+            # response population with no attempt beside them. An item that completed 2 of 3
+            # runs and then raised would otherwise show up in the per-response table and not in
+            # the per-conversation one.
+            traces.discard()
         finally:
             item_report.latency_s = time.perf_counter() - t0
+            item_report.trace_latencies_s = traces.stop()
 
         if on_item_done is not None:
             try:
@@ -607,6 +636,7 @@ def run_agentic_items(
             flush=True,
         )
     report.wall_clock_s = time.perf_counter() - _t0
+    report.finished_at = datetime.now(timezone.utc)
 
     if langfuse is not None:
         try:

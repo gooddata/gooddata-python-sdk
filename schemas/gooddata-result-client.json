@@ -140,6 +140,130 @@
         },
         "type": "object"
       },
+      "AnalyzeSavRequest": {
+        "description": "Bulk SPSS (.sav) file analysis request.",
+        "properties": {
+          "analyzeRequests": {
+            "description": "List of individual SPSS file analysis requests.",
+            "items": {
+              "$ref": "#/components/schemas/AnalyzeSavRequestItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "analyzeRequests"
+        ],
+        "type": "object"
+      },
+      "AnalyzeSavRequestItem": {
+        "description": "SPSS (.sav) file analysis request.",
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/AnalyzeSavRequestItemConfig"
+          },
+          "location": {
+            "description": "Location of the SPSS file to analyze.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "type": "object"
+      },
+      "AnalyzeSavRequestItemConfig": {
+        "description": "SPSS (.sav) file analysis request config.",
+        "properties": {
+          "resultRows": {
+            "description": "Number of rows to return as the preview of the file. The default is 100, the maximum is 1000.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AnalyzeSavResponse": {
+        "description": "Describes the results of an analysis of a single SPSS (.sav) file.",
+        "properties": {
+          "columns": {
+            "description": "List of column metadata.",
+            "items": {
+              "$ref": "#/components/schemas/AnalyzeSavResponseColumn"
+            },
+            "type": "array"
+          },
+          "location": {
+            "description": "Location of the analyzed file in the source data source.",
+            "type": "string"
+          },
+          "previewData": {
+            "description": "Preview of the first N rows of the file.",
+            "items": {
+              "description": "Preview of the first N rows of the file.",
+              "items": {
+                "description": "Preview of the first N rows of the file.",
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columns",
+          "location",
+          "previewData"
+        ],
+        "type": "object"
+      },
+      "AnalyzeSavResponseColumn": {
+        "description": "Describes a column of an SPSS file.",
+        "properties": {
+          "label": {
+            "description": "Label of the column, in a survey file usually the question text. Null if there is none.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the column as specified in the file.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of the column (e.g. string, float64, date32).",
+            "type": "string"
+          },
+          "valueLabels": {
+            "description": "Labels of the column values in file order. Null if there are none.",
+            "items": {
+              "$ref": "#/components/schemas/AnalyzeSavResponseValueLabel"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
+      "AnalyzeSavResponseValueLabel": {
+        "description": "Label of one value of an SPSS column.",
+        "properties": {
+          "label": {
+            "description": "The label of the value, in a survey file usually the answer text.",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value: a number in a numeric column, a string in a string column.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "label",
+          "value"
+        ],
+        "type": "object"
+      },
       "CacheRemovalInterval": {
         "description": "Information about a period in time and how much cached data was removed.",
         "properties": {
@@ -448,7 +572,8 @@
           "type": {
             "description": "Type of the file.",
             "enum": [
-              "CSV"
+              "CSV",
+              "SAV"
             ],
             "type": "string"
           }
@@ -643,6 +768,71 @@
           }
         },
         "required": [
+          "version"
+        ],
+        "type": "object"
+      },
+      "ImportSavRequest": {
+        "description": "Request containing the information necessary to import one or more SPSS (.sav) files from the staging area.",
+        "properties": {
+          "tables": {
+            "description": "Information about the individual tables.",
+            "items": {
+              "$ref": "#/components/schemas/ImportSavRequestTable"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "tables"
+        ],
+        "type": "object"
+      },
+      "ImportSavRequestTable": {
+        "description": "Information about a particular table imported from an SPSS file.",
+        "properties": {
+          "name": {
+            "description": "Name of the table.",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ImportSavRequestTableSource"
+          }
+        },
+        "required": [
+          "name",
+          "source"
+        ],
+        "type": "object"
+      },
+      "ImportSavRequestTableSource": {
+        "description": "Information about the SPSS source data of a particular table.",
+        "properties": {
+          "location": {
+            "description": "Location of the data in the staging area.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "type": "object"
+      },
+      "ImportSavResponse": {
+        "description": "Response containing the information about the imported SPSS (.sav) file.",
+        "properties": {
+          "name": {
+            "description": "Name of the table the file was imported to.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version the file was imported as.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
           "version"
         ],
         "type": "object"
@@ -1088,7 +1278,7 @@
     },
     "/api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv": {
       "post": {
-        "description": "Import the CSV files at the given locations in the staging area to the final location.",
+        "description": "Import the CSV files at the given locations in the staging area to the final location. A table that holds an SPSS file cannot take a CSV file.",
         "operationId": "importCsv",
         "parameters": [
           {
@@ -1126,6 +1316,58 @@
           }
         },
         "summary": "Import CSV",
+        "tags": [
+          "Data source files import",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/fileStorage/dataSources/{dataSourceId}/importSav": {
+      "post": {
+        "description": "Import the SPSS (.sav) files at the given locations in the staging area to the final location. A table that holds a CSV file cannot take an SPSS file.",
+        "operationId": "importSav",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportSavRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ImportSavResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful import."
+          }
+        },
+        "summary": "Import SPSS files",
         "tags": [
           "Data source files import",
           "actions"
@@ -1262,6 +1504,48 @@
           }
         },
         "summary": "Analyze CSV",
+        "tags": [
+          "Data source files analysis",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/fileStorage/staging/analyzeSav": {
+      "post": {
+        "description": "Reads the columns, their labels and the first rows of the SPSS (.sav) files at the given locations.",
+        "operationId": "analyzeSav",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalyzeSavRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AnalyzeSavResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful analysis."
+          }
+        },
+        "summary": "Analyze SPSS files",
         "tags": [
           "Data source files analysis",
           "actions"

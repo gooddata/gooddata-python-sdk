@@ -219,6 +219,12 @@
             "example": "INT",
             "type": "string"
           },
+          "defaultLabelOf": {
+            "description": "(EXPERIMENTAL) Name of the column whose values this column labels. Logical model generation makes this column the default label of the attribute on that column, sorted by that column.",
+            "example": "gender",
+            "maxLength": 255,
+            "type": "string"
+          },
           "description": {
             "description": "Column description/comment from database",
             "example": "Customer unique identifier",
@@ -295,6 +301,13 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "properties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Additional properties of the table that the data source passes on to the modeler and other callers. The data source decides which keys it sends. A caller uses the keys it understands and skips all other keys.",
+            "type": "object"
           },
           "type": {
             "description": "Table type: TABLE or VIEW.",
@@ -786,7 +799,6 @@
               "FLEXCONNECT",
               "STARROCKS",
               "ATHENA",
-              "MONGODB",
               "CRATEDB",
               "AILAKEHOUSE",
               "DENODO",

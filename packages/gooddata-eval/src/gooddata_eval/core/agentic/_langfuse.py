@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import contextvars
+import functools
 import logging
 import os
 import threading
@@ -10,7 +12,7 @@ import time
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from gooddata_eval.core.agentic._trace_linker import link_cancel_event, linking_is_inline, warn_from_worker
 from gooddata_eval.core.config import ReasoningEffort, env_flag, normalize_reasoning_effort
@@ -23,10 +25,23 @@ from gooddata_eval.core.langfuse.experiment import (
     build_experiment_root_span,
     trace_tags,
 )
+from gooddata_eval.core.langfuse.item_scope import (
+    SDK_EXPERIMENT_ENVIRONMENT,
+    ItemTraceScope,
+    JoinedRun,
+    joined_run,
+    joined_turns,
+    release_joined,
+    trace_ids_for,
+)
 
 # Part of this module's public surface: external callers import both names from here.
 from gooddata_eval.core.langfuse.observations import TraceSummary as _TraceObj  # noqa: F401
+from gooddata_eval.core.langfuse.observations import summarize_traces
 from gooddata_eval.core.langfuse.otlp import Span
+
+if TYPE_CHECKING:
+    from gooddata_eval.core.agentic._trace_linker import RunIdentity
 
 _log = logging.getLogger(__name__)
 
@@ -116,16 +131,22 @@ def get_model_version(
     if override:
         return override
     try:
-        from gooddata_sdk import GoodDataSdk  # noqa: PLC0415
-
-        sdk = GoodDataSdk.create(host, token)
-        setting = sdk.catalog_workspace.get_workspace_setting(workspace_id, "activeLlmProvider")
-        model = (setting.content or {}).get("defaultModelId") or None
-        if model:
-            return model
+        return _active_llm_model(host, token, workspace_id)
     except Exception:
-        pass
-    return ""
+        return ""
+
+
+@functools.cache
+def _active_llm_model(host: str, token: str, workspace_id: str) -> str:
+    """The workspace's default model id, read once per workspace; a failed read raises and is retried.
+
+    Every joined item resolves its run context before the first turn, on the item's own clock.
+    """
+    from gooddata_sdk import GoodDataSdk  # noqa: PLC0415
+
+    sdk = GoodDataSdk.create(host, token)
+    setting = sdk.catalog_workspace.get_workspace_setting(workspace_id, "activeLlmProvider")
+    return (setting.content or {}).get("defaultModelId") or ""
 
 
 def _matches_session(trace: Any, session_id: str) -> bool:
@@ -201,6 +222,22 @@ def _wait_between_attempts(delay: float) -> bool:
     return not cancel.is_set()
 
 
+def _fetch_joined_trace(langfuse: HttpxLangfuseClient, session_id: str, *_window: Any) -> list[Any]:
+    """The trace a joined conversation's gen-ai turns were put in, read by its id.
+
+    Empty until every joined turn's ``conversation.send_message`` row is ingested: a turn row
+    lands only when its turn ends, so an early read would cover the first turns alone.
+    ``joined_turns`` counts one per sent turn, but a turn the chat client retried after
+    gen-ai opened it leaves a row per attempt, so the count can be met while a later turn
+    is still in flight; the read then understates cost and latency.
+    """
+    trace_id = trace_ids_for(session_id)[0]
+    rows = langfuse.list_observations_for_trace(trace_id)
+    if sum(r.get("name") == "conversation.send_message" for r in rows) < joined_turns(session_id):
+        return []
+    return [t for t in summarize_traces(rows) if t.id == trace_id]
+
+
 def find_traces_per_conversation(
     langfuse: Any,
     conversation_ids: list[str],
@@ -246,12 +283,14 @@ def find_traces_per_conversation(
             break
         delay = _INITIAL_DELAY
         found: list[Any] = []
+        joined = joined_run(cid) is not None and isinstance(langfuse, HttpxLangfuseClient)
+        fetch = _fetch_joined_trace if joined else _fetch_traces_for_session
         for _attempt in range(_MAX_ATTEMPTS):
             # Attempt first, sleep only between attempts: a trace that is already ingested
             # when we look must cost nothing, which is the common case once linking is
             # batched to the end of the run.
             try:
-                found = _fetch_traces_for_session(langfuse, cid, window_start, window_end, pad)
+                found = fetch(langfuse, cid, window_start, window_end, pad)
             except Exception as exc:
                 _log.debug("Langfuse trace fetch failed for %s: %s", cid, exc)
             if found or time.monotonic() + delay > stop_at:
@@ -299,8 +338,13 @@ def _experiment_root_span(
     conversation_id: str | None,
     item_input: Any,
     output: Any,
+    joined_ids: tuple[str, str] | None = None,
 ) -> Span:
-    """gd-eval's own root span for one (dataset item, run) -- the whole experiment item."""
+    """gd-eval's own root span for one (dataset item, run) -- the whole experiment item.
+
+    ``joined_ids`` is the ``(trace_id, span_id)`` gen-ai's turns were put under; the span then
+    takes those ids and the environment the langfuse SDK forced on those turns.
+    """
     start, end = _span_window(trace, window)
     session_id = conversation_id or getattr(trace, "session_id", None)
     custom_tags = run_metadata.get("tags") or ()
@@ -332,7 +376,9 @@ def _experiment_root_span(
             "conversation_id": session_id,
         },
         trace_metadata={"run_name": run_name},
-        environment=os.environ.get("LANGFUSE_TRACING_ENVIRONMENT"),
+        environment=SDK_EXPERIMENT_ENVIRONMENT if joined_ids else os.environ.get("LANGFUSE_TRACING_ENVIRONMENT"),
+        trace_id=joined_ids[0] if joined_ids else None,
+        span_id=joined_ids[1] if joined_ids else None,
     )
 
 
@@ -379,6 +425,22 @@ def observe(
 
     if _drain_is_cancelled():
         yield None
+        return
+
+    joined = joined_run(conversation_id)
+    if joined is not None and conversation_id:
+        yield _export_joined_root(
+            langfuse,
+            joined,
+            conversation_id,
+            dataset_item_id,
+            run_name,
+            run_metadata or {},
+            trace=trace,
+            window=window,
+            item_input=item_input,
+            output=output,
+        )
         return
 
     try:
@@ -435,6 +497,85 @@ def observe(
     yield ScoreTarget(trace_id, span.trace_id, span.span_id)
 
 
+def _export_joined_root(
+    langfuse: HttpxLangfuseClient,
+    joined: JoinedRun,
+    conversation_id: str,
+    dataset_item_id: str,
+    run_name: str,
+    run_metadata: dict[str, Any],
+    *,
+    trace: Any,
+    window: tuple[datetime, datetime] | None,
+    item_input: Any,
+    output: Any,
+) -> ScoreTarget:
+    """Export the root of a joined conversation's trace and return its one score destination.
+
+    The root takes the trace and span ids gen-ai's turns were sent, and the experiment run
+    they were told they belong to, so Langfuse assembles one experiment item from both.
+    ``trace`` is that trace as read before scoring; its window spans every gen-ai row.
+    """
+    trace_id, span_id = trace_ids_for(conversation_id)
+    if joined.run_name != run_name:
+        _log.warning(
+            "Conversation %s joined run %s, not %s; its root follows the join.",
+            conversation_id,
+            joined.run_name,
+            run_name,
+        )
+    span = _experiment_root_span(
+        trace_id,
+        dataset_item_id,
+        joined.dataset_id,
+        joined.run_name,
+        run_metadata,
+        trace=trace,
+        window=window,
+        conversation_id=conversation_id,
+        item_input=item_input,
+        output=output,
+        joined_ids=(trace_id, span_id),
+    )
+    try:
+        langfuse.export_spans([span])
+    except Exception as exc:
+        _log.warning("Failed to export the experiment span for run %s: %s", joined.run_name, exc)
+        warn_from_worker(
+            f"[langfuse] WARNING: failed to export experiment span run={joined.run_name} item={dataset_item_id}: {exc}"
+        )
+        return ScoreTarget(trace_id)
+    finally:
+        release_joined(conversation_id)
+    return ScoreTarget(experiment_trace_id=trace_id, experiment_span_id=span_id)
+
+
+# Scores held by an open ``collect_scores`` block on this thread, sent together when it ends.
+_PENDING_SCORES: contextvars.ContextVar[list[dict[str, Any]] | None] = contextvars.ContextVar(
+    "gd_eval_pending_scores", default=None
+)
+
+
+@contextmanager
+def collect_scores(langfuse: HttpxLangfuseClient) -> Iterator[None]:
+    """Hold every ``score_safe`` write made in the block and send them as one batch at its end.
+
+    The batch is sent even when the drain was cancelled meanwhile, without retrying, so the
+    scores made before the interrupt are kept.
+    """
+    pending: list[dict[str, Any]] = []
+    token = _PENDING_SCORES.set(pending)
+    try:
+        yield
+    finally:
+        _PENDING_SCORES.reset(token)
+        if pending:
+            try:
+                langfuse.create_scores(pending, wait=_wait_between_attempts)
+            except Exception as exc:
+                _log.warning("Failed to log %d scores: %s", len(pending), exc)
+
+
 def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
     """Create one Langfuse score per destination the target names, ignoring errors.
 
@@ -448,7 +589,11 @@ def score_safe(langfuse: Any, trace_id: Any, **kwargs: Any) -> None:
     if _drain_is_cancelled():
         return
     targets = trace_id.destinations() if isinstance(trace_id, ScoreTarget) else [(str(trace_id), None)]
+    pending = _PENDING_SCORES.get()
     for target_id, observation_id in targets:
+        if pending is not None:
+            pending.append({"trace_id": target_id, "observation_id": observation_id, **kwargs})
+            continue
         extra = {"observation_id": observation_id} if observation_id else {}
         try:
             langfuse.create_score(trace_id=target_id, **kwargs, **extra)
@@ -495,6 +640,42 @@ def log_quality_and_value_scores(
             f"latency={latency_str}; cost={cost_str}"
         ),
     )
+
+
+def run_context_for(identity: RunIdentity) -> tuple[str, dict[str, Any]]:
+    """``build_run_context`` for an item's ``RunIdentity``."""
+    return build_run_context(
+        identity.host,
+        identity.token,
+        identity.workspace_id,
+        identity.dataset_name,
+        identity.run_timestamp,
+        identity.model_version_override,
+        identity.run_metadata_extra,
+        identity.reasoning_effort,
+    )
+
+
+def resolve_item_scope(
+    langfuse: Any, identity: RunIdentity, dataset_item_id: str, *, suffix_runs: bool
+) -> ItemTraceScope | None:
+    """The item's experiment scope, or None when ``observe`` could not export its root.
+
+    That is: a client other than ``HttpxLangfuseClient``, linking switched off, or a dataset
+    item Langfuse does not know. Sending the join keys then would leave gen-ai's turns under
+    a root that never arrives.
+    """
+    if not isinstance(langfuse, HttpxLangfuseClient) or env_flag(SKIP_ENV_VAR):
+        return None
+    try:
+        dataset_id = langfuse.dataset_id_for_item(dataset_item_id)
+    except Exception as exc:
+        _log.warning("Failed to resolve dataset item %s; its chat turns will not join: %s", dataset_item_id, exc)
+        return None
+    if dataset_id is None:
+        return None
+    base_name, run_metadata = run_context_for(identity)
+    return ItemTraceScope(base_name, suffix_runs, dataset_id, dataset_item_id, run_metadata)
 
 
 def build_run_context(

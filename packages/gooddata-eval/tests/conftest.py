@@ -25,6 +25,7 @@ _LEAKY_ENV = (
     "GOODDATA_EVAL_CHAT_MAX_BACKOFF_S",
     "GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S",
     "GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S",
+    "GOODDATA_EVAL_JOIN_GENAI_TRACE",
 )
 
 
@@ -32,6 +33,8 @@ _LEAKY_ENV = (
 def _isolate_gooddata_env(monkeypatch: pytest.MonkeyPatch) -> None:
     for name in _LEAKY_ENV:
         monkeypatch.delenv(name, raising=False)
+    # The join is on when unset; pin it off so a test that does not ask for it sends no join baggage.
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "0")
 
 
 @pytest.fixture

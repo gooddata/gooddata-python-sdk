@@ -41,6 +41,6 @@ repos:
       - id: gitlint
         stages: [commit-msg]
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.12.9
+    rev: 0.13.4
     hooks:
       - id: uv-lock

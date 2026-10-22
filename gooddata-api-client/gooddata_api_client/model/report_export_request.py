@@ -93,8 +93,9 @@ class ReportExportRequest(ModelNormal):
         return {
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
-            'report_id': (str,),  # noqa: E501
+            'document_id': (str,),  # noqa: E501
             'metadata': (JsonNode,),  # noqa: E501
+            'report_id': (str,),  # noqa: E501
             'timezone_id': (str, none_type,),  # noqa: E501
         }
 
@@ -106,8 +107,9 @@ class ReportExportRequest(ModelNormal):
     attribute_map = {
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
-        'report_id': 'reportId',  # noqa: E501
+        'document_id': 'documentId',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
+        'report_id': 'reportId',  # noqa: E501
         'timezone_id': 'timezoneId',  # noqa: E501
     }
 
@@ -118,12 +120,11 @@ class ReportExportRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, file_name, report_id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, file_name, *args, **kwargs):  # noqa: E501
         """ReportExportRequest - a model defined in OpenAPI
 
         Args:
             file_name (str): File name to be used for retrieving the pdf document.
-            report_id (str): Report identifier
 
         Keyword Args:
             format (str): Requested resulting file type.. defaults to "PDF", must be one of ["PDF", ]  # noqa: E501
@@ -157,7 +158,9 @@ class ReportExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            document_id (str): Document identifier; the export renders the Publisher document page.. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
+            report_id (str): Document identifier; the export renders the Publisher report page. Deprecated. 'documentId' renders the Publisher document page instead, so switching changes the page the export opens. Must not be set together with 'documentId'.. [optional]  # noqa: E501
             timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
@@ -193,7 +196,6 @@ class ReportExportRequest(ModelNormal):
 
         self.file_name = file_name
         self.format = format
-        self.report_id = report_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -214,12 +216,11 @@ class ReportExportRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, file_name, report_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, file_name, *args, **kwargs):  # noqa: E501
         """ReportExportRequest - a model defined in OpenAPI
 
         Args:
             file_name (str): File name to be used for retrieving the pdf document.
-            report_id (str): Report identifier
 
         Keyword Args:
             format (str): Requested resulting file type.. defaults to "PDF", must be one of ["PDF", ]  # noqa: E501
@@ -253,7 +254,9 @@ class ReportExportRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            document_id (str): Document identifier; the export renders the Publisher document page.. [optional]  # noqa: E501
             metadata (JsonNode): [optional]  # noqa: E501
+            report_id (str): Document identifier; the export renders the Publisher report page. Deprecated. 'documentId' renders the Publisher document page instead, so switching changes the page the export opens. Must not be set together with 'documentId'.. [optional]  # noqa: E501
             timezone_id (str, none_type): Time zone the export should be rendered in, as an IANA identifier (e.g. 'Asia/Kolkata') or a GMT offset (e.g. 'GMT+01:00'). When omitted, the workspace time zone setting is used.. [optional]  # noqa: E501
         """
 
@@ -287,7 +290,6 @@ class ReportExportRequest(ModelNormal):
 
         self.file_name = file_name
         self.format = format
-        self.report_id = report_id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

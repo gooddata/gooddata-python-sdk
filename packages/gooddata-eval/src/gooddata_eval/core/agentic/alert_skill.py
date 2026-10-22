@@ -6,9 +6,11 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
+import httpx
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
@@ -25,7 +27,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -33,6 +35,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -53,6 +56,11 @@ _DEFAULT_MAX_ITERATIONS = 6
 
 _TRIGGER_DISPLAY_TO_API = {"Every time": "ALWAYS", "One time": "ONCE"}
 _ALWAYS_TRIGGER_VALUES = {"Every time", "ALWAYS", "not specified"}
+_RELATIVE_OPERATORS = ("INCREASES_BY", "DECREASES_BY", "CHANGES_BY")
+
+# Expected-recipient spellings that mean the owner of the API token.
+_CURRENT_USER_RECIPIENT = "me"
+_CURRENT_USER_MARKERS = {"me", "myself", "current user", "current_user"}
 
 _TRIGGER_INSTRUCTIONS = {
     "ALWAYS": (
@@ -241,9 +249,9 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
     `create_metric_alert` then addresses the alert by internal user id
     (`internal_recipients`), never by email, so an expected email has to be
     resolved before it can be compared against that field. Failures (no
-    matching user, no permission, network error) are swallowed: the caller
-    treats an empty result the same as "this delivery path doesn't match",
-    which is correct -- it doesn't mean the alert itself failed.
+    matching user, no permission, network error) are logged and return an
+    empty set: the caller treats that the same as "this delivery path doesn't
+    match", which is correct -- it doesn't mean the alert itself failed.
     """
     if not emails:
         return set()
@@ -253,12 +261,48 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
         escaped = [email.replace("\\", "\\\\").replace("'", "\\'") for email in emails]
         quoted = ",".join(f"'{email}'" for email in escaped)
         resp = sdk._client.entities_api.get_all_entities_users(filter=f"email=in=({quoted})")
-        return {u.id for u in (resp.data or [])}
-    except Exception:
+        ids = {u.id for u in (resp.data or [])}
+    except Exception as exc:
+        print(f"[RECIPIENTS] Looking up users by {len(emails)} recipient email(s) failed: {exc}")
         return set()
+    if not ids:
+        print(
+            f"[RECIPIENTS] No user has any of the {len(emails)} recipient email(s); internal recipients cannot match."
+        )
+    return ids
 
 
-def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: GoodDataSdk | None = None) -> bool:
+def _resolve_current_user_id(host: str, token: str) -> str | None:
+    """Id of the user that owns ``token``, or None if the profile cannot be read.
+
+    The current user is matched by id, not email: that user may have no email at all.
+    """
+    try:
+        resp = httpx.get(
+            f"{host.rstrip('/')}/api/v1/profile",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=30.0,
+        )
+        resp.raise_for_status()
+        user_id = resp.json().get("userId")
+    except Exception as exc:
+        print(f"[RECIPIENTS] Resolving the current user failed: {exc}")
+        return None
+    return user_id if isinstance(user_id, str) and user_id else None
+
+
+def _split_current_user(recipients: list[str]) -> tuple[bool, list[str]]:
+    """Whether ``recipients`` names the current user, and the email recipients besides it."""
+    emails = [r for r in recipients if r != _CURRENT_USER_RECIPIENT]
+    return len(emails) != len(recipients), emails
+
+
+def _check_recipients(
+    expected: CatalogMetricAlert,
+    actual_args: dict,
+    sdk: GoodDataSdk | None = None,
+    current_user_id: str | None = None,
+) -> bool:
     if not expected.recipients:
         return True
     act_recip_raw = actual_args.get("recipients", actual_args.get("external_recipients"))
@@ -273,8 +317,6 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: Good
         act_recip = act_recip_raw
     else:
         act_recip = []
-    if set(expected.recipients) == set(act_recip or []):
-        return True
     act_internal_raw = actual_args.get("internal_recipients")
     # internal_recipients is declared `anyOf: [array of string, string, null]` in the
     # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
@@ -286,8 +328,27 @@ def _check_recipients(expected: CatalogMetricAlert, actual_args: dict, sdk: Good
         act_internal = act_internal_raw
     else:
         act_internal = []
+    wants_current_user, expected_emails = _split_current_user(expected.recipients)
+    if wants_current_user:
+        if current_user_id is None or current_user_id not in act_internal:
+            return False
+        other_internal = set(act_internal) - {current_user_id}
+        external = set(act_recip or [])
+        if external - set(expected_emails):
+            return False
+        # An email not sent externally must arrive as its user's id (workspace-restricted channel).
+        unmatched = [e for e in expected_emails if e not in external]
+        if not unmatched:
+            return not other_internal
+        if sdk is None or not other_internal:
+            return False
+        # One lookup per email: a bulk lookup returns only the users that exist, hiding a missing one.
+        ids_per_email = [_resolve_internal_recipient_ids(sdk, [email]) for email in unmatched]
+        return all(ids_per_email) and other_internal == set().union(*ids_per_email)
+    if set(expected_emails) == set(act_recip or []):
+        return True
     if sdk is not None and act_internal:
-        internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected.recipients)
+        internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected_emails)
         if internal_recipient_ids & set(act_internal):
             return True
     return False
@@ -298,6 +359,7 @@ def generate_simulated_alert_response(
     expected: CatalogMetricAlert,
     conversation_history: list,
     question: str = "",
+    current_user_id: str | None = None,
 ) -> str:
     """Stateful sim-user reply for alert-skill conversation (gpt-4o).
 
@@ -305,6 +367,8 @@ def generate_simulated_alert_response(
     history — the opening question went straight to the agent, never to the sim-user — so
     without it rule 5's "the filters your original request implies" refers to text the model
     cannot see. Optional (defaults to "") to keep the signature backwards compatible.
+
+    ``current_user_id`` lets the sim-user recognise itself as the recipient of a "me" alert.
     """
     if _OpenAI is None:
         raise RuntimeError(
@@ -332,7 +396,30 @@ def generate_simulated_alert_response(
         threshold = expected.threshold
     else:
         threshold = "not specified"
-    recipients = ", ".join(expected.recipients) if expected.recipients else "not specified"
+    wants_current_user, emails = _split_current_user(expected.recipients)
+    recipient_names = list(emails)
+    if wants_current_user:
+        user_id_note = f", user id {current_user_id}" if current_user_id else ""
+        recipient_names.insert(0, f"me (yourself, the current user{user_id_note})")
+    recipients = ", ".join(recipient_names) if recipient_names else "not specified"
+    if wants_current_user and not emails:
+        # An email given here would make the agent send the alert to it instead of the current user.
+        recipients_rule = (
+            "4. The alert is for you yourself. Never give an email address and never ask for one to "
+            "be added. A proposal whose recipient is you — shown as 'You', the current user or your "
+            "own user id — has the correct recipient.\n"
+        )
+    elif wants_current_user:
+        recipients_rule = (
+            f"4. Proactively state the email recipients in your first reply: {', '.join(emails)}, "
+            "and say the alert should also go to you yourself. A recipient shown as 'You', the "
+            "current user or your own user id is you.\n"
+        )
+    else:
+        recipients_rule = (
+            "4. Proactively include your email recipient in your first reply. "
+            "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
+        )
     trigger = expected.trigger
     filters = expected.filters
 
@@ -377,14 +464,25 @@ def generate_simulated_alert_response(
         # and scoring an item against an interval it never asked for is the defect this rule
         # exists to undo.
         granularity = (expected.granularity or AnomalyDetectionGranularity.DAY).value
-        anomaly_rule = (
+        period_rule = (
             "7. This is an ANOMALY alert. Anomaly detection REQUIRES a time granularity, and that "
             f"granularity is NOT a date filter. State it in your first reply and repeat it whenever "
             f"asked: use {granularity} granularity. Rule 5 constrains filters on the metric only — it "
             "never applies to this detection interval, so never refuse to give one.\n"
         )
+    elif operator in _RELATIVE_OPERATORS:
+        # The item names no comparison date or period; delegating is an answer the agent accepts,
+        # refusing loops until the turn budget runs out.
+        period_rule = (
+            "7. This is a comparison alert: keep the comparison your original request describes. The "
+            "agent may need a comparison date and a period length (day, week, month, quarter or "
+            "year), and those are NOT a date filter. Rule 5 constrains filters on the metric only — "
+            "it never applies to the comparison. If the agent asks which date or which period the "
+            "comparison should use, do not refuse and do not name one yourself: hand the choice back, "
+            "for example 'Pick whichever date and period fit best.'\n"
+        )
     else:
-        anomaly_rule = (
+        period_rule = (
             "7. Do not invent an evaluation period, a granularity or an 'evaluate each run on a X "
             "basis' instruction your goal never asked for.\n"
         )
@@ -408,11 +506,10 @@ def generate_simulated_alert_response(
         "   when every one of those fields matches your goal.\n"
         "   A field your goal reports as 'not specified' is one you have NO expectation about: "
         "   accept whatever the agent chose for it and never ask for it to be removed.\n"
-        "4. Proactively include your email recipient in your first reply. "
-        "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
+        + recipients_rule
         + filters_rule
         + f"6. Proactively state how often you want to be alerted in your first reply: {trigger_request}. "
-        "   Repeat it if the agent proposes a different cadence.\n" + anomaly_rule + "Reply concisely and directly."
+        "   Repeat it if the agent proposes a different cadence.\n" + period_rule + "Reply concisely and directly."
     )
 
     messages: list = [{"role": "system", "content": system_prompt}]
@@ -491,6 +588,8 @@ class AlertRunResult:
     # also report operator/threshold/metric/recipients as False.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     turns_used: int = 0
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -589,6 +688,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         recipients = [r.strip() for r in raw_recip.replace(";", ",").split(",") if r.strip()]
     else:
         recipients = list(raw_recip)
+    recipients = [_CURRENT_USER_RECIPIENT if str(r).strip().lower() in _CURRENT_USER_MARKERS else r for r in recipients]
 
     filters = _normalize_expected_filters(expected)
     attributes = _normalize_expected_attributes(expected)
@@ -664,6 +764,12 @@ def run_agentic_alert_skill(
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
     expected = _normalize_expected_output(expected_output)
+    current_user_id: str | None = None
+    if _CURRENT_USER_RECIPIENT in expected.recipients:
+        current_user_id = _resolve_current_user_id(host, token)
+        if current_user_id is None:
+            # A harness fault: report it as an item error, not as the agent's recipient mistake.
+            raise RuntimeError("Cannot score a current-user alert: the token owner's user id could not be resolved")
     run_results: list[AlertRunResult] = []
     client = ChatClient(
         host=host,
@@ -699,6 +805,7 @@ def run_agentic_alert_skill(
             # that simply runs out of range() is correctly labelled without a trailing else.
             exit_reason = LoopExit.BUDGET_EXHAUSTED
             turns_used = 0
+            run_started = time.monotonic()
             for _iteration in range(max_iterations):
                 turns_used = _iteration + 1
                 try:
@@ -760,7 +867,11 @@ def run_agentic_alert_skill(
                 # exit reason to classify the run as an error rather than an agent failure.
                 try:
                     follow_up = generate_simulated_alert_response(
-                        response_text, expected, conversation_history, question=question
+                        response_text,
+                        expected,
+                        conversation_history,
+                        question=question,
+                        current_user_id=current_user_id,
                     )
                 except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
                     print(f"[SIM-USER] Simulated reply failed for conversation {conv_id}: {exc}")
@@ -778,7 +889,8 @@ def run_agentic_alert_skill(
                 trigger_correct=tool_called and _check_trigger(expected, actual_args),
                 filters_correct=tool_called and _check_filters(expected, actual_args),
                 metric_correct=tool_called and _check_metric(expected, actual_args),
-                recipients_correct=tool_called and _check_recipients(expected, actual_args, sdk=sdk),
+                recipients_correct=tool_called
+                and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
                 attributes_correct=tool_called and _check_attributes(expected, actual_args),
                 granularity_correct=tool_called and _check_granularity(expected, actual_args),
             )
@@ -795,6 +907,7 @@ def run_agentic_alert_skill(
                 reasoning_step_events=all_reasoning_step_events,
                 exit_reason=exit_reason,
                 turns_used=turns_used,
+                run_latency_s=time.monotonic() - run_started,
             )
         finally:
             if alert_id_to_delete:
@@ -904,20 +1017,31 @@ def evaluate_agentic_alert_skill(
     `conversation_id`-on-exception idiom in `ChatClient.ask()`) so callers can retrieve them
     either way.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_alert_skill(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_alert_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -956,23 +1080,15 @@ def evaluate_agentic_alert_skill(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -1011,6 +1127,7 @@ def evaluate_agentic_alert_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -1022,4 +1139,5 @@ def evaluate_agentic_alert_skill(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

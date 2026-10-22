@@ -88,7 +88,6 @@ class DeclarativeDataSource(ModelNormal):
             'FLEXCONNECT': "FLEXCONNECT",
             'STARROCKS': "STARROCKS",
             'ATHENA': "ATHENA",
-            'MONGODB': "MONGODB",
             'CRATEDB': "CRATEDB",
             'AILAKEHOUSE': "AILAKEHOUSE",
             'DENODO': "DENODO",
@@ -192,6 +191,7 @@ class DeclarativeDataSource(ModelNormal):
             'date_time_semantics': (str, none_type,),  # noqa: E501
             'decoded_parameters': ([Parameter],),  # noqa: E501
             'disable_statistics': (bool, none_type,),  # noqa: E501
+            'ignore_jwt_aud': (bool, none_type,),  # noqa: E501
             'parameters': ([Parameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
             'permissions': ([DeclarativeDataSourcePermission],),  # noqa: E501
@@ -221,6 +221,7 @@ class DeclarativeDataSource(ModelNormal):
         'date_time_semantics': 'dateTimeSemantics',  # noqa: E501
         'decoded_parameters': 'decodedParameters',  # noqa: E501
         'disable_statistics': 'disableStatistics',  # noqa: E501
+        'ignore_jwt_aud': 'ignoreJwtAud',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
@@ -287,6 +288,7 @@ class DeclarativeDataSource(ModelNormal):
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. - LOCAL: The values are assumed to be in local timezone and they are not converted to the user's timezone. - UTC: The values are assumed to be in UTC and they are converted to the user's timezone.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             disable_statistics (bool, none_type): Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset.. [optional]  # noqa: E501
+            ignore_jwt_aud (bool, none_type): Turns off the check that the audience of an OIDC access token names the host of the data source, for the OIDC_PASSTHROUGH authentication type. Only an organization administrator may set it.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
@@ -399,6 +401,7 @@ class DeclarativeDataSource(ModelNormal):
             date_time_semantics (str, none_type): Determines how datetime values are interpreted in data sources without native support for specifying this. - LOCAL: The values are assumed to be in local timezone and they are not converted to the user's timezone. - UTC: The values are assumed to be in UTC and they are converted to the user's timezone.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             disable_statistics (bool, none_type): Whether to skip the collection of physical statistics from the database. Statistics are collected when this is false or unset.. [optional]  # noqa: E501
+            ignore_jwt_aud (bool, none_type): Turns off the check that the audience of an OIDC access token names the host of the data source, for the OIDC_PASSTHROUGH authentication type. Only an organization administrator may set it.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
