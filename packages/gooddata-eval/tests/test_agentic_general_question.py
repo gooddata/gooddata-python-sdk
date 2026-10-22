@@ -259,6 +259,10 @@ def test_evaluate_agentic_general_question_returns_reasoning_steps_on_pass():
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    # One wall-clock sample per run, passing runs included -- the latency distribution is over
+    # these, and a kind that forgot to report them would silently drop out of it.
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception_on_fail():
@@ -287,6 +291,7 @@ def test_evaluate_agentic_general_question_attaches_reasoning_steps_to_exception
         "latency_breakdown": [],
         "tool_calls": [],
     }
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
 
 
 def test_evaluate_general_question_defers_langfuse_work_to_the_injected_linker():
@@ -405,6 +410,8 @@ def test_evaluate_general_question_aggregates_timings_across_k_runs():
     # best_run_latency_s is the rank-selected run's own time (agent_s=2.0 + judge_s=1.0
     # from the first, tied-best run), not the item total above (both runs summed).
     assert outcome.best_run_latency_s == 3.0
+    # Each run's own span, agent and judge both inside it -- not their sum across runs.
+    assert outcome.run_latencies_s == [3.0, 3.5]
 
 
 def test_evaluate_general_question_attaches_timings_to_the_failure_exception():
@@ -724,3 +731,4 @@ def test_an_item_with_no_gradeable_run_raises_instead_of_reporting_failures():
     assert [r["run_index"] for r in err.value.failed_runs] == [1, 2]
     assert [r["error"] for r in err.value.failed_runs] == ["empty body twice", "no 'score' key"]
     assert (err.value.runs_passed, err.value.runs_effective) == (0, 2)
+    assert len(err.value.run_latencies_s) == err.value.runs_effective

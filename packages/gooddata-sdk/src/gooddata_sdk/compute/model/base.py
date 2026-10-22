@@ -28,7 +28,7 @@ class ObjId:
 
     def as_afm_id_label(self) -> afm_models.AfmObjectIdentifierLabel:
         return afm_models.AfmObjectIdentifierLabel(
-            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id)
+            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id, type="label")
         )
 
     def as_afm_id_dataset(self) -> afm_models.AfmObjectIdentifierDataset:

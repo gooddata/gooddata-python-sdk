@@ -23,7 +23,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -31,6 +31,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -1174,6 +1175,8 @@ class DashboardRunResult:
     # this loop's follow-up is built from the expectation by build_simulated_reply, with no
     # judge call that could fail.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -1411,6 +1414,7 @@ def _execute_single_dashboard_run(
     # is labelled correctly with no trailing else.
     exit_reason = LoopExit.BUDGET_EXHAUSTED
 
+    run_started = time.monotonic()
     for iteration in range(max_iterations):
         turns += 1
         agent_started = time.monotonic()
@@ -1516,6 +1520,7 @@ def _execute_single_dashboard_run(
         reasoning_step_events=all_reasoning_step_events,
         timings=timings,
         exit_reason=exit_reason,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -1637,20 +1642,31 @@ def evaluate_agentic_dashboard_skill(
         ValueError: the fixture is unusable — see ``_validate_expectation``. Raised before
             any request, so it means a fixture to fix rather than a result to read.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_dashboard_skill(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_dashboard_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -1680,23 +1696,15 @@ def evaluate_agentic_dashboard_skill(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -1746,6 +1754,7 @@ def evaluate_agentic_dashboard_skill(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=run_latency_s(best.timings),
+            run_latencies_s=[r.run_latency_s for r in summary.run_results],
             timings=item_timings,
             failed_runs=failed_runs,
         )
@@ -1759,4 +1768,5 @@ def evaluate_agentic_dashboard_skill(
         best_run_latency_s=run_latency_s(best.timings),
         timings=item_timings,
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

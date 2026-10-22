@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 ARG PY_TAG
-FROM ghcr.io/astral-sh/uv:0.12.5 AS uv
+FROM ghcr.io/astral-sh/uv:0.13.4 AS uv
 FROM python:${PY_TAG}
 
 ARG PY_TAG
@@ -17,7 +17,7 @@ COPY --from=uv /uv /usr/local/bin/uv
 ENV GOSU_VERSION=1.14
 RUN set -x \
   && apt-get update \
-  && apt-get install -y --no-install-recommends make curl gnupg \
+  && apt-get install -y --no-install-recommends make curl gnupg nodejs \
   && curl -sSLo /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
   && curl -sSLo /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
   && export GNUPGHOME="$(mktemp -d)" \

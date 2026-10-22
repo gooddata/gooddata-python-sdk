@@ -20,7 +20,8 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    conversations_to_link,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -30,6 +31,7 @@ from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._guardrail_criteria import GUARDRAIL_REFUSAL_DEFINITION
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -86,8 +88,7 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
-    # This run's own wall time (agent call + its grading) -- mirrors the single-shot
-    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    # This run's own wall time, from just before its chat call to the end of its scoring.
     run_latency_s: float = 0.0
 
 
@@ -210,6 +211,7 @@ def _attach_diagnostics(
     failed_runs: list[dict],
     runs_passed: int,
     runs_effective: int,
+    run_latencies_s: list[float],
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -224,6 +226,7 @@ def _attach_diagnostics(
     error.runs_passed = runs_passed
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
+    error.run_latencies_s = run_latencies_s
 
 
 def _run_detail(run: GuardrailResult) -> dict:
@@ -268,19 +271,30 @@ def evaluate_agentic_guardrail(
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id`` (mirrors
     `evaluate_agentic_metric_skill`'s idiom) so callers can retrieve them either way.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_guardrail(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_guardrail(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -293,6 +307,7 @@ def evaluate_agentic_guardrail(
                 if run.judge_error is not None:
                     # No verdict, so nothing truthful to publish: float(run.passed) would
                     # write a 0 the judge never returned.
+                    ctx.export_unscored(run_idx, run.conversation_id)
                     continue
                 pt = ctx.trace(run.conversation_id)
                 with ctx.observe(
@@ -311,25 +326,19 @@ def evaluate_agentic_guardrail(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
-            # Ungraded runs are skipped above, so polling for their traces would only spend
-            # the item's shared retry budget on scores that never get written.
-            conversation_ids=[r.conversation_id for r in summary.scored_run_results],
+            # An ungraded run is read only when it joined: its root still has to be exported.
+            conversation_ids=conversations_to_link(
+                [r.conversation_id for r in summary.scored_run_results],
+                [r.conversation_id for r in summary.run_results if r.judge_error is not None],
+            ),
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -337,6 +346,7 @@ def evaluate_agentic_guardrail(
 
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     detail = {
@@ -360,7 +370,7 @@ def evaluate_agentic_guardrail(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective)
+        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
         error.best_run_latency_s = best.run_latency_s
         raise error
 
@@ -376,6 +386,7 @@ def evaluate_agentic_guardrail(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=best.run_latency_s,
+            run_latencies_s=run_latencies_s,
             failed_runs=failed_runs,
         )
     return agentic_success(
@@ -387,4 +398,5 @@ def evaluate_agentic_guardrail(
         runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )

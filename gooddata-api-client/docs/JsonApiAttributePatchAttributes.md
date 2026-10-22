@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**conditional_formatting** | [**JsonApiAttributeOutAttributesConditionalFormatting**](JsonApiAttributeOutAttributesConditionalFormatting.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

@@ -288,6 +288,8 @@ def test_detail_reports_the_adjustments_the_agent_asked_for():
     assert "tool_calls" in outcome.detail
     assert outcome.detail["exit_reason"] == "success"
     assert outcome.runs_passed == 1
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
 
 
 def test_a_wrong_adjustment_raises_naming_what_the_agent_actually_did():
@@ -299,6 +301,7 @@ def test_a_wrong_adjustment_raises_naming_what_the_agent_actually_did():
     assert "* 3 *" in str(error)
     assert error.runs_passed == 0
     assert error.conversation_id == "conv-1"
+    assert len(error.run_latencies_s) == error.runs_effective == 1
 
 
 def test_a_spec_built_on_an_earlier_turn_is_still_the_one_scored():
@@ -379,7 +382,7 @@ class _FakeCtx:
         return None
 
     @contextmanager
-    def observe(self, _trace, _run_idx):
+    def observe(self, _trace, _run_idx, *, conversation_id=None):
         yield "trace-id"
 
     def score(self, _tid, *, name, value, data_type):

@@ -341,6 +341,8 @@ class ChatResult(BaseModel):
     reasoning_step_events: list[ReasoningStepEvent] = Field(default_factory=list, alias="reasoningStepEvents")
     conversation_id: str | None = Field(default=None, alias="conversationId")
     response_id: str | None = Field(default=None, alias="responseId")
+    # The Langfuse trace gen-ai opened the turn in, from its response_started event.
+    trace_id: str | None = Field(default=None, alias="traceId")
     # True once gen-ai's response_ended event arrived.
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
@@ -410,6 +412,7 @@ class AgenticAssertionError(AssertionError):
     runs_effective: int
     best_run_latency_s: float | None
     failed_runs: list[dict]
+    run_latencies_s: list[float]
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -447,6 +450,11 @@ class AgenticEvalOutcome(BaseModel):
     # ``core.agentic._failed_runs.build_failed_runs``; mirrors the single-shot path's
     # ``ItemReport.failed_runs``, which ``core/runner.py`` fills for the non-agentic kinds.
     failed_runs: list[dict] = Field(default_factory=list)
+    # The wall-clock seconds of every run, passing or not, in run order. ``timings`` and
+    # ``best_run_latency_s`` each describe one number per item; the latency distribution
+    # needs one per run. Empty means the kind recorded none, which the report reads as "no
+    # sample", not as zero-second runs.
+    run_latencies_s: list[float] = Field(default_factory=list)
 
 
 class SummaryInput(BaseModel):

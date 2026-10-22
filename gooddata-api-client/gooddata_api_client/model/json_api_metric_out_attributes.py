@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_metric_in_attributes_content import JsonApiMetricInAttributesContent
-    globals()['JsonApiMetricInAttributesContent'] = JsonApiMetricInAttributesContent
+    from gooddata_api_client.model.json_api_computed_attribute_in_attributes_content import JsonApiComputedAttributeInAttributesContent
+    from gooddata_api_client.model.json_api_metric_in_attributes_conditional_formatting import JsonApiMetricInAttributesConditionalFormatting
+    globals()['JsonApiComputedAttributeInAttributesContent'] = JsonApiComputedAttributeInAttributesContent
+    globals()['JsonApiMetricInAttributesConditionalFormatting'] = JsonApiMetricInAttributesConditionalFormatting
 
 
 class JsonApiMetricOutAttributes(ModelNormal):
@@ -112,11 +114,12 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """
         lazy_import()
         return {
-            'content': (JsonApiMetricInAttributesContent,),  # noqa: E501
+            'content': (JsonApiComputedAttributeInAttributesContent,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
             'certification': (str,),  # noqa: E501
             'certification_message': (str, none_type,),  # noqa: E501
             'certified_at': (datetime, none_type,),  # noqa: E501
+            'conditional_formatting': (JsonApiMetricInAttributesConditionalFormatting,),  # noqa: E501
             'created_at': (datetime, none_type,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'is_hidden': (bool,),  # noqa: E501
@@ -137,6 +140,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         'certification': 'certification',  # noqa: E501
         'certification_message': 'certificationMessage',  # noqa: E501
         'certified_at': 'certifiedAt',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
         'is_hidden': 'isHidden',  # noqa: E501
@@ -157,7 +161,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """JsonApiMetricOutAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,6 +198,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (datetime, none_type): Time when the certification was set.. [optional]  # noqa: E501
+            conditional_formatting (JsonApiMetricInAttributesConditionalFormatting): [optional]  # noqa: E501
             created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501
@@ -257,7 +262,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         """JsonApiMetricOutAttributes - a model defined in OpenAPI
 
         Args:
-            content (JsonApiMetricInAttributesContent):
+            content (JsonApiComputedAttributeInAttributesContent):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -294,6 +299,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             certification (str): Certification status of the entity.. [optional] if omitted the server will use the default value of "CERTIFIED"  # noqa: E501
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (datetime, none_type): Time when the certification was set.. [optional]  # noqa: E501
+            conditional_formatting (JsonApiMetricInAttributesConditionalFormatting): [optional]  # noqa: E501
             created_at (datetime, none_type): Time of the entity creation.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             is_hidden (bool): [optional]  # noqa: E501

@@ -5,7 +5,8 @@ Individual change analysis data item
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attribute_name** | **str** | The name of the attribute being analyzed | 
+**attribute_name** | **str** | Deprecated: bare id of the analyzed label or computed attribute, without its type. Use attributeRef instead. | 
+**attribute_ref** | [**AfmObjectIdentifierLabel**](AfmObjectIdentifierLabel.md) |  | 
 **attribute_value** | **str** | The value of the attribute being analyzed | 
 **attribute_values_change_mean** | **float** | The mean of attribute value changes for the attribute being analyzed | 
 **attribute_values_change_std** | **float** | The standard deviation of attribute value changes for the attribute being analyzed | 

@@ -85,6 +85,7 @@ class NotificationParameter(ModelNormal):
             'id': (str,),  # noqa: E501
             'value': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'value_title': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -96,6 +97,7 @@ class NotificationParameter(ModelNormal):
         'id': 'id',  # noqa: E501
         'value': 'value',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'value_title': 'valueTitle',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +146,7 @@ class NotificationParameter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             title (str): [optional]  # noqa: E501
+            value_title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,6 +239,7 @@ class NotificationParameter(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             title (str): [optional]  # noqa: E501
+            value_title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

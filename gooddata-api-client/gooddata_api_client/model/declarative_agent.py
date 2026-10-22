@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
+    from gooddata_api_client.model.instruction import Instruction
     globals()['DeclarativeUserGroupIdentifier'] = DeclarativeUserGroupIdentifier
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
+    globals()['Instruction'] = Instruction
 
 
 class DeclarativeAgent(ModelNormal):
@@ -75,6 +77,10 @@ class DeclarativeAgent(ModelNormal):
             'DASHBOARD_SUMMARY': "dashboard_summary",
             'WHAT_IF_ANALYSIS': "what_if_analysis",
             'KNOWLEDGE': "knowledge",
+            'DASHBOARD_BUILDER': "dashboard_builder",
+            'DASHBOARD_EDITOR': "dashboard_editor",
+            'REPORT_BUILDER': "report_builder",
+            'DOCUMENT_BUILDER': "document_builder",
         },
         ('skills_mode',): {
             'ALL': "all",
@@ -127,6 +133,7 @@ class DeclarativeAgent(ModelNormal):
             'custom_skills': ([str],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'enabled': (bool,),  # noqa: E501
+            'instructions': ([Instruction], none_type,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'name': (str,),  # noqa: E501
@@ -149,6 +156,7 @@ class DeclarativeAgent(ModelNormal):
         'custom_skills': 'customSkills',  # noqa: E501
         'description': 'description',  # noqa: E501
         'enabled': 'enabled',  # noqa: E501
+        'instructions': 'instructions',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
         'name': 'name',  # noqa: E501
@@ -208,6 +216,7 @@ class DeclarativeAgent(ModelNormal):
             custom_skills ([str]): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
             description (str): Description of the agent.. [optional]  # noqa: E501
             enabled (bool): Whether the agent is enabled.. [optional]  # noqa: E501
+            instructions ([Instruction], none_type): Rules this agent follows when answering.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             name (str): Name of the agent.. [optional]  # noqa: E501
@@ -310,6 +319,7 @@ class DeclarativeAgent(ModelNormal):
             custom_skills ([str]): List of custom skills when skillsMode is CUSTOM.. [optional]  # noqa: E501
             description (str): Description of the agent.. [optional]  # noqa: E501
             enabled (bool): Whether the agent is enabled.. [optional]  # noqa: E501
+            instructions ([Instruction], none_type): Rules this agent follows when answering.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             name (str): Name of the agent.. [optional]  # noqa: E501

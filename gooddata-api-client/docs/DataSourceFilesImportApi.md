@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**import_csv**](DataSourceFilesImportApi.md#import_csv) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importCsv | Import CSV
+[**import_sav**](DataSourceFilesImportApi.md#import_sav) | **POST** /api/v1/actions/fileStorage/dataSources/{dataSourceId}/importSav | Import SPSS files
 
 
 # **import_csv**
@@ -12,7 +13,7 @@ Method | HTTP request | Description
 
 Import CSV
 
-Import the CSV files at the given locations in the staging area to the final location.
+Import the CSV files at the given locations in the staging area to the final location. A table that holds an SPSS file cannot take a CSV file.
 
 ### Example
 
@@ -122,6 +123,85 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**[ImportCsvResponse]**](ImportCsvResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Successful import. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **import_sav**
+> [ImportSavResponse] import_sav(data_source_id, import_sav_request)
+
+Import SPSS files
+
+Import the SPSS (.sav) files at the given locations in the staging area to the final location. A table that holds a CSV file cannot take an SPSS file.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import data_source_files_import_api
+from gooddata_api_client.model.import_sav_response import ImportSavResponse
+from gooddata_api_client.model.import_sav_request import ImportSavRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = data_source_files_import_api.DataSourceFilesImportApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    import_sav_request = ImportSavRequest(
+        tables=[
+            ImportSavRequestTable(
+                name="name_example",
+                source=ImportSavRequestTableSource(
+                    location="location_example",
+                ),
+            ),
+        ],
+    ) # ImportSavRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Import SPSS files
+        api_response = api_instance.import_sav(data_source_id, import_sav_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling DataSourceFilesImportApi->import_sav: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **import_sav_request** | [**ImportSavRequest**](ImportSavRequest.md)|  |
+
+### Return type
+
+[**[ImportSavResponse]**](ImportSavResponse.md)
 
 ### Authorization
 

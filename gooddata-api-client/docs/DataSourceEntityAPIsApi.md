@@ -52,6 +52,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 client_id="client_id_example",
                 client_secret="client_secret_example",
                 date_time_semantics="LOCAL",
+                disable_statistics=True,
+                ignore_jwt_aud=True,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -548,6 +550,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 client_id="client_id_example",
                 client_secret="client_secret_example",
                 date_time_semantics="LOCAL",
+                disable_statistics=True,
+                ignore_jwt_aud=True,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(
@@ -658,6 +662,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 client_id="client_id_example",
                 client_secret="client_secret_example",
                 date_time_semantics="LOCAL",
+                disable_statistics=True,
+                ignore_jwt_aud=True,
                 name="name_example",
                 parameters=[
                     JsonApiDataSourceInAttributesParametersInner(

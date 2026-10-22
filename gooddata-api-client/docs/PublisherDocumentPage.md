@@ -1,0 +1,20 @@
+# PublisherDocumentPage
+
+A page of a document.
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**layout** | [**PublisherDocumentLayoutNode**](PublisherDocumentLayoutNode.md) |  | 
+**filters** | [**[PublisherDocumentFilter]**](PublisherDocumentFilter.md) | Page filters; stored, not applied. | [optional] 
+**id** | **str** | Unique within the document. Required in the declarative layout. A REST write can omit it. The server then generates it. | [optional] 
+**kind** | **str** | Editor hint. | [optional] 
+**notes** | **str** | Speaker notes in markdown, never drawn. | [optional] 
+**page_size** | **str** |  | [optional]  if omitted the server will use the default value of "widescreen"
+**style** | [**PublisherDocumentPageStyle**](PublisherDocumentPageStyle.md) |  | [optional] 
+**visible** | **bool** | &#x60;false&#x60; keeps the page out of the viewer, exports and page numbering. Default &#x60;true&#x60;. | [optional] 
+**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

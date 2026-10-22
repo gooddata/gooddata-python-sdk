@@ -1,0 +1,18 @@
+# ReportExportRequest
+
+Export request object describing the export properties and metadata for document exports.
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**file_name** | **str** | File name to be used for retrieving the pdf document. | 
+**format** | **str** | Requested resulting file type. | defaults to "PDF"
+**document_id** | **str** | Document identifier; the export renders the Publisher document page. | [optional] 
+**metadata** | [**JsonNode**](JsonNode.md) |  | [optional] 
+**report_id** | **str** | Document identifier; the export renders the Publisher report page. Deprecated. &#39;documentId&#39; renders the Publisher document page instead, so switching changes the page the export opens. Must not be set together with &#39;documentId&#39;. | [optional] 
+**timezone_id** | **str, none_type** | Time zone the export should be rendered in, as an IANA identifier (e.g. &#39;Asia/Kolkata&#39;) or a GMT offset (e.g. &#39;GMT+01:00&#39;). When omitted, the workspace time zone setting is used. | [optional] 
+**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

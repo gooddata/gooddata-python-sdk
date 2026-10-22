@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **custom_skills** | **[str], none_type** |  | [optional] 
 **description** | **str, none_type** |  | [optional] 
 **enabled** | **bool** |  | [optional] 
+**instructions** | [**[JsonApiAgentInAttributesInstructionsInner], none_type**](JsonApiAgentInAttributesInstructionsInner.md) | Rules this agent follows when answering. | [optional] 
 **is_preview** | **bool** |  | [optional] 
 **modified_at** | **datetime** |  | [optional] 
 **name** | **str, none_type** |  | [optional] 

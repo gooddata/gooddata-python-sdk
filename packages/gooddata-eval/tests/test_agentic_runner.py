@@ -5,6 +5,7 @@ import inspect
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
 from typing import Any
 from unittest.mock import patch
 
@@ -20,8 +21,9 @@ from gooddata_eval.cli.agentic_runner import (
 )
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import AgenticEvalOutcome, DatasetItem
-from gooddata_eval.core.timing import PhaseTimings
+from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, current_scope
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
+from gooddata_eval.core.timing import PhaseTimings, note_trace_latency
 
 
 def test_dispatch_agentic_passes_agent_id_through_to_alert_skill():
@@ -326,6 +328,26 @@ def test_run_agentic_items_records_phase_timings_and_wall_clock():
     item = report.items[0]
     assert (item.agent_latency_s, item.judge_latency_s, item.simulated_user_latency_s) == (2.0, 1.0, 0.5)
     assert report.wall_clock_s > 0.0
+    assert report.started_at is not None
+    assert report.started_at.tzinfo is not None
+
+
+def test_run_agentic_items_records_when_the_run_started_and_finished() -> None:
+    outcome = AgenticEvalOutcome(conversation_id="c1", detail={"alert_created": True})
+    before = datetime.now(timezone.utc)
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
+        report = run_agentic_items(
+            [_timed_item()],
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            run_ts="2026-01-01",
+        )
+    after = datetime.now(timezone.utc)
+
+    assert report.started_at is not None
+    assert report.finished_at is not None
+    assert before <= report.started_at <= report.finished_at <= after
 
 
 def test_run_agentic_items_records_phase_timings_when_the_item_fails():
@@ -1033,3 +1055,234 @@ def test_run_agentic_items_passes_custom_tags_as_run_metadata(tags, expected_ext
             [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", tags=tags
         )
     assert mock_eval.call_args.kwargs["run_metadata_extra"] == expected_extra
+
+
+class _FirstSend(BaseException):
+    """Ends a run at its first chat turn; BaseException so no kind's error handling keeps it."""
+
+
+class _FirstSendClient:
+    def __init__(self, **_kwargs: Any) -> None:
+        self.sent: list[str] = []
+
+    def create_conversation(self) -> str:
+        return "conv-created"
+
+    def send_message(self, conversation_id: str, *_args: Any, **_kwargs: Any) -> None:
+        self.sent.append(conversation_id)
+        raise _FirstSend
+
+    def delete_conversation(self, _conversation_id: str) -> None:
+        pass
+
+    def close(self) -> None:
+        pass
+
+
+_RUN_ZERO_KINDS = [
+    (m, run_fn, expected or [CreatedVisualization.model_validate(_MIN_VIZ)] if m == "visualization" else expected)
+    for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS
+] + [("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "expected"), _RUN_ZERO_KINDS)
+def test_every_kind_sends_run_zero_first(
+    module_name: str, run_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """ChatClient numbers runs by the order their conversations are first sent to, which
+    names each run's experiment; that only matches the scorer's run index if run 0 goes first."""
+    # The guardrail and general-question kinds build their LLM judge before the first send.
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    client = _FirstSendClient()
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+        kwargs: dict[str, Any] = {}
+    else:
+        args, kwargs = ("q", expected), {"k": 2}
+    with patch.object(module, "ChatClient", return_value=client), pytest.raises(_FirstSend):
+        getattr(module, run_fn)("https://h", "tok", "ws1", *args, initial_conversation_id="conv-run0", **kwargs)
+    assert client.sent == ["conv-run0"]
+
+
+_SCOPED_KINDS = [(m, run_fn, evaluate_fn, expected) for m, run_fn, evaluate_fn, expected in _CLIENT_CONTEXT_KINDS] + [
+    ("conversation", "run_agentic_conversation", "evaluate_agentic_conversation", _MIN_CONVERSATION_FIXTURE)
+]
+
+
+@pytest.mark.parametrize(("module_name", "run_fn", "evaluate_fn", "expected"), _SCOPED_KINDS)
+def test_evaluate_agentic_runs_its_k_runs_inside_the_item_scope(
+    module_name: str, run_fn: str, evaluate_fn: str, expected: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_JOIN_GENAI_TRACE", "1")
+    module = importlib.import_module(f"gooddata_eval.core.agentic.{module_name}")
+    scope = ItemTraceScope("ds", True, "ds-1", "item-1")
+    seen: list[ItemTraceScope | None] = []
+
+    def run(*_args: Any, **_kwargs: Any) -> None:
+        seen.append(current_scope())
+        raise _Stop
+
+    if module_name == "conversation":
+        args: tuple = (module.ConversationFixture.model_validate(expected),)
+    else:
+        args = ("q", expected)
+    with (
+        patch.object(module, "open_item_trace", return_value=(None, datetime.now(timezone.utc), scope)),
+        patch.object(module, run_fn, side_effect=run),
+        pytest.raises(_Stop),
+    ):
+        getattr(module, evaluate_fn)("https://h", "tok", "ws1", *args)
+
+    assert seen == [scope]
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_evaluator_hands_out_its_run_latencies(kind, expected_output, target):
+    """Structural, for the reason the failed_runs check above is: the report test below cans
+    the outcome and cannot see whether an evaluator filled it. A kind that stops handing out
+    its per-run times does not fail anything -- it just drops out of the latency percentiles,
+    quietly, because an empty list reads as "not timed"."""
+    module = importlib.import_module(getattr(agentic_runner, target).__module__)
+    source = inspect.getsource(module)
+    assert "run_latencies_s=" in source, f"{module.__name__} never returns its run latencies on the success path"
+    # Set on the raised error directly, or handed to raise_agentic_failure / _attach_diagnostics.
+    attaches = ".run_latencies_s = " in source or "raise_agentic_failure(" in source or "_attach_diagnostics(" in source
+    assert attaches, f"{module.__name__} never attaches them to its failure"
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_run_latencies_reach_the_report_for_every_kind(kind, expected_output, target):
+    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, run_latencies_s=[4.5, 6.0])
+    with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
+        report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == [4.5, 6.0]
+
+
+def test_a_kind_that_records_no_run_latencies_adds_no_sample():
+    """Absent, not zero: an empty list means "not timed", so the item cannot pull the
+    percentiles toward 0s."""
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        return_value=AgenticEvalOutcome(reasoning_steps=[], detail={}),
+    ):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == []
+    assert report.by_mode["multi_turn"]["runs_s"] is None
+
+
+def test_run_latencies_are_surfaced_from_the_exception_on_a_failed_item():
+    exc = AlertSkillAssertionError("nope")
+    exc.reasoning_steps = []
+    exc.detail = {"alert_created": False}
+    exc.run_latencies_s = [3.0, 5.0]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=exc):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].run_latencies_s == [3.0, 5.0]
+
+
+def test_an_all_ungraded_item_still_reports_what_its_runs_cost():
+    """The runs happened and took real time even though no verdict came back, so they belong
+    in the latency sample -- a broken judge must not make the agent look faster."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 2 run(s)")
+    err.runs_effective = 2
+    err.run_latencies_s = [7.0, 9.5]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=err):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=2
+        )
+    item = report.items[0]
+    assert item.error is not None
+    assert item.run_latencies_s == [7.0, 9.5]
+
+
+# --- per-trace latency: collected from the chat client, not handed out by each evaluator ---
+
+
+def _noting(*latencies: float, then: Any = None):
+    """A stand-in evaluator that completes the given chat turns, as ChatClient.send_message would."""
+
+    def evaluate(*args: Any, **kwargs: Any) -> Any:
+        for latency in latencies:
+            note_trace_latency(latency)
+        if isinstance(then, BaseException):
+            raise then
+        return then if then is not None else AgenticEvalOutcome(reasoning_steps=[], detail={})
+
+    return evaluate
+
+
+@pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
+def test_every_kind_gets_its_chat_turns_recorded_as_trace_latencies(kind, expected_output, target):
+    """The recorder wraps the item, so a kind needs no code of its own to be covered -- which is
+    the point: nothing a new evaluator forgets can drop it out of the per-trace percentiles."""
+    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    with patch(f"gooddata_eval.cli.agentic_runner.{target}", side_effect=_noting(1.5, 2.5, 0.5)):
+        report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].trace_latencies_s == [1.5, 2.5, 0.5]
+
+
+def test_turns_completed_before_a_failed_gate_still_count_as_traces():
+    exc = AlertSkillAssertionError("nope")
+    exc.reasoning_steps = []
+    exc.detail = {}
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=_noting(3.0, 4.0, then=exc)
+    ):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    assert report.items[0].trace_latencies_s == [3.0, 4.0]
+
+
+def test_an_item_that_errored_outside_its_evaluator_reports_no_trace_latencies():
+    """Such an item reports no runs, so keeping its turns would put them in the per-response
+    population with nothing beside them in the per-conversation one."""
+    with patch(
+        "gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill",
+        side_effect=_noting(2.0, 3.0, then=RuntimeError("simulated user failed")),
+    ):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    item = report.items[0]
+    assert item.error is not None
+    assert item.runs == 0
+    assert item.run_latencies_s == []
+    assert item.trace_latencies_s == []
+    assert report.by_mode["multi_turn"]["traces_s"] is None
+
+
+def test_an_ungraded_item_keeps_the_turns_it_drove():
+    """Unlike the case above, a judge fault leaves every run's time on the exception, so the
+    per-response and per-conversation populations still cover the same item."""
+    err = JudgeResponseError("judge returned no readable verdict for any of the 2 run(s)")
+    err.runs_effective = 2
+    err.run_latencies_s = [7.0, 9.5]
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", side_effect=_noting(2.0, then=err)):
+        report = run_agentic_items(
+            [_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", k=2
+        )
+    assert report.items[0].run_latencies_s == [7.0, 9.5]
+    assert report.items[0].trace_latencies_s == [2.0]
+
+
+def test_concurrent_items_each_keep_only_their_own_trace_latencies():
+    items = [
+        DatasetItem(
+            id=f"g{n}", dataset_name="d", test_kind="agentic_general_question", question=f"q{n}", expected_output="x"
+        )
+        for n in range(1, 5)
+    ]
+
+    def evaluate(*args: Any, **kwargs: Any) -> AgenticEvalOutcome:
+        base = float(kwargs["question"][1:]) * 100
+        for step in range(3):
+            time.sleep(0.005)  # interleave with the other workers
+            note_trace_latency(base + step)
+        return AgenticEvalOutcome(reasoning_steps=[], detail={})
+
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_general_question", side_effect=evaluate):
+        report = run_agentic_items(
+            items, host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01", concurrency=4
+        )
+    assert {i.id: i.trace_latencies_s for i in report.items} == {
+        f"g{n}": [n * 100.0, n * 100.0 + 1, n * 100.0 + 2] for n in range(1, 5)
+    }

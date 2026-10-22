@@ -3,7 +3,7 @@
 
 Before this module, each of the agentic evaluators hand-wrote the same block: copy
 ``reasoning_steps``/``conversation_id``/``response_id``/``detail``/``runs_passed``/
-``runs_effective``/``best_run_latency_s`` (and sometimes ``timings``) either onto a
+``runs_effective``/``best_run_latency_s``/``run_latencies_s`` (and sometimes ``timings``) either onto a
 raised exception or into the returned ``AgenticEvalOutcome``. Eleven independent copies
 of the same ~7 lines meant a new universal field needed eleven edits, not one, and
 nothing failed loudly when a copy was missed -- exactly what happened to ``timings``
@@ -57,6 +57,7 @@ def raise_agentic_failure(
     runs_passed: int,
     runs_effective: int,
     best_run_latency_s: float | None,
+    run_latencies_s: list[float] | None = None,
     timings: PhaseTimings | None = None,
     failed_runs: list[dict] | None = None,
 ) -> NoReturn:
@@ -79,6 +80,8 @@ def raise_agentic_failure(
     exc.runs_passed = runs_passed
     exc.runs_effective = runs_effective
     exc.best_run_latency_s = best_run_latency_s
+    if run_latencies_s is not None:
+        exc.run_latencies_s = run_latencies_s
     if timings is not None:
         exc.timings = timings
     # Optional for the same reason timings is: agentic_conversation drives its fixture once,
@@ -97,6 +100,7 @@ def agentic_success(
     runs_passed: int,
     runs_effective: int,
     best_run_latency_s: float | None,
+    run_latencies_s: list[float] | None = None,
     timings: PhaseTimings | None = None,
     failed_runs: list[dict] | None = None,
 ) -> AgenticEvalOutcome:
@@ -110,6 +114,8 @@ def agentic_success(
         "runs_effective": runs_effective,
         "best_run_latency_s": best_run_latency_s,
     }
+    if run_latencies_s is not None:
+        kwargs["run_latencies_s"] = run_latencies_s
     if timings is not None:
         kwargs["timings"] = timings
     if failed_runs is not None:

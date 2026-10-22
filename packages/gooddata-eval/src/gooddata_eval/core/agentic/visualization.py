@@ -25,7 +25,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -40,6 +40,7 @@ from gooddata_eval.core.evaluators.visualization import (
     evaluation_result_detail,
     with_execution,
 )
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -74,8 +75,7 @@ class RunResult:
     # Why the simulated-user loop stopped. visualization_created=False alone cannot separate
     # a refusal from a run that hit max_iterations while still on track -- see LoopExit.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
-    # This run's own wall time, across all its turns -- mirrors the single-shot
-    # path's best_run_latency_s (see core/runner.py's _run_one_item).
+    # This run's own wall time, from just before its first chat call to the end of its scoring.
     run_latency_s: float = 0.0
 
 
@@ -215,6 +215,7 @@ def _execute_single_run(
     # simply runs out of range() is labelled correctly with no trailing else.
     exit_reason = LoopExit.BUDGET_EXHAUSTED
 
+    run_started = time.monotonic()
     try:
         current_result = client.send_message(conversation_id, question)
     except ChatError as exc:
@@ -437,21 +438,32 @@ def evaluate_agentic_visualization(
     """
     import json as _json  # noqa: PLC0415
 
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_visualization(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_outputs=expected_outputs,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
-        requires_execution=requires_execution,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=True)
+    with item_scope(scope):
+        summary = run_agentic_visualization(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_outputs=expected_outputs,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+            requires_execution=requires_execution,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -501,16 +513,7 @@ def evaluate_agentic_visualization(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
@@ -519,6 +522,7 @@ def evaluate_agentic_visualization(
             # Unlike the other runners, this one suffixes every run, K=1 included.
             suffix_runs=True,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -533,6 +537,7 @@ def evaluate_agentic_visualization(
 
     runs_passed = sum(1 for r in summary.run_results if r.eval_result.strict_pass)
     runs_effective = len(summary.run_results)
+    run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
     ev = best.eval_result
@@ -595,6 +600,7 @@ def evaluate_agentic_visualization(
             runs_passed=runs_passed,
             runs_effective=runs_effective,
             best_run_latency_s=best.run_latency_s,
+            run_latencies_s=run_latencies_s,
             failed_runs=failed_runs,
         )
     return agentic_success(
@@ -606,4 +612,5 @@ def evaluate_agentic_visualization(
         runs_effective=runs_effective,
         best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
+        run_latencies_s=run_latencies_s,
     )

@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 [project]
 name = "gooddata-python-sdk-workspace"
-version = "1.76.0"
+version = "1.78.0"
 description = "GoodData Python SDK Workspace"
 requires-python = ">=3.10"
 dependencies = [
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [tool.uv]
-required-version = "~=0.12.0"
+required-version = "~=0.13.4"
 # The root only aggregates the members; it is never built or published.
 package = false
 # So a bare `uv sync` can run every make target (ruff, ty, pytest, tox). Not "all":
@@ -168,7 +168,7 @@ extra-paths = []
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "1.76.0"
+current = "1.78.0"
 regex = '''
   (?P<major>\d+)
   \.
