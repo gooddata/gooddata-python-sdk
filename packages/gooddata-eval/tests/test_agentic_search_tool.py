@@ -299,3 +299,10 @@ def test_tool_correctness_rejects_an_empty_search_term():
     assert _tool_correctness(tcs, {"keywords": ["revenue"]}) is False
     tcs = [_mock_tc("search_objects", {"keywords": ["revenue"]})]
     assert _tool_correctness(tcs, {"keywords": [""]}) is False
+
+
+def test_tool_correctness_compares_object_types_case_sensitively():
+    """object_types holds controlled values, so "METRIC" is not "metric" -- the single-shot
+    evaluator already says so; only free-text keywords match loosely."""
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "object_types": ["METRIC"]})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"], "object_types": ["metric"]}) is False

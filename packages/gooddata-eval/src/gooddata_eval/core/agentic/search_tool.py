@@ -60,24 +60,29 @@ def _loosely_contains(expected: str, actual: str) -> bool:
     return expected.lower() in actual.lower() or actual.lower() in expected.lower()
 
 
-def _list_matches(expected: list, actual: list) -> bool:
+def _list_matches(expected: list, actual: list, *, loose: bool) -> bool:
     """Every expected element must appear in some actual element, and vice versa is not required.
 
-    Substring rather than equality, because the two sides legitimately tokenize
-    differently: a fixture says ["abandonment", "rate", "3ds"] while the agent searches
-    the object's title as one phrase, ["Abandonment Rate - 3DS"]. Both name the same
-    object, and exact element equality calls that a failure.
+    ``loose`` is substring rather than equality, because free text legitimately tokenizes
+    differently on the two sides: a fixture says ["abandonment", "rate", "3ds"] while the agent
+    searches the object's title as one phrase, ["Abandonment Rate - 3DS"]. Both name the same
+    object, and exact element equality calls that a failure. A list of controlled values
+    (``object_types``) is not free text, so it is compared exactly and case-sensitively, as the
+    single-shot evaluator does: "METRIC" is not "metric".
     """
-    return all(
-        any(isinstance(a, str) and isinstance(e, str) and _loosely_contains(e, a) for a in actual) for e in expected
-    )
+    if loose:
+        return all(
+            any(isinstance(a, str) and isinstance(e, str) and _loosely_contains(e, a) for a in actual) for e in expected
+        )
+    return all(e in actual for e in expected)
 
 
 def _tool_correctness(tool_call_events: list[ToolCallEvent], expected_tool_call: dict) -> bool:
     """Return True if the search_objects call arguments match expected.
 
-    List fields (e.g. keywords, object_types) use subset matching: every expected value
-    must appear in the actual call, by substring, and the agent may include extras.
+    List fields (keywords, object_types) use subset matching: every expected value must
+    appear in the actual call and the agent may include extras. ``keywords`` match by
+    substring; every other list is compared exactly.
     """
     for tc in tool_call_events:
         if tc.function_name == "search_objects":
@@ -87,7 +92,7 @@ def _tool_correctness(tool_call_events: list[ToolCallEvent], expected_tool_call:
                     continue
                 act_val = args.get(key)
                 if isinstance(exp_val, list) and isinstance(act_val, list):
-                    if not _list_matches(exp_val, act_val):
+                    if not _list_matches(exp_val, act_val, loose=key == "keywords"):
                         return False
                 elif isinstance(exp_val, str) and isinstance(act_val, str):
                     if not _loosely_contains(exp_val, act_val):
