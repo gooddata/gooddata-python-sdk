@@ -21,6 +21,36 @@ _AAC_TYPE_MAP = {
 }
 
 
+# Every `type` the AAC visualization schema defines. An expectation naming anything else is a typo.
+AAC_VISUALIZATION_TYPES = frozenset(
+    {
+        "table",
+        "headline_chart",
+        "bar_chart",
+        "column_chart",
+        "line_chart",
+        "area_chart",
+        "pie_chart",
+        "donut_chart",
+        "scatter_chart",
+        "bubble_chart",
+        "treemap_chart",
+        "pyramid_chart",
+        "funnel_chart",
+        "heatmap_chart",
+        "bullet_chart",
+        "waterfall_chart",
+        "dependency_wheel_chart",
+        "sankey_chart",
+        "geo_chart",
+        "geo_area_chart",
+        "repeater_chart",
+        "radar_chart",
+        "combo_chart",
+    }
+)
+
+
 @dataclass
 class FilterScores:
     date_ok: bool
@@ -385,6 +415,11 @@ def check_filters(
 
 def _normalize_viz_type(raw_type: str) -> str:
     return _AAC_TYPE_MAP.get(raw_type, raw_type.replace("_chart", "").upper())
+
+
+def same_viz_type(expected: str, actual: str) -> bool:
+    """Whether two chart-type names denote the same type, spelled either way."""
+    return _normalize_viz_type(expected) == _normalize_viz_type(actual)
 
 
 def check_viz_type(expected: CreatedVisualization, actual: CreatedVisualization) -> bool:

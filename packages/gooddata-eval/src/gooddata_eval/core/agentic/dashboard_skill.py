@@ -40,6 +40,7 @@ from gooddata_eval.core.models import (
     build_latency_breakdown,
     shift_and_index_events,
 )
+from gooddata_eval.core.scoring import AAC_VISUALIZATION_TYPES, same_viz_type
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
 _DEFAULT_K = 1
@@ -582,6 +583,64 @@ def _check_date_bindings(widgets: list[dict], new_ids: set[str], expected: list[
     return failures
 
 
+def _has_chart_types(expected_output: dict) -> bool:
+    """Whether any expected chart states the type it must be placed as."""
+    return any(isinstance(v, dict) and "chart_type" in v for v in expected_output.get("visualizations") or [])
+
+
+def _bodies_by_id(*references: dict) -> dict[str, dict]:
+    """Every chart body the response's references carry, existing and authored, by chart id."""
+    bodies: dict[str, dict] = {}
+    for refs in references:
+        for key in ("visualizations", "new_visualizations"):
+            for body in refs.get(key) or []:
+                if isinstance(body, dict) and body.get("id"):
+                    bodies[body["id"]] = body
+    return bodies
+
+
+def _check_chart_types(
+    widgets: list[dict], new_ids: set[str], expected: list[dict], bodies: dict[str, dict]
+) -> tuple[list[str], list[str]]:
+    """Every widget of a chart that states a ``chart_type`` must show a chart of exactly that type.
+
+    A widget names only the chart id, so the type is read from the chart body the references
+    carry. The title alone cannot catch a chart authored as another type than the one asked
+    for, which is the silent swap GDAI-2054 rules out.
+
+    Returns the failures and the notes. A widget whose chart has no body in the references
+    cannot be checked: gen-ai carries a body only when it could resolve one, so a missing
+    body is a platform fault, noted as ``_check_references`` notes a missing id, and not
+    scored as the agent's.
+    """
+    failures: list[str] = []
+    notes: list[str] = []
+    for exp in expected:
+        if not isinstance(exp, dict) or "chart_type" not in exp:
+            continue
+        wanted = exp["chart_type"]
+        label = exp.get("title") if exp.get("id") is None else exp.get("id")
+        candidates = _matching_widgets(widgets, new_ids, exp)
+        if not candidates:
+            failures.append(f"cannot check the type of chart {label!r}: it is not on the dashboard")
+            continue
+        types: list[str] = []
+        for widget in candidates:
+            chart_type = (bodies.get(widget.get("visualization")) or {}).get("type")
+            if isinstance(chart_type, str):
+                types.append(chart_type)
+            else:
+                notes.append(
+                    f"cannot check the type of chart {label!r}: the response's references carry no body "
+                    f"for {widget.get('visualization')!r}"
+                )
+        # Every placement, as for date bindings: one right placement must not hide a wrong one.
+        if not all(same_viz_type(wanted, t) for t in types):
+            found = ", ".join(repr(t) for t in types)
+            failures.append(f"chart {label!r} is {found}, expected {wanted!r}")
+    return failures, notes
+
+
 def _tabs_of(dashboard: dict) -> list[dict]:
     """The dashboard's tabs, reading a document with root sections as its single tab."""
     tabs = dashboard.get("tabs")
@@ -936,6 +995,12 @@ def _validate_layout_expectations(expected_output: dict) -> None:
     for chart in expected_output.get("visualizations") or []:
         if isinstance(chart, dict) and "date_dataset" in chart and not _is_dataset_or_null(chart["date_dataset"]):
             raise ValueError(f"date_dataset must name a date dataset or be null, got {chart!r}")
+        if (
+            isinstance(chart, dict)
+            and "chart_type" in chart
+            and (not isinstance(chart["chart_type"], str) or chart["chart_type"] not in AAC_VISUALIZATION_TYPES)
+        ):
+            raise ValueError(f"chart_type must be an AAC visualization type, got {chart!r}")
 
     if "tabs" in expected_output:
         tabs = expected_output["tabs"]
@@ -1037,6 +1102,7 @@ class _Applies:
     tab_filters: bool = False
     date_filters: bool = False
     preserved_widgets: bool = False
+    chart_types: bool = False
 
     @classmethod
     def of(cls, expected_output: dict) -> _Applies:
@@ -1049,6 +1115,7 @@ class _Applies:
             tab_filters="tab_filters" in expected_output,
             date_filters="date_filters" in expected_output,
             preserved_widgets="preserved_widgets" in expected_output,
+            chart_types=_has_chart_types(expected_output),
         )
 
 
@@ -1089,6 +1156,7 @@ class DashboardEvaluation:
     tab_filters_correct: bool = False
     date_filters_correct: bool = False
     widgets_preserved: bool = False
+    chart_types_correct: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -1129,6 +1197,8 @@ class DashboardEvaluation:
             checks["dashboard_date_filters_correct"] = self.date_filters_correct
         if self.applies.preserved_widgets:
             checks["dashboard_widgets_preserved"] = self.widgets_preserved
+        if self.applies.chart_types:
+            checks["dashboard_chart_types_correct"] = self.chart_types_correct
         return checks
 
     @property
@@ -1280,12 +1350,14 @@ def evaluate_dashboard_response(
             | {v.get("id") for v in patch_references.get("visualizations") or [] if v.get("id")}
             | new_ids
         )
+        bodies = _bodies_by_id(base_references, patch_references)
     else:
         if actual_saved_id is not None:
             saved_failures.append(f"a new draft must not be saved yet, but it reports id {actual_saved_id!r}")
         document = base
         new_ids = {v.get("id") for v in base_references.get("new_visualizations") or [] if v.get("id")}
         known_ids = {v.get("id") for v in base_references.get("visualizations") or [] if v.get("id")} | new_ids
+        bodies = _bodies_by_id(base_references)
 
     if document is None:
         return DashboardEvaluation(
@@ -1337,6 +1409,11 @@ def evaluate_dashboard_response(
     preserved_failures = (
         _check_preserved_widgets(widgets, expected_output["preserved_widgets"]) if applies.preserved_widgets else []
     )
+    chart_type_failures, chart_type_notes = (
+        _check_chart_types(widgets, new_ids, expected_output.get("visualizations") or [], bodies)
+        if applies.chart_types
+        else ([], [])
+    )
 
     return DashboardEvaluation(
         drafted=True,
@@ -1356,6 +1433,7 @@ def evaluate_dashboard_response(
         tab_filters_correct=not tab_filter_failures,
         date_filters_correct=not date_filter_failures,
         widgets_preserved=not preserved_failures,
+        chart_types_correct=not chart_type_failures,
         failures=[
             *chart_failures,
             *saved_failures,
@@ -1366,9 +1444,10 @@ def evaluate_dashboard_response(
             *tab_filter_failures,
             *date_filter_failures,
             *preserved_failures,
+            *chart_type_failures,
             *new_failures,
         ],
-        notes=[*title_notes, *reference_notes],
+        notes=[*title_notes, *reference_notes, *chart_type_notes],
     )
 
 
