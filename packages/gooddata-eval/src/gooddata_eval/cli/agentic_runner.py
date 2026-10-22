@@ -26,7 +26,7 @@ from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualizat
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.evaluators.visualization import requires_execution_of
+from gooddata_eval.core.evaluators.visualization import expectation_options
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import TraceRecorder
@@ -119,6 +119,8 @@ def _parse_visualization_expected(expected_output: Any) -> list[CreatedVisualiza
       {"visualization": {...}} or {"visualization": [{...}]}  <- single/multi candidate
       [{"visualization": {...}}, ...]                          <- bare list
     """
+    if isinstance(expected_output, dict) and expected_output.get("expects_visualization") is False:
+        return []
     if isinstance(expected_output, dict):
         raw_list = expected_output.get("expected_outputs")
         if raw_list is not None:
@@ -187,7 +189,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
-            requires_execution=requires_execution_of(eo),
+            options=expectation_options(eo),
             k=k,
             gate=gate,
             agent_id=agent_id,
