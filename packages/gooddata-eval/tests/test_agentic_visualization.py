@@ -4,16 +4,22 @@
 All tests mock ChatClient so no network is needed.
 """
 
+from collections.abc import Callable
+from dataclasses import replace
+from typing import Any
 from unittest.mock import MagicMock, call, patch
 
 import pytest
+from gooddata_eval.core.agentic import visualization as agentic_visualization
 from gooddata_eval.core.agentic.visualization import (
     VisualizationAssertionError,
     _execute_single_run,
+    _strict_checks,
     evaluate_agentic_visualization,
     run_agentic_visualization,
 )
 from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.evaluators.visualization import ExpectationOptions
 from gooddata_eval.core.models import ChatResult, CreatedVisualization, LoopExit
 
 
@@ -550,3 +556,269 @@ def test_execute_single_run_records_simulated_user_failure_separately(monkeypatc
 
     assert result.exit_reason is LoopExit.SIMULATED_USER_FAILED
     assert result.eval_result.visualization_created is False
+
+
+def test_an_item_without_a_chart_stops_after_the_first_answer(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A simulated reply would answer the agent's question and push it into the chart the item rules out."""
+    replies = MagicMock(side_effect=AssertionError("no simulated reply may be sent"))
+    monkeypatch.setattr(agentic_visualization, "generate_simulated_response", replies)
+    client = MagicMock()
+    client.send_message.return_value = _chat_clarification("Which destination should the sankey flow to?")
+    options = ExpectationOptions(expects_visualization=False, answer_must_include=("destination",))
+
+    result = _execute_single_run(client, "conv-1", "Create a sankey from Region", [], max_iterations=4, options=options)
+
+    assert client.send_message.call_count == 1
+    assert result.exit_reason is LoopExit.SUCCESS
+    assert result.best_expected is None
+    assert result.eval_result.strict_pass
+    assert _strict_checks(result.eval_result) == {"assertion-vis-no-chart": True, "assertion-vis-answer": True}
+
+
+def test_strict_checks_publish_only_the_options_an_item_asks_for() -> None:
+    client = MagicMock()
+    client.send_message.return_value = _chat_with_viz()
+    plain = _execute_single_run(client, "conv-1", "q", [_expected()], max_iterations=1)
+    assert set(_strict_checks(plain.eval_result)) == {
+        "assertion-cross-ref-valid",
+        "assertion-vis-metric",
+        "assertion-vis-dimensions",
+        "assertion-vis-filters",
+        "assertion-vis-type",
+    }
+    with_options = replace(
+        plain.eval_result,
+        requires_execution=True,
+        buckets_correct=True,
+        format_correct=False,
+        part_present=True,
+        answer_correct=True,
+    )
+    assert set(_strict_checks(with_options)) - set(_strict_checks(plain.eval_result)) == {
+        "assertion-vis-executed",
+        "assertion-vis-buckets",
+        "assertion-vis-format",
+        "assertion-vis-part-present",
+        "assertion-vis-answer",
+    }
+
+
+def test_the_sort_is_scored_only_for_an_item_that_states_one() -> None:
+    """strict_pass gates on the sort, so a wrong sort must show in the scores, not only in the gate."""
+    sorted_viz = _viz()
+    sorted_viz["query"]["sort_by"] = [{"type": "attribute_sort", "by": "d", "direction": "DESC"}]
+    client = MagicMock()
+    client.send_message.return_value = _chat_with_viz()
+
+    unsorted_item = _execute_single_run(client, "conv-1", "q", [_expected()], max_iterations=1)
+    assert "assertion-vis-sort" not in _strict_checks(unsorted_item.eval_result)
+
+    wrong_sort = _execute_single_run(
+        client, "conv-1", "q", [CreatedVisualization.model_validate(sorted_viz)], max_iterations=1
+    )
+    assert wrong_sort.eval_result.strict_pass is False
+    assert _strict_checks(wrong_sort.eval_result)["assertion-vis-sort"] is False
+    assert not all(_strict_checks(wrong_sort.eval_result).values())
+
+    client.send_message.return_value = ChatResult.model_validate(
+        {"createdVisualizations": {"objects": [sorted_viz], "reasoning": ""}, "toolCallEvents": []}
+    )
+    right_sort = _execute_single_run(
+        client, "conv-1", "q", [CreatedVisualization.model_validate(sorted_viz)], max_iterations=1
+    )
+    assert _strict_checks(right_sort.eval_result)["assertion-vis-sort"] is True
+
+
+# ── an item that accepts no chart still needs an answer ─────────────────────
+
+
+def _silent_turn() -> MagicMock:
+    client = MagicMock()
+    client.send_message.return_value = ChatResult.model_validate({"toolCallEvents": [], "reasoningStepCount": 0})
+    return client
+
+
+def _failed_request() -> MagicMock:
+    client = MagicMock()
+    client.send_message.side_effect = ChatError("gen-ai unavailable")
+    return client
+
+
+_PROBLEM_OF = {
+    LoopExit.AGENT_SILENT: "the agent returned neither a chart nor an answer",
+    LoopExit.CHAT_ERROR: "the chat request failed before the answer ended",
+}
+
+
+@pytest.mark.parametrize(
+    ("make_client", "exit_reason"),
+    [(_silent_turn, LoopExit.AGENT_SILENT), (_failed_request, LoopExit.CHAT_ERROR)],
+    ids=["silent", "chat_error"],
+)
+@pytest.mark.parametrize(
+    ("options", "expected_outputs"),
+    [
+        (ExpectationOptions(expects_visualization=False), []),
+        (ExpectationOptions(expects_visualization=False, answer_must_not_match=("sankey",)), []),
+        (ExpectationOptions(visualization_optional=True), [_expected()]),
+    ],
+    ids=["no_chart", "no_chart_must_not_match", "visualization_optional"],
+)
+def test_a_run_with_neither_a_chart_nor_an_answer_fails_an_item_that_accepts_no_chart(
+    make_client: Callable[[], MagicMock],
+    exit_reason: LoopExit,
+    options: ExpectationOptions,
+    expected_outputs: list[CreatedVisualization],
+) -> None:
+    """With no answer pattern, or only a must-not-match one, an empty run would read as a correct "no chart"."""
+    result = _execute_single_run(make_client(), "conv-1", "q", expected_outputs, options=options)
+
+    assert result.exit_reason is exit_reason
+    assert result.eval_result.strict_pass is False
+    assert result.eval_result.answer_correct is False
+    assert result.eval_result.answer_problems[-1] == _PROBLEM_OF[exit_reason]
+    assert _strict_checks(result.eval_result)["assertion-vis-answer"] is False
+
+
+def test_an_answer_without_a_pattern_passes_an_item_without_a_chart() -> None:
+    client = MagicMock()
+    client.send_message.return_value = _chat_clarification("Which destination?")
+
+    result = _execute_single_run(client, "conv-1", "q", [], options=ExpectationOptions(expects_visualization=False))
+
+    assert result.eval_result.strict_pass is True
+    assert result.eval_result.answer_correct is None
+
+
+@pytest.mark.parametrize(
+    ("expected_outputs", "options"),
+    [([], None), ([], ExpectationOptions()), ([_expected()], ExpectationOptions(expects_visualization=False))],
+    ids=["no_candidates_no_options", "no_candidates_default_options", "candidates_but_no_chart"],
+)
+def test_run_rejects_candidates_that_disagree_with_the_options_before_any_request(
+    expected_outputs: list[CreatedVisualization], options: ExpectationOptions | None
+) -> None:
+    with (
+        patch.object(agentic_visualization, "ChatClient") as mock_client,
+        pytest.raises(ValueError, match="expected_outputs must list the candidate charts"),
+    ):
+        run_agentic_visualization("https://h", "tok", "ws", "q", expected_outputs, options=options)
+    mock_client.assert_not_called()
+
+
+# ── the failure summary and the scores show the options an item asks for ───
+
+
+def test_a_failed_item_reports_and_scores_every_option_it_asks_for() -> None:
+    expected = CreatedVisualization.model_validate({**_viz(), "buckets_strict": True})
+    # The same fields, with the quarter moved from view_by to segment_by: only the bucket check sees it.
+    moved = {**_viz(), "view_by": [], "segment_by": ["d"]}
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = ChatResult.model_validate(
+        {
+            "createdVisualizations": {"objects": [moved], "reasoning": ""},
+            "textResponse": "Here it is.",
+            "toolCallEvents": [],
+        }
+    )
+    options = ExpectationOptions(
+        requires_execution=True,
+        answer_must_include=("revenue",),
+        format_intents={"metric/revenue": {"divide_by": 1000, "suffix": "K"}},
+        requires_visualization_part=True,
+    )
+    captured: dict[str, Callable[[MagicMock], None]] = {}
+
+    def _capture(_submit: object, _identity: object, **kwargs: Any) -> None:
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        patch.object(agentic_visualization, "ChatClient", return_value=client),
+        patch.object(agentic_visualization, "submit_trace_scoring", _capture),
+        pytest.raises(VisualizationAssertionError) as exc_info,
+    ):
+        evaluate_agentic_visualization(
+            host="https://example.com",
+            token="tok",
+            workspace_id="ws",
+            question="Show revenue",
+            expected_outputs=[expected],
+            k=1,
+            options=options,
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    message = str(exc_info.value)
+    assert "Buckets Correct       : False" in message
+    assert "expected : {'view_by': ['label/date.quarter']" in message
+    assert "Answer Correct        : False" in message
+    assert "the answer does not match 'revenue'" in message
+    assert "answer   : 'Here it is.'" in message
+    assert "Format Correct        : False" in message
+    assert "metric/revenue: no format was written" in message
+    assert "Part Present          : True" in message
+    assert "No Chart" not in message
+
+    ctx = MagicMock()
+    captured["write_scores"](ctx)
+    scores = [(c.kwargs["name"], c.kwargs["value"]) for c in ctx.score.call_args_list]
+    names = [name for name, _ in scores]
+    assert dict(scores)["assertion-vis-buckets"] is False
+    assert dict(scores)["assertion-vis-format"] is False
+    assert dict(scores)["assertion-vis-part-present"] is True
+    assert dict(scores)["assertion-vis-answer"] is False
+    # Gating here, but still written once: the loop leaves it to the every-item score.
+    assert names.count("assertion-vis-executed") == 1
+
+
+def test_a_failed_item_without_a_chart_reports_the_chart_it_built() -> None:
+    client = MagicMock()
+    client.create_conversation.return_value = "conv-1"
+    client.send_message.return_value = _chat_with_viz()
+
+    with (
+        patch.object(agentic_visualization, "ChatClient", return_value=client),
+        pytest.raises(VisualizationAssertionError) as exc_info,
+    ):
+        evaluate_agentic_visualization(
+            host="https://example.com",
+            token="tok",
+            workspace_id="ws",
+            question="Create a sankey from Region",
+            expected_outputs=[],
+            k=1,
+            options=ExpectationOptions(expects_visualization=False),
+        )
+
+    message = str(exc_info.value)
+    assert "No Chart              : False" in message
+    assert '"expects_visualization": false' in message
+
+
+def test_a_visualization_optional_item_that_built_a_chart_does_not_report_a_no_chart_line() -> None:
+    """A chart is a valid outcome there, so a "No Chart : False" line would read as a failed check."""
+    client = MagicMock()
+    client.send_message.return_value = _chat_with_viz()
+    options = ExpectationOptions(visualization_optional=True)
+    built = _execute_single_run(client, "conv-1", "q", [_expected()], options=options)
+    assert "No Chart" not in agentic_visualization._options_lines(built.eval_result, built.answer_text)
+
+    client.send_message.return_value = _chat_clarification("Which measure should the donut show?")
+    asked = _execute_single_run(client, "conv-1", "q", [_expected()], options=options)
+    assert "No Chart              : True" in agentic_visualization._options_lines(asked.eval_result, asked.answer_text)
+
+
+def test_a_failed_request_with_a_cut_off_answer_fails_an_item_without_a_chart() -> None:
+    """The partial text is not the agent's answer, so it must not pass as a correct "no chart"."""
+    error = ChatError("stream died")
+    error.partial_result = ChatResult.model_validate({"textResponse": "Let me"})
+    client = MagicMock()
+    client.send_message.side_effect = error
+
+    result = _execute_single_run(client, "conv-1", "q", [], options=ExpectationOptions(expects_visualization=False))
+
+    assert result.exit_reason is LoopExit.CHAT_ERROR
+    assert result.eval_result.strict_pass is False
+    assert result.eval_result.answer_problems == ["the chat request failed before the answer ended"]

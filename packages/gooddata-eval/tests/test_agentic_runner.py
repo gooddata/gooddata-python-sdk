@@ -135,6 +135,42 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
     assert mock_eval.call_args.kwargs["agent_id"] == "agent-1"
 
 
+def _dispatch_visualization(expected_output: dict) -> Any:
+    item = DatasetItem(
+        id="q1", dataset_name="ds", test_kind="vis_agentic", question="q", expected_output=expected_output
+    )
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_visualization") as mock_eval:
+        _dispatch_agentic(
+            item,
+            host="https://h",
+            token="tok",
+            workspace_id="ws1",
+            k=1,
+            langfuse=None,
+            run_ts="2026-01-01",
+            model_version_override=None,
+        )
+    return mock_eval.call_args.kwargs
+
+
+def test_dispatch_agentic_relays_an_item_without_a_chart_with_no_candidates():
+    kwargs = _dispatch_visualization({"expects_visualization": False, "answer_must_include": ["destination"]})
+    assert kwargs["expected_outputs"] == []
+    assert kwargs["options"].expects_visualization is False
+    assert kwargs["options"].answer_must_include == ("destination",)
+
+
+@pytest.mark.parametrize(
+    "candidates",
+    [{"visualization": _MIN_VIZ}, {"expected_outputs": [{"visualization": _MIN_VIZ}]}],
+    ids=["visualization", "expected_outputs"],
+)
+def test_dispatch_agentic_rejects_an_item_without_a_chart_that_lists_candidates(candidates):
+    """Dropping the candidates would score the contradiction as a no-chart item and read green."""
+    with pytest.raises(ValueError, match="must not list 'visualization' candidates"):
+        _dispatch_visualization({"expects_visualization": False, **candidates})
+
+
 def _item(test_kind: str = "agentic_alert_skill") -> DatasetItem:
     return DatasetItem(
         id="item-1",
@@ -839,7 +875,14 @@ class _Stop(Exception):
 # Kinds whose run_* hands the item's context to its ChatClient, which sends it on every turn.
 # conversation passes it per turn instead, covered in its own test file.
 _CLIENT_CONTEXT_KINDS = [
-    ("visualization", "run_agentic_visualization", "evaluate_agentic_visualization", []),
+    # An empty candidate list is rejected before the client exists: it is only right for an item
+    # that expects no chart.
+    (
+        "visualization",
+        "run_agentic_visualization",
+        "evaluate_agentic_visualization",
+        [CreatedVisualization.model_validate(_MIN_VIZ)],
+    ),
     ("metric_skill", "run_agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
     (
         "dashboard_skill",
@@ -1026,10 +1069,9 @@ class _FirstSendClient:
         pass
 
 
-_RUN_ZERO_KINDS = [
-    (m, run_fn, expected or [CreatedVisualization.model_validate(_MIN_VIZ)] if m == "visualization" else expected)
-    for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS
-] + [("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)]
+_RUN_ZERO_KINDS = [(m, run_fn, expected) for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS] + [
+    ("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)
+]
 
 
 @pytest.mark.parametrize(("module_name", "run_fn", "expected"), _RUN_ZERO_KINDS)

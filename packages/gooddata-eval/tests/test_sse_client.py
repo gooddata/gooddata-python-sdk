@@ -1356,3 +1356,20 @@ def test_a_turn_that_fails_after_response_started_still_counts_as_joined(monkeyp
 def test_retry_names_external_callers_import_stay_on_sse_client() -> None:
     assert sse_mod._RETRYABLE_STATUS_CODES is retry_mod.RETRYABLE_STATUS_CODES
     assert sse_mod._retry_transient is retry_mod.retry_transient
+
+
+def test_parse_sse_lines_adhoc_fallback_keeps_its_id_over_one_in_the_arguments():
+    """An `id` in the tool arguments must not hide that the chart was never persisted."""
+    viz_def = {
+        "id": "v1",
+        "type": "line_chart",
+        "query": {"fields": {"m": {"using": "metric/total_sales"}}},
+        "metrics": ["m"],
+    }
+    lines = [
+        f'data: {{"item": {{"role": "assistant", "content": {{"type": "toolCall", "callId": "c1", "name": "create_adhoc_visualization", "arguments": {{"visualization": {json.dumps(viz_def)}}}}}}}}}',
+        'data: {"item": {"role": "assistant", "content": {"type": "multipart", "parts": [{"type": "visualization", "visualization": null}]}}}',
+    ]
+    result = parse_sse_lines(lines)
+    assert result.created_visualizations is not None
+    assert result.created_visualizations.objects[0].id == "adhoc-visualization-not-persisted"
