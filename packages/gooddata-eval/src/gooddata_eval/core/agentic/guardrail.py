@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -343,12 +344,6 @@ def evaluate_agentic_guardrail(
 
     unscored = summary.judge_errors
 
-    # Computed BEFORE the all-ungraded raise below, not after. An item whose every run went
-    # ungraded is the one where these matter most -- the judge broke, and the conversation
-    # ids are what someone needs to go read what the agent actually said -- but the raise
-    # used to happen first, so the runner caught a bare error and reported runs=0 with no
-    # records at all. `summary.best` already falls back to the unscored runs, and
-    # `runs_passed` is then 0, so nothing here needs a graded run to exist.
     runs_passed = sum(1 for r in summary.scored_run_results if r.passed)
     runs_effective = len(summary.run_results)
     run_latencies_s = [r.run_latency_s for r in summary.run_results]
@@ -376,24 +371,32 @@ def evaluate_agentic_guardrail(
             + " | ".join(unscored)
         )
         _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        error.best_run_latency_s = best.run_latency_s
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        exc = GuardrailAssertionError(
-            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
+        raise_agentic_failure(
+            GuardrailAssertionError,
+            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+            run_latencies_s=run_latencies_s,
+            failed_runs=failed_runs,
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
     )
