@@ -37,14 +37,36 @@ CONFIRMATION_REPLY = "Yes, go ahead."
 # Asked to pick from a list (which dashboard to bind an alert to), a real user picks one.
 NO_ANSWER_REPLY = "Use your best judgement and go ahead. If you need me to pick from a list, take the first option."
 
-# Part of the metric and alert skills' designed flow, not a clarification.
+# Part of the metric and alert skills' designed flow, not a clarification; so is a retry of a
+# corrected proposal. Keep `use` and `run` out: "Which one should I use?" is a choice question.
+_RETRY_VERBS = r"retry|try\s+(?:(?:it|this|that)\s+)?(?:again|once\s+more)|resubmit"
+_APPROVAL_VERBS = rf"go\s+ahead|proceed|create|save|update|apply|{_RETRY_VERBS}"
+_SHOULD_I = r"\b(?:should|shall|may|can)\s+i\s+"
+_WANT_ME_TO = r"\b(?:do\s+you\s+want|would\s+you\s+like)\s+me\s+to\s+"
 _CONFIRMATION_RE = re.compile(
-    r"\b(?:should|shall|may|can)\s+i\s+(?:go\s+ahead|proceed|create|save|update|apply|add|set\s+(?:it|this)\s+up)"
-    r"|\bdo\s+you\s+want\s+me\s+to\s+(?:go\s+ahead|proceed|create|save|update|apply)"
-    r"|\bwould\s+you\s+like\s+me\s+to\s+(?:go\s+ahead|proceed|create|save|update|apply)"
+    rf"{_SHOULD_I}(?:{_APPROVAL_VERBS}|add|set\s+(?:it|this)\s+up)\b"
+    rf"|{_WANT_ME_TO}(?:{_APPROVAL_VERBS})\b"
     r"|\bplease\s+confirm\b|\bconfirm\s+(?:if|whether|that)\b",
     re.IGNORECASE,
 )
+# "Should I retry with gross or net revenue?" offers a choice, so it stays a question, as does
+# a second option asked right after ("Should I retry? Or adjust the formula first?"). The
+# clause runs to the sentence end: a dot inside a token ("2.5") does not end it. Only a
+# prose "or"/"Or" counts: MAQL writes its OR in uppercase. An "or" that hands the turn back
+# to the user ("..., or would you like to adjust it?", "or not?") is not a second option.
+_NOT_AN_OPTION = (
+    r"not\b|(?:would|do)\s+you\s+(?:like|want|prefer)\s+to\b|(?:is|are)\s+there\b"
+    r"|anything\b|something\b|if\s+you\b|let\s+me\s+know\b"
+)
+_RETRY_CHOICE_RE = re.compile(
+    rf"(?:{_SHOULD_I}|{_WANT_ME_TO})(?:{_RETRY_VERBS})\b(?:[^?.!]|\.(?=\S))*"
+    rf"(?:[?.!]\s+)?(?:(?-i:\b[Oo]r\b)|\balternatively\b)(?!\s+(?:{_NOT_AN_OPTION}))",
+    re.IGNORECASE,
+)
+# Inline code, {type/id} references and quoted literals are the proposal itself; an OR
+# inside a formula is not a choice offered to the user. A single quote counts only outside a
+# word, so the apostrophes in "don't ... it's" do not mask the text between them.
+_FORMULA_SPAN_RE = re.compile(r"`+[^`]*`+|\{[^{}]*\}|\"[^\"\n]*\"|(?<!\w)'[^'\n]*'(?!\w)")
 
 # Checked after _CONFIRMATION_RE, so "please confirm" stays a confirmation.
 _REQUEST_RE = re.compile(
@@ -77,7 +99,7 @@ def classify_reply(chat_result: ChatResult, rendered_text: str) -> ReplyKind:
     text = (rendered_text or "").strip()
     if not text:
         return "no_action"
-    if _CONFIRMATION_RE.search(text):
+    if _CONFIRMATION_RE.search(text) and not _RETRY_CHOICE_RE.search(_FORMULA_SPAN_RE.sub(" ", text)):
         return "confirmation"
     if "?" in text or _REQUEST_RE.search(text):
         return "question"
@@ -238,6 +260,33 @@ class ClarificationJudge:
 
 _SIM_USER_MODEL = "gpt-4o"
 
+# The simulated user plays a business user: choosing the formula is the assistant's job.
+_NO_DEFINITIONS = (
+    "Never write MAQL, SQL, formulas or object definitions. If asked to approve one, reply that it is fine to go ahead."
+)
+# An uppercase SELECT counts once a reference, `(`, `*`, DISTINCT or a call follows it, so
+# "SELECT the second option" and "Select the first one" are left alone; in any case it counts
+# once an aggregation call follows, as in "select sum(revenue)". An
+# aggregation call is a formula even without SELECT: in uppercase ("SUM (units)") or in any
+# case with the parenthesis attached ("sum(units) / count(orders)"), so prose such as
+# "Count (all) is fine" is left alone. Lowercase SQL counts by its shape (`*`, a column list,
+# or a table followed by a clause), so "Select the first option from the list" is left alone.
+_MAQL_RE = re.compile(
+    r"\bSELECT\s+(?:[{<(*]|DISTINCT\b|\w+\s*\()|(?i:\bselect\s+(?:sum|count|avg|min|max|median|distinct)\s*\()"
+    r"|(?i:\bselect\s+(?:\*|[\w.]+(?:\s*,\s*[\w.]+)+)\s+from\b)"
+    r"|(?i:\bselect\b[^?!]*?\bfrom\s+[\w.]+\s+(?:where|group\s+by|order\s+by|join)\b)"
+    r"|\b(?:SUM|COUNT|AVG|MIN|MAX|MEDIAN)\s*\(|(?i:\b(?:sum|count|avg|min|max|median)\()"
+    r"|[{<](?:metric|fact|label|attribute|dataset)/"
+)
+
+
+def _without_maql(reply: str | None) -> str | None:
+    """A reply that slipped MAQL in past the prompt leaves the choice to the assistant.
+
+    Both callers answer a question, so the fallback must answer one too, not just approve.
+    """
+    return NO_ANSWER_REPLY if reply and _MAQL_RE.search(reply) else reply
+
 
 def _chat(prompt_system: str, prompt_user: str) -> str | None:
     try:
@@ -271,12 +320,12 @@ def reply_from_facts(transcript: str, question: str, facts: list[str]) -> str:
         return NO_ANSWER_REPLY
     reply = _chat(
         "You play a business user talking to an analytics assistant. Answer its question briefly, "
-        "using ONLY the facts listed below. Never invent requirements. If the facts do not answer "
-        f"the question, reply exactly: {NO_ANSWER_REPLY}",
+        f"using ONLY the facts listed below. Never invent requirements. {_NO_DEFINITIONS} If the facts "
+        f"do not answer the question, reply exactly: {NO_ANSWER_REPLY}",
         f"Conversation so far:\n{transcript}\n\nThe assistant now asks:\n{question}\n\n"
         "Facts you know:\n" + "\n".join(f"- {f}" for f in facts),
     )
-    return reply or NO_ANSWER_REPLY
+    return _without_maql(reply) or NO_ANSWER_REPLY
 
 
 def reply_restating(transcript: str, question: str) -> str:
@@ -289,7 +338,7 @@ def reply_restating(transcript: str, question: str) -> str:
         "You play a business user talking to an analytics assistant. The assistant just asked for "
         "something that was already said or found earlier in the conversation. Reply briefly, "
         "starting with 'As I said earlier,' and repeat only that information, taken from the "
-        "conversation. Do not add anything new.",
+        f"conversation. Do not add anything new. {_NO_DEFINITIONS}",
         f"Conversation so far:\n{transcript}\n\nThe assistant now asks:\n{question}",
     )
-    return reply or "As I said earlier in this conversation — please use what we already established."
+    return _without_maql(reply) or "As I said earlier in this conversation — please use what we already established."
