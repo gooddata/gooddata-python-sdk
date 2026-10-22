@@ -483,3 +483,10 @@ class DatasetItem(BaseModel):
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.
     user_context: dict[str, Any] | None = None
+    # The source's own item metadata, carried through verbatim. A Langfuse dataset item can
+    # hold whatever its publisher put there -- language, complexity, workspace id, the git
+    # revision the fixture was published from -- and `extra="ignore"` above used to drop all
+    # of it on load, so a caller could neither select on it nor report it. Not interpreted
+    # here: `test_kind`, `summary_input` and `user_context` are still read out into their own
+    # fields by the loader, and this is the rest of it.
+    metadata: dict[str, Any] = Field(default_factory=dict)

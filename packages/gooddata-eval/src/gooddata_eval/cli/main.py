@@ -2,12 +2,13 @@
 """`gd-eval` command-line entry point."""
 
 import argparse
+import json
 import os
 import sys
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import get_args
+from typing import Any, get_args
 
 import httpx
 from gooddata_api_client.exceptions import ApiException, ApiTypeError
@@ -78,6 +79,35 @@ def _build_parser() -> argparse.ArgumentParser:
     source = run.add_mutually_exclusive_group(required=True)
     source.add_argument("--dataset", help="Path to a folder of dataset JSON files.")
     source.add_argument("--langfuse-dataset", dest="langfuse_dataset", help="Langfuse dataset name.")
+    run.add_argument(
+        "--langfuse-item-id",
+        dest="langfuse_item_ids",
+        action="append",
+        default=[],
+        metavar="ITEM_ID",
+        help="Run only this Langfuse dataset item. Repeat for several. An id the dataset does "
+        "not have is an error, not a skip. Requires --langfuse-dataset.",
+    )
+    run.add_argument(
+        "--langfuse-item-metadata",
+        dest="langfuse_item_metadata",
+        action="append",
+        default=[],
+        type=_parse_item_metadata,
+        metavar="KEY=VALUE",
+        help="Run only Langfuse items whose metadata carries this key and value (e.g. "
+        "--langfuse-item-metadata language=es). Repeat to require several; values compare as "
+        "strings. Combined with --langfuse-item-id, an item must satisfy both. "
+        "Requires --langfuse-dataset.",
+    )
+    run.add_argument(
+        "--run-metadata-json",
+        dest="run_metadata_json",
+        metavar="PATH",
+        help="JSON object merged into the Langfuse dataset-run metadata. Per run, not per item "
+        "-- use it for what is constant across the run (agent id, personality, workspace, "
+        "memory snapshot id), not for anything that varies by question.",
+    )
     run.add_argument(
         "--kind",
         dest="kind",
@@ -396,6 +426,30 @@ def _parse_tag(val: str) -> str:
     return tag
 
 
+def _parse_item_metadata(val: str) -> tuple[str, str]:
+    """Split one --langfuse-item-metadata KEY=VALUE pair."""
+    key, sep, value = val.partition("=")
+    if not sep or not key.strip():
+        raise argparse.ArgumentTypeError(f"expected KEY=VALUE, got {val!r}")
+    return key.strip(), value.strip()
+
+
+def _load_run_metadata(path: str) -> dict[str, Any]:
+    """Read --run-metadata-json.
+
+    A non-object payload is rejected here rather than at the Langfuse call: dataset-run
+    metadata is merged key by key, so a list or a bare string has nowhere to go and would
+    otherwise be dropped silently after the run had already cost its agent calls.
+    """
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        raise ValueError(f"--run-metadata-json {path}: not valid JSON ({e})") from e
+    if not isinstance(payload, dict):
+        raise ValueError(f"--run-metadata-json {path}: expected a JSON object, got {type(payload).__name__}")
+    return payload
+
+
 def _make_progress_callbacks(console: Console):
     """Build (on_item_start, on_run_done, on_item_done) callbacks that stream progress.
 
@@ -446,7 +500,12 @@ def _load_dataset(config: RunConfig):
 
     if config.langfuse_dataset is None:  # pragma: no cover - argparse mutually-exclusive group guarantees one is set
         raise ValueError("Either --dataset or --langfuse-dataset is required.")
-    return load_langfuse_dataset(config.langfuse_dataset, default_test_kind=config.kind)
+    return load_langfuse_dataset(
+        config.langfuse_dataset,
+        default_test_kind=config.kind,
+        item_ids=config.item_ids or None,
+        metadata_filter=config.item_metadata_filter or None,
+    )
 
 
 def _list_models(host: str, token: str, workspace_id: str | None) -> int:
@@ -507,6 +566,15 @@ def _run(config: RunConfig) -> int:
     if config.log_to_langfuse and config.langfuse_dataset is None:
         print(
             "error: --langfuse requires --langfuse-dataset (local datasets have no Langfuse item ids to link to).",
+            file=sys.stderr,
+        )
+        return _EXIT_OPERATIONAL_ERROR
+    if (config.item_ids or config.item_metadata_filter) and config.langfuse_dataset is None:
+        # Refused rather than ignored: a run that quietly evaluated the whole local folder
+        # after being asked for one language would be read as that language's pass rate.
+        print(
+            "error: --langfuse-item-id / --langfuse-item-metadata require --langfuse-dataset "
+            "(a local dataset folder has no item metadata to select on).",
             file=sys.stderr,
         )
         return _EXIT_OPERATIONAL_ERROR
@@ -595,6 +663,7 @@ def _run(config: RunConfig) -> int:
                     reasoning_effort=config.reasoning_effort,
                     use_langfuse=config.log_to_langfuse,
                     tags=config.tags,
+                    run_metadata=config.run_metadata,
                     run_ts=run_ts,
                     on_item_start=on_item_start,
                     on_item_done=on_item_done,
@@ -754,6 +823,9 @@ def main(argv: list[str] | None = None) -> int:
             turn_timeout_s=args.turn_timeout,
             item_timeout_s=args.item_timeout,
             tags=tuple(dict.fromkeys(args.tags)),
+            item_ids=tuple(dict.fromkeys(args.langfuse_item_ids)),
+            item_metadata_filter=dict(args.langfuse_item_metadata),
+            run_metadata=_load_run_metadata(args.run_metadata_json) if args.run_metadata_json else {},
         )
         return _run(config)
     except (
