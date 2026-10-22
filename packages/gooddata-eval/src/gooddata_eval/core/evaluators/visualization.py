@@ -2,7 +2,7 @@
 """Agentic visualization evaluator — ported from gdc-nas tavern-e2e app/vis_agentic.py."""
 
 import re
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import date
 from typing import Any
 
@@ -15,7 +15,10 @@ from gooddata_eval.core.models import (
     timeline_detail,
 )
 from gooddata_eval.core.scoring import (
+    bucket_layout,
+    check_buckets,
     check_filters,
+    check_metric_layout,
     check_sorts,
     check_viz_type,
     get_dimension_uri_set,
@@ -61,6 +64,13 @@ class EvaluationResult:
     # Whether a number in the reply matches a value the chart returned. None when the reply
     # states no number. Reported only: reading numbers out of prose has false hits.
     stated_value_matches: bool | None = None
+    # Whether each field sits in the expected bucket. None when the expectation does not ask
+    # (`buckets_strict`), so the check neither gates nor shows.
+    buckets_correct: bool | None = None
+    expected_buckets: dict[str, list[str]] | None = None
+    actual_buckets: dict[str, list[str]] | None = None
+    # Why `metrics_correct` is False although the metric set matched: order or axis.
+    metric_layout_problems: list[str] = field(default_factory=list)
 
     @property
     def strict_pass(self) -> bool:
@@ -73,6 +83,7 @@ class EvaluationResult:
             and self.sorts_correct
             and self.viz_type_hard
             and (self.executed or not self.requires_execution)
+            and self.buckets_correct is not False
         )
 
     @property
@@ -85,6 +96,7 @@ class EvaluationResult:
                 self.filters_correct,
                 self.sorts_correct,
                 self.viz_type_hard,
+                self.buckets_correct is True,
             ]
         )
 
@@ -257,15 +269,18 @@ def _evaluate_visualization(
             actual_filters={category: values.copy() for category, values in _NO_FILTERS.items()},
             expected_sorts=normalized_sorts(expected),
             actual_sorts=[],
+            buckets_correct=False if expected.buckets_strict else None,
+            expected_buckets=bucket_layout(expected) if expected.buckets_strict else None,
         )
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
     act_dim_uris = get_dimension_uri_set(actual)
     filter_scores = check_filters(expected, actual, today)
+    metric_layout_problems = check_metric_layout(expected, actual)
     return EvaluationResult(
         visualization_created=True,
         cross_ref_valid=cross_ref_valid,
-        metrics_correct=act_metric_uris == exp_metric_uris,
+        metrics_correct=act_metric_uris == exp_metric_uris and not metric_layout_problems,
         dimensions_correct=act_dim_uris == exp_dim_uris,
         filters_correct=filter_scores.all_ok,
         sorts_correct=check_sorts(expected, actual),
@@ -283,6 +298,10 @@ def _evaluate_visualization(
         actual_sorts=normalized_sorts(actual),
         expected_filters=normalized_filters(expected, today),
         actual_filters=normalized_filters(actual, today),
+        buckets_correct=check_buckets(expected, actual),
+        expected_buckets=bucket_layout(expected) if expected.buckets_strict else None,
+        actual_buckets=bucket_layout(actual) if expected.buckets_strict else None,
+        metric_layout_problems=metric_layout_problems,
     )
 
 
@@ -349,6 +368,15 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "actual_filters": ev.actual_filters,
         "expected_sorts": ev.expected_sorts,
         "actual_sorts": ev.actual_sorts,
+        **({"metric_layout_problems": ev.metric_layout_problems} if ev.metric_layout_problems else {}),
+        # Top level only when the expectation asks for it: a check the item does not gate on
+        # must not lift `quality_score`, which counts every top-level boolean.
+        **({"buckets_correct": ev.buckets_correct} if ev.buckets_correct is not None else {}),
+        **(
+            {"buckets": {"expected": ev.expected_buckets, "actual": ev.actual_buckets}}
+            if ev.expected_buckets is not None
+            else {}
+        ),
         # Nested: `quality_score` counts every top-level boolean, and a check an item does not
         # gate on must not lower it. `executed` joins the top level only when it gates.
         "execution": {

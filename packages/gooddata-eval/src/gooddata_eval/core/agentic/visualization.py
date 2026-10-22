@@ -393,6 +393,17 @@ def _run_detail(run: RunResult) -> dict:
     }
 
 
+def _buckets_line(ev: EvaluationResult) -> str:
+    """The bucket-by-bucket verdict for the failure summary, or "" when the item does not ask for it."""
+    lines = "".join(f"    {problem}\n" for problem in ev.metric_layout_problems)
+    if ev.buckets_correct is None:
+        return lines
+    lines += f"  Buckets Correct       : {ev.buckets_correct}\n"
+    if not ev.buckets_correct:
+        lines += f"    expected : {ev.expected_buckets}\n    actual   : {ev.actual_buckets}\n"
+    return lines
+
+
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
     """Expected-vs-actual lines for one filter category, or "" when they matched.
 
@@ -483,12 +494,16 @@ def evaluate_agentic_visualization(
                 }
                 if ev.requires_execution:
                     strict_checks["assertion-vis-executed"] = ev.executed
+                if ev.buckets_correct is not None:
+                    strict_checks["assertion-vis-buckets"] = ev.buckets_correct
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     ctx.score(tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-dimensions", value=ev.dimensions_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
+                    if ev.buckets_correct is not None:
+                        ctx.score(tid, name="assertion-vis-buckets", value=ev.buckets_correct, data_type="BOOLEAN")
                     ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
                     # Scored on every item, gating or not, so the run rate is visible per model.
                     ctx.score(tid, name="assertion-vis-executed", value=ev.executed, data_type="BOOLEAN")
@@ -587,6 +602,7 @@ def evaluate_agentic_visualization(
             f"    attribute : {ev.filter_attribute_score}\n"
             f"{_filter_diff('attribute', ev)}"
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
+            f"{_buckets_line(ev)}"
             f"  Executed              : {ev.executed}{' (required)' if ev.requires_execution else ''}\n"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"

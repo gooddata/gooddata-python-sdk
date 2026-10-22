@@ -6,6 +6,7 @@ import pytest
 from gooddata_eval.core.evaluators import get_evaluator
 from gooddata_eval.core.evaluators.visualization import _evaluate_visualization, execution_signals
 from gooddata_eval.core.models import ChatResult, CreatedVisualization, DatasetItem, ToolCallEvent
+from gooddata_eval.core.scoring import get_dimension_uri_set, get_metric_uri_set
 
 
 def _item(expected_viz) -> DatasetItem:
@@ -367,3 +368,179 @@ def test_a_ref_that_is_not_a_string_is_skipped_not_raised():
         result='{"success":true,"data":{"rows":[]}}',
     )
     assert execution_signals([_CREATE, execute], None) == (False, None)
+
+
+# -- Extended chart types (QA-29722): shapes trimmed from ecommerce_demo runs -----------------
+
+_EXT_FIELDS = {
+    "m_net_sales": {"using": "metric/net_sales"},
+    "m_margin": {"using": "metric/gross_profit_margin"},
+    "m_orders": {"using": "metric/of_orders"},
+    "d_category": {"using": "label/product_category"},
+    "d_country": {"using": "label/customer_country"},
+    "d_brand": {"using": "label/product_brand"},
+    "d_month": {"using": "label/date.month"},
+}
+
+
+def _ext(type_: str, **buckets) -> dict:
+    return {"type": type_, "query": {"fields": _EXT_FIELDS, "filter_by": {}}, **buckets}
+
+
+def _score(expected: dict, actual: dict):
+    return _evaluate_visualization(
+        CreatedVisualization.model_validate(expected), CreatedVisualization.model_validate(actual)
+    )
+
+
+def test_a_repeater_scores_the_same_with_its_metric_in_metrics_or_in_columns():
+    expected = _ext("repeater_chart", metrics=["m_net_sales"], rows=["d_category"], view_by=["d_month"])
+    in_metrics = _ext(
+        "repeater_chart",
+        metrics=[{"field": "m_net_sales", "display_as": "line"}],
+        rows=["d_category"],
+        view_by=["d_month"],
+    )
+    in_columns = _ext(
+        "repeater_chart",
+        rows=["d_category"],
+        view_by=["d_month"],
+        columns=["d_category_column", {"field": "m_net_sales", "display_as": "line"}],
+    )
+    in_columns["query"] = {"fields": {**_EXT_FIELDS, "d_category_column": {"using": "label/product_category"}}}
+    for actual in (in_metrics, in_columns):
+        ev = _score({**expected, "buckets_strict": True}, actual)
+        assert ev.metrics_correct, ev.actual_metric_uris
+        assert ev.dimensions_correct, ev.actual_dim_uris
+        assert ev.buckets_correct is True, ev.actual_buckets
+        assert ev.strict_pass
+
+
+def test_sankey_ends_are_dimensions_and_their_direction_is_checked_under_buckets_strict():
+    expected = _ext("sankey_chart", metrics=["m_net_sales"], **{"from": "d_category", "to": "d_country"})
+    right = _score({**expected, "buckets_strict": True}, expected)
+    assert right.expected_dim_uris == {"label/product_category", "label/customer_country"}
+    assert right.strict_pass
+
+    reversed_ends = _ext("sankey_chart", metrics=["m_net_sales"], **{"from": "d_country", "to": "d_category"})
+    loose = _score(expected, reversed_ends)
+    strict = _score({**expected, "buckets_strict": True}, reversed_ends)
+    assert loose.strict_pass, "without buckets_strict the union of the ends is all that counts"
+    assert strict.buckets_correct is False
+    assert not strict.strict_pass
+
+
+def test_a_missing_sankey_destination_fails_the_dimension_check():
+    expected = _ext("sankey_chart", metrics=["m_net_sales"], **{"from": "d_category", "to": "d_country"})
+    no_destination = _ext("sankey_chart", metrics=["m_net_sales"], **{"from": "d_category"})
+    assert not _score(expected, no_destination).dimensions_correct
+
+
+def test_a_heatmap_with_rows_and_columns_swapped_fails_only_under_buckets_strict():
+    expected = _ext("heatmap_chart", metrics=["m_net_sales"], view_by=["d_brand"], segment_by=["d_country"])
+    swapped = _ext("heatmap_chart", metrics=["m_net_sales"], view_by=["d_country"], segment_by=["d_brand"])
+    assert _score(expected, swapped).strict_pass
+    ev = _score({**expected, "buckets_strict": True}, swapped)
+    assert ev.buckets_correct is False
+    assert ev.expected_buckets["view_by"] == ["label/product_brand"]
+    assert ev.actual_buckets["view_by"] == ["label/customer_country"]
+
+
+def test_bubble_size_counts_as_a_metric_and_order_holds_the_x_position():
+    expected = _ext(
+        "bubble_chart",
+        metrics=[None, "m_margin"],
+        size_by=["m_orders"],
+        view_by=["d_brand"],
+        metrics_ordered=True,
+        buckets_strict=True,
+    )
+    right = _ext("bubble_chart", metrics=[None, "m_margin"], size_by=["m_orders"], view_by=["d_brand"])
+    ev = _score(expected, right)
+    assert ev.expected_metric_uris == {"metric/gross_profit_margin", "metric/of_orders"}
+    assert ev.strict_pass, ev.metric_layout_problems
+
+    margin_on_x = _ext("bubble_chart", metrics=["m_margin"], size_by=["m_orders"], view_by=["d_brand"])
+    ev = _score(expected, margin_on_x)
+    assert not ev.metrics_correct
+    assert ev.metric_layout_problems and "metric order" in ev.metric_layout_problems[0]
+
+
+def test_bullet_roles_are_positional_only_when_metrics_ordered():
+    roles = ["m_net_sales", "m_orders", "m_margin"]
+    expected = _ext("bullet_chart", metrics=roles, view_by=["d_category"])
+    shuffled = _ext("bullet_chart", metrics=["m_orders", "m_net_sales", "m_margin"], view_by=["d_category"])
+    assert _score(expected, shuffled).metrics_correct
+    assert not _score({**expected, "metrics_ordered": True}, shuffled).metrics_correct
+
+
+def test_combo_axes_are_checked_for_every_metric_that_names_one():
+    expected = _ext(
+        "combo_chart",
+        metrics=[{"field": "m_net_sales", "axis": "primary"}, {"field": "m_margin", "axis": "secondary"}],
+        view_by=["d_category"],
+    )
+    assert _score(expected, expected).strict_pass
+    both_primary = _ext(
+        "combo_chart",
+        metrics=[{"field": "m_net_sales", "axis": "primary"}, {"field": "m_margin", "axis": "primary"}],
+        view_by=["d_category"],
+    )
+    ev = _score(expected, both_primary)
+    assert not ev.metrics_correct
+    assert "metric axes" in ev.metric_layout_problems[0]
+
+
+def test_combo_axes_read_a_metric_without_an_axis_as_primary():
+    expected = _ext(
+        "combo_chart",
+        metrics=[{"field": "m_net_sales", "axis": "primary"}, {"field": "m_margin", "axis": "secondary"}],
+        view_by=["d_category"],
+    )
+    for primary in ("m_net_sales", {"field": "m_net_sales"}):
+        actual = _ext(
+            "combo_chart", metrics=[primary, {"field": "m_margin", "axis": "secondary"}], view_by=["d_category"]
+        )
+        ev = _score(expected, actual)
+        assert ev.metrics_correct, ev.metric_layout_problems
+    secondary_unstated = _ext("combo_chart", metrics=["m_net_sales", "m_margin"], view_by=["d_category"])
+    ev = _score(expected, secondary_unstated)
+    assert not ev.metrics_correct
+    assert "'metric/gross_profit_margin': 'primary'" in ev.metric_layout_problems[0]
+
+
+def test_a_field_the_chart_aggregates_itself_counts_as_a_metric_in_columns():
+    fields = {**_EXT_FIELDS, "c_orders": {"using": "attribute/order_id", "aggregation": "COUNT"}}
+    repeater = _ext("repeater_chart", rows=["d_category"], columns=[{"field": "c_orders", "display_as": "line"}])
+    repeater["query"] = {"fields": fields, "filter_by": {}}
+    viz = CreatedVisualization.model_validate(repeater)
+    assert get_metric_uri_set(viz) == {"attribute/order_id"}
+    assert get_dimension_uri_set(viz) == {"label/product_category"}
+
+
+def test_a_sankey_source_is_written_under_its_aac_name():
+    """`from` is a Python keyword: the field is `from_`, but no dump may write that name."""
+    viz = CreatedVisualization.model_validate(
+        _ext("sankey_chart", metrics=["m_net_sales"], **{"from": "d_category", "to": "d_country"})
+    )
+    for dumped in (viz.model_dump(exclude_none=True), viz.model_dump(mode="json")):
+        assert dumped["from"] == "d_category"
+        assert "from_" not in dumped
+    assert '"from":"d_category"' in viz.model_dump_json()
+    assert list(viz.model_dump()).index("from") < list(viz.model_dump()).index("to")
+    assert CreatedVisualization.model_validate(viz.model_dump()).from_ == "d_category"
+
+
+def test_bucket_check_is_absent_from_the_detail_unless_asked_for():
+    ev = get_evaluator("visualization")
+    plain = ev.evaluate(_item(_expected()), _chat_result_with(dict(_expected())))
+    assert "buckets_correct" not in plain.detail
+    strict = ev.evaluate(_item({**_expected(), "buckets_strict": True}), _chat_result_with(dict(_expected())))
+    assert strict.detail["buckets_correct"] is True
+
+
+def test_expectation_switches_are_left_out_of_a_recorded_output():
+    viz = CreatedVisualization.model_validate({**_expected(), "buckets_strict": True, "metrics_ordered": True})
+    dumped = viz.model_dump(exclude_none=True)
+    assert "buckets_strict" not in dumped
+    assert "metrics_ordered" not in dumped
