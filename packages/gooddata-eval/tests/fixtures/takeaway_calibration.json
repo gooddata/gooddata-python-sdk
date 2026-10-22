@@ -1,0 +1,68 @@
+{
+  "question": "Takeaway for one dashboard page",
+  "texts": [
+    {
+      "label": "new markets (reference good example)",
+      "want": "pass",
+      "text": "**Growth now comes from new markets.** Sales rose again this period, led by the Nordics, while core markets held flat."
+    },
+    {
+      "label": "returning customers",
+      "want": "pass",
+      "text": "**Returning customers are the gap.** Almost all active customers are new, and the biggest spenders carry a large share of sales."
+    },
+    {
+      "label": "bigger baskets",
+      "want": "pass",
+      "text": "**Fewer orders, bigger baskets.** Order count dipped while the average order grew, keeping total sales steady."
+    },
+    {
+      "label": "category concentration",
+      "want": "pass",
+      "text": "**Electronics carries the product mix.** It leads every other category in sales, and the gap to the rest keeps widening."
+    },
+    {
+      "label": "rough size in words (prompt phrasing)",
+      "want": "pass",
+      "text": "**Audio and video now carry the store.** They bring in about a third of sales, and their sales roughly doubled compared with last period."
+    },
+    {
+      "label": "executive summary",
+      "want": "fail",
+      "criteria": ["executive_summary", "exact_figure", "date_or_period"],
+      "text": "**Summary:** Net Sales were $4.2M in Q3 2026, up 12%. Key takeaways: Electronics leads with 38% share; returns fell to 2.1%. Things to watch: inventory in Furniture is rising, and discounts may erode margin next quarter."
+    },
+    {
+      "label": "chart walk-through",
+      "want": "fail",
+      "criteria": ["chart_walkthrough", "exact_figure"],
+      "text": "**Sales overview.** Total Sales Trend shows sales in the low $100Ks, Net Sales by Product Category shows Audio & Video leading, and Order Breakdown shows most orders are Processed."
+    },
+    {
+      "label": "hedged figures (real output)",
+      "want": "fail",
+      "criteria": ["exact_figure"],
+      "text": "**Solid top-line scale** Total Sales are about $270M this period, supported by a customer base of roughly 1.2K Total Customers."
+    },
+    {
+      "label": "percentage with a tilde (real output)",
+      "want": "fail",
+      "criteria": [
+        "exact_figure"
+      ],
+      "text": "**Sales mix:** Audio & Video Accessories drive ~40% of Net Sales, and most orders are Processed."
+    },
+    {
+      "label": "page description opener",
+      "want": "fail",
+      "criteria": ["background_opener"],
+      "text": "This page shows sales, orders and customers for the online store. Sales rose while orders held flat."
+    },
+    {
+      "label": "external cause",
+      "want": "fail",
+      "criteria": ["unshown_cause"],
+      "text": "**Sales jumped in the West.** The rise came because the summer campaign drew in new buyers."
+    }
+  ]
+}

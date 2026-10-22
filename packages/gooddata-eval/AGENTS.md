@@ -27,6 +27,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/agentic/` | multi-turn agentic evaluation per capability, **plus** all Langfuse trace polling and linking (`_langfuse.py`, `_trace_linker.py`) |
 | `core/chat/` | SSE client for the agent's streaming chat endpoint |
 | `core/summary/` | HTTP client for the dedicated dashboard-summary endpoint — a single-shot chat backend, not reporting |
+| `core/takeaway/` | HTTP client for the AI Publisher takeaway endpoint — a single-shot backend like `core/summary/`, keeping the whole response on `ChatResult.raw_response` |
 | `core/dataset/` | dataset format, loading, and `from_insights.py` — dataset generation from a workspace's real insights |
 | `core/evaluators/` | single-shot evaluators and their registry |
 | `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `item_scope` (an item's experiment scope sent to gen-ai as baggage, and which conversations joined), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
@@ -59,7 +60,8 @@ implementation, sometimes under different `test_kind` strings (`search_tool` vs
 `expected_output: Any`. `expected_output` is deliberately untyped — each evaluator parses
 its own shape. `test_kind` on the item is what labels the result, not the evaluator class,
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
-`dashboard_summary` items additionally need `summary_input`.
+`dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
+`takeaway_input`.
 
 ## Running the pipeline
 
