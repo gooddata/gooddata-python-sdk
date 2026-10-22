@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import importlib
 import inspect
+import re
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 from unittest.mock import patch
 
@@ -1331,3 +1333,37 @@ def test_concurrent_items_each_keep_only_their_own_trace_latencies():
     assert {i.id: i.trace_latencies_s for i in report.items} == {
         f"g{n}": [n * 100.0, n * 100.0 + 1, n * 100.0 + 2] for n in range(1, 5)
     }
+
+
+def _agentic_module_sources() -> dict[str, str]:
+    """Every agentic evaluator module's source, keyed by name. Discovered by scanning the
+    package so a new kind is covered the day it lands rather than when someone remembers."""
+    package = importlib.import_module("gooddata_eval.core.agentic")
+    directory = Path(package.__file__).parent
+    return {
+        path.stem: path.read_text(encoding="utf-8")
+        for path in sorted(directory.glob("*.py"))
+        if not path.stem.startswith("_")
+    }
+
+
+@pytest.mark.parametrize("module_name", sorted(_agentic_module_sources()))
+def test_every_agentic_module_deletes_through_the_client_method(module_name: str) -> None:
+    """--keep-conversations is enforced inside ChatClient.delete_conversation, so a module
+    that issues its own DELETE would quietly ignore it. Thirteen modules delete twenty times
+    between them; one bypass is enough to lose the conversation a diagnostic run needed."""
+    source = _agentic_module_sources()[module_name]
+    # Only HTTP deletes: `created.delete(sdk, workspace_id)` is workspace-object cleanup,
+    # which has nothing to do with conversation retention.
+    bypasses = [
+        line.strip() for line in source.splitlines() if re.search(r"\b(httpx|requests|_client)\.delete\(", line)
+    ]
+    assert not bypasses, f"{module_name} issues its own DELETE; call client.delete_conversation instead: {bypasses}"
+
+
+def test_the_agentic_modules_do_delete_conversations() -> None:
+    """Guards the guard: an assertion that only forbids a pattern still passes once the
+    cleanup it is protecting has been deleted outright."""
+    sources = _agentic_module_sources()
+    deleting = {name for name, src in sources.items() if "delete_conversation(" in src}
+    assert len(deleting) >= 12, f"expected most agentic kinds to clean up, found {sorted(deleting)}"
