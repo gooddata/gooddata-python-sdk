@@ -4,7 +4,7 @@
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal, cast, get_args
+from typing import Any, Literal, cast, get_args
 
 # Values that mean "off" when read from the environment. Needed because every non-empty
 # string is truthy in Python, so a bare bool() on an env var reads FOO=0 -- the obvious way
@@ -102,3 +102,9 @@ class RunConfig:
     gate: EvalGate = DEFAULT_GATE
     tags: tuple[str, ...] = ()
     """Custom Langfuse trace tags, added after the automatic ones."""
+    item_ids: tuple[str, ...] = ()
+    """Langfuse dataset items to run, by id. Empty runs them all. Ignored for a local dataset."""
+    item_metadata_filter: dict[str, str] = field(default_factory=dict)
+    """Run only Langfuse items whose metadata carries all these key/values. Ignored for a local dataset."""
+    run_metadata: dict[str, Any] = field(default_factory=dict)
+    """Extra key/values written into the Langfuse dataset-run metadata, per run, not per item."""
