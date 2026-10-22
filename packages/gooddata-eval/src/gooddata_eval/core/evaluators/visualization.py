@@ -211,13 +211,44 @@ def requires_execution_of(expected_output: object) -> bool:
     return isinstance(expected_output, dict) and expected_output.get("requires_execution") is True
 
 
+def _extract_active_skills(tc: ToolCallEvent) -> list[str]:
+    """Derive the active skills from a set_skills ToolCallEvent.
+
+    Prefers the authoritative post-replacement active skills echoed back in the tool
+    result (e.g. `skills_to_activate`), falling back to requested arguments (`skill_names`)
+    when the result is absent, unparseable, or errored.
+    """
+    if getattr(tc, "result", None) or hasattr(tc, "parsed_result"):
+        try:
+            result_data = tc.parsed_result()
+        except Exception:
+            result_data = None
+        if isinstance(result_data, dict):
+            payload = result_data.get("data", result_data)
+            if isinstance(payload, dict) and payload.get("status") not in ("error", "failure"):
+                for key in ("skills_to_activate", "skill_names", "skills"):
+                    val = payload.get(key)
+                    if isinstance(val, list):
+                        return [str(s) for s in val]
+        elif isinstance(result_data, list):
+            return [str(s) for s in result_data]
+
+    args = tc.parsed_arguments() if hasattr(tc, "parsed_arguments") else {}
+    args = args or {}
+    names = args.get("skill_names")
+    if names is None:
+        names = args.get("skills")
+    if isinstance(names, list):
+        return [str(s) for s in names]
+    return list(names or [])
+
+
 def _check_visualization_skill_activated(tool_call_events: list[ToolCallEvent]) -> bool:
-    """Return True if set_skills was called with 'visualization' in skill_names."""
+    """Return True if set_skills activated 'visualization' (reading result, fallback to args)."""
     for tc in tool_call_events:
         if tc.function_name == "set_skills":
-            args = tc.parsed_arguments()
-            skill_names = args.get("skill_names", [])
-            if isinstance(skill_names, list) and "visualization" in skill_names:
+            active = _extract_active_skills(tc)
+            if "visualization" in active:
                 return True
     return False
 

@@ -30,9 +30,11 @@ from gooddata_eval.core.agentic.conversation import (
     _check_output_correct,
     _created_alert_ids,
     _expected_viz,
+    _final_skill_declaration,
     _get_sim_user_response,
     _metric_creations,
     _resolve_refs,
+    _set_skills_declarations,
     evaluate_agentic_conversation,
     resolve_conversation_mode,
     run_agentic_conversation,
@@ -44,7 +46,7 @@ from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 
-def _skills_tc(*skills):
+def _skills_tc(*skills, result=None):
     tc = MagicMock(spec=ToolCallEvent)
     tc.call_ts = None
     tc.result_ts = None
@@ -54,6 +56,16 @@ def _skills_tc(*skills):
     # previously used a bare `skills`, which only passed via _activated_skills' fallback
     # spelling -- so they exercised a payload shape the platform never actually sends.
     tc.parsed_arguments = lambda: {"skill_names": list(skills)}
+    if result is not None:
+        tc.result = _json.dumps(result) if not isinstance(result, str) else result
+        tc.parsed_result = lambda: (
+            (_json.loads(result) if isinstance(result, str) and result.strip().startswith("{") else result)
+            if not isinstance(result, dict)
+            else result
+        )
+    else:
+        tc.result = None
+        tc.parsed_result = lambda: None
     return tc
 
 
@@ -629,6 +641,123 @@ def test_run_agentic_conversation_skill_routing_false_when_skill_never_activated
         )
 
     assert result.turn_results[0].skill_routing is False
+
+
+def test_set_skills_declarations_prefers_result_over_arguments():
+    """Authoritative active skills echoed back in the result take precedence over arguments."""
+    tc = _skills_tc("metric", result={"skills_to_activate": ["visualization"]})
+    assert _set_skills_declarations([tc]) == [["visualization"]]
+    assert _final_skill_declaration([tc]) == ["visualization"]
+
+
+def test_set_skills_declarations_drops_unrecognised_requested_name():
+    """When the agent requests an unrecognised/retired skill that the platform drops,
+    it is not credited in declarations."""
+    tc = _skills_tc("retired_skill", "metric", result={"skills_to_activate": ["metric"]})
+    assert _set_skills_declarations([tc]) == [["metric"]]
+    assert _final_skill_declaration([tc]) == ["metric"]
+
+
+def test_set_skills_declarations_credits_implicit_dependency():
+    """When the platform pulls in a dependency not explicitly requested by the agent,
+    it is credited in declarations."""
+    tc = _skills_tc("dashboard_builder", result={"skills_to_activate": ["dashboard_builder", "visualization"]})
+    assert _set_skills_declarations([tc]) == [["dashboard_builder", "visualization"]]
+    assert _final_skill_declaration([tc]) == ["dashboard_builder", "visualization"]
+
+
+def test_set_skills_declarations_falls_back_when_result_missing():
+    """Older captured traces with result=None fall back to arguments."""
+    tc = _skills_tc("metric", result=None)
+    assert _set_skills_declarations([tc]) == [["metric"]]
+    assert _final_skill_declaration([tc]) == ["metric"]
+
+
+def test_set_skills_declarations_falls_back_when_result_unparseable():
+    """Unparseable non-JSON result falls back to arguments."""
+    tc = _skills_tc("metric", result="Internal Error 500")
+    assert _set_skills_declarations([tc]) == [["metric"]]
+    assert _final_skill_declaration([tc]) == ["metric"]
+
+
+def test_set_skills_declarations_falls_back_when_call_errored():
+    """An errored tool call falls back to arguments."""
+    tc = _skills_tc("metric", result={"status": "error", "error": "failed"})
+    assert _set_skills_declarations([tc]) == [["metric"]]
+    assert _final_skill_declaration([tc]) == ["metric"]
+
+
+def test_set_skills_declarations_empty_result_clears_skills():
+    """An explicit empty list in result is respected and does not fall back to arguments."""
+    tc = _skills_tc("metric", result={"skills_to_activate": []})
+    assert _set_skills_declarations([tc]) == [[]]
+    assert _final_skill_declaration([tc]) == []
+
+
+def test_run_agentic_conversation_unrecognised_skill_dropped_by_result_fails_routing():
+    """A fixture expecting a misspelled skill that the service drops fails routing."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # Agent asked for "unknown_skill", but platform dropped it and returned "metric"
+    tc = _skills_tc("unknown_skill", result={"skills_to_activate": ["metric"]})
+    mock_client.send_message.return_value = _metric_turn_result([tc, _create_metric_tc("m1")])
+
+    fixture = ConversationFixture(
+        id="test-unrecognised-skill-dropped",
+        expected_skills=["unknown_skill"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1", message="Do something", expected_skill="unknown_skill", expected_output_type="metric"
+            ),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is False
+    assert result.turn_results[0].active_skills == ["metric"]
+    assert result.full_skill_coverage is False
+
+
+def test_run_agentic_conversation_dependency_pulled_in_by_result_passes_routing():
+    """A skill activated implicitly as a dependency is credited in routing and coverage."""
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    # Agent asked for "dashboard_builder", service activated dashboard_builder + metric as dependency
+    tc = _skills_tc("dashboard_builder", result={"skills_to_activate": ["dashboard_builder", "metric"]})
+    mock_client.send_message.return_value = _metric_turn_result([tc, _create_metric_tc("m1")])
+
+    fixture = ConversationFixture(
+        id="test-dependency-credited",
+        expected_skills=["metric"],
+        turns=[
+            TurnDefinition(
+                turn_id="t1", message="Do something", expected_skill="metric", expected_output_type="metric"
+            ),
+        ],
+    )
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=fixture,
+        )
+
+    assert result.turn_results[0].skill_routing is True
+    assert "metric" in result.turn_results[0].active_skills
+    assert result.full_skill_coverage is True
 
 
 def test_run_agentic_conversation_deletes_metrics_even_when_a_later_turn_raises():
