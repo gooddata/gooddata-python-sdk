@@ -34,11 +34,12 @@ packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
   s_26352a90edbfcb::t_7703232388c151 132
   s_26352a90edbfcb::t_071a4b01e79b0b 152-168,170,210
 packages/gooddata-eval/tests/test_takeaway_client.py
-  s_26352a90edbfcb::t_1c8656bf2c88ee 7,155-215,155-188,200-205,224-242
+  s_26352a90edbfcb::t_1c8656bf2c88ee 7,155-215,155-188,155-158,166,168-222,168-195,200-205,207-212,224-242,231-249
   s_26352a90edbfcb::t_3cf7d260316799 126
-  s_26352a90edbfcb::t_9c33d82511addd 216-223,243-250
-  s_26352a90edbfcb::t_504032d7668b48 189-199,206-221
-  s_26352a90edbfcb::t_cd46e1ab048531 222-223
+  s_26352a90edbfcb::t_9c33d82511addd 216-223,223-230,243-250,250-257
+  s_26352a90edbfcb::t_504032d7668b48 189-199,196-206,206-221,213-228
+  s_26352a90edbfcb::t_cd46e1ab048531 222-223,229-230
+  h_123280b1c5e53d 7,159-165,167
 packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
   s_26352a90edbfcb::t_4c4f16278c76bd 20,32-37,32-33,35-37,37-39,37-38,41-42,76-77,83-95,83-94,88-100,88-99
   s_26352a90edbfcb::t_69e1bdaa54048f 20,34,39,65,70,95,100
@@ -60,6 +61,11 @@ packages/gooddata-eval/tests/test_sse_client.py
   "git_ai_version": "1.7.5",
   "base_commit_sha": "efe460126c5064ca71166f9fd1b983ae813309d3",
   "prompts": {},
+  "humans": {
+    "h_123280b1c5e53d": {
+      "author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  },
   "sessions": {
     "s_26352a90edbfcb": {
       "agent_id": {
