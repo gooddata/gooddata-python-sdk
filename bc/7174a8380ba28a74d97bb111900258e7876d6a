@@ -1,29 +1,29 @@
-packages/gooddata-eval/tests/test_takeaway_evaluator.py
-  s_26352a90edbfcb::t_5fa33835fef13a 1-324
-packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
-  s_26352a90edbfcb::t_7ffe3ac69f2510 1-199
-  s_26352a90edbfcb::t_3c2e743faf45c5 200
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
+  s_26352a90edbfcb::t_ba06dcb0dd0a62 30-31,78-87
 packages/gooddata-eval/AGENTS.md
   s_26352a90edbfcb::t_f94be74953e921 30,63-64
-packages/gooddata-eval/Makefile
-  s_26352a90edbfcb::t_83d57a3a89f877 3-6
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_rubric.py
+  s_26352a90edbfcb::t_0d77e5f36c5dc1 1-94
 packages/gooddata-eval/scripts/calibrate_takeaway_judge.py
   s_26352a90edbfcb::t_0a785fe019281f 1-75
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
   s_26352a90edbfcb::t_9943c9cb516bc9 23-24,38,45,72
-packages/gooddata-eval/src/gooddata_eval/core/evaluators/_rubric.py
-  s_26352a90edbfcb::t_0d77e5f36c5dc1 1-94
-packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
-  s_26352a90edbfcb::t_ba06dcb0dd0a62 30-31,78-87
-packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
-  s_26352a90edbfcb::t_1200ba9480bada 1-55
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
+  s_26352a90edbfcb::t_3c2e743faf45c5 204
+  s_26352a90edbfcb::t_7ffe3ac69f2510 1-203
+packages/gooddata-eval/tests/test_takeaway_evaluator.py
+  s_26352a90edbfcb::t_5fa33835fef13a 1-336
+packages/gooddata-eval/Makefile
+  s_26352a90edbfcb::t_83d57a3a89f877 3-6
 packages/gooddata-eval/tests/test_runner.py
   s_26352a90edbfcb::t_5b4b07400bae7b 126
+packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
+  s_26352a90edbfcb::t_1200ba9480bada 1-55
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "5ae2ac117f914ea8f74a3fbf04c72a079ae8db84",
+  "base_commit_sha": "bc7174a8380ba28a74d97bb111900258e7876d6a",
   "prompts": {},
   "sessions": {
     "s_26352a90edbfcb": {
