@@ -111,7 +111,7 @@ class ObjectStorageInfo(ModelNormal):
         """ObjectStorageInfo - a model defined in OpenAPI
 
         Args:
-            name (str): Human-readable name. Use this as `sourceStorageName` in CreatePipeTable, or pass `storageId` to ProvisionDatabase.storageIds.
+            name (str): Human-readable name. Pass `storageId` to ProvisionDatabase.storageIds.
             storage_config ({str: (str,)}): Provider-specific descriptors (e.g. bucket, region, endpoint, container). Credential references (any keys ending in `_env`) are stripped server-side.
             storage_id (str): Stable identifier of the storage configuration (UUID).
             storage_type (str): Provider type.
@@ -206,7 +206,7 @@ class ObjectStorageInfo(ModelNormal):
         """ObjectStorageInfo - a model defined in OpenAPI
 
         Args:
-            name (str): Human-readable name. Use this as `sourceStorageName` in CreatePipeTable, or pass `storageId` to ProvisionDatabase.storageIds.
+            name (str): Human-readable name. Pass `storageId` to ProvisionDatabase.storageIds.
             storage_config ({str: (str,)}): Provider-specific descriptors (e.g. bucket, region, endpoint, container). Credential references (any keys ending in `_env`) are stripped server-side.
             storage_id (str): Stable identifier of the storage configuration (UUID).
             storage_type (str): Provider type.

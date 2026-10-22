@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attributes** | [**JsonApiUserIdentifierOutAttributes**](JsonApiUserIdentifierOutAttributes.md) |  | [optional] 
-**meta** | [**JsonApiAggregatedFactOutMeta**](JsonApiAggregatedFactOutMeta.md) |  | [optional] 
+**meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiAttributeOutRelationships**](JsonApiAttributeOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 

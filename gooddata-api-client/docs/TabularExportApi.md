@@ -144,6 +144,27 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = tabular_export_api.TabularExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     tabular_export_request = TabularExportRequest(
+        conditional_formatting=ConditionalFormatting(
+            enabled=True,
+            rules=[
+                ConditionalFormattingRule(
+                    conditions=[
+                        ConditionalFormattingCondition(
+                            format=ConditionalFormattingFormat(
+                                background_color="#3DB36B",
+                                color="#E54D40",
+                                scope="cell",
+                            ),
+                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                            operator="ALL",
+                            value=ConditionalFormattingValue(),
+                        ),
+                    ],
+                    id="bb955b38-a9e6-45f5-b068-155cb7ce509a",
+                    target=ConditionalFormattingTarget(),
+                ),
+            ],
+        ),
         custom_override=CustomOverride(
             labels={
                 "key": CustomLabel(

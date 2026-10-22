@@ -5,7 +5,7 @@ import functools
 from typing import Any, Union
 
 from attrs import Factory, define, field
-from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
+from gooddata_api_client.model.json_api_user_setting_in_attributes import JsonApiUserSettingInAttributes
 from gooddata_api_client.model.json_api_workspace_setting_in import JsonApiWorkspaceSettingIn
 from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
 from gooddata_api_client.model.json_api_workspace_setting_out import JsonApiWorkspaceSettingOut
@@ -22,7 +22,7 @@ from gooddata_sdk.utils import safeget
 class CatalogWorkspaceSetting(Base):
     id: str = field(default=None)
     setting_type: str = field(
-        validator=functools.partial(value_in_allowed, client_class=JsonApiOrganizationSettingInAttributes)
+        validator=functools.partial(value_in_allowed, client_class=JsonApiUserSettingInAttributes)
     )
     content: dict = field(
         repr=False,
@@ -33,8 +33,8 @@ class CatalogWorkspaceSetting(Base):
     def client_class() -> type[JsonApiWorkspaceSettingOut]:
         return JsonApiWorkspaceSettingOut
 
-    def _attributes(self) -> JsonApiOrganizationSettingInAttributes:
-        return JsonApiOrganizationSettingInAttributes(
+    def _attributes(self) -> JsonApiUserSettingInAttributes:
+        return JsonApiUserSettingInAttributes(
             content=self.content,
             type=self.setting_type,
         )

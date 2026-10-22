@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
@@ -18,13 +19,14 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
 )
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -76,6 +78,8 @@ class SearchResult:
     response_id: str | None = None
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
 
 @dataclass
@@ -114,6 +118,7 @@ def run_agentic_search_tool(
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
+            run_started = time.monotonic()
             chat_result = client.send_message(conv_id_0, question)
             tcs = chat_result.tool_call_events or []
             selected = _tool_selection(tcs)
@@ -128,6 +133,7 @@ def run_agentic_search_tool(
                     response_id=chat_result.response_id,
                     tool_call_events=list(chat_result.tool_call_events or []),
                     reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                    run_latency_s=time.monotonic() - run_started,
                 )
             )
         finally:
@@ -137,6 +143,7 @@ def run_agentic_search_tool(
         for _ in range(1, k):
             conv_id = client.create_conversation()
             try:
+                run_started = time.monotonic()
                 chat_result = client.send_message(conv_id, question)
                 tcs = chat_result.tool_call_events or []
                 selected = _tool_selection(tcs)
@@ -151,6 +158,7 @@ def run_agentic_search_tool(
                         response_id=chat_result.response_id,
                         tool_call_events=list(chat_result.tool_call_events or []),
                         reasoning_step_events=list(chat_result.reasoning_step_events or []),
+                        run_latency_s=time.monotonic() - run_started,
                     )
                 )
             finally:
@@ -216,19 +224,30 @@ def evaluate_agentic_search_tool(
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_search_tool(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_tool_call=expected_tool_call,
-        k=k,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_search_tool(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_tool_call=expected_tool_call,
+            k=k,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -255,23 +274,15 @@ def evaluate_agentic_search_tool(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
             conversation_ids=[r.conversation_id for r in summary.run_results],
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -302,6 +313,7 @@ def evaluate_agentic_search_tool(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -313,4 +325,5 @@ def evaluate_agentic_search_tool(
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

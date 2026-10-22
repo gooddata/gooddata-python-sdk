@@ -31,10 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_metric_permissions_inner import DeclarativeMetricPermissionsInner
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.json_node import JsonNode
+    from gooddata_api_client.model.object_conditional_formatting import ObjectConditionalFormatting
+    globals()['DeclarativeMetricPermissionsInner'] = DeclarativeMetricPermissionsInner
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
     globals()['JsonNode'] = JsonNode
+    globals()['ObjectConditionalFormatting'] = ObjectConditionalFormatting
 
 
 class DeclarativeMetric(ModelNormal):
@@ -128,6 +132,7 @@ class DeclarativeMetric(ModelNormal):
             'certification_message': (str, none_type,),  # noqa: E501
             'certified_at': (str, none_type,),  # noqa: E501
             'certified_by': (DeclarativeUserIdentifier,),  # noqa: E501
+            'conditional_formatting': (ObjectConditionalFormatting,),  # noqa: E501
             'created_at': (str, none_type,),  # noqa: E501
             'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
@@ -135,6 +140,7 @@ class DeclarativeMetric(ModelNormal):
             'is_hidden_from_kda': (bool,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
+            'permissions': ([DeclarativeMetricPermissionsInner], none_type,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -151,6 +157,7 @@ class DeclarativeMetric(ModelNormal):
         'certification_message': 'certificationMessage',  # noqa: E501
         'certified_at': 'certifiedAt',  # noqa: E501
         'certified_by': 'certifiedBy',  # noqa: E501
+        'conditional_formatting': 'conditionalFormatting',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
@@ -158,6 +165,7 @@ class DeclarativeMetric(ModelNormal):
         'is_hidden_from_kda': 'isHiddenFromKda',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -211,6 +219,7 @@ class DeclarativeMetric(ModelNormal):
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
             certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Metric description.. [optional]  # noqa: E501
@@ -218,6 +227,7 @@ class DeclarativeMetric(ModelNormal):
             is_hidden_from_kda (bool): If true, this metric is hidden from key drive analysis.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            permissions ([DeclarativeMetricPermissionsInner], none_type): A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -316,6 +326,7 @@ class DeclarativeMetric(ModelNormal):
             certification_message (str, none_type): Optional message associated with the certification.. [optional]  # noqa: E501
             certified_at (str, none_type): Time when the certification was set.. [optional]  # noqa: E501
             certified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            conditional_formatting (ObjectConditionalFormatting): [optional]  # noqa: E501
             created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
             created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Metric description.. [optional]  # noqa: E501
@@ -323,6 +334,7 @@ class DeclarativeMetric(ModelNormal):
             is_hidden_from_kda (bool): If true, this metric is hidden from key drive analysis.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
+            permissions ([DeclarativeMetricPermissionsInner], none_type): A list of permissions. A PUT without this property keeps the existing permissions. An empty list removes all of them.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

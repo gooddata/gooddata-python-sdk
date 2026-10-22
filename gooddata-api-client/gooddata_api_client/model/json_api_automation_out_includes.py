@@ -31,25 +31,37 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_agent_in_relationships import JsonApiAgentInRelationships
-    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_automation_result_out_with_links import JsonApiAutomationResultOutWithLinks
+    from gooddata_api_client.model.json_api_computed_attribute_out_relationships import JsonApiComputedAttributeOutRelationships
+    from gooddata_api_client.model.json_api_computed_attribute_out_with_links import JsonApiComputedAttributeOutWithLinks
     from gooddata_api_client.model.json_api_export_definition_out_with_links import JsonApiExportDefinitionOutWithLinks
+    from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
+    from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+    from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_api_client.model.json_api_notification_channel_out_with_links import JsonApiNotificationChannelOutWithLinks
-    from gooddata_api_client.model.json_api_user_identifier_out_attributes import JsonApiUserIdentifierOutAttributes
     from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
+    from gooddata_api_client.model.json_api_visualization_object_out_attributes import JsonApiVisualizationObjectOutAttributes
+    from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAgentInRelationships'] = JsonApiAgentInRelationships
-    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiAutomationResultOutWithLinks'] = JsonApiAutomationResultOutWithLinks
+    globals()['JsonApiComputedAttributeOutRelationships'] = JsonApiComputedAttributeOutRelationships
+    globals()['JsonApiComputedAttributeOutWithLinks'] = JsonApiComputedAttributeOutWithLinks
     globals()['JsonApiExportDefinitionOutWithLinks'] = JsonApiExportDefinitionOutWithLinks
+    globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
+    globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
+    globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['JsonApiNotificationChannelOutWithLinks'] = JsonApiNotificationChannelOutWithLinks
-    globals()['JsonApiUserIdentifierOutAttributes'] = JsonApiUserIdentifierOutAttributes
     globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
     globals()['JsonApiUserOutWithLinks'] = JsonApiUserOutWithLinks
+    globals()['JsonApiVisualizationObjectOutAttributes'] = JsonApiVisualizationObjectOutAttributes
+    globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -79,7 +91,7 @@ class JsonApiAutomationOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'USERIDENTIFIER': "userIdentifier",
+            'VISUALIZATIONOBJECT': "visualizationObject",
         },
     }
 
@@ -114,10 +126,10 @@ class JsonApiAutomationOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiAgentInRelationships,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'relationships': (JsonApiComputedAttributeOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiUserIdentifierOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiVisualizationObjectOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -175,12 +187,12 @@ class JsonApiAutomationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiUserIdentifierOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "userIdentifier"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "visualizationObject"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -284,12 +296,12 @@ class JsonApiAutomationOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiAgentInRelationships): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiUserIdentifierOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiVisualizationObjectOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "userIdentifier"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "visualizationObject"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -362,10 +374,16 @@ class JsonApiAutomationOutIncludes(ModelComposed):
           ],
           'oneOf': [
               JsonApiAnalyticalDashboardOutWithLinks,
+              JsonApiAttributeOutWithLinks,
               JsonApiAutomationResultOutWithLinks,
+              JsonApiComputedAttributeOutWithLinks,
               JsonApiExportDefinitionOutWithLinks,
+              JsonApiFactOutWithLinks,
+              JsonApiLabelOutWithLinks,
+              JsonApiMetricOutWithLinks,
               JsonApiNotificationChannelOutWithLinks,
               JsonApiUserIdentifierOutWithLinks,
               JsonApiUserOutWithLinks,
+              JsonApiVisualizationObjectOutWithLinks,
           ],
         }

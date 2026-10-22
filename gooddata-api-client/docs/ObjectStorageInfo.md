@@ -5,7 +5,7 @@ Descriptor of a registered ObjectStorage. Provider credentials are stripped — 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **str** | Human-readable name. Use this as &#x60;sourceStorageName&#x60; in CreatePipeTable, or pass &#x60;storageId&#x60; to ProvisionDatabase.storageIds. | 
+**name** | **str** | Human-readable name. Pass &#x60;storageId&#x60; to ProvisionDatabase.storageIds. | 
 **storage_config** | **{str: (str,)}** | Provider-specific descriptors (e.g. bucket, region, endpoint, container). Credential references (any keys ending in &#x60;_env&#x60;) are stripped server-side. | 
 **storage_id** | **str** | Stable identifier of the storage configuration (UUID). | 
 **storage_type** | **str** | Provider type. | 

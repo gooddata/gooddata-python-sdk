@@ -48,7 +48,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,page,all",
+        "metaInclude=permissions,origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -139,7 +139,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=permissions,origin,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -225,6 +225,21 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_attribute_patch_document = JsonApiAttributePatchDocument(
         data=JsonApiAttributePatch(
             attributes=JsonApiAttributePatchAttributes(
+                conditional_formatting=JsonApiAttributeOutAttributesConditionalFormatting(
+                    conditions=[
+                        ConditionalFormattingCondition(
+                            format=ConditionalFormattingFormat(
+                                background_color="#3DB36B",
+                                color="#E54D40",
+                                scope="cell",
+                            ),
+                            id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                            operator="ALL",
+                            value=ConditionalFormattingValue(),
+                        ),
+                    ],
+                    enabled=True,
+                ),
                 description="description_example",
                 tags=[
                     "tags_example",

@@ -61,7 +61,7 @@ class ValidateByItem(ModelNormal):
     validations = {
         ('type',): {
             'regex': {
-                'pattern': r'^(label)|(attribute)|(fact)|(metric)$',  # noqa: E501
+                'pattern': r'^(label|attribute|computedAttribute|fact|metric)$',  # noqa: E501
             },
         },
     }
@@ -113,7 +113,7 @@ class ValidateByItem(ModelNormal):
 
         Args:
             id (str): Specifies entity used for valid elements computation.
-            type (str): Specifies entity type which could be label, attribute, fact, or metric.
+            type (str): Specifies entity type which could be label, attribute, computedAttribute, fact, or metric.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -204,7 +204,7 @@ class ValidateByItem(ModelNormal):
 
         Args:
             id (str): Specifies entity used for valid elements computation.
-            type (str): Specifies entity type which could be label, attribute, fact, or metric.
+            type (str): Specifies entity type which could be label, attribute, computedAttribute, fact, or metric.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

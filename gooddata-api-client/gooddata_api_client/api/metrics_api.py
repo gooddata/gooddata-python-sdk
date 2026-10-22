@@ -84,6 +84,7 @@ class MetricsApi(object):
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
                         "PARAMETERS": "parameters",
@@ -94,6 +95,7 @@ class MetricsApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ALL": "all",
                         "ALL": "ALL"
@@ -244,6 +246,7 @@ class MetricsApi(object):
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
                         "PARAMETERS": "parameters",
@@ -254,6 +257,7 @@ class MetricsApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "PAGE": "page",
                         "ALL": "all",
@@ -362,6 +366,7 @@ class MetricsApi(object):
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
                         "PARAMETERS": "parameters",
@@ -372,6 +377,7 @@ class MetricsApi(object):
                     },
                     ('meta_include',): {
 
+                        "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ALL": "all",
                         "ALL": "ALL"
@@ -461,6 +467,7 @@ class MetricsApi(object):
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
                         "PARAMETERS": "parameters",
@@ -625,6 +632,7 @@ class MetricsApi(object):
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
+                        "COMPUTEDATTRIBUTES": "computedAttributes",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
                         "PARAMETERS": "parameters",

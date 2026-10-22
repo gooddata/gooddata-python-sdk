@@ -29,7 +29,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/summary/` | HTTP client for the dedicated dashboard-summary endpoint — a single-shot chat backend, not reporting |
 | `core/dataset/` | dataset format, loading, and `from_insights.py` — dataset generation from a workspace's real insights |
 | `core/evaluators/` | single-shot evaluators and their registry |
-| `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
+| `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `item_scope` (an item's experiment scope sent to gen-ai as baggage, and which conversations joined), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
 | `core/reporting/` | console and JSON output rendering |
 | `core/scoring.py`, `core/runner.py` | scoring and orchestration |
 | `core/models.py` | `DatasetItem`, `ChatResult`, `ItemReport` and friends |
@@ -157,6 +157,7 @@ Run this before guessing a `--model` string.
 | `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` | `--langfuse`, `--langfuse-dataset` |
 | `GOODDATA_EVAL_CHAT_*` | SSE retry, backoff and timeout knobs |
 | `GOODDATA_EVAL_TRACE_LABELS` | `key=value,...` labels stamped on every observation of a chat conversation via W3C baggage; `model_version` also sets the observation `version`, so set it only for a one-model run: every `--model` in one process gets the same labels. Keys must match `[A-Za-z0-9_-]+`; others are skipped with a warning. Dashboard-summary runs are not labelled |
+| `GOODDATA_EVAL_JOIN_GENAI_TRACE` | on unless set to `0`, `false`, `no`, `off` or empty. An agentic item's chat turns ask gen-ai to open them under gd-eval's experiment root, so each item is one Langfuse trace with its scores written once. A gen-ai that drops caller baggage keeps today's separate traces; see the gotcha below |
 | `GD_EVAL_TIMERS` | same as `--timers` |
 
 A gitignored `.env` at the repo root is the normal place for these; load it with
@@ -167,8 +168,11 @@ A gitignored `.env` at the repo root is the normal place for these; load it with
 **Adding an evaluator is a registry change, not a naming convention.** Single-shot kinds go
 into `_EAGER_EVALUATORS`, or `_LAZY_EVALUATOR_MODULES` plus `_LAZY_EVALUATOR_CLASSES`, in
 `core/evaluators/__init__.py`. Agentic kinds need the string added to `AGENTIC_TEST_KINDS`
-and a new branch in `_dispatch_agentic`. Test file naming follows the capability, but
-naming a test file correctly registers nothing.
+and a new branch in `_dispatch_agentic`, and must also be classified in `core/interaction.py`:
+add it to `SINGLE_TURN_AGENTIC_KINDS` (one chat message per run) or `MULTI_TURN_KINDS` (a
+simulated user or several turns). That decides which latency section its items land in;
+`test_every_agentic_kind_is_classified_on_purpose` fails until it is done. Test file naming
+follows the capability, but naming a test file correctly registers nothing.
 
 **Parallel-safety is a reviewed allowlist, and getting it wrong corrupts results.**
 `WORKSPACE_MUTATING_TEST_KINDS` is computed as `AGENTIC_TEST_KINDS - PARALLEL_SAFE_TEST_KINDS`,
@@ -189,6 +193,13 @@ ingestion has no pass/fail signal and inflates or misattributes per-item latency
 `BackgroundTraceLinker` defers it and is drained before the report renders
 (`run_trace_link_inline` is the synchronous alternative). Do not "fix" a slow item by
 making trace scoring synchronous again.
+
+**Turn `GOODDATA_EVAL_JOIN_GENAI_TRACE` off against a gen-ai that accepts caller baggage
+but cannot join.** The trace and root ids are derived from the conversation id, and a conversation
+counts as joined only when gen-ai reports that trace id on `response_started`. A gen-ai that
+reads the baggage without that support tags its own traces with experiment ids under a root
+gd-eval never exports. The same orphan is left when an item raises before its deferred
+scoring runs: its turns sit in environment `sdk-experiment` without a root or scores.
 
 **A generated item's `expected_output` is copied, never invented — keep it that way.**
 `core/dataset/from_insights.py` converts each insight with the platform's own

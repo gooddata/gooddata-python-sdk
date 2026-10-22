@@ -6,20 +6,15 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**add_ai_lake_database_data_source**](AILakeApi.md#add_ai_lake_database_data_source) | **POST** /api/v1/ailake/database/instances/{instanceId}/dataSources | (BETA) Add a data source to an AILake Database instance
 [**analyze_statistics**](AILakeApi.md#analyze_statistics) | **POST** /api/v1/ailake/database/instances/{instanceId}/analyzeStatistics | (BETA) Run ANALYZE TABLE for tables in a database instance
-[**create_ai_lake_pipe_table**](AILakeApi.md#create_ai_lake_pipe_table) | **POST** /api/v1/ailake/database/instances/{instanceId}/pipeTables | (BETA) Create a new AI Lake pipe table
-[**delete_ai_lake_pipe_table**](AILakeApi.md#delete_ai_lake_pipe_table) | **DELETE** /api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName} | (BETA) Delete an AI Lake pipe table
 [**deprovision_ai_lake_database_instance**](AILakeApi.md#deprovision_ai_lake_database_instance) | **DELETE** /api/v1/ailake/database/instances/{instanceId} | (BETA) Delete an existing AILake Database instance
 [**get_ai_lake_database_instance**](AILakeApi.md#get_ai_lake_database_instance) | **GET** /api/v1/ailake/database/instances/{instanceId} | (BETA) Get the specified AILake Database instance
 [**get_ai_lake_operation**](AILakeApi.md#get_ai_lake_operation) | **GET** /api/v1/ailake/operations/{operationId} | (BETA) Get Long Running Operation details
-[**get_ai_lake_pipe_table**](AILakeApi.md#get_ai_lake_pipe_table) | **GET** /api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName} | (BETA) Get an AI Lake pipe table
 [**get_ai_lake_service_status**](AILakeApi.md#get_ai_lake_service_status) | **GET** /api/v1/ailake/services/{serviceId}/status | (BETA) Get AI Lake service status
 [**list_ai_lake_database_data_sources**](AILakeApi.md#list_ai_lake_database_data_sources) | **GET** /api/v1/ailake/database/instances/{instanceId}/dataSources | (BETA) List data sources of an AILake Database instance
 [**list_ai_lake_database_instances**](AILakeApi.md#list_ai_lake_database_instances) | **GET** /api/v1/ailake/database/instances | (BETA) List AI Lake Database instances
 [**list_ai_lake_object_storages**](AILakeApi.md#list_ai_lake_object_storages) | **GET** /api/v1/ailake/objectStorages | (BETA) List registered AI Lake ObjectStorages
-[**list_ai_lake_pipe_tables**](AILakeApi.md#list_ai_lake_pipe_tables) | **GET** /api/v1/ailake/database/instances/{instanceId}/pipeTables | (BETA) List AI Lake pipe tables
 [**list_ai_lake_services**](AILakeApi.md#list_ai_lake_services) | **GET** /api/v1/ailake/services | (BETA) List AI Lake services
 [**provision_ai_lake_database_instance**](AILakeApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instances | (BETA) Create a new AILake Database instance
-[**refresh_ai_lake_pipe_table_partition**](AILakeApi.md#refresh_ai_lake_pipe_table_partition) | **POST** /api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh | (BETA) Refresh a pipe table partition
 [**remove_ai_lake_database_data_source**](AILakeApi.md#remove_ai_lake_database_data_source) | **DELETE** /api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId} | (BETA) Remove a data source from an AILake Database instance
 [**run_ai_lake_service_command**](AILakeApi.md#run_ai_lake_service_command) | **POST** /api/v1/ailake/services/{serviceId}/commands/{commandName}/run | (BETA) Run an AI Lake services command
 [**update_ai_lake_database_data_source**](AILakeApi.md#update_ai_lake_database_data_source) | **PATCH** /api/v1/ailake/database/instances/{instanceId}/dataSource | (BETA) Update the data source of an AILake Database instance
@@ -103,7 +98,7 @@ No authorization required
 
 (BETA) Run ANALYZE TABLE for tables in a database instance
 
-(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.
+(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.
 
 ### Example
 
@@ -176,186 +171,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**202** | Statistics analysis scheduled. |  * operation-id -  <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **create_ai_lake_pipe_table**
-> create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
-
-(BETA) Create a new AI Lake pipe table
-
-(BETA) Creates a pipe-backed OLAP table in the given AI Lake database instance. Infers schema from parquet files. Returns an operation-id header the client can use to poll for progress.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import ai_lake_api
-from gooddata_api_client.model.create_pipe_table_request import CreatePipeTableRequest
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    create_pipe_table_request = CreatePipeTableRequest(
-        aggregation_overrides={
-            "key": "key_example",
-        },
-        column_expressions={
-            "key": ColumnExpression(
-                column="column_example",
-                function="HLL_HASH",
-            ),
-        },
-        column_overrides={
-            "key": "key_example",
-        },
-        distribution_config=CreatePipeTableRequestDistributionConfig(None),
-        key_config=CreatePipeTableRequestKeyConfig(None),
-        max_varchar_length=1,
-        partition_config=CreatePipeTableRequestPartitionConfig(None),
-        path_prefix="path_prefix_example",
-        polling_interval_seconds=1,
-        source_storage_name="source_storage_name_example",
-        table_name="table_name_example",
-        table_properties={
-            "key": "key_example",
-        },
-    ) # CreatePipeTableRequest | 
-    operation_id = "operation-id_example" # str |  (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Create a new AI Lake pipe table
-        api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->create_ai_lake_pipe_table: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # (BETA) Create a new AI Lake pipe table
-        api_instance.create_ai_lake_pipe_table(instance_id, create_pipe_table_request, operation_id=operation_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->create_ai_lake_pipe_table: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **create_pipe_table_request** | [**CreatePipeTableRequest**](CreatePipeTableRequest.md)|  |
- **operation_id** | **str**|  | [optional]
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**202** | Accepted |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **delete_ai_lake_pipe_table**
-> delete_ai_lake_pipe_table(instance_id, table_name)
-
-(BETA) Delete an AI Lake pipe table
-
-(BETA) Drops the pipe and OLAP table and removes the record. Returns an operation-id header the client can use to poll for progress.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import ai_lake_api
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    table_name = "tableName_example" # str | Pipe table name.
-    operation_id = "operation-id_example" # str |  (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Delete an AI Lake pipe table
-        api_instance.delete_ai_lake_pipe_table(instance_id, table_name)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->delete_ai_lake_pipe_table: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # (BETA) Delete an AI Lake pipe table
-        api_instance.delete_ai_lake_pipe_table(instance_id, table_name, operation_id=operation_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->delete_ai_lake_pipe_table: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **table_name** | **str**| Pipe table name. |
- **operation_id** | **str**|  | [optional]
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**202** | Accepted |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
+**202** | Statistics analysis scheduled. |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -364,7 +180,7 @@ No authorization required
 
 (BETA) Delete an existing AILake Database instance
 
-(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.
+(BETA) Deletes an existing database in the organization's AI Lake. A database that still contains tables is not deleted, unless cascade is set. With cascade, every table in the database is dropped first, which cannot be undone. Returns an operation-id in the operation-id header the client can use to poll for the progress.
 
 ### Example
 
@@ -386,6 +202,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ai_lake_api.AILakeApi(api_client)
     instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    cascade = True # bool | Drop every table in the database before the database itself. (optional)
     operation_id = "operation-id_example" # str |  (optional)
 
     # example passing only required values which don't have defaults set
@@ -399,7 +216,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # (BETA) Delete an existing AILake Database instance
-        api_instance.deprovision_ai_lake_database_instance(instance_id, operation_id=operation_id)
+        api_instance.deprovision_ai_lake_database_instance(instance_id, cascade=cascade, operation_id=operation_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AILakeApi->deprovision_ai_lake_database_instance: %s\n" % e)
 ```
@@ -410,6 +227,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **cascade** | **bool**| Drop every table in the database before the database itself. | [optional]
  **operation_id** | **str**|  | [optional]
 
 ### Return type
@@ -565,75 +383,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | AI Lake Long Running Operation details successfully retrieved |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_ai_lake_pipe_table**
-> JsonApiDocumentPipeTable get_ai_lake_pipe_table(instance_id, table_name)
-
-(BETA) Get an AI Lake pipe table
-
-(BETA) Returns full details of the specified pipe table.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import ai_lake_api
-from gooddata_api_client.model.json_api_document_pipe_table import JsonApiDocumentPipeTable
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    table_name = "tableName_example" # str | Pipe table name.
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Get an AI Lake pipe table
-        api_response = api_instance.get_ai_lake_pipe_table(instance_id, table_name)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->get_ai_lake_pipe_table: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **table_name** | **str**| Pipe table name. |
-
-### Return type
-
-[**JsonApiDocumentPipeTable**](JsonApiDocumentPipeTable.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | AI Lake pipe table successfully retrieved |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -867,7 +616,7 @@ No authorization required
 
 (BETA) List registered AI Lake ObjectStorages
 
-(BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.
+(BETA) Lists ObjectStorages registered for the organization. Pass the returned `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.
 
 ### Example
 
@@ -933,90 +682,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | AI Lake ObjectStorages successfully retrieved |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list_ai_lake_pipe_tables**
-> JsonApiListDocumentPipeTableSummary list_ai_lake_pipe_tables(instance_id)
-
-(BETA) List AI Lake pipe tables
-
-(BETA) Lists active pipe tables in the given AI Lake database instance.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import ai_lake_api
-from gooddata_api_client.model.json_api_list_document_pipe_table_summary import JsonApiListDocumentPipeTableSummary
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    page = 0 # int | Zero-based page number. (optional) if omitted the server will use the default value of 0
-    size = 50 # int | Number of items per page. (optional) if omitted the server will use the default value of 50
-    meta_include = [
-        "metaInclude_example",
-    ] # [str] |  (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) List AI Lake pipe tables
-        api_response = api_instance.list_ai_lake_pipe_tables(instance_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->list_ai_lake_pipe_tables: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # (BETA) List AI Lake pipe tables
-        api_response = api_instance.list_ai_lake_pipe_tables(instance_id, page=page, size=size, meta_include=meta_include)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->list_ai_lake_pipe_tables: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **page** | **int**| Zero-based page number. | [optional] if omitted the server will use the default value of 0
- **size** | **int**| Number of items per page. | [optional] if omitted the server will use the default value of 50
- **meta_include** | **[str]**|  | [optional]
-
-### Return type
-
-[**JsonApiListDocumentPipeTableSummary**](JsonApiListDocumentPipeTableSummary.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | AI Lake pipe tables successfully retrieved |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1153,90 +818,6 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **provision_database_instance_request** | [**ProvisionDatabaseInstanceRequest**](ProvisionDatabaseInstanceRequest.md)|  |
- **operation_id** | **str**|  | [optional]
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**202** | Accepted |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **refresh_ai_lake_pipe_table_partition**
-> refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
-
-(BETA) Refresh a pipe table partition
-
-(BETA) Deletes all rows for the specified Hive partition and re-loads them from S3. Use after overwriting a partition file in object storage with corrected data. Returns an operation-id header the client can use to poll for progress.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import ai_lake_api
-from gooddata_api_client.model.refresh_partition_request import RefreshPartitionRequest
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = ai_lake_api.AILakeApi(api_client)
-    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
-    table_name = "tableName_example" # str | Pipe table name.
-    refresh_partition_request = RefreshPartitionRequest(
-        partition_spec={
-            "key": "key_example",
-        },
-    ) # RefreshPartitionRequest | 
-    operation_id = "operation-id_example" # str |  (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # (BETA) Refresh a pipe table partition
-        api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->refresh_ai_lake_pipe_table_partition: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # (BETA) Refresh a pipe table partition
-        api_instance.refresh_ai_lake_pipe_table_partition(instance_id, table_name, refresh_partition_request, operation_id=operation_id)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling AILakeApi->refresh_ai_lake_pipe_table_partition: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
- **table_name** | **str**| Pipe table name. |
- **refresh_partition_request** | [**RefreshPartitionRequest**](RefreshPartitionRequest.md)|  |
  **operation_id** | **str**|  | [optional]
 
 ### Return type

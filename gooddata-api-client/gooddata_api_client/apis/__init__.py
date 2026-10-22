@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from gooddata_api_client.api.ai_api import AIApi
+#   from gooddata_api_client.api.ai_lake_api import AILakeApi
 #
 # or import this package, but before doing it, use:
 #
@@ -14,14 +14,11 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
-from gooddata_api_client.api.ai_api import AIApi
-from gooddata_api_client.api.ai_agents_api import AIAgentsApi
 from gooddata_api_client.api.ai_lake_api import AILakeApi
 from gooddata_api_client.api.ai_lake_databases_api import AILakeDatabasesApi
-from gooddata_api_client.api.ai_lake_pipe_tables_api import AILakePipeTablesApi
 from gooddata_api_client.api.ai_lake_services_operations_api import AILakeServicesOperationsApi
-from gooddata_api_client.api.ai_observability_api import AIObservabilityApi
 from gooddata_api_client.api.api_tokens_api import APITokensApi
+from gooddata_api_client.api.agents_api import AgentsApi
 from gooddata_api_client.api.analytics_model_api import AnalyticsModelApi
 from gooddata_api_client.api.appearance_api import AppearanceApi
 from gooddata_api_client.api.attribute_hierarchies_api import AttributeHierarchiesApi
@@ -32,6 +29,7 @@ from gooddata_api_client.api.csp_directives_api import CSPDirectivesApi
 from gooddata_api_client.api.cache_usage_api import CacheUsageApi
 from gooddata_api_client.api.certification_api import CertificationApi
 from gooddata_api_client.api.computation_api import ComputationApi
+from gooddata_api_client.api.computed_attributes_api import ComputedAttributesApi
 from gooddata_api_client.api.cookie_security_configuration_api import CookieSecurityConfigurationApi
 from gooddata_api_client.api.dashboards_api import DashboardsApi
 from gooddata_api_client.api.data_filters_api import DataFiltersApi
@@ -53,6 +51,7 @@ from gooddata_api_client.api.facts_api import FactsApi
 from gooddata_api_client.api.filter_context_api import FilterContextApi
 from gooddata_api_client.api.filter_views_api import FilterViewsApi
 from gooddata_api_client.api.fiscal_calendars_api import FiscalCalendarsApi
+from gooddata_api_client.api.flow_api import FlowApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
 from gooddata_api_client.api.geographic_data_api import GeographicDataApi
 from gooddata_api_client.api.hierarchy_api import HierarchyApi
@@ -60,22 +59,30 @@ from gooddata_api_client.api.identity_providers_api import IdentityProvidersApi
 from gooddata_api_client.api.image_export_api import ImageExportApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
 from gooddata_api_client.api.jwks_api import JWKSApi
+from gooddata_api_client.api.knowledge_recommendations_api import KnowledgeRecommendationsApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
 from gooddata_api_client.api.llm_endpoints_api import LLMEndpointsApi
 from gooddata_api_client.api.llm_providers_api import LLMProvidersApi
 from gooddata_api_client.api.labels_api import LabelsApi
+from gooddata_api_client.api.localization_api import LocalizationApi
 from gooddata_api_client.api.manage_permissions_api import ManagePermissionsApi
+from gooddata_api_client.api.memory_items_api import MemoryItemsApi
+from gooddata_api_client.api.metadata_synchronization_api import MetadataSynchronizationApi
 from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.notification_channels_api import NotificationChannelsApi
 from gooddata_api_client.api.ogcapi_features_api import OGCAPIFeaturesApi
+from gooddata_api_client.api.observability_api import ObservabilityApi
 from gooddata_api_client.api.options_api import OptionsApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi
 from gooddata_api_client.api.parameters_api import ParametersApi
 from gooddata_api_client.api.permissions_api import PermissionsApi
 from gooddata_api_client.api.plugins_api import PluginsApi
+from gooddata_api_client.api.publisher_documents_api import PublisherDocumentsApi
 from gooddata_api_client.api.raw_export_api import RawExportApi
+from gooddata_api_client.api.report_export_api import ReportExportApi
 from gooddata_api_client.api.reporting_settings_api import ReportingSettingsApi
+from gooddata_api_client.api.reports_api import ReportsApi
 from gooddata_api_client.api.scanning_api import ScanningApi
 from gooddata_api_client.api.slides_export_api import SlidesExportApi
 from gooddata_api_client.api.smart_functions_api import SmartFunctionsApi
@@ -109,6 +116,7 @@ from gooddata_api_client.api.automation_controller_api import AutomationControll
 from gooddata_api_client.api.automation_organization_view_controller_api import AutomationOrganizationViewControllerApi
 from gooddata_api_client.api.automation_result_controller_api import AutomationResultControllerApi
 from gooddata_api_client.api.color_palette_controller_api import ColorPaletteControllerApi
+from gooddata_api_client.api.computed_attribute_controller_api import ComputedAttributeControllerApi
 from gooddata_api_client.api.cookie_security_configuration_controller_api import CookieSecurityConfigurationControllerApi
 from gooddata_api_client.api.csp_directive_controller_api import CspDirectiveControllerApi
 from gooddata_api_client.api.custom_application_setting_controller_api import CustomApplicationSettingControllerApi
@@ -118,6 +126,8 @@ from gooddata_api_client.api.dashboard_plugin_controller_api import DashboardPlu
 from gooddata_api_client.api.data_source_controller_api import DataSourceControllerApi
 from gooddata_api_client.api.data_source_identifier_controller_api import DataSourceIdentifierControllerApi
 from gooddata_api_client.api.dataset_controller_api import DatasetControllerApi
+from gooddata_api_client.api.document_controller_api import DocumentControllerApi
+from gooddata_api_client.api.document_template_controller_api import DocumentTemplateControllerApi
 from gooddata_api_client.api.entities_api import EntitiesApi
 from gooddata_api_client.api.entitlement_entity_controller_api import EntitlementEntityControllerApi
 from gooddata_api_client.api.export_definition_controller_api import ExportDefinitionControllerApi
@@ -140,7 +150,11 @@ from gooddata_api_client.api.notification_channel_identifier_controller_api impo
 from gooddata_api_client.api.org_memory_item_controller_api import OrgMemoryItemControllerApi
 from gooddata_api_client.api.organization_entity_controller_api import OrganizationEntityControllerApi
 from gooddata_api_client.api.organization_setting_controller_api import OrganizationSettingControllerApi
+from gooddata_api_client.api.page_template_controller_api import PageTemplateControllerApi
 from gooddata_api_client.api.parameter_controller_api import ParameterControllerApi
+from gooddata_api_client.api.report_controller_api import ReportControllerApi
+from gooddata_api_client.api.report_page_layout_controller_api import ReportPageLayoutControllerApi
+from gooddata_api_client.api.report_template_controller_api import ReportTemplateControllerApi
 from gooddata_api_client.api.theme_controller_api import ThemeControllerApi
 from gooddata_api_client.api.user_controller_api import UserControllerApi
 from gooddata_api_client.api.user_data_filter_controller_api import UserDataFilterControllerApi

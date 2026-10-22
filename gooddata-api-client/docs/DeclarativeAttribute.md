@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **id** | **str** | Attribute ID. | 
 **labels** | [**[DeclarativeLabel]**](DeclarativeLabel.md) | An array of attribute labels. | 
 **title** | **str** | Attribute title. | 
+**conditional_formatting** | [**ObjectConditionalFormatting**](ObjectConditionalFormatting.md) |  | [optional] 
 **default_view** | [**LabelIdentifier**](LabelIdentifier.md) |  | [optional] 
 **description** | **str** | Attribute description. | [optional] 
 **is_hidden** | **bool** | If true, this attribute is hidden from AI search results. | [optional] 

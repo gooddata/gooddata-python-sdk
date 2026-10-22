@@ -103,7 +103,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -127,7 +127,6 @@
                 "description": "Start of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the start.",
                 "example": "2012-05",
                 "nullable": true,
-                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
                 "type": "string"
               },
               "granularity": {
@@ -184,7 +183,6 @@
                 "description": "End of the range (including), in the format matching 'granularity'. If omitted, the range is unbounded at the end.",
                 "example": "2012-08",
                 "nullable": true,
-                "pattern": "^((?:\\d{4})|(?:\\d{4}-[1-4])|(?:\\d{4}-(0[1-9]|1[0-2]))|(?:\\d{4}-(0[1-9]|[1-4]\\d|5[0-3]))|(?:\\d{4}-\\d{2}-\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,3}|[1-7]\\d{4}|8[0-5]\\d{3}|86[0-3]\\d{2})|(?:[0-9]|[1-5]\\d)|(?:[0-9]|[1-9]\\d{1,2}|1[0-3]\\d{2}|14[0-3]\\d)|(?:[0-9]|1\\d|2[0-3])|(?:[0-6])|(?:[1-9]|[12]\\d|3[01])|(?:[1-9]|[1-8]\\d|9[0-2])|(?:[1-9]|[1-9]\\d|[12]\\d\\d|3[0-5]\\d|36[0-6])|(?:[1-9]|[1-4]\\d|5[0-3])|(?:[1-9]|1[0-2])|(?:[1-4]))$",
                 "type": "string"
               }
             },
@@ -214,29 +212,6 @@
           {
             "$ref": "#/components/schemas/RankingFilter"
           }
-        ],
-        "type": "object"
-      },
-      "ActiveObjectIdentification": {
-        "description": "Object, with which the user is actively working.",
-        "properties": {
-          "id": {
-            "description": "Object ID.",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type, e.g. dashboard.",
-            "type": "string"
-          },
-          "workspaceId": {
-            "description": "Workspace ID.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "workspaceId"
         ],
         "type": "object"
       },
@@ -315,6 +290,34 @@
         ],
         "type": "object"
       },
+      "AfmFlowInput": {
+        "allOf": [
+          {
+            "properties": {
+              "execution": {
+                "$ref": "#/components/schemas/AFM"
+              },
+              "settings": {
+                "$ref": "#/components/schemas/ExecutionSettings"
+              },
+              "type": {
+                "description": "Type of the input.",
+                "enum": [
+                  "afm"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Computes an AFM as /afm/execute does, and reads its rows as a table. It has a column for each attribute and each measure of the AFM, named by its local identifier, the attributes first. Each attribute must use a label of its own.",
+        "required": [
+          "execution",
+          "type"
+        ],
+        "type": "object"
+      },
       "AfmIdentifier": {
         "description": "Reference to the attribute label to which the filter should be applied.",
         "oneOf": [
@@ -354,6 +357,7 @@
                 "enum": [
                   "analyticalDashboard",
                   "attribute",
+                  "computedAttribute",
                   "dashboardPlugin",
                   "dataset",
                   "fact",
@@ -423,7 +427,8 @@
                   "attribute",
                   "label",
                   "fact",
-                  "metric"
+                  "metric",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -480,7 +485,8 @@
               },
               "type": {
                 "enum": [
-                  "label"
+                  "label",
+                  "computedAttribute"
                 ],
                 "type": "string"
               }
@@ -574,7 +580,8 @@
               "enum": [
                 "facts",
                 "attributes",
-                "measures"
+                "measures",
+                "computedAttributes"
               ],
               "example": "facts",
               "type": "string"
@@ -601,54 +608,6 @@
         },
         "required": [
           "items"
-        ],
-        "type": "object"
-      },
-      "AggregateKeyConfig": {
-        "description": "Aggregate key model — pre-aggregates rows sharing the same key columns.",
-        "properties": {
-          "columns": {
-            "description": "Key columns. Defaults to first inferred column.",
-            "items": {
-              "description": "Key columns. Defaults to first inferred column.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "aggregate"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
-      "AiUsageMetadataItem": {
-        "description": "AI usage metadata returned after the interaction (e.g. current query count vs. entitlement limit).",
-        "properties": {
-          "counterType": {
-            "description": "Type of usage counter, e.g. AI_QUERIES.",
-            "type": "string"
-          },
-          "currentValue": {
-            "description": "Current usage value after this request.",
-            "format": "int64",
-            "type": "integer"
-          },
-          "limit": {
-            "description": "Entitlement limit. 0 means unlimited.",
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "counterType",
-          "currentValue",
-          "limit"
         ],
         "type": "object"
       },
@@ -736,49 +695,6 @@
         ],
         "type": "object"
       },
-      "AllowedRelationshipType": {
-        "description": "Allowed relationship type combination.",
-        "properties": {
-          "allowOrphans": {
-            "default": true,
-            "description": "If true, allows target objects that are not part of any relationship (orphans) to be included in results. If false, orphan target objects will be excluded even if they directly match the search query. Default is true (orphans are allowed).",
-            "type": "boolean"
-          },
-          "sourceType": {
-            "description": "Source object type (e.g., 'dashboard', 'visualization', 'metric').",
-            "enum": [
-              "attribute",
-              "metric",
-              "fact",
-              "label",
-              "date",
-              "dataset",
-              "visualization",
-              "dashboard"
-            ],
-            "type": "string"
-          },
-          "targetType": {
-            "description": "Target object type (e.g., 'visualization', 'metric', 'attribute').",
-            "enum": [
-              "attribute",
-              "metric",
-              "fact",
-              "label",
-              "date",
-              "dataset",
-              "visualization",
-              "dashboard"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "sourceType",
-          "targetType"
-        ],
-        "type": "object"
-      },
       "AnalyzeStatisticsRequest": {
         "description": "Request to run ANALYZE TABLE for tables in a database instance",
         "properties": {
@@ -791,24 +707,6 @@
             "type": "array"
           }
         },
-        "type": "object"
-      },
-      "AnomalyDetectionConfig": {
-        "description": "Anomaly detection configuration.",
-        "properties": {
-          "sensitivity": {
-            "description": "Outlier sensitivity level.",
-            "enum": [
-              "LOW",
-              "MEDIUM",
-              "HIGH"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "sensitivity"
-        ],
         "type": "object"
       },
       "AnomalyDetectionRequest": {
@@ -1034,6 +932,20 @@
                 "description": "Attribute name.",
                 "type": "string"
               },
+              "dataType": {
+                "description": "Data type of the attribute values, only filled for computed attributes.",
+                "enum": [
+                  "INT",
+                  "STRING",
+                  "DATE",
+                  "NUMERIC",
+                  "TIMESTAMP",
+                  "TIMESTAMP_TZ",
+                  "BOOLEAN",
+                  "HLL"
+                ],
+                "type": "string"
+              },
               "format": {
                 "$ref": "#/components/schemas/AttributeFormat"
               },
@@ -1098,6 +1010,10 @@
                 "pattern": "^[.a-zA-Z0-9_-]+$",
                 "type": "string"
               },
+              "numberFormat": {
+                "description": "Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.",
+                "type": "string"
+              },
               "primaryLabel": {
                 "$ref": "#/components/schemas/RestApiIdentifier"
               },
@@ -1153,58 +1069,6 @@
         "required": [
           "label",
           "localIdentifier"
-        ],
-        "type": "object"
-      },
-      "AttributeNegativeFilter": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Filter"
-          },
-          {
-            "properties": {
-              "exclude": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "using": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "exclude",
-          "using"
-        ],
-        "type": "object"
-      },
-      "AttributePositiveFilter": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Filter"
-          },
-          {
-            "properties": {
-              "include": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "using": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "include",
-          "using"
         ],
         "type": "object"
       },
@@ -1438,75 +1302,6 @@
         ],
         "type": "object"
       },
-      "CertificationInfo": {
-        "description": "Certification state of the object. Who certified and when are never exposed here.",
-        "properties": {
-          "certificationMessage": {
-            "description": "Optional message describing the certification.",
-            "type": "string"
-          },
-          "status": {
-            "description": "Certification status, e.g. CERTIFIED.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "status"
-        ],
-        "type": "object"
-      },
-      "ChangeAnalysisParams": {
-        "description": "Change analysis specification.",
-        "properties": {
-          "analyzedPeriod": {
-            "description": "The analyzed time period",
-            "type": "string"
-          },
-          "attributes": {
-            "description": "Attributes to analyze for significant changes",
-            "items": {
-              "$ref": "#/components/schemas/AttributeItem"
-            },
-            "type": "array"
-          },
-          "dateAttribute": {
-            "$ref": "#/components/schemas/AttributeItem"
-          },
-          "filters": {
-            "description": "Optional filters to apply",
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
-            },
-            "type": "array"
-          },
-          "measure": {
-            "$ref": "#/components/schemas/MeasureItem"
-          },
-          "measureTitle": {
-            "description": "The title of the measure being analyzed",
-            "type": "string"
-          },
-          "referencePeriod": {
-            "description": "The reference time period",
-            "type": "string"
-          },
-          "useSmartAttributeSelection": {
-            "description": "Whether to use smart attribute selection",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "analyzedPeriod",
-          "attributes",
-          "dateAttribute",
-          "filters",
-          "measure",
-          "measureTitle",
-          "referencePeriod",
-          "useSmartAttributeSelection"
-        ],
-        "type": "object"
-      },
       "ChangeAnalysisRequest": {
         "description": "Request for change analysis computation",
         "properties": {
@@ -1603,313 +1398,6 @@
         ],
         "type": "object"
       },
-      "ChatHistoryInteraction": {
-        "description": "List of chat history interactions.",
-        "properties": {
-          "changeAnalysisParams": {
-            "$ref": "#/components/schemas/ChangeAnalysisParams"
-          },
-          "chatHistoryInteractionId": {
-            "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "type": "string"
-          },
-          "createdVisualizations": {
-            "$ref": "#/components/schemas/CreatedVisualizations"
-          },
-          "errorResponse": {
-            "description": "Error response in anything fails.",
-            "type": "string"
-          },
-          "foundObjects": {
-            "$ref": "#/components/schemas/FoundObjects"
-          },
-          "interactionFinished": {
-            "description": "Has the interaction already finished? Can be used for polling when interaction is in progress.",
-            "type": "boolean"
-          },
-          "question": {
-            "description": "User question",
-            "maxLength": 2000,
-            "type": "string"
-          },
-          "reasoning": {
-            "$ref": "#/components/schemas/Reasoning"
-          },
-          "routing": {
-            "$ref": "#/components/schemas/RouteResult"
-          },
-          "semanticSearch": {
-            "$ref": "#/components/schemas/SearchResult"
-          },
-          "textResponse": {
-            "description": "Text response for general questions.",
-            "type": "string"
-          },
-          "threadIdSuffix": {
-            "description": "Chat History thread suffix appended to ID generated by backend. Enables more chat windows.",
-            "type": "string"
-          },
-          "userFeedback": {
-            "description": "User feedback.",
-            "enum": [
-              "POSITIVE",
-              "NEGATIVE",
-              "NONE"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "chatHistoryInteractionId",
-          "interactionFinished",
-          "question",
-          "routing"
-        ],
-        "type": "object"
-      },
-      "ChatHistoryRequest": {
-        "properties": {
-          "chatHistoryInteractionId": {
-            "description": "Return chat history records only after this interaction ID. If empty, complete chat history is returned.",
-            "type": "string"
-          },
-          "reset": {
-            "description": "User feedback.",
-            "type": "boolean"
-          },
-          "responseState": {
-            "description": "Response state indicating the outcome of the AI interaction.",
-            "enum": [
-              "SUCCESSFUL",
-              "UNEXPECTED_ERROR",
-              "NOT_FOUND_ATTRIBUTES",
-              "TOO_MANY_DATA_POINTS",
-              "NO_DATA",
-              "NO_RESULTS",
-              "OUT_OF_TOPIC"
-            ],
-            "type": "string"
-          },
-          "savedVisualization": {
-            "$ref": "#/components/schemas/SavedVisualization"
-          },
-          "threadIdSuffix": {
-            "description": "Chat History thread suffix appended to ID generated by backend. Enables more chat windows.",
-            "type": "string"
-          },
-          "userFeedback": {
-            "description": "User feedback.",
-            "enum": [
-              "POSITIVE",
-              "NEGATIVE",
-              "NONE"
-            ],
-            "type": "string"
-          },
-          "userTextFeedback": {
-            "description": "User text feedback for the interaction.",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ChatHistoryResult": {
-        "properties": {
-          "interactions": {
-            "description": "List of chat history interactions.",
-            "items": {
-              "$ref": "#/components/schemas/ChatHistoryInteraction"
-            },
-            "type": "array"
-          },
-          "threadId": {
-            "description": "The conversation thread ID.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "interactions",
-          "threadId"
-        ],
-        "type": "object"
-      },
-      "ChatRequest": {
-        "properties": {
-          "allowedRelationshipTypes": {
-            "description": "Filter relationships and search results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned (e.g. for view-only users).",
-            "items": {
-              "$ref": "#/components/schemas/AllowedRelationshipType"
-            },
-            "type": "array"
-          },
-          "includeHidden": {
-            "default": false,
-            "description": "If true, includes hidden objects in search and visualization building. If false (default), excludes objects where isHidden=true.",
-            "type": "boolean"
-          },
-          "limitCreate": {
-            "default": 3,
-            "description": "Maximum number of created results.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "limitCreateContext": {
-            "default": 10,
-            "description": "Maximum number of relevant objects included into context for LLM (for each object type).",
-            "format": "int32",
-            "type": "integer"
-          },
-          "limitSearch": {
-            "default": 5,
-            "description": "Maximum number of search results.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "objectTypes": {
-            "description": "List of object types to filter the search and visualization building. If empty or null, all object types are considered.",
-            "items": {
-              "description": "Object type to filter.",
-              "enum": [
-                "attribute",
-                "metric",
-                "fact",
-                "label",
-                "date",
-                "dataset",
-                "visualization",
-                "dashboard"
-              ],
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "question": {
-            "description": "User question",
-            "maxLength": 2000,
-            "type": "string"
-          },
-          "relevantScoreThreshold": {
-            "default": 0.45,
-            "description": "Score, above which we return found objects. Below this score objects are not relevant.",
-            "format": "double",
-            "type": "number"
-          },
-          "searchScoreThreshold": {
-            "default": 0.9,
-            "description": "Score, above which we return found object(s) and don't call LLM to create new objects.",
-            "format": "double",
-            "type": "number"
-          },
-          "threadIdSuffix": {
-            "description": "Chat History thread suffix appended to ID generated by backend. Enables more chat windows.",
-            "type": "string"
-          },
-          "titleToDescriptorRatio": {
-            "default": 0.7,
-            "description": "Temporary for experiments. Ratio of title score to descriptor score.",
-            "format": "double",
-            "type": "number"
-          },
-          "userContext": {
-            "$ref": "#/components/schemas/UserContext"
-          }
-        },
-        "required": [
-          "question"
-        ],
-        "type": "object"
-      },
-      "ChatResult": {
-        "properties": {
-          "changeAnalysisParams": {
-            "$ref": "#/components/schemas/ChangeAnalysisParams"
-          },
-          "chatHistoryInteractionId": {
-            "description": "Chat History interaction ID. Unique ID for each interaction.",
-            "type": "string"
-          },
-          "createdVisualizations": {
-            "$ref": "#/components/schemas/CreatedVisualizations"
-          },
-          "errorResponse": {
-            "description": "Error response in anything fails.",
-            "type": "string"
-          },
-          "foundObjects": {
-            "$ref": "#/components/schemas/FoundObjects"
-          },
-          "reasoning": {
-            "$ref": "#/components/schemas/Reasoning"
-          },
-          "routing": {
-            "$ref": "#/components/schemas/RouteResult"
-          },
-          "semanticSearch": {
-            "$ref": "#/components/schemas/SearchResult"
-          },
-          "textResponse": {
-            "description": "Text response for general questions.",
-            "type": "string"
-          },
-          "threadIdSuffix": {
-            "description": "Chat History thread suffix appended to ID generated by backend. Enables more chat windows.",
-            "type": "string"
-          },
-          "usage": {
-            "description": "AI usage metadata returned after the interaction (e.g. current query count vs. entitlement limit).",
-            "items": {
-              "$ref": "#/components/schemas/AiUsageMetadataItem"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "ChatUsageResponse": {
-        "properties": {
-          "interactionCount": {
-            "description": "Number of interactions in the time window",
-            "format": "int32",
-            "type": "integer"
-          },
-          "interactionLimit": {
-            "description": "Maximum number of interactions in the time window any user can do in the workspace",
-            "format": "int32",
-            "type": "integer"
-          },
-          "timeWindowHours": {
-            "description": "Time window in hours",
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "interactionCount",
-          "interactionLimit",
-          "timeWindowHours"
-        ],
-        "type": "object"
-      },
-      "ClusteringConfig": {
-        "description": "Clustering configuration.",
-        "properties": {
-          "numberOfClusters": {
-            "description": "Number of clusters to create",
-            "format": "int32",
-            "type": "integer"
-          },
-          "threshold": {
-            "description": "Clustering algorithm threshold",
-            "format": "float",
-            "type": "number"
-          }
-        },
-        "required": [
-          "numberOfClusters",
-          "threshold"
-        ],
-        "type": "object"
-      },
       "ClusteringRequest": {
         "properties": {
           "numberOfClusters": {
@@ -1948,30 +1436,16 @@
             },
             "type": "array"
           },
-          "xCoord": {
-            "items": {
-              "nullable": true,
-              "type": "number"
-            },
-            "type": "array",
-            "writeOnly": true
-          },
           "xcoord": {
             "items": {
+              "nullable": true,
               "type": "number"
             },
             "type": "array"
           },
-          "yCoord": {
-            "items": {
-              "nullable": true,
-              "type": "number"
-            },
-            "type": "array",
-            "writeOnly": true
-          },
           "ycoord": {
             "items": {
+              "nullable": true,
               "type": "number"
             },
             "type": "array"
@@ -1982,72 +1456,6 @@
           "clusters",
           "xcoord",
           "ycoord"
-        ],
-        "type": "object"
-      },
-      "ColumnExpression": {
-        "description": "Single column projection override: applies `function(column)` to a source column.",
-        "properties": {
-          "column": {
-            "description": "Source column produced by parquet schema inference (after columnOverrides).",
-            "type": "string"
-          },
-          "function": {
-            "description": "StarRocks transform applied to a source column when projecting it through the generated CREATE PIPE ... AS INSERT statement.",
-            "enum": [
-              "HLL_HASH",
-              "BITMAP_HASH",
-              "BITMAP_HASH64",
-              "TO_BITMAP"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "column",
-          "function"
-        ],
-        "type": "object"
-      },
-      "ColumnInfo": {
-        "description": "A single column definition inferred from the parquet schema",
-        "properties": {
-          "name": {
-            "description": "Column name",
-            "type": "string"
-          },
-          "type": {
-            "description": "SQL column type (e.g. VARCHAR(200), BIGINT, DOUBLE)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "type"
-        ],
-        "type": "object"
-      },
-      "ColumnPartitionConfig": {
-        "description": "Partition by column expression.",
-        "properties": {
-          "columns": {
-            "description": "Columns to partition by.",
-            "items": {
-              "description": "Columns to partition by.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "column"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "columns",
-          "type"
         ],
         "type": "object"
       },
@@ -2186,250 +1594,6 @@
         ],
         "type": "object"
       },
-      "CreatePipeTableRequest": {
-        "description": "Request to create a new pipe-backed OLAP table in the AI Lake",
-        "properties": {
-          "aggregationOverrides": {
-            "additionalProperties": {
-              "description": "Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.",
-              "type": "string"
-            },
-            "description": "Maps non-key column names to their StarRocks aggregation function (SUM, MIN, MAX, REPLACE, REPLACE_IF_NOT_NULL, HLL_UNION, BITMAP_UNION, PERCENTILE_UNION). Required for every non-key column when keyConfig type is 'aggregate'. Ignored for other key types.",
-            "type": "object"
-          },
-          "columnExpressions": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/ColumnExpression"
-            },
-            "description": "Per-target-column projection overrides. Each entry emits `<function>(<column>) AS <key>` in the SELECT list of the generated CREATE PIPE ... AS INSERT; keys absent from the map are projected as-is. Required for AGGREGATE-KEY tables that include native HLL columns (StarRocks rejects raw VARBINARY into HLL columns).",
-            "type": "object"
-          },
-          "columnOverrides": {
-            "additionalProperties": {
-              "description": "Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.",
-              "type": "string"
-            },
-            "description": "Override inferred column types. Maps column names to SQL type strings (e.g. {\"year\": \"INT\", \"event_date\": \"DATE\"}). Applied after parquet schema inference.",
-            "type": "object"
-          },
-          "distributionConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/HashDistributionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/RandomDistributionConfig"
-              }
-            ]
-          },
-          "keyConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AggregateKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/DuplicateKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/PrimaryKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/UniqueKeyConfig"
-              }
-            ]
-          },
-          "maxVarcharLength": {
-            "description": "Cap VARCHAR(N) to this length when N exceeds it. 0 = no cap.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "partitionConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ColumnPartitionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/DateTruncPartitionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/TimeSlicePartitionConfig"
-              }
-            ]
-          },
-          "pathPrefix": {
-            "description": "Path prefix to the parquet files (e.g. 'my-dataset/year=2024/'). All parquet files must be at a uniform depth under the prefix — either all directly under the prefix, or all under a consistent Hive partition hierarchy (e.g. year=2024/month=01/). Mixed layouts (files at multiple depths) are not supported.",
-            "type": "string"
-          },
-          "pollingIntervalSeconds": {
-            "description": "How often (in seconds) the pipe polls for new files. 0 or null = use server default.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "sourceStorageName": {
-            "description": "Name of the pre-configured S3/MinIO ObjectStorage source",
-            "type": "string"
-          },
-          "tableName": {
-            "description": "Name of the OLAP table to create. Must match ^[a-z][a-z0-9_-]{0,62}$",
-            "type": "string"
-          },
-          "tableProperties": {
-            "additionalProperties": {
-              "description": "CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.",
-              "type": "string"
-            },
-            "description": "CREATE TABLE PROPERTIES key-value pairs. Defaults to {\"replication_num\": \"1\"}.",
-            "type": "object"
-          }
-        },
-        "required": [
-          "pathPrefix",
-          "sourceStorageName",
-          "tableName"
-        ],
-        "type": "object"
-      },
-      "CreatedVisualization": {
-        "description": "List of created visualization objects",
-        "properties": {
-          "config": {
-            "$ref": "#/components/schemas/VisualizationConfig"
-          },
-          "dimensionality": {
-            "description": "List of attributes representing the dimensionality of the new visualization",
-            "items": {
-              "$ref": "#/components/schemas/DimAttribute"
-            },
-            "type": "array"
-          },
-          "filters": {
-            "description": "List of filters to be applied to the new visualization",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AttributeNegativeFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/AttributePositiveFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/DateAbsoluteFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/DateRelativeFilter"
-                },
-                {
-                  "$ref": "#/components/schemas/GenAiRankingFilter"
-                }
-              ]
-            },
-            "type": "array"
-          },
-          "id": {
-            "description": "Proposed ID of the new visualization",
-            "example": "revenue_by_country",
-            "type": "string"
-          },
-          "metrics": {
-            "description": "List of metrics to be used in the new visualization",
-            "items": {
-              "$ref": "#/components/schemas/Metric"
-            },
-            "type": "array"
-          },
-          "savedVisualizationId": {
-            "description": "Saved visualization ID.",
-            "type": "string"
-          },
-          "suggestions": {
-            "description": "Suggestions for next steps",
-            "items": {
-              "$ref": "#/components/schemas/Suggestion"
-            },
-            "type": "array"
-          },
-          "title": {
-            "description": "Proposed title of the new visualization",
-            "example": "Revenue by Country",
-            "type": "string"
-          },
-          "visualizationType": {
-            "description": "Visualization type requested in question",
-            "enum": [
-              "TABLE",
-              "HEADLINE",
-              "BAR",
-              "LINE",
-              "PIE",
-              "COLUMN",
-              "SCATTER"
-            ],
-            "example": "TABLE",
-            "type": "string"
-          }
-        },
-        "required": [
-          "dimensionality",
-          "filters",
-          "id",
-          "metrics",
-          "suggestions",
-          "title",
-          "visualizationType"
-        ],
-        "type": "object"
-      },
-      "CreatedVisualizations": {
-        "description": "Visualization definitions created by AI.",
-        "properties": {
-          "objects": {
-            "description": "List of created visualization objects",
-            "items": {
-              "$ref": "#/components/schemas/CreatedVisualization"
-            },
-            "type": "array"
-          },
-          "reasoning": {
-            "deprecated": true,
-            "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
-            "type": "string"
-          },
-          "suggestions": {
-            "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
-            "items": {
-              "$ref": "#/components/schemas/Suggestion"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "objects",
-          "reasoning",
-          "suggestions"
-        ],
-        "type": "object"
-      },
-      "DashboardContext": {
-        "description": "Dashboard the user is currently viewing.",
-        "properties": {
-          "id": {
-            "description": "Dashboard object ID.",
-            "type": "string"
-          },
-          "widgets": {
-            "description": "Widgets currently visible on the dashboard.",
-            "items": {
-              "$ref": "#/components/schemas/WidgetDescriptor"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "id",
-          "widgets"
-        ],
-        "type": "object"
-      },
       "DataColumnLocator": {
         "description": "Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.",
         "example": {
@@ -2536,33 +1700,6 @@
         ],
         "type": "object"
       },
-      "DateAbsoluteFilter": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Filter"
-          },
-          {
-            "properties": {
-              "from": {
-                "type": "string"
-              },
-              "to": {
-                "type": "string"
-              },
-              "using": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "from",
-          "to",
-          "using"
-        ],
-        "type": "object"
-      },
       "DateFilter": {
         "description": "Abstract filter definition type for dates.",
         "oneOf": [
@@ -2581,118 +1718,6 @@
         ],
         "type": "object"
       },
-      "DateRelativeFilter": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Filter"
-          },
-          {
-            "properties": {
-              "from": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "granularity": {
-                "enum": [
-                  "SECOND",
-                  "SECOND_OF_MINUTE",
-                  "SECOND_OF_DAY",
-                  "MINUTE",
-                  "MINUTE_OF_HOUR",
-                  "MINUTE_OF_DAY",
-                  "HOUR",
-                  "HOUR_OF_DAY",
-                  "DAY",
-                  "DAY_OF_WEEK",
-                  "DAY_OF_MONTH",
-                  "DAY_OF_QUARTER",
-                  "DAY_OF_YEAR",
-                  "WEEK",
-                  "WEEK_OF_YEAR",
-                  "MONTH",
-                  "MONTH_OF_YEAR",
-                  "QUARTER",
-                  "QUARTER_OF_YEAR",
-                  "YEAR",
-                  "FISCAL_DAY_OF_FISCAL_WEEK",
-                  "FISCAL_DAY_OF_FISCAL_MONTH",
-                  "FISCAL_DAY_OF_FISCAL_QUARTER",
-                  "FISCAL_DAY_OF_FISCAL_SEMESTER",
-                  "FISCAL_DAY_OF_FISCAL_YEAR",
-                  "FISCAL_WEEK",
-                  "FISCAL_WEEK_OF_FISCAL_MONTH",
-                  "FISCAL_WEEK_OF_FISCAL_QUARTER",
-                  "FISCAL_WEEK_OF_FISCAL_SEMESTER",
-                  "FISCAL_WEEK_OF_FISCAL_YEAR",
-                  "FISCAL_MONTH",
-                  "FISCAL_MONTH_OF_FISCAL_QUARTER",
-                  "FISCAL_MONTH_OF_FISCAL_SEMESTER",
-                  "FISCAL_MONTH_OF_FISCAL_YEAR",
-                  "FISCAL_QUARTER",
-                  "FISCAL_QUARTER_OF_FISCAL_SEMESTER",
-                  "FISCAL_QUARTER_OF_FISCAL_YEAR",
-                  "FISCAL_SEMESTER",
-                  "FISCAL_SEMESTER_OF_FISCAL_YEAR",
-                  "FISCAL_YEAR"
-                ],
-                "type": "string"
-              },
-              "to": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "using": {
-                "type": "string"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "from",
-          "granularity",
-          "to",
-          "using"
-        ],
-        "type": "object"
-      },
-      "DateTruncPartitionConfig": {
-        "description": "Partition by date_trunc() expression.",
-        "properties": {
-          "column": {
-            "description": "Column to partition on.",
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "dateTrunc"
-            ],
-            "type": "string"
-          },
-          "unit": {
-            "description": "Date/time unit for partition granularity",
-            "enum": [
-              "year",
-              "quarter",
-              "month",
-              "week",
-              "day",
-              "hour",
-              "minute",
-              "second",
-              "millisecond",
-              "microsecond"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "column",
-          "type",
-          "unit"
-        ],
-        "type": "object"
-      },
       "DependsOn": {
         "allOf": [
           {
@@ -2707,6 +1732,14 @@
               },
               "label": {
                 "description": "Specifies on which label the filter depends on.",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.",
+                "enum": [
+                  "label",
+                  "computedAttribute"
+                ],
                 "type": "string"
               },
               "values": {
@@ -2772,34 +1805,6 @@
         ],
         "type": "object"
       },
-      "DimAttribute": {
-        "description": "List of attributes representing the dimensionality of the new visualization",
-        "properties": {
-          "id": {
-            "description": "ID of the object",
-            "example": "country",
-            "type": "string"
-          },
-          "title": {
-            "description": "Title of attribute.",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "attribute"
-            ],
-            "example": "attribute",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "type"
-        ],
-        "type": "object"
-      },
       "Dimension": {
         "description": "Single dimension description.",
         "properties": {
@@ -2846,48 +1851,6 @@
         },
         "required": [
           "headerGroups"
-        ],
-        "type": "object"
-      },
-      "DistributionConfig": {
-        "description": "Distribution configuration for the OLAP table.",
-        "discriminator": {
-          "mapping": {
-            "hash": "#/components/schemas/HashDistributionConfig",
-            "random": "#/components/schemas/RandomDistributionConfig"
-          },
-          "propertyName": "type"
-        },
-        "properties": {
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
-      "DuplicateKeyConfig": {
-        "description": "Duplicate key model — allows duplicate rows for the given key columns.",
-        "properties": {
-          "columns": {
-            "description": "Key columns. Defaults to first inferred column.",
-            "items": {
-              "description": "Key columns. Defaults to first inferred column.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "duplicate"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
         ],
         "type": "object"
       },
@@ -2983,6 +1946,14 @@
             "example": "Europe/Prague",
             "type": "string"
           },
+          "type": {
+            "description": "Type of the object ```label``` refers to. A set type is taken at its word; an unset one means a label, with a computed attribute of the same id accepted as a fallback.",
+            "enum": [
+              "label",
+              "computedAttribute"
+            ],
+            "type": "string"
+          },
           "validateBy": {
             "description": "Return only items that are computable on metric.",
             "items": {
@@ -3001,6 +1972,20 @@
         "properties": {
           "cacheId": {
             "description": "The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.",
+            "type": "string"
+          },
+          "dataType": {
+            "description": "Data type of the element values, only filled for computed attributes.",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN",
+              "HLL"
+            ],
             "type": "string"
           },
           "elements": {
@@ -3059,6 +2044,10 @@
             ],
             "type": "string"
           },
+          "numberFormat": {
+            "description": "Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.",
+            "type": "string"
+          },
           "paging": {
             "$ref": "#/components/schemas/Paging"
           },
@@ -3070,27 +2059,6 @@
           "elements",
           "paging",
           "primaryLabel"
-        ],
-        "type": "object"
-      },
-      "ErrorInfo": {
-        "description": "Structured error, present when the search could not run (e.g. metadata sync in progress). Absent on success.",
-        "properties": {
-          "reason": {
-            "description": "Stable machine-readable error code. Switch on this for localized client messages.",
-            "example": "METADATA_SYNC_IN_PROGRESS",
-            "type": "string"
-          },
-          "statusCode": {
-            "description": "HTTP-like semantic status (e.g. 503 when the workspace is still syncing).",
-            "example": 503,
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "reason",
-          "statusCode"
         ],
         "type": "object"
       },
@@ -3411,8 +2379,35 @@
         ],
         "type": "object"
       },
-      "Filter": {
-        "description": "List of filters to be applied to the new visualization",
+      "FileFlowInput": {
+        "allOf": [
+          {
+            "properties": {
+              "dataSourceId": {
+                "description": "Identifier of the GDSTORAGE data source.",
+                "type": "string"
+              },
+              "table": {
+                "description": "Name of the table in the data source.",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the input.",
+                "enum": [
+                  "file"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Reads the latest version of a table uploaded to a GDSTORAGE data source.",
+        "required": [
+          "dataSourceId",
+          "table",
+          "type"
+        ],
         "type": "object"
       },
       "FilterBy": {
@@ -3484,28 +2479,304 @@
         ],
         "type": "object"
       },
-      "ForecastConfig": {
-        "description": "Forecast configuration.",
+      "FlowColumn": {
+        "description": "A column of a flow result.",
         "properties": {
-          "confidenceLevel": {
-            "description": "Confidence interval boundary value.",
-            "format": "float",
-            "type": "number"
+          "metadata": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata of the column, as the operation that produced it gives them.",
+            "type": "object"
           },
-          "forecastPeriod": {
-            "description": "Number of future periods that should be forecasted",
-            "format": "int32",
-            "type": "integer"
+          "name": {
+            "description": "Name of the column.",
+            "type": "string"
           },
-          "seasonal": {
-            "description": "Whether the input data is seasonal",
+          "type": {
+            "description": "Type of the values in the column.",
+            "example": "double",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metadata",
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
+      "FlowExecutionResponse": {
+        "description": "A submitted flow: where to read its result.",
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "FlowInput": {
+        "description": "An input of a flow.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FileFlowInput"
+          },
+          {
+            "$ref": "#/components/schemas/AfmFlowInput"
+          },
+          {
+            "$ref": "#/components/schemas/SqlFlowInput"
+          }
+        ],
+        "type": "object"
+      },
+      "FlowOperationDescriptor": {
+        "description": "An operation that a transformation can run.",
+        "properties": {
+          "description": {
+            "description": "What the operation does.",
+            "type": "string"
+          },
+          "inputs": {
+            "description": "Inputs of the operation. The first one is the primary input, named data.",
+            "items": {
+              "$ref": "#/components/schemas/FlowOperationInput"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "Name of the operation. A transformation gives it as its operation.",
+            "type": "string"
+          },
+          "output": {
+            "$ref": "#/components/schemas/FlowOperationOutput"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "description": "JSON Schema of the parameters of the operation.",
+            "type": "object"
+          },
+          "pure": {
+            "description": "True when the result depends only on the inputs and the parameters. The result of an impure operation is never reused.",
             "type": "boolean"
           }
         },
         "required": [
-          "confidenceLevel",
-          "forecastPeriod",
-          "seasonal"
+          "description",
+          "inputs",
+          "name",
+          "output",
+          "parameters",
+          "pure"
+        ],
+        "type": "object"
+      },
+      "FlowOperationInput": {
+        "description": "An input of an operation.",
+        "properties": {
+          "description": {
+            "description": "What the operation expects in the input.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the input. A transformation binds it in its inputRefs.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "name"
+        ],
+        "type": "object"
+      },
+      "FlowOperationOutput": {
+        "description": "The output of an operation.",
+        "properties": {
+          "description": {
+            "description": "What the operation produces.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "type": "object"
+      },
+      "FlowOperations": {
+        "description": "The operations that the transformations of a flow can run.",
+        "properties": {
+          "operations": {
+            "description": "Available operations.",
+            "items": {
+              "$ref": "#/components/schemas/FlowOperationDescriptor"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "operations"
+        ],
+        "type": "object"
+      },
+      "FlowRequest": {
+        "description": "A flow: named inputs and the transformations that run over them.",
+        "properties": {
+          "inputs": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FlowInput"
+            },
+            "description": "Inputs of the flow by name. A transformation refers to an input by its name.",
+            "type": "object"
+          },
+          "transformations": {
+            "description": "Transformations in the order they run. The result of the last transformation is the result of the flow. Without transformations, the result is the only input.",
+            "items": {
+              "$ref": "#/components/schemas/FlowTransformation"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "inputs"
+        ],
+        "type": "object"
+      },
+      "FlowResultMetadata": {
+        "description": "Description of a flow result.",
+        "properties": {
+          "columns": {
+            "description": "Columns of the result, in order.",
+            "items": {
+              "$ref": "#/components/schemas/FlowColumn"
+            },
+            "type": "array"
+          },
+          "metadata": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata of the result, as the operations that produced it give them.",
+            "type": "object"
+          },
+          "totalRows": {
+            "description": "Number of rows in the result.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "columns",
+          "metadata",
+          "totalRows"
+        ],
+        "type": "object"
+      },
+      "FlowTablePaging": {
+        "description": "Position of a page in a table result.",
+        "properties": {
+          "columnLimit": {
+            "description": "Maximum number of columns in the page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "columnOffset": {
+            "description": "Index of the first column of the page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "rowLimit": {
+            "description": "Maximum number of rows in the page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "rowOffset": {
+            "description": "Index of the first row of the page.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalColumns": {
+            "description": "Number of columns in the result.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalRows": {
+            "description": "Number of rows in the result.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "columnLimit",
+          "columnOffset",
+          "rowLimit",
+          "rowOffset",
+          "totalColumns",
+          "totalRows"
+        ],
+        "type": "object"
+      },
+      "FlowTableResult": {
+        "description": "A page of a table result.",
+        "properties": {
+          "columns": {
+            "description": "Columns of the page, in order.",
+            "items": {
+              "$ref": "#/components/schemas/FlowColumn"
+            },
+            "type": "array"
+          },
+          "data": {
+            "description": "Rows of the page. A row has one value for each column, in the order of the columns.",
+            "items": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "paging": {
+            "$ref": "#/components/schemas/FlowTablePaging"
+          }
+        },
+        "required": [
+          "columns",
+          "data",
+          "paging"
+        ],
+        "type": "object"
+      },
+      "FlowTransformation": {
+        "description": "One transformation of a flow: an operation that runs over its inputs.",
+        "properties": {
+          "id": {
+            "description": "Identifier of the transformation. Give it when a later transformation refers to it. The identifier does not change the result.",
+            "nullable": true,
+            "type": "string"
+          },
+          "inputRefs": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Inputs of the operation by name. Each one refers to a flow input or to an earlier transformation. The primary input is named data. When data is not given, it refers to the previous transformation, or to the only flow input for the first transformation.",
+            "type": "object"
+          },
+          "operation": {
+            "description": "Name of the operation, as the operation catalog lists it.",
+            "example": "survey_weighting",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "description": "Parameters of the operation. They must match the parameter schema of the operation.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "operation"
         ],
         "type": "object"
       },
@@ -3580,69 +2851,6 @@
           "origin",
           "prediction",
           "upperBound"
-        ],
-        "type": "object"
-      },
-      "FoundObjects": {
-        "description": "List of objects found by similarity search and post-processed by LLM.",
-        "properties": {
-          "objects": {
-            "description": "List of objects found with a similarity search.",
-            "items": {
-              "$ref": "#/components/schemas/SearchResultObject"
-            },
-            "type": "array"
-          },
-          "reasoning": {
-            "deprecated": true,
-            "description": "DEPRECATED: Use top-level reasoning.steps instead. Reasoning from LLM. Description of how and why the answer was generated.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "objects",
-          "reasoning"
-        ],
-        "type": "object"
-      },
-      "GenAiRankingFilter": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Filter"
-          },
-          {
-            "properties": {
-              "dimensionality": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "measures": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "operator": {
-                "enum": [
-                  "TOP",
-                  "BOTTOM"
-                ],
-                "type": "string"
-              },
-              "value": {
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "measures",
-          "operator",
-          "value"
         ],
         "type": "object"
       },
@@ -3799,35 +3007,6 @@
         ],
         "type": "object"
       },
-      "HashDistributionConfig": {
-        "description": "Hash-based distribution across buckets.",
-        "properties": {
-          "buckets": {
-            "description": "Number of hash buckets. Defaults to 1.",
-            "format": "int32",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "columns": {
-            "description": "Columns to distribute by. Defaults to first column.",
-            "items": {
-              "description": "Columns to distribute by. Defaults to first column.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "hash"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -3892,68 +3071,11 @@
         ],
         "type": "object"
       },
-      "InsightWidgetDescriptor": {
-        "description": "Insight widget displaying a visualization.",
-        "properties": {
-          "filters": {
-            "description": "Filters currently applied to the dashboard.",
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
-            },
-            "type": "array"
-          },
-          "resultId": {
-            "description": "Signed result ID for this widget's cached execution result.",
-            "type": "string"
-          },
-          "title": {
-            "description": "Widget title as displayed on the dashboard.",
-            "type": "string"
-          },
-          "visualizationId": {
-            "description": "Visualization object ID referenced by this insight widget.",
-            "type": "string"
-          },
-          "widgetId": {
-            "description": "Widget object ID.",
-            "type": "string"
-          },
-          "widgetType": {
-            "enum": [
-              "insight"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "title",
-          "visualizationId",
-          "widgetId",
-          "widgetType"
-        ],
-        "type": "object"
-      },
       "JsonApiDocumentDatabaseInstance": {
         "description": "JSON:API-compatible single-resource response envelope",
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiItemDatabaseInstance"
-          },
-          "links": {
-            "$ref": "#/components/schemas/JsonApiListLinks"
-          }
-        },
-        "required": [
-          "data",
-          "links"
-        ],
-        "type": "object"
-      },
-      "JsonApiDocumentPipeTable": {
-        "description": "JSON:API-compatible single-resource response envelope",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/JsonApiItemPipeTable"
           },
           "links": {
             "$ref": "#/components/schemas/JsonApiListLinks"
@@ -4014,50 +3136,6 @@
         "properties": {
           "attributes": {
             "$ref": "#/components/schemas/ObjectStorageInfo"
-          },
-          "id": {
-            "description": "Resource identifier",
-            "type": "string"
-          },
-          "type": {
-            "description": "Resource type",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiItemPipeTable": {
-        "description": "A single JSON:API resource item",
-        "properties": {
-          "attributes": {
-            "$ref": "#/components/schemas/PipeTable"
-          },
-          "id": {
-            "description": "Resource identifier",
-            "type": "string"
-          },
-          "type": {
-            "description": "Resource type",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiItemPipeTableSummary": {
-        "description": "A single JSON:API resource item",
-        "properties": {
-          "attributes": {
-            "$ref": "#/components/schemas/PipeTableSummary"
           },
           "id": {
             "description": "Resource identifier",
@@ -4166,29 +3244,6 @@
         ],
         "type": "object"
       },
-      "JsonApiListDocumentPipeTableSummary": {
-        "description": "JSON:API-compatible list response envelope",
-        "properties": {
-          "data": {
-            "description": "Array of resource items",
-            "items": {
-              "$ref": "#/components/schemas/JsonApiItemPipeTableSummary"
-            },
-            "type": "array"
-          },
-          "links": {
-            "$ref": "#/components/schemas/JsonApiListLinks"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/JsonApiListMeta"
-          }
-        },
-        "required": [
-          "data",
-          "links"
-        ],
-        "type": "object"
-      },
       "JsonApiListDocumentServiceInfo": {
         "description": "JSON:API-compatible list response envelope",
         "properties": {
@@ -4270,27 +3325,6 @@
       "JsonNode": {
         "description": "The payload to pass to the command",
         "nullable": true,
-        "type": "object"
-      },
-      "KeyConfig": {
-        "description": "Key configuration for the table data model.",
-        "discriminator": {
-          "mapping": {
-            "aggregate": "#/components/schemas/AggregateKeyConfig",
-            "duplicate": "#/components/schemas/DuplicateKeyConfig",
-            "primary": "#/components/schemas/PrimaryKeyConfig",
-            "unique": "#/components/schemas/UniqueKeyConfig"
-          },
-          "propertyName": "type"
-        },
-        "properties": {
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
         "type": "object"
       },
       "KeyDriversDimension": {
@@ -4733,48 +3767,6 @@
         ],
         "type": "object"
       },
-      "Metric": {
-        "description": "List of metrics to be used in the new visualization",
-        "properties": {
-          "aggFunction": {
-            "description": "Agg function. Empty if a stored metric is used.",
-            "enum": [
-              "COUNT",
-              "SUM",
-              "MIN",
-              "MAX",
-              "AVG",
-              "MEDIAN"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "ID of the object",
-            "example": "revenue",
-            "type": "string"
-          },
-          "title": {
-            "description": "Title of metric.",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "metric",
-              "fact",
-              "attribute"
-            ],
-            "example": "metric",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "type"
-        ],
-        "type": "object"
-      },
       "MetricDefinitionOverride": {
         "description": "(EXPERIMENTAL) Override for a catalog metric definition.",
         "properties": {
@@ -4795,8 +3787,12 @@
         "description": "Individual change analysis data item",
         "properties": {
           "attributeName": {
-            "description": "The name of the attribute being analyzed",
+            "deprecated": true,
+            "description": "Deprecated: bare id of the analyzed label or computed attribute, without its type. Use attributeRef instead.",
             "type": "string"
+          },
+          "attributeRef": {
+            "$ref": "#/components/schemas/AfmObjectIdentifierLabel"
           },
           "attributeValue": {
             "description": "The value of the attribute being analyzed",
@@ -4849,6 +3845,7 @@
         },
         "required": [
           "attributeName",
+          "attributeRef",
           "attributeValue",
           "attributeValuesChangeMean",
           "attributeValuesChangeStd",
@@ -4919,52 +3916,11 @@
         ],
         "type": "object"
       },
-      "ObjectReference": {
-        "properties": {
-          "id": {
-            "description": "Object identifier (e.g. widget ID, metric ID).",
-            "type": "string"
-          },
-          "type": {
-            "description": "Type of the referenced object.",
-            "enum": [
-              "WIDGET",
-              "METRIC",
-              "ATTRIBUTE",
-              "DASHBOARD"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "ObjectReferenceGroup": {
-        "properties": {
-          "context": {
-            "$ref": "#/components/schemas/ObjectReference"
-          },
-          "objects": {
-            "description": "Objects the user explicitly referenced within this context.",
-            "items": {
-              "$ref": "#/components/schemas/ObjectReference"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "objects"
-        ],
-        "type": "object"
-      },
       "ObjectStorageInfo": {
         "description": "Descriptor of a registered ObjectStorage. Provider credentials are stripped — only fields useful for identifying the storage are returned.",
         "properties": {
           "name": {
-            "description": "Human-readable name. Use this as `sourceStorageName` in CreatePipeTable, or pass `storageId` to ProvisionDatabase.storageIds.",
+            "description": "Human-readable name. Pass `storageId` to ProvisionDatabase.storageIds.",
             "example": "s3-data-lake",
             "type": "string"
           },
@@ -5078,15 +4034,12 @@
             "type": "string"
           },
           "kind": {
-            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n* `create-pipe-table` — Creating a pipe table backed by an S3 data source.\n* `delete-pipe-table` — Deleting a pipe table.\n* `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection.\n* `refresh-partition` — Refreshing a specific Hive partition (delete + re-load from S3).\n",
+            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n* `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection.\n",
             "enum": [
               "provision-database",
               "deprovision-database",
               "run-service-command",
-              "create-pipe-table",
-              "delete-pipe-table",
-              "analyze-statistics",
-              "refresh-partition"
+              "analyze-statistics"
             ],
             "type": "string"
           },
@@ -5280,26 +4233,6 @@
         ],
         "type": "object"
       },
-      "PartitionConfig": {
-        "description": "Partition configuration for the table.",
-        "discriminator": {
-          "mapping": {
-            "column": "#/components/schemas/ColumnPartitionConfig",
-            "dateTrunc": "#/components/schemas/DateTruncPartitionConfig",
-            "timeSlice": "#/components/schemas/TimeSlicePartitionConfig"
-          },
-          "propertyName": "type"
-        },
-        "properties": {
-          "type": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
       "PendingOperation": {
         "allOf": [
           {
@@ -5319,143 +4252,6 @@
           "id",
           "kind",
           "status"
-        ],
-        "type": "object"
-      },
-      "PipeTable": {
-        "description": "Full details of a pipe-backed OLAP table",
-        "properties": {
-          "columns": {
-            "description": "Inferred column schema",
-            "items": {
-              "$ref": "#/components/schemas/ColumnInfo"
-            },
-            "type": "array"
-          },
-          "databaseName": {
-            "description": "Database name",
-            "type": "string"
-          },
-          "distributionConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/HashDistributionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/RandomDistributionConfig"
-              }
-            ]
-          },
-          "keyConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/AggregateKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/DuplicateKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/PrimaryKeyConfig"
-              },
-              {
-                "$ref": "#/components/schemas/UniqueKeyConfig"
-              }
-            ]
-          },
-          "partitionColumns": {
-            "description": "Hive partition columns detected from the path structure",
-            "items": {
-              "description": "Hive partition columns detected from the path structure",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "partitionConfig": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ColumnPartitionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/DateTruncPartitionConfig"
-              },
-              {
-                "$ref": "#/components/schemas/TimeSlicePartitionConfig"
-              }
-            ]
-          },
-          "pathPrefix": {
-            "description": "Path prefix to the parquet files",
-            "type": "string"
-          },
-          "pipeTableId": {
-            "description": "Internal UUID of the pipe table record",
-            "type": "string"
-          },
-          "pollingIntervalSeconds": {
-            "description": "How often (in seconds) the pipe polls for new files. 0 = server default.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "sourceStorageName": {
-            "description": "Source ObjectStorage name",
-            "type": "string"
-          },
-          "tableName": {
-            "description": "OLAP table name",
-            "type": "string"
-          },
-          "tableProperties": {
-            "additionalProperties": {
-              "description": "CREATE TABLE PROPERTIES key-value pairs",
-              "type": "string"
-            },
-            "description": "CREATE TABLE PROPERTIES key-value pairs",
-            "type": "object"
-          }
-        },
-        "required": [
-          "columns",
-          "databaseName",
-          "distributionConfig",
-          "keyConfig",
-          "partitionColumns",
-          "pathPrefix",
-          "pipeTableId",
-          "pollingIntervalSeconds",
-          "sourceStorageName",
-          "tableName",
-          "tableProperties"
-        ],
-        "type": "object"
-      },
-      "PipeTableSummary": {
-        "description": "Lightweight pipe table entry used in list responses",
-        "properties": {
-          "columns": {
-            "description": "Inferred column schema",
-            "items": {
-              "$ref": "#/components/schemas/ColumnInfo"
-            },
-            "type": "array"
-          },
-          "pathPrefix": {
-            "description": "Path prefix to the parquet files",
-            "type": "string"
-          },
-          "pipeTableId": {
-            "description": "Internal UUID of the pipe table record",
-            "type": "string"
-          },
-          "tableName": {
-            "description": "OLAP table name",
-            "type": "string"
-          }
-        },
-        "required": [
-          "columns",
-          "pathPrefix",
-          "pipeTableId",
-          "tableName"
         ],
         "type": "object"
       },
@@ -5598,29 +4394,6 @@
         ],
         "type": "object"
       },
-      "PrimaryKeyConfig": {
-        "description": "Primary key model — enforces uniqueness, replaces on conflict.",
-        "properties": {
-          "columns": {
-            "description": "Key columns. Defaults to first inferred column.",
-            "items": {
-              "description": "Key columns. Defaults to first inferred column.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "primary"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
       "ProvisionDatabaseInstanceRequest": {
         "description": "Request to provision a new AILake Database instance",
         "properties": {
@@ -5758,27 +4531,6 @@
         },
         "required": [
           "status"
-        ],
-        "type": "object"
-      },
-      "RandomDistributionConfig": {
-        "description": "Random distribution across buckets.",
-        "properties": {
-          "buckets": {
-            "description": "Number of random distribution buckets. Defaults to 1.",
-            "format": "int32",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "type": {
-            "enum": [
-              "random"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
         ],
         "type": "object"
       },
@@ -5931,64 +4683,6 @@
         ],
         "type": "object"
       },
-      "Reasoning": {
-        "description": "Reasoning wrapper containing steps taken during request handling.",
-        "properties": {
-          "answer": {
-            "description": "Final answer/reasoning from the use case result.",
-            "type": "string"
-          },
-          "steps": {
-            "description": "Steps taken during processing, showing the AI's reasoning process.",
-            "items": {
-              "$ref": "#/components/schemas/ReasoningStep"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "steps"
-        ],
-        "type": "object"
-      },
-      "ReasoningStep": {
-        "description": "Steps taken during processing, showing the AI's reasoning process.",
-        "properties": {
-          "thoughts": {
-            "description": "Detailed thoughts/messages within this step.",
-            "items": {
-              "$ref": "#/components/schemas/Thought"
-            },
-            "type": "array"
-          },
-          "title": {
-            "description": "Title describing this reasoning step.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "thoughts",
-          "title"
-        ],
-        "type": "object"
-      },
-      "RefreshPartitionRequest": {
-        "description": "Request to refresh a specific Hive partition in a pipe-backed OLAP table",
-        "properties": {
-          "partitionSpec": {
-            "additionalProperties": {
-              "description": "Partition column values identifying the partition to refresh. Keys must match the table's partition_columns exactly. Example: {\"date\": \"2026-01-01\"}",
-              "type": "string"
-            },
-            "description": "Partition column values identifying the partition to refresh. Keys must match the table's partition_columns exactly. Example: {\"date\": \"2026-01-01\"}",
-            "type": "object"
-          }
-        },
-        "required": [
-          "partitionSpec"
-        ],
-        "type": "object"
-      },
       "RelativeDateFilter": {
         "description": "A date filter specifying a time interval that is relative to the current date. For example, last week, next month, and so on. Field dataset is representing qualifier of date dimension. The 'from' and 'to' properties mark the boundaries of the interval. If 'from' is omitted, all values earlier than 'to' are included. If 'to' is omitted, all values later than 'from' are included. It is not allowed to omit both.",
         "properties": {
@@ -6103,68 +4797,6 @@
         ],
         "type": "object"
       },
-      "ResolvedLlm": {
-        "description": "The resolved LLM configuration, or null if none is configured.",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "title"
-        ],
-        "type": "object"
-      },
-      "ResolvedLlmProvider": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ResolvedLlm"
-          },
-          {
-            "properties": {
-              "id": {
-                "description": "Provider Id",
-                "type": "string"
-              },
-              "models": {
-                "items": {
-                  "$ref": "#/components/schemas/LlmModel"
-                },
-                "maxItems": 1,
-                "minItems": 1,
-                "type": "array"
-              },
-              "title": {
-                "description": "Provider Title",
-                "type": "string"
-              }
-            },
-            "type": "object"
-          }
-        ],
-        "required": [
-          "id",
-          "models",
-          "title"
-        ],
-        "type": "object"
-      },
-      "ResolvedLlms": {
-        "properties": {
-          "data": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ResolvedLlmProvider"
-              }
-            ]
-          }
-        },
-        "type": "object"
-      },
       "RestApiIdentifier": {
         "description": "Object identifier.",
         "properties": {
@@ -6262,70 +4894,6 @@
         ],
         "type": "object"
       },
-      "RichTextWidgetDescriptor": {
-        "description": "Rich text widget displaying static content. Has no execution result.",
-        "properties": {
-          "content": {
-            "description": "Markdown/text content of the rich text widget.",
-            "type": "string"
-          },
-          "filters": {
-            "description": "Filters currently applied to the dashboard.",
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
-            },
-            "type": "array"
-          },
-          "title": {
-            "description": "Widget title as displayed on the dashboard.",
-            "type": "string"
-          },
-          "widgetId": {
-            "description": "Widget object ID.",
-            "type": "string"
-          },
-          "widgetType": {
-            "enum": [
-              "richText"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "title",
-          "widgetId",
-          "widgetType"
-        ],
-        "type": "object"
-      },
-      "RouteResult": {
-        "description": "Question -> Use Case routing. May contain final answer is a special use case is not required.",
-        "properties": {
-          "reasoning": {
-            "description": "Explanation why LLM picked this use case.",
-            "type": "string"
-          },
-          "useCase": {
-            "description": "Use case where LLM routed based on question.",
-            "enum": [
-              "INVALID",
-              "GENERAL",
-              "SEARCH",
-              "CREATE_VISUALIZATION",
-              "EXTEND_VISUALIZATION",
-              "HOWTO",
-              "CHANGE_ANALYSIS",
-              "ALERT"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "reasoning",
-          "useCase"
-        ],
-        "type": "object"
-      },
       "RunServiceCommandRequest": {
         "description": "Request to run an AI Lake Service Command",
         "properties": {
@@ -6343,271 +4911,6 @@
             "$ref": "#/components/schemas/JsonNode"
           }
         },
-        "type": "object"
-      },
-      "SavedVisualization": {
-        "description": "Created and saved visualization IDs.",
-        "properties": {
-          "createdVisualizationId": {
-            "description": "Created visualization ID.",
-            "type": "string"
-          },
-          "savedVisualizationId": {
-            "description": "Saved visualization ID.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "createdVisualizationId",
-          "savedVisualizationId"
-        ],
-        "type": "object"
-      },
-      "SearchRelationshipObject": {
-        "properties": {
-          "sourceObjectId": {
-            "description": "Source object ID.",
-            "type": "string"
-          },
-          "sourceObjectTitle": {
-            "description": "Source object title.",
-            "type": "string"
-          },
-          "sourceObjectType": {
-            "description": "Source object type, e.g. dashboard.",
-            "type": "string"
-          },
-          "sourceWorkspaceId": {
-            "description": "Source workspace ID. If relationship is dashboard->visualization, this is the workspace where the dashboard is located.",
-            "type": "string"
-          },
-          "targetObjectId": {
-            "description": "Target object ID.",
-            "type": "string"
-          },
-          "targetObjectTitle": {
-            "description": "Target object title.",
-            "type": "string"
-          },
-          "targetObjectType": {
-            "description": "Target object type, e.g. visualization.",
-            "type": "string"
-          },
-          "targetWorkspaceId": {
-            "description": "Target workspace ID. If relationship is dashboard->visualization, this is the workspace where the visualization is located.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "sourceObjectId",
-          "sourceObjectTitle",
-          "sourceObjectType",
-          "sourceWorkspaceId",
-          "targetObjectId",
-          "targetObjectTitle",
-          "targetObjectType",
-          "targetWorkspaceId"
-        ],
-        "type": "object"
-      },
-      "SearchRequest": {
-        "properties": {
-          "allowedRelationshipTypes": {
-            "description": "Filter relationships and results based on allowed relationship type combinations. When specified, only relationships matching the allowed types are returned, and results are filtered to include only direct matches or objects reachable via allowed relationships. When null or omitted, all relationships and results are returned (default behavior). Note: This filtering happens after the initial search, so the number of returned results may be lower than the requested limit if some results are filtered out.",
-            "items": {
-              "$ref": "#/components/schemas/AllowedRelationshipType"
-            },
-            "type": "array"
-          },
-          "deepSearch": {
-            "default": false,
-            "description": "Turn on deep search. If true, content of complex objects will be searched as well, e.g. metrics in visualizations.",
-            "type": "boolean"
-          },
-          "enableHybridSearch": {
-            "default": false,
-            "description": "If true, enables hybrid search combining vector similarity and keyword matching. This can improve search results by considering both semantic similarity and exact keyword matches.",
-            "type": "boolean"
-          },
-          "excludeTags": {
-            "description": "Exclude objects that contain any of the specified tags. This parameter only affects the search results. Objects with excluded tags are completely hidden from the results.",
-            "items": {
-              "description": "Tag to exclude.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "includeHidden": {
-            "default": false,
-            "description": "If true, includes hidden objects in search results. If false (default), excludes objects where isHidden=true.",
-            "type": "boolean"
-          },
-          "includeTags": {
-            "description": "Include only objects that contain at least one of the specified tags (OR logic). This parameter only affects the search results. If an object has multiple tags, it will be included as long as it matches at least one tag from this parameter.",
-            "items": {
-              "description": "Tag to include.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "limit": {
-            "default": 10,
-            "description": "Maximum number of results to return. There is a hard limit and the actual number of returned results may be lower than what is requested. This can happen when post-search filters are applied (e.g., reranker threshold filtering or allowedRelationshipTypes filtering), which may exclude some results after the initial search.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "objectTypes": {
-            "description": "List of object types to search for.",
-            "items": {
-              "description": "Object type to search for.",
-              "enum": [
-                "attribute",
-                "metric",
-                "fact",
-                "label",
-                "date",
-                "dataset",
-                "visualization",
-                "dashboard"
-              ],
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "question": {
-            "description": "Keyword/sentence is input for search.",
-            "maxLength": 1000,
-            "type": "string"
-          },
-          "relevantScoreThreshold": {
-            "default": 0.3,
-            "description": "Score, above which we return found objects. Below this score objects are not relevant.",
-            "format": "double",
-            "type": "number"
-          },
-          "titleToDescriptorRatio": {
-            "default": 0.7,
-            "description": "Temporary for experiments. Ratio of title score to descriptor score.",
-            "format": "double",
-            "type": "number"
-          }
-        },
-        "required": [
-          "question"
-        ],
-        "type": "object"
-      },
-      "SearchResult": {
-        "properties": {
-          "error": {
-            "$ref": "#/components/schemas/ErrorInfo"
-          },
-          "reasoning": {
-            "deprecated": true,
-            "description": "DEPRECATED: Use top-level reasoning.steps instead. If something is not working properly this field will contain explanation.",
-            "type": "string"
-          },
-          "relationships": {
-            "items": {
-              "$ref": "#/components/schemas/SearchRelationshipObject"
-            },
-            "type": "array"
-          },
-          "results": {
-            "items": {
-              "$ref": "#/components/schemas/SearchResultObject"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "reasoning",
-          "relationships",
-          "results"
-        ],
-        "type": "object"
-      },
-      "SearchResultObject": {
-        "properties": {
-          "certification": {
-            "$ref": "#/components/schemas/CertificationInfo"
-          },
-          "createdAt": {
-            "description": "Timestamp when object was created.",
-            "format": "date-time",
-            "type": "string"
-          },
-          "description": {
-            "description": "Object description.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Object ID.",
-            "type": "string"
-          },
-          "isHidden": {
-            "description": "If true, this object is hidden from AI search results by default.",
-            "type": "boolean"
-          },
-          "modifiedAt": {
-            "description": "Timestamp when object was last modified.",
-            "format": "date-time",
-            "type": "string"
-          },
-          "score": {
-            "description": "Result score calculated by a similarity search algorithm (cosine_distance).",
-            "format": "float",
-            "type": "number"
-          },
-          "scoreDescriptor": {
-            "description": "Result score for descriptor containing(now) description and tags.",
-            "format": "float",
-            "type": "number"
-          },
-          "scoreExactMatch": {
-            "description": "Result score for exact match(id/title). 1/1000. Other scores are multiplied by this.",
-            "format": "int32",
-            "type": "integer"
-          },
-          "scoreTitle": {
-            "description": "Result score for object title.",
-            "format": "float",
-            "type": "number"
-          },
-          "tags": {
-            "items": {
-              "description": "List of tags assigned to the object.",
-              "type": "string"
-            },
-            "type": "array",
-            "uniqueItems": true
-          },
-          "title": {
-            "description": "Object title.",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type, e.g. dashboard.",
-            "type": "string"
-          },
-          "visualizationUrl": {
-            "description": "If the object is visualization, this field defines the type of visualization.",
-            "type": "string"
-          },
-          "workspaceId": {
-            "description": "Workspace ID.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "type",
-          "workspaceId"
-        ],
-        "type": "object"
-      },
-      "ServerSentEventChatResult": {
         "type": "object"
       },
       "ServiceInfo": {
@@ -6802,6 +5105,38 @@
         ],
         "type": "object"
       },
+      "SqlFlowInput": {
+        "allOf": [
+          {
+            "properties": {
+              "dataSourceId": {
+                "description": "Identifier of the data source that runs the statement.",
+                "type": "string"
+              },
+              "sql": {
+                "description": "One SELECT statement in the SQL dialect of the data source.",
+                "example": "SELECT region, SUM(amount) AS amount FROM sales GROUP BY region",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type of the input.",
+                "enum": [
+                  "sql"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Runs a SELECT statement on a data source and reads its rows as a table. Its columns are named and typed as the statement returns them. Data filters of the workspace and of the user do not apply. A GDSTORAGE, FlexConnect or platform-managed data source cannot run it.",
+        "required": [
+          "dataSourceId",
+          "sql",
+          "type"
+        ],
+        "type": "object"
+      },
       "SucceededOperation": {
         "allOf": [
           {
@@ -6830,24 +5165,6 @@
           "id",
           "kind",
           "status"
-        ],
-        "type": "object"
-      },
-      "Suggestion": {
-        "description": "List of suggestions for next steps. Filled when no visualization was created, suggests alternatives.",
-        "properties": {
-          "label": {
-            "description": "Suggestion button label",
-            "type": "string"
-          },
-          "query": {
-            "description": "Suggestion query",
-            "type": "string"
-          }
-        },
-        "required": [
-          "label",
-          "query"
         ],
         "type": "object"
       },
@@ -6906,63 +5223,6 @@
           "modelResults",
           "providerMessage",
           "providerReachable"
-        ],
-        "type": "object"
-      },
-      "Thought": {
-        "description": "Detailed thoughts/messages within this step.",
-        "properties": {
-          "text": {
-            "description": "The text content of this thought.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "text"
-        ],
-        "type": "object"
-      },
-      "TimeSlicePartitionConfig": {
-        "description": "Partition by time_slice() expression.",
-        "properties": {
-          "column": {
-            "description": "Column to partition on.",
-            "type": "string"
-          },
-          "slices": {
-            "description": "How many units per slice.",
-            "format": "int32",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "type": {
-            "enum": [
-              "timeSlice"
-            ],
-            "type": "string"
-          },
-          "unit": {
-            "description": "Date/time unit for partition granularity",
-            "enum": [
-              "year",
-              "quarter",
-              "month",
-              "week",
-              "day",
-              "hour",
-              "minute",
-              "second",
-              "millisecond",
-              "microsecond"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "column",
-          "slices",
-          "type",
-          "unit"
         ],
         "type": "object"
       },
@@ -7186,38 +5446,6 @@
         ],
         "type": "object"
       },
-      "UIContext": {
-        "description": "Ambient UI state: what the user is currently looking at (dashboard, visible widgets).",
-        "properties": {
-          "dashboard": {
-            "$ref": "#/components/schemas/DashboardContext"
-          }
-        },
-        "type": "object"
-      },
-      "UniqueKeyConfig": {
-        "description": "Unique key model — enforces uniqueness, replaces on conflict.",
-        "properties": {
-          "columns": {
-            "description": "Key columns. Defaults to first inferred column.",
-            "items": {
-              "description": "Key columns. Defaults to first inferred column.",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "type": {
-            "enum": [
-              "unique"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
       "UpdateDatabaseDataSourceRequest": {
         "description": "Request to update the data source associated with an AI Lake Database instance",
         "properties": {
@@ -7258,25 +5486,6 @@
         ],
         "type": "object"
       },
-      "UserContext": {
-        "description": "User context with ambient UI state (view) and explicitly referenced objects.",
-        "properties": {
-          "activeObject": {
-            "$ref": "#/components/schemas/ActiveObjectIdentification"
-          },
-          "referencedObjects": {
-            "description": "Groups of explicitly referenced objects, each optionally scoped by a context (e.g. a dashboard context with widget references).",
-            "items": {
-              "$ref": "#/components/schemas/ObjectReferenceGroup"
-            },
-            "type": "array"
-          },
-          "view": {
-            "$ref": "#/components/schemas/UIContext"
-          }
-        },
-        "type": "object"
-      },
       "ValidateByItem": {
         "nullable": true,
         "properties": {
@@ -7285,8 +5494,8 @@
             "type": "string"
           },
           "type": {
-            "description": "Specifies entity type which could be label, attribute, fact, or metric.",
-            "pattern": "^(label)|(attribute)|(fact)|(metric)$",
+            "description": "Specifies entity type which could be label, attribute, computedAttribute, fact, or metric.",
+            "pattern": "^(label|attribute|computedAttribute|fact|metric)$",
             "type": "string"
           }
         },
@@ -7294,24 +5503,6 @@
           "id",
           "type"
         ],
-        "type": "object"
-      },
-      "VisualizationConfig": {
-        "description": "Visualization config for smart-function rendering.",
-        "properties": {
-          "anomalyDetection": {
-            "$ref": "#/components/schemas/AnomalyDetectionConfig"
-          },
-          "clustering": {
-            "$ref": "#/components/schemas/ClusteringConfig"
-          },
-          "forecast": {
-            "$ref": "#/components/schemas/ForecastConfig"
-          },
-          "whatIf": {
-            "$ref": "#/components/schemas/WhatIfScenarioConfig"
-          }
-        },
         "type": "object"
       },
       "VisualizationObjectExecution": {
@@ -7327,227 +5518,6 @@
             "$ref": "#/components/schemas/ExecutionSettings"
           }
         },
-        "type": "object"
-      },
-      "VisualizationSwitcherWidgetDescriptor": {
-        "description": "Visualization switcher widget allowing users to toggle between multiple visualizations.",
-        "properties": {
-          "activeVisualizationId": {
-            "description": "ID of the currently active visualization in the switcher.",
-            "type": "string"
-          },
-          "filters": {
-            "description": "Filters currently applied to the dashboard.",
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
-            },
-            "type": "array"
-          },
-          "resultId": {
-            "description": "Signed result ID for the currently active visualization's execution result.",
-            "type": "string"
-          },
-          "title": {
-            "description": "Widget title as displayed on the dashboard.",
-            "type": "string"
-          },
-          "visualizationIds": {
-            "description": "IDs of all visualizations available in the switcher.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "widgetId": {
-            "description": "Widget object ID.",
-            "type": "string"
-          },
-          "widgetType": {
-            "enum": [
-              "visualizationSwitcher"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "activeVisualizationId",
-          "title",
-          "visualizationIds",
-          "widgetId",
-          "widgetType"
-        ],
-        "type": "object"
-      },
-      "WhatIfMeasureAdjustmentConfig": {
-        "description": "Measure adjustments for this scenario",
-        "properties": {
-          "metricId": {
-            "description": "ID of the metric or fact to adjust",
-            "type": "string"
-          },
-          "metricType": {
-            "description": "Type: metric or fact",
-            "type": "string"
-          },
-          "scenarioMaql": {
-            "description": "Alternative MAQL expression for this scenario",
-            "type": "string"
-          }
-        },
-        "required": [
-          "metricId",
-          "metricType",
-          "scenarioMaql"
-        ],
-        "type": "object"
-      },
-      "WhatIfScenarioConfig": {
-        "description": "What-if scenario configuration.",
-        "properties": {
-          "includeBaseline": {
-            "description": "Whether baseline (unmodified) values are included",
-            "type": "boolean"
-          },
-          "scenarios": {
-            "description": "Scenarios with alternative measure calculations",
-            "items": {
-              "$ref": "#/components/schemas/WhatIfScenarioItem"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "includeBaseline",
-          "scenarios"
-        ],
-        "type": "object"
-      },
-      "WhatIfScenarioItem": {
-        "description": "Scenarios with alternative measure calculations",
-        "properties": {
-          "adjustments": {
-            "description": "Measure adjustments for this scenario",
-            "items": {
-              "$ref": "#/components/schemas/WhatIfMeasureAdjustmentConfig"
-            },
-            "type": "array"
-          },
-          "label": {
-            "description": "Human-readable scenario label",
-            "type": "string"
-          }
-        },
-        "required": [
-          "adjustments",
-          "label"
-        ],
-        "type": "object"
-      },
-      "WidgetDescriptor": {
-        "description": "Descriptor for a widget on the dashboard.",
-        "discriminator": {
-          "mapping": {
-            "insight": "#/components/schemas/InsightWidgetDescriptor",
-            "richText": "#/components/schemas/RichTextWidgetDescriptor",
-            "visualizationSwitcher": "#/components/schemas/VisualizationSwitcherWidgetDescriptor"
-          },
-          "propertyName": "widgetType"
-        },
-        "properties": {
-          "filters": {
-            "items": {
-              "$ref": "#/components/schemas/FilterDefinition"
-            },
-            "type": "array"
-          },
-          "title": {
-            "type": "string"
-          },
-          "widgetId": {
-            "type": "string"
-          },
-          "widgetType": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "title",
-          "widgetId",
-          "widgetType"
-        ],
-        "type": "object"
-      },
-      "WorkflowDashboardSummaryRequestDto": {
-        "properties": {
-          "customUserPrompt": {
-            "type": "string"
-          },
-          "dashboardId": {
-            "type": "string"
-          },
-          "keyMetricIds": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "referenceQuarter": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "dashboardId"
-        ],
-        "type": "object"
-      },
-      "WorkflowDashboardSummaryResponseDto": {
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
-        "type": "object"
-      },
-      "WorkflowStatusResponseDto": {
-        "properties": {
-          "currentPhase": {
-            "type": "string"
-          },
-          "error": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "additionalProperties": {
-              "type": "object"
-            },
-            "type": "object"
-          },
-          "runId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "message",
-          "runId",
-          "status"
-        ],
         "type": "object"
       }
     }
@@ -7872,7 +5842,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/ai/chat": {
       "post": {
-        "description": "(BETA) Combines multiple use cases such as search, create visualizations, ...",
+        "deprecated": true,
+        "description": "Removed. Use POST /api/v1/ai/workspaces/{workspaceId}/chat (AI Assistant) instead.",
         "operationId": "aiChat",
         "parameters": [
           {
@@ -7888,27 +5859,16 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatRequest"
-              }
-            }
+            "application/json": {}
           },
-          "required": true
+          "description": "Ignored. Kept optional so callers still on the old client are not rejected before reaching this endpoint."
         },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatResult"
-                }
-              }
-            },
-            "description": "OK"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "(BETA) Chat with AI",
+        "summary": "(REMOVED) Chat with AI",
         "tags": [
           "Smart Functions",
           "actions"
@@ -7917,7 +5877,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/ai/chatHistory": {
       "post": {
-        "description": "(BETA) Post thread ID (and optionally interaction ID) to get full/partial chat history.",
+        "deprecated": true,
+        "description": "Removed. Chat history is served by the AI Assistant API.",
         "operationId": "aiChatHistory",
         "parameters": [
           {
@@ -7933,27 +5894,16 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatHistoryRequest"
-              }
-            }
+            "application/json": {}
           },
-          "required": true
+          "description": "Ignored. Kept optional so callers still on the old client are not rejected before reaching this endpoint."
         },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatHistoryResult"
-                }
-              }
-            },
-            "description": "OK"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "(BETA) Get Chat History",
+        "summary": "(REMOVED) Get Chat History",
         "tags": [
           "Smart Functions",
           "actions"
@@ -7962,7 +5912,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/ai/chatStream": {
       "post": {
-        "description": "(BETA) Combines multiple use cases such as search, create visualizations, ...",
+        "deprecated": true,
+        "description": "Removed. Use POST /api/v1/ai/workspaces/{workspaceId}/chat (AI Assistant) instead.",
         "operationId": "aiChatStream",
         "parameters": [
           {
@@ -7978,30 +5929,16 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatRequest"
-              }
-            }
+            "application/json": {}
           },
-          "required": true
+          "description": "Ignored. Kept optional so callers still on the old client are not rejected before reaching this endpoint."
         },
         "responses": {
-          "200": {
-            "content": {
-              "text/event-stream": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ServerSentEventChatResult"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "OK"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "(BETA) Chat with AI",
+        "summary": "(REMOVED) Chat with AI",
         "tags": [
           "Smart Functions",
           "actions"
@@ -8010,7 +5947,8 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/ai/chatUsage": {
       "get": {
-        "description": "Returns usage statistics of chat for a user in a workspace.",
+        "deprecated": true,
+        "description": "Removed. Chat usage is served by the AI Assistant API.",
         "operationId": "aiChatUsage",
         "parameters": [
           {
@@ -8025,18 +5963,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatUsageResponse"
-                }
-              }
-            },
-            "description": "OK"
+          "410": {
+            "description": "Gone"
           }
         },
-        "summary": "Get Chat Usage",
+        "summary": "(REMOVED) Get Chat Usage",
         "tags": [
           "Smart Functions",
           "actions"
@@ -8217,211 +6148,6 @@
         "summary": "Get Active LLM Endpoints for this workspace (Removed)",
         "tags": [
           "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/resolveLlmProviders": {
-      "get": {
-        "description": "Resolves the active LLM provider configuration for the given workspace.",
-        "operationId": "resolveLlmProviders",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResolvedLlms"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "Get Active LLM configuration for this workspace",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/search": {
-      "post": {
-        "description": "(BETA) Uses similarity (e.g. cosine distance) search to find top X most similar metadata objects.",
-        "operationId": "aiSearch",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SearchResult"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "summary": "(BETA) Semantic Search in Metadata",
-        "tags": [
-          "Smart Functions",
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/dashboardSummary": {
-      "post": {
-        "operationId": "generateDashboardSummary",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WorkflowDashboardSummaryRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowDashboardSummaryResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/cancel": {
-      "post": {
-        "operationId": "cancelWorkflow",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/ai/workflow/{runId}/status": {
-      "get": {
-        "operationId": "getWorkflowStatus",
-        "parameters": [
-          {
-            "description": "Workspace identifier",
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "runId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WorkflowStatusResponseDto"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
           "actions"
         ]
       }
@@ -9390,6 +7116,398 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow": {
+      "post": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Runs the transformations of a flow over its inputs and stores the result. The response links to the result.",
+        "operationId": "executeFlow",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlowRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowExecutionResponse"
+                }
+              }
+            },
+            "description": "The flow was accepted.",
+            "headers": {
+              "X-GDC-CANCEL-TOKEN": {
+                "description": "Token that cancels the flow when it is given to the cancel endpoint.",
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(EXPERIMENTAL) Execute a flow",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to run a flow.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow/cancel": {
+      "post": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Each result has one cancel token, which the submit of its flow returns. Applying the token cancels the flow that computes the result.",
+        "operationId": "cancelFlows",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AfmCancelTokens"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmCancelTokens"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Apply the given cancel tokens to flows",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to cancel a flow.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow/operations": {
+      "get": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Lists the operations that the transformations of a flow can run, with their inputs and the JSON Schema of their parameters.",
+        "operationId": "listFlowOperations",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowOperations"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) List the operations of flows",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to list the operations of flows.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/binary": {
+      "get": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Gets a window of rows and columns of a flow result as an Apache Arrow IPC File or Stream.",
+        "operationId": "retrieveFlowResultBinary",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Index of the first row to return. The default is 0.",
+            "in": "query",
+            "name": "rowOffset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum number of rows to return. The default is all remaining rows.",
+            "in": "query",
+            "name": "rowLimit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Index of the first column to return. The default is 0.",
+            "in": "query",
+            "name": "columnOffset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum number of columns to return. The default is all remaining columns.",
+            "in": "query",
+            "name": "columnLimit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.apache.arrow.file": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "application/vnd.apache.arrow.stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "The result."
+          }
+        },
+        "summary": "(EXPERIMENTAL) Get a flow result in Apache Arrow File or Stream format",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to read a flow result.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/metadata": {
+      "get": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Gets the columns and the number of rows of a flow result.",
+        "operationId": "retrieveFlowResultMetadata",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowResultMetadata"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Get the metadata of a flow result",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to read a flow result.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/flow/result/{resultId}/table": {
+      "get": {
+        "description": "Note: This API is experimental and is going to change. Please, use it accordingly. Gets a window of rows and columns of a flow result.",
+        "operationId": "retrieveFlowResultTable",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Index of the first row to return. The default is 0.",
+            "in": "query",
+            "name": "rowOffset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum number of rows to return. The default is all remaining rows.",
+            "in": "query",
+            "name": "rowLimit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Index of the first column to return. The default is 0.",
+            "in": "query",
+            "name": "columnOffset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum number of columns to return. The default is all remaining columns.",
+            "in": "query",
+            "name": "columnLimit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowTableResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Get a page of a flow result",
+        "tags": [
+          "actions",
+          "Flow"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to read a flow result.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/functions/anomalyDetection/result/{resultId}": {
       "get": {
         "deprecated": true,
@@ -9986,7 +8104,7 @@
     },
     "/api/v1/ailake/database/instances/{instanceId}": {
       "delete": {
-        "description": "(BETA) Deletes an existing database in the organization's AI Lake. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
+        "description": "(BETA) Deletes an existing database in the organization's AI Lake. A database that still contains tables is not deleted, unless cascade is set. With cascade, every table in the database is dropped first, which cannot be undone. Returns an operation-id in the operation-id header the client can use to poll for the progress.",
         "operationId": "deprovisionAiLakeDatabaseInstance",
         "parameters": [
           {
@@ -9997,6 +8115,16 @@
             "schema": {
               "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
               "type": "string"
+            }
+          },
+          {
+            "description": "Drop every table in the database before the database itself.",
+            "in": "query",
+            "name": "cascade",
+            "required": false,
+            "schema": {
+              "description": "Drop every table in the database before the database itself.",
+              "type": "boolean"
             }
           },
           {
@@ -10088,7 +8216,7 @@
     },
     "/api/v1/ailake/database/instances/{instanceId}/analyzeStatistics": {
       "post": {
-        "description": "(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native/PIPE) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.",
+        "description": "(BETA) Collects CBO statistics for tables in a StarRocks database. Works for both internal (native) and external (Iceberg) catalogs. If tableNames is empty, all tables are analyzed.",
         "operationId": "analyzeStatistics",
         "parameters": [
           {
@@ -10126,8 +8254,19 @@
             "description": "Statistics analysis scheduled.",
             "headers": {
               "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
                 "schema": {
-                  "format": "uuid",
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
                   "type": "string"
                 },
                 "style": "simple"
@@ -10137,8 +8276,8 @@
         },
         "summary": "(BETA) Run ANALYZE TABLE for tables in a database instance",
         "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
+          "AI Lake - Databases",
+          "AI Lake"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to analyze statistics.",
@@ -10379,365 +8518,9 @@
         }
       }
     },
-    "/api/v1/ailake/database/instances/{instanceId}/pipeTables": {
-      "get": {
-        "description": "(BETA) Lists active pipe tables in the given AI Lake database instance.",
-        "operationId": "listAiLakePipeTables",
-        "parameters": [
-          {
-            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-            "in": "path",
-            "name": "instanceId",
-            "required": true,
-            "schema": {
-              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Zero-based page number.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "description": "Zero-based page number.",
-              "format": "int32",
-              "minimum": 0,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Number of items per page.",
-            "in": "query",
-            "name": "size",
-            "required": false,
-            "schema": {
-              "default": 50,
-              "description": "Number of items per page.",
-              "format": "int32",
-              "maximum": 500,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "metaInclude",
-            "required": false,
-            "schema": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "uniqueItems": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiListDocumentPipeTableSummary"
-                }
-              }
-            },
-            "description": "AI Lake pipe tables successfully retrieved"
-          }
-        },
-        "summary": "(BETA) List AI Lake pipe tables",
-        "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to list AI Lake pipe tables.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      },
-      "post": {
-        "description": "(BETA) Creates a pipe-backed OLAP table in the given AI Lake database instance. Infers schema from parquet files. Returns an operation-id header the client can use to poll for progress.",
-        "operationId": "createAiLakePipeTable",
-        "parameters": [
-          {
-            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-            "in": "path",
-            "name": "instanceId",
-            "required": true,
-            "schema": {
-              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "operation-id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePipeTableRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "content": {},
-            "description": "Accepted",
-            "headers": {
-              "operation-id": {
-                "description": "Operation ID to use for polling.",
-                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              },
-              "operation-location": {
-                "description": "Operation location URL.",
-                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              }
-            }
-          }
-        },
-        "summary": "(BETA) Create a new AI Lake pipe table",
-        "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to create an AI Lake pipe table.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      }
-    },
-    "/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}": {
-      "delete": {
-        "description": "(BETA) Drops the pipe and OLAP table and removes the record. Returns an operation-id header the client can use to poll for progress.",
-        "operationId": "deleteAiLakePipeTable",
-        "parameters": [
-          {
-            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-            "in": "path",
-            "name": "instanceId",
-            "required": true,
-            "schema": {
-              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Pipe table name.",
-            "in": "path",
-            "name": "tableName",
-            "required": true,
-            "schema": {
-              "description": "Pipe table name.",
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "operation-id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "content": {},
-            "description": "Accepted",
-            "headers": {
-              "operation-id": {
-                "description": "Operation ID to use for polling.",
-                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              },
-              "operation-location": {
-                "description": "Operation location URL.",
-                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              }
-            }
-          }
-        },
-        "summary": "(BETA) Delete an AI Lake pipe table",
-        "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to delete an AI Lake pipe table.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      },
-      "get": {
-        "description": "(BETA) Returns full details of the specified pipe table.",
-        "operationId": "getAiLakePipeTable",
-        "parameters": [
-          {
-            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-            "in": "path",
-            "name": "instanceId",
-            "required": true,
-            "schema": {
-              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Pipe table name.",
-            "in": "path",
-            "name": "tableName",
-            "required": true,
-            "schema": {
-              "description": "Pipe table name.",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiDocumentPipeTable"
-                }
-              }
-            },
-            "description": "AI Lake pipe table successfully retrieved"
-          }
-        },
-        "summary": "(BETA) Get an AI Lake pipe table",
-        "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to get an AI Lake pipe table.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      }
-    },
-    "/api/v1/ailake/database/instances/{instanceId}/pipeTables/{tableName}/refresh": {
-      "post": {
-        "description": "(BETA) Deletes all rows for the specified Hive partition and re-loads them from S3. Use after overwriting a partition file in object storage with corrected data. Returns an operation-id header the client can use to poll for progress.",
-        "operationId": "refreshAiLakePipeTablePartition",
-        "parameters": [
-          {
-            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-            "in": "path",
-            "name": "instanceId",
-            "required": true,
-            "schema": {
-              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Pipe table name.",
-            "in": "path",
-            "name": "tableName",
-            "required": true,
-            "schema": {
-              "description": "Pipe table name.",
-              "type": "string"
-            }
-          },
-          {
-            "in": "header",
-            "name": "operation-id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RefreshPartitionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "content": {},
-            "description": "Accepted",
-            "headers": {
-              "operation-id": {
-                "description": "Operation ID to use for polling.",
-                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              },
-              "operation-location": {
-                "description": "Operation location URL.",
-                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
-                "required": true,
-                "schema": {
-                  "type": "string"
-                },
-                "style": "simple"
-              }
-            }
-          }
-        },
-        "summary": "(BETA) Refresh a pipe table partition",
-        "tags": [
-          "AI Lake",
-          "AI Lake - Pipe Tables"
-        ],
-        "x-gdc-security-info": {
-          "description": "Permissions required to refresh an AI Lake pipe table partition.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      }
-    },
     "/api/v1/ailake/objectStorages": {
       "get": {
-        "description": "(BETA) Lists ObjectStorages registered for the organization. Use the returned `name` as `sourceStorageName` in CreatePipeTable, or pass `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.",
+        "description": "(BETA) Lists ObjectStorages registered for the organization. Pass the returned `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.",
         "operationId": "listAiLakeObjectStorages",
         "parameters": [
           {

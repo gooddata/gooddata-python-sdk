@@ -56,6 +56,10 @@ class GrantedPermission(ModelNormal):
     """
 
     allowed_values = {
+        ('source',): {
+            'DIRECT': "direct",
+            'INDIRECT': "indirect",
+        },
     }
 
     validations = {

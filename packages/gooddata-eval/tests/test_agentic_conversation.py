@@ -973,6 +973,8 @@ def test_evaluate_agentic_conversation_returns_reasoning_steps_on_pass():
     assert outcome.reasoning_steps == ["thinking about it"]
     assert outcome.conversation_id == "conv-1"
     assert outcome.response_id == "resp-1"
+    assert len(outcome.run_latencies_s) == outcome.runs_effective == 1
+    assert all(latency >= 0 for latency in outcome.run_latencies_s)
     assert outcome.detail == {
         "mode": "legacy",
         "full_skill_coverage": True,
@@ -1054,6 +1056,7 @@ def test_evaluate_agentic_conversation_attaches_reasoning_steps_to_exception_on_
     assert exc_info.value.reasoning_steps == ["confused thinking"]
     assert exc_info.value.conversation_id == "conv-1"
     assert exc_info.value.response_id == "resp-2"
+    assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
     assert exc_info.value.detail == {
         "mode": "legacy",
         "full_skill_coverage": False,

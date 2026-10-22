@@ -23,7 +23,8 @@ from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
     SubmitTraceLink,
-    open_trace_window,
+    conversations_to_link,
+    open_item_trace,
     run_trace_link_inline,
     submit_trace_scoring,
     utc_now,
@@ -33,6 +34,7 @@ from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
+from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
@@ -67,6 +69,9 @@ _EXPECTATION_KEYS = frozenset({"period", "visualizations", "narrative", "expects
 # Template tokens the document renders at export time ({documentName}, {periodStart}, ...).
 _PLACEHOLDER_RE = re.compile(r"\{\w+\}")
 _SUMMARY_SLOT = "summary"
+_V2 = "2"
+_V2_HEADING_WIDGETS = frozenset({"title", "heading"})
+_V2_TAKEAWAY_WIDGET = "takeaway"
 
 _NARRATIVE_EVALUATION_STEPS = [
     "The actual output is a document rendered as text: its title, period, and per page the heading, "
@@ -120,14 +125,44 @@ def legacy_wire_names(parts: list[dict], tool_call_events: list[ToolCallEvent]) 
     return list(dict.fromkeys(found))
 
 
+def _is_v2(document: dict) -> bool:
+    return document.get("version") == _V2
+
+
+def _pages(document: dict) -> list[Any]:
+    """Every page in order, hidden ones included.
+
+    v2 keeps them in ``content``, read from the top level when ``content`` is missing, either as
+    ``pages`` or grouped into ``sections`` that read as one list; ``sections`` wins when both are there.
+    """
+    if not _is_v2(document):
+        return document.get("pages") or []
+    content = document.get("content")
+    container = content if isinstance(content, dict) else document
+    sections = container.get("sections")
+    if isinstance(sections, list):
+        return [page for section in sections if isinstance(section, dict) for page in section.get("pages") or []]
+    return container.get("pages") or []
+
+
+def _visible_pages(document: dict) -> list[Any]:
+    """The pages a reader sees: a v2 page with ``visible: false`` is out of the viewer, exports and numbering."""
+    return [page for page in _pages(document) if not (isinstance(page, dict) and page.get("visible") is False)]
+
+
 def _nodes(node: Any) -> Iterator[dict]:
-    """Every node of a page layout in document order, following ``row`` and ``column`` as gen-ai does."""
+    """Every node of a page layout in document order.
+
+    v1 nests through ``row`` and ``column`` lists as gen-ai does; v2 containers hold ``children``.
+    """
     if not isinstance(node, dict):
         return
     yield node
-    for direction in ("row", "column"):
-        for child in node.get(direction) or []:
-            yield from _nodes(child)
+    for key in ("row", "column", "children"):
+        children = node.get(key)
+        if isinstance(children, list):
+            for child in children:
+                yield from _nodes(child)
 
 
 def _page_kind(page: dict) -> str:
@@ -135,14 +170,28 @@ def _page_kind(page: dict) -> str:
     return str(page.get("kind") or _CONTENT_PAGE)
 
 
+def _visualization_id(node: dict) -> str | None:
+    """The node's visualization id: a string in v1 and as-code, ``{"identifier": ...}`` in the v2 API."""
+    reference = node.get("visualization")
+    if isinstance(reference, dict):
+        reference = reference.get("identifier")
+    return reference if isinstance(reference, str) else None
+
+
+def _heading(node: dict) -> str | None:
+    if node.get("type") in _V2_HEADING_WIDGETS:
+        return _written(node.get("markdown"))
+    return _written(node.get("heading"))
+
+
 def _visualizations_of(document: dict) -> set[str]:
-    """Every visualization id placed anywhere in the document's page layouts."""
+    """Every visualization id placed anywhere in the layouts of the pages a reader sees."""
     return {
-        node["visualization"]
-        for page in document.get("pages") or []
+        visualization
+        for page in _visible_pages(document)
         if isinstance(page, dict)
         for node in _nodes(page.get("layout"))
-        if isinstance(node.get("visualization"), str)
+        if (visualization := _visualization_id(node)) is not None
     }
 
 
@@ -155,45 +204,82 @@ def _written(text: Any) -> str | None:
     return text.strip()
 
 
-def _summary_slot(page: dict) -> dict | None:
-    """The page's ``summary`` slot, as gen-ai reads it, or ``None`` when the layout has none."""
-    for node in _nodes(page.get("layout")):
+def _is_takeaway(node: dict) -> bool:
+    return node.get("type") == _V2_TAKEAWAY_WIDGET
+
+
+def _summary_slots(page: dict) -> list[dict]:
+    """The page's summaries: every v2 ``takeaway`` widget, or the v1 ``summary`` slot as gen-ai reads it.
+
+    A v2 ``text`` widget with id ``summary`` is static text the default page templates ship empty,
+    not a summary: the copilot writes its summaries into takeaways.
+    """
+    nodes = list(_nodes(page.get("layout")))
+    takeaways = [node for node in nodes if _is_takeaway(node)]
+    if takeaways:
+        return takeaways
+    for node in nodes:
         if node.get("id") == _SUMMARY_SLOT and "paragraph" in node:
-            return node
-    return None
+            return [node]
+    return []
 
 
 def _summary_text(slot: dict) -> str | None:
-    """The slot's written text: the model's on an AI summary, the typed string on a static one."""
+    """The slot's written text: a takeaway's markdown, the model's on an AI summary, the string on a static one."""
+    if _is_takeaway(slot):
+        return _written(slot.get("markdown"))
     paragraph = slot.get("paragraph")
     return _written(paragraph.get("text") if isinstance(paragraph, dict) else paragraph)
 
 
+def _slot_name(slot: dict) -> str:
+    return "takeaway" if _is_takeaway(slot) else "summary slot"
+
+
 def _content_pages(document: dict) -> list[tuple[int, dict]]:
-    """``(page number, page)`` for every content page."""
+    """``(page number, page)`` for every content page a reader sees, numbered as the reader sees them."""
     return [
         (number, page)
-        for number, page in enumerate(document.get("pages") or [], start=1)
+        for number, page in enumerate(_visible_pages(document), start=1)
         if isinstance(page, dict) and _page_kind(page) == _CONTENT_PAGE
     ]
 
 
+def _period(document: dict) -> dict:
+    period = document.get("period")
+    return period if isinstance(period, dict) else {}
+
+
+def _period_bounds(document: dict) -> tuple[Any, Any] | None:
+    """The document's first and last day, or ``None`` for a v2 relative period, which has no fixed dates."""
+    period = _period(document)
+    if not _is_v2(document):
+        return period.get("start"), period.get("end")
+    if period.get("type") == "relative":
+        return None
+    return period.get("from"), period.get("to")
+
+
+def _period_text(document: dict) -> str:
+    bounds = _period_bounds(document)
+    if bounds is None:
+        period = _period(document)
+        return f"the relative range {period.get('granularity')} {period.get('from')} to {period.get('to')}"
+    return f"{bounds[0]} to {bounds[1]}"
+
+
 def render_document_text(document: dict) -> str:
     """The document as the judge reads it: title, period, and per content page its heading, charts and summaries."""
-    period = document.get("period") or {}
-    lines = [f"Document: {document.get('title')}", f"Period: {period.get('start')} to {period.get('end')}"]
+    lines = [f"Document: {document.get('title')}", f"Period: {_period_text(document)}"]
     for number, page in _content_pages(document):
         nodes = list(_nodes(page.get("layout")))
-        headings = [h for h in (_written(n.get("heading")) for n in nodes) if h is not None]
-        charts = [n["visualization"] for n in nodes if isinstance(n.get("visualization"), str)]
+        headings = [h for h in (_heading(n) for n in nodes) if h is not None]
+        charts = [c for c in (_visualization_id(n) for n in nodes) if c is not None]
         lines.append("")
         lines.append(f"Page {number}: {', '.join(headings) or '(no heading)'}")
         if charts:
             lines.append(f"Charts: {', '.join(charts)}")
-        slot = _summary_slot(page)
-        text = _summary_text(slot) if slot is not None else None
-        if text is not None:
-            lines.append(f"Summary: {text}")
+        lines.extend(f"Summary: {text}" for text in map(_summary_text, _summary_slots(page)) if text is not None)
     return "\n".join(lines)
 
 
@@ -441,7 +527,9 @@ def _score_response(
     if not ref_matches:
         failures.append(f"the {_PART_TYPE!r} part shows {part_ref!r}, but {_DRAFT_TOOL} returned {tool_ref!r}")
 
-    pages = document.get("pages") or []
+    # page_count is what the user is told ("a document with 3 pages"), so it counts only the
+    # pages a reader sees: a hidden page is out of the viewer, exports and page numbering.
+    pages = _visible_pages(document)
     part_count, tool_count = document_part.get("page_count"), tool_result.get("page_count")
     if part_count != len(pages) or tool_count != len(pages):
         failures.append(
@@ -466,11 +554,10 @@ def _score_response(
     period_correct = False
     if applies.period:
         expected_period = expected_output["period"]
-        actual_period = document.get("period") or {}
-        period_correct = all(actual_period.get(key) == expected_period.get(key) for key in ("start", "end"))
+        period_correct = _period_bounds(document) == (expected_period.get("start"), expected_period.get("end"))
         if not period_correct:
             failures.append(
-                f"the document covers {actual_period.get('start')} to {actual_period.get('end')}, "
+                f"the document covers {_period_text(document)}, "
                 f"expected {expected_period.get('start')} to {expected_period.get('end')}"
             )
 
@@ -483,13 +570,16 @@ def _score_response(
 
     summaries_present = False
     if applies.narrative:
-        slots = [
-            (page, slot) for _number, page in _content_pages(document) if (slot := _summary_slot(page)) is not None
+        slots = [(page, slot) for _number, page in _content_pages(document) for slot in _summary_slots(page)]
+        unwritten = [
+            f"page {page.get('id')!r} has a {_slot_name(slot)} with no written text"
+            for page, slot in slots
+            if _summary_text(slot) is None
         ]
-        unwritten = [page for page, slot in slots if _summary_text(slot) is None]
         if not slots:
-            failures.append("the document has no summary slot")
-        failures.extend(f"page {page.get('id')!r} has a summary slot with no written text" for page in unwritten)
+            missing = "takeaway" if _is_v2(document) else "summary slot"
+            failures.append(f"the document has no {missing}")
+        failures.extend(dict.fromkeys(unwritten))
         summaries_present = bool(slots) and not unwritten
 
     return DocumentEvaluation(
@@ -548,6 +638,8 @@ class DocumentRunResult:
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
     timings: PhaseTimings = field(default_factory=PhaseTimings)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
 
     @property
     def diagnostics(self) -> dict[str, bool]:
@@ -621,6 +713,7 @@ def _execute_single_document_run(
     reasoning_index_offset = 0
     first_turn_asked = False
 
+    run_started = time.monotonic()
     for iteration in range(max_iterations):
         turns += 1
         agent_started = time.monotonic()
@@ -691,6 +784,7 @@ def _execute_single_document_run(
         tool_call_events=all_tool_call_events,
         reasoning_step_events=all_reasoning_step_events,
         timings=timings,
+        run_latency_s=time.monotonic() - run_started,
     )
 
 
@@ -802,21 +896,32 @@ def evaluate_agentic_document_skill(
         JudgeResponseError: the fixture states a narrative and the judge returned no readable
             verdict for any run -- an item without a result, not K failures.
     """
-    langfuse, window_start = open_trace_window(langfuse)
-    summary = run_agentic_document_skill(
-        host=host,
-        token=token,
-        workspace_id=workspace_id,
-        question=question,
-        expected_output=expected_output,
-        k=k,
-        max_iterations=max_iterations,
-        initial_conversation_id=initial_conversation_id,
-        reasoning_effort=reasoning_effort,
-        agent_id=agent_id,
-        judge=judge,
-        user_context=user_context,
+    identity = RunIdentity(
+        host,
+        token,
+        workspace_id,
+        dataset_name,
+        run_timestamp,
+        model_version_override,
+        run_metadata_extra,
+        reasoning_effort,
     )
+    langfuse, window_start, scope = open_item_trace(langfuse, identity, dataset_item_id, suffix_runs=k > 1)
+    with item_scope(scope):
+        summary = run_agentic_document_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expected_output=expected_output,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            judge=judge,
+            user_context=user_context,
+        )
 
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
@@ -829,6 +934,7 @@ def evaluate_agentic_document_skill(
                 if run.ungraded:
                     # No verdict decided this run: its other scores would publish a pass the gate
                     # never counted.
+                    ctx.export_unscored(run_idx, run.conversation_id)
                     continue
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.evaluation.strict_checks
@@ -854,23 +960,19 @@ def evaluate_agentic_document_skill(
         # Before the pass@K raise: a failing item's scores are the ones worth having.
         submit_trace_scoring(
             submit_trace_link,
-            RunIdentity(
-                host,
-                token,
-                workspace_id,
-                dataset_name,
-                run_timestamp,
-                model_version_override,
-                run_metadata_extra,
-                reasoning_effort,
-            ),
+            identity,
             langfuse=langfuse,
             dataset_item_id=dataset_item_id,
-            conversation_ids=[r.conversation_id for r in summary.scored_run_results],
+            # An ungraded run is read only when it joined: its root still has to be exported.
+            conversation_ids=conversations_to_link(
+                [r.conversation_id for r in summary.scored_run_results],
+                [r.conversation_id for r in summary.run_results if r.ungraded],
+            ),
             window_start=window_start,
             window_end=window_end,
-            suffix_runs=len(summary.run_results) > 1,
+            suffix_runs=k > 1,
             write_scores=_write_scores,
+            scope=scope,
             item_input=question,
         )
 
@@ -882,6 +984,7 @@ def evaluate_agentic_document_skill(
             + " | ".join(unscored)
         )
         exc_judge.timings = item_timings
+        exc_judge.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc_judge
 
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
@@ -919,7 +1022,7 @@ def evaluate_agentic_document_skill(
         elif not best.evaluation.skill_activated:
             skill_note = (
                 f" set_skills never activated {_BUILDER_SKILL}: either the copilot routed elsewhere, or the skill"
-                " is not registered. It registers only with enableGenAiDocumentBuilderSkill and the org's"
+                " is not registered. It registers only with enableGenAiReportBuilderSkill and the org's"
                 " enableBusinessBriefingReportsApp both on."
             )
         exc = DocumentSkillAssertionError(
@@ -935,6 +1038,7 @@ def evaluate_agentic_document_skill(
         exc.runs_passed = runs_passed
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
+        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
@@ -945,4 +1049,5 @@ def evaluate_agentic_document_skill(
         detail=detail,
         timings=item_timings,
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

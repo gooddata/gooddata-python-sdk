@@ -31,19 +31,25 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
+    from gooddata_api_client.model.json_api_computed_attribute_out_relationships import JsonApiComputedAttributeOutRelationships
+    from gooddata_api_client.model.json_api_computed_attribute_out_with_links import JsonApiComputedAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
-    from gooddata_api_client.model.json_api_label_out_attributes import JsonApiLabelOutAttributes
-    from gooddata_api_client.model.json_api_label_out_relationships import JsonApiLabelOutRelationships
+    from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
+    from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
+    from gooddata_api_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
+    globals()['JsonApiComputedAttributeOutRelationships'] = JsonApiComputedAttributeOutRelationships
+    globals()['JsonApiComputedAttributeOutWithLinks'] = JsonApiComputedAttributeOutWithLinks
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
-    globals()['JsonApiLabelOutAttributes'] = JsonApiLabelOutAttributes
-    globals()['JsonApiLabelOutRelationships'] = JsonApiLabelOutRelationships
+    globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
+    globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
+    globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -73,7 +79,7 @@ class JsonApiFilterContextOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'LABEL': "label",
+            'METRIC': "metric",
         },
     }
 
@@ -108,10 +114,10 @@ class JsonApiFilterContextOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiLabelOutRelationships,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'relationships': (JsonApiComputedAttributeOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'attributes': (JsonApiLabelOutAttributes,),  # noqa: E501
+            'attributes': (JsonApiMetricOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -169,12 +175,12 @@ class JsonApiFilterContextOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiLabelOutRelationships): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiLabelOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiMetricOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "label"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -278,12 +284,12 @@ class JsonApiFilterContextOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiLabelOutRelationships): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiComputedAttributeOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            attributes (JsonApiLabelOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiMetricOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "label"  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -356,7 +362,10 @@ class JsonApiFilterContextOutIncludes(ModelComposed):
           ],
           'oneOf': [
               JsonApiAttributeOutWithLinks,
+              JsonApiComputedAttributeOutWithLinks,
               JsonApiDatasetOutWithLinks,
+              JsonApiFactOutWithLinks,
               JsonApiLabelOutWithLinks,
+              JsonApiMetricOutWithLinks,
           ],
         }

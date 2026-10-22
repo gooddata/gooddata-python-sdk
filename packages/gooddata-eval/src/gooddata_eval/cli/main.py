@@ -649,6 +649,10 @@ def _run(config: RunConfig) -> int:
                 report.items.extend(agentic_report.items)
             report.items.extend(single_report.items)
             report.wall_clock_s = (agentic_report.wall_clock_s if agentic_report else 0.0) + single_report.wall_clock_s
+            # The two phases run back to back, so the merged run spans the earliest start to the latest finish.
+            phases = [r for r in (agentic_report, single_report) if r is not None]
+            report.started_at = min((r.started_at for r in phases if r.started_at), default=None)
+            report.finished_at = max((r.finished_at for r in phases if r.finished_at), default=None)
 
             skipped_kinds = sorted({i.test_kind for i in report.items if i.skipped})
             if skipped_kinds:

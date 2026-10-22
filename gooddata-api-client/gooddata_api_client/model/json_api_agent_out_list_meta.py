@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.page_metadata import PageMetadata
+    from gooddata_api_client.model.restricted_object import RestrictedObject
     globals()['PageMetadata'] = PageMetadata
+    globals()['RestrictedObject'] = RestrictedObject
 
 
 class JsonApiAgentOutListMeta(ModelNormal):
@@ -63,6 +65,8 @@ class JsonApiAgentOutListMeta(ModelNormal):
     }
 
     validations = {
+        ('restricted',): {
+        },
     }
 
     @cached_property
@@ -89,6 +93,7 @@ class JsonApiAgentOutListMeta(ModelNormal):
         lazy_import()
         return {
             'page': (PageMetadata,),  # noqa: E501
+            'restricted': ([RestrictedObject],),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +103,7 @@ class JsonApiAgentOutListMeta(ModelNormal):
 
     attribute_map = {
         'page': 'page',  # noqa: E501
+        'restricted': 'restricted',  # noqa: E501
     }
 
     read_only_vars = {
@@ -142,6 +148,7 @@ class JsonApiAgentOutListMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             page (PageMetadata): [optional]  # noqa: E501
+            restricted ([RestrictedObject]): References withheld from `included` because the caller may not view them. Their `relationships` entries are kept, so a client can render a placeholder instead of treating the reference as missing. Empty when the caller may view every reference in the payload; absent entirely when no object-level permissions apply to the request.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -228,6 +235,7 @@ class JsonApiAgentOutListMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             page (PageMetadata): [optional]  # noqa: E501
+            restricted ([RestrictedObject]): References withheld from `included` because the caller may not view them. Their `relationships` entries are kept, so a client can render a placeholder instead of treating the reference as missing. Empty when the caller may view every reference in the payload; absent entirely when no object-level permissions apply to the request.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

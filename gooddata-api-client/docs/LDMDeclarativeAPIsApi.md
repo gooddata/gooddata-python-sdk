@@ -166,6 +166,21 @@ with gooddata_api_client.ApiClient() as api_client:
                     ],
                     attributes=[
                         DeclarativeAttribute(
+                            conditional_formatting=ObjectConditionalFormatting(
+                                conditions=[
+                                    ConditionalFormattingCondition(
+                                        format=ConditionalFormattingFormat(
+                                            background_color="#3DB36B",
+                                            color="#E54D40",
+                                            scope="cell",
+                                        ),
+                                        id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                        operator="ALL",
+                                        value=ConditionalFormattingValue(),
+                                    ),
+                                ],
+                                enabled=True,
+                            ),
                             default_view=LabelIdentifier(
                                 id="label_id",
                                 type="label",
@@ -176,6 +191,21 @@ with gooddata_api_client.ApiClient() as api_client:
                             is_nullable=False,
                             labels=[
                                 DeclarativeLabel(
+                                    conditional_formatting=ObjectConditionalFormatting(
+                                        conditions=[
+                                            ConditionalFormattingCondition(
+                                                format=ConditionalFormattingFormat(
+                                                    background_color="#3DB36B",
+                                                    color="#E54D40",
+                                                    scope="cell",
+                                                ),
+                                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                                operator="ALL",
+                                                value=ConditionalFormattingValue(),
+                                            ),
+                                        ],
+                                        enabled=True,
+                                    ),
                                     description="Customer name",
                                     geo_area_config=GeoAreaConfig(
                                         collection=GeoCollectionIdentifier(
@@ -291,6 +321,21 @@ with gooddata_api_client.ApiClient() as api_client:
             ],
             date_instances=[
                 DeclarativeDateDataset(
+                    conditional_formatting=ObjectConditionalFormatting(
+                        conditions=[
+                            ConditionalFormattingCondition(
+                                format=ConditionalFormattingFormat(
+                                    background_color="#3DB36B",
+                                    color="#E54D40",
+                                    scope="cell",
+                                ),
+                                id="d0538854-aac3-4fc6-9603-61f49bab6aa3",
+                                operator="ALL",
+                                value=ConditionalFormattingValue(),
+                            ),
+                        ],
+                        enabled=True,
+                    ),
                     description="A customer order date",
                     granularities=[
                         "SECOND",
