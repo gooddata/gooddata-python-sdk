@@ -626,6 +626,7 @@ def evaluate_agentic_forecasting(
         exc.runs_passed = runs_passed
         exc.runs_effective = len(summary.run_results)
         exc.failed_runs = failed_runs
+        exc.best_run_latency_s = best.run_latency_s
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise exc
 
@@ -637,5 +638,6 @@ def evaluate_agentic_forecasting(
         response_id=best.response_id,
         detail=detail,
         failed_runs=failed_runs,
+        best_run_latency_s=best.run_latency_s,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

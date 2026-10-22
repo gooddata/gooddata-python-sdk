@@ -565,6 +565,7 @@ def evaluate_agentic_dashboard_summary(
         error.runs_passed = runs_passed
         error.runs_effective = len(summary.run_results)
         error.failed_runs = failed_runs
+        error.best_run_latency_s = best.run_latency_s
         error.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise error
 
@@ -577,5 +578,6 @@ def evaluate_agentic_dashboard_summary(
         runs_passed=runs_passed,
         runs_effective=len(summary.run_results),
         failed_runs=failed_runs,
+        best_run_latency_s=best.run_latency_s,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

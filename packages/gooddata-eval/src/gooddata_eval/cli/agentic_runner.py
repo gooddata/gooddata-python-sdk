@@ -326,6 +326,8 @@ def _dispatch_agentic(
             k=k,
             gate=gate,
             agent_id=agent_id,
+            **lf_kw,
+        )
     elif kind == "agentic_forecasting":
         return evaluate_agentic_forecasting(
             host=host,
