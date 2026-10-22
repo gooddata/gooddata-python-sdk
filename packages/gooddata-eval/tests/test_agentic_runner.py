@@ -103,6 +103,7 @@ _ALL_AGENTIC_KIND_CASES = [
         {"must_include": ["States the overall trend."]},
         "evaluate_agentic_dashboard_summary",
     ),
+    ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
@@ -807,6 +808,7 @@ _KIND_EVALUATORS = [
     ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("agentic_document_skill", "evaluate_agentic_document_skill", {}),
     ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
+    ("agentic_forecasting", "evaluate_agentic_forecasting", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
