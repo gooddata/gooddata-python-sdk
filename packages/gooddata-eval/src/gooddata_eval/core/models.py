@@ -347,6 +347,9 @@ class ChatResult(BaseModel):
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
     turn_wall_clock_sec: float | None = None
+    # The endpoint's whole JSON response, for single-shot endpoints whose answer carries
+    # more than its text (the takeaway endpoint's `noData`). None for chat responses.
+    raw_response: dict[str, Any] | None = None
 
 
 def shift_and_index_events(

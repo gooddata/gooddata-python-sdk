@@ -6,6 +6,7 @@ from urllib.parse import unquote
 
 import httpx
 import pytest
+from gooddata_eval.core import _retry as retry_mod
 from gooddata_eval.core.chat import sse_client as sse_mod
 from gooddata_eval.core.chat.sse_client import (
     ChatClient,
@@ -1350,3 +1351,8 @@ def test_a_turn_that_fails_after_response_started_still_counts_as_joined(monkeyp
         client.send_message("conv-failed-turn", "q")
 
     assert joined_turns("conv-failed-turn") == 1
+
+
+def test_retry_names_external_callers_import_stay_on_sse_client() -> None:
+    assert sse_mod._RETRYABLE_STATUS_CODES is retry_mod.RETRYABLE_STATUS_CODES
+    assert sse_mod._retry_transient is retry_mod.retry_transient
