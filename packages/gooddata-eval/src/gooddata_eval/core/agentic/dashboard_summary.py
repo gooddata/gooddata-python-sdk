@@ -246,6 +246,8 @@ class DashboardSummaryRunResult:
     reasoning_steps: list[str] = field(default_factory=list)
     response_id: str | None = None
     timings: PhaseTimings = field(default_factory=PhaseTimings)
+    # This run's own wall time, from just before its chat call to the end of its scoring.
+    run_latency_s: float = 0.0
     tool_call_events: list[ToolCallEvent] = field(default_factory=list)
     reasoning_step_events: list[ReasoningStepEvent] = field(default_factory=list)
     # Set when the chat call itself failed. Such a run has no summary to grade, so it is
@@ -278,6 +280,7 @@ def _failed_run(
         widgets_total=len(widgets),
         widgets_executed=sum(1 for w in widgets if w.result_id is not None),
         timings=PhaseTimings(agent_s=agent_s),
+        run_latency_s=agent_s,
         chat_error=message,
     )
 
@@ -318,6 +321,7 @@ def _run_single_dashboard_summary(
         reasoning_steps=list(chat_result.reasoning_steps or []),
         response_id=chat_result.response_id,
         timings=PhaseTimings(agent_s=agent_elapsed, judge_s=judge_elapsed),
+        run_latency_s=agent_elapsed + judge_elapsed,
         tool_call_events=list(chat_result.tool_call_events or []),
         reasoning_step_events=list(chat_result.reasoning_step_events or []),
     )
@@ -561,6 +565,7 @@ def evaluate_agentic_dashboard_summary(
         error.runs_passed = runs_passed
         error.runs_effective = len(summary.run_results)
         error.failed_runs = failed_runs
+        error.run_latencies_s = [r.run_latency_s for r in summary.run_results]
         raise error
 
     return AgenticEvalOutcome(
@@ -572,4 +577,5 @@ def evaluate_agentic_dashboard_summary(
         runs_passed=runs_passed,
         runs_effective=len(summary.run_results),
         failed_runs=failed_runs,
+        run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )

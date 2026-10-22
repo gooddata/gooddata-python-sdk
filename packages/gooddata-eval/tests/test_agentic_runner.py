@@ -1127,7 +1127,14 @@ def test_every_evaluator_hands_out_its_run_latencies(kind, expected_output, targ
 
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
 def test_run_latencies_reach_the_report_for_every_kind(kind, expected_output, target):
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, run_latencies_s=[4.5, 6.0])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
@@ -1191,7 +1198,14 @@ def _noting(*latencies: float, then: Any = None):
 def test_every_kind_gets_its_chat_turns_recorded_as_trace_latencies(kind, expected_output, target):
     """The recorder wraps the item, so a kind needs no code of its own to be covered -- which is
     the point: nothing a new evaluator forgets can drop it out of the per-trace percentiles."""
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", side_effect=_noting(1.5, 2.5, 0.5)):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].trace_latencies_s == [1.5, 2.5, 0.5]

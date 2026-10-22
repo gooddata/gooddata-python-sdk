@@ -28,6 +28,7 @@ SINGLE_TURN_AGENTIC_KINDS = frozenset(
         "agentic_general_question",
         "agentic_guardrail",
         "agentic_search",
+        "agentic_dashboard_summary",
     }
 )
 
