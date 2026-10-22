@@ -250,3 +250,50 @@ def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_f
         "latency_breakdown": [],
     }
     assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
+
+
+def test_tool_correctness_tokenized_keywords_match_a_title_phrase():
+    """A fixture tokenizes; the agent searches the object's title as one phrase."""
+    tcs = [_mock_tc("search_objects", {"keywords": ["Abandonment Rate - 3DS"], "object_types": ["metric"]})]
+    assert _tool_correctness(tcs, {"keywords": ["abandonment", "rate", "3ds"]}) is True
+
+
+def test_tool_correctness_still_rejects_an_unrelated_keyword():
+    tcs = [_mock_tc("search_objects", {"keywords": ["Abandonment Rate - 3DS"]})]
+    assert _tool_correctness(tcs, {"keywords": ["interchange"]}) is False
+
+
+def test_tool_correctness_ignores_limit():
+    """`limit` has a server-side default; the single-shot evaluator already ignores it."""
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "limit": 20})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"], "limit": 10}) is True
+
+
+def test_tool_correctness_ignores_the_renamed_widget_argument():
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "user_requested_search": True})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"], "emit_widget": False}) is True
+
+
+def test_tool_correctness_allows_extra_object_types():
+    """Searching more broadly than the fixture asked is not a failure."""
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "object_types": ["metric", "fact", "attribute"]})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"], "object_types": ["metric"]}) is True
+
+
+def test_tool_correctness_rejects_a_missing_object_type():
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "object_types": ["metric"]})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"], "object_types": ["dashboard"]}) is False
+
+
+def test_tool_correctness_ignores_arguments_the_agent_adds():
+    """compatible_with_afm and kda_eligible appeared after these fixtures were written."""
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"], "compatible_with_afm": "x", "kda_eligible": True})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"]}) is True
+
+
+def test_tool_correctness_rejects_an_empty_search_term():
+    """ "" is a substring of everything, so it must not satisfy an expected keyword."""
+    tcs = [_mock_tc("search_objects", {"keywords": [""]})]
+    assert _tool_correctness(tcs, {"keywords": ["revenue"]}) is False
+    tcs = [_mock_tc("search_objects", {"keywords": ["revenue"]})]
+    assert _tool_correctness(tcs, {"keywords": [""]}) is False

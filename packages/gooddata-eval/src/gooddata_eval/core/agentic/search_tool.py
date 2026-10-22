@@ -43,22 +43,53 @@ def _tool_selection(tool_call_events: list[ToolCallEvent]) -> bool:
     return any(tc.function_name == "search_objects" for tc in tool_call_events)
 
 
+# Arguments that do not determine search quality, so a fixture naming them must not
+# fail the call. `limit` has a server-side default the agent is free to choose;
+# `emit_widget` was renamed to `user_requested_search` in the tool schema. The
+# single-shot evaluator (core/evaluators/search_tool.py) has ignored these since the
+# rename -- this path did not, so every fixture written against the older signature
+# scored tool_correctness=False while still passing on tool_selection alone.
+_IGNORED_SEARCH_ARGS = frozenset({"limit", "emit_widget", "user_requested_search"})
+
+
+def _loosely_contains(expected: str, actual: str) -> bool:
+    """Case-insensitive containment in either direction; an empty string matches nothing."""
+    if not expected.strip() or not actual.strip():
+        return False
+    return expected.lower() in actual.lower() or actual.lower() in expected.lower()
+
+
+def _list_matches(expected: list, actual: list) -> bool:
+    """Every expected element must appear in some actual element, and vice versa is not required.
+
+    Substring rather than equality, because the two sides legitimately tokenize
+    differently: a fixture says ["abandonment", "rate", "3ds"] while the agent searches
+    the object's title as one phrase, ["Abandonment Rate - 3DS"]. Both name the same
+    object, and exact element equality calls that a failure.
+    """
+    return all(
+        any(isinstance(a, str) and isinstance(e, str) and _loosely_contains(e, a) for a in actual) for e in expected
+    )
+
+
 def _tool_correctness(tool_call_events: list[ToolCallEvent], expected_tool_call: dict) -> bool:
     """Return True if the search_objects call arguments match expected.
 
-    List fields (e.g. keywords, object_types) use subset matching: all expected
-    values must appear in the actual call, but the agent may include extras.
+    List fields (e.g. keywords, object_types) use subset matching: every expected value
+    must appear in the actual call, by substring, and the agent may include extras.
     """
     for tc in tool_call_events:
         if tc.function_name == "search_objects":
             args = tc.parsed_arguments() or {}
             for key, exp_val in expected_tool_call.items():
+                if key in _IGNORED_SEARCH_ARGS:
+                    continue
                 act_val = args.get(key)
                 if isinstance(exp_val, list) and isinstance(act_val, list):
-                    if not set(exp_val).issubset(set(act_val)):
+                    if not _list_matches(exp_val, act_val):
                         return False
                 elif isinstance(exp_val, str) and isinstance(act_val, str):
-                    if exp_val.lower() not in act_val.lower() and act_val.lower() not in exp_val.lower():
+                    if not _loosely_contains(exp_val, act_val):
                         return False
                 elif exp_val != act_val:
                     return False
