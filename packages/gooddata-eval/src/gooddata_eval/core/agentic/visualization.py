@@ -20,6 +20,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -198,6 +199,7 @@ def _execute_single_run(
     requires_execution: bool = False,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
+    run_started = time.monotonic()
     total_turns = 0
     total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
@@ -559,7 +561,8 @@ def evaluate_agentic_visualization(
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
         expected_dump = best.best_expected.model_dump(exclude_none=True)
         actual_dump = best.actual_output.model_dump(exclude_none=True) if best.actual_output else None
-        exc = VisualizationAssertionError(
+        raise_agentic_failure(
+            VisualizationAssertionError,
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
             f"{gate_note}\n"
@@ -589,26 +592,25 @@ def evaluate_agentic_visualization(
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
             f"  Executed              : {ev.executed}{' (required)' if ev.requires_execution else ''}\n"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+            run_latencies_s=run_latencies_s,
+            failed_runs=failed_runs,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
-        exc.run_latencies_s = run_latencies_s
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
     )

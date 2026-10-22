@@ -21,6 +21,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -44,7 +45,7 @@ from gooddata_eval.core.models import (
     shift_and_index_events,
     timeline_detail,
 )
-from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
+from gooddata_eval.core.timing import PhaseTimings, log_timer, run_latency_s, sum_timings
 
 try:
     from openai import OpenAI as _OpenAI
@@ -646,29 +647,31 @@ def evaluate_agentic_metric_skill(
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
-        exc = MetricSkillAssertionError(
+        raise_agentic_failure(
+            MetricSkillAssertionError,
             f"Metric skill assertion failed. {gate_note} "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
-            f"Actual MAQL: {best.actual_maql}."
+            f"Actual MAQL: {best.actual_maql}.",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=run_latency_s(best.timings),
+            run_latencies_s=run_latencies_s,
+            timings=item_timings,
+            failed_runs=failed_runs,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.timings = item_timings
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
-        exc.run_latencies_s = run_latencies_s
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=run_latency_s(best.timings),
         timings=item_timings,
         # Also on the success path: pass@K clears the gate with one passing run, so a
         # 1/3 item reports success while two of its runs failed for reasons worth reading.

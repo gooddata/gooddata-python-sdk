@@ -23,6 +23,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1110,7 +1111,8 @@ def evaluate_agentic_alert_skill(
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
-        exc = AlertSkillAssertionError(
+        raise_agentic_failure(
+            AlertSkillAssertionError,
             f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
@@ -1118,26 +1120,25 @@ def evaluate_agentic_alert_skill(
             f"recipients_correct={ev.recipients_correct}, "
             f"attributes_correct={ev.attributes_correct}, "
             f"granularity_correct={ev.granularity_correct}. "
-            f"Actual args: {best.actual_alert_arguments}"
+            f"Actual args: {best.actual_alert_arguments}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            best_run_latency_s=best.run_latency_s,
+            run_latencies_s=[r.run_latency_s for r in summary.run_results],
+            failed_runs=failed_runs,
         )
-        exc.reasoning_steps = best.reasoning_steps
-        exc.conversation_id = best.conversation_id
-        exc.response_id = best.response_id
-        exc.detail = detail
-        exc.runs_passed = runs_passed
-        exc.runs_effective = runs_effective
-        exc.failed_runs = failed_runs
-        exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
+        best_run_latency_s=best.run_latency_s,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
     )
