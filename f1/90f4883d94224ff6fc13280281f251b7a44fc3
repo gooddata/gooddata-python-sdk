@@ -66,7 +66,7 @@ packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "efe460126c5064ca71166f9fd1b983ae813309d3",
+  "base_commit_sha": "f190f4883d94224ff6fc13280281f251b7a44fc3",
   "prompts": {},
   "humans": {
     "h_123280b1c5e53d": {
