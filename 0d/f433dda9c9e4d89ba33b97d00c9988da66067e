@@ -6,7 +6,7 @@ packages/gooddata-eval/tests/test_models.py
 packages/gooddata-eval/tests/test_langfuse_source.py
   s_26352a90edbfcb::t_3f81900257b1dc 76-171
 packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_26352a90edbfcb::t_a7bb52dbdbe63c 462-497,510-511
+  s_26352a90edbfcb::t_a7bb52dbdbe63c 462-497,470-505,510-511,518-519
 ---
 {
   "schema_version": "authorship/3.0.0",
