@@ -28,11 +28,14 @@ packages/gooddata-eval/tests/test_takeaway_evaluate.py
 packages/gooddata-eval/tests/test_takeaway_evaluator.py
   s_26352a90edbfcb::t_6d15e1f6449825 106-110
   s_26352a90edbfcb::t_7703232388c151 111
-  s_26352a90edbfcb::t_d88c613015cef7 390-407
+  s_26352a90edbfcb::t_d88c613015cef7 390-407,393-410
+  s_26352a90edbfcb::t_fd6ff769b02bd4 357-360
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
-  s_26352a90edbfcb::t_75d80446cdf151 98,123-124,133-134
-  s_26352a90edbfcb::t_7703232388c151 132
-  s_26352a90edbfcb::t_071a4b01e79b0b 152-168,170,210
+  s_26352a90edbfcb::t_75d80446cdf151 98,99,123-124,124-125,133-134,134-135
+  s_26352a90edbfcb::t_7703232388c151 132,133
+  s_26352a90edbfcb::t_071a4b01e79b0b 152-168,153-169,170,171,210,211
+  s_26352a90edbfcb::t_19a007c5d7e1ac 52
+  s_26352a90edbfcb::t_7df0250b636436 51,53
 packages/gooddata-eval/tests/test_takeaway_client.py
   s_26352a90edbfcb::t_1c8656bf2c88ee 7,155-215,155-188,155-158,166,168-222,168-195,200-205,207-212,224-242,231-249
   s_26352a90edbfcb::t_3cf7d260316799 126
@@ -55,6 +58,10 @@ packages/gooddata-eval/src/gooddata_eval/core/_retry.py
 packages/gooddata-eval/tests/test_sse_client.py
   s_26352a90edbfcb::t_504032d7668b48 1134-1138
   s_26352a90edbfcb::t_66851a5f92b608 9
+packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
+  s_26352a90edbfcb::t_c6bcf2b044edcf 25-28
+  s_26352a90edbfcb::t_d5509697d81a57 48-54
+  s_26352a90edbfcb::t_fca5c9aba7adae 24,47
 ---
 {
   "schema_version": "authorship/3.0.0",
