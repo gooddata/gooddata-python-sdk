@@ -1,10 +1,10 @@
 docs/content/en/latest/data/data-source/_index.md
-  s_a78cd47c5b252c::t_b1020d89fc442d 104
+  s_a78cd47c5b252c::t_d799b0367d3ad6 104
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "178beff08af115ecf68a68282803efd889910b93",
+  "base_commit_sha": "851a8695d0ba492e6af3eeac2f05cecc29dbde2c",
   "prompts": {},
   "sessions": {
     "s_a78cd47c5b252c": {
@@ -13,7 +13,7 @@ docs/content/en/latest/data/data-source/_index.md
         "id": "9663ef0d-0743-4ac5-9f14-137567e0a99a",
         "model": "claude-opus-5-5"
       },
-      "human_author": "zdenekornst <ornstz@me.com>"
+      "human_author": null
     }
   }
 }
