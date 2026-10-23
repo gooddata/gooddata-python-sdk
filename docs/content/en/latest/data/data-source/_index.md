@@ -87,24 +87,6 @@ CatalogDataSourceRedshift(
 ```
 ### Snowflake
 
-Using basic credentials (username + password):
-```python
-CatalogDataSourceSnowflake(
-    id=data_source_id,
-    name=data_source_name,
-    db_specific_attributes=SnowflakeAttributes(
-        account=os.environ["SNOWFLAKE_ACCOUNT"],
-        warehouse=os.environ["SNOWFLAKE_WAREHOUSE"],
-        db_name=os.environ["SNOWFLAKE_DBNAME"]
-    ),
-    schema=os.environ["SNOWFLAKE_SCHEMA"],
-    credentials=BasicCredentials(
-        username=os.environ["SNOWFLAKE_USER"],
-        password=os.environ["SNOWFLAKE_PASSWORD"],
-    ),
-)
-```
-
 Using key-pair authentication (username + private_key, optionally private_key_passphrase):
 ```python
 CatalogDataSourceSnowflake(
@@ -119,6 +101,7 @@ CatalogDataSourceSnowflake(
     credentials=KeyPairCredentials(
         username=os.environ["SNOWFLAKE_USER"],
         private_key=os.environ["SNOWFLAKE_PRIVATE_KEY"],
+        private_key_passphrase=os.environ.get("SNOWFLAKE_PRIVATE_KEY_PASSPHRASE"),  # optional
     ),
 )
 ```
