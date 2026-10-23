@@ -1,0 +1,51 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_notification_channel_destinations.py
+  s_bcf6588db246d3::t_8cda0532c2cb5a 106
+  s_bcf6588db246d3::t_7a65a2ab695c8a 1-7,10-105,107-121
+  s_bcf6588db246d3::t_07652012a1ce47 8-9
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_bcf6588db246d3::t_7c3d176da29d22 143-146
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/layout/notification_channel.py
+  s_bcf6588db246d3::t_c413ce946e6d44 2-3,5,10-12,16,21-22,33-75,77-84,86-103,110-111,120,125-138
+  s_bcf6588db246d3::t_cc2fbf3855990b 85
+  s_bcf6588db246d3::t_cd7dc4b1ed5453 104-108
+  s_bcf6588db246d3::t_856c19d700958c 8
+  s_bcf6588db246d3::t_9d71870fb1fa9f 109
+  s_bcf6588db246d3::t_d9d7f9d79aaf2a 76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "16db372332b662b4cf0cfffc37851cea6f97e67e",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-sdk/tests/catalog/unit_tests/test_notification_channel_destinations.py
+  s_bcf6588db246d3::t_4d099543835aa8 5-10,19
+  s_bcf6588db246d3::t_022a0cedad7942 110-111,121-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3471005fc69f6c9100eff749afef8a0214243acb",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_160cda2303f459::t_a4f2a51f6e95ab 1002-1004,1007-1008
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ac1c5b0c8c3b863a44392180809c2746882e8a15",
+  "prompts": {},
+  "sessions": {
+    "s_160cda2303f459": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44aefa1b-0519-49d5-8f88-a995e4677cbb",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/tests/test_agentic_join_trace.py
+  s_eb4ec8b714e7de::t_2cefbce6484b08 253-261,266-276
+  s_eb4ec8b714e7de::t_89639243445740 262-265
+  s_eb4ec8b714e7de::t_5bb9bf9e541e67 9
+  s_eb4ec8b714e7de::t_7ba0c81edad747 277-280
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_trace_linker.py
+  s_eb4ec8b714e7de::t_7b7e72e0e1447a 253
+  s_eb4ec8b714e7de::t_480392bb3ed9fd 24
+  s_eb4ec8b714e7de::t_89d238293b1fb9 236-250,252,254-255
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "207192e080a21428b629d7ad216d3db5a9948a85",
+  "prompts": {},
+  "sessions": {
+    "s_eb4ec8b714e7de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7880db01-ebe2-47d4-a090-a7bf4a566f72",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/item_scope.py
+  s_328fe1dadf98b7::t_f28a8f8525248e 4,18,44-45
+packages/gooddata-eval/tests/test_sse_client.py
+  s_328fe1dadf98b7::t_12666d2cb20963 1230,1232
+packages/gooddata-eval/AGENTS.md
+  s_328fe1dadf98b7::t_d79bb0559c6094 160,194-195
+packages/gooddata-eval/tests/test_langfuse_item_scope.py
+  s_328fe1dadf98b7::t_c0d4fe085e839b 46-54
+  s_328fe1dadf98b7::t_e55bc48e2fe0ed 10
+packages/gooddata-eval/tests/test_agentic_join_trace.py
+  s_328fe1dadf98b7::t_12666d2cb20963 174
+packages/gooddata-eval/tests/conftest.py
+  s_328fe1dadf98b7::t_f28a8f8525248e 36-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "50bccafd4b024fdc34dee8a04888c9db9100e8ae",
+  "prompts": {},
+  "sessions": {
+    "s_328fe1dadf98b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e92dd-9274-4415-a3ca-cbd1592d1c5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_parameters.py
+  s_745e495ad9e54d::t_8ee3081fe3ab5e 9-10,17-18,22,31,58-83
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_745e495ad9e54d::t_f412b01dfc4b39 334-335
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f79f0ef877ac74f73f81a6867edc79ff58cecb0e",
+  "prompts": {},
+  "sessions": {
+    "s_745e495ad9e54d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bf0295c5-3fe5-4b14-9060-45632d3c16e2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
