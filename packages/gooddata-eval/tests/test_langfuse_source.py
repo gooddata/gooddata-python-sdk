@@ -73,6 +73,102 @@ def test_item_from_raw_summary_input_absent_is_none():
     assert item.summary_input is None
 
 
+def test_langfuse_item_takeaway_input_from_input_object() -> None:
+    raw = {
+        "id": "lf-tk-1",
+        "datasetName": "ds",
+        "input": {"question": "Takeaway for the page", "takeaway_input": {"visualizations": ["v1"]}},
+        "metadata": {"takeaway_input": {"visualizations": ["from-metadata"]}},
+        "expectedOutput": {"test_kind": "document_takeaway"},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.takeaway_input is not None
+    assert item.takeaway_input.visualizations == ["v1"]
+
+
+def test_langfuse_item_takeaway_input_from_metadata() -> None:
+    raw = {
+        "id": "lf-tk-2",
+        "datasetName": "ds",
+        "input": "Takeaway for the page",
+        "metadata": {"takeaway_input": {"visualizations": ["v2"], "max_characters": 1000}},
+        "expectedOutput": {"must_include": ["revenue"]},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "document_takeaway"
+    assert item.takeaway_input.visualizations == ["v2"]
+    assert item.takeaway_input.max_characters == 1000
+
+
+def test_langfuse_item_takeaway_input_from_expected_output() -> None:
+    raw = {
+        "id": "lf-tk-5",
+        "datasetName": "ds",
+        "input": "Takeaway for the page",
+        "expectedOutput": {"takeaway_input": {"visualizations": ["v3"]}},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "document_takeaway"
+    assert item.takeaway_input.visualizations == ["v3"]
+
+
+def test_langfuse_item_structural_kind_beats_takeaway_input() -> None:
+    raw = {
+        "id": "lf-tk-6",
+        "datasetName": "ds",
+        "input": {"question": "Show revenue", "takeaway_input": {"visualizations": ["v1"]}},
+        "expectedOutput": {"visualization": {"id": "x", "type": "", "query": {"fields": {}}}},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "vis_agentic"
+
+
+def test_langfuse_item_invalid_takeaway_input_names_the_item() -> None:
+    raw = {
+        "id": "lf-tk-bad",
+        "datasetName": "ds",
+        "input": {"question": "Takeaway", "takeaway_input": {"visualizations": ["v1"], "max_chars": 400}},
+        "expectedOutput": {},
+    }
+    with pytest.raises(ValueError, match=r"(?s)'lf-tk-bad'.*max_chars"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+@pytest.mark.parametrize("takeaway_input", ["v1", ["v1"]])
+def test_langfuse_item_non_object_takeaway_input_names_the_item(takeaway_input: object) -> None:
+    raw = {
+        "id": "lf-tk-shape",
+        "datasetName": "ds",
+        "input": "Takeaway",
+        "metadata": {"takeaway_input": takeaway_input},
+        "expectedOutput": {},
+    }
+    with pytest.raises(ValueError, match="'lf-tk-shape'.*takeaway_input"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+def test_langfuse_item_infers_document_takeaway_kind() -> None:
+    raw = {
+        "id": "lf-tk-3",
+        "datasetName": "ds",
+        "input": {"question": "Takeaway for the page", "takeaway_input": {"visualizations": ["v1"]}},
+        "expectedOutput": {"no_data": False, "must_include": ["revenue"]},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "document_takeaway"
+
+
+def test_langfuse_item_explicit_kind_beats_takeaway_input() -> None:
+    raw = {
+        "id": "lf-tk-4",
+        "datasetName": "ds",
+        "input": {"question": "Takeaway for the page", "takeaway_input": {"visualizations": ["v1"]}},
+        "expectedOutput": {"test_kind": "agentic_general_question"},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "agentic_general_question"
+
+
 def test_load_langfuse_dataset_calls_rest_api(monkeypatch):
     monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "pk-test")
     monkeypatch.setenv("LANGFUSE_SECRET_KEY", "sk-test")
