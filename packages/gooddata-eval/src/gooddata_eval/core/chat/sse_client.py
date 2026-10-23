@@ -20,17 +20,25 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Any, Iterable
 from urllib.parse import quote
 
 import httpx
 
+from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, float_env, int_env, retry_transient
 from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
 from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import note_trace_latency
 
 _log = logging.getLogger(__name__)
+
+# The retry helpers live in core/_retry.py, shared with the takeaway client. The private
+# names stay importable from here: gdc-nas tavern-e2e imports them from this module.
+_int_env = int_env
+_float_env = float_env
+_RETRYABLE_STATUS_CODES = RETRYABLE_STATUS_CODES
+_retry_transient = retry_transient
 
 SSE_DATA_PREFIX = "data: "
 SSE_EVENT_PREFIX = "event: "
@@ -39,11 +47,6 @@ _RESPONSE_ENDED_EVENT = "response_ended"
 # gen-ai's first event of a turn; its data carries the turn's responseId and traceId.
 _RESPONSE_STARTED_EVENT = "response_started"
 
-# 500 is here on evidence, not on principle: in one visualization eval batch it hard-failed
-# 10 of 56 runs with zero retry attempts, and every affected question scored normally when the
-# same question/model ran again the next day -- i.e. transient gen-ai faults, not deterministic
-# server bugs. A genuinely deterministic 500 still terminates, just after the bounded backoff.
-_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 # `reason` values gen-ai puts on the error event of a turn that finished without an answer.
 _TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tokens", "content_filter"})
@@ -112,27 +115,6 @@ class TurnTimeoutError(ChatError):
     retrying it spends the budget again."""
 
 
-def _int_env(name: str, default: int) -> int:
-    """Read an int from the environment, falling back to ``default`` when unset or blank."""
-    raw = os.getenv(name)
-    return int(raw) if raw else default
-
-
-def _float_env(name: str, default: float) -> float:
-    """Read a float from the environment, falling back to ``default`` when unset or blank."""
-    raw = os.getenv(name)
-    return float(raw) if raw else default
-
-
-# Retry budget defaults, giving a ~2 min worst-case cap per send (5/10/20/40/60s).
-# Each is overridable via env so CI can retune without cutting a new release --
-# read per call rather than at import, so an exported value cannot silently
-# rewrite what a test that patches these attributes expects.
-_MAX_RETRIES_DEFAULT = 5
-_INITIAL_BACKOFF_S_DEFAULT = 5.0
-_BACKOFF_FACTOR_DEFAULT = 2.0
-_MAX_BACKOFF_S_DEFAULT = 60.0
-
 # Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
 # so an agent that keeps emitting reasoning events can stream for many minutes without
 # ever tripping it -- this is what bounds a runaway item and lets the run move on.
@@ -199,44 +181,16 @@ def set_default_item_timeout(seconds: float | None) -> None:
     _ITEM_TIMEOUT_S = seconds or 0.0
 
 
-T = TypeVar("T")
-
-
 def _is_retryable_exc(exc: Exception) -> bool:
     if isinstance(exc, TransientChatError):
         return True
     if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in _RETRYABLE_STATUS_CODES
+        return exc.response.status_code in RETRYABLE_STATUS_CODES
     # Mid-stream disconnect ("peer closed connection without sending complete
     # message body") -- pure network flake, not a real agent/content failure.
     # Confirmed live: contaminated ~1-4% of visualization runs with a hard
     # fail and zero retry attempts.
     return isinstance(exc, httpx.RemoteProtocolError)
-
-
-def _retry_transient(operation: Callable[[], T], *, is_retryable: Callable[[Exception], bool]) -> T:
-    """Run ``operation``; retry retryable failures with bounded exponential backoff."""
-    max_retries = _int_env("GOODDATA_EVAL_CHAT_MAX_RETRIES", _MAX_RETRIES_DEFAULT)
-    delay = _float_env("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", _INITIAL_BACKOFF_S_DEFAULT)
-    factor = _float_env("GOODDATA_EVAL_CHAT_BACKOFF_FACTOR", _BACKOFF_FACTOR_DEFAULT)
-    max_backoff = _float_env("GOODDATA_EVAL_CHAT_MAX_BACKOFF_S", _MAX_BACKOFF_S_DEFAULT)
-    for attempt in range(max_retries + 1):  # 0..N => N retries + 1 initial attempt
-        try:
-            return operation()
-        except Exception as exc:  # noqa: PERF203 — retry loop: per-attempt try/except is intentional
-            if attempt == max_retries or not is_retryable(exc):
-                raise
-            sleep_s = min(delay, max_backoff)
-            _log.warning(
-                "Transient gen-ai error (attempt %d/%d): %s; retrying in %.0fs",
-                attempt + 1,
-                max_retries + 1,
-                exc,
-                sleep_s,
-            )
-            time.sleep(sleep_s)
-            delay *= factor
-    raise AssertionError("unreachable")  # loop either returns or raises
 
 
 @dataclass
@@ -456,7 +410,7 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
                 raise TurnIncompleteError(
                     message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
-            if code in _RETRYABLE_STATUS_CODES:
+            if code in RETRYABLE_STATUS_CODES:
                 raise TransientChatError(
                     message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
@@ -557,7 +511,7 @@ class ChatClient:
 
         # NOTE: retrying create is not idempotent — a created-then-503 can leak an
         # orphaned (ephemeral) conversation. Acceptable for eval; do not reuse blindly.
-        conversation_id = _retry_transient(_do, is_retryable=_is_retryable_exc)
+        conversation_id = retry_transient(_do, is_retryable=_is_retryable_exc)
         # Anchor the per-item clock here: for an agentic item this conversation carries
         # every turn, so the budget must run from its creation, not from each send.
         self._conversation_started = time.monotonic()
@@ -603,7 +557,7 @@ class ChatClient:
                 return result
 
         try:
-            result = _retry_transient(_do, is_retryable=_is_retryable_exc)
+            result = retry_transient(_do, is_retryable=_is_retryable_exc)
         except ChatError as exc:
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)

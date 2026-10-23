@@ -347,6 +347,9 @@ class ChatResult(BaseModel):
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
     turn_wall_clock_sec: float | None = None
+    # The endpoint's whole JSON response, for single-shot endpoints whose answer carries
+    # more than its text (the takeaway endpoint's `noData`). None for chat responses.
+    raw_response: dict[str, Any] | None = None
 
 
 def shift_and_index_events(
@@ -467,6 +470,42 @@ class SummaryInput(BaseModel):
     format_hint: str | None = None
 
 
+class TakeawayVisualization(BaseModel):
+    """A takeaway visualization placed with its own filters."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    visualization_id: str
+    filters: list[dict] = Field(default_factory=list)
+
+
+class TakeawayInstructions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    document: str | None = None
+    slot: str | None = None
+    format_hint: str | None = None
+
+
+class TakeawayInput(BaseModel):
+    """Structured input for the `document_takeaway` test kind.
+
+    Maps onto the takeaway endpoint's request body
+    (`POST /api/v1/ai/workspaces/{ws}/takeaway`). Authored in snake_case in the
+    dataset; the TakeawayClient maps it to the endpoint's camelCase fields. Unknown
+    keys are rejected at every level so a typo in a dataset item fails loudly instead
+    of being dropped.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    visualizations: list[str | TakeawayVisualization] = Field(min_length=1)
+    filter_context: list[dict] = Field(default_factory=list)
+    instructions: TakeawayInstructions = Field(default_factory=TakeawayInstructions)
+    max_characters: int | None = None
+    agent_id: str | None = None
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -479,6 +518,8 @@ class DatasetItem(BaseModel):
     expected_output: Any
     # Only used by the `dashboard_summary` test kind; ignored by all others.
     summary_input: SummaryInput | None = None
+    # Only used by the `document_takeaway` test kind; ignored by all others.
+    takeaway_input: TakeawayInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

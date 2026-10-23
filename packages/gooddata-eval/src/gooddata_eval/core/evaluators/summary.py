@@ -27,7 +27,8 @@ criterion (same behaviour as `general_question`).
 
 from typing import Any
 
-from gooddata_eval.core.evaluators._llm_judge import LLMJudge, score_run
+from gooddata_eval.core.evaluators._llm_judge import LLMJudge
+from gooddata_eval.core.evaluators._rubric import grade_rubric
 from gooddata_eval.core.evaluators._text_utils import extract_text
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
@@ -74,66 +75,13 @@ class DashboardSummaryEvaluator:
     def evaluate(self, item: DatasetItem, chat_result: ChatResult) -> ItemEvaluation:
         actual = extract_text(chat_result)
         must_include, must_not_include, rubric = self._criteria(item.expected_output)
-
-        detail: dict[str, Any] = {"actual_output": actual}
-        passed = True
-
-        # One judge request PER CRITERION, so an unreadable response has to be confined to
-        # its own criterion: letting it raise would discard every criterion already graded
-        # and abandon the ones after it, losing a 7-criterion item to one bad body. An
-        # ungraded criterion is recorded but stored without a bool, which keeps it out of
-        # the failing list and the quality denominator below: counting it as failed would
-        # invent a score the judge never gave.
-        ungraded = 0
-
-        def _grade(judge: LLMJudge, criterion: str, key: str, *, invert: bool = False) -> bool | None:
-            nonlocal ungraded
-            verdict = score_run(judge, input=item.question, expected_output=criterion, actual_output=actual)
-            if verdict.error is not None:
-                ungraded += 1
-                detail[f"{key}_reason"] = f"UNGRADED: {verdict.error}"
-                return None
-            # invert: the violation judge answers "is the characteristic present?", so the
-            # criterion is satisfied exactly when it says no.
-            ok = not verdict.passed if invert else verdict.passed
-            detail[key] = ok
-            detail[f"{key}_reason"] = verdict.reasoning
-            return ok
-
-        # `is True`, not `is not False`: a gating criterion the judge could not grade is not
-        # a failure, but it cannot carry a pass either.
-        for i, criterion in enumerate(must_include):
-            ok = _grade(self._positive_judge, criterion, f"include_{i}")
-            passed = passed and ok is True
-
-        for i, criterion in enumerate(must_not_include):
-            ok = _grade(self._violation_judge, criterion, f"exclude_{i}", invert=True)
-            passed = passed and ok is True
-
-        for i, criterion in enumerate(rubric):
-            # Rubric criteria inform quality but never gate `passed`.
-            _grade(self._positive_judge, criterion, f"rubric_{i}")
-
-        if ungraded:
-            detail["ungraded_criteria"] = ungraded
-        bool_checks = [v for v in detail.values() if isinstance(v, bool)]
-        quality = sum(1 for v in bool_checks if v) / len(bool_checks) if bool_checks else 0.0
-
-        # Keyed on the criteria that decide the verdict, not on any graded bool: rubric
-        # criteria never gate `passed`, so one graded rubric line must not certify a pass
-        # whose every mandatory fact went unassessed. A rubric-only item has no gating
-        # criteria, so there any graded line is a verdict.
-        gating = len(must_include) + len(must_not_include)
-        graded_gating = [v for k, v in detail.items() if isinstance(v, bool) and not k.startswith("rubric_")]
-        if ungraded and not (graded_gating if gating else bool_checks):
-            return ItemEvaluation(
-                passed=False,
-                rank_key=(-1, quality),
-                detail=detail,
-                error=(
-                    f"judge returned no readable verdict for any of the {gating or ungraded} criterion(s) "
-                    "that decide this item."
-                ),
-            )
-
-        return ItemEvaluation(passed=passed, rank_key=(int(passed), quality), detail=detail)
+        return grade_rubric(
+            self._positive_judge,
+            self._violation_judge,
+            question=item.question,
+            actual=actual,
+            must_include=[(f"include_{i}", c) for i, c in enumerate(must_include)],
+            must_not_include=[(f"exclude_{i}", c) for i, c in enumerate(must_not_include)],
+            rubric=[(f"rubric_{i}", c) for i, c in enumerate(rubric)],
+            detail={"actual_output": actual},
+        )

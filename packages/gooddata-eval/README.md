@@ -132,8 +132,8 @@ gd-eval run \
 | `--runs K` | `2` | Independent runs per item. |
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
-| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail` and `dashboard_summary`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
-| `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` items go through the summary endpoint, which has no such option. |
+| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
+| `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
 (`agentic_metric_skill`, `agentic_alert_skill`, `agentic_conversation`, `agentic_kda_skill`) always run one at a
@@ -707,7 +707,7 @@ A dataset is a folder of `.json` files, one per question:
 ```
 
 Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
-`search_tool`, `general_question`, `guardrail`, `dashboard_summary`.
+`search_tool`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway`.
 
 ### `dashboard_summary` items
 
@@ -746,6 +746,64 @@ The `expected_output` rubric:
 Each criterion is scored independently by the LLM judge, so `quality_score`
 is the fraction of satisfied criteria.
 
+### `document_takeaway` items
+
+Takeaway items call the AI Publisher takeaway endpoint
+(`POST /api/v1/ai/workspaces/{ws}/takeaway`) with a `takeaway_input` block, authored in
+snake_case and sent as the endpoint's camelCase body. In a Langfuse dataset the block goes
+in the item's `metadata` (or its `input` object), and `input` can stay a plain case label;
+an item carrying `takeaway_input` is a `document_takeaway` item unless it declares another
+`test_kind`. The endpoint needs the `enableGenAiReportTakeaways` feature flag.
+
+```json
+{
+  "id": "takeaway-001",
+  "dataset_name": "agent_document_takeaway",
+  "test_kind": "document_takeaway",
+  "question": "P01 default format, Sales page, no instructions",
+  "takeaway_input": {
+    "visualizations": ["<visualization id>", {"visualization_id": "<id>", "filters": []}],
+    "filter_context": [],
+    "instructions": {"document": null, "slot": null, "format_hint": null},
+    "max_characters": 300
+  },
+  "expected_output": {
+    "no_data": false,
+    "format": {"no_lists": false},
+    "must_include": ["States one finding that connects at least two of the charts"],
+    "must_not_include": [],
+    "rubric": []
+  }
+}
+```
+
+`takeaway_input` requires `visualizations`; unknown keys are rejected. Every
+`expected_output` key is optional:
+
+- `no_data` — whether the endpoint must answer `noData`; when either side says no data,
+  nothing else is graded.
+- `format` — overrides of the deterministic checks, which gate pass/fail: `bold_headline`,
+  `max_headline_words` (10), `max_sentences` (2), `max_words` (50), `single_paragraph`,
+  `no_lists`, `no_headings`. `false` or `null` switches a check off; unknown keys are
+  rejected. `length` (`max_characters`), `no_ids` and `no_meta` always apply.
+- `default_rules` — `false` drops the default judge criteria (one finding; no executive
+  summary, chart walk-through, background opener, figures, dates, causes the data cannot
+  show, chart description).
+- `must_include`, `must_not_include`, `rubric` — the item's own judge criteria, graded like
+  `dashboard_summary`.
+
+`word_count` and `headline_word_count` are reported in the item detail. The default judge
+criteria are calibrated with `make calibrate-takeaway` (needs `OPENAI_API_KEY`); re-run it
+after changing their wording.
+
+The client retries 429/5xx answers and connection failures. A request error that survives
+the retries is handled differently by the two entry points: `gd-eval run` aborts the item
+with that error, whatever `--runs` is, while the CI entry point
+(`evaluate_document_takeaway`) records it as an errored run, keeps the item's other runs,
+and raises only when no run completed. A read timeout is not retried, and the CI entry
+point records it as an errored run too. Any other 4xx and an unsupported URL scheme are
+never retried and fail the item in both.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
@@ -753,7 +811,8 @@ Its `user_context` is sent verbatim as `userContext` on every chat message of th
 follow-up and clarification messages included — the server treats a message without one
 as a cleared context. Requires the `enableAiContextSetup` feature flag on the target
 organization — without it the server ignores the dashboard view. Applies to chat items
-only; `dashboard_summary` items carry their scope in `summary_input` instead. No
+only; `dashboard_summary` and `document_takeaway` items carry their scope in
+`summary_input` / `takeaway_input` instead. No
 `userContext` key is sent at all when neither the item nor, for `agentic_conversation`,
 the current turn sets one.
 
@@ -806,6 +865,7 @@ from that turn on until another turn changes it, as the attached context does in
 | `general_question` | Text answer judged by LLM | `[llm-judge]` |
 | `guardrail` | Refusal/redirect (visualization response auto-fails) | `[llm-judge]` |
 | `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
+| `document_takeaway` | One short takeaway for a page (via `/takeaway` endpoint): deterministic format checks plus a rubric scored by LLM | `[llm-judge]` |
 
 ## Optional extras
 

@@ -2,6 +2,7 @@
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
+from unittest.mock import MagicMock
 
 import httpx
 import orjson
@@ -12,6 +13,7 @@ from gooddata_eval.core.config import JUDGE_MODEL_ENV_VAR, RunConfig, judge_mode
 from gooddata_eval.core.connection import (
     ConnectionError_,  # noqa: F401 - used in test_cli_operational_error_exits_nonzero
 )
+from gooddata_eval.core.dataset.langfuse_source import _item_from_raw
 from gooddata_eval.core.models import DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import TIMERS_ENV_VAR, timers_enabled
@@ -1146,3 +1148,52 @@ def test_no_warning_when_there_are_no_agentic_items(monkeypatch, tmp_path, capsy
     cli_main._warn_if_local_dataset_cannot_link(_local_dataset_config(tmp_path), [])
 
     assert capsys.readouterr().err == ""
+
+
+def _routing_backend() -> tuple[cli_main._RoutingBackend, MagicMock, MagicMock, MagicMock]:
+    chat, summary, takeaway = MagicMock(), MagicMock(), MagicMock()
+    backend = cli_main._RoutingBackend(chat, {"dashboard_summary": summary, "document_takeaway": takeaway})
+    return backend, chat, summary, takeaway
+
+
+def test_cli_routes_takeaway_items_to_takeaway_client() -> None:
+    backend, chat, summary, takeaway = _routing_backend()
+    raw = {
+        "id": "lf-tk-1",
+        "datasetName": "agent_document_takeaway",
+        "input": "P01 default format, Sales page",
+        "metadata": {"takeaway_input": {"visualizations": ["v1", "v2"], "max_characters": 300}},
+        "expectedOutput": {"must_include": ["States one finding"]},
+    }
+    item = _item_from_raw(raw, dataset_name="agent_document_takeaway", test_kind="visualization")
+
+    result = backend.ask(item)
+
+    takeaway.ask.assert_called_once_with(item)
+    assert result is takeaway.ask.return_value
+    chat.ask.assert_not_called()
+    summary.ask.assert_not_called()
+
+
+def test_cli_routes_other_kinds_by_test_kind() -> None:
+    backend, chat, summary, takeaway = _routing_backend()
+    summary_item = DatasetItem(
+        id="s", dataset_name="d", test_kind="dashboard_summary", question="q", expected_output={}
+    )
+    chat_item = DatasetItem(id="c", dataset_name="d", test_kind="general_question", question="q", expected_output="x")
+
+    backend.ask(summary_item)
+    backend.ask(chat_item)
+
+    summary.ask.assert_called_once_with(summary_item)
+    chat.ask.assert_called_once_with(chat_item)
+    takeaway.ask.assert_not_called()
+
+
+def test_routing_backend_closes_every_client() -> None:
+    backend, chat, summary, takeaway = _routing_backend()
+
+    backend.close()
+
+    for client in (chat, summary, takeaway):
+        client.close.assert_called_once_with()
