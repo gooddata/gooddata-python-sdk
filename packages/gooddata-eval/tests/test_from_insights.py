@@ -27,6 +27,7 @@ from gooddata_eval.core.dataset.from_insights import (
     resolve_type,
 )
 from gooddata_eval.core.dataset.local import load_local_dataset
+from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
     get_metric_uri_set,
@@ -1192,3 +1193,26 @@ def test_all_selection_filters_are_dropped_not_fatal(noop):
     """
     spec = convert(spend_by_merchant(filters=[noop]))
     assert spec.query.filter_by == {}
+
+
+def test_a_null_metric_keeps_its_position_and_size_by_is_normalized() -> None:
+    """A bubble with no x measure is `[null, y]`: dropping the null would move y onto the x axis."""
+    raw = CreatedVisualization.model_validate(
+        {
+            "type": "bubble_chart",
+            "query": {"fields": {"y": {"using": "metric/margin"}, "s": {"using": "metric/orders"}, "b": "label/brand"}},
+            "metrics": [None, {"field": "y", "format": "#,##0"}],
+            "size_by": [{"field": "s", "format": "#,##0"}],
+            "view_by": ["b"],
+        }
+    )
+    with patch.object(from_insights_mod, "_to_aac", return_value=raw):
+        spec = convert(viz("local:bubble", []))
+    assert spec.metrics == [None, "y"]
+    assert spec.size_by == ["s"]
+
+
+def test_a_chart_with_only_a_null_metric_has_no_measures() -> None:
+    raw = CreatedVisualization.model_validate({"type": "bubble_chart", "query": {"fields": {}}, "metrics": [None]})
+    with patch.object(from_insights_mod, "_to_aac", return_value=raw), pytest.raises(Unsupported, match="no measures"):
+        convert(viz("local:bubble", []))
