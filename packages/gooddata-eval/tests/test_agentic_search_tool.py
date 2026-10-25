@@ -208,6 +208,7 @@ def test_evaluate_agentic_search_tool_returns_reasoning_steps_on_pass():
         "tool_correct": True,
         "tool_call_names": ["search_objects"],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
     # One wall-clock sample per run, passing runs included -- the latency distribution is over
     # these, and a kind that forgot to report them would silently drop out of it.
@@ -248,5 +249,6 @@ def test_evaluate_agentic_search_tool_attaches_reasoning_steps_to_exception_on_f
         "tool_correct": False,
         "tool_call_names": [],
         "latency_breakdown": [],
+        "tool_calls": [],
     }
     assert len(exc_info.value.run_latencies_s) == exc_info.value.runs_effective == 1
