@@ -146,13 +146,14 @@ def list_ids(directory: Path) -> set[str]:
     return ids
 
 
-def aliases(bucket: list[AacBucketRef | str]) -> list[str]:
+def aliases(bucket: list[AacBucketRef | str] | list[AacBucketRef | str | None]) -> list[str]:
     """A bucket's field aliases.
 
     A bucket item is an alias, or an `AacBucketRef` carrying `format`, `axis`, `totals`
-    or `display_as` -- presentation, which nothing here or in the scorer reads.
+    or `display_as` -- presentation, which nothing here reads. A null metric only holds a
+    position and names no field.
     """
-    return [item if isinstance(item, str) else item.field for item in bucket]
+    return [item if isinstance(item, str) else item.field for item in bucket if item is not None]
 
 
 def _reject_unscorable(spec: CreatedVisualization) -> None:
@@ -164,7 +165,7 @@ def _reject_unscorable(spec: CreatedVisualization) -> None:
     field where `check_filters` never looks, and a repeater lists labels among its
     metrics. Teach the comparator about one and its line here can go.
     """
-    for alias in aliases(spec.metrics):
+    for alias in aliases(spec.metrics) + aliases(spec.size_by):
         field = spec.query.fields[alias]
         if isinstance(field, str):
             using, aggregated = field, False
@@ -257,9 +258,12 @@ def convert(viz: dict) -> CreatedVisualization:
     # scorer never reads them, so they do not belong in an expected output.
     spec.config = None
     spec.query.filter_by = _normalize_filters(spec.query.filter_by)
-    for bucket in ("metrics", "view_by", "segment_by", "columns", "rows"):
+    # A null metric holds a position: a bubble with no x measure is `[null, y]`, and dropping
+    # the null would move y onto the x axis.
+    spec.metrics = [None if item is None else aliases([item])[0] for item in spec.metrics]
+    for bucket in ("view_by", "segment_by", "columns", "rows", "size_by"):
         setattr(spec, bucket, aliases(getattr(spec, bucket)))
-    if not spec.metrics:
+    if not aliases(spec.metrics):
         raise Unsupported("no measures")
     _reject_unscorable(spec)
     return spec

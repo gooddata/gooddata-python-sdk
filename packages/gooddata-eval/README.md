@@ -709,6 +709,63 @@ A dataset is a folder of `.json` files, one per question:
 Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
 `search_tool`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway`.
 
+### `visualization` items
+
+The `expected_output` lists the candidate charts in the AAC format, and the item passes when
+the agent's chart matches one of them. Keys beside the candidates add item-level checks:
+
+```json
+{
+  "id": "sankey-001",
+  "dataset_name": "agent_visualization_extended_charts",
+  "test_kind": "visualization",
+  "question": "Show how net sales flow from product category to customer country.",
+  "expected_output": {
+    "visualization": {
+      "type": "sankey_chart",
+      "query": {"fields": {"m": {"using": "metric/net_sales"}, "c": {"using": "label/product_category"},
+                           "d": {"using": "label/customer_country"}}},
+      "metrics": ["m"],
+      "from": "c",
+      "to": "d",
+      "buckets_strict": true
+    },
+    "requires_visualization_part": true
+  }
+}
+```
+
+Item-level keys, all optional except the candidates:
+
+- `visualization` — one candidate chart, or a list of them. `expected_outputs`
+  (`[{"visualization": {...}}, ...]`) is the same list in the agentic fixture form.
+- `requires_execution` — the agent must also run the chart it built.
+- `expects_visualization: false` — the agent must answer without a chart, for example by asking
+  for a part the request leaves out. The item then lists no candidates.
+- `visualization_optional: true` — either an answer without a chart, or a chart that matches a
+  candidate, is right.
+- `answer_must_include` / `answer_must_not_match` — regular expressions, matched without regard
+  to case against the final answer. Every `answer_must_include` pattern must match, and no
+  `answer_must_not_match` pattern may.
+- `format_intents` — per metric uri, how the metric's numbers must read, for example
+  `{"metric/net_sales": {"divide_by": 1000000, "decimals": 1, "suffix": "M"}}`.
+- `requires_visualization_part` — the chart must come back as a part of the answer, not only as
+  the arguments of the chart tool call.
+
+Switches on a candidate chart:
+
+- `buckets_strict` — compare bucket by bucket, not only the union of the buckets, so swapped
+  heatmap rows and columns or a reversed sankey fail.
+- `metrics_ordered` — compare the metrics by position, for bullet roles and bubble axes.
+
+Any other key, at item level or on a candidate chart, makes the item error before any request
+is sent, because a misspelled key would otherwise be dropped and its check would never run:
+
+```
+ValueError: the expectation states ['answer_must_inlcude'], which is not one of ['answer_must_include', ...]
+ValueError: a candidate chart states ['bucket_strict'], which the chart model does not read
+```
+
 ### `dashboard_summary` items
 
 Summary items call the dedicated summary endpoint
