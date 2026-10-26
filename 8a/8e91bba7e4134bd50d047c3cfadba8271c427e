@@ -1,0 +1,16 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/report_skill.py
+  h_123280b1c5e53d 593
+packages/gooddata-eval/tests/test_agentic_report_skill.py
+  h_123280b1c5e53d 531-537
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a8e91bba7e4134bd50d047c3cfadba8271c427e",
+  "prompts": {},
+  "humans": {
+    "h_123280b1c5e53d": {
+      "author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

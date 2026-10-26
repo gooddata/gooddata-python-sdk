@@ -1,0 +1,22 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_b28a8daacfffee::t_ee04ea0bcade3e 208-209,219-221
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_b28a8daacfffee::t_7e497d03dd9ba9 858-863,871-872
+  s_b28a8daacfffee::t_81e0080146e4ea 3,16,864-870
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3d21230c170ad74eb460704fa063b580bd2ffc1a",
+  "prompts": {},
+  "sessions": {
+    "s_b28a8daacfffee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc852cd0-e08c-4394-80a0-ad52b4a1bdd3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

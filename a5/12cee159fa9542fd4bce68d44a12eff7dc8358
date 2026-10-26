@@ -1,0 +1,112 @@
+packages/gooddata-eval/tests/test_takeaway_client.py
+  s_26352a90edbfcb::t_a799e5b4dfb127 1-143,1-138,149-153
+  h_123280b1c5e53d 139-148
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_26352a90edbfcb::t_b69b8212f11f04 348-350
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/__init__.py
+  s_26352a90edbfcb::t_7bd5c75b83c801 1
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  s_26352a90edbfcb::t_e033495f003e66 1-88,1-77,79-88
+  h_123280b1c5e53d 78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "89bd470929bf37ccc3fc2677906758c1b44c96b4",
+  "prompts": {},
+  "humans": {
+    "h_123280b1c5e53d": {
+      "author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  },
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/tests/test_takeaway_client.py
+  s_26352a90edbfcb::t_1c8656bf2c88ee 7,155-215
+  s_26352a90edbfcb::t_3cf7d260316799 126
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  s_26352a90edbfcb::t_4c4f16278c76bd 20,32-37,76-77,83-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b9b1cb8e339d266b4fb2ef26506089b351540c74",
+  "prompts": {},
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  s_26352a90edbfcb::t_69e1bdaa54048f 20,34,65,95
+packages/gooddata-eval/tests/test_takeaway_client.py
+  s_26352a90edbfcb::t_9c33d82511addd 216-223
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_26352a90edbfcb::t_5b7fca3c8226ea 28,34-36
+  s_26352a90edbfcb::t_b3a7045cc1043b 23
+  s_26352a90edbfcb::t_69e1bdaa54048f 180,403,497,541
+  s_26352a90edbfcb::t_a1929ac5bae6b0 37
+packages/gooddata-eval/src/gooddata_eval/core/_retry.py
+  s_26352a90edbfcb::t_69e1bdaa54048f 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "00855000843a0f608856660bbea7b1ab71de16f1",
+  "prompts": {},
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/tests/test_takeaway_client.py
+  s_26352a90edbfcb::t_504032d7668b48 189-199,206-221
+  s_26352a90edbfcb::t_cd46e1ab048531 222-223
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_26352a90edbfcb::t_6dc4e2c7bba3bd 34-35,38-39
+packages/gooddata-eval/tests/test_sse_client.py
+  s_26352a90edbfcb::t_504032d7668b48 1134-1138
+  s_26352a90edbfcb::t_66851a5f92b608 9
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  s_26352a90edbfcb::t_6dc4e2c7bba3bd 32-36,40,81-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "516e6ef0823453c8020ab6128cfffea63719aa58",
+  "prompts": {},
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

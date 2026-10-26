@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  s_9581792d57de34::t_719de358ba4ef6 159-161,171-175
+packages/gooddata-eval/tests/test_visualization_evaluator.py
+  s_9581792d57de34::t_0bb7d37caee954 317-322
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "934102c629e9b9b28838aca76b01dea9555d73c4",
+  "prompts": {},
+  "sessions": {
+    "s_9581792d57de34": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4fa57ff-9ade-42a8-a203-efd5eb66e000",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

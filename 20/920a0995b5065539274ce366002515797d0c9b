@@ -1,0 +1,16 @@
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  h_123280b1c5e53d 78
+packages/gooddata-eval/tests/test_takeaway_client.py
+  h_123280b1c5e53d 139-148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20920a0995b5065539274ce366002515797d0c9b",
+  "prompts": {},
+  "humans": {
+    "h_123280b1c5e53d": {
+      "author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

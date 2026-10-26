@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_7a7aacffd04f2e::t_f6214ee0f4c810 1374,1380,1383,1442,1447
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_7a7aacffd04f2e::t_f6214ee0f4c810 288-289,296
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1944abf74f071fecb740e1e01c029ab7e191086d",
+  "prompts": {},
+  "sessions": {
+    "s_7a7aacffd04f2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62b190bc-a23d-4cb7-9e5c-b84a0d1f482f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
