@@ -14,8 +14,12 @@ agree on them without passing anything between threads.
 from __future__ import annotations
 
 import contextvars
+import functools
 import hashlib
+import json
+import logging
 import os
+import re
 import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -38,6 +42,12 @@ EXPERIMENT_ID_KEY = "langfuse_experiment_id"
 EXPERIMENT_NAME_KEY = "langfuse_experiment_name"
 EXPERIMENT_DATASET_ID_KEY = "langfuse_experiment_dataset_id"
 EXPERIMENT_ITEM_ID_KEY = "langfuse_experiment_item_id"
+EXPERIMENT_METADATA_KEY_PREFIX = "langfuse_experiment_metadata_"
+
+# A key gen-ai's OTel propagator and httpx both pass through unchanged.
+BAGGAGE_KEY = re.compile(r"[A-Za-z0-9_-]+")
+
+_log = logging.getLogger(__name__)
 
 
 def join_enabled() -> bool:
@@ -108,7 +118,12 @@ def trace_ids_for(conversation_id: str) -> tuple[str, str]:
 
 
 def baggage_entries(scope: ItemTraceScope, run_name: str, conversation_id: str) -> list[str]:
-    """The W3C baggage members that put one run's gen-ai spans under its experiment item."""
+    """The W3C baggage members that put one run's gen-ai spans under its experiment item.
+
+    They carry the run metadata known before the run as the experiment metadata. A key that
+    is not a plain token (letters, digits, ``_``, ``-``) is skipped with a warning: httpx
+    refuses a non-ASCII header, and a space, comma or ``=`` would break the baggage entry.
+    """
     trace_id, span_id = trace_ids_for(conversation_id)
     return [
         f"{TRACE_ID_KEY}={trace_id}",
@@ -117,7 +132,30 @@ def baggage_entries(scope: ItemTraceScope, run_name: str, conversation_id: str) 
         f"{EXPERIMENT_NAME_KEY}={quote(run_name, safe='')}",
         f"{EXPERIMENT_DATASET_ID_KEY}={quote(scope.dataset_id, safe='')}",
         f"{EXPERIMENT_ITEM_ID_KEY}={quote(scope.item_id, safe='')}",
+        *(
+            f"{EXPERIMENT_METADATA_KEY_PREFIX}{key}={quote(_baggage_value(value), safe='')}"
+            for key, value in scope.run_metadata.items()
+            if value is not None and _is_baggage_key(key)
+        ),
     ]
+
+
+def _is_baggage_key(key: str) -> bool:
+    if BAGGAGE_KEY.fullmatch(key):
+        return True
+    _warn_skipped_metadata_key(key)
+    return False
+
+
+@functools.cache
+def _warn_skipped_metadata_key(key: str) -> None:
+    """Warn once per key per process: the entries are rebuilt on every chat turn."""
+    _log.warning("Run metadata key %r is not sent to gen-ai; keys must match [A-Za-z0-9_-]+", key)
+
+
+def _baggage_value(value: Any) -> str:
+    """``value`` as the root span shows it: a string as is, anything else as JSON (``true``, ``1``, ``["a"]``)."""
+    return value if isinstance(value, str) else json.dumps(value, default=str)
 
 
 @dataclass(frozen=True)

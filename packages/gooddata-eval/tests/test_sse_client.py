@@ -1292,6 +1292,38 @@ def test_run_index_follows_the_order_conversations_are_first_sent(monkeypatch: p
     assert ids == [experiment_id_for(name) for name in names]
 
 
+def test_the_run_metadata_rides_along_as_experiment_metadata(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Without it, a gen-ai span that names the experiment can leave its metadata empty."""
+    scope = ItemTraceScope(
+        base_name="ds_ts_model",
+        suffix_runs=True,
+        dataset_id="ds-1",
+        item_id="item-1",
+        run_metadata={
+            "github_ref_name": "feat/a b",
+            "eval_k": 1,
+            "tags": ["x", "y"],
+            "rerun": True,
+            "unset": None,
+            "ci run,id": "7",
+            "zkouška": "x",
+        },
+    )
+    requests: list[httpx.Request] = []
+    client = _scoped_client(monkeypatch, requests)
+    with item_scope(scope):
+        client.send_message("conv-metadata", "q")
+
+    (baggage,) = _baggage_of(requests)
+    prefix = "langfuse_experiment_metadata_"
+    assert {k[len(prefix) :]: v for k, v in baggage.items() if k.startswith(prefix)} == {
+        "github_ref_name": "feat/a b",
+        "eval_k": "1",
+        "tags": '["x", "y"]',
+        "rerun": "true",
+    }
+
+
 def test_labels_and_scope_share_one_baggage_header(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GOODDATA_EVAL_TRACE_LABELS", "github_run_id=42")
     requests: list[httpx.Request] = []

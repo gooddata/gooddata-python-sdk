@@ -17,7 +17,6 @@ import functools
 import json
 import logging
 import os
-import re
 import time
 from dataclasses import dataclass, field
 from typing import Any, Iterable
@@ -27,7 +26,14 @@ import httpx
 
 from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, float_env, int_env, retry_transient
 from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
-from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
+from gooddata_eval.core.langfuse.item_scope import (
+    BAGGAGE_KEY,
+    JoinedRun,
+    baggage_entries,
+    current_scope,
+    mark_joined,
+    trace_ids_for,
+)
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import note_trace_latency
 
@@ -133,7 +139,6 @@ _ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
 # a plain token (letters, digits, `_`, `-`); any other key is skipped with a warning, because httpx
 # refuses a non-ASCII header and gen-ai's OTel propagator drops or rewrites the rest.
 _TRACE_LABELS_ENV = "GOODDATA_EVAL_TRACE_LABELS"
-_TRACE_LABEL_KEY = re.compile(r"[A-Za-z0-9_-]+")
 
 
 @functools.cache
@@ -155,7 +160,7 @@ def _trace_baggage() -> dict[str, str]:
         key = key.strip()
         if not sep or not key:
             continue
-        if _TRACE_LABEL_KEY.fullmatch(key):
+        if BAGGAGE_KEY.fullmatch(key):
             labels[key] = value.strip()
         else:
             _warn_skipped_trace_label(key)
