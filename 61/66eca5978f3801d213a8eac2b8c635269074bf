@@ -1,20 +1,18 @@
 packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_846911820c2035::t_80a2c8d9ae6b08 35,804,811-813,816-817,821,832,892,899-901,905-906,936
+  s_b90bc68ca25668::t_7770da696a6bcf 35,804,811-813,816-817,821,832,892,899-902,906-908,912-915,941
 packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
-  s_846911820c2035::t_b4fd1dbb6b41d6 29-34,468,485-491,510,548,550-554
+  s_846911820c2035::t_1a29472417987f 29-34,468,485-491,510,548,550-554
 packages/gooddata-eval/src/gooddata_eval/core/config.py
-  s_846911820c2035::t_b4fd1dbb6b41d6 36-38,79-92
-  s_846911820c2035::t_2227845bd8077a 93-94
-packages/gooddata-eval/tests/test_sse_client.py
-  s_846911820c2035::t_554af9f642b93a 954,959-965,1035-1069
-  s_846911820c2035::t_f0576647671ffc 1070-1071
+  s_b90bc68ca25668::t_a21f89c9d95446 36-38,79-94
 packages/gooddata-eval/tests/test_agentic_document_skill.py
-  s_846911820c2035::t_554af9f642b93a 539-559
+  s_b90bc68ca25668::t_59a416abbeb678 539-595
+packages/gooddata-eval/tests/test_sse_client.py
+  s_b90bc68ca25668::t_e34bbfba4cb01f 5,955-961,965-971,1041-1077
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "4a5c1c978425319fd8b9bb537f8c0add357b14fb",
+  "base_commit_sha": "6166eca5978f3801d213a8eac2b8c635269074bf",
   "prompts": {},
   "sessions": {
     "s_846911820c2035": {
@@ -24,46 +22,7 @@ packages/gooddata-eval/tests/test_agentic_document_skill.py
         "model": "claude-opus-5-5"
       },
       "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
-    }
-  }
-}
-
-packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_9d3d07d0fb3c7f::t_932b7a3eb18c8b 817,907
----
-{
-  "schema_version": "authorship/3.0.0",
-  "git_ai_version": "1.7.5",
-  "base_commit_sha": "9aca8b96396ee21c71bdd900d77de15b602eab69",
-  "prompts": {},
-  "sessions": {
-    "s_9d3d07d0fb3c7f": {
-      "agent_id": {
-        "tool": "claude",
-        "id": "b23bcc5b-3bee-4fed-9a85-f499ab005bcb",
-        "model": "claude-opus-5-5"
-      },
-      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
-    }
-  }
-}
-
-packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_b90bc68ca25668::t_27e86c71c8ee30 900-901,912-915
-packages/gooddata-eval/src/gooddata_eval/core/config.py
-  s_b90bc68ca25668::t_27e86c71c8ee30 82-83
-packages/gooddata-eval/tests/test_sse_client.py
-  s_b90bc68ca25668::t_27e86c71c8ee30 1073
-packages/gooddata-eval/tests/test_agentic_document_skill.py
-  s_b90bc68ca25668::t_e94edcf7f75230 560-575,579-595
-  s_b90bc68ca25668::t_5043fe35274744 576-578
----
-{
-  "schema_version": "authorship/3.0.0",
-  "git_ai_version": "1.7.5",
-  "base_commit_sha": "3c1c7f52aebd49adf4a1f3aa6f598aa93c49aba7",
-  "prompts": {},
-  "sessions": {
+    },
     "s_b90bc68ca25668": {
       "agent_id": {
         "tool": "claude",
