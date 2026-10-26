@@ -1,0 +1,52 @@
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_7a7aacffd04f2e::t_f6214ee0f4c810 1379,1385,1388,1501,1506
+  s_7a7aacffd04f2e::t_c06426786056ed 1374-1378,1380-1384,1386-1387,1389-1405,1406-1413,1415-1431,1486-1500,1502-1505,1507-1511
+  s_7a7aacffd04f2e::t_1bfd33d4b0bc39 13,17
+  s_7a7aacffd04f2e::t_292c48140f9ead 1288
+  s_7a7aacffd04f2e::t_800bba09db96bc 1341-1350
+  s_7a7aacffd04f2e::t_7b2979dc21f5d9 1432-1463
+  s_7a7aacffd04f2e::t_31ffe23764c8f4 1464-1483
+  s_7a7aacffd04f2e::t_a0d303bcf0d37f 1484-1485
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_7a7aacffd04f2e::t_fe443a06ed8601 72-75
+  s_7a7aacffd04f2e::t_4b423d606abc88 97-98
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_7a7aacffd04f2e::t_f6214ee0f4c810 309-310,317
+  s_7a7aacffd04f2e::t_e0a2bb1743ddcb 583-591
+  s_7a7aacffd04f2e::t_c3f407027b0480 660
+  s_7a7aacffd04f2e::t_f183b0a9bfbbdb 871-872
+  s_26cdf899a7bcca::t_f38c61eadff11c 661,677,1121,1142,1218,1267-1268
+  s_7a7aacffd04f2e::t_9be0a2fb63d85b 306-308,311-316,318-320,322-324,326-327
+  s_7a7aacffd04f2e::t_ca3671ad6b98d0 612-615
+  s_7a7aacffd04f2e::t_2c580ba79324c7 809-822,823,827-833,838-839
+  s_7a7aacffd04f2e::t_dba38b5985711e 886-887
+  s_7a7aacffd04f2e::t_29129888209271 299-301
+  s_7a7aacffd04f2e::t_55254fb09b34a1 321,325
+  s_7a7aacffd04f2e::t_436326d1531d79 71-72,74,286-287
+  s_7a7aacffd04f2e::t_2ab592899c9906 296-298
+  s_7a7aacffd04f2e::t_a9db1626e1efed 10,77-91,656-659,662-673,824-826,834-837,1073-1079
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3f30b08facb1f657ec10d52f223cbdb1d146fab1",
+  "prompts": {},
+  "sessions": {
+    "s_26cdf899a7bcca": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4cffeea170de9048",
+        "model": "unknown"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_7a7aacffd04f2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62b190bc-a23d-4cb7-9e5c-b84a0d1f482f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
