@@ -58,6 +58,37 @@ _TRIGGER_DISPLAY_TO_API = {"Every time": "ALWAYS", "One time": "ONCE"}
 _ALWAYS_TRIGGER_VALUES = {"Every time", "ALWAYS", "not specified"}
 _RELATIVE_OPERATORS = ("INCREASES_BY", "DECREASES_BY", "CHANGES_BY")
 
+# Fixture spelling of each period-comparison property -> the create_metric_alert argument.
+_COMPARISON_ARGS = {
+    "kind": "comparison_kind",
+    "periods_ago": "comparison_periods_ago",
+    "date_dataset_id": "comparison_date_dataset_id",
+    "date_attribute_id": "comparison_date_attribute_id",
+    "arithmetic_operator": "arithmetic_operator",
+}
+# Compared verbatim: object ids are case-sensitive, unlike the enum-valued properties.
+_COMPARISON_ID_ARGS = ("comparison_date_dataset_id", "comparison_date_attribute_id")
+# What create_metric_alert applies when the argument is left out, per its own contract. A
+# metric-to-metric comparison has no periods, so periods_ago defaults only for a period kind.
+_COMPARISON_ARG_DEFAULTS: dict[str, object] = {"comparison_periods_ago": 1, "arithmetic_operator": "DIFFERENCE"}
+_PERIOD_COMPARISON_KINDS = ("PREVIOUS_PERIOD", "SAME_PERIOD_PRIOR_YEAR")
+_NO_COMPARISON_MARKERS = ("none", "no comparison")
+
+# AlertEvaluation checks, in report order. Every run is scored on the first group; the second only
+# when the item states the matching expectation.
+_ALERT_CHECKS = (
+    "alert_created",
+    "operator_correct",
+    "threshold_correct",
+    "trigger_correct",
+    "filters_correct",
+    "metric_correct",
+    "recipients_correct",
+    "attributes_correct",
+    "granularity_correct",
+)
+_CONDITIONAL_ALERT_CHECKS = ("comparison_correct", "title_correct", "dashboard_correct")
+
 # Expected-recipient spellings that mean the owner of the API token.
 _CURRENT_USER_RECIPIENT = "me"
 _CURRENT_USER_MARKERS = {"me", "myself", "current user", "current_user"}
@@ -232,6 +263,66 @@ def _check_granularity(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not actual:
         return False
     return str(actual).strip().upper() == expected.granularity.value
+
+
+def _canonical_comparison_value(arg: str, value: object) -> str | int | float | None:
+    """Fold one comparison value so fixture and tool-argument spellings compare equal."""
+    if value is None or str(value).strip() == "":
+        return None
+    if arg == "comparison_periods_ago":
+        return _to_number(value)
+    if arg in _COMPARISON_ID_ARGS:
+        return str(value).strip()
+    return str(value).strip().upper()
+
+
+def _check_comparison(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare only the comparison properties the fixture states.
+
+    ``None`` means unasserted. A stated ``comparison_kind`` of ``None`` asserts the alert has
+    no comparison at all. ``comparison_kind`` is read as ``create_metric_alert`` resolves it:
+    left out next to a ``compare_metric_id`` it is METRIC. Any other argument the agent left out
+    on an alert that does compare counts as the value ``create_metric_alert`` applies for it, so
+    omitting ``comparison_periods_ago`` matches 1 on a period comparison; a METRIC comparison has
+    no periods, and with no comparison there is nothing to default.
+    The comparison period itself (DAY, MONTH, ...) is not checked here: it is the granularity
+    of the comparison date filter, which ``filters`` asserts.
+    """
+    if expected.comparison is None:
+        return True
+    kind = actual_args.get("comparison_kind") or ("METRIC" if actual_args.get("compare_metric_id") else None)
+    for arg, exp_value in expected.comparison.items():
+        act_raw = kind if arg == "comparison_kind" else actual_args.get(arg)
+        defaults_apply = arg != "comparison_periods_ago" or str(kind).upper() in _PERIOD_COMPARISON_KINDS
+        if act_raw is None and kind is not None and defaults_apply:
+            act_raw = _COMPARISON_ARG_DEFAULTS.get(arg)
+        # Only the fixture side of an object id is trimmed: a padded id is a different id.
+        actual = act_raw if arg in _COMPARISON_ID_ARGS else _canonical_comparison_value(arg, act_raw)
+        if actual != exp_value:
+            return False
+    return True
+
+
+def _check_title(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Exact match on the alert name when the fixture states one.
+
+    Only the fixture side is trimmed: a name saved with padding is not the name the user asked for.
+
+    An omitted ``title`` fails: ``create_metric_alert`` then saves an auto-generated name, even
+    when ``automation_id`` carries a slug of the requested one.
+    """
+    if expected.title is None:
+        return True
+    actual = actual_args.get("title")
+    return isinstance(actual, str) and actual == expected.title
+
+
+def _check_dashboard(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare the bound dashboard id when the fixture states one; the actual id verbatim."""
+    if expected.dashboard_id is None:
+        return True
+    actual = actual_args.get("dashboard_id")
+    return isinstance(actual, str) and actual == expected.dashboard_id
 
 
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
@@ -489,6 +580,15 @@ def generate_simulated_alert_response(
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
 
+    # Only a stated title is enforced: an unstated one is the agent's to choose, and telling the
+    # sim-user nothing keeps it from objecting to a generated name.
+    title_rule = (
+        f'8. The alert must be named exactly "{expected.title}". If a summary or proposal shows a '
+        "different name, do NOT confirm: state that exact name and ask the agent to use it.\n"
+        if expected.title
+        else ""
+    )
+
     system_prompt = (
         "You are a user requesting creation of an alert for a metric from an AI agent. "
         "Respond naturally but always steer toward the exact values you were given.\n"
@@ -509,7 +609,10 @@ def generate_simulated_alert_response(
         + recipients_rule
         + filters_rule
         + f"6. Proactively state how often you want to be alerted in your first reply: {trigger_request}. "
-        "   Repeat it if the agent proposes a different cadence.\n" + period_rule + "Reply concisely and directly."
+        "   Repeat it if the agent proposes a different cadence.\n"
+        + period_rule
+        + title_rule
+        + "Reply concisely and directly."
     )
 
     messages: list = [{"role": "system", "content": system_prompt}]
@@ -550,22 +653,28 @@ class AlertEvaluation:
     recipients_correct: bool
     attributes_correct: bool = True
     granularity_correct: bool = True
+    # ``None``: the item states no such expectation, so the check is neither scored nor gated.
+    comparison_correct: bool | None = None
+    title_correct: bool | None = None
+    dashboard_correct: bool | None = None
+
+    def checks(self) -> dict[str, bool]:
+        """Every check that ran, by name; strict_pass requires all of them.
+
+        The conditional checks are left out when unasserted, so an item that names no title does
+        not report a ``title_correct`` it was never scored on, and a refusal on it is not counted
+        as a title failure.
+        """
+        ran: dict[str, bool] = {name: getattr(self, name) for name in _ALERT_CHECKS}
+        for name in _CONDITIONAL_ALERT_CHECKS:
+            value = getattr(self, name)
+            if value is not None:
+                ran[name] = value
+        return ran
 
     @property
     def strict_pass(self) -> bool:
-        return all(
-            [
-                self.alert_created,
-                self.operator_correct,
-                self.threshold_correct,
-                self.trigger_correct,
-                self.filters_correct,
-                self.metric_correct,
-                self.recipients_correct,
-                self.attributes_correct,
-                self.granularity_correct,
-            ]
-        )
+        return all(self.checks().values())
 
 
 @dataclass
@@ -666,6 +775,68 @@ def _normalize_expected_attributes(expected: dict) -> list | None:
     raise ValueError(f"Attributes expectation must be a list or a display string, got {type(attributes).__name__}")
 
 
+def _normalize_expected_comparison(expected: dict) -> dict[str, str | int | float | None] | None:
+    """
+    * ``Comparison`` object       -> its stated properties, keyed by tool-argument name
+    * "None" / "no comparison"    -> ``{"comparison_kind": None}`` (stated: no comparison)
+    * absent, empty, or prose     -> ``None`` (unstated; comparison not asserted)
+
+    Each property of the object is asserted only when it carries a value, so an item can pin
+    the comparison kind without also pinning the date dataset the agent may pick.
+    """
+    comparison = _case_insensitive_get(expected, "comparison")
+    if comparison is None:
+        return None
+    if isinstance(comparison, str):
+        return {"comparison_kind": None} if any(kw in comparison.lower() for kw in _NO_COMPARISON_MARKERS) else None
+    if not isinstance(comparison, dict):
+        raise ValueError(f"Comparison expectation must be an object or a display string, got {comparison!r}")
+    stated: dict[str, str | int | float | None] = {}
+    for key, value in comparison.items():
+        name = str(key).strip().lower()
+        arg = _COMPARISON_ARGS.get(name) or (name if name in _COMPARISON_ARGS.values() else None)
+        if arg is None:
+            # Validated here so a misspelled property fails before the run spends an API call.
+            raise ValueError(f"Unrecognised comparison property {key!r}; expected one of {sorted(_COMPARISON_ARGS)}")
+        canonical = _canonical_comparison_value(arg, value)
+        if canonical is None and arg == "comparison_periods_ago" and str(value or "").strip():
+            raise ValueError(f"Comparison periods_ago must be a number, got {value!r}")
+        if canonical is not None:
+            stated[arg] = canonical
+    return stated or None
+
+
+def _normalize_expected_text(expected: dict, *keys: str) -> str | None:
+    """A stated string expectation, or ``None`` when absent or blank (unasserted)."""
+    value = _case_insensitive_get(expected, *keys)
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError(f"{keys[0]} expectation must be a string, got {value!r}")
+    return value.strip() or None
+
+
+def _normalize_expected_dashboard(expected: dict) -> str | None:
+    """
+    * ``dashboard_id``            -> that id
+    * ``Dashboard`` "Title (id)"  -> the id in the trailing parentheses, as ``Metric`` is read
+    * absent / empty              -> ``None`` (unstated; binding not asserted)
+
+    A ``Dashboard`` without a trailing ``(id)`` raises: a title alone can never equal the
+    ``dashboard_id`` the tool receives, so the item would fail on every run.
+    """
+    dashboard_id = _normalize_expected_text(expected, "dashboard_id")
+    if dashboard_id is not None:
+        return dashboard_id
+    display = _normalize_expected_text(expected, "dashboard")
+    if display is None:
+        return None
+    parsed = _parse_metric_id(display)
+    if parsed is None:
+        raise ValueError(f'Dashboard expectation must be "Title (id)", got {display!r}; use dashboard_id for a bare id')
+    return parsed
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -696,6 +867,9 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     granularity = AnomalyDetectionGranularity.parse(
         _case_insensitive_get(expected, "granularity", "detection granularity")
     )
+    comparison = _normalize_expected_comparison(expected)
+    title = _normalize_expected_text(expected, "title")
+    dashboard_id = _normalize_expected_dashboard(expected)
 
     return CatalogMetricAlert(
         operator=operator,
@@ -708,6 +882,9 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         filters=filters,
         attributes=attributes,
         granularity=granularity,
+        comparison=comparison,
+        title=title,
+        dashboard_id=dashboard_id,
     )
 
 
@@ -893,6 +1070,13 @@ def run_agentic_alert_skill(
                 and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
                 attributes_correct=tool_called and _check_attributes(expected, actual_args),
                 granularity_correct=tool_called and _check_granularity(expected, actual_args),
+                comparison_correct=None
+                if expected.comparison is None
+                else tool_called and _check_comparison(expected, actual_args),
+                title_correct=None if expected.title is None else tool_called and _check_title(expected, actual_args),
+                dashboard_correct=None
+                if expected.dashboard_id is None
+                else tool_called and _check_dashboard(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -934,19 +1118,7 @@ def run_agentic_alert_skill(
     pass_power_k = all(r.eval.strict_pass for r in run_results)
     best = max(
         run_results,
-        key=lambda r: sum(
-            [
-                r.eval.alert_created,
-                r.eval.operator_correct,
-                r.eval.threshold_correct,
-                r.eval.trigger_correct,
-                r.eval.filters_correct,
-                r.eval.metric_correct,
-                r.eval.recipients_correct,
-                r.eval.attributes_correct,
-                r.eval.granularity_correct,
-            ]
-        ),
+        key=lambda r: sum(r.eval.checks().values()),
     )
     return AgenticAlertSummary(
         run_results=run_results,
@@ -966,17 +1138,8 @@ def _run_detail(run: AlertRunResult) -> dict:
     Extracted so a failing run is described by exactly the same keys as the winning run --
     for this kind that means the full per-field check breakdown and the arguments the run sent.
     """
-    ev = run.eval
     return {
-        "alert_created": ev.alert_created,
-        "operator_correct": ev.operator_correct,
-        "threshold_correct": ev.threshold_correct,
-        "trigger_correct": ev.trigger_correct,
-        "filters_correct": ev.filters_correct,
-        "metric_correct": ev.metric_correct,
-        "recipients_correct": ev.recipients_correct,
-        "attributes_correct": ev.attributes_correct,
-        "granularity_correct": ev.granularity_correct,
+        **run.eval.checks(),
         "actual_alert_arguments": run.actual_alert_arguments,
         # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
         # that hit max_iterations while still on track -- see LoopExit. Per-run rather than
@@ -1052,18 +1215,7 @@ def evaluate_agentic_alert_skill(
 
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
-                ev = run.eval
-                strict_checks = {
-                    "alert_created": ev.alert_created,
-                    "operator_correct": ev.operator_correct,
-                    "threshold_correct": ev.threshold_correct,
-                    "trigger_correct": ev.trigger_correct,
-                    "filters_correct": ev.filters_correct,
-                    "metric_correct": ev.metric_correct,
-                    "recipients_correct": ev.recipients_correct,
-                    "attributes_correct": ev.attributes_correct,
-                    "granularity_correct": ev.granularity_correct,
-                }
+                strict_checks = run.eval.checks()
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
@@ -1112,13 +1264,8 @@ def evaluate_agentic_alert_skill(
         gate_note = gate_failure_note(gate, runs_passed, runs_effective)
         exc = AlertSkillAssertionError(
             f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
-            f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
-            f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
-            f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
-            f"recipients_correct={ev.recipients_correct}, "
-            f"attributes_correct={ev.attributes_correct}, "
-            f"granularity_correct={ev.granularity_correct}. "
-            f"Actual args: {best.actual_alert_arguments}"
+            + ", ".join(f"{name}={value}" for name, value in ev.checks().items())
+            + f". Actual args: {best.actual_alert_arguments}"
         )
         exc.reasoning_steps = best.reasoning_steps
         exc.conversation_id = best.conversation_id
