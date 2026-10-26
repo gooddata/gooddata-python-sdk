@@ -52,7 +52,7 @@ _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 _TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tokens", "content_filter"})
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.
-_ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
+ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
 
 _KNOWN_PART_TYPES: frozenset[str] = frozenset(
     {
@@ -311,7 +311,8 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         # accessible). The last attempt is the agent's best answer.
         #
         # These are raw tool-call arguments, so they carry no `id` -- the server
-        # mints it. The sentinel marks the chart as never persisted. Logged because
+        # mints it. The sentinel marks the chart as never persisted, and goes last so
+        # that an `id` in the arguments cannot hide that. Logged because
         # a turn that called the tool and answered without a chart is otherwise
         # invisible: the user saw no chart either.
         _log.warning(
@@ -320,7 +321,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
             len(acc.adhoc_viz_args),
         )
         payload["createdVisualizations"] = {
-            "objects": [{"id": _ADHOC_VIZ_ID, **acc.adhoc_viz_args[-1]}],
+            "objects": [{**acc.adhoc_viz_args[-1], "id": ADHOC_VIZ_ID}],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
         }
     result = ChatResult.model_validate(payload)

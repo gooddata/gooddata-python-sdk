@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.agentic.dashboard_skill import (
+    DashboardEvaluation,
     DashboardSkillAssertionError,
     _date_range_text,
     _extract_tool_result,
@@ -1232,6 +1233,118 @@ class TestDateBindings:
         client = MagicMock()
         expected = {**_DC05_EXPECTED, "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "T", "date_dataset": 1}]}
         with pytest.raises(ValueError, match="date_dataset must name a date dataset or be null"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+
+class TestChartTypes:
+    """GDAI-2054: a chart asked for by type is placed as that type, never as a silent swap.
+    The widget names only the chart id, so the type comes from the body in the references."""
+
+    _WATERFALL = "authored-waterfall"
+
+    def _create(self, authored_type: str, expected_type: str = "waterfall_chart") -> DashboardEvaluation:
+        part = _dashboard_part(
+            [_widget("Gross Profit Bridge", self._WATERFALL)],
+            date_filter=_THIS_YEAR_FILTER,
+            visualizations=[],
+            new_visualizations=[self._WATERFALL],
+        )
+        part["references"]["new_visualizations"][0]["type"] = authored_type
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": None, "title": "Gross Profit Bridge", "chart_type": expected_type}],
+            "min_new_visualizations": 1,
+        }
+        expected.pop("date_range")
+        return evaluate_dashboard_response(_draft_result(new_visualization_count=1), part, expected, True)
+
+    def test_an_authored_chart_of_the_requested_type_passes(self) -> None:
+        ev = self._create("waterfall_chart")
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_an_authored_chart_of_another_type_fails(self) -> None:
+        ev = self._create("column_chart")
+        assert ev.strict_checks["dashboard_chart_types_correct"] is False
+        assert any("is 'column_chart', expected 'waterfall_chart'" in f for f in ev.failures)
+
+    def test_an_existing_chart_is_typed_from_the_visualizations_reference(self) -> None:
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "headline_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.chart_types_correct, ev.failures
+
+    def test_an_edit_reads_the_type_from_the_patch_references(self) -> None:
+        new_widget = _widget("Net Sales Flow", "authored-sankey")
+        patch = _patch_part(
+            [{"op": "add", "path": "/sections/0/widgets/-", "value": new_widget}],
+            new_visualizations=["authored-sankey"],
+        )
+        patch["patch"]["references"]["new_visualizations"][0]["type"] = "sankey_chart"
+        expected = {
+            "type": "dashboardPatch",
+            "saved_dashboard_id": _OVERVIEW_DASHBOARD,
+            "visualizations": [{"id": None, "title": "Net Sales Flow", "chart_type": "sankey_chart"}],
+            "min_new_visualizations": 1,
+        }
+        ev = evaluate_dashboard_response(_patch_result(1), _edit_base_part(), expected, True, patch_part=patch)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+
+    def test_a_chart_not_on_the_dashboard_cannot_pass_the_type_check(self) -> None:
+        part = _dashboard_part([_widget("Active Customers", _ACTIVE_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": None, "title": "Gross Profit Bridge", "chart_type": "waterfall_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert not ev.chart_types_correct
+        assert any("cannot check the type of chart 'Gross Profit Bridge'" in f for f in ev.failures)
+
+    @pytest.mark.parametrize("reference", [None, {"id": _TOTAL_CUSTOMERS}], ids=["absent", "untyped"])
+    def test_a_chart_without_a_body_is_noted_not_scored(self, reference: dict | None) -> None:
+        """gen-ai carries a body only when it could resolve one: a missing body is a platform fault."""
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        part["references"]["visualizations"] = [reference] if reference else []
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "bar_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+        assert any(f"carry no body for {_TOTAL_CUSTOMERS!r}" in note for note in ev.notes)
+
+    def test_only_the_charts_that_state_a_type_are_checked(self) -> None:
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [
+                {"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "headline_chart"},
+                {"id": _ACTIVE_CUSTOMERS, "title": "Active Customers"},
+            ],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+
+    def test_a_case_without_chart_types_does_not_publish_the_check(self) -> None:
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        ev = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "dashboard_chart_types_correct" not in ev.strict_checks
+
+    @pytest.mark.parametrize("chart_type", ["waterfall", ["waterfall_chart"]], ids=["unknown", "not_a_string"])
+    def test_an_unknown_chart_type_is_rejected_up_front(self, chart_type: object) -> None:
+        client = MagicMock()
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "T", "chart_type": chart_type}],
+        }
+        with pytest.raises(ValueError, match="chart_type must be an AAC visualization type"):
             _run_with(client, expected)
         client.send_message.assert_not_called()
 

@@ -9,7 +9,7 @@ import re
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, SerializerFunctionWrapHandler, field_validator, model_serializer
 
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -96,7 +96,7 @@ class AacQuery(BaseModel):
 class CreatedVisualization(BaseModel):
     """Visualization in the AAC format (agent output and dataset expected output)."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
 
     # Optional on purpose: nothing scores on it, and the agent sometimes omits it. A
     # required field here turns a scorable chart into a parse error and an errored item.
@@ -104,17 +104,33 @@ class CreatedVisualization(BaseModel):
     title: str | None = None
     type: str
     query: AacQuery
-    metrics: list[AacBucketRef | str] = Field(default_factory=list)
+    # A null entry holds a position: a bubble chart with no x measure is `[null, y]`.
+    metrics: list[AacBucketRef | str | None] = Field(default_factory=list)
     view_by: list[AacBucketRef | str] = Field(default_factory=list)
     segment_by: list[AacBucketRef | str] = Field(default_factory=list)
     rows: list[AacBucketRef | str] = Field(default_factory=list)
     columns: list[AacBucketRef | str] = Field(default_factory=list)
+    # The metric that sizes each bubble of a bubble chart.
+    size_by: list[AacBucketRef | str] = Field(default_factory=list)
+    # The source and the destination of a sankey or dependency wheel: one bucket item each, not a list.
+    from_: AacBucketRef | str | None = Field(default=None, alias="from")
+    to: AacBucketRef | str | None = None
     config: dict | None = None
+    # Expectation switches. An agent never sends them, and a recorded output leaves them out.
+    buckets_strict: bool = Field(default=False, exclude=True)
+    metrics_ordered: bool = Field(default=False, exclude=True)
 
-    @field_validator("metrics", "view_by", "segment_by", "rows", "columns", mode="before")
+    @field_validator("metrics", "view_by", "segment_by", "rows", "columns", "size_by", mode="before")
     @classmethod
     def _coerce_list_fields(cls, v: object) -> object:
         return v if v is not None else []
+
+    @model_serializer(mode="wrap")
+    def _dump_from_under_its_aac_name(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
+        # `from` is a keyword, so the field is `from_`. A dump without `by_alias` must still
+        # write the AAC key: a dataset or a fixture holding `from_` loses the source bucket in
+        # every reader that does not know the Python name.
+        return {"from" if key == "from_" else key: value for key, value in handler(self).items()}
 
 
 class CreatedVisualizations(BaseModel):
