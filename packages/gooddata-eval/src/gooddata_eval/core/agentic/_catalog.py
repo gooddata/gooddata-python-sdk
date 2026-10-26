@@ -69,6 +69,10 @@ class CatalogMetricAlert:
     """Detection interval for an ANOMALY alert (DAY/WEEK/MONTH/...). Not a date filter."""
     comparison: dict[str, str | int | float | None] | None = None
     """Expected period comparison as ``create_metric_alert`` argument names; ``None`` means unasserted."""
+    title: str | None = None
+    """Alert name the user asked for; ``None`` means unasserted."""
+    dashboard_id: str | None = None
+    """Dashboard the alert must be bound to; ``None`` means unasserted."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:
@@ -90,4 +94,6 @@ class CatalogMetricAlert:
             attributes=d.get("attributes"),
             granularity=AnomalyDetectionGranularity.parse(d.get("granularity")),
             comparison=d.get("comparison"),
+            title=d.get("title"),
+            dashboard_id=d.get("dashboard_id"),
         )
