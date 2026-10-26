@@ -67,6 +67,8 @@ class CatalogMetricAlert:
     """Expected group-by attributes; ``None`` means the fixture states no expectation."""
     granularity: AnomalyDetectionGranularity | None = None
     """Detection interval for an ANOMALY alert (DAY/WEEK/MONTH/...). Not a date filter."""
+    comparison: dict[str, str | int | float | None] | None = None
+    """Expected period comparison as ``create_metric_alert`` argument names; ``None`` means unasserted."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:
@@ -87,4 +89,5 @@ class CatalogMetricAlert:
             filters=d.get("filters"),
             attributes=d.get("attributes"),
             granularity=AnomalyDetectionGranularity.parse(d.get("granularity")),
+            comparison=d.get("comparison"),
         )

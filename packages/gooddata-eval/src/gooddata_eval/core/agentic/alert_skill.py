@@ -58,6 +58,22 @@ _TRIGGER_DISPLAY_TO_API = {"Every time": "ALWAYS", "One time": "ONCE"}
 _ALWAYS_TRIGGER_VALUES = {"Every time", "ALWAYS", "not specified"}
 _RELATIVE_OPERATORS = ("INCREASES_BY", "DECREASES_BY", "CHANGES_BY")
 
+# Fixture spelling of each period-comparison property -> the create_metric_alert argument.
+_COMPARISON_ARGS = {
+    "kind": "comparison_kind",
+    "periods_ago": "comparison_periods_ago",
+    "date_dataset_id": "comparison_date_dataset_id",
+    "date_attribute_id": "comparison_date_attribute_id",
+    "arithmetic_operator": "arithmetic_operator",
+}
+# Compared verbatim: object ids are case-sensitive, unlike the enum-valued properties.
+_COMPARISON_ID_ARGS = ("comparison_date_dataset_id", "comparison_date_attribute_id")
+# What create_metric_alert applies when the argument is left out, per its own contract. A
+# metric-to-metric comparison has no periods, so periods_ago defaults only for a period kind.
+_COMPARISON_ARG_DEFAULTS: dict[str, object] = {"comparison_periods_ago": 1, "arithmetic_operator": "DIFFERENCE"}
+_PERIOD_COMPARISON_KINDS = ("PREVIOUS_PERIOD", "SAME_PERIOD_PRIOR_YEAR")
+_NO_COMPARISON_MARKERS = ("none", "no comparison")
+
 # Expected-recipient spellings that mean the owner of the API token.
 _CURRENT_USER_RECIPIENT = "me"
 _CURRENT_USER_MARKERS = {"me", "myself", "current user", "current_user"}
@@ -232,6 +248,44 @@ def _check_granularity(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not actual:
         return False
     return str(actual).strip().upper() == expected.granularity.value
+
+
+def _canonical_comparison_value(arg: str, value: object) -> str | int | float | None:
+    """Fold one comparison value so fixture and tool-argument spellings compare equal."""
+    if value is None or str(value).strip() == "":
+        return None
+    if arg == "comparison_periods_ago":
+        return _to_number(value)
+    if arg in _COMPARISON_ID_ARGS:
+        return str(value).strip()
+    return str(value).strip().upper()
+
+
+def _check_comparison(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    """Compare only the comparison properties the fixture states.
+
+    ``None`` means unasserted. A stated ``comparison_kind`` of ``None`` asserts the alert has
+    no comparison at all. ``comparison_kind`` is read as ``create_metric_alert`` resolves it:
+    left out next to a ``compare_metric_id`` it is METRIC. Any other argument the agent left out
+    on an alert that does compare counts as the value ``create_metric_alert`` applies for it, so
+    omitting ``comparison_periods_ago`` matches 1 on a period comparison; a METRIC comparison has
+    no periods, and with no comparison there is nothing to default.
+    The comparison period itself (DAY, MONTH, ...) is not checked here: it is the granularity
+    of the comparison date filter, which ``filters`` asserts.
+    """
+    if expected.comparison is None:
+        return True
+    kind = actual_args.get("comparison_kind") or ("METRIC" if actual_args.get("compare_metric_id") else None)
+    for arg, exp_value in expected.comparison.items():
+        act_raw = kind if arg == "comparison_kind" else actual_args.get(arg)
+        defaults_apply = arg != "comparison_periods_ago" or str(kind).upper() in _PERIOD_COMPARISON_KINDS
+        if act_raw is None and kind is not None and defaults_apply:
+            act_raw = _COMPARISON_ARG_DEFAULTS.get(arg)
+        # Only the fixture side of an object id is trimmed: a padded id is a different id.
+        actual = act_raw if arg in _COMPARISON_ID_ARGS else _canonical_comparison_value(arg, act_raw)
+        if actual != exp_value:
+            return False
+    return True
 
 
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
@@ -550,6 +604,7 @@ class AlertEvaluation:
     recipients_correct: bool
     attributes_correct: bool = True
     granularity_correct: bool = True
+    comparison_correct: bool = True
 
     @property
     def strict_pass(self) -> bool:
@@ -564,6 +619,7 @@ class AlertEvaluation:
                 self.recipients_correct,
                 self.attributes_correct,
                 self.granularity_correct,
+                self.comparison_correct,
             ]
         )
 
@@ -666,6 +722,37 @@ def _normalize_expected_attributes(expected: dict) -> list | None:
     raise ValueError(f"Attributes expectation must be a list or a display string, got {type(attributes).__name__}")
 
 
+def _normalize_expected_comparison(expected: dict) -> dict[str, str | int | float | None] | None:
+    """
+    * ``Comparison`` object       -> its stated properties, keyed by tool-argument name
+    * "None" / "no comparison"    -> ``{"comparison_kind": None}`` (stated: no comparison)
+    * absent, empty, or prose     -> ``None`` (unstated; comparison not asserted)
+
+    Each property of the object is asserted only when it carries a value, so an item can pin
+    the comparison kind without also pinning the date dataset the agent may pick.
+    """
+    comparison = _case_insensitive_get(expected, "comparison")
+    if comparison is None:
+        return None
+    if isinstance(comparison, str):
+        return {"comparison_kind": None} if any(kw in comparison.lower() for kw in _NO_COMPARISON_MARKERS) else None
+    if not isinstance(comparison, dict):
+        raise ValueError(f"Comparison expectation must be an object or a display string, got {comparison!r}")
+    stated: dict[str, str | int | float | None] = {}
+    for key, value in comparison.items():
+        name = str(key).strip().lower()
+        arg = _COMPARISON_ARGS.get(name) or (name if name in _COMPARISON_ARGS.values() else None)
+        if arg is None:
+            # Validated here so a misspelled property fails before the run spends an API call.
+            raise ValueError(f"Unrecognised comparison property {key!r}; expected one of {sorted(_COMPARISON_ARGS)}")
+        canonical = _canonical_comparison_value(arg, value)
+        if canonical is None and arg == "comparison_periods_ago" and str(value or "").strip():
+            raise ValueError(f"Comparison periods_ago must be a number, got {value!r}")
+        if canonical is not None:
+            stated[arg] = canonical
+    return stated or None
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -696,6 +783,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     granularity = AnomalyDetectionGranularity.parse(
         _case_insensitive_get(expected, "granularity", "detection granularity")
     )
+    comparison = _normalize_expected_comparison(expected)
 
     return CatalogMetricAlert(
         operator=operator,
@@ -708,6 +796,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         filters=filters,
         attributes=attributes,
         granularity=granularity,
+        comparison=comparison,
     )
 
 
@@ -893,6 +982,7 @@ def run_agentic_alert_skill(
                 and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
                 attributes_correct=tool_called and _check_attributes(expected, actual_args),
                 granularity_correct=tool_called and _check_granularity(expected, actual_args),
+                comparison_correct=tool_called and _check_comparison(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -945,6 +1035,7 @@ def run_agentic_alert_skill(
                 r.eval.recipients_correct,
                 r.eval.attributes_correct,
                 r.eval.granularity_correct,
+                r.eval.comparison_correct,
             ]
         ),
     )
@@ -977,6 +1068,7 @@ def _run_detail(run: AlertRunResult) -> dict:
         "recipients_correct": ev.recipients_correct,
         "attributes_correct": ev.attributes_correct,
         "granularity_correct": ev.granularity_correct,
+        "comparison_correct": ev.comparison_correct,
         "actual_alert_arguments": run.actual_alert_arguments,
         # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
         # that hit max_iterations while still on track -- see LoopExit. Per-run rather than
@@ -1063,6 +1155,7 @@ def evaluate_agentic_alert_skill(
                     "recipients_correct": ev.recipients_correct,
                     "attributes_correct": ev.attributes_correct,
                     "granularity_correct": ev.granularity_correct,
+                    "comparison_correct": ev.comparison_correct,
                 }
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
                     for score_name, value in strict_checks.items():
@@ -1117,7 +1210,8 @@ def evaluate_agentic_alert_skill(
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
             f"recipients_correct={ev.recipients_correct}, "
             f"attributes_correct={ev.attributes_correct}, "
-            f"granularity_correct={ev.granularity_correct}. "
+            f"granularity_correct={ev.granularity_correct}, "
+            f"comparison_correct={ev.comparison_correct}. "
             f"Actual args: {best.actual_alert_arguments}"
         )
         exc.reasoning_steps = best.reasoning_steps

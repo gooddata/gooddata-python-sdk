@@ -9,6 +9,7 @@ from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     AlertSkillAssertionError,
     _check_attributes,
+    _check_comparison,
     _check_filters,
     _check_granularity,
     _check_recipients,
@@ -888,6 +889,7 @@ def test_evaluate_agentic_alert_skill_returns_reasoning_steps_on_pass():
         "recipients_correct": True,
         "attributes_correct": True,
         "granularity_correct": True,
+        "comparison_correct": True,
         "actual_alert_arguments": {"operator": "GREATER_THAN", "threshold": 500},
         "exit_reason": "success",
         "turns_used": 1,
@@ -934,6 +936,7 @@ def test_evaluate_agentic_alert_skill_attaches_reasoning_steps_to_exception_on_f
         "recipients_correct": False,
         "attributes_correct": False,
         "granularity_correct": False,
+        "comparison_correct": False,
         "actual_alert_arguments": {},
         # The agent replied but never called create_metric_alert, and the loop had only one
         # iteration to give -- budget_exhausted, not a refusal.
@@ -1218,6 +1221,154 @@ def test_every_gen_ai_interval_is_accepted():
         assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
     assert AnomalyDetectionGranularity.parse(None) is None
     assert AnomalyDetectionGranularity.parse("  ") is None
+
+
+# --- Period comparison ------------------------------------------------------------------
+
+# What create_metric_alert receives for "decreases by more than 15% compared with the previous
+# period": the comparison properties plus the date filter that sets the compared period.
+_PREVIOUS_PERIOD_ARGS = {
+    "metric_id": "net_sales",
+    "operator": "DECREASES_BY",
+    "threshold": 0.15,
+    "arithmetic_operator": "CHANGE",
+    "comparison_kind": "PREVIOUS_PERIOD",
+    "comparison_date_dataset_id": "date",
+    "comparison_periods_ago": 1,
+    "filters": [_DATE_FILTER],
+}
+_PREVIOUS_PERIOD_EXPECTATION = {
+    "Operator": "DECREASES_BY",
+    "Threshold": "0.15",
+    "Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": 1, "arithmetic_operator": "CHANGE"},
+}
+
+
+def test_comparison_matching_the_request_passes() -> None:
+    expected = _normalize_expected_output(_PREVIOUS_PERIOD_EXPECTATION)
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+
+
+@pytest.mark.parametrize(
+    "wrong_args",
+    [
+        {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR"},
+        {"comparison_periods_ago": 2},
+        {"arithmetic_operator": "DIFFERENCE"},
+        # A hand-made "previous period" metric instead of a comparison.
+        {"comparison_kind": None, "compare_metric_id": "net_sales_previous_period"},
+    ],
+)
+def test_comparison_differing_from_the_request_fails(wrong_args: dict) -> None:
+    expected = _normalize_expected_output(_PREVIOUS_PERIOD_EXPECTATION)
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, **wrong_args}) is False
+
+
+def test_omitted_comparison_arguments_count_as_the_tool_defaults() -> None:
+    expected = _normalize_expected_output(
+        {"Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": 1, "arithmetic_operator": "DIFFERENCE"}}
+    )
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD"}) is True
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD", "arithmetic_operator": None}) is True
+
+
+def test_only_the_stated_comparison_properties_are_asserted() -> None:
+    expected = _normalize_expected_output({"Comparison": {"kind": "previous_period", "date_dataset_id": ""}})
+    assert expected.comparison == {"comparison_kind": "PREVIOUS_PERIOD"}
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_periods_ago": 3}) is True
+
+
+def test_comparison_accepts_tool_argument_spellings() -> None:
+    expected = _normalize_expected_output(
+        {"comparison": {"comparison_kind": "PREVIOUS_PERIOD", "date_dataset_id": "date"}}
+    )
+    assert expected.comparison == {"comparison_kind": "PREVIOUS_PERIOD", "comparison_date_dataset_id": "date"}
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_date_dataset_id": "order_date"}) is False
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_date_dataset_id": " date "}) is False
+
+
+@pytest.mark.parametrize("unstated", [{}, {"Comparison": ""}, {"Comparison": {}}, {"Comparison": "vs last month"}])
+def test_comparison_is_unasserted_when_the_fixture_states_none(unstated: dict) -> None:
+    expected = _normalize_expected_output({"Operator": "DECREASES_BY", **unstated})
+    assert expected.comparison is None
+    assert _check_comparison(expected, {}) is True
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+
+
+@pytest.mark.parametrize("marker", ["None", "no comparison"])
+def test_a_none_comparison_rejects_any_period_comparison(marker: str) -> None:
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN", "Comparison": marker})
+    assert _check_comparison(expected, {"operator": "GREATER_THAN"}) is True
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is False
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"Comparison": {"period": "MONTH"}},
+        {"Comparison": ["PREVIOUS_PERIOD"]},
+        {"Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": "one"}},
+    ],
+)
+def test_a_malformed_comparison_expectation_fails_before_the_run(bad: dict) -> None:
+    with pytest.raises(ValueError, match="omparison"):
+        _normalize_expected_output(bad)
+
+
+def test_a_none_comparison_display_string_with_a_note_is_still_stated() -> None:
+    expected = _normalize_expected_output({"Comparison": "None (no period comparison)"})
+    assert expected.comparison == {"comparison_kind": None}
+
+
+def test_a_metric_comparison_is_read_the_same_whether_its_kind_is_spelled_or_defaulted() -> None:
+    implicit = {"operator": "INCREASES_BY", "compare_metric_id": "budget"}
+    explicit = {**implicit, "comparison_kind": "METRIC"}
+    as_metric = _normalize_expected_output({"Comparison": {"kind": "METRIC"}})
+    no_comparison = _normalize_expected_output({"Comparison": "None"})
+    assert _check_comparison(as_metric, implicit) is True
+    assert _check_comparison(as_metric, explicit) is True
+    assert _check_comparison(no_comparison, implicit) is False
+    assert _check_comparison(no_comparison, explicit) is False
+
+
+def test_tool_defaults_do_not_stand_in_for_a_missing_comparison() -> None:
+    expected = _normalize_expected_output({"Comparison": {"periods_ago": 1}})
+    assert _check_comparison(expected, {"operator": "GREATER_THAN"}) is False
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD"}) is True
+
+
+def test_a_metric_comparison_gets_no_periods_ago_default() -> None:
+    """A hand-made "previous period" metric must not satisfy a stated periods_ago."""
+    expected = _normalize_expected_output({"Comparison": {"periods_ago": 1}})
+    assert _check_comparison(expected, {"compare_metric_id": "net_sales_previous_period"}) is False
+    assert _check_comparison(expected, {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR"}) is True
+    # arithmetic_operator does default on a METRIC comparison: the tool applies it to every relative alert.
+    arithmetic = _normalize_expected_output({"Comparison": {"arithmetic_operator": "DIFFERENCE"}})
+    assert _check_comparison(arithmetic, {"compare_metric_id": "budget"}) is True
+
+
+def test_same_period_prior_year_date_attribute_can_be_asserted() -> None:
+    expected = _normalize_expected_output(
+        {"Comparison": {"kind": "SAME_PERIOD_PRIOR_YEAR", "date_attribute_id": "date.year"}}
+    )
+    args = {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR", "comparison_date_attribute_id": "date.year"}
+    assert _check_comparison(expected, args) is True
+    assert _check_comparison(expected, {**args, "comparison_date_attribute_id": "date.month"}) is False
+
+
+def test_a_mismatched_comparison_fails_strict_pass() -> None:
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        comparison_correct=False,
+    )
+    assert ev.strict_pass is False
 
 
 # --- LoopExit: why the simulated-user loop stopped ------------------------------------------
