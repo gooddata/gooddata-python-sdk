@@ -536,6 +536,74 @@ def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: p
     assert client.sent == []
 
 
+def test_the_document_format_reaches_the_chat_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    built: list[dict[str, Any]] = []
+
+    def _build(**kwargs: Any) -> _ScriptedChatClient:
+        built.append(kwargs)
+        return client
+
+    monkeypatch.setattr(document_skill, "ChatClient", _build)
+    evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, document_format="aac-v2")
+    assert [kwargs["document_format"] for kwargs in built] == ["aac-v2"]
+
+
+def test_an_unknown_document_format_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    with pytest.raises(ValueError, match="Invalid document format 'v2'"):
+        evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, document_format="v2")
+    assert client.created == client.sent == []
+
+
+def test_an_unknown_document_format_fails_before_the_narrative_judge_is_built(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    with pytest.raises(ValueError, match="Invalid document format 'v2'"):
+        run_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, document_format="v2")
+    assert client.created == client.sent == []
+
+
+@pytest.mark.parametrize(
+    ("document_format", "extra", "expected"),
+    [
+        ("AAC-V2", {"tags": ["ci"]}, {"tags": ["ci"], "document_format": "aac-v2"}),
+        (None, {"tags": ["ci"]}, {"tags": ["ci"]}),
+        (None, None, None),
+    ],
+)
+def test_the_document_format_is_recorded_in_the_run_metadata(
+    monkeypatch: pytest.MonkeyPatch,
+    document_format: str | None,
+    extra: dict[str, Any] | None,
+    expected: dict[str, Any] | None,
+) -> None:
+    _install_client(monkeypatch, _ScriptedChatClient([_drafting_turn()]))
+    identities: list[Any] = []
+    monkeypatch.setattr(
+        document_skill, "submit_trace_scoring", lambda _link, identity, **_kw: identities.append(identity)
+    )
+    try:
+        evaluate_agentic_document_skill(
+            "https://h",
+            "tok",
+            "ws",
+            "Create a document",
+            {},
+            langfuse=object(),
+            dataset_item_id="item-1",
+            run_metadata_extra=extra,
+            document_format=document_format,
+        )
+    except DocumentSkillAssertionError:
+        pass  # the identity is handed to scoring before the gate raises
+    assert [identity.run_metadata_extra for identity in identities] == [expected]
+
+
 # ── fixture validation ──────────────────────────────────────────────────────
 
 

@@ -32,7 +32,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 from gooddata_eval.core.agentic.dashboard_skill import _extract_tool_result, _skill_activated
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
-from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.config import DocumentFormat, ReasoningEffort, normalize_document_format
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
 from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
@@ -801,18 +801,24 @@ def run_agentic_document_skill(
     agent_id: str | None = None,
     judge: LLMJudge | None = None,
     user_context: dict | None = None,
+    document_format: DocumentFormat | None = None,
 ) -> AgenticDocumentSummary:
     """Run the document-skill agentic evaluation K times and return a summary.
 
     The narrative judge is built only for a fixture that states a ``narrative``, so an item
     without one needs neither the llm-judge extra nor ``OPENAI_API_KEY``.
 
+    ``document_format`` is sent on every turn of every run, see ``ChatClient``; None leaves
+    the format to the server's ``enablePublisherV2`` feature flag.
+
     Raises:
         ValueError: the fixture is unusable — see ``_validate_expectation`` and
-            ``_validate_user_context``.
+            ``_validate_user_context``, or ``document_format`` is not a format gen-ai
+            accepts. Raised before any chat request.
     """
     _validate_expectation(expected_output)
     _validate_user_context(user_context)
+    document_format = normalize_document_format(document_format)
     if judge is None and _has_narrative(expected_output):
         judge = LLMJudge(_NARRATIVE_EVALUATION_STEPS)
     run_results: list[DocumentRunResult] = []
@@ -823,6 +829,7 @@ def run_agentic_document_skill(
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
         user_context=user_context,
+        document_format=document_format,
     )
 
     try:
@@ -882,20 +889,32 @@ def evaluate_agentic_document_skill(
     gate: EvalGate = DEFAULT_GATE,
     judge: LLMJudge | None = None,
     user_context: dict | None = None,
+    document_format: DocumentFormat | None = None,
 ) -> AgenticEvalOutcome:
     """Run document-skill evaluation, log to Langfuse, and raise on failure.
 
     Returns the best run's outcome on success; on failure the same values are attached to the
     raised ``DocumentSkillAssertionError`` so callers can retrieve them either way.
 
+    ``document_format`` (``aac-v1``/``aac-v2``) asks gen-ai for that document content format
+    on every turn and is recorded as ``document_format`` in the dataset-run metadata; None
+    leaves it to the server's ``enablePublisherV2`` feature flag.
+
     Raises:
         DocumentSkillAssertionError: the gate did not pass.
-        ValueError: the fixture is unusable — see ``_validate_expectation`` and
-            ``_validate_user_context``. Raised before any
-            request, so it means a fixture to fix rather than a result to read.
+        ValueError: the fixture is unusable, see ``_validate_expectation`` and
+            ``_validate_user_context``. Raised before any chat request, so it means a
+            fixture to fix rather than a result to read. Also raised, equally before any
+            request, when the caller passes a ``document_format`` gen-ai does not accept.
         JudgeResponseError: the fixture states a narrative and the judge returned no readable
             verdict for any run -- an item without a result, not K failures.
     """
+    document_format = normalize_document_format(document_format)
+    if document_format is not None:
+        # Metadata only, not part of the run name: it tells runs apart only when their names
+        # already differ, so two runs that share a run_timestamp, dataset and model but not the
+        # format still collide on one dataset-run name.
+        run_metadata_extra = {**(run_metadata_extra or {}), "document_format": document_format}
     identity = RunIdentity(
         host,
         token,
@@ -921,6 +940,7 @@ def evaluate_agentic_document_skill(
             agent_id=agent_id,
             judge=judge,
             user_context=user_context,
+            document_format=document_format,
         )
 
     if langfuse is not None and dataset_item_id:
