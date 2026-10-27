@@ -1,19 +1,19 @@
-packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_b90bc68ca25668::t_7770da696a6bcf 35,804,811-813,816-817,821,832,892,899-902,906-908,912-915,912-913,917,941,943
-packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
-  s_846911820c2035::t_1a29472417987f 29-34,468,485-491,510,548,550-554
-packages/gooddata-eval/src/gooddata_eval/core/config.py
-  s_b90bc68ca25668::t_a21f89c9d95446 36-38,79-94
-packages/gooddata-eval/tests/test_agentic_document_skill.py
-  s_b90bc68ca25668::t_59a416abbeb678 539-595,539-559,571-606
-  s_2c6e0483cddd97::t_063c2c827f989a 560-570
 packages/gooddata-eval/tests/test_sse_client.py
   s_b90bc68ca25668::t_e34bbfba4cb01f 5,955-961,965-971,1041-1077
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_2c6e0483cddd97::t_063c2c827f989a 560-570
+  s_b90bc68ca25668::t_59a416abbeb678 539-559,571-606
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_b90bc68ca25668::t_a21f89c9d95446 36-38,79-94
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_b90bc68ca25668::t_7770da696a6bcf 35,804,811-813,816-817,821,832,892,899-902,905-908,912-917,943
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_846911820c2035::t_1a29472417987f 29-34,468,485-491,510,548,550-554
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "6166eca5978f3801d213a8eac2b8c635269074bf",
+  "base_commit_sha": "a2147d1a97c0adab46f372c8bbfc240da28acdf2",
   "prompts": {},
   "sessions": {
     "s_2c6e0483cddd97": {
