@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_sse_client.py
+  s_b4ca31ffd03fdc::t_79ffce40f9fdc0 955-961,1042,1044,1051-1052,1058-1059,1065-1066,1072
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "72d8c09affafed173c74741963119e5114d8d774",
+  "prompts": {},
+  "sessions": {
+    "s_b4ca31ffd03fdc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f761ffc1-8b8c-4113-bf15-6a5499a5a8af",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}
