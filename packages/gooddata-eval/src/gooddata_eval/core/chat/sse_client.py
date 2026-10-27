@@ -26,7 +26,12 @@ from urllib.parse import quote
 import httpx
 
 from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, float_env, int_env, retry_transient
-from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
+from gooddata_eval.core.config import (
+    DocumentFormat,
+    ReasoningEffort,
+    normalize_document_format,
+    normalize_reasoning_effort,
+)
 from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import note_trace_latency
@@ -460,6 +465,7 @@ class ChatClient:
         reasoning_effort: ReasoningEffort | None = None,
         agent_id: str | None = None,
         user_context: dict[str, Any] | None = None,
+        document_format: DocumentFormat | None = None,
     ):
         """Create a chat client bound to one workspace.
 
@@ -476,6 +482,13 @@ class ChatClient:
         back to it: a caller that changes or clears the context per message builds the
         client without one. The server grounds answers in it only while
         the ``enableAiContextSetup`` feature flag is on for the organization.
+
+        ``document_format`` (``aac-v1``/``aac-v2``) is sent as ``options.documentFormat``
+        on every message and selects the document content format gen-ai drafts in for
+        that turn. gen-ai keeps a draft in the format of the turn that wrote it and a
+        turn in the other format cannot continue it, so follow-up and clarification
+        turns carry it too. When None the key is omitted and the server picks the format
+        from the ``enablePublisherV2`` feature flag. Any other value raises ``ValueError``.
         """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}", **_trace_baggage()}
@@ -494,6 +507,7 @@ class ChatClient:
         self._client = httpx.Client(timeout=http_timeout)
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
+        self._document_format = normalize_document_format(document_format)
         self._agent_id = agent_id
         self._user_context = user_context
         # Run index of each conversation this client has sent to, in first-send order: every
@@ -531,8 +545,13 @@ class ChatClient:
         join_headers, joined = self._join_item_trace(conversation_id)
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json", **join_headers}
         body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        options: dict[str, str] = {}
         if self._reasoning_effort is not None:
-            body["options"] = {"reasoningEffort": self._reasoning_effort}
+            options["reasoningEffort"] = self._reasoning_effort
+        if self._document_format is not None:
+            options["documentFormat"] = self._document_format
+        if options:
+            body["options"] = options
         # A per-call context overrides the client's. Only sent when there is one: gen-ai
         # accepts an explicit null, so assigning unconditionally would quietly change every
         # request that has no attachment.

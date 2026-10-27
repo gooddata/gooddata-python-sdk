@@ -2,6 +2,7 @@
 import json
 import logging
 from collections.abc import Callable
+from typing import Any
 from urllib.parse import unquote
 
 import httpx
@@ -951,12 +952,23 @@ def test_ask_attaches_conversation_id_to_exception(monkeypatch):
     assert ei.value.conversation_id == "conv-exc"
 
 
-def _capture_body_client(captured, *, reasoning_effort=None):
-    def handler(request):
+def _capture_body_client(
+    captured: list[dict[str, Any]],
+    *,
+    reasoning_effort: str | None = None,
+    document_format: str | None = None,
+) -> ChatClient:
+    def handler(request: httpx.Request) -> httpx.Response:
         captured.append(json.loads(request.content))
         return httpx.Response(200, content=_OK_SSE)
 
-    client = ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort=reasoning_effort)
+    client = ChatClient(
+        host="https://example.invalid",
+        token="t",
+        workspace_id="w",
+        reasoning_effort=reasoning_effort,
+        document_format=document_format,
+    )
     client._client = httpx.Client(transport=httpx.MockTransport(handler))
     return client
 
@@ -1024,6 +1036,43 @@ def test_invalid_reasoning_effort_fails_at_construction():
     """Fail locally rather than as an out-of-enum request partway through a run."""
     with pytest.raises(ValueError, match="Invalid reasoning effort"):
         ChatClient(host="https://example.invalid", token="t", workspace_id="w", reasoning_effort="maximum")
+
+
+@pytest.mark.parametrize("document_format", ["aac-v1", "aac-v2"])
+def test_send_message_sends_document_format_on_every_message(document_format: str) -> None:
+    """gen-ai keeps a draft in the format of the turn that wrote it, so follow-ups need it too."""
+    captured: list[dict[str, Any]] = []
+    client = _capture_body_client(captured, document_format=document_format)
+    client.send_message("conv", "first")
+    client.send_message("conv", "follow-up")
+    assert [c["options"] for c in captured] == [{"documentFormat": document_format}] * 2
+
+
+def test_send_message_sends_document_format_with_reasoning_effort() -> None:
+    captured: list[dict[str, Any]] = []
+    _capture_body_client(captured, reasoning_effort="LOW", document_format="aac-v2").send_message("conv", "q")
+    assert captured[0]["options"] == {"reasoningEffort": "LOW", "documentFormat": "aac-v2"}
+
+
+@pytest.mark.parametrize(("given", "sent"), [("AAC-V2", "aac-v2"), ("  aac-v1  ", "aac-v1")])
+def test_send_message_normalizes_document_format(given: str, sent: str) -> None:
+    captured: list[dict[str, Any]] = []
+    _capture_body_client(captured, document_format=given).send_message("conv", "q")
+    assert captured[0]["options"] == {"documentFormat": sent}
+
+
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_blank_document_format_is_treated_as_unset(blank: str) -> None:
+    captured: list[dict[str, Any]] = []
+    _capture_body_client(captured, document_format=blank).send_message("conv", "q")
+    assert "options" not in captured[0]
+
+
+@pytest.mark.parametrize("bad", ["v2", "aac-v3", "aac_v2"])
+def test_invalid_document_format_fails_at_construction(bad: str) -> None:
+    """gen-ai rejects any other value; fail before the first request instead."""
+    with pytest.raises(ValueError, match="Invalid document format"):
+        ChatClient(host="https://example.invalid", token="t", workspace_id="w", document_format=bad)
 
 
 def test_turn_timeout_aborts_a_streaming_turn_and_is_not_retried(monkeypatch):
