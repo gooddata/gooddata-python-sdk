@@ -356,6 +356,64 @@ def test_check_recipients_accepts_the_current_user_alongside_an_email() -> None:
     assert _check_recipients(expected, extra, current_user_id="admin") is False
 
 
+@pytest.mark.parametrize(
+    ("internal_recipients", "passes"),
+    [
+        # Some models (haiku) JSON-encode the list; gen-ai decodes it before calling the server.
+        ('["admin"]', True),
+        ("admin", True),
+        (["admin"], True),
+        ('["someone_else"]', False),
+        ("[]", False),
+        ("null", False),
+        ("", False),
+        ("  ", False),
+        # Not a list of strings, so the whole string is one (unknown) id.
+        ('["admin", 1]', False),
+    ],
+)
+def test_check_recipients_decodes_a_json_encoded_internal_recipients_string(
+    internal_recipients: object, passes: bool
+) -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    args = {"internal_recipients": internal_recipients}
+    assert _check_recipients(expected, args, sdk=MagicMock(), current_user_id="admin") is passes
+
+
+def test_check_recipients_decodes_json_encoded_strings_next_to_an_email() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
+    args = {"internal_recipients": '["admin"]', "external_recipients": '["bob@example.com"]'}
+    assert _check_recipients(expected, args, current_user_id="admin") is True
+    extra = {"internal_recipients": '["admin", "carol.id"]', "external_recipients": '["bob@example.com"]'}
+    assert _check_recipients(expected, extra, current_user_id="admin") is False
+
+
+@pytest.mark.parametrize(
+    ("external_recipients", "passes"),
+    [
+        ('["a@example.com", "b@example.com"]', True),
+        (["a@example.com", "b@example.com"], True),
+        ("a@example.com; b@example.com", True),
+        ("a@example.com, b@example.com", True),
+        ('["a@example.com"]', False),
+        ("null", False),
+        ("", False),
+        (" ; ", False),
+        (None, False),
+    ],
+)
+def test_check_recipients_normalizes_every_external_recipients_shape(external_recipients: object, passes: bool) -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "a@example.com, b@example.com"})
+    args = {"external_recipients": external_recipients}
+    assert _check_recipients(expected, args) is passes
+
+
+def test_check_recipients_scores_a_non_string_internal_recipient_false_instead_of_raising() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    args = {"internal_recipients": ["admin", {"id": "carol.id"}]}
+    assert _check_recipients(expected, args, current_user_id="admin") is False
+
+
 def test_check_recipients_accepts_an_email_delivered_as_a_user_id_next_to_the_current_user() -> None:
     expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
     mock_sdk = MagicMock()
@@ -411,7 +469,12 @@ def test_sim_user_still_volunteers_an_email_recipient() -> None:
     assert "Proactively include your email recipient" in prompt
 
 
-def test_run_agentic_alert_skill_scores_a_current_user_alert() -> None:
+@pytest.mark.parametrize(
+    "internal_recipients",
+    # As sent in the tool call: a JSON list, or that list JSON-encoded into a string.
+    ['["admin"]', '"[\\"admin\\"]"'],
+)
+def test_run_agentic_alert_skill_scores_a_current_user_alert(internal_recipients: str) -> None:
     asked_turn = ChatResult.model_validate({"text_response": "Which dashboard?", "tool_call_events": []})
     created_turn = ChatResult.model_validate(
         {
@@ -419,7 +482,9 @@ def test_run_agentic_alert_skill_scores_a_current_user_alert() -> None:
             "tool_call_events": [
                 {
                     "functionName": "create_metric_alert",
-                    "functionArguments": '{"operator": "LESS_THAN", "threshold": 30000, "internal_recipients": ["admin"]}',
+                    "functionArguments": (
+                        f'{{"operator": "LESS_THAN", "threshold": 30000, "internal_recipients": {internal_recipients}}}'
+                    ),
                     "result": '{"id": "alert-1"}',
                 }
             ],
