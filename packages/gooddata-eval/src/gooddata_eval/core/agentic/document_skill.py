@@ -72,6 +72,7 @@ _SUMMARY_SLOT = "summary"
 _V2 = "2"
 _V2_HEADING_WIDGETS = frozenset({"title", "heading"})
 _V2_TAKEAWAY_WIDGET = "takeaway"
+_V2_TEXT_WIDGET = "text"
 
 _NARRATIVE_EVALUATION_STEPS = [
     "The actual output is a document rendered as text: its title, period, and per page the heading, "
@@ -208,32 +209,39 @@ def _is_takeaway(node: dict) -> bool:
     return node.get("type") == _V2_TAKEAWAY_WIDGET
 
 
-def _summary_slots(page: dict) -> list[dict]:
-    """The page's summaries: every v2 ``takeaway`` widget, or the v1 ``summary`` slot as gen-ai reads it.
+def _is_summary_text(node: dict) -> bool:
+    return node.get("type") == _V2_TEXT_WIDGET and node.get("id") == _SUMMARY_SLOT
 
-    A v2 ``text`` widget with id ``summary`` is static text the default page templates ship empty,
-    not a summary: the copilot writes its summaries into takeaways.
+
+def _summary_slots(page: dict) -> list[dict]:
+    """The page's summaries, as gen-ai writes them.
+
+    A v2 page's summaries are its ``takeaway`` widgets; a v2 page without one is summarised by its
+    ``text`` widget with id ``summary``. A v1 page's summary is its ``summary`` slot with a ``paragraph``.
     """
     nodes = list(_nodes(page.get("layout")))
     takeaways = [node for node in nodes if _is_takeaway(node)]
     if takeaways:
         return takeaways
     for node in nodes:
-        if node.get("id") == _SUMMARY_SLOT and "paragraph" in node:
+        if _is_summary_text(node) or (node.get("id") == _SUMMARY_SLOT and "paragraph" in node):
             return [node]
     return []
 
 
 def _summary_text(slot: dict) -> str | None:
-    """The slot's written text: a takeaway's markdown, the model's on an AI summary, the string on a static one."""
-    if _is_takeaway(slot):
+    """The slot's written text: the markdown of a takeaway or text summary, the model's on an AI summary,
+    the string on a static one."""
+    if _is_takeaway(slot) or _is_summary_text(slot):
         return _written(slot.get("markdown"))
     paragraph = slot.get("paragraph")
     return _written(paragraph.get("text") if isinstance(paragraph, dict) else paragraph)
 
 
 def _slot_name(slot: dict) -> str:
-    return "takeaway" if _is_takeaway(slot) else "summary slot"
+    if _is_takeaway(slot):
+        return "takeaway"
+    return "text summary" if _is_summary_text(slot) else "summary slot"
 
 
 def _content_pages(document: dict) -> list[tuple[int, dict]]:
@@ -577,7 +585,7 @@ def _score_response(
             if _summary_text(slot) is None
         ]
         if not slots:
-            missing = "takeaway" if _is_v2(document) else "summary slot"
+            missing = "takeaway or text summary" if _is_v2(document) else "summary slot"
             failures.append(f"the document has no {missing}")
         failures.extend(dict.fromkeys(unwritten))
         summaries_present = bool(slots) and not unwritten

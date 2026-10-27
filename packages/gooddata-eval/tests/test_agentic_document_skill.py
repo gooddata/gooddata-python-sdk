@@ -1268,20 +1268,39 @@ def test_a_takeaway_made_only_of_placeholders_is_not_written() -> None:
 
 
 def _with_summary_text(page: dict, markdown: str | None) -> dict:
-    """``page`` plus the default template's ``text`` widget with id ``summary``, which is not a takeaway."""
+    """``page`` plus a page template's ``text`` widget with id ``summary``; ``None`` leaves its markdown out."""
     page["layout"]["children"].append(
         {"type": "text", "id": "summary", **({"markdown": markdown} if markdown is not None else {})}
     )
     return page
 
 
-def test_a_v2_document_without_a_takeaway_has_no_summaries() -> None:
+def test_a_v2_page_without_a_takeaway_is_summarised_by_its_summary_text() -> None:
     page = _with_summary_text(_v2_content_page("page2", _REVENUE_TREND), "Revenue grew 12%.")
     part = _v2_document_part([_v2_cover_page(), page])
     evaluation = _evaluate(part, expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is True
+    assert render_document_text(part["document"]).splitlines()[-1] == "Summary: Revenue grew 12%."
+
+
+@pytest.mark.parametrize("markdown", ["", None])
+def test_an_unwritten_summary_text_fails_when_the_page_has_no_takeaway(markdown: str | None) -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND, takeaway="Revenue grew 12%."),
+        _with_summary_text(_v2_content_page("page3", _RETURNS_BY_CATEGORY), markdown),
+    ]
+    part = _v2_document_part(pages)
+    evaluation = _evaluate(part, expected={"narrative": _NARRATIVE}, tool=_draft_result(page_count=3))
     assert evaluation.strict_checks["document_summaries_present"] is False
-    assert evaluation.failures == ["the document has no takeaway"]
-    assert "Summary:" not in render_document_text(part["document"])
+    assert evaluation.failures == ["page 'page3' has a text summary with no written text"]
+    assert render_document_text(part["document"]).count("Summary:") == 1
+
+
+def test_a_v2_document_without_a_takeaway_or_summary_text_has_no_summaries() -> None:
+    evaluation = _evaluate(_v2_document_part(), expected={"narrative": _NARRATIVE})
+    assert evaluation.strict_checks["document_summaries_present"] is False
+    assert evaluation.failures == ["the document has no takeaway or text summary"]
 
 
 def test_an_empty_summary_text_beside_a_written_takeaway_is_ignored() -> None:
