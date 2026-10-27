@@ -125,6 +125,29 @@ def _parse_recipients(recipients_str: str | None) -> list[str] | None:
     return [r.strip() for r in recipients_str.replace(";", ",").split(",") if r.strip()]
 
 
+def _recipient_list(value: object, *, split_bare: bool) -> list[str]:
+    """A recipient argument as a list, decoded the way gen-ai does before calling the server.
+
+    The tool schema declares both recipient fields ``anyOf: [array of string, string, null]``,
+    and some models send the list JSON-encoded as a string (``'["admin"]'``). Empty or
+    ``"null"`` means none; any other string that is not a JSON list of strings is a bare
+    value -- one user id, or with ``split_bare`` a comma/semicolon-separated email list
+    (gen-ai forwards a bare string as one entry; the split is this checker's own leniency).
+    A non-string list entry is kept as its ``str()`` so it compares unequal instead of raising.
+    """
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    if not isinstance(value, str) or value.strip() in ("", "null"):
+        return []
+    try:
+        parsed = json.loads(value)
+    except ValueError:
+        parsed = None
+    if isinstance(parsed, list) and all(isinstance(item, str) for item in parsed):
+        return parsed
+    return (_parse_recipients(value) or []) if split_bare else [value]
+
+
 def _deep_subset(expected: object, actual: object) -> bool:
     """Return True if expected is a recursive subset of actual."""
     if isinstance(expected, dict) and isinstance(actual, dict):
@@ -396,35 +419,14 @@ def _check_recipients(
 ) -> bool:
     if not expected.recipients:
         return True
-    act_recip_raw = actual_args.get("recipients", actual_args.get("external_recipients"))
-    if isinstance(act_recip_raw, str):
-        # external_recipients is JSON-encoded (e.g. '["email@example.com"]')
-        try:
-            parsed = json.loads(act_recip_raw)
-            act_recip = parsed if isinstance(parsed, list) else _parse_recipients(act_recip_raw)
-        except (json.JSONDecodeError, ValueError):
-            act_recip = _parse_recipients(act_recip_raw)
-    elif isinstance(act_recip_raw, list):
-        act_recip = act_recip_raw
-    else:
-        act_recip = []
-    act_internal_raw = actual_args.get("internal_recipients")
-    # internal_recipients is declared `anyOf: [array of string, string, null]` in the
-    # create_metric_alert tool schema -- a single id as a bare string is schema-legal,
-    # not a malformed call, so it needs the same string/list normalization already
-    # applied to recipients/external_recipients above.
-    if isinstance(act_internal_raw, str):
-        act_internal = [act_internal_raw]
-    elif isinstance(act_internal_raw, list):
-        act_internal = act_internal_raw
-    else:
-        act_internal = []
+    act_recip = _recipient_list(actual_args.get("recipients", actual_args.get("external_recipients")), split_bare=True)
+    act_internal = _recipient_list(actual_args.get("internal_recipients"), split_bare=False)
     wants_current_user, expected_emails = _split_current_user(expected.recipients)
     if wants_current_user:
         if current_user_id is None or current_user_id not in act_internal:
             return False
         other_internal = set(act_internal) - {current_user_id}
-        external = set(act_recip or [])
+        external = set(act_recip)
         if external - set(expected_emails):
             return False
         # An email not sent externally must arrive as its user's id (workspace-restricted channel).
@@ -436,7 +438,7 @@ def _check_recipients(
         # One lookup per email: a bulk lookup returns only the users that exist, hiding a missing one.
         ids_per_email = [_resolve_internal_recipient_ids(sdk, [email]) for email in unmatched]
         return all(ids_per_email) and other_internal == set().union(*ids_per_email)
-    if set(expected_emails) == set(act_recip or []):
+    if set(expected_emails) == set(act_recip):
         return True
     if sdk is not None and act_internal:
         internal_recipient_ids = _resolve_internal_recipient_ids(sdk, expected_emails)
