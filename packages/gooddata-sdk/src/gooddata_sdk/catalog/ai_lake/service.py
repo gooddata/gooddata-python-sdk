@@ -18,10 +18,12 @@ ticket adds typed wrappers.
 
 from __future__ import annotations
 
+import json
 import time
 import uuid
 from typing import Any, Literal
 
+import requests
 from attrs import define
 from gooddata_api_client.api.ai_lake_api import AILakeApi
 from gooddata_api_client.model.analyze_statistics_request import AnalyzeStatisticsRequest
@@ -75,6 +77,52 @@ class CatalogAILakeService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
         self._ai_lake_api: AILakeApi = AILakeApi(api_client._api_client)
+
+    def refresh_partition(
+        self,
+        instance_id: str,
+        table_name: str,
+        partition_spec: dict[str, str],
+        operation_id: str | None = None,
+    ) -> str:
+        """(BETA) Delete all rows for the specified Hive partition and re-load from S3.
+
+        Triggers a ``refresh-partition`` long-running operation in the AI Lake.
+        The generated client does not yet expose this endpoint, so the SDK calls
+        it via a raw HTTP POST using the same URL-construction logic as
+        :meth:`~gooddata_sdk.client.GoodDataApiClient._do_post_request`.
+
+        Args:
+            instance_id: Database instance name (preferred) or UUID.
+            table_name: Name of the pipe-backed OLAP table.
+            partition_spec: Partition column values that identify the partition to
+                refresh (e.g. ``{"year": "2024", "month": "01"}``).
+            operation_id: Optional client-supplied operation identifier.  If
+                omitted, a fresh UUID is generated.  Pass the same value to
+                :meth:`wait_for_operation` to poll.
+
+        Returns:
+            The operation ID (UUID string) the platform will track this run
+            under.  Pass it to :meth:`get_operation` / :meth:`wait_for_operation`.
+        """
+        op_id = operation_id or str(uuid.uuid4())
+        endpoint = f"api/v1/ailake/database/instances/{instance_id}/pipeTables/{table_name}/refresh"
+        hostname = self._client._hostname
+        if not hostname.endswith("/"):
+            endpoint = f"/{endpoint}"
+        url = f"{hostname}{endpoint}"
+        body = json.dumps({"partitionSpec": partition_spec}).encode("utf-8")
+        response = requests.post(
+            url=url,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self._client._token}",
+                "operation-id": op_id,
+            },
+            data=body,
+        )
+        response.raise_for_status()
+        return op_id
 
     def analyze_statistics(
         self,
