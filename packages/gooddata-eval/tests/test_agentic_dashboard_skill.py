@@ -1477,8 +1477,31 @@ class TestTabFilters:
         expected = {**_TABBED_EDIT, "tab_filters": {"tab_finance": {}}}
         assert any("has no tab 'tab_finance'" in f for f in _score_tabbed_edit(expected, _RESIZE_AMOUNT).failures)
 
+    def test_a_group_is_read_as_filter_bar_reads_it(self):
+        """By its members' own keys, so the two exact filter checks agree on the same dashboard."""
+        expected = {
+            **_TABBED_EDIT,
+            "tab_filters": {
+                "tab_products": {
+                    "tab2_date": _TAB2_DATE,
+                    "category_filter": _GROUPED_CATEGORY,
+                    "product_brand": {**_BRAND, "group": "Product"},
+                }
+            },
+        }
+        assert _score_tabbed_edit(expected, _GROUP_CATEGORY_WITH_BRAND).tab_filters_correct
+        ev = self._score(_GROUP_CATEGORY_WITH_BRAND)
+        assert "tab 'tab_products' filter 'category_filter' sits in group 'Product', expected no group" in ev.failures
+        assert "tab 'tab_products' carries filter 'product_brand', which it should not" in ev.failures
+
     @pytest.mark.parametrize(
-        "tab_filters", [{}, {"tab_customers": []}, {"tab_customers": {"main_date": {"granularity": "MONTH"}}}]
+        "tab_filters",
+        [
+            {},
+            {"tab_customers": []},
+            {"tab_customers": {"main_date": {"granularity": "MONTH"}}},
+            {"tab_products": {"product": {"type": "filter_group", "title": "Product", "filters": {}}}},
+        ],
     )
     def test_a_malformed_expectation_is_rejected_up_front(self, tab_filters):
         client = MagicMock()
@@ -1630,6 +1653,339 @@ class TestPreservedWidgets:
         client = MagicMock()
         with pytest.raises(ValueError, match="preserved"):
             _run_with(client, {**_TABBED_EDIT, "preserved_widgets": preserved})
+        client.send_message.assert_not_called()
+
+
+_LAYOUT_UNTOUCHED = [
+    {"tab": "tab_customers", "sections": [{"title": "Overview", "visualizations": [_NET_SALES, _TOTAL_CUSTOMERS]}]},
+    {"tab": "tab_products", "sections": [{"title": None, "visualizations": [_ACTIVE_CUSTOMERS]}]},
+]
+# A move between tabs as the agent emits it: placed on the target tab, then taken off the source.
+_MOVE_NET_SALES_TO_PRODUCTS = [
+    {"op": "test", "path": "/tabs/1/sections/0/widgets/0/visualization", "value": _ACTIVE_CUSTOMERS},
+    {
+        "op": "add",
+        "path": "/tabs/1/sections/0/widgets/1",
+        "value": {"visualization": _NET_SALES, "title": False, "columns": 6, "rows": 12, "interactions": _DRILL},
+    },
+    {"op": "test", "path": "/tabs/0/sections/0/widgets/0/visualization", "value": _NET_SALES},
+    {"op": "remove", "path": "/tabs/0/sections/0/widgets/0"},
+]
+_LAYOUT_AFTER_MOVE = [
+    {"tab": "tab_customers", "sections": [{"title": "Overview", "visualizations": [_TOTAL_CUSTOMERS]}]},
+    {"tab": "tab_products", "sections": [{"title": None, "visualizations": [_ACTIVE_CUSTOMERS, _NET_SALES]}]},
+]
+
+
+def _two_section_base() -> dict:
+    """A saved single-tab dashboard as relayed for editing: version 2, sections at the root."""
+    part = _edit_base_part([_widget("Net Sales", _NET_SALES), _widget("Activity by Hour", _ACTIVITY_BY_HOUR)])
+    part["dashboard"]["sections"].append({"title": "Orders", "widgets": [_widget("Order status", _ORDER_STATUS)]})
+    part["references"]["visualizations"].append({"id": _ORDER_STATUS, "type": "funnel_chart", "title": "Order status"})
+    return part
+
+
+def _score_root_edit(expected: dict, operations: list[dict], new_visualizations: list[str] | None = None):
+    patch_part = _patch_part(operations, new_visualizations=new_visualizations)
+    return evaluate_dashboard_response(
+        _patch_result(len(new_visualizations or [])), _two_section_base(), expected, True, patch_part=patch_part
+    )
+
+
+_ROOT_EDIT = {**_DE01_EXPECTED, "visualizations": [{"id": _NET_SALES, "title": "Net Sales"}]}
+
+
+class TestLayout:
+    """A move or a removal is only visible in the whole arrangement: every chart staying "on the
+    dashboard" also passes a move that never happened or left a second copy behind."""
+
+    def test_a_move_between_tabs_matches(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _MOVE_NET_SALES_TO_PRODUCTS)
+        assert ev.strict_checks["dashboard_layout_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_a_move_that_leaves_the_original_behind_fails(self):
+        """Placing alone adds a second copy -- the mistake gen-ai's editor prompt warns about."""
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _MOVE_NET_SALES_TO_PRODUCTS[:2])
+        assert not ev.layout_correct
+        assert any("tab 'tab_customers' section 0 holds" in f for f in ev.failures)
+
+    def test_a_move_that_never_happened_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _RESIZE_AMOUNT)
+        assert not ev.layout_correct
+
+    def test_a_reorder_is_read_in_order(self):
+        layout = [{"tab": "tab_customers", "sections": [{"visualizations": [_TOTAL_CUSTOMERS, _NET_SALES]}]}]
+        swap = [{"op": "move", "from": "/tabs/0/sections/0/widgets/1", "path": "/tabs/0/sections/0/widgets/0"}]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, swap).layout_correct
+        assert not _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT).layout_correct
+
+    def test_only_the_named_tabs_are_compared(self):
+        layout = [_LAYOUT_UNTOUCHED[1]]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT).layout_correct
+
+    def test_removing_the_last_widget_of_a_section_removes_the_section(self):
+        expected = {
+            **_ROOT_EDIT,
+            "layout": [
+                {"sections": [{"title": "Products overview", "visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]}]}
+            ],
+        }
+        removed = [{"op": "test", "path": "/sections/1/widgets/0/visualization", "value": _ORDER_STATUS}]
+        assert _score_root_edit(expected, [*removed, {"op": "remove", "path": "/sections/1"}]).strict_pass
+        ev = _score_root_edit(expected, [*removed, {"op": "remove", "path": "/sections/1/widgets/0"}])
+        assert not ev.layout_correct
+        assert any("the dashboard has 2 section(s)" in f for f in ev.failures)
+
+    def test_a_section_title_is_compared_when_stated(self):
+        new_section = {"title": "Order health", "widgets": [_widget("Order status", _ORDER_STATUS)]}
+        operations = [
+            {"op": "remove", "path": "/sections/1"},
+            {"op": "add", "path": "/sections/-", "value": new_section},
+        ]
+        layout = [
+            {
+                "sections": [
+                    {"visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]},
+                    {"title": "order  HEALTH", "visualizations": [_ORDER_STATUS]},
+                ]
+            }
+        ]
+        assert _score_root_edit({**_ROOT_EDIT, "layout": layout}, operations).layout_correct
+        layout[0]["sections"][1]["title"] = "Orders"
+        ev = _score_root_edit({**_ROOT_EDIT, "layout": layout}, operations)
+        assert any("section 1 is titled 'Order health', expected 'Orders'" in f for f in ev.failures)
+
+    def test_an_authored_chart_is_matched_by_title(self):
+        authored = "b5c2f8d4-0000-4000-8000-000000000001"
+        operations = [{"op": "add", "path": "/sections/1/widgets/-", "value": _widget("Returns by Category", authored)}]
+        layout = [
+            {
+                "sections": [
+                    {"visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]},
+                    {"visualizations": [_ORDER_STATUS, {"title": "Returns by category"}]},
+                ]
+            }
+        ]
+        expected = {**_ROOT_EDIT, "layout": layout}
+        assert _score_root_edit(expected, operations, new_visualizations=[authored]).layout_correct
+        # The same title on a chart that already existed is not the authored one.
+        assert not _score_root_edit(expected, operations).layout_correct
+
+    def test_an_entry_without_a_tab_on_a_tabbed_dashboard_fails(self):
+        layout = [{"sections": _LAYOUT_UNTOUCHED[0]["sections"]}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT)
+        assert any("the dashboard has 2 tabs, so the expectation must name one" in f for f in ev.failures)
+
+    @pytest.mark.parametrize(
+        "layout",
+        [
+            [],
+            [{"sections": "Overview"}],
+            [{"sections": [{"name": "Overview"}]}],
+            [{"sections": [{"visualizations": [{"id": _NET_SALES}]}]}],
+            [{"sections": [{"title": 3, "visualizations": []}]}],
+            # A chart title that is not text would crash the run instead of failing here.
+            [{"sections": [{"visualizations": [{"title": 3}]}]}],
+            # Without visualizations, `layout` would read "no charts" where `tabs` reads "any".
+            [{"sections": [{"title": "Orders"}]}],
+            [{"tab": "tab_customers", "sections": []}, {"tab": "tab_customers", "sections": []}],
+            # On a one-tab dashboard both entries could name that tab.
+            [{"sections": []}, {"tab": "tab_customers", "sections": []}],
+            [{"tabs": "tab_customers", "sections": []}],
+        ],
+    )
+    def test_a_malformed_expectation_is_rejected_up_front(self, layout):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="layout"):
+            _run_with(client, {**_TABBED_EDIT, "layout": layout})
+        client.send_message.assert_not_called()
+
+
+_CUSTOMER_CONTAINS = {"type": "text_filter", "using": "label/customer_name", "condition": "contains", "value": "Aaron"}
+# A list filter turned into a text filter as the agent emits it: removed, then added under a minted key.
+_CUSTOMER_TO_TEXT = [
+    {"op": "test", "path": "/tabs/0/filters/customer_filter", "value": _CUSTOMER_BY_NAME},
+    {"op": "remove", "path": "/tabs/0/filters/customer_filter"},
+    {"op": "add", "path": "/tabs/0/filters/customer_name", "value": _CUSTOMER_CONTAINS},
+]
+_BAR_AFTER_TEXT = [
+    {
+        "tab": "tab_customers",
+        "filters": {"main_date": _MAIN_DATE, "second_date": _SECOND_DATE},
+        "added": [_CUSTOMER_CONTAINS],
+    },
+    {"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _CATEGORY_ALL}},
+]
+_BRAND = {"type": "attribute_filter", "using": "label/product_brand"}
+_GROUPED_CATEGORY = {**_CATEGORY_ALL, "group": "Product"}
+# The category filter taken off the bar and put in a new group beside a new brand filter.
+_GROUP_CATEGORY_WITH_BRAND = [
+    {"op": "remove", "path": "/tabs/1/filters/category_filter"},
+    {
+        "op": "add",
+        "path": "/tabs/1/filters/product",
+        "value": {
+            "type": "filter_group",
+            "title": "Product",
+            "filters": {"category_filter": _CATEGORY_ALL, "product_brand": _BRAND},
+        },
+    },
+]
+
+
+class TestFilterBar:
+    """Exact filters per tab, like ``tab_filters``, but able to hold a filter whose key the agent
+    mints at run time, and to read a dashboard without tabs."""
+
+    def test_a_list_filter_turned_into_a_text_filter_matches(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT)
+        assert ev.strict_checks["dashboard_filter_bar_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_a_change_that_keeps_the_key_matches_too(self):
+        operations = [{"op": "replace", "path": "/tabs/0/filters/customer_filter", "value": _CUSTOMER_CONTAINS}]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, operations).filter_bar_correct
+
+    def test_the_list_filter_left_beside_the_new_one_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT[2:])
+        assert not ev.filter_bar_correct
+        assert any(
+            "tab 'tab_customers' carries filter 'customer_filter', which it should not" in f for f in ev.failures
+        )
+
+    def test_a_new_filter_that_is_not_there_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT[:2])
+        assert any("tab 'tab_customers' carries no new filter matching" in f for f in ev.failures)
+
+    def test_a_new_filter_added_twice_fails(self):
+        twice = [
+            *_CUSTOMER_TO_TEXT,
+            {"op": "add", "path": "/tabs/0/filters/customer_name_2", "value": _CUSTOMER_CONTAINS},
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, twice)
+        assert any("carries filter 'customer_name_2', which it should not" in f for f in ev.failures)
+
+    def test_a_new_filter_on_the_wrong_tab_fails(self):
+        operations = [{"op": "add", "path": "/tabs/1/filters/customer_name", "value": _CUSTOMER_CONTAINS}]
+        bar = [
+            {
+                "tab": "tab_customers",
+                "filters": {"main_date": _MAIN_DATE, "second_date": _SECOND_DATE, "customer_filter": _CUSTOMER_BY_NAME},
+                "added": [_CUSTOMER_CONTAINS],
+            },
+            _BAR_AFTER_TEXT[1],
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+        assert any("tab 'tab_customers' carries no new filter" in f for f in ev.failures)
+        assert any("tab 'tab_products' carries filter 'customer_name'" in f for f in ev.failures)
+
+    def test_a_removed_filter_on_a_dashboard_without_tabs(self):
+        """What `filters` cannot see: it ignores filters beyond the expected ones."""
+        kept = {k: v for k, v in _SAVED_FILTERS.items() if k != "1b0255ea4bfd4f11a832a8649abd73b2"}
+        expected = {**_ROOT_EDIT, "filter_bar": [{"filters": kept}]}
+        removal = [{"op": "remove", "path": "/filters/1b0255ea4bfd4f11a832a8649abd73b2"}]
+        assert _score_root_edit(expected, removal).strict_pass
+        ev = _score_root_edit(expected, [{"op": "add", "path": "/sections/0/widgets/0/columns", "value": 12}])
+        assert any("the dashboard carries filter '1b0255ea4bfd4f11a832a8649abd73b2'" in f for f in ev.failures)
+
+    def test_a_changed_selection_is_compared(self):
+        country = "c47fea61aa7247cca2bab2096ce6e297"
+        canada = {"type": "attribute_filter", "using": "label/customer_country", "state": {"include": ["Canada"]}}
+        expected = {**_ROOT_EDIT, "filter_bar": [{"filters": {**_SAVED_FILTERS, country: canada}}]}
+        assert _score_root_edit(
+            expected, [{"op": "replace", "path": f"/filters/{country}", "value": canada}]
+        ).strict_pass
+        ev = _score_root_edit(expected, [{"op": "add", "path": "/sections/0/widgets/0/columns", "value": 12}])
+        assert any(
+            f"the dashboard filter {country!r} selects all, expected include ['Canada']" in f for f in ev.failures
+        )
+
+    def test_a_groups_members_are_read_by_their_own_keys_and_name_the_group(self):
+        bar = [
+            {
+                "tab": "tab_products",
+                "filters": {"tab2_date": _TAB2_DATE, "category_filter": {**_CATEGORY_ALL, "group": "product"}},
+                "added": [{**_BRAND, "group": "Product"}],
+            }
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _GROUP_CATEGORY_WITH_BRAND)
+        assert ev.filter_bar_correct, ev.failures
+
+    def test_a_filter_moved_into_a_group_fails_when_it_should_stand_alone(self):
+        bar = [
+            {
+                "tab": "tab_products",
+                "filters": {"tab2_date": _TAB2_DATE, "category_filter": _CATEGORY_ALL},
+                "added": [_BRAND],
+            }
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _GROUP_CATEGORY_WITH_BRAND)
+        assert not ev.filter_bar_correct
+        assert "tab 'tab_products' filter 'category_filter' sits in group 'Product', expected no group" in ev.failures
+        assert any("carries no new filter matching" in f for f in ev.failures)
+        assert any("carries filter group 'product' ('Product'), which holds none" in f for f in ev.failures)
+
+    def test_a_filter_left_outside_its_group_fails(self):
+        bar = [{"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _GROUPED_CATEGORY}}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _RESIZE_AMOUNT)
+        assert "tab 'tab_products' filter 'category_filter' sits in no group, expected group 'Product'" in ev.failures
+
+    def test_a_filter_both_grouped_and_left_on_its_own_fails(self):
+        """Grouped without being taken off the bar: shown twice, under one key."""
+        group = {"type": "filter_group", "title": "Product", "filters": {"category_filter": _CATEGORY_ALL}}
+        operations = [{"op": "add", "path": "/tabs/1/filters/product", "value": group}]
+        bar = [{"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _GROUPED_CATEGORY}}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+        assert "tab 'tab_products' carries filter 'category_filter' more than once" in ev.failures
+
+    def test_an_empty_group_fails(self):
+        empty = {"type": "filter_group", "title": "Product", "filters": {}}
+        operations = [{"op": "add", "path": "/tabs/1/filters/product", "value": empty}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": [_BAR_AFTER_TEXT[1]]}, operations)
+        assert ev.failures == [
+            "tab 'tab_products' carries filter group 'product' ('Product'), which holds none of the expected filters"
+        ]
+
+    def test_added_entries_match_whatever_order_they_are_listed_in(self):
+        """A looser entry listed first must not take the filter only the stricter one fits."""
+        aaron = _CUSTOMER_CONTAINS
+        bella = {**_CUSTOMER_CONTAINS, "value": "Bella"}
+        operations = [
+            {"op": "add", "path": "/tabs/1/filters/customer_aaron", "value": aaron},
+            {"op": "add", "path": "/tabs/1/filters/customer_bella", "value": bella},
+        ]
+        loose = {"type": "text_filter", "using": "label/customer_name"}
+        for added in ([loose, aaron], [aaron, loose]):
+            bar = [{**_BAR_AFTER_TEXT[1], "added": added}]
+            ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+            assert ev.filter_bar_correct, (added, ev.failures)
+
+    def test_an_entry_without_a_tab_on_a_tabbed_dashboard_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": [{"filters": {}}]}, _RESIZE_AMOUNT)
+        assert any("must name one" in f for f in ev.failures)
+
+    @pytest.mark.parametrize(
+        ("bar", "match"),
+        [
+            ([], "filter_bar must be a non-empty list"),
+            ([{"filters": []}], "needs filters as a map"),
+            ([{"added": {}}], "needs filters as a map"),
+            ([{"filters": {"main_date": {"granularity": "MONTH"}}}], "must be a typed filter"),
+            ([{"added": [{"type": "attribute_filter", "using": "label/x", "include": ["a"]}]}], r"puts \['include'\]"),
+            ([{"tab": "tab_products"}, {"tab": "tab_products"}], "more than once"),
+            ([{"filters": {}}, {"tab": "tab_products"}], "without tab must be the only entry"),
+            ([{"tab": 3, "filters": {}}], "tab must be a tab id"),
+            ([{"filters": {}, "kept": {}}], r"cannot state \['kept'\]"),
+            # The check reads a group's members by their own keys, so a group could never match.
+            ([{"filters": {"product": {"type": "filter_group", "filters": {}}}}], "is a filter_group"),
+            ([{"added": [{**_BRAND, "group": ""}]}], "group must be the title"),
+        ],
+    )
+    def test_a_malformed_expectation_is_rejected_up_front(self, bar, match):
+        client = MagicMock()
+        with pytest.raises(ValueError, match=match):
+            _run_with(client, {**_TABBED_EDIT, "filter_bar": bar})
         client.send_message.assert_not_called()
 
 
@@ -1869,6 +2225,8 @@ class TestNewChecksOnAnEmptyRun:
             "tab_filters": {"tab_customers": {}},
             "date_filters": {"main_date": None},
             "preserved_widgets": [{"visualization": _NET_SALES, "title": False}],
+            "layout": _LAYOUT_UNTOUCHED,
+            "filter_bar": [{"tab": "tab_customers"}],
         }
         ev = evaluate_dashboard_response(None, None, expected, True)
         for name in (
@@ -1877,8 +2235,15 @@ class TestNewChecksOnAnEmptyRun:
             "dashboard_tab_filters_correct",
             "dashboard_date_filters_correct",
             "dashboard_widgets_preserved",
+            "dashboard_layout_correct",
+            "dashboard_filter_bar_correct",
         ):
             assert ev.strict_checks[name] is False
+
+    def test_a_case_without_layout_or_filter_bar_publishes_neither(self):
+        ev = _score_tabbed_edit(_TABBED_EDIT, _RESIZE_AMOUNT)
+        assert "dashboard_layout_correct" not in ev.strict_checks
+        assert "dashboard_filter_bar_correct" not in ev.strict_checks
 
 
 class TestRunLoop:
