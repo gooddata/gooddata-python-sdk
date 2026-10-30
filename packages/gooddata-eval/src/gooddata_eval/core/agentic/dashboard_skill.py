@@ -313,20 +313,33 @@ def _grouped_filter_entries(dashboard: dict) -> list[tuple[str, dict, str | None
         if tabs
         else [("", dashboard.get("filters") or {})]
     )
-    entries: list[tuple[str, dict, str | None]] = []
-    for where, filters in maps:
-        for key, value in filters.items():
-            if not isinstance(value, dict):
-                continue
-            label = where or f"filter {key!r}"
-            if value.get("type") != "filter_group":
-                entries.append((label, value, None))
-                continue
-            group = str(value.get("title") or "")
-            entries.extend(
-                (label, member, group) for member in (value.get("filters") or {}).values() if isinstance(member, dict)
-            )
-    return entries
+    return [
+        (where or f"filter {entry_key!r}", value, group)
+        for where, filters in maps
+        for entry_key, _key, value, group in _members_of(filters)
+    ]
+
+
+def _members_of(filters: dict) -> list[tuple[str, str, dict, str | None]]:
+    """``(entry key, filter key, filter, group title)`` for every filter of one filter map.
+
+    A group's members are read in its place, each under its own key and with the group's key as
+    the entry key; a filter outside a group is its own entry and has no group title.
+    """
+    members: list[tuple[str, str, dict, str | None]] = []
+    for entry_key, value in filters.items():
+        if not isinstance(value, dict):
+            continue
+        if value.get("type") != "filter_group":
+            members.append((entry_key, entry_key, value, None))
+            continue
+        group = str(value.get("title") or "")
+        members.extend(
+            (entry_key, key, member, group)
+            for key, member in (value.get("filters") or {}).items()
+            if isinstance(member, dict)
+        )
+    return members
 
 
 def _filters_of_type(dashboard: dict, filter_type: str) -> list[tuple[str, dict]]:
@@ -549,6 +562,11 @@ def _matching_widgets(widgets: list[dict], new_ids: set[str], expected: dict) ->
     return [w for w in widgets if w.get("visualization") in new_ids and _norm(str(w.get("title") or "")) == title]
 
 
+def _chart_entry(chart: str | dict) -> dict:
+    """A chart as ``tabs`` and ``layout`` name it -- an id, or ``{"title": ...}`` -- as a ``_matching_widgets`` entry."""
+    return {"id": chart} if isinstance(chart, str) else {"id": None, **chart}
+
+
 def _has_date_bindings(expected_output: dict) -> bool:
     """Whether any expected chart states the date dataset its widget must follow.
 
@@ -665,10 +683,11 @@ def _check_tabs(dashboard: dict, new_ids: set[str], expected: list[dict]) -> lis
         if "title" in exp and _norm(str(tab.get("title") or "")) != _norm(str(exp["title"] or "")):
             failures.append(f"tab {index} is titled {tab.get('title')!r}, expected {exp['title']!r}")
         tab_widgets = [w for section in tab.get("sections") or [] for w in section.get("widgets") or []]
-        for chart in exp.get("visualizations") or []:
-            entry = {"id": chart} if isinstance(chart, str) else {"id": None, **chart}
-            if not _matching_widgets(tab_widgets, new_ids, entry):
-                failures.append(f"tab {index} ({tab.get('title')!r}) does not hold chart {chart!r}")
+        failures.extend(
+            f"tab {index} ({tab.get('title')!r}) does not hold chart {chart!r}"
+            for chart in exp.get("visualizations") or []
+            if not _matching_widgets(tab_widgets, new_ids, _chart_entry(chart))
+        )
     return failures
 
 
@@ -732,27 +751,10 @@ def _check_tab_filters(dashboard: dict, expected: dict[str, dict]) -> list[str]:
     Exact on purpose: GDAI-2540 is a filter that turns up on a tab it never belonged to, which a
     check of only the expected entries would pass. Keyed by the saved dashboard's local filter
     id rather than by label, so two filters on the same label stay distinguishable.
+
+    It is ``filter_bar`` with every filter known by key, so the two read filter groups the same way.
     """
-    tabs = {tab.get("id"): tab for tab in dashboard.get("tabs") or []}
-    failures: list[str] = []
-    for tab_id, expected_filters in expected.items():
-        tab = tabs.get(tab_id)
-        if tab is None:
-            failures.append(f"the dashboard has no tab {tab_id!r}")
-            continue
-        actual = {k: v for k, v in (tab.get("filters") or {}).items() if isinstance(v, dict)}
-        failures.extend(
-            f"tab {tab_id!r} carries filter {filter_id!r}, which it should not"
-            for filter_id in sorted(actual.keys() - expected_filters.keys())
-        )
-        failures.extend(
-            f"tab {tab_id!r} lost filter {filter_id!r}" for filter_id in sorted(expected_filters.keys() - actual.keys())
-        )
-        for filter_id in sorted(expected_filters.keys() & actual.keys()):
-            failures.extend(
-                _filter_mismatch(f"tab {tab_id!r} filter {filter_id!r}", actual[filter_id], expected_filters[filter_id])
-            )
-    return failures
+    return _check_filter_bar(dashboard, [{"tab": tab_id, "filters": filters} for tab_id, filters in expected.items()])
 
 
 def _filters_by_id(dashboard: dict) -> dict[str, list[tuple[str, dict]]]:
@@ -817,6 +819,167 @@ def _check_preserved_widgets(widgets: list[dict], expected: list[dict]) -> list[
         changed = ", ".join(f"{k} {widget.get(k)!r} (expected {exp[k]!r})" for k in keys if widget.get(k) != exp[k])
         failures.append(f"the widget showing {viz_id!r} changed: {changed}")
     return failures
+
+
+def _named_tab(dashboard: dict, tab_id: str | None) -> tuple[dict | None, str]:
+    """The tab an entry of ``layout`` or ``filter_bar`` names, and how to refer to it in a failure.
+
+    An entry without ``tab`` is for a dashboard with one tab only, root sections included: on a
+    dashboard with several it would be a guess which one the case meant, so it is a failure.
+    """
+    tabs = _tabs_of(dashboard)
+    if tab_id is None:
+        if len(tabs) != 1:
+            return None, f"the dashboard has {len(tabs)} tabs, so the expectation must name one"
+        return tabs[0], "the dashboard"
+    tab = next((t for t in tabs if t.get("id") == tab_id), None)
+    return tab, f"tab {tab_id!r}" if tab is not None else f"the dashboard has no tab {tab_id!r}"
+
+
+def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> list[str]:
+    """Each named tab must hold exactly the expected sections, in order, each with exactly its charts in order.
+
+    Exact on purpose. A move that leaves the widget where it was, places a second copy, or puts
+    it in the wrong section keeps every chart "on the dashboard", and so does a removal that
+    never happened; only the whole arrangement tells them apart. A section's ``title`` is
+    compared when the entry states it, ``null`` meaning untitled. Its ``visualizations`` are
+    always stated, ``[]`` for a section without charts. A chart is an id, or
+    ``{"title": ...}`` for one the agent authored. Widgets that show no visualization are not
+    charts and are left out on both sides.
+    """
+    failures: list[str] = []
+    for entry in expected:
+        tab, where = _named_tab(dashboard, entry.get("tab"))
+        if tab is None:
+            failures.append(where)
+            continue
+        sections = tab.get("sections") or []
+        wanted = entry["sections"]
+        if len(sections) != len(wanted):
+            titles = ", ".join(repr(s.get("title")) for s in sections)
+            failures.append(f"{where} has {len(sections)} section(s) ({titles}), expected {len(wanted)}")
+            continue
+        for index, (section, want) in enumerate(zip(sections, wanted, strict=True)):
+            if "title" in want and _norm(str(section.get("title") or "")) != _norm(str(want["title"] or "")):
+                failures.append(
+                    f"{where} section {index} is titled {section.get('title')!r}, expected {want['title']!r}"
+                )
+            charts = [w for w in section.get("widgets") or [] if w.get("visualization")]
+            charts_wanted = want["visualizations"]
+            if len(charts) != len(charts_wanted) or not all(
+                _matching_widgets([w], new_ids, _chart_entry(c)) for w, c in zip(charts, charts_wanted, strict=True)
+            ):
+                shown = [w.get("visualization") for w in charts]
+                failures.append(f"{where} section {index} holds {shown}, expected {charts_wanted}")
+    return failures
+
+
+def _check_filter_bar(dashboard: dict, expected: list[dict]) -> list[str]:
+    """Each named tab must carry exactly the expected filters: the kept ones by key, the new ones by content.
+
+    ``filters`` names a filter the case knows the key of, the saved one or one the change keeps.
+    ``added`` holds a filter whose key the agent mints at run time -- a new one, or one it
+    replaced by removing and re-adding it -- each matched to a different filter that ``filters``
+    did not claim. Anything left over fails: a filter that should have been removed, a duplicate,
+    or one copied in from elsewhere. Unlike ``tab_filters``, it reads a dashboard without tabs too.
+
+    A grouped filter is read by its own key. Its entry names the group's title as ``group``, and
+    an entry without one must sit outside every group, so a filter moved into or out of a group
+    fails. A group none of the expected filters sits in fails like a leftover filter -- an empty
+    one, or one whose members should have been ungrouped -- and so does a key the tab carries twice.
+    """
+    failures: list[str] = []
+    for entry in expected:
+        tab, where = _named_tab(dashboard, entry.get("tab"))
+        if tab is None:
+            failures.append(where)
+            continue
+        filters = tab.get("filters") or {}
+        groups = {
+            key: str(value.get("title") or "")
+            for key, value in filters.items()
+            if isinstance(value, dict) and value.get("type") == "filter_group"
+        }
+        # Each filter by its own key, with the key of the group it sits in.
+        actual: dict[str, tuple[dict, str | None]] = {}
+        for entry_key, key, value, group in _members_of(filters):
+            if key in actual:
+                failures.append(f"{where} carries filter {key!r} more than once")
+                continue
+            actual[key] = (value, None if group is None else entry_key)
+        claimed: set[str | None] = set()
+        for filter_id, want in (entry.get("filters") or {}).items():
+            got = actual.pop(filter_id, None)
+            if got is None:
+                failures.append(f"{where} lost filter {filter_id!r}")
+                continue
+            value, group_key = got
+            failures.extend(_filter_mismatch(f"{where} filter {filter_id!r}", value, _without_group(want)))
+            if _in_wanted_group(groups, group_key, want):
+                claimed.add(group_key)
+            else:
+                sits = "no group" if group_key is None else f"group {groups[group_key]!r}"
+                wanted = f"group {want['group']!r}" if "group" in want else "no group"
+                failures.append(f"{where} filter {filter_id!r} sits in {sits}, expected {wanted}")
+        added = entry.get("added") or []
+        keys = list(actual)
+        fits = [
+            [
+                not _filter_mismatch("", actual[key][0], _without_group(want))
+                and _in_wanted_group(groups, actual[key][1], want)
+                for key in keys
+            ]
+            for want in added
+        ]
+        for want, index in zip(added, _one_to_one(fits), strict=True):
+            if index is None:
+                failures.append(f"{where} carries no new filter matching {want!r}")
+                continue
+            claimed.add(actual.pop(keys[index])[1])
+        failures.extend(f"{where} carries filter {key!r}, which it should not" for key in sorted(actual))
+        failures.extend(
+            f"{where} carries filter group {key!r} ({title!r}), which holds none of the expected filters"
+            for key, title in sorted(groups.items())
+            if key not in claimed
+        )
+    return failures
+
+
+def _without_group(expected: dict) -> dict:
+    return {k: v for k, v in expected.items() if k != "group"}
+
+
+def _in_wanted_group(groups: dict[str, str], group_key: str | None, expected: dict) -> bool:
+    """Whether a filter in the group keyed ``group_key`` (``None`` for none) sits where ``expected`` puts it."""
+    if group_key is None or "group" not in expected:
+        return group_key is None and "group" not in expected
+    return _norm(groups[group_key]) == _norm(expected["group"])
+
+
+def _one_to_one(fits: list[list[bool]]) -> list[int | None]:
+    """For each row, a column it fits, no column taken twice, with as many rows matched as there can be.
+
+    First fit is not enough: an expectation that names fewer keys can take the filter a stricter
+    one needed and fail a correct dashboard on the order the entries are listed in. Each row
+    that finds every fitting column taken tries to move that column's owner to another one.
+    """
+    owner: dict[int, int] = {}
+
+    def claim(row: int, seen: set[int]) -> bool:
+        for column, fit in enumerate(fits[row]):
+            if fit and column not in seen:
+                seen.add(column)
+                if column not in owner or claim(owner[column], seen):
+                    owner[column] = row
+                    return True
+        return False
+
+    for row in range(len(fits)):
+        claim(row, set())
+    matched: list[int | None] = [None] * len(fits)
+    for column, row in owner.items():
+        matched[row] = column
+    return matched
 
 
 def _date_range_text(date_range: dict | None) -> str:
@@ -986,7 +1149,7 @@ def _validate_expectation(expected_output: dict) -> None:
 
 
 def _validate_layout_expectations(expected_output: dict) -> None:
-    """Shape checks for the opt-in keys on charts, tabs, per-tab filters and preserved widgets.
+    """Shape checks for the opt-in keys on charts, tabs, per-tab filters, preserved widgets, layout and filter bar.
 
     Raises:
         ValueError: one of them is unusable. Loud for the same reason as the rest of the
@@ -1023,8 +1186,7 @@ def _validate_layout_expectations(expected_output: dict) -> None:
             ):
                 raise ValueError(f"tab_filters[{tab_id!r}] must map filter ids to typed filters, got {filters!r}")
             for filter_id, entry in filters.items():
-                if entry["type"] == "attribute_filter":
-                    _validate_tab_attribute_filter(f"tab_filters[{tab_id!r}][{filter_id!r}]", entry)
+                _validate_bar_filter(f"tab_filters[{tab_id!r}][{filter_id!r}]", entry)
 
     if "date_filters" in expected_output:
         date_filters = expected_output["date_filters"]
@@ -1056,6 +1218,87 @@ def _validate_layout_expectations(expected_output: dict) -> None:
         for widget in preserved:
             if not isinstance(widget, dict) or not widget.get("visualization") or len(widget) < 2:
                 raise ValueError(f"a preserved widget needs its visualization and a key to guard, got {widget!r}")
+
+    if "layout" in expected_output:
+        for entry in _tab_entries(expected_output, "layout", {"tab", "sections"}):
+            sections = entry.get("sections")
+            if not isinstance(sections, list):
+                raise ValueError(f"a layout entry needs its sections as a list, got {entry!r}")
+            for section in sections:
+                if not isinstance(section, dict) or section.keys() - {"title", "visualizations"}:
+                    raise ValueError(f"a layout section takes only title and visualizations, got {section!r}")
+                if section.get("title") is not None and not isinstance(section["title"], str):
+                    raise ValueError(f"a layout section's title must be a string or null, got {section!r}")
+                if "visualizations" not in section:
+                    # Missing would read as "no charts" here but as "any charts" in `tabs`.
+                    raise ValueError(f"a layout section must list its visualizations, [] for none, got {section!r}")
+                charts = section["visualizations"]
+                if not isinstance(charts, list) or not all(
+                    (isinstance(c, str) and c)
+                    or (isinstance(c, dict) and c.keys() == {"title"} and isinstance(c["title"], str) and c["title"])
+                    for c in charts
+                ):
+                    raise ValueError(
+                        f"a layout section's visualizations must be chart ids or {{'title': ...}}, got {section!r}"
+                    )
+
+    if "filter_bar" in expected_output:
+        for entry in _tab_entries(expected_output, "filter_bar", {"tab", "filters", "added"}):
+            where = f"filter_bar[{entry.get('tab')!r}]"
+            kept = entry.get("filters", {})
+            added = entry.get("added", [])
+            if not isinstance(kept, dict) or not isinstance(added, list):
+                raise ValueError(f"{where} needs filters as a map of keys and added as a list, got {entry!r}")
+            named = [(f"{where}[{key!r}]", f) for key, f in kept.items()]
+            named += [(f"{where} added[{index}]", f) for index, f in enumerate(added)]
+            for label, body in named:
+                _validate_bar_filter(label, body)
+
+
+def _validate_bar_filter(label: str, body: object) -> None:
+    """A filter ``tab_filters`` or ``filter_bar`` expects: typed, in the AAC shape, and never a group.
+
+    A group is not a filter there: both checks read its members by their own keys, so an
+    expected ``filter_group`` could never match. Its members say which group they sit in.
+
+    Raises:
+        ValueError: the filter is unusable.
+    """
+    if not isinstance(body, dict) or not body.get("type"):
+        raise ValueError(f"{label} must be a typed filter, got {body!r}")
+    if body["type"] == "filter_group":
+        raise ValueError(f"{label} is a filter_group; list its members instead, each with group set to its title")
+    if "group" in body and not (isinstance(body["group"], str) and body["group"]):
+        raise ValueError(f"{label} group must be the title of the filter group, got {body['group']!r}")
+    if body["type"] == "attribute_filter":
+        _validate_tab_attribute_filter(label, body)
+
+
+def _tab_entries(expected_output: dict, key: str, allowed: set[str]) -> list[dict]:
+    """The entries of a per-tab expectation, checked for the shape ``layout`` and ``filter_bar`` share.
+
+    Raises:
+        ValueError: not a non-empty list of objects, a key outside ``allowed``, or a tab named
+            twice. An entry without ``tab`` is for a dashboard with one tab, so it must be the
+            only entry: beside another, both could name that one tab.
+    """
+    entries = expected_output[key]
+    if not isinstance(entries, list) or not entries or not all(isinstance(e, dict) for e in entries):
+        raise ValueError(f"{key} must be a non-empty list of per-tab objects, got {entries!r}")
+    seen: set[str | None] = set()
+    for entry in entries:
+        unknown = sorted(entry.keys() - allowed)
+        if unknown:
+            raise ValueError(f"a {key} entry cannot state {unknown}, got {entry!r}")
+        tab = entry.get("tab")
+        if tab is not None and not (isinstance(tab, str) and tab):
+            raise ValueError(f"a {key} entry's tab must be a tab id, got {entry!r}")
+        if tab in seen:
+            raise ValueError(f"{key} names tab {tab!r} more than once")
+        seen.add(tab)
+    if None in seen and len(entries) > 1:
+        raise ValueError(f"a {key} entry without tab must be the only entry, got {entries!r}")
+    return entries
 
 
 def _is_dataset_or_null(value: object) -> bool:
@@ -1103,6 +1346,8 @@ class _Applies:
     date_filters: bool = False
     preserved_widgets: bool = False
     chart_types: bool = False
+    layout: bool = False
+    filter_bar: bool = False
 
     @classmethod
     def of(cls, expected_output: dict) -> _Applies:
@@ -1116,6 +1361,8 @@ class _Applies:
             date_filters="date_filters" in expected_output,
             preserved_widgets="preserved_widgets" in expected_output,
             chart_types=_has_chart_types(expected_output),
+            layout="layout" in expected_output,
+            filter_bar="filter_bar" in expected_output,
         )
 
 
@@ -1157,6 +1404,8 @@ class DashboardEvaluation:
     date_filters_correct: bool = False
     widgets_preserved: bool = False
     chart_types_correct: bool = False
+    layout_correct: bool = False
+    filter_bar_correct: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -1199,6 +1448,10 @@ class DashboardEvaluation:
             checks["dashboard_widgets_preserved"] = self.widgets_preserved
         if self.applies.chart_types:
             checks["dashboard_chart_types_correct"] = self.chart_types_correct
+        if self.applies.layout:
+            checks["dashboard_layout_correct"] = self.layout_correct
+        if self.applies.filter_bar:
+            checks["dashboard_filter_bar_correct"] = self.filter_bar_correct
         return checks
 
     @property
@@ -1414,6 +1667,8 @@ def evaluate_dashboard_response(
         if applies.chart_types
         else ([], [])
     )
+    layout_failures = _check_layout(document, new_ids, expected_output["layout"]) if applies.layout else []
+    filter_bar_failures = _check_filter_bar(document, expected_output["filter_bar"]) if applies.filter_bar else []
 
     return DashboardEvaluation(
         drafted=True,
@@ -1434,6 +1689,8 @@ def evaluate_dashboard_response(
         date_filters_correct=not date_filter_failures,
         widgets_preserved=not preserved_failures,
         chart_types_correct=not chart_type_failures,
+        layout_correct=not layout_failures,
+        filter_bar_correct=not filter_bar_failures,
         failures=[
             *chart_failures,
             *saved_failures,
@@ -1445,6 +1702,8 @@ def evaluate_dashboard_response(
             *date_filter_failures,
             *preserved_failures,
             *chart_type_failures,
+            *layout_failures,
+            *filter_bar_failures,
             *new_failures,
         ],
         notes=[*title_notes, *reference_notes, *chart_type_notes],
