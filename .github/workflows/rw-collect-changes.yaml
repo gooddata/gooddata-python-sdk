@@ -41,6 +41,8 @@ jobs:
               - '.docker/**'
               - 'packages/**'
               - 'scripts/docs/**'
+              - 'scripts/next_dev_version.py'
+              - 'scripts/tests/**'
               - '*.mk'
               - 'Makefile'
               - Dockerfile

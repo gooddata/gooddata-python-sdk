@@ -109,7 +109,12 @@ The docs site keeps the four newest release branches, sorted by `major.minor`, a
   appears in the docs.
 
 ### How-to dev release
-To publish current master as a dev release version, use [Dev release from master](.github/workflows/dev-release.yaml) GitHub workflow.
+To publish current master as a dev release version, manually run the
+[Build Python Package and Create Release](.github/workflows/build-release.yaml) workflow (optionally with a
+different `BRANCH_NAME`). A manual run bumps to the next `N.N.N.devN` version and publishes to PyPI only, with
+no GitHub release and no Slack notification. Dev and stable releases share one workflow on purpose: PyPI
+shows a "Change of provenance" warning when a release is published from a different workflow file than the
+previous one.
 
 ### Errors that may appear
 
