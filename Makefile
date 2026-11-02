@@ -153,7 +153,7 @@ remove-cassettes:
 
 .PHONY: test-docs-scripts
 test-docs-scripts:
-	uv run pytest scripts/docs/tests/ -v
+	uv run pytest scripts/docs/tests/ scripts/tests/ -v
 
 .PHONY: new-docs
 new-docs:

@@ -42,14 +42,44 @@ env:
 
 jobs:
   matrix-components:
-    name: Prepare matrix components
+    name: Prepare components and version
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       components: ${{ steps.export.outputs.components }}
+      # Tag push: the tag. Dev release: the branch head, resolved once so every build job
+      # builds the same commit even if the branch moves mid-run.
+      ref: ${{ steps.dev.outputs.sha || github.ref }}
+      # Dev release only. Computed once and shared, so all components get the same version
+      # and re-running a failed build job reuses it instead of picking the next devN.
+      dev_version: ${{ steps.dev.outputs.version }}
     steps:
       - name: Export components JSON
         id: export
         run: echo "components=${COMPONENTS}" >> "$GITHUB_OUTPUT"
+      # The script runs from this workflow's revision, not from BRANCH_NAME, so dev releases
+      # also work from branches that predate it. The branch only supplies the commit to build
+      # and the version to start from.
+      - name: Checkout the workflow revision
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Compute dev version
+        id: dev
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          BRANCH_NAME: ${{ inputs.BRANCH_NAME }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BRANCH_NAME"
+          sha=$(git rev-parse FETCH_HEAD)
+          git show "$sha:pyproject.toml" > "$RUNNER_TEMP/branch-pyproject.toml"
+          # shellcheck disable=SC2046 # one argument per component
+          version=$(python3 scripts/next_dev_version.py --pyproject "$RUNNER_TEMP/branch-pyproject.toml" $(jq -r '.[]' <<< "$COMPONENTS"))
+          echo "Dev release $version from $sha"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build all components
@@ -63,17 +93,19 @@ jobs:
     steps:
     - uses: actions/checkout@v5
       with:
-        # Tag push: the tag itself. Dev release: the requested branch.
-        ref: ${{ github.event_name == 'workflow_dispatch' && inputs.BRANCH_NAME || github.ref }}
+        ref: ${{ needs.matrix-components.outputs.ref }}
+        persist-credentials: false
     - name: Install uv
       uses: astral-sh/setup-uv@v10.0.1
       with:
         prune-cache: true
     - name: Bump to dev version
       if: github.event_name == 'workflow_dispatch'
+      env:
+        DEV_VERSION: ${{ needs.matrix-components.outputs.dev_version }}
       run: |
         uv sync --only-group release --locked
-        uv run tbump --only-patch --non-interactive "$(./scripts/next_dev.sh)"
+        uv run tbump --only-patch --non-interactive "$DEV_VERSION"
     - name: Build ${{ matrix.component }}
       run: |
           if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
