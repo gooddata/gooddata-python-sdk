@@ -6,7 +6,7 @@ from __future__ import annotations
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any, TypedDict
 
 from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
@@ -445,7 +445,7 @@ def run_agentic_items(
     # latency. Drained below before this function returns, so every score is written
     # before the caller renders a report or decides an exit code.
     linker = BackgroundTraceLinker()
-    report.started_at = datetime.now(timezone.utc)
+    report.started_at = datetime.now(UTC)
     _t0 = time.perf_counter()
 
     def _process_item(index: int, item: DatasetItem) -> ItemReport:
@@ -638,7 +638,7 @@ def run_agentic_items(
             flush=True,
         )
     report.wall_clock_s = time.perf_counter() - _t0
-    report.finished_at = datetime.now(timezone.utc)
+    report.finished_at = datetime.now(UTC)
 
     if langfuse is not None:
         try:

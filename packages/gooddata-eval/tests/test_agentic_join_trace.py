@@ -7,7 +7,7 @@ from __future__ import annotations
 import json
 import threading
 from contextlib import nullcontext
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from unittest.mock import MagicMock, patch
 
@@ -42,7 +42,7 @@ from gooddata_eval.core.langfuse.otlp import unix_nano
 
 _OTLP_PATH = "/api/public/otel/v1/traces"
 _OBSERVATIONS_PATH = "/api/public/v2/observations"
-_WINDOW = (datetime(2026, 9, 8, 9, 0, tzinfo=timezone.utc), datetime(2026, 9, 8, 9, 5, tzinfo=timezone.utc))
+_WINDOW = (datetime(2026, 9, 8, 9, 0, tzinfo=UTC), datetime(2026, 9, 8, 9, 5, tzinfo=UTC))
 _IDENTITY = RunIdentity("https://h", "tok", "ws", "ds", "2026-09-08", "gpt-x", None, None)
 
 
@@ -141,8 +141,8 @@ def test_a_joined_root_is_exported_into_the_gen_ai_trace_and_scored_once():
     (span,) = rec.spans()
     assert (span["traceId"], span["spanId"]) == (trace_id, span_id)
     assert "parentSpanId" not in span
-    assert span["startTimeUnixNano"] == unix_nano(datetime(2026, 9, 8, 9, 0, 10, tzinfo=timezone.utc))
-    assert span["endTimeUnixNano"] == unix_nano(datetime(2026, 9, 8, 9, 0, 50, tzinfo=timezone.utc))
+    assert span["startTimeUnixNano"] == unix_nano(datetime(2026, 9, 8, 9, 0, 10, tzinfo=UTC))
+    assert span["endTimeUnixNano"] == unix_nano(datetime(2026, 9, 8, 9, 0, 50, tzinfo=UTC))
     attrs = _attrs(span)
     assert attrs["langfuse.environment"] == "sdk-experiment"
     assert attrs["langfuse.experiment.id"] == experiment_id_for("ds_run1")

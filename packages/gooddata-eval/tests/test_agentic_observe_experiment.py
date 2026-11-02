@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import re
 import threading
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from unittest.mock import MagicMock
 
@@ -21,7 +21,7 @@ from gooddata_eval.core.langfuse.otlp import unix_nano
 
 _OTLP_PATH = "/api/public/otel/v1/traces"
 _SCORES_PATH = "/api/public/scores"
-_WINDOW = (datetime(2026, 9, 8, 10, 0, tzinfo=timezone.utc), datetime(2026, 9, 8, 10, 1, tzinfo=timezone.utc))
+_WINDOW = (datetime(2026, 9, 8, 10, 0, tzinfo=UTC), datetime(2026, 9, 8, 10, 1, tzinfo=UTC))
 
 
 @pytest.fixture(autouse=True)

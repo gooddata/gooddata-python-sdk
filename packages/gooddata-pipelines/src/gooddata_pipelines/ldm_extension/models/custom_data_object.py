@@ -5,24 +5,22 @@ Models defined here are used to validate and structure the input data before
 further processing.
 """
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field, model_validator
 
 
-class CustomFieldType(str, Enum):
+class CustomFieldType(StrEnum):
     """GoodData field types."""
 
-    # NOTE: Start using StrEnum with Python 3.11
     ATTRIBUTE = "attribute"
     FACT = "fact"
     DATE = "date"
 
 
-class ColumnDataType(str, Enum):
+class ColumnDataType(StrEnum):
     """Supported data types"""
 
-    # NOTE: Start using StrEnum with Python 3.11
     INT = "INT"
     STRING = "STRING"
     DATE = "DATE"

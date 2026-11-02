@@ -1,6 +1,6 @@
 # (C) 2026 GoodData Corporation
 import io
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import orjson
 from gooddata_eval.core.reporting.console import render_comparison, render_console
@@ -59,7 +59,7 @@ def test_build_json_report_keyed_by_item_id():
 
 def test_build_json_report_writes_started_at_as_utc_iso() -> None:
     report = _report()
-    report.started_at = datetime(2026, 10, 14, 14, 30, 21, 412873, tzinfo=timezone.utc)
+    report.started_at = datetime(2026, 10, 14, 14, 30, 21, 412873, tzinfo=UTC)
     assert build_json_report(report)["summary"]["started_at"] == "2026-10-14T14:30:21.412873+00:00"
 
 
@@ -503,8 +503,8 @@ def test_json_report_failed_runs_is_empty_for_a_clean_item():
 
 def test_json_summary_carries_when_the_run_started_and_finished() -> None:
     report = _report()
-    report.started_at = datetime(2026, 10, 14, 9, 30, 0, tzinfo=timezone.utc)
-    report.finished_at = datetime(2026, 10, 14, 9, 47, 12, tzinfo=timezone.utc)
+    report.started_at = datetime(2026, 10, 14, 9, 30, 0, tzinfo=UTC)
+    report.finished_at = datetime(2026, 10, 14, 9, 47, 12, tzinfo=UTC)
 
     summary = build_json_report(report)["summary"]
 

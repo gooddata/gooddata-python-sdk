@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 import threading
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
 import pytest
@@ -63,9 +63,9 @@ def test_run_items_pass_at_k_true_if_any_run_passes():
 
 
 def test_run_items_stamps_when_the_run_started() -> None:
-    before = datetime.now(timezone.utc)
+    before = datetime.now(UTC)
     report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
-    after = datetime.now(timezone.utc)
+    after = datetime.now(UTC)
     assert report.started_at is not None
     assert report.started_at.tzinfo is not None
     assert before <= report.started_at <= after
@@ -527,9 +527,9 @@ def test_an_ungraded_run_is_recorded_as_a_failure_with_its_judge_error():
 def test_run_items_records_when_the_run_started_and_finished() -> None:
     # wall_clock_s is a duration with no anchor, so a finished run could not say when it
     # ended. The bounds are timezone-aware UTC, taken around the same span wall_clock_s times.
-    before = datetime.now(timezone.utc)
+    before = datetime.now(UTC)
     report = run_items([_item()], _FakeBackend([_chat_with(_viz_obj())]), runs=1)
-    after = datetime.now(timezone.utc)
+    after = datetime.now(UTC)
 
     assert report.started_at is not None
     assert report.finished_at is not None
