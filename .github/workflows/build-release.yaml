@@ -1,11 +1,15 @@
 # (C) 2022 GoodData Corporation
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# The single workflow that publishes to PyPI -- both stable and dev releases.
+#
+# * Stable release: triggered by pushing a vX.Y.Z tag (see bump-version.yaml). Builds every
+#   component, creates the GitHub release, publishes to PyPI and notifies #releases.
+# * Dev release: triggered manually (workflow_dispatch). Bumps the checked-out branch to the
+#   next N.N.N.devN version, builds and publishes to PyPI. No GitHub release, no notification.
+#
+# Both paths must stay in this one file. PyPI attestations record the workflow file that
+# published each release, and PyPI flags a "Change of provenance" whenever it differs from
+# the previous release's. With dev and stable releases in separate files, every stable
+# release that followed a dev release was flagged.
 
 name: Build Python Package and Create Release
 
@@ -13,13 +17,24 @@ on:
   push:
     tags:
       - v*.*.*
+  workflow_dispatch:
+    inputs:
+      BRANCH_NAME:
+        type: string
+        description: 'Branch name to dev-release from'
+        default: "master"
 
-# One release at a time. Each tag is unique, so runs never collide on the tag itself, but
-# is_latest is computed once per run: with two releases in flight, the earlier tag can
-# finish last and take the "Latest" badge back from the newer one. Serializing keeps the
-# badge in release order. Never cancels -- a cancelled run leaves components half-published.
+# One release of each kind at a time. Each tag is unique, so runs never collide on the tag
+# itself, but is_latest is computed once per run: with two releases in flight, the earlier
+# tag can finish last and take the "Latest" badge back from the newer one. Serializing keeps
+# the badge in release order. For dev releases it keeps two runs from computing the same
+# devN version from PyPI. Never cancels -- a cancelled run leaves components half-published.
+#
+# Stable and dev runs use separate groups: a group holds only one pending run, and a newer
+# pending run cancels it. In a shared group, a dev release dispatched while a tag release
+# waits would cancel the tag release.
 concurrency:
-  group: build-release
+  group: build-release-${{ github.event_name }}
   cancel-in-progress: false
 
 env:
@@ -47,10 +62,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
+      with:
+        # Tag push: the tag itself. Dev release: the requested branch.
+        ref: ${{ github.event_name == 'workflow_dispatch' && inputs.BRANCH_NAME || github.ref }}
     - name: Install uv
       uses: astral-sh/setup-uv@v10.0.1
       with:
         prune-cache: true
+    - name: Bump to dev version
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        uv sync --only-group release --locked
+        uv run tbump --only-patch --non-interactive "$(./scripts/next_dev.sh)"
     - name: Build ${{ matrix.component }}
       run: |
           if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
@@ -69,6 +92,7 @@ jobs:
 
   tag-checks:
     name: Check the triggering tag
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -84,6 +108,7 @@ jobs:
 
   github_release:
     name: Create GitHub release
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs:
       - build
@@ -140,6 +165,7 @@ jobs:
           packages-dir: dist/${{ matrix.component }}
           verbose: true
   slack-notification:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: publish
     steps:

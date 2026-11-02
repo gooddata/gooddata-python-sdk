@@ -287,8 +287,8 @@ release. Add a dependency to the package's `pyproject.toml`, then run `uv lock`.
 
 Three entries in the root `pyproject.toml` — `[project].dependencies`,
 `[tool.uv.sources]`, and `[tool.uv.workspace].members` (listed explicitly, not globbed, so
-a stray directory cannot break every `uv` command). Then add it to `COMPONENTS` in both
-`.github/workflows/dev-release.yaml` and `build-release.yaml`, to the Codecov file list in
+a stray directory cannot break every `uv` command). Then add it to `COMPONENTS` in
+`.github/workflows/build-release.yaml`, to the Codecov file list in
 `rw-python-tests.yaml`, and to `scopes` in `.gitlint`.
 
 ## Documentation
