@@ -23,7 +23,12 @@ inexplicably rejected.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
+from gooddata_api_client.model.declarative_publisher_document_page_template import (
+    DeclarativePublisherDocumentPageTemplate,
+)
 from gooddata_api_client.model.json_api_llm_provider_in_attributes_provider_config import (
     JsonApiLlmProviderInAttributesProviderConfig,
 )
@@ -177,3 +182,50 @@ def test_union_helpers_tolerate_a_non_model_member(union_helper, monkeypatch) ->
 
     # Must not raise, and must still report what the real members declare.
     assert union_helper(model, "type")
+
+
+_TEXT = {"type": "text", "id": "t1", "markdown": "Hello"}
+_ROW = {"type": "row", "children": [_TEXT]}
+_COLUMN = {"type": "column", "children": [_TEXT, _ROW]}
+
+
+def _page_template_from_python_names(layout: dict[str, Any]) -> DeclarativePublisherDocumentPageTemplate:
+    """Builds a page template the way `Base.to_api()` does: python names, `camel_case=False`."""
+    return DeclarativePublisherDocumentPageTemplate.from_dict(
+        {"id": "pt", "title": "PT", "version": "1", "content": {"layout": layout}},
+        camel_case=False,
+    )
+
+
+@pytest.mark.parametrize("layout", [_TEXT, _ROW, _COLUMN], ids=["text", "row", "column"])
+def test_layout_node_resolves_from_python_names(layout: dict[str, Any]) -> None:
+    """A discriminated composed model must dispatch on `type`, not try every member.
+
+    `PublisherDocumentLayoutNode` is a `oneOf` with a `type` discriminator. Built
+    from python names, it must resolve to the member `type` names; trying the
+    members in turn fails on the first one whose required arguments are missing.
+    """
+    template = _page_template_from_python_names(layout)
+
+    assert template.to_dict(camel_case=True)["content"]["layout"] == layout
+
+
+def test_text_layout_node_keeps_its_fields_from_python_names() -> None:
+    template = _page_template_from_python_names(_TEXT)
+
+    assert template.content.layout.markdown == "Hello"
+
+
+def test_nested_layout_nodes_resolve_from_python_names() -> None:
+    template = _page_template_from_python_names(_COLUMN)
+
+    text, row = template.content.layout.children
+    assert text.markdown == "Hello"
+    assert row.children[0].markdown == "Hello"
+
+
+def test_image_layout_node_maps_python_names_to_json_names() -> None:
+    template = _page_template_from_python_names({"type": "image", "id": "i1", "alt_text": "A chart"})
+
+    layout = template.to_dict(camel_case=True)["content"]["layout"]
+    assert layout == {"type": "image", "id": "i1", "altText": "A chart"}
