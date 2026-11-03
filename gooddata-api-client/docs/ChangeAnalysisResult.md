@@ -6,6 +6,7 @@ Result of a change analysis execution.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data** | [**[MetricValueChange]**](MetricValueChange.md) | The change analysis result data containing significant changes. | 
+**restricted_count** | **int** | Number of attributes and computed attributes left out of the analysis because the user has no access to them. | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

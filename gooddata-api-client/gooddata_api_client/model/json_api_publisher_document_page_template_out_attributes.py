@@ -105,6 +105,7 @@ class JsonApiPublisherDocumentPageTemplateOutAttributes(ModelNormal):
         lazy_import()
         return {
             'content': (JsonApiPublisherDocumentPageTemplateInAttributesContent,),  # noqa: E501
+            'is_default': (bool,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'version': (str,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
@@ -121,6 +122,7 @@ class JsonApiPublisherDocumentPageTemplateOutAttributes(ModelNormal):
 
     attribute_map = {
         'content': 'content',  # noqa: E501
+        'is_default': 'isDefault',  # noqa: E501
         'title': 'title',  # noqa: E501
         'version': 'version',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
@@ -131,17 +133,19 @@ class JsonApiPublisherDocumentPageTemplateOutAttributes(ModelNormal):
     }
 
     read_only_vars = {
+        'is_default',  # noqa: E501
     }
 
     _composed_schemas = {}
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, content, title, version, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, content, is_default, title, version, *args, **kwargs):  # noqa: E501
         """JsonApiPublisherDocumentPageTemplateOutAttributes - a model defined in OpenAPI
 
         Args:
             content (JsonApiPublisherDocumentPageTemplateInAttributesContent):
+            is_default (bool): Whether the backend ships this page template as a read-only default.
             title (str):
             version (str): Version of the content format.
 
@@ -213,6 +217,7 @@ class JsonApiPublisherDocumentPageTemplateOutAttributes(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.content = content
+        self.is_default = is_default
         self.title = title
         self.version = version
         for var_name, var_value in kwargs.items():

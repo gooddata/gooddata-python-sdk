@@ -747,6 +747,7 @@ class PageTemplateControllerApi(object):
     ):
         """Get all Page Templates  # noqa: E501
 
+        Lists the default page templates first, in a fixed order, then the workspace page templates. Paging counts both as one sequence. `filter` and `sort` apply to the workspace page templates only; the default page templates are always listed first and in full, and `isDefault` is not filterable. The default page templates are listed only with `origin=ALL`.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

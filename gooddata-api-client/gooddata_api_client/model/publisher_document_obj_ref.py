@@ -56,6 +56,13 @@ class PublisherDocumentObjRef(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'INSIGHT': "insight",
+            'DISPLAYFORM': "displayForm",
+            'DATASET': "dataSet",
+            'MEASURE': "measure",
+            'ATTRIBUTE': "attribute",
+        },
     }
 
     validations = {
@@ -108,7 +115,7 @@ class PublisherDocumentObjRef(ModelNormal):
 
         Args:
             identifier (str):
-            type (str): sdk-model object type, such as `displayForm`, `dataSet` or `measure`.
+            type (str): sdk-model object type.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -199,7 +206,7 @@ class PublisherDocumentObjRef(ModelNormal):
 
         Args:
             identifier (str):
-            type (str): sdk-model object type, such as `displayForm`, `dataSet` or `measure`.
+            type (str): sdk-model object type.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

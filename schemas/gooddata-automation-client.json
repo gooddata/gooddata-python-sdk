@@ -4502,7 +4502,7 @@
           "url": {
             "description": "The webhook URL.",
             "example": "https://webhook.site/something",
-            "maxLength": 255,
+            "maxLength": 2048,
             "pattern": "https?\\://.*",
             "type": "string"
           }

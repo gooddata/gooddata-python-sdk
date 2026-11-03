@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.data_source_info import DataSourceInfo
+    from gooddata_api_client.model.object_storage_ref import ObjectStorageRef
     globals()['DataSourceInfo'] = DataSourceInfo
+    globals()['ObjectStorageRef'] = ObjectStorageRef
 
 
 class DatabaseInstance(ModelNormal):
@@ -94,6 +96,7 @@ class DatabaseInstance(ModelNormal):
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'storage_ids': ([str],),  # noqa: E501
+            'storages': ([ObjectStorageRef],),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +109,7 @@ class DatabaseInstance(ModelNormal):
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
         'storage_ids': 'storageIds',  # noqa: E501
+        'storages': 'storages',  # noqa: E501
     }
 
     read_only_vars = {
@@ -115,14 +119,15 @@ class DatabaseInstance(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, data_sources, id, name, storage_ids, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data_sources, id, name, storage_ids, storages, *args, **kwargs):  # noqa: E501
         """DatabaseInstance - a model defined in OpenAPI
 
         Args:
             data_sources ([DataSourceInfo]): All data source associations for this database instance.
             id (str): Id of the AI Lake Database instance
             name (str): Name of the AI Lake Database instance
-            storage_ids ([str]): Set of ids of the storage instances this database instance should access.
+            storage_ids ([str]): Set of names of the storage instances this database instance accesses. Kept for backward compatibility; use `storages` for the storage ids.
+            storages ([ObjectStorageRef]): Storage instances this database instance accesses.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -190,6 +195,7 @@ class DatabaseInstance(ModelNormal):
         self.id = id
         self.name = name
         self.storage_ids = storage_ids
+        self.storages = storages
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -210,14 +216,15 @@ class DatabaseInstance(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data_sources, id, name, storage_ids, *args, **kwargs):  # noqa: E501
+    def __init__(self, data_sources, id, name, storage_ids, storages, *args, **kwargs):  # noqa: E501
         """DatabaseInstance - a model defined in OpenAPI
 
         Args:
             data_sources ([DataSourceInfo]): All data source associations for this database instance.
             id (str): Id of the AI Lake Database instance
             name (str): Name of the AI Lake Database instance
-            storage_ids ([str]): Set of ids of the storage instances this database instance should access.
+            storage_ids ([str]): Set of names of the storage instances this database instance accesses. Kept for backward compatibility; use `storages` for the storage ids.
+            storages ([ObjectStorageRef]): Storage instances this database instance accesses.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -283,6 +290,7 @@ class DatabaseInstance(ModelNormal):
         self.id = id
         self.name = name
         self.storage_ids = storage_ids
+        self.storages = storages
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

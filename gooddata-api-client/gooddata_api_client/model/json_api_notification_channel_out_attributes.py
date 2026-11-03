@@ -85,7 +85,7 @@ class JsonApiNotificationChannelOutAttributes(ModelNormal):
 
     validations = {
         ('custom_dashboard_url',): {
-            'max_length': 255,
+            'max_length': 2048,
         },
         ('description',): {
             'max_length': 10000,
@@ -150,6 +150,7 @@ class JsonApiNotificationChannelOutAttributes(ModelNormal):
     }
 
     read_only_vars = {
+        'destination_type',  # noqa: E501
     }
 
     _composed_schemas = {}

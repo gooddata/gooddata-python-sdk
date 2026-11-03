@@ -74,6 +74,7 @@ class EntityIdentifier(ModelNormal):
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
             'FILTERVIEW': "filterView",
+            'DOCUMENT': "document",
         },
     }
 

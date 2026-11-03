@@ -309,7 +309,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             PublisherDocumentAttributeFilterConfig(
                                 display_as_label=PublisherDocumentObjRef(
                                     identifier="identifier_example",
-                                    type="type_example",
+                                    type="insight",
                                 ),
                                 local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                                 mode="readonly",
@@ -465,7 +465,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             PublisherDocumentAttributeFilterConfig(
                                 display_as_label=PublisherDocumentObjRef(
                                     identifier="identifier_example",
-                                    type="type_example",
+                                    type="insight",
                                 ),
                                 local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                                 mode="readonly",
@@ -605,8 +605,18 @@ with gooddata_api_client.ApiClient() as api_client:
                             gap=PublisherDocumentAreaStyleGap(None),
                         ),
                     ),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="description_example",
                     id="levis-h1-2026",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     period=PublisherDocumentPeriod(),
                     tags=[
                         "["brand"]",
@@ -1804,7 +1814,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         PublisherDocumentAttributeFilterConfig(
                                             display_as_label=PublisherDocumentObjRef(
                                                 identifier="identifier_example",
-                                                type="type_example",
+                                                type="insight",
                                             ),
                                             local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                                             mode="readonly",
@@ -1960,7 +1970,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         PublisherDocumentAttributeFilterConfig(
                                             display_as_label=PublisherDocumentObjRef(
                                                 identifier="identifier_example",
-                                                type="type_example",
+                                                type="insight",
                                             ),
                                             local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                                             mode="readonly",
@@ -2100,8 +2110,18 @@ with gooddata_api_client.ApiClient() as api_client:
                                         gap=PublisherDocumentAreaStyleGap(None),
                                     ),
                                 ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="description_example",
                                 id="levis-h1-2026",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 period=PublisherDocumentPeriod(),
                                 tags=[
                                     "["brand"]",

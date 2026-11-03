@@ -687,33 +687,6 @@
         ],
         "type": "object"
       },
-      "AmplitudeService": {
-        "description": "Amplitude service.",
-        "properties": {
-          "aiProjectApiKey": {
-            "description": "API key for AI project - intended for frontend use.",
-            "type": "string"
-          },
-          "endpoint": {
-            "description": "Amplitude endpoint URL.",
-            "type": "string"
-          },
-          "gdCommonApiKey": {
-            "description": "API key for GoodData common project - used by backend.",
-            "type": "string"
-          },
-          "reportingEndpoint": {
-            "description": "Optional reporting endpoint for proxying telemetry events.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "aiProjectApiKey",
-          "endpoint",
-          "gdCommonApiKey"
-        ],
-        "type": "object"
-      },
       "AnalyticsCatalogCreatedBy": {
         "description": "List of users who created catalog objects in the workspace hierarchy.",
         "properties": {
@@ -6219,7 +6192,7 @@
           },
           "customDashboardUrl": {
             "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
-            "maxLength": 255,
+            "maxLength": 2048,
             "type": "string"
           },
           "dashboardLinkVisibility": {
@@ -6586,6 +6559,16 @@
           "content": {
             "$ref": "#/components/schemas/PublisherDocumentContent"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Document description.",
             "maxLength": 10000,
@@ -6596,6 +6579,16 @@
             "example": "levis-h1-2026",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "period": {
             "$ref": "#/components/schemas/PublisherDocumentPeriod"
@@ -7090,7 +7083,8 @@
               "AUTHORIZATION_SERVER_REDIRECT_POLICY",
               "DEFAULT_VISUALIZATION_VISIBILITY",
               "DEFAULT_METRIC_VISIBILITY",
-              "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+              "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+              "QUERY_ENGINE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -7123,6 +7117,7 @@
               "MANAGE_VISUALIZATIONS",
               "CREATE_VISUALIZATION",
               "CREATE_COMPUTED_ATTRIBUTE",
+              "CREATE_DOCUMENT",
               "VIEW"
             ],
             "type": "string"
@@ -8112,6 +8107,7 @@
               "MANAGE_VISUALIZATIONS",
               "CREATE_VISUALIZATION",
               "CREATE_COMPUTED_ATTRIBUTE",
+              "CREATE_DOCUMENT",
               "VIEW"
             ],
             "type": "string"
@@ -8281,7 +8277,8 @@
               "knowledgeRecommendation",
               "visualizationObject",
               "filterContext",
-              "filterView"
+              "filterView",
+              "document"
             ],
             "example": "metric",
             "type": "string"
@@ -8404,7 +8401,8 @@
               "knowledgeRecommendation",
               "visualizationObject",
               "filterContext",
-              "filterView"
+              "filterView",
+              "document"
             ],
             "example": "metric",
             "type": "string"
@@ -8636,6 +8634,12 @@
       },
       "FeatureFlagsContext": {
         "properties": {
+          "controlledFeatureRollout": {
+            "type": "string"
+          },
+          "dataCenter": {
+            "type": "string"
+          },
           "earlyAccess": {
             "type": "string"
           },
@@ -8645,11 +8649,17 @@
             },
             "type": "array",
             "uniqueItems": true
+          },
+          "tier": {
+            "type": "string"
           }
         },
         "required": [
+          "controlledFeatureRollout",
+          "dataCenter",
           "earlyAccess",
-          "earlyAccessValues"
+          "earlyAccessValues",
+          "tier"
         ],
         "type": "object"
       },
@@ -23496,7 +23506,7 @@
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
-                "maxLength": 255,
+                "maxLength": 2048,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -23618,7 +23628,7 @@
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
-                "maxLength": 255,
+                "maxLength": 2048,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -23660,6 +23670,7 @@
                   "IN_PLATFORM"
                 ],
                 "nullable": true,
+                "readOnly": true,
                 "type": "string"
               },
               "inPlatformNotification": {
@@ -23771,7 +23782,7 @@
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
-                "maxLength": 255,
+                "maxLength": 2048,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -23874,7 +23885,7 @@
               },
               "customDashboardUrl": {
                 "description": "Custom dashboard url that is going to be used in the notification. If not specified it is going to be deduced based on the context. Allowed placeholders are:\n{workspaceId}\n{dashboardId}\n{automationId}\n{asOfDate}\n",
-                "maxLength": 255,
+                "maxLength": 2048,
                 "type": "string"
               },
               "dashboardLinkVisibility": {
@@ -24757,7 +24768,8 @@
                   "AUTHORIZATION_SERVER_REDIRECT_POLICY",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -24867,7 +24879,8 @@
                   "AUTHORIZATION_SERVER_REDIRECT_POLICY",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -25017,7 +25030,8 @@
                   "AUTHORIZATION_SERVER_REDIRECT_POLICY",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -26122,10 +26136,54 @@
                 ],
                 "type": "object"
               },
+              "datasets": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "labels": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "modifiedBy": {
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObjects": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToManyLinkage"
                   }
                 },
                 "required": [
@@ -26160,7 +26218,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -26187,6 +26245,25 @@
         ],
         "type": "object"
       },
+      "JsonApiPublisherDocumentOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
+          }
+        ]
+      },
       "JsonApiPublisherDocumentOutList": {
         "description": "A JSON:API document with a list of resources",
         "properties": {
@@ -26200,7 +26277,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -26594,6 +26671,11 @@
                 "maxLength": 10000,
                 "type": "string"
               },
+              "isDefault": {
+                "description": "Whether the backend ships this page template as a read-only default.",
+                "readOnly": true,
+                "type": "boolean"
+              },
               "modifiedAt": {
                 "description": "Time of the last entity modification.",
                 "example": "2023-07-20 12:30",
@@ -26620,6 +26702,7 @@
             },
             "required": [
               "content",
+              "isDefault",
               "title",
               "version"
             ],
@@ -34254,7 +34337,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -34363,7 +34447,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -37289,6 +37374,7 @@
                     "MANAGE_VISUALIZATIONS",
                     "CREATE_VISUALIZATION",
                     "CREATE_COMPUTED_ATTRIBUTE",
+                    "CREATE_DOCUMENT",
                     "VIEW"
                   ],
                   "type": "string"
@@ -37603,7 +37689,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -37712,7 +37799,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -37887,7 +37975,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -37996,7 +38085,8 @@
                   "ENABLE_TIMEZONE_CHANGE",
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
-                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+                  "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+                  "QUERY_ENGINE"
                 ],
                 "type": "string"
               }
@@ -42073,7 +42163,14 @@
             "type": "string"
           },
           "type": {
-            "description": "sdk-model object type, such as `displayForm`, `dataSet` or `measure`.",
+            "description": "sdk-model object type.",
+            "enum": [
+              "insight",
+              "displayForm",
+              "dataSet",
+              "measure",
+              "attribute"
+            ],
             "type": "string"
           }
         },
@@ -44476,7 +44573,8 @@
               "AUTHORIZATION_SERVER_REDIRECT_POLICY",
               "DEFAULT_VISUALIZATION_VISIBILITY",
               "DEFAULT_METRIC_VISIBILITY",
-              "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE"
+              "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
+              "QUERY_ENGINE"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -45326,9 +45424,6 @@
       "TelemetryServices": {
         "description": "Available telemetry services.",
         "properties": {
-          "amplitude": {
-            "$ref": "#/components/schemas/AmplitudeService"
-          },
           "matomo": {
             "$ref": "#/components/schemas/MatomoService"
           },
@@ -45672,6 +45767,7 @@
                 "MANAGE_VISUALIZATIONS",
                 "CREATE_VISUALIZATION",
                 "CREATE_COMPUTED_ATTRIBUTE",
+                "CREATE_DOCUMENT",
                 "VIEW"
               ],
               "type": "string"
@@ -45702,6 +45798,7 @@
                 "MANAGE_VISUALIZATIONS",
                 "CREATE_VISUALIZATION",
                 "CREATE_COMPUTED_ATTRIBUTE",
+                "CREATE_DOCUMENT",
                 "VIEW"
               ],
               "type": "string"
@@ -45965,7 +46062,7 @@
               "url": {
                 "description": "The webhook URL.",
                 "example": "https://webhook.site/something",
-                "maxLength": 255,
+                "maxLength": 2048,
                 "pattern": "https?\\://.*",
                 "type": "string"
               }
@@ -46160,6 +46257,7 @@
                 "MANAGE_VISUALIZATIONS",
                 "CREATE_VISUALIZATION",
                 "CREATE_COMPUTED_ATTRIBUTE",
+                "CREATE_DOCUMENT",
                 "VIEW"
               ],
               "type": "string"
@@ -46183,6 +46281,7 @@
                 "MANAGE_VISUALIZATIONS",
                 "CREATE_VISUALIZATION",
                 "CREATE_COMPUTED_ATTRIBUTE",
+                "CREATE_DOCUMENT",
                 "VIEW"
               ],
               "type": "string"
@@ -46839,7 +46938,7 @@
     },
     "/api/v1/actions/organization/localization/usage/users": {
       "get": {
-        "description": "(BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. Users counted in the usage entry without a language are not listed.",
+        "description": "(BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. No value selects the usage entry without a language.",
         "operationId": "organizationLocalizationUsageUsers",
         "parameters": [
           {
@@ -46948,7 +47047,7 @@
     },
     "/api/v1/actions/organization/localization/usage/workspaces": {
       "get": {
-        "description": "(BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one.",
+        "description": "(BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. No value selects the usage entry without a language.",
         "operationId": "organizationLocalizationUsageWorkspaces",
         "parameters": [
           {
@@ -48898,7 +48997,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/localization/usage/users": {
       "get": {
-        "description": "(BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one.",
+        "description": "(BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. No value selects the usage entry without a language.",
         "operationId": "workspaceLocalizationUsageUsers",
         "parameters": [
           {
@@ -63479,7 +63578,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63488,6 +63587,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -63583,7 +63686,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63592,6 +63695,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -63664,9 +63771,9 @@
           "document-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to create Documents",
           "permissions": [
-            "MANAGE"
+            "CREATE_DOCUMENT"
           ]
         }
       }
@@ -63704,7 +63811,7 @@
           "document-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to update and delete Documents: MANAGE, or VIEW for the Document's creator.",
           "permissions": [
             "MANAGE"
           ]
@@ -63740,7 +63847,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63749,6 +63856,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -63851,7 +63962,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63860,6 +63971,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -63910,7 +64025,7 @@
           "document-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to update and delete Documents: MANAGE, or VIEW for the Document's creator.",
           "permissions": [
             "MANAGE"
           ]
@@ -63946,7 +64061,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63955,6 +64070,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -64005,7 +64124,7 @@
           "document-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to update and delete Documents: MANAGE, or VIEW for the Document's creator.",
           "permissions": [
             "MANAGE"
           ]
@@ -68977,6 +69096,7 @@
     },
     "/api/v1/entities/workspaces/{workspaceId}/pageTemplates": {
       "get": {
+        "description": "Lists the default page templates first, in a fixed order, then the workspace page templates. Paging counts both as one sequence. `filter` and `sort` apply to the workspace page templates only; the default page templates are always listed first and in full, and `isDefault` is not filterable. The default page templates are listed only with `origin=ALL`.",
         "operationId": "getAllEntities@PageTemplates",
         "parameters": [
           {
@@ -77672,7 +77792,7 @@
         "x-gdc-security-info": {
           "description": "Permissions required to read the layout.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -77767,7 +77887,7 @@
         "x-gdc-security-info": {
           "description": "Permissions to read the analytics layout.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -77808,7 +77928,7 @@
         "x-gdc-security-info": {
           "description": "Permissions to modify the analytics layout.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       }
