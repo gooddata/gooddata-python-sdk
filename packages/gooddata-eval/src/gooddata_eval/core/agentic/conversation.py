@@ -29,7 +29,10 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from gooddata_eval.core.agentic._clarification import (
     ClarificationForm,
+    ClarifyingPick,
     FirstReply,
+    after_answers_mismatches,
+    build_clarifying_answers,
     clarification_mismatches,
     fetch_object_refs,
     read_first_reply,
@@ -42,6 +45,7 @@ from gooddata_eval.core.agentic._conversation_context import (
     asks_in_text,
     classify_reply,
     clip,
+    has_structured_question,
     judge_prompt,
     render_transcript,
     reply_from_facts,
@@ -122,6 +126,16 @@ class TurnDefinition(BaseModel):
     it asks (``questionnaire`` = a ``clarifyingQuestions`` part, ``text`` = prose only),
     ``max_clarifying_questions`` caps the questionnaire, and ``clarifying_options_grounded``
     requires every ``{type/id}`` option to name an object of the workspace.
+
+    ``clarifying_answers`` answers the questionnaire of the turn's first reply the way the chat panel
+    does, with a ``clarifyingAnswers`` message: a question no pick matches is skipped, and an empty
+    list skips them all. Every other question, a later questionnaire included, gets ``set_answers``
+    text, so a follow-up confirmation can be answered. With it,
+    ``states_skipped_assumption`` requires a reply after the answers to name an option of each skipped
+    question (a mention, which stands in for the stated assumption),
+    ``skipped_questions_not_reasked`` forbids a later questionnaire asking one again, and
+    ``expects_confirmation_after_answers`` requires the agent to stop after each ``clarifyingAnswers``
+    message rather than act on it in the same reply: a skip is not an approval.
     """
 
     turn_id: str
@@ -139,11 +153,19 @@ class TurnDefinition(BaseModel):
     expected_clarification_form: ClarificationForm | None = None
     max_clarifying_questions: int | None = Field(default=None, ge=1)
     clarifying_options_grounded: bool = False
+    clarifying_answers: list[ClarifyingPick] | None = None
+    states_skipped_assumption: bool = False
+    skipped_questions_not_reasked: bool = False
+    expects_confirmation_after_answers: bool = False
 
     @property
     def reads_questionnaire(self) -> bool:
         """Whether a clarification key of the turn reads a ``clarifyingQuestions`` part, so prose cannot satisfy it."""
-        return self.max_clarifying_questions is not None or self.clarifying_options_grounded
+        return (
+            self.max_clarifying_questions is not None
+            or self.clarifying_options_grounded
+            or self.clarifying_answers is not None
+        )
 
     @model_validator(mode="after")
     def _clarification_keys_need_an_expected_question(self) -> TurnDefinition:
@@ -154,13 +176,28 @@ class TurnDefinition(BaseModel):
                 ("expected_clarification_form", self.expected_clarification_form),
                 ("max_clarifying_questions", self.max_clarifying_questions),
                 ("clarifying_options_grounded", self.clarifying_options_grounded or None),
+                ("clarifying_answers", self.clarifying_answers),
             )
             if value is not None
         ]
         if stated and self.expects_clarification is not True:
             raise ValueError(f"{stated} need expects_clarification: true")
         if self.reads_questionnaire and self.expected_clarification_form == "text":
-            raise ValueError("max_clarifying_questions and clarifying_options_grounded read a questionnaire, not text")
+            raise ValueError(
+                "max_clarifying_questions, clarifying_options_grounded and clarifying_answers read a "
+                "questionnaire, not text"
+            )
+        after_answers = [
+            name
+            for name, value in (
+                ("states_skipped_assumption", self.states_skipped_assumption),
+                ("skipped_questions_not_reasked", self.skipped_questions_not_reasked),
+                ("expects_confirmation_after_answers", self.expects_confirmation_after_answers),
+            )
+            if value
+        ]
+        if after_answers and self.clarifying_answers is None:
+            raise ValueError(f"{after_answers} read the turn after its clarifying_answers; set clarifying_answers")
         return self
 
 
@@ -795,8 +832,8 @@ def run_agentic_conversation(
     ``user_context`` is the context attached when the conversation starts; a turn's own
     ``user_context`` replaces it from that turn on.
 
-    A fixture with ``expects_clarification`` needs ``context`` mode: legacy mode does not let the
-    clarification checks fail the item, so it raises ``ValueError``.
+    A fixture with ``expects_clarification`` needs ``context`` mode: legacy mode neither sends
+    ``clarifying_answers`` nor lets the clarification checks fail the item, so it raises ``ValueError``.
     """
     resolved_mode = resolve_conversation_mode(mode)
     graded = [t.turn_id for t in fixture.turns if t.expects_clarification is not None]
@@ -914,6 +951,14 @@ def run_agentic_conversation(
             records: list[ClarificationRecord] = []
             answers_left = list(turn.set_answers)
             first_reply: FirstReply | None = None
+            # Structured answers: the one to send next, what they skipped, and every reply after them.
+            pending_answers: tuple[str, list[dict]] | None = None
+            answers_sent = False
+            # Why clarifying_answers were not sent, when the loop knows it better than what is left after.
+            answers_unsent: str | None = None
+            matched_picks: set[str] = set()
+            skipped_questions: list[dict] = []
+            replies_after_answers: list[tuple[str, ChatResult, bool]] = []
 
             # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop
             # that simply runs out of range() is labelled correctly with no trailing else.
@@ -921,8 +966,19 @@ def run_agentic_conversation(
             for _iter in range(max_clarification_turns + 1):
                 transcript.append(TranscriptEntry("user", current_message))
                 incomplete = False
+                follows_answers = pending_answers is not None
+                is_first_reply = False
                 try:
-                    chat_result = client.send_message(conversation_id, current_message, user_context=current_context)
+                    if pending_answers is not None:
+                        questions_item_id, answers = pending_answers
+                        pending_answers = None
+                        chat_result = client.send_clarifying_answers(
+                            conversation_id, questions_item_id, answers, user_context=current_context
+                        )
+                    else:
+                        chat_result = client.send_message(
+                            conversation_id, current_message, user_context=current_context
+                        )
                 except TurnIncompleteError as exc:
                     chat_result = exc.partial_result or ChatResult()
                     incomplete = True
@@ -988,10 +1044,24 @@ def run_agentic_conversation(
                         chat_result, response_text
                     )
                     first_reply = read_first_reply(chat_result, asked_in_text=asked_in_text)
+                    is_first_reply = True
+                # The questionnaire clarifying_answers would answer, when this reply carries it.
+                answerable = (
+                    turn.clarifying_answers is not None and is_first_reply and has_structured_question(chat_result)
+                )
+                if answers_sent:
+                    reply_kind = (
+                        "output"
+                        if _check_output_present(resolved_turn, chat_result)
+                        else classify_reply(chat_result, response_text)
+                    )
+                    replies_after_answers.append((reply_kind, chat_result, follows_answers))
 
                 if _check_output_present(resolved_turn, chat_result):
                     if incomplete:
                         records.append(ClarificationRecord(kind="turn_incomplete", agent_message=clip(response_text)))
+                    if answerable:
+                        answers_unsent = "the first reply delivered the output with its questionnaire, so nothing waited on the answers"
                     turn_exit = LoopExit.SUCCESS
                     break
 
@@ -1026,6 +1096,11 @@ def run_agentic_conversation(
                     and any(r.kind in ("no_action", "turn_incomplete") for r in records)
                 )
                 if clarification_turns >= max_clarification_turns or second_stall:
+                    if answerable:
+                        answers_unsent = (
+                            f"the clarification budget ({max_clarification_turns}) ended the turn "
+                            "before clarifying_answers were sent"
+                        )
                     records.append(record)
                     break
 
@@ -1035,6 +1110,15 @@ def run_agentic_conversation(
                     reply = CONFIRMATION_REPLY
                 elif kind in ("no_action", "turn_incomplete"):
                     reply = NUDGE_MESSAGE
+                # Before restating: the fixture expects this question, so a lost_context verdict on it
+                # must not send the picks to a later questionnaire.
+                elif answerable and turn.clarifying_answers is not None and chat_result.clarifying_questions_item_id:
+                    built = build_clarifying_answers(chat_result, turn.clarifying_answers)
+                    matched_picks.update(built.matched_picks)
+                    skipped_questions = built.skipped
+                    pending_answers = (chat_result.clarifying_questions_item_id, built.answers)
+                    answers_sent = True
+                    reply = built.render()
                 elif record.lost_context is True and not any(r.lost_context is True for r in records):
                     # Once per turn, so a judge mistake cannot loop the user on restating.
                     reply = reply_restating(render_transcript(transcript[:-1]), response_text)
@@ -1042,6 +1126,8 @@ def run_agentic_conversation(
                     reply = answers_left.pop(0)
                 else:
                     reply = reply_from_facts(render_transcript(transcript[:-1]), response_text, turn.set_answers)
+                if answerable and not answers_sent:
+                    answers_unsent = "the first reply's questionnaire has no itemId to send clarifying_answers to"
                 record.reply = clip(reply)
                 records.append(record)
 
@@ -1089,6 +1175,24 @@ def run_agentic_conversation(
                     known_refs=known_refs,
                     reads_questionnaire=turn.reads_questionnaire,
                 )
+                if turn.clarifying_answers is not None and not answers_sent:
+                    # Every check after the answers would pass with nothing to read.
+                    if answers_unsent is None:
+                        answers_unsent = (
+                            "the first reply asked no questionnaire to answer"
+                            if first_reply.form != "questionnaire"
+                            else "the turn ended before clarifying_answers were sent"
+                        )
+                    clarification_problems.append(f"clarifying_answers not sent: {answers_unsent}")
+                if turn.clarifying_answers is not None and answers_sent:
+                    clarification_problems += after_answers_mismatches(
+                        unmatched_picks=[p.label for p in turn.clarifying_answers if p.label not in matched_picks],
+                        skipped=skipped_questions,
+                        replies_after=replies_after_answers,
+                        states_skipped_assumption=turn.states_skipped_assumption,
+                        skipped_questions_not_reasked=turn.skipped_questions_not_reasked,
+                        expects_confirmation_after_answers=turn.expects_confirmation_after_answers,
+                    )
                 if clarification_problems:
                     clarification_correct = False
                 elif clarification_ungraded is None:

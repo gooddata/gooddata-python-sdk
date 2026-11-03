@@ -206,6 +206,7 @@ class _SseAccumulator:
     alert_proposals: list[dict[str, Any]] = field(default_factory=list)
     search_results: list[dict[str, Any]] = field(default_factory=list)
     unhandled_parts: list[dict[str, Any]] = field(default_factory=list)
+    clarifying_questions_item_id: str | None = None
     tool_call_events: list[dict[str, Any]] = field(default_factory=list)
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
@@ -226,7 +227,8 @@ def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
         acc.text_parts.append(text)
 
 
-def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
+def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator, item_id: str | None = None) -> None:
+    """Sort the item's parts; a ``clarifyingQuestions`` part keeps ``item_id``, since answers number questions per item."""
     for part in content.get("parts", []):
         ptype = part.get("type")
         if ptype == "text":
@@ -247,7 +249,8 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
         else:
             if ptype not in _KNOWN_PART_TYPES:
                 _log.warning("unknown multipart part type %r; captured as an unhandled part", ptype)
-            acc.unhandled_parts.append(part)
+            tagged = ptype == "clarifyingQuestions" and item_id
+            acc.unhandled_parts.append({**part, "itemId": item_id} if tagged else part)
 
 
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -300,6 +303,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         "alertProposals": acc.alert_proposals,
         "searchResults": acc.search_results,
         "unhandledParts": acc.unhandled_parts,
+        "clarifyingQuestionsItemId": acc.clarifying_questions_item_id,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
         "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],
@@ -439,7 +443,9 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             if ctype == "text":
                 _handle_text(content, acc)
             elif ctype == "multipart":
-                _handle_multipart(content, acc)
+                _handle_multipart(content, acc, item_id=item.get("itemId"))
+                if any(p.get("type") == "clarifyingQuestions" for p in content.get("parts", [])):
+                    acc.clarifying_questions_item_id = item.get("itemId") or acc.clarifying_questions_item_id
             elif ctype == "reasoning":
                 _handle_reasoning(content, acc)
             elif ctype == "toolCall":
@@ -541,10 +547,30 @@ class ChatClient:
     def send_message(
         self, conversation_id: str, question: str, *, user_context: dict[str, Any] | None = None
     ) -> ChatResult:
+        return self._send(conversation_id, {"type": "text", "text": question}, user_context=user_context)
+
+    def send_clarifying_answers(
+        self,
+        conversation_id: str,
+        questions_item_id: str,
+        answers: list[dict[str, Any]],
+        *,
+        user_context: dict[str, Any] | None = None,
+    ) -> ChatResult:
+        """Answer a questionnaire the way the chat panel does: positions plus the texts shown.
+
+        A question left out of ``answers`` is skipped; an empty list skips them all.
+        """
+        content = {"type": "clarifyingAnswers", "questionsItemId": questions_item_id, "answers": answers}
+        return self._send(conversation_id, content, user_context=user_context)
+
+    def _send(
+        self, conversation_id: str, content: dict[str, Any], *, user_context: dict[str, Any] | None = None
+    ) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         join_headers, joined = self._join_item_trace(conversation_id)
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json", **join_headers}
-        body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        body: dict[str, Any] = {"item": {"role": "user", "content": content}}
         options: dict[str, str] = {}
         if self._reasoning_effort is not None:
             options["reasoningEffort"] = self._reasoning_effort

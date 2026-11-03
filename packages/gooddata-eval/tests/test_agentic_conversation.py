@@ -9,7 +9,14 @@ from unittest.mock import MagicMock, patch
 import httpx
 import pytest
 from gooddata_eval.core.agentic import _conversation_context as ctx_mod
-from gooddata_eval.core.agentic._clarification import fetch_object_refs, read_first_reply, ungrounded_refs
+from gooddata_eval.core.agentic._clarification import (
+    ClarifyingPick,
+    after_answers_mismatches,
+    build_clarifying_answers,
+    fetch_object_refs,
+    read_first_reply,
+    ungrounded_refs,
+)
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
     NO_ANSWER_REPLY,
@@ -1528,7 +1535,17 @@ def _run(
 ) -> tuple[ConversationResult, MagicMock]:
     client = MagicMock()
     client.create_conversation.return_value = "conv-1"
-    client.send_message.side_effect = replies
+    # Text messages and clarifying answers take their replies from the one queue, in call order.
+    queue = iter(replies)
+
+    def _next_reply(*_args: object, **_kwargs: object) -> ChatResult:
+        reply = next(queue)
+        if isinstance(reply, BaseException):
+            raise reply
+        return reply
+
+    client.send_message.side_effect = _next_reply
+    client.send_clarifying_answers.side_effect = _next_reply
     fixture = ConversationFixture(id="c", expected_skills=["visualization"], turns=turns)
     with (
         patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=client) as client_cls,
@@ -2634,3 +2651,370 @@ def test_fetch_object_refs_refuses_a_body_that_is_not_an_entity_page(response: h
 
     with pytest.raises(ValueError):
         fetch_object_refs("https://h/", "t", "ws", transport=httpx.MockTransport(handler))
+
+
+# Structured answers and what the agent does after a skip.
+
+_SALES_CARD = {
+    "type": "clarifyingQuestions",
+    "questions": [
+        {
+            "text": "Which sales measure should the alert monitor?",
+            "control": {
+                "type": "singleChoice",
+                "options": [{"text": "{metric/total_sales}"}, {"text": "{metric/net_sales}"}],
+            },
+        },
+        {
+            "text": "Which notification channel should I use?",
+            "control": {"type": "singleChoice", "options": [{"text": "HN SMTP"}, {"text": "Default SMTP"}]},
+        },
+    ],
+}
+_SALES_VIZ = _viz(metric="metric/net_sales", dim="label/product_category")
+
+
+def _card(part: dict, item_id: str = "q-item", text: str = "Two sales measures match.") -> ChatResult:
+    return _result(text=text, tools=[_SKILLS], unhandledParts=[part], clarifyingQuestionsItemId=item_id)
+
+
+def _answers_turn(picks: list[dict], **kw: object) -> TurnDefinition:
+    return _viz_turn(
+        "t1",
+        expected=kw.pop("expected", _SALES_VIZ),
+        message="Show me sales by product category.",
+        expects_clarification=True,
+        clarifying_answers=picks,
+        **kw,
+    )
+
+
+def test_picks_are_sent_as_clarifying_answers_and_an_unpicked_question_is_skipped() -> None:
+    turn_def = _answers_turn([{"option": "metric/net_sales"}])
+    result, client = _run([_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [turn_def])
+    client.send_clarifying_answers.assert_called_once_with(
+        "conv-1",
+        "q-item",
+        [
+            {
+                "questionIndex": 0,
+                "questionText": "Which sales measure should the alert monitor?",
+                "answer": {"type": "singleChoice", "optionIndex": 1, "optionText": "{metric/net_sales}"},
+            }
+        ],
+        user_context=None,
+    )
+    turn = result.turn_results[0]
+    assert turn.clarification_correct is True
+    assert turn.context_success is True
+    assert turn.clarifications[0].reply == (
+        "**Which sales measure should the alert monitor?** {metric/net_sales} "
+        "**Which notification channel should I use?** Skipped"
+    )
+
+
+def test_a_pick_can_name_the_option_text_and_its_question() -> None:
+    turn_def = _answers_turn([{"option": "default smtp", "question": 1}], expected=_SALES_VIZ)
+    _, client = _run([_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [turn_def])
+    answers = client.send_clarifying_answers.call_args.args[2]
+    assert [(a["questionIndex"], a["answer"]["optionIndex"]) for a in answers] == [(1, 1)]
+
+
+def test_an_empty_pick_list_skips_every_question() -> None:
+    _, client = _run([_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [_answers_turn([])])
+    assert client.send_clarifying_answers.call_args.args[2] == []
+
+
+def test_a_pick_no_questionnaire_offered_fails_the_turn() -> None:
+    result, _ = _run(
+        [_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [_answers_turn([{"option": "metric/order_amount"}])]
+    )
+    turn = result.turn_results[0]
+    assert turn.clarification_correct is False
+    assert "no questionnaire offered the picked option 'metric/order_amount'" in turn.failure_reasons()
+
+
+def test_a_question_without_a_questionnaire_gets_the_text_answer_and_fails_the_answers_check() -> None:
+    turn_def = _answers_turn([{"option": "metric/net_sales"}], set_answers=["Use Net Sales."])
+    result, client = _run(
+        [_result(text="Which sales measure do you mean?", tools=[_SKILLS]), _result(viz=_SALES_VIZ)], [turn_def]
+    )
+    client.send_clarifying_answers.assert_not_called()
+    assert client.send_message.call_args_list[1].args[1] == "Use Net Sales."
+    assert result.turn_results[0].clarification_mismatches == [
+        "the turn checks a questionnaire, but the first reply asked as text",
+        "clarifying_answers not sent: the first reply asked no questionnaire to answer",
+    ]
+
+
+def test_answers_not_sent_because_the_first_reply_also_delivered_the_output_say_so() -> None:
+    reply = _result(
+        text="Here is net sales.",
+        viz=_SALES_VIZ,
+        tools=[_SKILLS],
+        unhandledParts=[_SALES_CARD],
+        clarifyingQuestionsItemId="q-item",
+    )
+    result, client = _run([reply], [_answers_turn([{"option": "metric/net_sales"}])])
+    client.send_clarifying_answers.assert_not_called()
+    assert result.turn_results[0].clarification_mismatches == [
+        "clarifying_answers not sent: the first reply delivered the output with its questionnaire, "
+        "so nothing waited on the answers"
+    ]
+
+
+def test_answers_not_sent_because_the_budget_ended_the_turn_say_so() -> None:
+    result, client = _run(
+        [_card(_SALES_CARD)], [_answers_turn([{"option": "metric/net_sales"}])], max_clarification_turns=0
+    )
+    client.send_clarifying_answers.assert_not_called()
+    assert result.turn_results[0].clarification_mismatches == [
+        "clarifying_answers not sent: the clarification budget (0) ended the turn before clarifying_answers were sent"
+    ]
+
+
+def test_answers_not_sent_because_the_questionnaire_has_no_item_id_say_so() -> None:
+    no_id = _result(text="Two sales measures match.", tools=[_SKILLS], unhandledParts=[_SALES_CARD])
+    turn_def = _answers_turn([{"option": "metric/net_sales"}], set_answers=["Use Net Sales."])
+    result, client = _run([no_id, _result(viz=_SALES_VIZ)], [turn_def])
+    client.send_clarifying_answers.assert_not_called()
+    assert result.turn_results[0].clarification_mismatches == [
+        "clarifying_answers not sent: the first reply's questionnaire has no itemId to send clarifying_answers to"
+    ]
+
+
+def test_a_lost_context_verdict_on_the_expected_questionnaire_does_not_divert_the_answers() -> None:
+    turn_def = _answers_turn([{"option": "metric/net_sales"}])
+    result, client = _run(
+        [_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [turn_def], judge=_FakeJudge(lost_context=True)
+    )
+    assert client.send_clarifying_answers.call_args.args[1] == "q-item"
+    assert result.turn_results[0].clarification_correct is True
+
+
+@pytest.mark.parametrize(
+    ("final_text", "named"),
+    [
+        ("You skipped the measure, so I used {metric/total_sales}.", True),
+        ("I used Default SMTP for the channel and net sales for the rest.", False),
+        ("Here is the chart.", False),
+    ],
+)
+def test_the_final_reply_must_name_an_option_of_each_skipped_question(final_text: str, named: bool) -> None:
+    card = {"type": "clarifyingQuestions", "questions": [_SALES_CARD["questions"][0]]}
+    turn_def = _answers_turn(
+        [], states_skipped_assumption=True, expected=_viz(metric="metric/total_sales", dim="label/product_category")
+    )
+    result, _ = _run(
+        [_card(card), _result(text=final_text, viz=_viz(metric="metric/total_sales", dim="label/product_category"))],
+        [turn_def],
+    )
+    turn = result.turn_results[0]
+    assert turn.clarification_correct is named
+    if not named:
+        assert turn.clarification_mismatches == [
+            "no reply after the answers names an option of the skipped question "
+            "'Which sales measure should the alert monitor?'"
+        ]
+
+
+def test_an_assumption_stated_in_the_reply_that_asks_for_confirmation_counts() -> None:
+    card = {"type": "clarifyingQuestions", "questions": [_SALES_CARD["questions"][0]]}
+    total_sales = _viz(metric="metric/total_sales", dim="label/product_category")
+    turn_def = _answers_turn(
+        [],
+        set_answers=["Yes, go ahead."],
+        states_skipped_assumption=True,
+        expects_confirmation_after_answers=True,
+        expected=total_sales,
+    )
+    result, _ = _run(
+        [
+            _card(card),
+            _result(text="I'll assume {metric/total_sales}, OK?", tools=[_SKILLS]),
+            _result(text="", viz=total_sales),
+        ],
+        [turn_def],
+    )
+    assert result.turn_results[0].clarification_correct is True
+
+
+def test_asking_a_skipped_question_again_fails_the_turn() -> None:
+    reworded = {
+        "type": "clarifyingQuestions",
+        "questions": [{"text": "Which measure did you mean?", "control": _SALES_CARD["questions"][0]["control"]}],
+    }
+    turn_def = _answers_turn([], skipped_questions_not_reasked=True)
+    result, client = _run([_card(_SALES_CARD), _card(reworded, item_id="q-2"), _result(viz=_SALES_VIZ)], [turn_def])
+    assert client.send_clarifying_answers.call_count == 1
+    assert result.turn_results[0].clarification_mismatches == [
+        "asked the skipped question 'Which sales measure should the alert monitor?' again"
+    ]
+
+
+def test_a_new_question_after_a_skip_is_not_a_reasked_one() -> None:
+    other = {
+        "type": "clarifyingQuestions",
+        "questions": [
+            {"text": "Which dashboard?", "control": {"options": [{"text": "1. Overview"}, {"text": "2. Sales"}]}}
+        ],
+    }
+    turn_def = _answers_turn([], skipped_questions_not_reasked=True)
+    result, _ = _run([_card(_SALES_CARD), _card(other, item_id="q-2"), _result(viz=_SALES_VIZ)], [turn_def])
+    assert result.turn_results[0].clarification_correct is True
+
+
+@pytest.mark.parametrize(
+    ("later_text", "reasked"),
+    [("Should I build the chart?", False), ("Include returns?", True)],
+)
+def test_yes_no_options_count_as_a_reask_only_with_the_same_text(later_text: str, reasked: bool) -> None:
+    later = {
+        "type": "clarifyingQuestions",
+        "questions": [{"text": later_text, "control": {"options": [{"text": "Yes"}, {"text": "No"}]}}],
+    }
+    mismatches = after_answers_mismatches(
+        unmatched_picks=[],
+        skipped=[{"index": 0, "text": "Include returns?", "options": ["No", "Yes"]}],
+        replies_after=[("question", _result(unhandledParts=[later]), True)],
+        states_skipped_assumption=False,
+        skipped_questions_not_reasked=True,
+        expects_confirmation_after_answers=False,
+    )
+    assert mismatches == (["asked the skipped question 'Include returns?' again"] if reasked else [])
+
+
+@pytest.mark.parametrize(
+    ("options", "final_text", "named"),
+    [
+        (["All", "Top 10"], "Overall revenue grew.", False),
+        (["All", "Top 10"], "I kept all products.", True),
+        (["{metric/net_sales}", "{metric/total_sales}"], "I used {metric/net_sales_ytd}.", False),
+        (["{attribute/product_category}", "{attribute/region}"], "Split by {label/product_category}.", True),
+    ],
+)
+def test_a_skipped_option_is_named_only_as_whole_words_or_a_whole_reference(
+    options: list[str], final_text: str, named: bool
+) -> None:
+    mismatches = after_answers_mismatches(
+        unmatched_picks=[],
+        skipped=[{"index": 0, "text": "Which one?", "options": options}],
+        replies_after=[("output", _result(text=final_text), True)],
+        states_skipped_assumption=True,
+        skipped_questions_not_reasked=False,
+        expects_confirmation_after_answers=False,
+    )
+    assert (mismatches == []) is named
+
+
+def test_a_pick_by_attribute_matches_an_option_written_as_its_label() -> None:
+    card = _questionnaire(["{label/product_category}", "{label/region}"])
+    built = build_clarifying_answers(_card(card), [ClarifyingPick(option="attribute/product_category")])
+    assert [(a["questionIndex"], a["answer"]["optionIndex"]) for a in built.answers] == [(0, 0)]
+    assert built.matched_picks == ["attribute/product_category"]
+
+
+def test_answers_number_the_questions_of_the_item_they_answer_only() -> None:
+    first = {**_questionnaire(["{metric/returns}", "{metric/total_returns}"]), "itemId": "i-1"}
+    second = {**_questionnaire(["{metric/net_sales}", "{metric/total_sales}"]), "itemId": "i-2"}
+    reply = _result(unhandledParts=[first, second], clarifyingQuestionsItemId="i-2")
+    built = build_clarifying_answers(reply, [ClarifyingPick(option="metric/total_sales")])
+    assert [(a["questionIndex"], a["answer"]["optionIndex"]) for a in built.answers] == [(0, 1)]
+    assert built.skipped == []
+
+
+def test_acting_on_the_answers_without_a_confirmation_fails_when_one_is_expected() -> None:
+    turn_def = _answers_turn([], expects_confirmation_after_answers=True)
+    result, _ = _run([_card(_SALES_CARD), _result(viz=_SALES_VIZ)], [turn_def])
+    assert result.turn_results[0].clarification_mismatches == [
+        "acted on the answers in the same reply, without waiting for confirmation"
+    ]
+
+
+def test_a_confirmation_before_the_output_passes_when_one_is_expected() -> None:
+    turn_def = _answers_turn([], expects_confirmation_after_answers=True)
+    result, client = _run(
+        [_card(_SALES_CARD), _result(text="I will chart Net Sales. Please confirm."), _result(viz=_SALES_VIZ)],
+        [turn_def],
+    )
+    assert result.turn_results[0].clarification_correct is True
+    assert client.send_message.call_args_list[-1].args[1] == CONFIRMATION_REPLY
+
+
+@pytest.mark.parametrize(
+    "keys",
+    [
+        {"states_skipped_assumption": True},
+        {"skipped_questions_not_reasked": True},
+        {"expects_confirmation_after_answers": True},
+    ],
+)
+def test_an_after_answers_key_without_clarifying_answers_is_rejected(keys: dict) -> None:
+    with pytest.raises(ValueError, match="set clarifying_answers"):
+        TurnDefinition(turn_id="t1", message="m", expected_skill="visualization", expects_clarification=True, **keys)
+
+
+def test_clarifying_answers_need_an_expected_questionnaire() -> None:
+    with pytest.raises(ValueError, match="need expects_clarification: true"):
+        TurnDefinition(turn_id="t1", message="m", expected_skill="visualization", clarifying_answers=[])
+    with pytest.raises(ValueError, match="not text"):
+        TurnDefinition(
+            turn_id="t1",
+            message="m",
+            expected_skill="visualization",
+            expects_clarification=True,
+            expected_clarification_form="text",
+            clarifying_answers=[],
+        )
+
+
+def test_rendered_answers_follow_the_text_gen_ai_builds_for_the_model() -> None:
+    built = build_clarifying_answers(_card(_SALES_CARD), [ClarifyingPick(option="HN SMTP")])
+    assert [s["index"] for s in built.skipped] == [0]
+    assert built.render() == (
+        "**Which sales measure should the alert monitor?**\n\nSkipped\n\n"
+        "**Which notification channel should I use?**\n\nHN SMTP"
+    )
+
+
+def test_a_plan_the_agent_waits_on_after_the_answers_counts_as_stopping_for_confirmation() -> None:
+    turn_def = _answers_turn([], expects_confirmation_after_answers=True)
+    result, _ = _run(
+        [
+            _card(_SALES_CARD),
+            _result(text="I'll use Net Sales. The plan: one bar chart by category."),
+            _result(viz=_SALES_VIZ),
+        ],
+        [turn_def],
+    )
+    assert result.turn_results[0].clarification_mismatches == []
+
+
+def test_a_pick_names_the_spellings_of_one_option() -> None:
+    plain = {
+        "type": "clarifyingQuestions",
+        "questions": [
+            {"text": "Which sales measure?", "control": {"options": [{"text": "Total Sales"}, {"text": "Net Sales"}]}}
+        ],
+    }
+    turn_def = _answers_turn([{"option": ["metric/net_sales", "Net Sales"]}])
+    result, client = _run([_card(plain), _result(viz=_SALES_VIZ)], [turn_def])
+    assert client.send_clarifying_answers.call_args.args[2][0]["answer"]["optionText"] == "Net Sales"
+    assert result.turn_results[0].clarification_correct is True
+
+
+def test_only_the_first_questionnaire_gets_the_structured_answers() -> None:
+    confirm = {
+        "type": "clarifyingQuestions",
+        "questions": [{"text": "Should I build it?", "control": {"options": [{"text": "Yes"}, {"text": "No"}]}}],
+    }
+    turn_def = _answers_turn([], set_answers=["Yes, build it."], expects_confirmation_after_answers=True)
+    result, client = _run([_card(_SALES_CARD), _card(confirm, item_id="q-2"), _result(viz=_SALES_VIZ)], [turn_def])
+    assert client.send_clarifying_answers.call_count == 1
+    assert client.send_message.call_args_list[-1].args[1] == "Yes, build it."
+    assert result.turn_results[0].clarification_correct is True
+
+
+def test_an_empty_option_spelling_is_rejected() -> None:
+    with pytest.raises(ValueError, match="non-empty spelling"):
+        ClarifyingPick(option=[])
