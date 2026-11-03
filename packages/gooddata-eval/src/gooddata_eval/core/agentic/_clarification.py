@@ -3,12 +3,18 @@
 
 from __future__ import annotations
 
+import functools
 import re
+from collections.abc import Callable
 from typing import Any, Literal
 
-import httpx
+from gooddata_api_client.exceptions import ApiException, NotFoundException
+from gooddata_sdk import GoodDataSdk
+from gooddata_sdk.utils import load_all_entities
 from pydantic import BaseModel, Field, model_validator
+from urllib3.exceptions import HTTPError
 
+from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, retry_transient
 from gooddata_eval.core.models import ChatResult
 
 ClarificationForm = Literal["questionnaire", "text"]
@@ -33,14 +39,53 @@ _REF_ENTITIES: dict[str, tuple[str, ...]] = {
 }
 # Reference types gen-ai writes that no entity listing holds, so grounding cannot check them.
 _UNLISTED_REF_TYPES = frozenset({"computed_attribute", "filter_context", "document", "report"})
-_GENERIC_ANSWERS = frozenset(
-    {"yes", "no", "ok", "okay", "cancel", "confirm", "continue", "proceed", "skip", "not now", "go ahead"}
-)
 _ENTITY_KINDS = tuple(sorted({kind for kinds in _REF_ENTITIES.values() for kind in kinds}))
 _PAGE_SIZE = 1000
+# The EntitiesApi listing of each entity kind.
+_LIST_METHODS: dict[str, str] = {
+    "analyticalDashboards": "get_all_entities_analytical_dashboards",
+    "attributes": "get_all_entities_attributes",
+    "datasets": "get_all_entities_datasets",
+    "facts": "get_all_entities_facts",
+    "labels": "get_all_entities_labels",
+    "metrics": "get_all_entities_metrics",
+    "parameters": "get_all_entities_parameters",
+    "visualizationObjects": "get_all_entities_visualization_objects",
+}
 # A shorter skipped option, such as "No" or "Q1", also occurs in text that assumes nothing, so it
 # never counts as named.
 _MIN_NAMED_OPTION_CHARS = 3
+
+
+OptionTitleKind = Literal["metric", "attribute", "fact", "dataset", "dashboard", "visualization"]
+_TITLE_ENTITIES: dict[str, str] = {
+    "metric": "metrics",
+    "attribute": "attributes",
+    "fact": "facts",
+    "dataset": "datasets",
+    "dashboard": "analyticalDashboards",
+    "visualization": "visualizationObjects",
+}
+# What may follow a title in an option that adds context, as two charts with one title need.
+_TITLE_CONTEXT_SEPARATORS = (" (", " [", " - ", " – ", " — ", ": ", ", ")
+_GENERIC_ANSWERS = frozenset(
+    {"yes", "no", "ok", "okay", "cancel", "confirm", "continue", "proceed", "skip", "not now", "go ahead"}
+)
+# How an option may spell a chart type whose `local:<type>` id is not a word of its own.
+_CHART_TYPE_WORDS: dict[str, tuple[str, ...]] = {
+    "combo2": ("combo",),
+    "pushpin": ("geo", "map", "pushpin"),
+    "heatmap": ("heatmap", "heat map"),
+    "treemap": ("treemap", "tree map"),
+    "dependencywheel": ("dependency wheel",),
+}
+
+
+class QuestionOptions(BaseModel):
+    """One question's options: the ``type/id`` references they name, and the options that name none."""
+
+    refs: list[str] = Field(default_factory=list)
+    plain: list[str] = Field(default_factory=list)
 
 
 class FirstReply(BaseModel):
@@ -48,8 +93,23 @@ class FirstReply(BaseModel):
 
     asked: bool
     form: ClarificationForm | None = None
-    question_count: int = 0
-    option_refs: list[str] = Field(default_factory=list)
+    questions: list[QuestionOptions] = Field(default_factory=list)
+
+    @property
+    def question_count(self) -> int:
+        return len(self.questions)
+
+    @property
+    def option_refs(self) -> list[str]:
+        return [ref for q in self.questions for ref in q.refs]
+
+    @property
+    def plain_options(self) -> list[str]:
+        return [option for q in self.questions for option in q.plain]
+
+    @property
+    def has_options(self) -> bool:
+        return any(q.refs or q.plain for q in self.questions)
 
 
 def read_first_reply(chat_result: ChatResult, *, asked_in_text: bool) -> FirstReply:
@@ -58,41 +118,76 @@ def read_first_reply(chat_result: ChatResult, *, asked_in_text: bool) -> FirstRe
     ``asked_in_text`` is the caller's reading of the prose, for a question without a part.
     """
     parts = [p for p in chat_result.unhandled_parts or [] if p.get("type") == "clarifyingQuestions"]
-    questions = [q for p in parts for q in p.get("questions") or []]
-    options = [str(o.get("text") or "") for q in questions for o in (q.get("control") or {}).get("options") or []]
-    refs = [f"{kind}/{obj_id}" for text in options for kind, obj_id in _REF_RE.findall(text)]
-    if parts:
-        return FirstReply(asked=True, form="questionnaire", question_count=len(questions), option_refs=refs)
-    return FirstReply(asked=asked_in_text, form="text" if asked_in_text else None)
+    if not parts:
+        return FirstReply(asked=asked_in_text, form="text" if asked_in_text else None)
+    questions = []
+    for question in (q for p in parts for q in p.get("questions") or []):
+        options = _options(question)
+        questions.append(
+            QuestionOptions(
+                refs=[f"{kind}/{obj_id}" for text in options for kind, obj_id in _REF_RE.findall(text)],
+                plain=[text for text in options if not _REF_RE.search(text)],
+            )
+        )
+    return FirstReply(asked=True, form="questionnaire", questions=questions)
 
 
-def fetch_object_refs(
-    host: str, token: str, workspace_id: str, *, transport: httpx.BaseTransport | None = None
-) -> set[str]:
-    """Every ``<entity kind>/<id>`` the workspace holds, inherited objects included.
+class WorkspaceObjects(BaseModel):
+    """The workspace's objects as the option checks read them: ``<entity kind>/<id>`` and their titles."""
 
-    The entity API sends a ``next`` link on every page, an empty one too, so a short page ends the listing.
-    A kind the server does not know (404) has no objects. A body that is not an entity page raises ``ValueError``.
+    refs: set[str] = Field(default_factory=set)
+    # `<entity kind>/<id>` -> the title, casefolded with whitespace collapsed.
+    titles: dict[str, str] = Field(default_factory=dict)
+    # `visualizationObjects/<id>` -> the chart type, `local:donut` read as `donut`.
+    chart_types: dict[str, str] = Field(default_factory=dict)
+
+    def titles_of(self, entity_kind: str) -> set[str]:
+        return {title for ref, title in self.titles.items() if ref.startswith(f"{entity_kind}/")}
+
+
+def _title_key(text: str) -> str:
+    return " ".join(text.casefold().split())
+
+
+def _is_transient(exc: Exception) -> bool:
+    if isinstance(exc, ApiException):
+        return exc.status in RETRYABLE_STATUS_CODES
+    return isinstance(exc, HTTPError)
+
+
+def _page_with_retry(list_page: Callable[..., Any], **page: int) -> Any:
+    return retry_transient(lambda: list_page(**page), is_retryable=_is_transient)
+
+
+def fetch_workspace_objects(sdk: GoodDataSdk, workspace_id: str) -> WorkspaceObjects:
+    """Every ``<entity kind>/<id>`` and title the workspace holds, inherited objects included.
+
+    A page that fails with a transient error is retried as a chat message is. A kind the server does
+    not know (404) has no objects. Any other failure of the entity API is raised.
     """
-    found: set[str] = set()
-    headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
-    with httpx.Client(timeout=60, headers=headers, transport=transport) as client:
-        for kind in _ENTITY_KINDS:
-            url = f"{host.rstrip('/')}/api/v1/entities/workspaces/{workspace_id}/{kind}"
-            page = 0
-            while True:
-                response = client.get(url, params={"size": _PAGE_SIZE, "page": page})
-                if response.status_code == httpx.codes.NOT_FOUND:
-                    break
-                response.raise_for_status()
-                body: Any = response.json()
-                data = body.get("data") if isinstance(body, dict) else None
-                if not isinstance(data, list):
-                    raise ValueError(f"{kind} page {page} is not an entity page")
-                found.update(f"{kind}/{obj['id']}" for obj in data if isinstance(obj, dict) and obj.get("id"))
-                if len(data) < _PAGE_SIZE:
-                    break
-                page += 1
+    found = WorkspaceObjects()
+    api = sdk._client.entities_api
+    for kind in _ENTITY_KINDS:
+        list_page = functools.partial(getattr(api, _LIST_METHODS[kind]), workspace_id, _check_return_type=False)
+        try:
+            data = load_all_entities(functools.partial(_page_with_retry, list_page), page_size=_PAGE_SIZE).data
+        except NotFoundException:
+            continue
+        for obj in data:
+            if not isinstance(obj, dict) or not obj.get("id"):
+                continue
+            ref = f"{kind}/{obj['id']}"
+            found.refs.add(ref)
+            raw_attributes = obj.get("attributes")
+            attributes: dict[str, Any] = raw_attributes if isinstance(raw_attributes, dict) else {}
+            title = attributes.get("title")
+            if isinstance(title, str) and title:
+                found.titles[ref] = _title_key(title)
+            raw_content = attributes.get("content")
+            content: dict[str, Any] = raw_content if isinstance(raw_content, dict) else {}
+            chart_url = str(content.get("visualizationUrl") or "")
+            if chart_url.startswith("local:"):
+                found.chart_types[ref] = chart_url.removeprefix("local:")
     return found
 
 
@@ -112,19 +207,100 @@ def ungrounded_refs(refs: list[str], known: set[str]) -> list[str]:
     return missing
 
 
+def _is_titled(option: str, titles: set[str]) -> bool:
+    key = _title_key(option)
+    return key in titles or any(key.startswith(title + sep) for title in titles for sep in _TITLE_CONTEXT_SEPARATORS)
+
+
+def untitled_options(options: list[str], objects: WorkspaceObjects, kind: OptionTitleKind) -> list[str]:
+    """The options that are not the title of a ``kind`` object, alone or followed by added context."""
+    titles = objects.titles_of(_TITLE_ENTITIES[kind])
+    return [option for option in options if not _is_titled(option, titles)]
+
+
+def _off_in_scope(
+    questions: list[QuestionOptions], off_of: Callable[[QuestionOptions], tuple[int, list[str]]]
+) -> list[str]:
+    """The options an option check fails, read only from the questions the check is about.
+
+    ``off_of`` gives a question's count of options the check reads and the ones it fails. A questionnaire
+    can ask about more than one thing, such as a metric next to a channel: a question with at least one
+    option the check accepts is about it, and a question with none is about something else and left out.
+    When no question is about it, every option the check read fails.
+    """
+    checked = [off_of(q) for q in questions]
+    about = [off for read, off in checked if len(off) < read]
+    return [option for off in (about or [off for _, off in checked]) for option in off]
+
+
+def untitled_question_options(reply: FirstReply, objects: WorkspaceObjects, kind: OptionTitleKind) -> list[str]:
+    """The plain-text options that are not the title of a ``kind`` object, in the questions about that kind."""
+    return _off_in_scope(reply.questions, lambda q: (len(q.plain), untitled_options(q.plain, objects, kind)))
+
+
+def _entity_refs(ref: str) -> set[str]:
+    ref_type, _, obj_id = ref.partition("/")
+    return {f"{kind}/{obj_id}" for kind in _REF_ENTITIES.get(ref_type, ())}
+
+
+def is_object_ref(ref: str) -> bool:
+    """Whether ``ref`` is ``type/id`` with a type an option reference can name."""
+    ref_type, sep, obj_id = ref.partition("/")
+    return bool(sep and obj_id) and ref_type in _REF_ENTITIES
+
+
+def _names_chart_type(option: str, chart_type: str) -> bool:
+    key = _title_key(option)
+    return any(re.search(rf"\b{re.escape(word)}\b", key) for word in _CHART_TYPE_WORDS.get(chart_type, (chart_type,)))
+
+
+def off_candidate_options(reply: FirstReply, objects: WorkspaceObjects, candidates: list[str]) -> list[str]:
+    """The options that name none of ``candidates``, in the questions that offer at least one of them.
+
+    An option names a candidate by reference, by its title plus context, or by its chart type when
+    no other candidate has that type: "Donut chart" tells two same-titled charts apart only then.
+    A chart type does not count in an option that starts with the title of an object outside the candidates.
+    """
+    wanted = set().union(*(_entity_refs(c) for c in candidates))
+    titles = {objects.titles[ref] for ref in wanted if ref in objects.titles}
+    kinds = {ref.partition("/")[0] for ref in wanted}
+    other_titles = {
+        title for ref, title in objects.titles.items() if ref not in wanted and ref.partition("/")[0] in kinds
+    } - titles
+    types = [objects.chart_types[ref] for ref in wanted if ref in objects.chart_types]
+    unique_types = {chart_type for chart_type in types if types.count(chart_type) == 1}
+
+    def names_a_candidate_type(option: str) -> bool:
+        return any(_names_chart_type(option, t) for t in unique_types) and not _is_titled(option, other_titles)
+
+    def off_of(question: QuestionOptions) -> tuple[int, list[str]]:
+        off = [ref for ref in question.refs if not (_entity_refs(ref) & wanted)]
+        off += [
+            option for option in question.plain if not _is_titled(option, titles) and not names_a_candidate_type(option)
+        ]
+        return len(question.refs) + len(question.plain), off
+
+    return _off_in_scope(reply.questions, off_of)
+
+
 def clarification_mismatches(
     reply: FirstReply,
     *,
     expects_clarification: bool,
     expected_form: ClarificationForm | None,
     max_questions: int | None,
-    known_refs: set[str] | None,
+    objects: WorkspaceObjects | None,
+    grounded: bool,
+    titled_as: OptionTitleKind | None,
+    candidates: list[str] | None = None,
     reads_questionnaire: bool = False,
 ) -> list[str]:
     """How the first reply differs from the expected clarification; empty when it matches.
 
-    ``known_refs`` is None when the fixture does not ask for grounded options.
-    Options without a ``{type/id}`` reference are not checked for grounding.
+    ``grounded`` checks the ``{type/id}`` options of every question; ``titled_as`` checks the plain-text
+    ones against that kind's titles; ``candidates`` requires every option to name one of those objects.
+    The last two read only the questions they are about (see ``_off_in_scope``). All three are skipped
+    when ``objects`` is None: the caller reports the turn ungraded then.
     ``reads_questionnaire`` fails a prose question, which has no options for these checks to read.
     """
     if not expects_clarification:
@@ -138,10 +314,18 @@ def clarification_mismatches(
         out.append(f"the turn checks a questionnaire, but the first reply asked as {reply.form}")
     if max_questions is not None and reply.question_count > max_questions:
         out.append(f"asked {reply.question_count} questions, at most {max_questions} expected")
-    if known_refs is not None:
-        missing = ungrounded_refs(reply.option_refs, known_refs)
+    if objects is not None and grounded:
+        missing = ungrounded_refs(reply.option_refs, objects.refs)
         if missing:
             out.append(f"options name objects the workspace does not have: {missing}")
+    if objects is not None and titled_as is not None:
+        untitled = untitled_question_options(reply, objects, titled_as)
+        if untitled:
+            out.append(f"options are not the title of a {titled_as} of the workspace: {untitled}")
+    if objects is not None and candidates:
+        off = off_candidate_options(reply, objects, candidates)
+        if off:
+            out.append(f"options name none of {candidates}: {off}")
     return out
 
 
@@ -184,11 +368,6 @@ class ClarifyingAnswers(BaseModel):
         sections = [(a["questionIndex"], a["questionText"], a["answer"]["optionText"]) for a in self.answers]
         sections += [(s["index"], s["text"], "Skipped") for s in self.skipped]
         return "\n\n".join(f"**{text}**\n\n{answer}" for _, text, answer in sorted(sections, key=lambda s: s[0]))
-
-
-def _entity_refs(ref: str) -> set[str]:
-    ref_type, _, obj_id = ref.partition("/")
-    return {f"{kind}/{obj_id}" for kind in _REF_ENTITIES.get(ref_type, ())}
 
 
 def _all_questions(chat_result: ChatResult) -> list[dict]:

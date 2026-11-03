@@ -4,18 +4,23 @@ import json as _json
 import sys
 import types
 from datetime import date
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-import httpx
 import pytest
+from gooddata_api_client.exceptions import ApiException, NotFoundException
 from gooddata_eval.core.agentic import _conversation_context as ctx_mod
 from gooddata_eval.core.agentic._clarification import (
     ClarifyingPick,
+    QuestionOptions,
+    WorkspaceObjects,
     after_answers_mismatches,
     build_clarifying_answers,
-    fetch_object_refs,
+    fetch_workspace_objects,
+    off_candidate_options,
     read_first_reply,
     ungrounded_refs,
+    untitled_options,
 )
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
@@ -52,6 +57,7 @@ from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError
 from gooddata_eval.core.chat.sse_client import ChatError as ChatError_
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
+from urllib3.exceptions import ProtocolError
 
 
 def _skills_tc(*skills):
@@ -2390,27 +2396,6 @@ def test_a_prose_question_passes_an_expected_text_question() -> None:
     assert result.turn_results[0].clarification_correct is True
 
 
-@pytest.mark.parametrize(
-    ("text", "asks"),
-    [
-        ("Did you mean Net Sales or Gross Sales? Please confirm.", True),
-        ("Which time range do you want?", True),
-        ("I will chart Total Returns. Please confirm.", False),
-        ("Should I proceed with Net Sales?", False),
-        ("Here is the plan. Shall I create it?", False),
-    ],
-)
-def test_a_question_followed_by_a_confirmation_phrase_still_asks(text: str, asks: bool) -> None:
-    assert asks_in_text(_result(text=text), text) is asks
-
-
-def test_a_prose_choice_with_please_confirm_passes_an_expected_text_question() -> None:
-    turn_def = _clarifying_turn(expects_clarification=True, expected_clarification_form="text")
-    text = "Did you mean Returns or Total Returns? Please confirm."
-    result, _ = _run([_result(text=text, tools=[_SKILLS]), _result(viz=_RETURNS_VIZ)], [turn_def])
-    assert result.turn_results[0].clarification_correct is True
-
-
 def test_more_questions_than_allowed_fail_the_turn() -> None:
     card = _questionnaire(["{metric/returns}", "{metric/total_returns}"], ["Monthly", "Quarterly"])
     turn_def = _clarifying_turn(expects_clarification=True, max_clarifying_questions=1)
@@ -2420,17 +2405,22 @@ def test_more_questions_than_allowed_fail_the_turn() -> None:
 
 def test_an_option_naming_an_object_the_workspace_lacks_fails_grounding() -> None:
     card = _questionnaire(["{metric/total_returns}", "{dashboard/2. Sales}", "Plain text option"])
-    known = {"metrics/total_returns", "analyticalDashboards/bf439696"}
+    known = WorkspaceObjects(refs={"metrics/total_returns", "analyticalDashboards/bf439696"})
     turn_def = _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True)
-    with patch("gooddata_eval.core.agentic.conversation.fetch_object_refs", return_value=known) as fetch:
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=known) as fetch:
         result, _ = _run([_card_reply(card), _result(viz=_RETURNS_VIZ)], [turn_def])
-    fetch.assert_called_once_with("h", "t", "ws")
+    assert fetch.call_count == 1
+    assert fetch.call_args.args[1] == "ws"
     assert result.turn_results[0].clarification_mismatches == [
         "options name objects the workspace does not have: ['dashboard/2. Sales']"
     ]
 
 
-def test_grounded_options_pass_and_the_catalog_is_read_on_each_turn_that_checks_options() -> None:
+def _created_metric(metric_id: str) -> dict:
+    return _tool("create_metric", result={"metric_id": metric_id, "created_new": True})
+
+
+def test_grounded_options_pass_and_the_listing_is_read_once_while_the_run_writes_nothing() -> None:
     turns = [
         _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True),
         _viz_turn(
@@ -2442,8 +2432,8 @@ def test_grounded_options_pass_and_the_catalog_is_read_on_each_turn_that_checks_
             clarifying_options_grounded=True,
         ),
     ]
-    known = {"metrics/returns", "metrics/total_returns"}
-    with patch("gooddata_eval.core.agentic.conversation.fetch_object_refs", return_value=known) as fetch:
+    known = WorkspaceObjects(refs={"metrics/returns", "metrics/total_returns"})
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=known) as fetch:
         result, _ = _run(
             [
                 _card_reply(_RETURNS_CARD),
@@ -2453,14 +2443,57 @@ def test_grounded_options_pass_and_the_catalog_is_read_on_each_turn_that_checks_
             ],
             turns,
         )
-    assert fetch.call_count == 2
+    assert fetch.call_count == 1
     assert [t.clarification_correct for t in result.turn_results] == [True, True]
 
 
-@pytest.mark.parametrize("error", [httpx.ConnectError("refused"), ValueError("metrics page 0 is not an entity page")])
+def test_the_listing_is_read_again_once_the_run_has_created_an_object() -> None:
+    turns = [
+        _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True),
+        _viz_turn(
+            "t2",
+            expected=_RETURNS_VIZ,
+            message="Again for returns.",
+            set_answers=["Use Total Returns."],
+            expects_clarification=True,
+            clarifying_options_grounded=True,
+        ),
+    ]
+    known = WorkspaceObjects(refs={"metrics/returns", "metrics/total_returns"})
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=known) as fetch:
+        _run(
+            [
+                _card_reply(_RETURNS_CARD),
+                _result(viz=_RETURNS_VIZ),
+                _card_reply(_RETURNS_CARD),
+                _result(viz=_RETURNS_VIZ, tools=[_created_metric("return_rate")]),
+            ],
+            turns,
+        )
+    assert fetch.call_count == 2
+
+
+def test_the_listing_is_not_read_for_a_first_reply_without_options() -> None:
+    turn_def = _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True)
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects") as fetch:
+        result, _ = _run(
+            [_result(text="Which returns measure do you want?", tools=[_SKILLS]), _result(viz=_RETURNS_VIZ)],
+            [turn_def],
+        )
+    fetch.assert_not_called()
+    assert result.turn_results[0].clarification_mismatches == [
+        "the turn checks a questionnaire, but the first reply asked as text"
+    ]
+
+
+@pytest.mark.parametrize(
+    "error",
+    [ApiException(status=401, reason="Unauthorized"), ProtocolError("connection reset"), ValueError("x")],
+    ids=["unauthorized", "connection-reset", "unexpected-body"],
+)
 def test_an_unreadable_listing_leaves_the_turn_ungraded_rather_than_passed(error: Exception) -> None:
     turn_def = _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True)
-    with patch("gooddata_eval.core.agentic.conversation.fetch_object_refs", side_effect=error):
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", side_effect=error):
         result, _ = _run([_card_reply(_RETURNS_CARD), _result(viz=_RETURNS_VIZ)], [turn_def])
     turn = result.turn_results[0]
     assert turn.clarification_correct is None
@@ -2476,7 +2509,7 @@ def test_an_unreadable_listing_still_fails_a_check_that_does_not_need_it() -> No
         expects_clarification=True, clarifying_options_grounded=True, max_clarifying_questions=1
     )
     card = _questionnaire(["{metric/returns}", "{metric/total_returns}"], ["Monthly", "Quarterly"])
-    with patch("gooddata_eval.core.agentic.conversation.fetch_object_refs", side_effect=ValueError("x")):
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", side_effect=ValueError("x")):
         result, _ = _run([_card_reply(card), _result(viz=_RETURNS_VIZ)], [turn_def])
     assert result.turn_results[0].clarification_correct is False
 
@@ -2501,18 +2534,45 @@ def test_ungrounded_refs_accept_each_spelling_of_an_object(ref: str, known: set[
     assert (ungrounded_refs([ref], known) == []) is grounded
 
 
-def test_read_first_reply_counts_questions_and_collects_option_refs() -> None:
+def test_read_first_reply_keeps_the_options_of_each_question_apart() -> None:
     card = _questionnaire(["{metric/returns}", "Returned amount {metric/total_returns}"], ["Monthly", "Weekly"])
     reply = read_first_reply(_result(unhandledParts=[card]), asked_in_text=False)
     assert reply.form == "questionnaire"
     assert reply.question_count == 2
+    assert reply.questions == [
+        QuestionOptions(refs=["metric/returns", "metric/total_returns"]),
+        QuestionOptions(plain=["Monthly", "Weekly"]),
+    ]
     assert reply.option_refs == ["metric/returns", "metric/total_returns"]
+    assert reply.plain_options == ["Monthly", "Weekly"]
+
+
+@pytest.mark.parametrize(
+    ("text", "asks"),
+    [
+        ("Did you mean Net Sales or Gross Sales? Please confirm.", True),
+        ("Which time range do you want?", True),
+        ("I will chart Total Returns. Please confirm.", False),
+        ("Should I proceed with Net Sales?", False),
+        ("Here is the plan. Shall I create it?", False),
+    ],
+)
+def test_a_question_followed_by_a_confirmation_phrase_still_asks(text: str, asks: bool) -> None:
+    assert asks_in_text(_result(text=text), text) is asks
+
+
+def test_a_prose_choice_with_please_confirm_passes_an_expected_text_question() -> None:
+    turn_def = _clarifying_turn(expects_clarification=True, expected_clarification_form="text")
+    text = "Did you mean Returns or Total Returns? Please confirm."
+    result, _ = _run([_result(text=text, tools=[_SKILLS]), _result(viz=_RETURNS_VIZ)], [turn_def])
+    assert result.turn_results[0].clarification_correct is True
 
 
 def test_read_first_reply_reads_a_reference_type_with_an_underscore() -> None:
     card = _questionnaire(["{date_attribute/order_date.month}", "{date_attribute/ship_date.month}"])
     reply = read_first_reply(_result(unhandledParts=[card]), asked_in_text=False)
     assert reply.option_refs == ["date_attribute/order_date.month", "date_attribute/ship_date.month"]
+    assert reply.plain_options == []
 
 
 def test_clarification_checks_in_legacy_mode_are_refused_before_any_request() -> None:
@@ -2521,8 +2581,9 @@ def test_clarification_checks_in_legacy_mode_are_refused_before_any_request() ->
 
 
 def test_option_keys_fail_a_question_asked_in_prose() -> None:
-    turn_def = _clarifying_turn(expects_clarification=True, clarifying_options_grounded=True)
-    with patch("gooddata_eval.core.agentic.conversation.fetch_object_refs", return_value={"metrics/total_returns"}):
+    turn_def = _clarifying_turn(expects_clarification=True, clarifying_option_objects=["metric/total_returns"])
+    known = WorkspaceObjects(refs={"metrics/total_returns"})
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=known):
         result, _ = _run(
             [_result(text="Do you mean returns or total returns?", tools=[_SKILLS]), _result(viz=_RETURNS_VIZ)],
             [turn_def],
@@ -2608,49 +2669,122 @@ def test_the_clarification_verdict_is_written_to_langfuse_only_when_stated() -> 
     assert scores["turn_t1_clarification_correct"] == 1.0
 
 
-def test_fetch_object_refs_ends_on_a_short_page_although_every_page_links_a_next_one(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def _entities_sdk(pages: dict[tuple[str, int], list | Exception]) -> MagicMock:
+    """An sdk whose EntitiesApi serves ``pages``: the objects, or an exception to raise, per (kind, page)."""
+    sdk = MagicMock()
+    calls: list[tuple[str, int]] = []
+
+    def method(name: str) -> object:
+        def list_page(workspace_id: str, *, page: int, size: int, _check_return_type: bool) -> SimpleNamespace:
+            assert (workspace_id, _check_return_type) == ("ws", False)
+            calls.append((name, page))
+            served = pages.get((name, page), [])
+            if isinstance(served, Exception):
+                raise served
+            return SimpleNamespace(data=served, included=[])
+
+        return list_page
+
+    sdk._client.entities_api.configure_mock(
+        **{
+            f"get_all_entities_{kind}": method(kind)
+            for kind in (
+                "analytical_dashboards",
+                "attributes",
+                "datasets",
+                "facts",
+                "labels",
+                "metrics",
+                "parameters",
+                "visualization_objects",
+            )
+        }
+    )
+    sdk.calls = calls
+    return sdk
+
+
+def test_fetch_workspace_objects_pages_each_kind_until_a_short_page(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("gooddata_eval.core.agentic._clarification._PAGE_SIZE", 2)
-    pages = {("metrics", 0): ["a", "b"], ("metrics", 1): ["c"]}
-    seen: list[tuple[str, int]] = []
+    metric = lambda i: {"id": i, "attributes": {"title": f"Metric  {i.upper()}"}}  # noqa: E731
+    sdk = _entities_sdk(
+        {
+            ("metrics", 0): [metric("a"), metric("b"), "junk", {"attributes": {"title": "No id"}}],
+            ("metrics", 1): [metric("c")],
+            ("parameters", 0): NotFoundException(status=404, reason="Not Found"),
+            ("visualization_objects", 0): [
+                {"id": "v", "attributes": {"title": "V", "content": {"visualizationUrl": "local:donut"}}}
+            ],
+        }
+    )
+    objects = fetch_workspace_objects(sdk, "ws")
+    assert {r for r in objects.refs if r.startswith("metrics/")} == {"metrics/a", "metrics/b", "metrics/c"}
+    assert objects.titles_of("metrics") == {"metric a", "metric b", "metric c"}
+    assert objects.chart_types == {"visualizationObjects/v": "donut"}
+    assert [p for k, p in sdk.calls if k == "metrics"] == [0, 1]
+    assert not any(r.startswith("parameters/") for r in objects.refs)
 
-    def handler(request: httpx.Request) -> httpx.Response:
-        kind = request.url.path.rsplit("/", 1)[1]
-        page = int(request.url.params["page"])
-        seen.append((kind, page))
-        if kind == "parameters":
-            return httpx.Response(404, json={"title": "Not Found"})
-        assert request.headers["Authorization"] == "Bearer t"
-        ids = pages.get((kind, page), [])
-        nxt = f"{request.url.copy_with(params={'page': page + 1, 'size': 2})}"
-        data: list = [{"id": i} for i in ids]
-        if (kind, page) == ("metrics", 0):
-            data += ["junk", {"attributes": {"title": "No id"}}]
-        return httpx.Response(200, json={"data": data, "links": {"next": nxt}})
 
-    refs = fetch_object_refs("https://h/", "t", "ws", transport=httpx.MockTransport(handler))
-    assert {r for r in refs if r.startswith("metrics/")} == {"metrics/a", "metrics/b", "metrics/c"}
-    assert [p for k, p in seen if k == "metrics"] == [0, 1]
-    assert max(p for _, p in seen) == 1
-    assert not any(r.startswith("parameters/") for r in refs)
+def test_fetch_workspace_objects_retries_a_transient_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", "0")
+    sdk = _entities_sdk({("metrics", 0): [{"id": "a", "attributes": {"title": "A"}}]})
+    list_metrics = sdk._client.entities_api.get_all_entities_metrics
+    failures = [ApiException(status=503, reason="Service Unavailable")]
+
+    def flaky(workspace_id: str, **kw: object) -> SimpleNamespace:
+        if failures:
+            raise failures.pop()
+        return list_metrics(workspace_id, **kw)
+
+    sdk._client.entities_api.get_all_entities_metrics = flaky
+    assert "metrics/a" in fetch_workspace_objects(sdk, "ws").refs
+    assert not failures
+
+
+def test_fetch_workspace_objects_raises_a_failure_that_is_not_transient() -> None:
+    sdk = _entities_sdk({("metrics", 0): ApiException(status=401, reason="Unauthorized")})
+    with pytest.raises(ApiException):
+        fetch_workspace_objects(sdk, "ws")
+
+
+# Option checks read only the questions they are about.
+
+
+def test_an_option_check_ignores_a_question_about_something_else() -> None:
+    # Reproduced on ecommerce_demo with gpt-5.6-luna: one questionnaire asking for the measure and the breakdown.
+    card = _questionnaire(
+        ["{metric/total_sales}", "{metric/net_sales}"],
+        ["{attribute/product_category}", "{attribute/product_brand}"],
+    )
+    known = WorkspaceObjects(
+        refs={"metrics/total_sales", "metrics/net_sales", "attributes/product_category", "attributes/product_brand"}
+    )
+    turn_def = _clarifying_turn(
+        expects_clarification=True,
+        clarifying_options_grounded=True,
+        clarifying_option_objects=["metric/total_sales", "metric/net_sales"],
+    )
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=known):
+        result, _ = _run([_card_reply(card), _result(viz=_RETURNS_VIZ)], [turn_def])
+    assert result.turn_results[0].clarification_correct is True
 
 
 @pytest.mark.parametrize(
-    "response",
+    ("questions", "untitled"),
     [
-        httpx.Response(200, text="<html>Sign in</html>"),
-        httpx.Response(200, json=[{"id": "a"}]),
-        httpx.Response(200, json={"errors": ["boom"]}),
+        ([["Net Sales", "Total Sales"], ["Email", "Slack"], ["2. Sales", "1. Overview"]], []),
+        ([["Net Sales", "Gross Margin"], ["Email", "Slack"]], ["Gross Margin"]),
+        ([["Email", "Slack"]], ["Email", "Slack"]),
     ],
-    ids=["not-json", "a-list", "no-data"],
+    ids=["other-questions-left-out", "off-option-in-the-metric-question", "no-question-about-metrics"],
 )
-def test_fetch_object_refs_refuses_a_body_that_is_not_an_entity_page(response: httpx.Response) -> None:
-    def handler(request: httpx.Request) -> httpx.Response:
-        return response
-
-    with pytest.raises(ValueError):
-        fetch_object_refs("https://h/", "t", "ws", transport=httpx.MockTransport(handler))
+def test_a_title_check_reads_the_questions_about_its_kind(questions: list[list[str]], untitled: list[str]) -> None:
+    titles = WorkspaceObjects(titles={"metrics/net_sales": "net sales", "metrics/total_sales": "total sales"})
+    turn_def = _clarifying_turn(expects_clarification=True, clarifying_option_titles="metric")
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=titles):
+        result, _ = _run([_card_reply(_questionnaire(*questions)), _result(viz=_RETURNS_VIZ)], [turn_def])
+    expected = [f"options are not the title of a metric of the workspace: {untitled}"] if untitled else []
+    assert result.turn_results[0].clarification_mismatches == expected
 
 
 # Structured answers and what the agent does after a skip.
@@ -3018,3 +3152,128 @@ def test_only_the_first_questionnaire_gets_the_structured_answers() -> None:
 def test_an_empty_option_spelling_is_rejected() -> None:
     with pytest.raises(ValueError, match="non-empty spelling"):
         ClarifyingPick(option=[])
+
+
+# Plain-text options checked against the titles of one object kind (search: B15).
+
+# Two charts share one title, and the second one's description is another chart's title (ecommerce_demo).
+_NSB_1, _NSB_2, _SALES_GOAL = (
+    "visualizationObjects/643699f3",
+    "visualizationObjects/68ddf963",
+    "visualizationObjects/8a07a527",
+)
+_CHART_TITLES = WorkspaceObjects(
+    refs={_NSB_1, _NSB_2, _SALES_GOAL, "visualizationObjects/700d", "visualizationObjects/8619", "metrics/net_sales"},
+    titles={
+        _NSB_1: "net sales breakdown",
+        _NSB_2: "net sales breakdown",
+        _SALES_GOAL: "sales goal",
+        "visualizationObjects/700d": "net sales",
+        "visualizationObjects/8619": "total sales",
+        "metrics/net_sales": "net sales",
+    },
+    chart_types={_NSB_1: "donut", _NSB_2: "waterfall", _SALES_GOAL: "bullet", "visualizationObjects/700d": "donut"},
+)
+
+
+@pytest.mark.parametrize(
+    ("options", "untitled"),
+    [
+        (["Net Sales Breakdown (1. Overview)", "Net Sales Breakdown (2. Sales)"], []),
+        (["Net Sales Breakdown - by tab", "net  sales"], []),
+        (["Net sales split", "Net Sales by Region chart"], ["Net sales split", "Net Sales by Region chart"]),
+    ],
+)
+def test_plain_options_must_be_titles_of_the_named_kind(options: list[str], untitled: list[str]) -> None:
+    card = {
+        "type": "clarifyingQuestions",
+        "questions": [{"text": "Which chart?", "control": {"options": [{"text": o} for o in options]}}],
+    }
+    turn_def = _clarifying_turn(expects_clarification=True, clarifying_option_titles="visualization")
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=_CHART_TITLES):
+        result, _ = _run([_card_reply(card), _result(viz=_RETURNS_VIZ)], [turn_def])
+    expected = [f"options are not the title of a visualization of the workspace: {untitled}"] if untitled else []
+    assert result.turn_results[0].clarification_mismatches == expected
+
+
+def test_title_check_reads_only_options_without_a_reference_and_only_the_named_kind() -> None:
+    reply = read_first_reply(
+        _result(unhandledParts=[_questionnaire(["{visualization/abc}", "Total Sales", "Gross Profit Trend"])]),
+        asked_in_text=False,
+    )
+    assert reply.plain_options == ["Total Sales", "Gross Profit Trend"]
+    assert untitled_options(reply.plain_options, _CHART_TITLES, "visualization") == ["Gross Profit Trend"]
+    assert untitled_options(["Total Sales"], _CHART_TITLES, "metric") == ["Total Sales"]
+
+
+def test_a_title_kind_needs_an_expected_questionnaire() -> None:
+    with pytest.raises(ValueError, match="need expects_clarification: true"):
+        TurnDefinition(turn_id="t1", message="m", expected_skill="search", clarifying_option_titles="visualization")
+    with pytest.raises(ValueError):
+        TurnDefinition(
+            turn_id="t1",
+            message="m",
+            expected_skill="search",
+            expects_clarification=True,
+            clarifying_option_titles="chart",
+        )
+
+
+_NSB_CANDIDATES = ["visualization/643699f3", "visualization/68ddf963"]
+
+
+@pytest.mark.parametrize(
+    ("options", "off"),
+    [
+        # gen-ai replies to "Describe the Net Sales Breakdown chart." on ecommerce_demo (gpt-5.6-luna).
+        (["{visualization/643699f3}", "{visualization/68ddf963}"], []),
+        (["Net Sales Breakdown", "Sales Goal"], ["Sales Goal"]),
+        (["Net Sales", "Sales Goal"], ["Net Sales", "Sales Goal"]),
+        (["Net Sales Breakdown (1. Overview)", "Net Sales Breakdown (2. Sales)"], []),
+        (["{visualization/8a07a527}", "{visualization/643699f3}"], ["visualization/8a07a527"]),
+        (["Donut chart", "Waterfall chart"], []),
+        (["The donut one", "Bullet chart"], ["Bullet chart"]),
+        (["Net Sales (donut)", "Waterfall chart"], ["Net Sales (donut)"]),
+    ],
+)
+def test_every_option_must_name_one_of_the_candidate_objects(options: list[str], off: list[str]) -> None:
+    card = {
+        "type": "clarifyingQuestions",
+        "questions": [{"text": "Which chart?", "control": {"options": [{"text": o} for o in options]}}],
+    }
+    turn_def = _clarifying_turn(expects_clarification=True, clarifying_option_objects=_NSB_CANDIDATES)
+    with patch("gooddata_eval.core.agentic.conversation.fetch_workspace_objects", return_value=_CHART_TITLES):
+        result, _ = _run([_card_reply(card), _result(viz=_RETURNS_VIZ)], [turn_def])
+    expected = [f"options name none of {_NSB_CANDIDATES}: {off}"] if off else []
+    assert result.turn_results[0].clarification_mismatches == expected
+
+
+def test_a_chart_type_names_a_candidate_only_when_no_other_candidate_has_it() -> None:
+    reply = read_first_reply(
+        _result(unhandledParts=[_questionnaire(["Donut chart", "Waterfall chart"])]), asked_in_text=False
+    )
+    same_type = _CHART_TITLES.model_copy(update={"chart_types": {_NSB_1: "donut", _NSB_2: "donut"}})
+    assert off_candidate_options(reply, same_type, _NSB_CANDIDATES) == ["Donut chart", "Waterfall chart"]
+
+
+def test_candidate_objects_accept_date_references() -> None:
+    turn = TurnDefinition(
+        turn_id="t1",
+        message="m",
+        expected_skill="visualization",
+        expects_clarification=True,
+        clarifying_option_objects=["date/order_date", "date_attribute/ship_date.month"],
+    )
+    assert turn.clarifying_option_objects == ["date/order_date", "date_attribute/ship_date.month"]
+
+
+@pytest.mark.parametrize("objects", [[], ["643699f3"], ["chart/643699f3"]])
+def test_candidate_objects_need_type_id_references(objects: list[str]) -> None:
+    with pytest.raises(ValueError, match="clarifying_option_objects needs type/id references"):
+        TurnDefinition(
+            turn_id="t1",
+            message="m",
+            expected_skill="search",
+            expects_clarification=True,
+            clarifying_option_objects=objects,
+        )

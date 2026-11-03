@@ -31,10 +31,13 @@ from gooddata_eval.core.agentic._clarification import (
     ClarificationForm,
     ClarifyingPick,
     FirstReply,
+    OptionTitleKind,
+    WorkspaceObjects,
     after_answers_mismatches,
     build_clarifying_answers,
     clarification_mismatches,
-    fetch_object_refs,
+    fetch_workspace_objects,
+    is_object_ref,
     read_first_reply,
 )
 from gooddata_eval.core.agentic._conversation_context import (
@@ -125,7 +128,12 @@ class TurnDefinition(BaseModel):
     it must not. Left out, nothing is checked. With true, ``expected_clarification_form`` names how
     it asks (``questionnaire`` = a ``clarifyingQuestions`` part, ``text`` = prose only),
     ``max_clarifying_questions`` caps the questionnaire, and ``clarifying_options_grounded``
-    requires every ``{type/id}`` option to name an object of the workspace.
+    requires every ``{type/id}`` option to name an object of the workspace. ``clarifying_option_titles``
+    names an object kind (``visualization``, ``metric``, ...): every plain-text option must be the title
+    of such an object, alone or followed by context in brackets or after a dash, comma or colon.
+    ``clarifying_option_objects`` lists the ``type/id`` objects the question is about, such as the
+    charts sharing the title the user named: every option must name one of them, by reference, by
+    its title with that context, or by its chart type when no other candidate has that type.
 
     ``clarifying_answers`` answers the questionnaire of the turn's first reply the way the chat panel
     does, with a ``clarifyingAnswers`` message: a question no pick matches is skipped, and an empty
@@ -153,6 +161,8 @@ class TurnDefinition(BaseModel):
     expected_clarification_form: ClarificationForm | None = None
     max_clarifying_questions: int | None = Field(default=None, ge=1)
     clarifying_options_grounded: bool = False
+    clarifying_option_titles: OptionTitleKind | None = None
+    clarifying_option_objects: list[str] | None = None
     clarifying_answers: list[ClarifyingPick] | None = None
     states_skipped_assumption: bool = False
     skipped_questions_not_reasked: bool = False
@@ -164,6 +174,8 @@ class TurnDefinition(BaseModel):
         return (
             self.max_clarifying_questions is not None
             or self.clarifying_options_grounded
+            or self.clarifying_option_titles is not None
+            or self.clarifying_option_objects is not None
             or self.clarifying_answers is not None
         )
 
@@ -176,6 +188,8 @@ class TurnDefinition(BaseModel):
                 ("expected_clarification_form", self.expected_clarification_form),
                 ("max_clarifying_questions", self.max_clarifying_questions),
                 ("clarifying_options_grounded", self.clarifying_options_grounded or None),
+                ("clarifying_option_titles", self.clarifying_option_titles),
+                ("clarifying_option_objects", self.clarifying_option_objects),
                 ("clarifying_answers", self.clarifying_answers),
             )
             if value is not None
@@ -184,8 +198,8 @@ class TurnDefinition(BaseModel):
             raise ValueError(f"{stated} need expects_clarification: true")
         if self.reads_questionnaire and self.expected_clarification_form == "text":
             raise ValueError(
-                "max_clarifying_questions, clarifying_options_grounded and clarifying_answers read a "
-                "questionnaire, not text"
+                "max_clarifying_questions, clarifying_options_grounded, clarifying_option_titles, "
+                "clarifying_option_objects and clarifying_answers read a questionnaire, not text"
             )
         after_answers = [
             name
@@ -196,6 +210,10 @@ class TurnDefinition(BaseModel):
             )
             if value
         ]
+        if self.clarifying_option_objects is not None:
+            bad = [ref for ref in self.clarifying_option_objects if not is_object_ref(ref)]
+            if not self.clarifying_option_objects or bad:
+                raise ValueError(f"clarifying_option_objects needs type/id references, got {bad or 'none'}")
         if after_answers and self.clarifying_answers is None:
             raise ValueError(f"{after_answers} read the turn after its clarifying_answers; set clarifying_answers")
         return self
@@ -767,6 +785,10 @@ class _WorkspaceObjects:
         self.updated_metrics: list[str] = []
         self.alerts: list[str] = []
 
+    def state(self) -> tuple[tuple[str, ...], ...]:
+        """What the conversation has written so far; a change means a workspace listing is out of date."""
+        return tuple(self.metrics), tuple(self.updated_metrics), tuple(self.alerts)
+
     def record(self, tool_call_events: list[ToolCallEvent]) -> None:
         for metric_id, created_new in _metric_creations(tool_call_events):
             if created_new:
@@ -894,6 +916,8 @@ def run_agentic_conversation(
         run_started = time.monotonic()
         conversation_swap_s = 0.0  # fresh_conversation_per_turn's delete/create, which is not the run's work
         workspace_read_s = 0.0  # the option checks' workspace listing, which is not the run's work either
+        # The option checks' listing, with the created.state() it was read at; read again once that changes.
+        workspace_listing: tuple[tuple[tuple[str, ...], ...], WorkspaceObjects] | None = None
         for turn_index, turn in enumerate(fixture.turns):
             if fresh_conversation_per_turn and turn_index > 0:
                 swap_started = time.monotonic()
@@ -1157,22 +1181,37 @@ def run_agentic_conversation(
             clarification_problems: list[str] = []
             clarification_ungraded: str | None = None
             if turn.expects_clarification is not None and first_reply is not None:
-                known_refs: set[str] | None = None
-                # Read on each such turn: an option can name an object an earlier turn created.
-                if turn.clarifying_options_grounded:
-                    read_started = time.monotonic()
-                    try:
-                        known_refs = fetch_object_refs(host, token, workspace_id) or None
-                    except Exception as exc:  # any failure leaves the options unchecked, never passed
-                        clarification_ungraded = f"workspace objects not readable, options left unchecked: {exc}"
-                        print(f"[CLARIFICATION] {clarification_ungraded}")
-                    workspace_read_s += time.monotonic() - read_started
+                checks_options = (
+                    turn.clarifying_options_grounded
+                    or turn.clarifying_option_titles is not None
+                    or turn.clarifying_option_objects is not None
+                )
+                workspace_objects: WorkspaceObjects | None = None
+                # Only a questionnaire with options has anything to check. The listing is kept for the run
+                # and read again once a turn has written to the workspace, since an option can name an
+                # object an earlier turn created.
+                if checks_options and first_reply.has_options:
+                    written = created.state()
+                    if workspace_listing is None or workspace_listing[0] != written:
+                        read_started = time.monotonic()
+                        try:
+                            workspace_listing = (written, fetch_workspace_objects(sdk, workspace_id))
+                        except Exception as exc:  # any failure leaves the options unchecked, never passed
+                            workspace_listing = None
+                            clarification_ungraded = f"workspace objects not readable, options left unchecked: {exc}"
+                            print(f"[CLARIFICATION] {clarification_ungraded}")
+                        workspace_read_s += time.monotonic() - read_started
+                    if workspace_listing is not None:
+                        workspace_objects = workspace_listing[1]
                 clarification_problems = clarification_mismatches(
                     first_reply,
                     expects_clarification=turn.expects_clarification,
                     expected_form=turn.expected_clarification_form,
                     max_questions=turn.max_clarifying_questions,
-                    known_refs=known_refs,
+                    objects=workspace_objects,
+                    grounded=turn.clarifying_options_grounded,
+                    titled_as=turn.clarifying_option_titles,
+                    candidates=turn.clarifying_option_objects,
                     reads_questionnaire=turn.reads_questionnaire,
                 )
                 if turn.clarifying_answers is not None and not answers_sent:
