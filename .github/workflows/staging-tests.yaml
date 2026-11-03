@@ -19,6 +19,9 @@ on:
         required: false
         default: ''
 
+# Default-deny; the job opts in to what it needs.
+permissions: {}
+
 concurrency:
   group: staging-tests
   cancel-in-progress: false
@@ -26,28 +29,59 @@ concurrency:
 jobs:
   staging-tests:
     name: Staging tests
+    # Cheap pre-filter only; the real authorization is the first step below.
+    # author_association is not used as the gate because private org members
+    # show up as CONTRIBUTOR, which would lock out legitimate maintainers.
+    # The label trigger is safe as is: pull_request runs from forks get no
+    # secrets, and adding a label requires triage access.
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && github.event.label.name == 'test-staging') ||
-      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/test-staging'))
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && github.event.issue.state == 'open' && contains(github.event.comment.body, '/test-staging'))
     runs-on:
       group: infra1-runners-arc
       labels: runners-small
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
-      - name: Get PR head SHA (comment trigger)
+      # SECURITY: anyone can comment on a PR in a public repo, and this job runs
+      # PR code with PYTHON_SDK_STG_API_KEY on self-hosted runners. Before any
+      # checkout, require (1) write access for the commenter and (2) a PR head
+      # branch in this repository, not a fork. (2) closes the race where an
+      # outsider pushes new commits to their fork after a maintainer comments:
+      # only users with write access can push to in-repo branches.
+      - name: Authorize comment trigger
         if: github.event_name == 'issue_comment'
         id: pr
-        run: |
-          PR_DATA=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.issue.number }})
-          echo "sha=$(echo "$PR_DATA" | jq -r .head.sha)" >> "$GITHUB_OUTPUT"
-          echo "ref=$(echo "$PR_DATA" | jq -r .head.ref)" >> "$GITHUB_OUTPUT"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+          COMMENTER: ${{ github.event.comment.user.login }}
+        run: |
+          PERMISSION=$(gh api "repos/$REPO/collaborators/$COMMENTER/permission" --jq .permission 2>/dev/null || echo none)
+          case "$PERMISSION" in
+            admin|maintain|write) ;;
+            *)
+              echo "::error::User '$COMMENTER' has '$PERMISSION' permission; write access is required to run staging tests."
+              exit 1
+              ;;
+          esac
+
+          PR_DATA=$(gh api "repos/$REPO/pulls/$PR_NUMBER")
+          HEAD_REPO=$(echo "$PR_DATA" | jq -r .head.repo.full_name)
+          if [ "$HEAD_REPO" != "$REPO" ]; then
+            echo "::error::PR head is in '$HEAD_REPO'. Staging tests only run on branches of $REPO; push the branch there to test it."
+            exit 1
+          fi
+          echo "sha=$(echo "$PR_DATA" | jq -r .head.sha)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
         uses: actions/checkout@v5
         with:
           ref: ${{ steps.pr.outputs.sha || github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
 
       - name: Set up Python
         uses: astral-sh/setup-uv@v10.0.1
@@ -72,9 +106,11 @@ jobs:
           TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
 
       - name: Run staging tests
+        # Inputs are passed through env, not interpolated into the script, so
+        # they cannot inject shell commands.
         run: |
-          make test-staging \
-            TEST_ENVS=${{ github.event.inputs.test_envs || 'py314' }} \
-            ADD_ARGS="${{ github.event.inputs.test_filter && format('-k {0}', github.event.inputs.test_filter) || '' }}"
+          make test-staging TEST_ENVS="$TEST_ENVS" ADD_ARGS="${TEST_FILTER:+-k $TEST_FILTER}"
         env:
           TOKEN: ${{ secrets.PYTHON_SDK_STG_API_KEY }}
+          TEST_ENVS: ${{ github.event.inputs.test_envs || 'py314' }}
+          TEST_FILTER: ${{ github.event.inputs.test_filter }}
