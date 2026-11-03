@@ -68,6 +68,8 @@ _RETRY_CHOICE_RE = re.compile(
 # word, so the apostrophes in "don't ... it's" do not mask the text between them.
 _FORMULA_SPAN_RE = re.compile(r"`+[^`]*`+|\{[^{}]*\}|\"[^\"\n]*\"|(?<!\w)'[^'\n]*'(?!\w)")
 
+# Where one sentence ends and the next starts, for asks_in_text.
+_SENTENCE_END_RE = re.compile(r"(?<=[.?!])\s+")
 # Checked after _CONFIRMATION_RE, so "please confirm" stays a confirmation.
 _REQUEST_RE = re.compile(
     r"\bplease\s+(?:select|choose|pick|specify|provide|tell\s+me|let\s+me\s+know|clarify|share)\b"
@@ -104,6 +106,20 @@ def classify_reply(chat_result: ChatResult, rendered_text: str) -> ReplyKind:
     if "?" in text or _REQUEST_RE.search(text):
         return "question"
     return "no_action"
+
+
+def asks_in_text(chat_result: ChatResult, rendered_text: str) -> bool:
+    """Whether a reply without the expected output asks the user something, read for the clarification checks.
+
+    ``classify_reply`` reads "Did you mean A or B? Please confirm." as a confirmation, which is right for
+    what the simulated user says back. Here it is a question: a sentence that ends in a question mark and
+    is not itself a confirmation phrase asks, whatever confirmation follows it.
+    """
+    kind = classify_reply(chat_result, rendered_text)
+    if kind != "confirmation" or chat_result.alert_proposals:
+        return kind == "question"
+    sentences = _SENTENCE_END_RE.split(rendered_text.strip())
+    return any(s.rstrip().endswith("?") and not _CONFIRMATION_RE.search(s) for s in sentences)
 
 
 @dataclass
