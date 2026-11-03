@@ -1,11 +1,13 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import builtins
 from pathlib import Path
 from typing import Any, Union
 
 from attrs import define, field
 from cattrs import global_converter, structure
+from gooddata_api_client.model.absolute_publisher_document_period import AbsolutePublisherDocumentPeriod
 from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
 from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
 from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
@@ -16,7 +18,13 @@ from gooddata_api_client.model.declarative_filter_context import DeclarativeFilt
 from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_parameter import DeclarativeParameter
+from gooddata_api_client.model.declarative_publisher_document import DeclarativePublisherDocument
+from gooddata_api_client.model.declarative_publisher_document_page_template import (
+    DeclarativePublisherDocumentPageTemplate,
+)
+from gooddata_api_client.model.declarative_publisher_document_template import DeclarativePublisherDocumentTemplate
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+from gooddata_api_client.model.relative_publisher_document_period import RelativePublisherDocumentPeriod
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
@@ -84,6 +92,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     export_definitions: list[CatalogDeclarativeExportDefinition] = field(factory=list)
     memory_items: list[CatalogDeclarativeMemoryItem] = field(factory=list)
     parameters: list[CatalogDeclarativeParameter] = field(factory=list)
+    documents: list[CatalogDeclarativePublisherDocument] = field(factory=list)
+    document_templates: list[CatalogDeclarativePublisherDocumentTemplate] = field(factory=list)
+    page_templates: list[CatalogDeclarativePublisherDocumentPageTemplate] = field(factory=list)
 
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticsLayer]:
@@ -372,3 +383,94 @@ class CatalogDeclarativeParameter(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> type[DeclarativeParameter]:
         return DeclarativeParameter
+
+
+@define(kw_only=True)
+class CatalogAbsolutePublisherDocumentPeriod(Base):
+    """A document period between two calendar dates, both inclusive, given as ISO dates (``2026-01-31``)."""
+
+    type: str = field(default="absolute", init=False)
+    from_: str
+    to: str
+    # Required by the API but single-valued; the generated client defaults it the same way, and the code form omits it.
+    granularity: str = "GDC.time.date"
+
+    @staticmethod
+    def client_class() -> builtins.type[AbsolutePublisherDocumentPeriod]:
+        return AbsolutePublisherDocumentPeriod
+
+
+@define(kw_only=True)
+class CatalogRelativePublisherDocumentPeriod(Base):
+    """A document period in units of ``granularity`` relative to the current one (``from_=-1, to=0``)."""
+
+    type: str = field(default="relative", init=False)
+    from_: int
+    to: int
+    granularity: str
+
+    @staticmethod
+    def client_class() -> builtins.type[RelativePublisherDocumentPeriod]:
+        return RelativePublisherDocumentPeriod
+
+
+CatalogPublisherDocumentPeriod = Union[CatalogAbsolutePublisherDocumentPeriod, CatalogRelativePublisherDocumentPeriod]
+
+
+@define(kw_only=True)
+class CatalogDeclarativePublisherDocument(CatalogAnalyticsBaseMeta):
+    title: str
+    content: dict[str, Any]
+    period: CatalogPublisherDocumentPeriod
+    version: str
+    description: str | None = None
+    tags: list[str] | None = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativePublisherDocument]:
+        return DeclarativePublisherDocument
+
+    @staticmethod
+    def structure_period(v: dict[str, Any], _: Any) -> CatalogPublisherDocumentPeriod:
+        period = dict(v)
+        for key in ("_from", "from"):
+            if key in period:
+                period["from_"] = period.pop(key)
+        period_type = period.get("type")
+        if period_type == "absolute":
+            return structure(period, CatalogAbsolutePublisherDocumentPeriod)
+        if period_type == "relative":
+            return structure(period, CatalogRelativePublisherDocumentPeriod)
+        raise ValueError(f"Unknown publisher document period type {period_type!r}, expected 'absolute' or 'relative'.")
+
+
+global_converter.register_structure_hook(
+    CatalogPublisherDocumentPeriod,
+    CatalogDeclarativePublisherDocument.structure_period,
+)
+
+
+@define(kw_only=True)
+class CatalogDeclarativePublisherDocumentTemplate(CatalogAnalyticsObjectBase):
+    title: str
+    content: dict[str, Any]
+    version: str
+    description: str | None = None
+    tags: list[str] | None = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativePublisherDocumentTemplate]:
+        return DeclarativePublisherDocumentTemplate
+
+
+@define(kw_only=True)
+class CatalogDeclarativePublisherDocumentPageTemplate(CatalogAnalyticsObjectBase):
+    title: str
+    content: dict[str, Any]
+    version: str
+    description: str | None = None
+    tags: list[str] | None = None
+
+    @staticmethod
+    def client_class() -> type[DeclarativePublisherDocumentPageTemplate]:
+        return DeclarativePublisherDocumentPageTemplate
