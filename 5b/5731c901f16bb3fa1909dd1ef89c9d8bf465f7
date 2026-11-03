@@ -1,0 +1,38 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_7a7aacffd04f2e::t_2a1d04aec7403e 92
+  s_7a7aacffd04f2e::t_693768686deb73 70-71
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_7a7aacffd04f2e::t_5c6adfb543b1e0 595,610
+  s_7a7aacffd04f2e::t_9c00bff1cdaf9d 1057
+  s_7a7aacffd04f2e::t_0633ee12e8b2bb 1144
+  s_7a7aacffd04f2e::t_746ff467a1a326 61-71
+  s_7a7aacffd04f2e::t_ff041c814385f9 772
+  s_7a7aacffd04f2e::t_fac7d43a39f2f3 1024
+  s_7a7aacffd04f2e::t_6cb732d66fc617 785
+  s_7a7aacffd04f2e::t_6ce8dd8749926a 971
+  s_7a7aacffd04f2e::t_90d29729b821dc 248-278
+  s_7a7aacffd04f2e::t_52a07acde00f12 1199-1200
+  s_7a7aacffd04f2e::t_4b426b1148a06b 713-741
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_7a7aacffd04f2e::t_bbbd9d58e987ac 892
+  s_7a7aacffd04f2e::t_1f89e7d6e7f9fb 12
+  s_7a7aacffd04f2e::t_4a9de540815142 939
+  s_7a7aacffd04f2e::t_7c1c510433969d 1226-1281,1285-1324
+  s_7a7aacffd04f2e::t_108e2fb76c9318 1282-1284
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5b5731c901f16bb3fa1909dd1ef89c9d8bf465f7",
+  "prompts": {},
+  "sessions": {
+    "s_7a7aacffd04f2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62b190bc-a23d-4cb7-9e5c-b84a0d1f482f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

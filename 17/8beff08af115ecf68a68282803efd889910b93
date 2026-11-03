@@ -1,0 +1,19 @@
+docs/content/en/latest/data/data-source/_index.md
+  s_a78cd47c5b252c::t_b1020d89fc442d 104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "178beff08af115ecf68a68282803efd889910b93",
+  "prompts": {},
+  "sessions": {
+    "s_a78cd47c5b252c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9663ef0d-0743-4ac5-9f14-137567e0a99a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "zdenekornst <ornstz@me.com>"
+    }
+  }
+}
