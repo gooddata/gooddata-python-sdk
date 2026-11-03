@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 import time
 from collections.abc import Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from gooddata_eval.core.agentic._conversation_context import classify_reply
@@ -65,7 +65,9 @@ _LEGACY_SKILL = "report_builder"
 # The copilot's own rule: a document opens with a cover and has at least one content page.
 _COVER_PAGE = "cover"
 _CONTENT_PAGE = "content"
-_EXPECTATION_KEYS = frozenset({"period", "visualizations", "narrative", "expects_clarification"})
+_EXPECTATION_KEYS = frozenset(
+    {"period", "visualizations", "narrative", "expects_clarification", "asked_first_required", "clarification_reply"}
+)
 # Template tokens the document renders at export time ({documentName}, {periodStart}, ...).
 _PLACEHOLDER_RE = re.compile(r"\{\w+\}")
 _SUMMARY_SLOT = "summary"
@@ -299,6 +301,10 @@ def _expects_clarification(expected_output: dict) -> bool:
     return "expects_clarification" in expected_output
 
 
+def _asked_first_required(expected_output: dict) -> bool:
+    return expected_output.get("asked_first_required") is True
+
+
 def _validate_expectation(expected_output: Any) -> None:
     """Reject a fixture the run could not score meaningfully, before the first API call.
 
@@ -336,6 +342,19 @@ def _validate_expectation(expected_output: Any) -> None:
         raise ValueError(
             f"expects_clarification must be true or false, got {expected_output['expects_clarification']!r}"
         )
+    if "asked_first_required" in expected_output:
+        if not isinstance(expected_output["asked_first_required"], bool):
+            raise ValueError(
+                f"asked_first_required must be true or false, got {expected_output['asked_first_required']!r}"
+            )
+        if expected_output["asked_first_required"] and expected_output.get("expects_clarification") is not True:
+            raise ValueError("asked_first_required needs expects_clarification: true")
+    if "clarification_reply" in expected_output:
+        reply = expected_output["clarification_reply"]
+        if not isinstance(reply, str) or not reply.strip():
+            raise ValueError(f"clarification_reply must be a non-empty reply, got {reply!r}")
+        if expected_output.get("expects_clarification") is not True:
+            raise ValueError("clarification_reply needs expects_clarification: true")
 
 
 def _validate_user_context(user_context: dict | None) -> None:
@@ -351,12 +370,16 @@ def _validate_user_context(user_context: dict | None) -> None:
         raise ValueError("user_context.view.report is the Report name; send view.document")
 
 
-def build_simulated_reply(expected_output: dict) -> str:
+def build_simulated_reply(expected_output: dict, *, asked: bool = True) -> str:
     """The reply the simulated user sends when the copilot asks back instead of drafting.
 
     Deterministic and LLM-free, built from what the fixture states, so a failure stays the
     copilot's rather than a simulated user that phrased things differently each run.
+    A fixture's ``clarification_reply`` replaces it after a turn that ``asked``, for a question
+    the charts and period do not answer. The run sends it once, to the first such turn.
     """
+    if asked and isinstance(reply := expected_output.get("clarification_reply"), str):
+        return reply
     segments: list[str] = []
     visualizations = expected_output.get("visualizations") or []
     if visualizations:
@@ -380,6 +403,7 @@ class _Applies:
     period: bool
     charts: bool
     narrative: bool = False
+    asked_first: bool = False
 
 
 @dataclass
@@ -398,6 +422,7 @@ class DocumentEvaluation:
     charts_matched: bool = False
     summaries_present: bool = False
     narrative_judged: bool = False
+    asked_first: bool = False
     judge_reasoning: str = ""
     # Set when the judge returned something unreadable. The run then has no narrative verdict:
     # it is neither published as a 0 nor allowed to pass on the remaining checks.
@@ -438,6 +463,8 @@ class DocumentEvaluation:
             checks["document_summaries_present"] = self.summaries_present
             if self.judge_error is None:
                 checks["document_narrative_judged"] = self.narrative_judged
+        if self.applies.asked_first:
+            checks["document_asked_first"] = self.asked_first
         return checks
 
 
@@ -646,10 +673,12 @@ class DocumentRunResult:
         """Observed but not scored.
 
         Whether the copilot asked before drafting is recorded only when the fixture says it
-        expects a question, and never gates: how much the copilot should ask is a product
-        decision, not something a run can get wrong.
+        expects a question. It gates only when the fixture sets ``asked_first_required``: how
+        much the copilot should ask is a product decision, made per item.
         """
-        return {"document_asked_first": self.asked_first} if self.expects_clarification else {}
+        if not self.expects_clarification or self.evaluation.applies.asked_first:
+            return {}
+        return {"document_asked_first": self.asked_first}
 
     @property
     def judge_error(self) -> str | None:
@@ -711,7 +740,8 @@ def _execute_single_document_run(
     turn_offset = 0.0
     tool_index_offset = 0
     reasoning_index_offset = 0
-    first_turn_asked = False
+    asked_before_draft = False
+    replied = False
 
     run_started = time.monotonic()
     for iteration in range(max_iterations):
@@ -748,8 +778,8 @@ def _execute_single_document_run(
             break
 
         response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
-        if iteration == 0:
-            first_turn_asked = classify_reply(chat_result, response_text) == "question"
+        asked = classify_reply(chat_result, response_text) != "no_action"
+        asked_before_draft = asked_before_draft or asked
         if not response_text and not chat_result.tool_call_events:
             break
         if iteration >= max_iterations - 1:
@@ -758,7 +788,8 @@ def _execute_single_document_run(
             f"[timer] document_skill {conversation_id} GoodData turn {turns} complete after "
             f"{agent_elapsed:.2f}s; answering with the expected charts and period"
         )
-        current_question = build_simulated_reply(expected_output)
+        current_question = build_simulated_reply(expected_output, asked=asked and not replied)
+        replied = replied or asked
 
     evaluation = evaluate_document_response(
         tool_result,
@@ -767,6 +798,11 @@ def _execute_single_document_run(
         skill_activated=_skill_activated(all_tool_call_events, _BUILDER_SKILL),
         legacy_names=legacy_wire_names(all_parts, all_tool_call_events),
     )
+    if _asked_first_required(expected_output):
+        evaluation.applies = replace(evaluation.applies, asked_first=True)
+        evaluation.asked_first = asked_before_draft
+        if tool_result is not None and not asked_before_draft:
+            evaluation.failures.append("the copilot drafted without asking first")
     if judge is not None and _has_narrative(expected_output):
         timings.judge_s += _judge_narrative(evaluation, judge, document_part, question, expected_output["narrative"])
 
@@ -774,7 +810,7 @@ def _execute_single_document_run(
         conversation_id=conversation_id,
         evaluation=evaluation,
         expects_clarification=_expects_clarification(expected_output),
-        asked_first=first_turn_asked,
+        asked_first=asked_before_draft,
         tool_result=tool_result,
         document_part=document_part,
         total_turns=turns,
