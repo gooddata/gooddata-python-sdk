@@ -1,0 +1,23 @@
+# (C) 2026 GoodData Corporation
+# A document template is the pages a document starts from.
+# A document made from it copies them and keeps no reference back,
+# so the document stays as it was made while the template moves on.
+
+type: document_template
+id: tpl_1
+version: "2"
+title: Tpl 1
+description: Base
+tags:
+  - finance
+content:
+  locale: en-US
+  pages:
+    - id: p1
+      kind: content
+      layout:
+        type: row
+        children:
+          - type: text
+            id: t1
+            markdown: Hello
