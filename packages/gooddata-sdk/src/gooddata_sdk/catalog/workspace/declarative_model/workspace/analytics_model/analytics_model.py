@@ -60,6 +60,9 @@ ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
 EXPORT_DEFINITION_DIR = "export_definitions"
 MEMORY_ITEMS_DIR = "memory_items"
 PARAMETERS_DIR = "parameters"
+LAYOUT_DOCUMENTS_DIR = "documents"
+LAYOUT_DOCUMENT_TEMPLATES_DIR = "document_templates"
+LAYOUT_PAGE_TEMPLATES_DIR = "page_templates"
 
 
 @define(kw_only=True)
@@ -166,6 +169,24 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
+    @staticmethod
+    def get_documents_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / LAYOUT_DOCUMENTS_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
+    def get_document_templates_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / LAYOUT_DOCUMENT_TEMPLATES_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
+    def get_page_templates_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / LAYOUT_PAGE_TEMPLATES_DIR
+        create_directory(folder)
+        return folder
+
     def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
@@ -179,6 +200,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         export_definition_folder = self.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = self.get_memory_item_folder(analytics_model_folder)
         parameters_folder = self.get_parameters_folder(analytics_model_folder)
+        documents_folder = self.get_documents_folder(analytics_model_folder)
+        document_templates_folder = self.get_document_templates_folder(analytics_model_folder)
+        page_templates_folder = self.get_page_templates_folder(analytics_model_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder, sort=sort)
@@ -210,6 +234,15 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for parameter in self.parameters:
             parameter.store_to_disk(parameters_folder, sort=sort)
 
+        for document in self.documents:
+            document.store_to_disk(documents_folder, sort=sort)
+
+        for document_template in self.document_templates:
+            document_template.store_to_disk(document_templates_folder, sort=sort)
+
+        for page_template in self.page_templates:
+            page_template.store_to_disk(page_templates_folder, sort=sort)
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
@@ -223,6 +256,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         export_definition_folder = cls.get_export_definition_folder(analytical_dashboards_folder)
         memory_item_folder = cls.get_memory_item_folder(analytics_model_folder)
         parameters_folder = cls.get_parameters_folder(analytics_model_folder)
+        documents_folder = cls.get_documents_folder(analytics_model_folder)
+        document_templates_folder = cls.get_document_templates_folder(analytics_model_folder)
+        page_templates_folder = cls.get_page_templates_folder(analytics_model_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
@@ -234,6 +270,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         export_definition_files = get_sorted_yaml_files(export_definition_folder)
         memory_item_files = get_sorted_yaml_files(memory_item_folder)
         parameter_files = get_sorted_yaml_files(parameters_folder)
+        document_files = get_sorted_yaml_files(documents_folder)
+        document_template_files = get_sorted_yaml_files(document_templates_folder)
+        page_template_files = get_sorted_yaml_files(page_templates_folder)
 
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
@@ -268,6 +307,17 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             CatalogDeclarativeMemoryItem.load_from_disk(memory_item_file) for memory_item_file in memory_item_files
         ]
         parameters = [CatalogDeclarativeParameter.load_from_disk(parameter_file) for parameter_file in parameter_files]
+        documents = [
+            CatalogDeclarativePublisherDocument.load_from_disk(document_file) for document_file in document_files
+        ]
+        document_templates = [
+            CatalogDeclarativePublisherDocumentTemplate.load_from_disk(document_template_file)
+            for document_template_file in document_template_files
+        ]
+        page_templates = [
+            CatalogDeclarativePublisherDocumentPageTemplate.load_from_disk(page_template_file)
+            for page_template_file in page_template_files
+        ]
         return cls(
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
@@ -279,6 +329,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             export_definitions=export_definitions,
             memory_items=memory_items,
             parameters=parameters,
+            documents=documents,
+            document_templates=document_templates,
+            page_templates=page_templates,
         )
 
 

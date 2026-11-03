@@ -8,7 +8,9 @@ The analytics layer carries ``documents``, ``documentTemplates`` and
 
 from __future__ import annotations
 
+import shutil
 from datetime import date
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -26,6 +28,7 @@ from gooddata_sdk import (
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalyticsLayer,
 )
+from gooddata_sdk.utils import write_layout_to_file
 
 _AUTHOR = {
     "createdBy": {"id": "admin", "type": "user"},
@@ -49,6 +52,8 @@ _DOCUMENT = {
 _DOCUMENT_TEMPLATE = {"id": "tpl_1", "title": "Tpl 1", "version": "1", "content": {"locale": "en-US"}}
 _PAGE_TEMPLATE = {"id": "pt_1", "title": "Page 1", "version": "1", "content": {"layout": _TEXT}}
 _LAYER = {"documents": [_DOCUMENT], "documentTemplates": [_DOCUMENT_TEMPLATE], "pageTemplates": [_PAGE_TEMPLATE]}
+_METRIC = {"id": "bmk_w_fraud_charged_back", "title": "BMK", "content": {"format": "#,##0", "maql": "SELECT 1"}}
+_DOCUMENT_FOLDERS = ("documents", "document_templates", "page_templates")
 _ABSOLUTE_PERIOD = {"type": "absolute", "granularity": "GDC.time.date", "from": "2026-01-01", "to": "2026-01-31"}
 _RELATIVE_PERIOD = {"type": "relative", "granularity": "GDC.time.month", "from": -1, "to": 0}
 # The generated client holds an absolute period's dates as `datetime.date`, so its `to_dict` writes them so.
@@ -143,6 +148,33 @@ def test_empty_layer_has_empty_document_lists() -> None:
     assert round_tripped["pageTemplates"] == []
 
 
+@pytest.mark.parametrize("sort", [True, False], ids=["sorted", "unsorted"])
+def test_documents_survive_disk_round_trip(tmp_path: Path, sort: bool) -> None:
+    layer = CatalogDeclarativeAnalyticsLayer.from_dict(_LAYER)
+
+    layer.store_to_disk(tmp_path, sort=sort)
+
+    analytics_model_folder = tmp_path / "analytics_model"
+    assert (analytics_model_folder / "documents" / "doc_1.yaml").is_file()
+    assert (analytics_model_folder / "document_templates" / "tpl_1.yaml").is_file()
+    assert (analytics_model_folder / "page_templates" / "pt_1.yaml").is_file()
+    round_tripped = _round_trip(CatalogDeclarativeAnalyticsLayer.load_from_disk(tmp_path))
+    assert {key: round_tripped[key] for key in _LAYER} == _LAYER
+
+
+def test_load_without_document_folders(tmp_path: Path) -> None:
+    CatalogDeclarativeAnalyticsLayer.from_dict({"metrics": [_METRIC]}).store_to_disk(tmp_path)
+    for folder in _DOCUMENT_FOLDERS:
+        shutil.rmtree(tmp_path / "analytics_model" / folder, ignore_errors=True)
+
+    reloaded = CatalogDeclarativeAnalyticsLayer.load_from_disk(tmp_path)
+
+    assert reloaded.documents == []
+    assert reloaded.document_templates == []
+    assert reloaded.page_templates == []
+    assert _round_trip(reloaded)["metrics"] == [_METRIC]
+
+
 def _document_with(period: dict[str, Any]) -> dict[str, Any]:
     return {**{key: value for key, value in _DOCUMENT.items() if key not in _AUTHOR}, "period": period}
 
@@ -214,3 +246,19 @@ def test_nested_period_write_uses_api_names(
 def test_unknown_period_type_raises() -> None:
     with pytest.raises(ValueError, match="rolling"):
         structure({"type": "rolling", "from": -1, "to": 0}, CatalogPublisherDocumentPeriod)
+
+
+def test_load_document_yaml_without_author_fields(tmp_path: Path) -> None:
+    document = {key: value for key, value in _DOCUMENT.items() if key not in _AUTHOR}
+    documents_folder = tmp_path / "analytics_model" / "documents"
+    documents_folder.mkdir(parents=True)
+    write_layout_to_file(documents_folder / "doc_1.yaml", document)
+
+    reloaded = CatalogDeclarativeAnalyticsLayer.load_from_disk(tmp_path)
+
+    assert len(reloaded.documents) == 1
+    loaded = reloaded.documents[0]
+    assert loaded.created_by is None
+    assert loaded.created_at is None
+    assert loaded.modified_by is None
+    assert loaded.modified_at is None
