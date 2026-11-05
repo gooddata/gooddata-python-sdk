@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_2c6e0483cddd97::t_063c2c827f989a 560-570
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "961115e6d7f45c00186ad24567d75f9c449ff430",
+  "prompts": {},
+  "sessions": {
+    "s_2c6e0483cddd97": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6631f3d2-3216-4457-b111-4156d298d139",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}

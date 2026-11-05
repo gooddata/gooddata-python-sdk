@@ -1,0 +1,31 @@
+schemas/gooddata-api-client.json
+  s_ed564d03c96d0e::t_4a0647399f5d6e 8521,9440,31174,38410,38440,39321,39344
+schemas/gooddata-metadata-client.json
+  s_ed564d03c96d0e::t_4a0647399f5d6e 5994,6897,26804,30848,30878,31225,31248
+gooddata-api-client/gooddata_api_client/model/declarative_single_workspace_permission.py
+  s_ed564d03c96d0e::t_d809ddfab76e59 75
+gooddata-api-client/gooddata_api_client/model/declarative_workspace_hierarchy_permission.py
+  s_ed564d03c96d0e::t_0b27d87568d51b 75
+gooddata-api-client/gooddata_api_client/model/json_api_workspace_out_meta.py
+  s_ed564d03c96d0e::t_6a478bb1582eed 79
+gooddata-api-client/gooddata_api_client/model/user_management_workspace_permission_assignment.py
+  s_ed564d03c96d0e::t_0dcb4cd5b0a5ba 71,88
+gooddata-api-client/gooddata_api_client/model/workspace_permission_assignment.py
+  s_ed564d03c96d0e::t_f47caf16c02920 75,92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3c2baff9790ffea1a2ca8ea89505d6d2856b80ea",
+  "prompts": {},
+  "sessions": {
+    "s_ed564d03c96d0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e615e63-21a6-45a9-8517-4fffd71e2a88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vojtěch Tollar <vojtech.tollar@gooddata.com>"
+    }
+  }
+}

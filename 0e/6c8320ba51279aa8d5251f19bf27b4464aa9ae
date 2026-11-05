@@ -1,0 +1,33 @@
+schemas/gooddata-metadata-client.json
+  s_7340812602f53b::t_84c6e67f8d70ec 5994,6896,26802,30845,30874,31220,31242
+  s_7340812602f53b::t_5d55988bcb1844 5995,6897,26803,30846,30875,31221,31243
+  s_7340812602f53b::t_c1bd23a81410da 52992,52994
+schemas/gooddata-api-client.json
+  s_7340812602f53b::t_5d55988bcb1844 8521-8522,9439-9440,31172-31173,38407-38408,38436-38437,39316-39317,39338-39339,66788,66790
+gooddata-api-client/gooddata_api_client/model/declarative_single_workspace_permission.py
+  s_7340812602f53b::t_cbb2c8ae629390 75-76
+gooddata-api-client/gooddata_api_client/model/declarative_workspace_hierarchy_permission.py
+  s_7340812602f53b::t_01bc02a4f50738 75-76
+gooddata-api-client/gooddata_api_client/model/json_api_workspace_out_meta.py
+  s_7340812602f53b::t_1b14e63d0011f3 79-80
+gooddata-api-client/gooddata_api_client/model/user_management_workspace_permission_assignment.py
+  s_7340812602f53b::t_fc0a640dd8386b 71-72,87-88
+gooddata-api-client/gooddata_api_client/model/workspace_permission_assignment.py
+  s_7340812602f53b::t_b24a72e5c42e8b 75-76,91-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "0e6c8320ba51279aa8d5251f19bf27b4464aa9ae",
+  "prompts": {},
+  "sessions": {
+    "s_7340812602f53b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62eb0b77-b48f-4eb6-8ce0-0b8a83d98b62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Petr Ješke <petr.jeske@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_b4ef09eebe7513::t_3081c80a12ea1a 70-71,78,87-88,90,92-93,134,212,219,225,231,237,243,253,261,264,500,531-533,629-630,635,746
+  s_b4ef09eebe7513::t_6062fd2772143c 40,505,510
+  s_b4ef09eebe7513::t_e1f9fbd4253785 22,193,296-376,695
+  s_b4ef09eebe7513::t_5fc4ffc035f83c 255-257
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_b4ef09eebe7513::t_5959eee05a8f55 56
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_b4ef09eebe7513::t_5959eee05a8f55 52-61,66,92-118,251-263,306,341,358,362,377,381-384,388-401,435,456,513,613,636,668,710-711,714,913
+packages/gooddata-eval/tests/test_chat_render.py
+  s_b4ef09eebe7513::t_5fc4ffc035f83c 55,57-58,60,62,70-72,88-89,92,115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "780ea9557f9d0ab7adb951e059dbd9479795c409",
+  "prompts": {},
+  "sessions": {
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

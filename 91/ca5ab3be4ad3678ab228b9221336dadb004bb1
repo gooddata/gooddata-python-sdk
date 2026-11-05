@@ -1,0 +1,24 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_b4ef09eebe7513::t_50b11f2effde66 915-919
+  s_b4ef09eebe7513::t_96959c69761a7e 60-61,652-654,798-799
+  s_b4ef09eebe7513::t_5bf9d4285f2d09 99-101,104-105
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_b4ef09eebe7513::t_bcac986c0e59d8 377-400
+  s_b4ef09eebe7513::t_66fab942e2249f 338-347
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "91ca5ab3be4ad3678ab228b9221336dadb004bb1",
+  "prompts": {},
+  "sessions": {
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/summary.py
+  s_26352a90edbfcb::t_ba06dcb0dd0a62 30-31,78-87
+packages/gooddata-eval/AGENTS.md
+  s_26352a90edbfcb::t_f94be74953e921 30,63-64
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/_rubric.py
+  s_26352a90edbfcb::t_0d77e5f36c5dc1 1-94
+packages/gooddata-eval/scripts/calibrate_takeaway_judge.py
+  s_26352a90edbfcb::t_0a785fe019281f 1-75
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_26352a90edbfcb::t_9943c9cb516bc9 23-24,38,45,72
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
+  s_26352a90edbfcb::t_3c2e743faf45c5 204,223
+  s_26352a90edbfcb::t_7ffe3ac69f2510 1-203,1-94,98,100-119,132-158,160-186,194-222
+  h_123280b1c5e53d 95-97,99,120-131,159,187-193
+packages/gooddata-eval/tests/test_takeaway_evaluator.py
+  s_26352a90edbfcb::t_5fa33835fef13a 1-336,1-10,12-93,120-187,198-372
+  h_123280b1c5e53d 11,94-119,188-197,373-383
+packages/gooddata-eval/Makefile
+  s_26352a90edbfcb::t_83d57a3a89f877 3-6
+packages/gooddata-eval/tests/test_runner.py
+  s_26352a90edbfcb::t_5b4b07400bae7b 126
+packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
+  s_26352a90edbfcb::t_1200ba9480bada 1-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bc7174a8380ba28a74d97bb111900258e7876d6a",
+  "prompts": {},
+  "humans": {
+    "h_123280b1c5e53d": {
+      "author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  },
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_9581792d57de34::t_bf253336e7e771 472-504
+packages/gooddata-eval/tests/test_visualization_evaluator.py
+  s_9581792d57de34::t_bf253336e7e771 323-350
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  s_9581792d57de34::t_a878aaabcfa044 115
+  s_9581792d57de34::t_e46d8fc1e2d9e6 92-98,106-107,109,119-120,131-134,136,139-140,143,147,172
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_9581792d57de34::t_e46d8fc1e2d9e6 270-272
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5a777e3a02fbefab36428990093851bcc798fdb1",
+  "prompts": {},
+  "sessions": {
+    "s_9581792d57de34": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4fa57ff-9ade-42a8-a203-efd5eb66e000",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/item_scope.py
+  s_328fe1dadf98b7::t_380a4ed99f53dc 48-56,72-73
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_trace_linker.py
+  s_328fe1dadf98b7::t_380a4ed99f53dc 24-30,182-183
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d4c138dfee8a8ea01578cd0cd6b14bd8bf9740e2",
+  "prompts": {},
+  "sessions": {
+    "s_328fe1dadf98b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e92dd-9274-4415-a3ca-cbd1592d1c5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+packages/gooddata-pandas/AGENTS.md
+  s_ed564d03c96d0e::t_cc0a217cfc3c2c 52-53,67
+packages/gooddata-sdk/AGENTS.md
+  s_ed564d03c96d0e::t_7c90d59d657acb 6
+  s_ed564d03c96d0e::t_ef179f56c5c021 9-11
+  s_ed564d03c96d0e::t_e6b13f3096fd9f 18,50
+  s_ed564d03c96d0e::t_d6e7008209011e 7-8
+packages/gooddata-sdk/src/gooddata_sdk/compute/service.py
+  s_ed564d03c96d0e::t_4ee9464ebb0b9c 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a48fd0396b741c902ea79c0461df1e5e07d0becc",
+  "prompts": {},
+  "sessions": {
+    "s_ed564d03c96d0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e615e63-21a6-45a9-8517-4fffd71e2a88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vojtěch Tollar <vojtech.tollar@gooddata.com>"
+    }
+  }
+}

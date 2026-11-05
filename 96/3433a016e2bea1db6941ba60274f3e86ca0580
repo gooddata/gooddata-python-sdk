@@ -1,0 +1,30 @@
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_b7df762a0d3a7b::t_83cbea194e233c 1467
+  s_b7df762a0d3a7b::t_cb43634549e447 1471-1480,2044,2061,2069
+  s_b7df762a0d3a7b::t_d7e86fdc0dfcc2 1468-1469
+  s_b7df762a0d3a7b::t_379f2bc3cbf34e 2062-2068
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_conversation_context.py
+  s_b7df762a0d3a7b::t_c254c95cdb4408 42
+  s_b7df762a0d3a7b::t_947271b0fd5a28 54-60,62,66
+  s_b7df762a0d3a7b::t_6bdabfa4753d1f 67-69
+  s_b7df762a0d3a7b::t_727ca317802cbe 267-269
+  s_b7df762a0d3a7b::t_0743bf60890f70 63
+  s_b7df762a0d3a7b::t_ec16ca2b32e458 270-273,278
+  s_b7df762a0d3a7b::t_c3e4fad5a20269 275
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "963433a016e2bea1db6941ba60274f3e86ca0580",
+  "prompts": {},
+  "sessions": {
+    "s_b7df762a0d3a7b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0ce899c1-e71a-40fd-a086-4803d6874738",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
