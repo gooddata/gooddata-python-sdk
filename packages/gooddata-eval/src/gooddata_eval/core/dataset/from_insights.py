@@ -20,7 +20,7 @@ import os
 import re
 import sys
 import unicodedata
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from gooddata_sdk.catalog.workspace.aac import declarative_visualization_to_aac
@@ -729,6 +729,13 @@ def _validation_errors(envelope: dict) -> str | None:
     return None
 
 
+def _snapshot_json_default(value: object) -> str:
+    """JSON hook for the snapshot: dates and datetimes become ISO strings, anything else is refused."""
+    if isinstance(value, date):
+        return value.isoformat()
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
 def generate(args, sdk_factory=None) -> int:
     """Run the whole generation pipeline. Returns a process exit code."""
     if args.snapshot_in:
@@ -738,7 +745,7 @@ def generate(args, sdk_factory=None) -> int:
             raise ValueError("a live run needs an SDK; pass --snapshot-in to replay a saved model instead")
         snapshot = fetch_snapshot(sdk_factory(), args.workspace)
     if args.snapshot_out:
-        Path(args.snapshot_out).write_text(json.dumps(snapshot, indent=2))
+        Path(args.snapshot_out).write_text(json.dumps(snapshot, indent=2, default=_snapshot_json_default))
 
     analytics = snapshot["analytics"]
     display_names = snapshot.get("display_names") or {}
