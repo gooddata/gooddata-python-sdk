@@ -1422,3 +1422,49 @@ def test_parse_sse_lines_adhoc_fallback_keeps_its_id_over_one_in_the_arguments()
     result = parse_sse_lines(lines)
     assert result.created_visualizations is not None
     assert result.created_visualizations.objects[0].id == "adhoc-visualization-not-persisted"
+
+
+def test_parse_sse_lines_keeps_the_item_id_of_the_questionnaire():
+    card = {"type": "clarifyingQuestions", "questions": [{"text": "Which one?", "control": {"options": []}}]}
+    lines = [
+        'data: {"item": {"itemId": "i-text", "role": "assistant", "content": '
+        '{"type": "multipart", "parts": [{"type": "text", "text": "Two measures."}]}}}',
+        "data: "
+        + json.dumps(
+            {
+                "item": {
+                    "itemId": "i-card",
+                    "role": "assistant",
+                    "content": {"type": "multipart", "parts": [{"type": "text", "text": "Pick one."}, card]},
+                }
+            }
+        ),
+    ]
+    result = parse_sse_lines(lines)
+    assert result.clarifying_questions_item_id == "i-card"
+    assert result.unhandled_parts == [{**card, "itemId": "i-card"}]
+
+
+def test_parse_sse_lines_has_no_questionnaire_item_without_one():
+    assert parse_sse_lines(_OK_SSE.decode().splitlines()).clarifying_questions_item_id is None
+
+
+def test_send_clarifying_answers_sends_the_chat_panel_shape():
+    captured = []
+    answers = [
+        {
+            "questionIndex": 0,
+            "questionText": "Which one?",
+            "answer": {"type": "singleChoice", "optionIndex": 1, "optionText": "{metric/net_sales}"},
+        }
+    ]
+    _capture_body_client(captured, reasoning_effort="LOW").send_clarifying_answers("conv", "i-card", answers)
+    assert captured == [
+        {
+            "item": {
+                "role": "user",
+                "content": {"type": "clarifyingAnswers", "questionsItemId": "i-card", "answers": answers},
+            },
+            "options": {"reasoningEffort": "LOW"},
+        }
+    ]

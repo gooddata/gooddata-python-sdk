@@ -351,6 +351,9 @@ class ChatResult(BaseModel):
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
     search_results: list[dict] = Field(default_factory=list, alias="searchResults")
     unhandled_parts: list[dict] = Field(default_factory=list, alias="unhandledParts")
+    # The itemId of the assistant item holding a clarifyingQuestions part: a clarifyingAnswers
+    # message names it as questionsItemId.
+    clarifying_questions_item_id: str | None = Field(default=None, alias="clarifyingQuestionsItemId")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
