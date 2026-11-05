@@ -1,7 +1,7 @@
 packages/gooddata-sdk/pyproject.toml
   s_666cb82b8b0068::t_d9bf91d893746b 37
 uv.lock
-  s_666cb82b8b0068::t_b24e98d84d7b3f 1006,1014,1472
+  s_666cb82b8b0068::t_b24e98d84d7b3f 1006,1014,1044,1052,1472,1510
 ---
 {
   "schema_version": "authorship/3.0.0",
