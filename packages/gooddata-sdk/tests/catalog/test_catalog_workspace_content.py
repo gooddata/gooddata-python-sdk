@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import attrs
+from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_sdk import (
     CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogDeclarativeAnalytics,
@@ -21,6 +22,7 @@ from gooddata_sdk import (
     CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
+    GoodDataApiClient,
     GoodDataSdk,
     ObjId,
 )
@@ -235,6 +237,45 @@ def test_put_declarative_analytics_model(test_config):
         analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
         assert deep_eq(analytics_model_e, analytics_model_o)
         assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
+    finally:
+        safe_delete(_refresh_workspaces, sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_documents_store_load_and_put.yaml"))
+def test_documents_survive_store_load_and_put(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    layout_api = GoodDataApiClient(host=test_config["host"], token=test_config["token"]).layout_api
+    identifier = test_documents_survive_store_load_and_put.__name__
+    path = _current_dir / "store" / "documents"
+    recreate_directory(path)
+    # The seed's createdAt is the cassette normalizer's canonical value, so a replayed read returns
+    # the same author fields a recording run sees.
+    with open(_current_dir / "expected" / "declarative_analytics_model_documents.json") as f:
+        seed = json.load(f)
+    seed_document = seed["analytics"]["documents"][0]
+
+    try:
+        _set_up_workspace_ldm(sdk, test_config["workspace"], identifier)
+        layout_api.set_analytics_model(identifier, DeclarativeAnalytics.from_dict(seed, camel_case=True))
+        analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
+
+        sdk.catalog_workspace_content.store_declarative_analytics_model(identifier, path)
+        loaded = sdk.catalog_workspace_content.load_declarative_analytics_model(identifier, path)
+        sdk.catalog_workspace_content.put_declarative_analytics_model(identifier, loaded)
+
+        analytics_raw = layout_api.get_analytics_model(identifier).analytics
+        assert len(analytics_raw.get("documents", [])) == 1
+        assert len(analytics_raw.get("document_templates", [])) == 1
+        assert len(analytics_raw.get("page_templates", [])) == 1
+
+        analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
+        assert deep_eq(analytics_model_e, analytics_model_o)
+        assert deep_eq(analytics_model_e.to_api().to_dict(), analytics_model_o.to_api().to_dict())
+        document = analytics_model_o.analytics.documents[0]
+        assert document.created_by.id == seed_document["createdBy"]["id"]
+        assert document.created_at == seed_document["createdAt"]
+        assert document.modified_by.id == seed_document["modifiedBy"]["id"]
+        assert document.modified_at == seed_document["modifiedAt"]
     finally:
         safe_delete(_refresh_workspaces, sdk)
 

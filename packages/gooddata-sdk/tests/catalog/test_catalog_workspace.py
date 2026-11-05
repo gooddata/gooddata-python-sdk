@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 from xml.etree import ElementTree as ET
 
 import yaml
@@ -46,6 +47,18 @@ gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "workspaces"
+
+# The backend omits these analytics lists from a layout response when they are empty, while the SDK model
+# always emits them.
+_ANALYTICS_LISTS_OMITTED_WHEN_EMPTY = ("documents", "documentTemplates", "pageTemplates")
+
+
+def _fill_lists_omitted_when_empty(workspace_model: dict[str, Any]) -> dict[str, Any]:
+    analytics = workspace_model.get("analytics")
+    if analytics is not None:
+        for key in _ANALYTICS_LISTS_OMITTED_WHEN_EMPTY:
+            analytics.setdefault(key, [])
+    return workspace_model
 
 
 def _empty_workspaces(sdk: GoodDataSdk) -> None:
@@ -186,9 +199,10 @@ def test_declarative_workspaces(test_config):
     assert len(workspaces_o.workspaces) == 3
     assert len(workspaces_o.workspace_data_filters) == 2
     assert [workspace.id for workspace in workspaces_o.workspaces] == ["demo", "demo_west", "demo_west_california"]
-    assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout(exclude=["ACTIVITY_INFO"]).to_dict(
-        camel_case=True
-    )
+    workspaces_raw = layout_api.get_workspaces_layout(exclude=["ACTIVITY_INFO"]).to_dict(camel_case=True)
+    for workspace_raw in workspaces_raw["workspaces"]:
+        _fill_lists_omitted_when_empty(workspace_raw["model"])
+    assert workspaces_o.to_dict(camel_case=True) == workspaces_raw
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.yaml"))
@@ -593,9 +607,11 @@ def test_get_declarative_workspace(test_config):
     assert len(workspace.analytics.filter_contexts) == 2
     assert len(workspace.analytics.metrics) == 24
     assert len(workspace.analytics.visualization_objects) == 15
-    assert workspace.to_dict(camel_case=True) == layout_api.get_workspace_layout(
-        workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
-    ).to_dict(camel_case=True)
+    assert workspace.to_dict(camel_case=True) == _fill_lists_omitted_when_empty(
+        layout_api.get_workspace_layout(workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]).to_dict(
+            camel_case=True
+        )
+    )
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace.yaml"))
