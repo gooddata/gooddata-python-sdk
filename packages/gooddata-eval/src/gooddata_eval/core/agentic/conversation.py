@@ -27,13 +27,28 @@ from typing import ClassVar, Literal
 from gooddata_sdk import GoodDataSdk
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
+from gooddata_eval.core.agentic._clarification import (
+    ClarificationForm,
+    ClarifyingPick,
+    FirstReply,
+    OptionTitleKind,
+    WorkspaceObjects,
+    after_answers_mismatches,
+    build_clarifying_answers,
+    clarification_mismatches,
+    fetch_workspace_objects,
+    is_object_ref,
+    read_first_reply,
+)
 from gooddata_eval.core.agentic._conversation_context import (
     CONFIRMATION_REPLY,
     NUDGE_MESSAGE,
     ClarificationJudge,
     TranscriptEntry,
+    asks_in_text,
     classify_reply,
     clip,
+    has_structured_question,
     judge_prompt,
     render_transcript,
     reply_from_facts,
@@ -108,6 +123,27 @@ class TurnDefinition(BaseModel):
     and setting it to null clears it. A turn that leaves it out keeps the current one. Its
     clarification replies carry it too, since gen-ai treats a message without a context as
     cleared.
+
+    ``expects_clarification`` grades the turn's first reply: true means it must ask, false means
+    it must not. Left out, nothing is checked. With true, ``expected_clarification_form`` names how
+    it asks (``questionnaire`` = a ``clarifyingQuestions`` part, ``text`` = prose only),
+    ``max_clarifying_questions`` caps the questionnaire, and ``clarifying_options_grounded``
+    requires every ``{type/id}`` option to name an object of the workspace. ``clarifying_option_titles``
+    names an object kind (``visualization``, ``metric``, ...): every plain-text option must be the title
+    of such an object, alone or followed by context in brackets or after a dash, comma or colon.
+    ``clarifying_option_objects`` lists the ``type/id`` objects the question is about, such as the
+    charts sharing the title the user named: every option must name one of them, by reference, by
+    its title with that context, or by its chart type when no other candidate has that type.
+
+    ``clarifying_answers`` answers the questionnaire of the turn's first reply the way the chat panel
+    does, with a ``clarifyingAnswers`` message: a question no pick matches is skipped, and an empty
+    list skips them all. Every other question, a later questionnaire included, gets ``set_answers``
+    text, so a follow-up confirmation can be answered. With it,
+    ``states_skipped_assumption`` requires a reply after the answers to name an option of each skipped
+    question (a mention, which stands in for the stated assumption),
+    ``skipped_questions_not_reasked`` forbids a later questionnaire asking one again, and
+    ``expects_confirmation_after_answers`` requires the agent to stop after each ``clarifyingAnswers``
+    message rather than act on it in the same reply: a skip is not an approval.
     """
 
     turn_id: str
@@ -121,6 +157,66 @@ class TurnDefinition(BaseModel):
     depends_on: list[str] = Field(default_factory=list)
     set_answers: list[str] = Field(default_factory=list)
     user_context: dict | None = None
+    expects_clarification: bool | None = None
+    expected_clarification_form: ClarificationForm | None = None
+    max_clarifying_questions: int | None = Field(default=None, ge=1)
+    clarifying_options_grounded: bool = False
+    clarifying_option_titles: OptionTitleKind | None = None
+    clarifying_option_objects: list[str] | None = None
+    clarifying_answers: list[ClarifyingPick] | None = None
+    states_skipped_assumption: bool = False
+    skipped_questions_not_reasked: bool = False
+    expects_confirmation_after_answers: bool = False
+
+    @property
+    def reads_questionnaire(self) -> bool:
+        """Whether a clarification key of the turn reads a ``clarifyingQuestions`` part, so prose cannot satisfy it."""
+        return (
+            self.max_clarifying_questions is not None
+            or self.clarifying_options_grounded
+            or self.clarifying_option_titles is not None
+            or self.clarifying_option_objects is not None
+            or self.clarifying_answers is not None
+        )
+
+    @model_validator(mode="after")
+    def _clarification_keys_need_an_expected_question(self) -> TurnDefinition:
+        # Each of these only reads a question, so without one it would pass vacuously.
+        stated = [
+            name
+            for name, value in (
+                ("expected_clarification_form", self.expected_clarification_form),
+                ("max_clarifying_questions", self.max_clarifying_questions),
+                ("clarifying_options_grounded", self.clarifying_options_grounded or None),
+                ("clarifying_option_titles", self.clarifying_option_titles),
+                ("clarifying_option_objects", self.clarifying_option_objects),
+                ("clarifying_answers", self.clarifying_answers),
+            )
+            if value is not None
+        ]
+        if stated and self.expects_clarification is not True:
+            raise ValueError(f"{stated} need expects_clarification: true")
+        if self.reads_questionnaire and self.expected_clarification_form == "text":
+            raise ValueError(
+                "max_clarifying_questions, clarifying_options_grounded, clarifying_option_titles, "
+                "clarifying_option_objects and clarifying_answers read a questionnaire, not text"
+            )
+        after_answers = [
+            name
+            for name, value in (
+                ("states_skipped_assumption", self.states_skipped_assumption),
+                ("skipped_questions_not_reasked", self.skipped_questions_not_reasked),
+                ("expects_confirmation_after_answers", self.expects_confirmation_after_answers),
+            )
+            if value
+        ]
+        if self.clarifying_option_objects is not None:
+            bad = [ref for ref in self.clarifying_option_objects if not is_object_ref(ref)]
+            if not self.clarifying_option_objects or bad:
+                raise ValueError(f"clarifying_option_objects needs type/id references, got {bad or 'none'}")
+        if after_answers and self.clarifying_answers is None:
+            raise ValueError(f"{after_answers} read the turn after its clarifying_answers; set clarifying_answers")
+        return self
 
 
 class ConversationFixture(BaseModel):
@@ -196,6 +292,11 @@ class TurnResult(BaseModel):
     mismatches: list[str] = Field(default_factory=list)
     clarifications: list[ClarificationRecord] = Field(default_factory=list)
     depends_on: list[str] = Field(default_factory=list)
+    # None when the fixture states no expects_clarification, or the check could not run.
+    clarification_correct: bool | None = None
+    clarification_mismatches: list[str] = Field(default_factory=list)
+    # Why a stated clarification check could not run, so an ungraded turn does not read as a pass.
+    clarification_ungraded: str | None = None
 
     @property
     def skill_success(self) -> bool:
@@ -211,7 +312,13 @@ class TurnResult(BaseModel):
 
     @property
     def context_success(self) -> bool:
-        return self.skill_success and self.output_correct is not False and not self.lost_context and not self.stalled
+        return (
+            self.skill_success
+            and self.output_correct is not False
+            and self.clarification_correct is not False
+            and not self.lost_context
+            and not self.stalled
+        )
 
     def failure_reasons(self) -> list[str]:
         """Why ``context_success`` is False, in reading order; empty when it is True."""
@@ -224,6 +331,8 @@ class TurnResult(BaseModel):
             reasons.append(f"skill {self.expected_skill!r} not active")
         if self.output_correct is False:
             reasons.extend(self.mismatches or ["output does not match the expected output"])
+        if self.clarification_correct is False:
+            reasons.extend(self.clarification_mismatches)
         if self.lost_context:
             reasons.append("asked for information the conversation already established")
         if self.stalled:
@@ -258,6 +367,13 @@ class TurnResult(BaseModel):
         out = self.model_dump(include=self._DETAIL_FIELDS)
         out["context_success"] = self.context_success
         out["failure_reasons"] = self.failure_reasons()
+        # Only when the fixture states the check, so an item without one reports what it always did.
+        if self.clarification_correct is not None:
+            out["clarification_correct"] = self.clarification_correct
+            out["clarification_mismatches"] = list(self.clarification_mismatches)
+        elif self.clarification_ungraded is not None:
+            out["clarification_correct"] = None
+            out["clarification_ungraded"] = self.clarification_ungraded
         return out
 
 
@@ -669,6 +785,10 @@ class _WorkspaceObjects:
         self.updated_metrics: list[str] = []
         self.alerts: list[str] = []
 
+    def state(self) -> tuple[tuple[str, ...], ...]:
+        """What the conversation has written so far; a change means a workspace listing is out of date."""
+        return tuple(self.metrics), tuple(self.updated_metrics), tuple(self.alerts)
+
     def record(self, tool_call_events: list[ToolCallEvent]) -> None:
         for metric_id, created_new in _metric_creations(tool_call_events):
             if created_new:
@@ -733,8 +853,17 @@ def run_agentic_conversation(
 
     ``user_context`` is the context attached when the conversation starts; a turn's own
     ``user_context`` replaces it from that turn on.
+
+    A fixture with ``expects_clarification`` needs ``context`` mode: legacy mode neither sends
+    ``clarifying_answers`` nor lets the clarification checks fail the item, so it raises ``ValueError``.
     """
     resolved_mode = resolve_conversation_mode(mode)
+    graded = [t.turn_id for t in fixture.turns if t.expects_clarification is not None]
+    if resolved_mode == "legacy" and graded:
+        raise ValueError(
+            f"turns {graded} set expects_clarification, which only context mode grades; "
+            f"pass mode='context' or set {CONVERSATION_MODE_ENV_VAR}=context"
+        )
     if fresh_conversation_per_turn and initial_conversation_id is not None:
         raise ValueError("fresh_conversation_per_turn needs conversations this run creates itself")
     judge = clarification_judge if clarification_judge is not None else ClarificationJudge()
@@ -786,6 +915,9 @@ def run_agentic_conversation(
 
         run_started = time.monotonic()
         conversation_swap_s = 0.0  # fresh_conversation_per_turn's delete/create, which is not the run's work
+        workspace_read_s = 0.0  # the option checks' workspace listing, which is not the run's work either
+        # The option checks' listing, with the created.state() it was read at; read again once that changes.
+        workspace_listing: tuple[tuple[tuple[str, ...], ...], WorkspaceObjects] | None = None
         for turn_index, turn in enumerate(fixture.turns):
             if fresh_conversation_per_turn and turn_index > 0:
                 swap_started = time.monotonic()
@@ -842,6 +974,15 @@ def run_agentic_conversation(
             final_result: ChatResult | None = None
             records: list[ClarificationRecord] = []
             answers_left = list(turn.set_answers)
+            first_reply: FirstReply | None = None
+            # Structured answers: the one to send next, what they skipped, and every reply after them.
+            pending_answers: tuple[str, list[dict]] | None = None
+            answers_sent = False
+            # Why clarifying_answers were not sent, when the loop knows it better than what is left after.
+            answers_unsent: str | None = None
+            matched_picks: set[str] = set()
+            skipped_questions: list[dict] = []
+            replies_after_answers: list[tuple[str, ChatResult, bool]] = []
 
             # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop
             # that simply runs out of range() is labelled correctly with no trailing else.
@@ -849,8 +990,19 @@ def run_agentic_conversation(
             for _iter in range(max_clarification_turns + 1):
                 transcript.append(TranscriptEntry("user", current_message))
                 incomplete = False
+                follows_answers = pending_answers is not None
+                is_first_reply = False
                 try:
-                    chat_result = client.send_message(conversation_id, current_message, user_context=current_context)
+                    if pending_answers is not None:
+                        questions_item_id, answers = pending_answers
+                        pending_answers = None
+                        chat_result = client.send_clarifying_answers(
+                            conversation_id, questions_item_id, answers, user_context=current_context
+                        )
+                    else:
+                        chat_result = client.send_message(
+                            conversation_id, current_message, user_context=current_context
+                        )
                 except TurnIncompleteError as exc:
                     chat_result = exc.partial_result or ChatResult()
                     incomplete = True
@@ -910,10 +1062,30 @@ def run_agentic_conversation(
                         "assistant", " ".join(p for p in (response_text, summarize_visualizations(chat_result)) if p)
                     )
                 )
+                # A reply the server cut short is a stall the loop nudges past, so the next one is the first reply.
+                if first_reply is None and not incomplete:
+                    asked_in_text = not _check_output_present(resolved_turn, chat_result) and asks_in_text(
+                        chat_result, response_text
+                    )
+                    first_reply = read_first_reply(chat_result, asked_in_text=asked_in_text)
+                    is_first_reply = True
+                # The questionnaire clarifying_answers would answer, when this reply carries it.
+                answerable = (
+                    turn.clarifying_answers is not None and is_first_reply and has_structured_question(chat_result)
+                )
+                if answers_sent:
+                    reply_kind = (
+                        "output"
+                        if _check_output_present(resolved_turn, chat_result)
+                        else classify_reply(chat_result, response_text)
+                    )
+                    replies_after_answers.append((reply_kind, chat_result, follows_answers))
 
                 if _check_output_present(resolved_turn, chat_result):
                     if incomplete:
                         records.append(ClarificationRecord(kind="turn_incomplete", agent_message=clip(response_text)))
+                    if answerable:
+                        answers_unsent = "the first reply delivered the output with its questionnaire, so nothing waited on the answers"
                     turn_exit = LoopExit.SUCCESS
                     break
 
@@ -948,6 +1120,11 @@ def run_agentic_conversation(
                     and any(r.kind in ("no_action", "turn_incomplete") for r in records)
                 )
                 if clarification_turns >= max_clarification_turns or second_stall:
+                    if answerable:
+                        answers_unsent = (
+                            f"the clarification budget ({max_clarification_turns}) ended the turn "
+                            "before clarifying_answers were sent"
+                        )
                     records.append(record)
                     break
 
@@ -957,6 +1134,15 @@ def run_agentic_conversation(
                     reply = CONFIRMATION_REPLY
                 elif kind in ("no_action", "turn_incomplete"):
                     reply = NUDGE_MESSAGE
+                # Before restating: the fixture expects this question, so a lost_context verdict on it
+                # must not send the picks to a later questionnaire.
+                elif answerable and turn.clarifying_answers is not None and chat_result.clarifying_questions_item_id:
+                    built = build_clarifying_answers(chat_result, turn.clarifying_answers)
+                    matched_picks.update(built.matched_picks)
+                    skipped_questions = built.skipped
+                    pending_answers = (chat_result.clarifying_questions_item_id, built.answers)
+                    answers_sent = True
+                    reply = built.render()
                 elif record.lost_context is True and not any(r.lost_context is True for r in records):
                     # Once per turn, so a judge mistake cannot loop the user on restating.
                     reply = reply_restating(render_transcript(transcript[:-1]), response_text)
@@ -964,6 +1150,8 @@ def run_agentic_conversation(
                     reply = answers_left.pop(0)
                 else:
                     reply = reply_from_facts(render_transcript(transcript[:-1]), response_text, turn.set_answers)
+                if answerable and not answers_sent:
+                    answers_unsent = "the first reply's questionnaire has no itemId to send clarifying_answers to"
                 record.reply = clip(reply)
                 records.append(record)
 
@@ -987,6 +1175,67 @@ def run_agentic_conversation(
             mismatches: list[str] = []
             if final_result and output_present:
                 output_correct, mismatches = _check_output_correct(resolved_turn, final_result, all_tool_calls)
+
+            # A turn with no complete reply has nothing to read; its chat error or missing output fails it.
+            clarification_correct: bool | None = None
+            clarification_problems: list[str] = []
+            clarification_ungraded: str | None = None
+            if turn.expects_clarification is not None and first_reply is not None:
+                checks_options = (
+                    turn.clarifying_options_grounded
+                    or turn.clarifying_option_titles is not None
+                    or turn.clarifying_option_objects is not None
+                )
+                workspace_objects: WorkspaceObjects | None = None
+                # Only a questionnaire with options has anything to check. The listing is kept for the run
+                # and read again once a turn has written to the workspace, since an option can name an
+                # object an earlier turn created.
+                if checks_options and first_reply.has_options:
+                    written = created.state()
+                    if workspace_listing is None or workspace_listing[0] != written:
+                        read_started = time.monotonic()
+                        try:
+                            workspace_listing = (written, fetch_workspace_objects(sdk, workspace_id))
+                        except Exception as exc:  # any failure leaves the options unchecked, never passed
+                            workspace_listing = None
+                            clarification_ungraded = f"workspace objects not readable, options left unchecked: {exc}"
+                            print(f"[CLARIFICATION] {clarification_ungraded}")
+                        workspace_read_s += time.monotonic() - read_started
+                    if workspace_listing is not None:
+                        workspace_objects = workspace_listing[1]
+                clarification_problems = clarification_mismatches(
+                    first_reply,
+                    expects_clarification=turn.expects_clarification,
+                    expected_form=turn.expected_clarification_form,
+                    max_questions=turn.max_clarifying_questions,
+                    objects=workspace_objects,
+                    grounded=turn.clarifying_options_grounded,
+                    titled_as=turn.clarifying_option_titles,
+                    candidates=turn.clarifying_option_objects,
+                    reads_questionnaire=turn.reads_questionnaire,
+                )
+                if turn.clarifying_answers is not None and not answers_sent:
+                    # Every check after the answers would pass with nothing to read.
+                    if answers_unsent is None:
+                        answers_unsent = (
+                            "the first reply asked no questionnaire to answer"
+                            if first_reply.form != "questionnaire"
+                            else "the turn ended before clarifying_answers were sent"
+                        )
+                    clarification_problems.append(f"clarifying_answers not sent: {answers_unsent}")
+                if turn.clarifying_answers is not None and answers_sent:
+                    clarification_problems += after_answers_mismatches(
+                        unmatched_picks=[p.label for p in turn.clarifying_answers if p.label not in matched_picks],
+                        skipped=skipped_questions,
+                        replies_after=replies_after_answers,
+                        states_skipped_assumption=turn.states_skipped_assumption,
+                        skipped_questions_not_reasked=turn.skipped_questions_not_reasked,
+                        expects_confirmation_after_answers=turn.expects_confirmation_after_answers,
+                    )
+                if clarification_problems:
+                    clarification_correct = False
+                elif clarification_ungraded is None:
+                    clarification_correct = True
 
             # Capture metric output for $ref resolution in subsequent turns.
             if final_result and turn.expected_output_type == "metric":
@@ -1012,11 +1261,14 @@ def run_agentic_conversation(
                     mismatches=mismatches,
                     clarifications=records,
                     depends_on=list(turn.depends_on),
+                    clarification_correct=clarification_correct,
+                    clarification_mismatches=clarification_problems,
+                    clarification_ungraded=clarification_ungraded,
                 )
             )
 
         # Taken here, not after the finally: its cleanup is not part of the run.
-        run_latency_s = time.monotonic() - run_started - conversation_swap_s
+        run_latency_s = time.monotonic() - run_started - conversation_swap_s - workspace_read_s
     finally:
         if owns_conversation and conversation_id:
             client.delete_conversation(conversation_id)
@@ -1208,6 +1460,13 @@ def evaluate_agentic_conversation(
                         value=float(tr.skill_success),
                         data_type="BOOLEAN",
                     )
+                    if tr.clarification_correct is not None:
+                        ctx.score(
+                            tid,
+                            name=f"turn_{tr.turn_id}_clarification_correct",
+                            value=float(tr.clarification_correct),
+                            data_type="BOOLEAN",
+                        )
                 strict_checks = {
                     "conversation_success": result.conversation_success,
                     "full_skill_coverage": result.full_skill_coverage,
