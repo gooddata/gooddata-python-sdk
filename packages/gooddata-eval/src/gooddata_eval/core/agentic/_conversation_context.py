@@ -49,8 +49,9 @@ _CONFIRMATION_RE = re.compile(
     r"|\bplease\s+confirm\b|\bconfirm\s+(?:if|whether|that)\b",
     re.IGNORECASE,
 )
-# "Should I retry with gross or net revenue?" offers a choice, so it stays a question, as does
-# a second option asked right after ("Should I retry? Or adjust the formula first?"). The
+# "Should I retry with gross or net revenue?" and "Should I create it for Q1 or Q2?" offer a
+# choice, so they stay questions, as does a second option asked right after ("Should I
+# retry? Or adjust the formula first?"). The
 # clause runs to the sentence end: a dot inside a token ("2.5") does not end it. Only a
 # prose "or"/"Or" counts: MAQL writes its OR in uppercase. An "or" that hands the turn back
 # to the user ("..., or would you like to adjust it?", "or not?") is not a second option.
@@ -58,8 +59,8 @@ _NOT_AN_OPTION = (
     r"not\b|(?:would|do)\s+you\s+(?:like|want|prefer)\s+to\b|(?:is|are)\s+there\b"
     r"|anything\b|something\b|if\s+you\b|let\s+me\s+know\b"
 )
-_RETRY_CHOICE_RE = re.compile(
-    rf"(?:{_SHOULD_I}|{_WANT_ME_TO})(?:{_RETRY_VERBS})\b(?:[^?.!]|\.(?=\S))*"
+_CHOICE_RE = re.compile(
+    rf"(?:{_SHOULD_I}|{_WANT_ME_TO})(?:{_APPROVAL_VERBS})\b(?:[^?.!]|\.(?=\S))*"
     rf"(?:[?.!]\s+)?(?:(?-i:\b[Oo]r\b)|\balternatively\b)(?!\s+(?:{_NOT_AN_OPTION}))",
     re.IGNORECASE,
 )
@@ -101,7 +102,7 @@ def classify_reply(chat_result: ChatResult, rendered_text: str) -> ReplyKind:
     text = (rendered_text or "").strip()
     if not text:
         return "no_action"
-    if _CONFIRMATION_RE.search(text) and not _RETRY_CHOICE_RE.search(_FORMULA_SPAN_RE.sub(" ", text)):
+    if _CONFIRMATION_RE.search(text) and not _CHOICE_RE.search(_FORMULA_SPAN_RE.sub(" ", text)):
         return "confirmation"
     if "?" in text or _REQUEST_RE.search(text):
         return "question"
