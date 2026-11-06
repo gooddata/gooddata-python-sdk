@@ -67,3 +67,23 @@ packages/gooddata-eval/src/gooddata_eval/core/dataset/from_insights.py
     }
   }
 }
+
+packages/gooddata-eval/tests/test_from_insights.py
+  s_720a9cbc502a94::t_fdb86ffe307100 1029-1032
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e0b65a06052f082aec79432e18fa8e95964fecb",
+  "prompts": {},
+  "sessions": {
+    "s_720a9cbc502a94": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a01fd99-61e3-4ce1-9e2d-91c4c40e1051",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
