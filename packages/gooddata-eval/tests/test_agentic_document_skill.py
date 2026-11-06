@@ -70,6 +70,7 @@ def _document_part(
     period: dict | None = None,
     saved_document_id: str | None = None,
     base_document_id: str | None = None,
+    reworks_open_document: bool = False,
     document: dict | None | str = "default",
 ) -> dict:
     pages = pages if pages is not None else [_cover_page(), _content_page("page2", _REVENUE_TREND)]
@@ -92,6 +93,7 @@ def _document_part(
         "page_count": len(pages) if page_count is None else page_count,
         "base_document_id": base_document_id,
         "saved_document_id": saved_document_id,
+        "reworks_open_document": reworks_open_document,
     }
 
 
@@ -386,6 +388,168 @@ def test_a_new_draft_must_not_edit_a_saved_document() -> None:
     ]
 
 
+def test_a_new_draft_must_not_rework_the_open_document() -> None:
+    evaluation = _evaluate(_document_part(reworks_open_document=True))
+    assert evaluation.strict_checks["document_not_saved"] is False
+    assert evaluation.failures == [
+        "a new draft must not rework the open document, but it reports reworks_open_document"
+    ]
+
+
+# ── rework of the open document ─────────────────────────────────────────────
+# A rework is scored on aac-v2 documents only, so these build v2 parts.
+
+_OPEN_DOCUMENT = "q3_review"
+# Keyed by filter id, as gen-ai drafts a v2 document's content.filters.
+_OPEN_FILTERS = {
+    "document_filter_customer_country": {
+        "type": "attribute_filter",
+        "title": "Customer country",
+        "using": "label/customer_country",
+        "multiselect": False,
+    }
+}
+
+
+def _rework_part(pages: list[dict] | None = None, **kwargs: Any) -> dict:
+    kwargs.setdefault("base_document_id", _OPEN_DOCUMENT)
+    kwargs.setdefault("reworks_open_document", True)
+    return _v2_document_part(pages, **kwargs)
+
+
+def _with_filters(part: dict, filters: dict) -> dict:
+    part["document"]["content"]["filters"] = filters
+    return part
+
+
+def test_an_edit_of_the_open_document_passes_every_rework_check() -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY),
+    ]
+    part = _with_filters(_rework_part(pages), _OPEN_FILTERS)
+    expected = {
+        "period": _PERIOD,
+        "rework": {
+            "base_document_id": _OPEN_DOCUMENT,
+            "keeps_pages": ["page1", "page2"],
+            "title": "Sales overview",
+            "filters": _OPEN_FILTERS,
+        },
+    }
+    evaluation = _evaluate(part, expected=expected, tool=_draft_result(page_count=3))
+    assert evaluation.failures == []
+    assert evaluation.strict_pass
+    assert evaluation.strict_checks == {
+        "document_drafted": True,
+        "document_part_present": True,
+        "document_ref_matches": True,
+        "document_pages_consistent": True,
+        "document_not_saved": True,
+        "document_skill_activated": True,
+        "document_wire_names": True,
+        "document_period_correct": True,
+        "document_reworks_open": True,
+        "document_pages_kept": True,
+        "document_title_correct": True,
+        "document_filters_kept": True,
+    }
+
+
+def test_a_rework_of_a_v1_document_fails_once_and_says_why() -> None:
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "keeps_pages": ["page1"], "title": "Sales overview"}}
+    evaluation = _evaluate(_document_part(base_document_id=_OPEN_DOCUMENT), expected=expected)
+    assert evaluation.failures == ["a rework is scored on aac-v2 documents only, but the draft is version None"]
+    assert evaluation.strict_checks["document_reworks_open"] is False
+    assert evaluation.strict_checks["document_pages_kept"] is False
+    assert evaluation.strict_checks["document_title_correct"] is False
+
+
+def test_a_new_draft_where_an_edit_was_expected_fails() -> None:
+    evaluation = _evaluate(_v2_document_part(), expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
+    assert evaluation.strict_checks["document_reworks_open"] is False
+    assert evaluation.failures == [
+        "the edit must apply to the open document 'q3_review', but it reports base_document_id None",
+        "the edit must be written from the open document, but reworks_open_document is not true",
+    ]
+
+
+def test_an_edit_of_another_document_fails() -> None:
+    part = _rework_part(base_document_id="another_document")
+    evaluation = _evaluate(part, expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
+    assert evaluation.strict_checks["document_reworks_open"] is False
+    assert evaluation.failures == [
+        "the edit must apply to the open document 'q3_review', but it reports base_document_id 'another_document'"
+    ]
+
+
+def test_an_edit_not_written_from_the_open_document_fails() -> None:
+    part = _rework_part(reworks_open_document=False)
+    evaluation = _evaluate(part, expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
+    assert evaluation.strict_checks["document_reworks_open"] is False
+    assert evaluation.failures == [
+        "the edit must be written from the open document, but reworks_open_document is not true"
+    ]
+
+
+def test_an_edit_must_not_be_saved_yet() -> None:
+    part = _rework_part(saved_document_id=_OPEN_DOCUMENT)
+    evaluation = _evaluate(part, expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
+    assert evaluation.strict_checks["document_not_saved"] is False
+    assert evaluation.failures == ["an edit must not be saved yet, but it reports saved_document_id 'q3_review'"]
+
+
+def test_an_edit_that_drops_a_page_of_the_open_document_fails_and_names_it() -> None:
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "keeps_pages": ["page1", "page2", "page3"]}}
+    evaluation = _evaluate(_rework_part(), expected=expected)
+    assert evaluation.strict_checks["document_pages_kept"] is False
+    assert evaluation.failures == ["the edit lost page 'page3' of the open document"]
+
+
+def test_a_hidden_page_counts_as_lost() -> None:
+    hidden = {**_v2_content_page("page3", _RETURNS_BY_CATEGORY), "visible": False}
+    pages = [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND), hidden]
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "keeps_pages": ["page3"]}}
+    evaluation = _evaluate(_rework_part(pages), expected=expected)
+    assert evaluation.failures == ["the edit lost page 'page3' of the open document"]
+
+
+def test_pages_in_sections_are_found() -> None:
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "keeps_pages": ["page1", "page2"]}}
+    evaluation = _evaluate(_rework_part(form="sections"), expected=expected)
+    assert evaluation.strict_checks["document_pages_kept"] is True
+
+
+def test_a_rename_that_left_the_old_title_fails() -> None:
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "title": "E2 Sales Review"}}
+    evaluation = _evaluate(_rework_part(), expected=expected)
+    assert evaluation.strict_checks["document_title_correct"] is False
+    assert evaluation.failures == ["the document is titled 'Sales overview', expected 'E2 Sales Review'"]
+
+
+def test_an_edit_that_changed_the_document_filters_fails() -> None:
+    part = _with_filters(_rework_part(), {})
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _OPEN_FILTERS}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [f"the document filters are {{}}, expected {_OPEN_FILTERS!r}"]
+
+
+def test_a_document_without_filters_keeps_an_expectation_of_none() -> None:
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {}}}
+    evaluation = _evaluate(_rework_part(), expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is True
+
+
+def test_rework_checks_are_published_only_for_what_the_fixture_states() -> None:
+    evaluation = _evaluate(_rework_part(), expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
+    assert "document_reworks_open" in evaluation.strict_checks
+    for name in ("document_pages_kept", "document_title_correct", "document_filters_kept"):
+        assert name not in evaluation.strict_checks
+    assert evaluation.strict_pass
+
+
 @pytest.mark.parametrize("version", _VERSIONS)
 def test_a_wrong_period_fails(version: str) -> None:
     evaluation = _evaluate(_versioned_part(version, period=("2025-07-01", "2025-12-31")), expected={"period": _PERIOD})
@@ -536,6 +700,35 @@ def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: p
     assert client.sent == []
 
 
+@pytest.mark.parametrize(
+    ("user_context", "message"),
+    [
+        (None, "rework needs the open document in user_context.view.document"),
+        ({"view": {"dashboard": {"id": "d1"}}}, "rework needs the open document in user_context.view.document"),
+        ({"view": {"document": {"title": "Q3 review"}}}, "rework needs the open document's id"),
+        ({"view": {"document": {"id": "another_document"}}}, "rework.base_document_id 'q3_review' is not the open"),
+    ],
+)
+def test_a_rework_that_does_not_match_the_open_document_fails_before_any_request(
+    monkeypatch: pytest.MonkeyPatch, user_context: dict | None, message: str
+) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT}}
+    with pytest.raises(ValueError, match=message):
+        run_agentic_document_skill("https://h", "tok", "ws", "Rename it", expected, user_context=user_context)
+    assert client.sent == []
+
+
+def test_a_rework_of_the_open_document_reaches_the_chat(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    user_context = {"view": {"document": {"id": _OPEN_DOCUMENT, "title": "Q3 review"}}}
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT}}
+    run_agentic_document_skill("https://h", "tok", "ws", "Rename it", expected, user_context=user_context)
+    assert client.sent == ["Rename it"]
+
+
 def test_the_document_format_reaches_the_chat_client(monkeypatch: pytest.MonkeyPatch) -> None:
     client = _ScriptedChatClient([_drafting_turn()])
     built: list[dict[str, Any]] = []
@@ -615,6 +808,15 @@ def test_the_document_format_is_recorded_in_the_run_metadata(
         ({"visualizations": []}, "visualizations is empty"),
         ({"visualizations": [{"title": "Revenue"}]}, "every visualization needs an 'id'"),
         ({"expects_clarification": "yes"}, "expects_clarification must be true or false"),
+        ({"rework": True}, "rework must be an object"),
+        ({"rework": {}}, "rework needs the base_document_id"),
+        ({"rework": {"base_document_id": "  "}}, "rework needs the base_document_id"),
+        ({"rework": {"base_document_id": "q3", "keeps_pages": [" "]}}, "every rework.keeps_pages entry"),
+        ({"rework": {"base_document_id": "q3", "keep_pages": ["page1"]}}, r"unknown rework key\(s\) \['keep_pages'\]"),
+        ({"rework": {"base_document_id": "q3", "keeps_pages": []}}, "rework.keeps_pages is empty"),
+        ({"rework": {"base_document_id": "q3", "keeps_pages": [""]}}, "every rework.keeps_pages entry"),
+        ({"rework": {"base_document_id": "q3", "title": " "}}, "rework.title must be"),
+        ({"rework": {"base_document_id": "q3", "filters": ["customer_country"]}}, "rework.filters must be"),
     ],
 )
 def test_an_unusable_fixture_is_rejected_before_any_request(expected: dict, message: str) -> None:
@@ -646,6 +848,12 @@ def test_the_simulated_reply_names_the_charts_and_the_period() -> None:
 
 def test_the_simulated_reply_leaves_out_what_the_fixture_does_not_state() -> None:
     assert build_simulated_reply({}) == "Anything else is up to you. Please create the document now."
+
+
+def test_the_simulated_reply_to_an_edit_asks_for_the_change_in_the_open_document() -> None:
+    assert build_simulated_reply({"rework": {"base_document_id": "q3"}}) == (
+        "Anything else is up to you. Please make the change in the open document now."
+    )
 
 
 # ── conversation loop ───────────────────────────────────────────────────────
