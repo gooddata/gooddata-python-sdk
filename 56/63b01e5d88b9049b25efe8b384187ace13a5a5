@@ -1,19 +1,43 @@
 packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
   s_e05416bc60f5cb::t_9d582966c3c63d 381
+packages/gooddata-eval/src/gooddata_eval/core/chat/render.py
+  s_90c56caf79cc98::t_e7abbe080858fb 29,32
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_90c56caf79cc98::t_682308d47329f0 334-369
 packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
   s_e05416bc60f5cb::t_95219f2f6d6026 1043
   s_e05416bc60f5cb::t_a2275d7f3965b4 42
   s_e05416bc60f5cb::t_a02553ba43dc32 932-943
+packages/gooddata-eval/tests/test_chat_render.py
+  s_90c56caf79cc98::t_682308d47329f0 158-190
 packages/gooddata-eval/tests/test_agentic_alert_skill.py
-  s_e05416bc60f5cb::t_c7ce1d60f1dcab 825-852
+  s_0b97148191cf36::t_b8fc2aea01a879 879
+  s_e05416bc60f5cb::t_c7ce1d60f1dcab 825-827,835-836,838-856,873,878
   s_e05416bc60f5cb::t_39e286796e86de 26
+  s_90c56caf79cc98::t_682308d47329f0 828-834,857-872,874-877,880-882,885,922-923
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "bd3de4585aff781d1682e0f7d5aa2d6a53861961",
+  "base_commit_sha": "5663b01e5d88b9049b25efe8b384187ace13a5a5",
   "prompts": {},
   "sessions": {
+    "s_0b97148191cf36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c6354c0-fd12-49b4-849a-e38d81a65b86",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_90c56caf79cc98": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b308-ea52-7982-9770-992652e8f98c",
+        "model": "gpt-6-astra"
+      },
+      "human_author": null
+    },
     "s_e05416bc60f5cb": {
       "agent_id": {
         "tool": "claude",
