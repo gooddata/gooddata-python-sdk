@@ -23,6 +23,7 @@ from gooddata_eval.core.agentic.alert_skill import (
     evaluate_agentic_alert_skill,
     generate_simulated_alert_response,
     render_alert_proposal,
+    render_turn_for_simulated_user,
     run_agentic_alert_skill,
 )
 from gooddata_eval.core.chat.sse_client import ChatError
@@ -821,15 +822,67 @@ def test_render_alert_proposal_falls_back_to_default_cta():
     assert render_alert_proposal({}).startswith("Should I create this alert?")
 
 
-def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
-    """GDAI-2032 regression: confirmation turn has no text part, only an alertProposal.
+_QUESTIONS_PART = {
+    "type": "clarifyingQuestions",
+    "questions": [
+        {
+            "text": "Which date?",
+            "control": {
+                "type": "singleChoice",
+                "options": [{"text": "{dataset/date}"}, {"text": "{dataset/created}"}],
+            },
+        },
+    ],
+}
 
-    Without the fallback the simulated user is handed an empty agent message, so the agent
-    never receives an explicit "yes" and create_metric_alert is never called.
-    """
+
+@pytest.mark.parametrize(
+    ("turn", "must_contain"),
+    [
+        ({"text_response": "Pick both.", "unhandled_parts": [_QUESTIONS_PART]}, ["Pick both.", "{dataset/date}"]),
+        ({"text_response": "Here it is.", "alert_proposals": [_PROPOSAL]}, ["Here it is.", "GREATER_THAN"]),
+        ({"alert_proposals": [_PROPOSAL]}, ["Should I create this alert?", "GREATER_THAN"]),
+        ({"text_response": "Which metric?"}, ["Which metric?"]),
+    ],
+    ids=["text_and_questions", "text_and_proposal", "proposal_only", "text_only"],
+)
+def test_simulated_user_reads_every_part_of_the_turn(turn, must_contain):
+    rendered = render_turn_for_simulated_user(ChatResult(**turn))
+    for fragment in must_contain:
+        assert fragment in rendered
+
+
+def test_simulated_user_reads_nothing_of_a_silent_turn():
+    assert render_turn_for_simulated_user(ChatResult()) == ""
+
+
+def test_run_agentic_alert_skill_passes_question_options_to_simulated_user() -> None:
+    client = MagicMock()
+    client.send_message.return_value = ChatResult(text_response="Pick one.", unhandled_parts=[_QUESTIONS_PART])
+    with _patched(client, simulated_reply="Use the created date.") as mock_sim:
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Create an alert",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=2,
+            initial_conversation_id="conv-1",
+        )
+
+    agent_message = mock_sim.call_args.args[0]
+    assert "Pick one." in agent_message
+    assert "{dataset/date}" in agent_message
+    assert "{dataset/created}" in agent_message
+
+
+@pytest.mark.parametrize("text_response", [None, "Here it is."])
+def test_run_agentic_alert_skill_answers_proposal_confirmation_turn(text_response: str | None) -> None:
+    """Confirmation keeps the proposal fields visible alongside any prose."""
     proposal_turn = ChatResult.model_validate(
         {
-            "text_response": None,
+            "text_response": text_response,
             "alertProposals": [_PROPOSAL],
             "tool_call_events": [
                 {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None}
@@ -866,6 +919,8 @@ def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
         )
 
     agent_message = mock_sim.call_args.args[0]
+    if text_response:
+        assert text_response in agent_message
     assert "Should I create this alert?" in agent_message
     assert "admin@gooddata.com" in agent_message
     assert summary.best.eval.alert_created is True
