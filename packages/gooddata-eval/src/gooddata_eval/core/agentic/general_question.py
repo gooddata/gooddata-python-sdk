@@ -27,7 +27,7 @@ from gooddata_eval.core.agentic._trace_linker import (
 )
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient
-from gooddata_eval.core.config import ReasoningEffort
+from gooddata_eval.core.config import DocumentFormat, ReasoningEffort, normalize_document_format
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge, score_run
 from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
@@ -172,8 +172,18 @@ def run_agentic_general_question(
     reasoning_effort: ReasoningEffort | None = None,
     agent_id: str | None = None,
     user_context: dict | None = None,
+    document_format: DocumentFormat | None = None,
 ) -> AgenticGeneralQuestionSummary:
-    """Run the general-question agentic evaluation K times and return a summary."""
+    """Run the general-question agentic evaluation K times and return a summary.
+
+    ``document_format`` is sent on every turn of every run, see ``ChatClient``: a question about
+    the document open in ``user_context`` needs the format that document is in. None leaves it to
+    the server's ``enablePublisherV2`` feature flag.
+
+    Raises:
+        ValueError: ``document_format`` is not a format gen-ai accepts. Raised before any chat request.
+    """
+    document_format = normalize_document_format(document_format)
     run_results: list[GeneralQuestionResult] = []
     client = ChatClient(
         host=host,
@@ -182,6 +192,7 @@ def run_agentic_general_question(
         reasoning_effort=reasoning_effort,
         agent_id=agent_id,
         user_context=user_context,
+        document_format=document_format,
     )
     judge = LLMJudge(_GENERAL_QUESTION_EVALUATION_STEPS)
 
@@ -280,6 +291,7 @@ def evaluate_agentic_general_question(
     reasoning_effort: ReasoningEffort | None = None,
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     user_context: dict | None = None,
+    document_format: DocumentFormat | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run general-question evaluation, log to Langfuse, and raise GeneralQuestionAssertionError on failure.
@@ -287,7 +299,17 @@ def evaluate_agentic_general_question(
     Returns the best run's outcome (reasoning_steps, conversation_id, response_id) as an
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
+
+    ``document_format`` (``aac-v1``/``aac-v2``) asks gen-ai for that document content format
+    on every turn and is recorded as ``document_format`` in the dataset-run metadata; None
+    leaves it to the server's ``enablePublisherV2`` feature flag.
+
+    Raises:
+        ValueError: ``document_format`` is not a format gen-ai accepts. Raised before any request.
     """
+    document_format = normalize_document_format(document_format)
+    if document_format is not None:
+        run_metadata_extra = {**(run_metadata_extra or {}), "document_format": document_format}
     identity = RunIdentity(
         host,
         token,
@@ -311,6 +333,7 @@ def evaluate_agentic_general_question(
             reasoning_effort=reasoning_effort,
             agent_id=agent_id,
             user_context=user_context,
+            document_format=document_format,
         )
 
     if langfuse is not None and dataset_item_id:
