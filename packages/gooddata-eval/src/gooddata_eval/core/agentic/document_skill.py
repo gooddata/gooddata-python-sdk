@@ -66,8 +66,17 @@ _LEGACY_SKILL = "report_builder"
 _COVER_PAGE = "cover"
 _CONTENT_PAGE = "content"
 _EXPECTATION_KEYS = frozenset(
-    {"period", "visualizations", "narrative", "expects_clarification", "asked_first_required", "clarification_reply"}
+    {
+        "period",
+        "visualizations",
+        "narrative",
+        "expects_clarification",
+        "asked_first_required",
+        "clarification_reply",
+        "rework",
+    }
 )
+_REWORK_KEYS = frozenset({"base_document_id", "keeps_pages", "page_charts", "title", "filters"})
 # Template tokens the document renders at export time ({documentName}, {periodStart}, ...).
 _PLACEHOLDER_RE = re.compile(r"\{\w+\}")
 _SUMMARY_SLOT = "summary"
@@ -186,6 +195,15 @@ def _heading(node: dict) -> str | None:
     return _written(node.get("heading"))
 
 
+def _page_visualizations(page: Any) -> set[str]:
+    """Every visualization id placed in one page's layout."""
+    if not isinstance(page, dict):
+        return set()
+    return {
+        visualization for node in _nodes(page.get("layout")) if (visualization := _visualization_id(node)) is not None
+    }
+
+
 def _visualizations_of(document: dict) -> set[str]:
     """Every visualization id placed anywhere in the layouts of the pages a reader sees."""
     return {
@@ -262,6 +280,13 @@ def _period_bounds(document: dict) -> tuple[Any, Any] | None:
     return period.get("from"), period.get("to")
 
 
+def _filters(document: dict) -> Any:
+    """A v2 document's filters, keyed by filter id in ``content``; read from the top level when ``content`` is missing."""
+    content = document.get("content")
+    container = content if isinstance(content, dict) else document
+    return container.get("filters")
+
+
 def _period_text(document: dict) -> str:
     bounds = _period_bounds(document)
     if bounds is None:
@@ -303,6 +328,55 @@ def _expects_clarification(expected_output: dict) -> bool:
 
 def _asked_first_required(expected_output: dict) -> bool:
     return expected_output.get("asked_first_required") is True
+
+
+def _rework(expected_output: dict) -> dict | None:
+    """The fixture's ``rework`` expectation: the run must edit the open document rather than draft a new one."""
+    rework = expected_output.get("rework")
+    return rework if isinstance(rework, dict) else None
+
+
+def _validate_rework(rework: Any) -> None:
+    """Reject a ``rework`` expectation the run could not score meaningfully.
+
+    A rework is scored on aac-v2 documents only. ``keeps_pages`` checks that each page id is still
+    visible, not what the page shows. ``page_charts`` maps a kept page to the charts that must stay
+    on it; the page may hold others too. ``visualizations`` checks the charts anywhere in the document.
+    ``filters`` is compared with ``==`` against the drafted document's ``content.filters``, so it
+    must be copied from a real aac-v2 run: the wire form is not the shape a filter is authored in.
+    """
+    if not isinstance(rework, dict):
+        raise ValueError(f"rework must be an object, got {type(rework).__name__}")
+    unknown = sorted(set(rework) - _REWORK_KEYS)
+    if unknown:
+        raise ValueError(f"unknown rework key(s) {unknown}; known: {sorted(_REWORK_KEYS)}")
+    base_document_id = rework.get("base_document_id")
+    if not isinstance(base_document_id, str) or not base_document_id.strip():
+        raise ValueError(f"rework needs the base_document_id of the open document, got {base_document_id!r}")
+    if "keeps_pages" in rework:
+        keeps_pages = rework["keeps_pages"]
+        if not isinstance(keeps_pages, list) or not keeps_pages:
+            raise ValueError("rework.keeps_pages is empty; the pages check would pass vacuously")
+        if not all(isinstance(page_id, str) and page_id.strip() for page_id in keeps_pages):
+            raise ValueError(f"every rework.keeps_pages entry must be a page id, got {keeps_pages!r}")
+    if "page_charts" in rework:
+        page_charts = rework["page_charts"]
+        if not isinstance(page_charts, dict) or not page_charts:
+            raise ValueError("rework.page_charts is empty; the page charts check would pass vacuously")
+        kept = set(rework.get("keeps_pages") or [])
+        for page_id, charts in page_charts.items():
+            if page_id not in kept:
+                raise ValueError(f"rework.page_charts page {page_id!r} must also be listed in rework.keeps_pages")
+            if not isinstance(charts, list) or not charts:
+                raise ValueError(f"rework.page_charts[{page_id!r}] must list the charts that stay on the page")
+            if not all(isinstance(chart, str) and chart.strip() for chart in charts):
+                raise ValueError(f"every rework.page_charts[{page_id!r}] entry must be a chart id, got {charts!r}")
+    if "title" in rework:
+        title = rework["title"]
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError(f"rework.title must be the title the edit leaves, got {title!r}")
+    if "filters" in rework and not isinstance(rework["filters"], dict):
+        raise ValueError(f"rework.filters must be the document's filters keyed by id, got {rework['filters']!r}")
 
 
 def _validate_expectation(expected_output: Any) -> None:
@@ -355,6 +429,8 @@ def _validate_expectation(expected_output: Any) -> None:
             raise ValueError(f"clarification_reply must be a non-empty reply, got {reply!r}")
         if expected_output.get("expects_clarification") is not True:
             raise ValueError("clarification_reply needs expects_clarification: true")
+    if "rework" in expected_output:
+        _validate_rework(expected_output["rework"])
 
 
 def _validate_user_context(user_context: dict | None) -> None:
@@ -368,6 +444,30 @@ def _validate_user_context(user_context: dict | None) -> None:
     view = (user_context or {}).get("view")
     if isinstance(view, dict) and _LEGACY_PART_TYPE in view:
         raise ValueError("user_context.view.report is the Report name; send view.document")
+
+
+def _validate_rework_target(expected_output: dict, user_context: dict | None) -> None:
+    """Reject a ``rework`` whose base id is not the open document the run sends, before the first API call.
+
+    Otherwise every run would fail on ``base_document_id`` and read as a copilot regression. An
+    unsaved open document has no id, so a rework of one cannot be stated.
+
+    Raises:
+        ValueError: the item states a rework, and ``user_context.view.document`` is missing,
+            has no id, or has another id.
+    """
+    rework = _rework(expected_output)
+    if rework is None:
+        return
+    view = (user_context or {}).get("view")
+    document = view.get(_PART_TYPE) if isinstance(view, dict) else None
+    if not isinstance(document, dict):
+        raise ValueError("rework needs the open document in user_context.view.document")
+    open_id = document.get("id")
+    if not isinstance(open_id, str) or not open_id.strip():
+        raise ValueError(f"rework needs the open document's id in user_context.view.document.id, got {open_id!r}")
+    if open_id != rework["base_document_id"]:
+        raise ValueError(f"rework.base_document_id {rework['base_document_id']!r} is not the open document {open_id!r}")
 
 
 def build_simulated_reply(expected_output: dict, *, asked: bool = True) -> str:
@@ -388,7 +488,10 @@ def build_simulated_reply(expected_output: dict, *, asked: bool = True) -> str:
     period = expected_output.get("period")
     if isinstance(period, dict):
         segments.append(f"Period: {period.get('start')} to {period.get('end')}.")
-    segments.append("Anything else is up to you. Please create the document now.")
+    if _rework(expected_output) is not None:
+        segments.append("Anything else is up to you. Please make the change in the open document now.")
+    else:
+        segments.append("Anything else is up to you. Please create the document now.")
     return " ".join(segments)
 
 
@@ -404,6 +507,11 @@ class _Applies:
     charts: bool
     narrative: bool = False
     asked_first: bool = False
+    rework: bool = False
+    pages_kept: bool = False
+    page_charts: bool = False
+    title: bool = False
+    filters: bool = False
 
 
 @dataclass
@@ -423,6 +531,12 @@ class DocumentEvaluation:
     summaries_present: bool = False
     narrative_judged: bool = False
     asked_first: bool = False
+    new_draft: bool = False
+    reworks_open: bool = False
+    pages_kept: bool = False
+    page_charts_kept: bool = False
+    title_correct: bool = False
+    filters_kept: bool = False
     judge_reasoning: str = ""
     # Set when the judge returned something unreadable. The run then has no narrative verdict:
     # it is neither published as a 0 nor allowed to pass on the remaining checks.
@@ -465,6 +579,18 @@ class DocumentEvaluation:
                 checks["document_narrative_judged"] = self.narrative_judged
         if self.applies.asked_first:
             checks["document_asked_first"] = self.asked_first
+        if self.applies.rework:
+            checks["document_reworks_open"] = self.reworks_open
+        else:
+            checks["document_new_draft"] = self.new_draft
+        if self.applies.pages_kept:
+            checks["document_pages_kept"] = self.pages_kept
+        if self.applies.page_charts:
+            checks["document_page_charts_kept"] = self.page_charts_kept
+        if self.applies.title:
+            checks["document_title_correct"] = self.title_correct
+        if self.applies.filters:
+            checks["document_filters_kept"] = self.filters_kept
         return checks
 
 
@@ -509,6 +635,62 @@ def evaluate_document_response(
     return evaluation
 
 
+def _score_rework(
+    rework: dict, document: dict, document_part: dict, pages: list[Any], failures: list[str]
+) -> tuple[bool, bool, bool, bool, bool]:
+    """``(reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept)`` of a v2 edit.
+
+    A check the item does not state is False.
+    """
+    base_document_id = document_part.get("base_document_id")
+    reworks_open_document = document_part.get("reworks_open_document") is True
+    expected_base = rework["base_document_id"]
+    if base_document_id != expected_base:
+        failures.append(
+            f"the edit must apply to the open document {expected_base!r}, "
+            f"but it reports base_document_id {base_document_id!r}"
+        )
+    if not reworks_open_document:
+        failures.append("the edit must be written from the open document, but reworks_open_document is not true")
+    reworks_open = base_document_id == expected_base and reworks_open_document
+
+    pages_kept = False
+    if "keeps_pages" in rework:
+        present = {page.get("id") for page in pages if isinstance(page, dict)}
+        lost = [page_id for page_id in rework["keeps_pages"] if page_id not in present]
+        failures.extend(f"the edit lost page {page_id!r} of the open document" for page_id in lost)
+        pages_kept = not lost
+
+    page_charts_kept = False
+    if "page_charts" in rework:
+        by_id = {page.get("id"): page for page in pages if isinstance(page, dict)}
+        moved = [
+            (chart, page_id)
+            for page_id, charts in rework["page_charts"].items()
+            for chart in charts
+            if chart not in _page_visualizations(by_id.get(page_id))
+        ]
+        failures.extend(
+            f"chart {chart!r} is no longer on page {page_id!r} of the open document" for chart, page_id in moved
+        )
+        page_charts_kept = not moved
+
+    title_correct = False
+    if "title" in rework:
+        title_correct = document.get("title") == rework["title"]
+        if not title_correct:
+            failures.append(f"the document is titled {document.get('title')!r}, expected {rework['title']!r}")
+
+    filters_kept = False
+    if "filters" in rework:
+        # A document without filters omits the key, which matches an expectation of none.
+        actual_filters = _filters(document) or {}
+        filters_kept = actual_filters == rework["filters"]
+        if not filters_kept:
+            failures.append(f"the document filters are {actual_filters!r}, expected {rework['filters']!r}")
+    return reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept
+
+
 def _score_response(
     tool_result: dict | None,
     document_part: dict | None,
@@ -516,10 +698,16 @@ def _score_response(
     *,
     skill_activated: bool,
 ) -> DocumentEvaluation:
+    rework = _rework(expected_output)
     applies = _Applies(
         period=_has_period(expected_output),
         charts=_has_visualizations(expected_output),
         narrative=_has_narrative(expected_output),
+        rework=rework is not None,
+        pages_kept=rework is not None and "keeps_pages" in rework,
+        page_charts=rework is not None and "page_charts" in rework,
+        title=rework is not None and "title" in rework,
+        filters=rework is not None and "filters" in rework,
     )
 
     if tool_result is None:
@@ -572,11 +760,32 @@ def _score_response(
         pages_consistent = bool(kinds) and kinds[0] == _COVER_PAGE and _CONTENT_PAGE in kinds
 
     not_saved = True
-    for key, wording in (("saved_document_id", "be saved yet"), ("base_document_id", "edit a saved document")):
-        value = document_part.get(key)
-        if value is not None:
-            failures.append(f"a new draft must not {wording}, but it reports {key} {value!r}")
-            not_saved = False
+    saved_document_id = document_part.get("saved_document_id")
+    if saved_document_id is not None:
+        draft = "a new draft" if rework is None else "an edit"
+        failures.append(f"{draft} must not be saved yet, but it reports saved_document_id {saved_document_id!r}")
+        not_saved = False
+
+    new_draft = reworks_open = pages_kept = page_charts_kept = title_correct = filters_kept = False
+    if rework is None:
+        new_draft = True
+        base_document_id = document_part.get("base_document_id")
+        if base_document_id is not None:
+            failures.append(
+                f"a new draft must not edit a saved document, but it reports base_document_id {base_document_id!r}"
+            )
+            new_draft = False
+        if document_part.get("reworks_open_document") is True:
+            failures.append("a new draft must not rework the open document, but it reports reworks_open_document")
+            new_draft = False
+    elif not _is_v2(document):
+        failures.append(
+            f"a rework is scored on aac-v2 documents only, but the draft is version {document.get('version')!r}"
+        )
+    else:
+        reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept = _score_rework(
+            rework, document, document_part, pages, failures
+        )
 
     period_correct = False
     if applies.period:
@@ -620,6 +829,12 @@ def _score_response(
         period_correct=period_correct,
         charts_matched=charts_matched,
         summaries_present=summaries_present,
+        new_draft=new_draft,
+        reworks_open=reworks_open,
+        pages_kept=pages_kept,
+        page_charts_kept=page_charts_kept,
+        title_correct=title_correct,
+        filters_kept=filters_kept,
         failures=failures,
     )
 
@@ -848,12 +1063,13 @@ def run_agentic_document_skill(
     the format to the server's ``enablePublisherV2`` feature flag.
 
     Raises:
-        ValueError: the fixture is unusable — see ``_validate_expectation`` and
-            ``_validate_user_context``, or ``document_format`` is not a format gen-ai
-            accepts. Raised before any chat request.
+        ValueError: the fixture is unusable — see ``_validate_expectation``,
+            ``_validate_user_context`` and ``_validate_rework_target``, or ``document_format``
+            is not a format gen-ai accepts. Raised before any chat request.
     """
     _validate_expectation(expected_output)
     _validate_user_context(user_context)
+    _validate_rework_target(expected_output, user_context)
     document_format = normalize_document_format(document_format)
     if judge is None and _has_narrative(expected_output):
         judge = LLMJudge(_NARRATIVE_EVALUATION_STEPS)
@@ -938,9 +1154,9 @@ def evaluate_agentic_document_skill(
 
     Raises:
         DocumentSkillAssertionError: the gate did not pass.
-        ValueError: the fixture is unusable, see ``_validate_expectation`` and
-            ``_validate_user_context``. Raised before any chat request, so it means a
-            fixture to fix rather than a result to read. Also raised, equally before any
+        ValueError: the fixture is unusable, see ``_validate_expectation``,
+            ``_validate_user_context`` and ``_validate_rework_target``. Raised before any chat
+            request, so it means a fixture to fix rather than a result to read. Also raised, equally before any
             request, when the caller passes a ``document_format`` gen-ai does not accept.
         JudgeResponseError: the fixture states a narrative and the judge returned no readable
             verdict for any run -- an item without a result, not K failures.
