@@ -71,6 +71,7 @@ _KNOWN_PART_TYPES: frozenset[str] = frozenset(
         "searchResults",
         "alertProposal",
         "clarifyingQuestions",
+        "workflowStatus",
     }
 )
 
@@ -246,6 +247,9 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator, item_id: st
             acc.alert_proposals.append(part.get("alertProposal") or {})
         elif ptype == "searchResults":
             acc.search_results.append(part)
+        elif ptype == "workflowStatus":
+            # A UI signal that the turn ended a workflow; it carries nothing the answer is scored on.
+            continue
         else:
             if ptype not in _KNOWN_PART_TYPES:
                 _log.warning("unknown multipart part type %r; captured as an unhandled part", ptype)

@@ -106,6 +106,18 @@ def test_alert_proposal_part_still_goes_to_its_own_field():
     assert result.unhandled_parts == []
 
 
+def test_workflow_status_part_stays_out_of_the_answer():
+    result = parse_sse_lines(
+        _multipart_lines(
+            {"type": "workflowStatus", "skills": ["dashboard_editor"], "status": "ended"},
+            {"type": "text", "text": "Done."},
+        )
+    )
+    assert result.unhandled_parts == []
+    assert result.search_results == []
+    assert render_answer_text(result) == "Done."
+
+
 def test_known_part_types_matches_the_documented_gen_ai_union():
     gen_ai_message_part_union = {
         "text",
@@ -118,6 +130,7 @@ def test_known_part_types_matches_the_documented_gen_ai_union():
         "searchResults",
         "alertProposal",
         "clarifyingQuestions",
+        "workflowStatus",
     }
     assert gen_ai_message_part_union == _KNOWN_PART_TYPES
 
