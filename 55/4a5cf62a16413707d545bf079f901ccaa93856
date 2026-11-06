@@ -25,3 +25,30 @@ packages/gooddata-sdk/src/gooddata_sdk/__init__.py
     }
   }
 }
+
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_a3a72d936bc79e::t_592b37fc6b7de3 448-449
+  s_a3a72d936bc79e::t_9dba08f5ff747b 445-447
+  s_a3a72d936bc79e::t_0ed09bbbc64622 450-452
+  s_a3a72d936bc79e::t_a8be2763008212 4,10,27,441-444,453-472,477,486-504
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_a3a72d936bc79e::t_d094e40f8f2999 235,243-244,398,535-536,671,808-809
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_documents.py
+  s_a3a72d936bc79e::t_9925fb5a064a6c 12,17,19-20,24-25,57-75,178-250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f789f994bbcf2ea93313cf2b8af9018e7603c488",
+  "prompts": {},
+  "sessions": {
+    "s_a3a72d936bc79e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a63996f6-45cd-4842-b400-4f090303bde4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
