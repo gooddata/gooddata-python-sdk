@@ -1,0 +1,64 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_7db080eb8d74a7::t_e1f548ef4b2931 73,96,391-552,703-731,811-819,853-858
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_b4ef09eebe7513::t_5959eee05a8f55 422-423,972
+  s_7db080eb8d74a7::t_3a4b9f65583682 407-409
+  s_7db080eb8d74a7::t_a60b01f2543415 68-69,264-270,310-318,323-345,383-384,410-411,438-441,456-459,478-481,522-529,574-612,620,625-628,681-693,695-696,698-705,749-752
+  s_b4ef09eebe7513::t_62b9a0db7803cc 694
+  s_7db080eb8d74a7::t_e6c81c985c7780 400-406,412-421
+  s_b4ef09eebe7513::t_1703dbca3a20ea 973-974
+  s_7db080eb8d74a7::t_240e8afd0f061f 978,1063-1065
+  s_8a1464293a1bf2::t_d151a2e96efd62 319-322
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_9be5c935c4199e::t_cf3523bbf6d310 30,175,177-186,195,294,302-308,310-312,336
+packages/gooddata-eval/tests/test_agentic_general_question.py
+  s_1fed2936afd5a3::t_e5384b89efd88f 729-794
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "23215e754a6618061ffdc18646c2861209e10cd4",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_7db080eb8d74a7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "acfcd90f-739a-4b63-b9d6-ca67c31d3884",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_8a1464293a1bf2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b79d79d-490b-4217-b524-56aea3e31804",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_9be5c935c4199e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4854202-f3a9-4a45-9cc8-fc0084369b8b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}
