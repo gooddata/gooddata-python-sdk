@@ -40,6 +40,18 @@ def _is_retryable(exc: Exception) -> bool:
     return isinstance(exc, _RETRYABLE_TRANSPORT_ERRORS)
 
 
+def is_transient(exc: httpx.HTTPError) -> bool:
+    """Whether a failure left after the client's retries says nothing about the request.
+
+    429, 5xx and transport failures (a read timeout included) are transient; any other 4xx
+    (flag off, no agent, invalid body) and an unsupported URL scheme are setup problems.
+    """
+    if isinstance(exc, httpx.HTTPStatusError):
+        status = exc.response.status_code
+        return status == 429 or status >= 500
+    return isinstance(exc, httpx.TransportError) and not isinstance(exc, httpx.UnsupportedProtocol)
+
+
 def _request_body(ti: TakeawayInput) -> dict[str, Any]:
     body: dict[str, Any] = {}
     if ti.agent_id is not None:
@@ -77,14 +89,21 @@ class TakeawayClient:
 
         Raises:
             ValueError: The item carries no `takeaway_input`.
-            httpx.HTTPStatusError: The endpoint answered non-2xx; the message carries the
-                status code and the response body. Transient statuses and connection
-                failures are retried first, with the chat client's backoff and budget.
+            httpx.HTTPStatusError: As `request`.
         """
         ti = item.takeaway_input
         if ti is None:
             raise ValueError(f"document_takeaway item '{item.id}' is missing required 'takeaway_input'.")
+        return self.request(ti)
 
+    def request(self, ti: TakeawayInput) -> ChatResult:
+        """Request a takeaway for one input and adapt it to a ChatResult.
+
+        Raises:
+            httpx.HTTPStatusError: The endpoint answered non-2xx; the message carries the
+                status code and the response body. Transient statuses and connection
+                failures are retried first, with the chat client's backoff and budget.
+        """
         body = _request_body(ti)
 
         def _post() -> httpx.Response:
