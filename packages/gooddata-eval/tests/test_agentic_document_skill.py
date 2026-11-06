@@ -6,6 +6,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
+import httpx
 import pytest
 from gooddata_eval.cli.agentic_runner import _dispatch_agentic
 from gooddata_eval.core import agentic
@@ -24,7 +25,7 @@ from gooddata_eval.core.agentic.document_skill import (
     run_agentic_document_skill,
 )
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, TakeawayInput
 
 # Shapes follow what gen-ai writes for a drafted document (composed_report.aac.json): a cover
 # page, then content pages whose layout nests `column` and `row` entries down to the slots.
@@ -1079,7 +1080,9 @@ def test_an_item_the_judge_could_never_grade_raises(monkeypatch: pytest.MonkeyPa
     turn = _narrative_turn(_cover_page(), _summary_page("page2", "Revenue grew 12%.", _REVENUE_TREND))
     _install_client(monkeypatch, _ScriptedChatClient([turn]))
     judge = _FakeJudge(error=JudgeResponseError("empty body"))
-    with pytest.raises(JudgeResponseError, match="no readable verdict") as raised:
+    with pytest.raises(
+        JudgeResponseError, match=r"^no run of 1 could be graded: judge returned no readable verdict for 1 run\(s\): "
+    ) as raised:
         evaluate_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=judge)
     assert len(raised.value.run_latencies_s) == 1
 
@@ -1374,6 +1377,500 @@ def test_a_document_whose_only_content_page_is_hidden_has_no_content_page() -> N
     pages = [_v2_cover_page(), _hidden(_v2_content_page("page2", _REVENUE_TREND))]
     evaluation = _evaluate(_v2_document_part(pages), tool=_draft_result(page_count=1))
     assert evaluation.failures == ["the document has no content page"]
+
+
+# ── takeaways the copilot leaves to the editor ──────────────────────────────
+
+_EDITOR_TEXT = "**Revenue grew 12%** in H1, led by the West."
+
+
+class _StubTakeaways:
+    """Stands in for TakeawayClient: answers each request with the next scripted response."""
+
+    def __init__(self, *responses: dict | Exception) -> None:
+        self._responses = list(responses)
+        self.requests: list[TakeawayInput] = []
+        self.closed = False
+
+    def request(self, ti: TakeawayInput) -> ChatResult:
+        self.requests.append(ti)
+        response = self._responses.pop(0) if self._responses else {"takeaway": _EDITOR_TEXT, "noData": False}
+        if isinstance(response, Exception):
+            raise response
+        return ChatResult(text_response=response.get("takeaway") or "", raw_response=response)
+
+    def close(self) -> None:
+        self.closed = True
+
+
+def _install_takeaways(monkeypatch: pytest.MonkeyPatch, takeaways: _StubTakeaways) -> None:
+    monkeypatch.setattr(document_skill, "TakeawayClient", lambda **_kwargs: takeaways)
+
+
+def _http_error(status: int) -> httpx.HTTPStatusError:
+    request = httpx.Request("POST", "https://h/api/v1/ai/workspaces/ws/takeaway")
+    return httpx.HTTPStatusError(f"{status}", request=request, response=httpx.Response(status, request=request))
+
+
+def _with_instructions(page: dict, instructions: str) -> dict:
+    takeaway = page["layout"]["children"][1]["children"][1]
+    takeaway["generation"] = {**takeaway["generation"], "instructions": instructions}
+    return page
+
+
+# The copilot's part carries the document as code: a period of bare dates and a widget's date dataset in ``date``.
+_AAC_PERIOD = {"from": "2026-01-01", "to": "2026-06-30"}
+
+
+def _dated(page: dict, dataset: str) -> dict:
+    page["layout"]["children"][1]["children"][0]["children"][0]["date"] = dataset
+    return page
+
+
+def _editor_pages() -> list[dict]:
+    """A cover, a page whose takeaway the copilot wrote, and two left to the editor, one dated and with instructions."""
+    return [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND, takeaway="Revenue grew 12%.", bare_ids=True),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY, takeaway="", bare_ids=True),
+        _with_instructions(
+            _dated(_v2_content_page("page4", _REVENUE_TREND, takeaway="", bare_ids=True), "date"), "Focus on the West."
+        ),
+    ]
+
+
+def _editor_turn(
+    pages: list[dict],
+    editor_page_ids: Any,
+    *,
+    version: str = "v2",
+    period: Any = _AAC_PERIOD,
+    filters: dict | None = None,
+) -> ChatResult:
+    tool = _draft_result(page_count=len(pages))
+    if editor_page_ids is not None:
+        tool[document_skill._EDITOR_PAGES_KEY] = editor_page_ids
+    part = _v2_document_part(pages, period=period) if version == "v2" else _document_part(pages)
+    if filters is not None:
+        part["document"]["content"]["filters"] = filters
+    return _chat_result(tool_calls=[_tool_call("draft_document", tool)], parts=[part], text="Done.")
+
+
+def _editor_run(
+    pages: list[dict],
+    editor_page_ids: Any,
+    takeaways: _StubTakeaways | None,
+    judge: _FakeJudge | None = None,
+    user_context: dict | None = None,
+) -> document_skill.DocumentRunResult:
+    return _execute_single_document_run(
+        _ScriptedChatClient([_editor_turn(pages, editor_page_ids)]),
+        "conv-1",
+        "q",
+        {"narrative": _NARRATIVE},
+        4,
+        judge or _FakeJudge(),
+        takeaways,
+        user_context,
+    )
+
+
+def test_each_takeaway_left_to_the_editor_is_written_the_editors_way_and_graded() -> None:
+    # given
+    takeaways = _StubTakeaways()
+    judge = _FakeJudge()
+
+    # when
+    run = _editor_run(_editor_pages(), ["page3", "page4"], takeaways, judge)
+
+    # then
+    assert [r.model_dump() for r in takeaways.requests] == [
+        TakeawayInput(visualizations=[{"visualization_id": _RETURNS_BY_CATEGORY}]).model_dump(),
+        TakeawayInput(
+            visualizations=[
+                {
+                    "visualization_id": _REVENUE_TREND,
+                    "filters": [
+                        {
+                            "absoluteDateFilter": {
+                                "dataset": {"identifier": {"id": "date", "type": "dataset"}},
+                                "from": "2026-01-01",
+                                "to": "2026-06-30",
+                            }
+                        }
+                    ],
+                }
+            ],
+            instructions={"slot": "Focus on the West."},
+        ).model_dump(),
+    ]
+    assert run.evaluation.failures == []
+    assert run.evaluation.strict_checks["document_summaries_present"] is True
+    assert run.evaluation.strict_checks["document_narrative_judged"] is True
+    assert judge.calls[0]["actual_output"].count(f"Summary: {_EDITOR_TEXT}") == 2
+    assert run.takeaways_by_editor == 2
+
+
+def test_each_takeaway_on_a_page_sends_its_own_instructions() -> None:
+    # given
+    page = _with_instructions(_v2_content_page("page3", _RETURNS_BY_CATEGORY, takeaway="", bare_ids=True), "First.")
+    row = page["layout"]["children"][1]["children"]
+    row.append({**row[1], "id": "takeawayB", "generation": {**row[1]["generation"], "instructions": "Second."}})
+    takeaways = _StubTakeaways()
+
+    # when
+    run = _editor_run([_v2_cover_page(), page], ["page3"], takeaways)
+
+    # then
+    assert [r.instructions.slot for r in takeaways.requests if r.instructions] == ["First.", "Second."]
+    assert run.takeaways_by_editor == 2
+
+
+def test_the_document_filters_as_the_editor_reads_them_reach_each_request() -> None:
+    # given
+    filters = {
+        "region": {"type": "attribute_filter", "using": "label/region", "state": {"include": ["West"]}},
+        "q1": {"type": "date_filter", "granularity": "DAY", "date": "date", "from": "2026-01-01", "to": "2026-03-31"},
+    }
+    takeaways = _StubTakeaways()
+    turn = _editor_turn(_editor_pages(), ["page3", "page4"], filters=filters)
+
+    # when
+    run = _execute_single_document_run(
+        _ScriptedChatClient([turn]), "conv-1", "q", {"narrative": _NARRATIVE}, 4, _FakeJudge(), takeaways
+    )
+
+    # then
+    west = {
+        "positiveAttributeFilter": {
+            "label": {"identifier": {"id": "region", "type": "label"}},
+            "in": {"values": ["West"]},
+        }
+    }
+    q1 = {
+        "absoluteDateFilter": {
+            "dataset": {"identifier": {"id": "date", "type": "dataset"}},
+            "from": "2026-01-01",
+            "to": "2026-03-31",
+        }
+    }
+    assert [[v.filters for v in r.visualizations if not isinstance(v, str)] for r in takeaways.requests] == [
+        [[west]],
+        [[q1, west]],
+    ]
+    assert run.evaluation.failures == []
+    assert run.takeaways_by_editor == 2
+
+
+def test_the_run_keeps_the_part_the_copilot_sent() -> None:
+    # when
+    run = _editor_run(_editor_pages(), ["page3", "page4"], _StubTakeaways())
+
+    # then
+    assert run.document_part is not None
+    assert (
+        "markdown" not in run.document_part["document"]["content"]["pages"][2]["layout"]["children"][1]["children"][1]
+    )
+
+
+def test_an_empty_takeaway_on_a_page_not_left_to_the_editor_still_fails() -> None:
+    # given
+    takeaways = _StubTakeaways()
+
+    # when
+    run = _editor_run(_editor_pages(), ["page4"], takeaways)
+
+    # then
+    assert len(takeaways.requests) == 1
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+    assert run.evaluation.failures[0] == "page 'page3' has a takeaway with no written text"
+
+
+def _open_document(pages: list[dict], *, period: Any = _AAC_PERIOD) -> dict:
+    """The ``user_context`` of an item that has this document open in the editor."""
+    return {"view": {"document": {"id": "sales_overview", "definition": _v2_document(pages, period=period)}}}
+
+
+def test_an_empty_takeaway_the_open_document_holds_empty_under_the_same_request_may_stay_empty() -> None:
+    # given
+    takeaways = _StubTakeaways()
+    open_document = _open_document(_editor_pages())
+
+    # when
+    run = _editor_run(_editor_pages(), ["page4"], takeaways, user_context=open_document)
+
+    # then
+    assert len(takeaways.requests) == 1
+    assert run.evaluation.strict_checks["document_summaries_present"] is True
+    assert run.evaluation.failures == []
+
+
+def test_an_empty_takeaway_fails_when_the_open_document_had_another_period() -> None:
+    # given
+    takeaways = _StubTakeaways()
+    other_period = {"from": "2025-01-01", "to": "2025-06-30"}
+    open_document = _open_document(_editor_pages(), period=other_period)
+
+    # when
+    run = _editor_run(_editor_pages(), ["page4"], takeaways, user_context=open_document)
+
+    # then
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+    assert run.evaluation.failures[0] == "page 'page3' has a takeaway with no written text"
+
+
+def test_an_empty_takeaway_fails_when_the_open_document_wrote_it() -> None:
+    # given
+    written = _editor_pages()
+    written[2] = _v2_content_page("page3", _RETURNS_BY_CATEGORY, takeaway="Returns fell.", bare_ids=True)
+
+    # when
+    run = _editor_run(_editor_pages(), ["page4"], _StubTakeaways(), user_context=_open_document(written))
+
+    # then
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+
+
+def test_an_empty_takeaway_fails_when_its_instructions_changed_since_the_open_document() -> None:
+    # given
+    changed = _editor_pages()
+    changed[2] = _with_instructions(changed[2], "Focus on the East.")
+
+    # when
+    run = _editor_run(changed, ["page4"], _StubTakeaways(), user_context=_open_document(_editor_pages()))
+
+    # then
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+
+
+def test_a_listed_takeaway_the_copilot_wrote_is_graded_as_written() -> None:
+    # given
+    takeaways = _StubTakeaways()
+
+    # when
+    run = _editor_run(_editor_pages(), ["page2", "page3", "page4"], takeaways)
+
+    # then
+    assert len(takeaways.requests) == 2
+    assert run.takeaways_by_editor == 2
+
+
+@pytest.mark.parametrize("editor_page_ids", [None, []], ids=["field absent", "field empty"])
+def test_a_draft_that_leaves_nothing_to_the_editor_is_graded_as_before(editor_page_ids: Any) -> None:
+    # given
+    takeaways = _StubTakeaways()
+    pages = _editor_pages()
+
+    # when
+    run = _editor_run(pages, editor_page_ids, takeaways)
+
+    # then
+    assert takeaways.requests == []
+    assert run.takeaways_by_editor is None
+    without_client = _editor_run(pages, editor_page_ids, None)
+    assert run.evaluation == without_client.evaluation
+    assert run.evaluation.failures == [
+        "page 'page3' has a takeaway with no written text",
+        "page 'page4' has a takeaway with no written text",
+    ]
+
+
+def test_a_v1_draft_is_never_filled() -> None:
+    # given
+    takeaways = _StubTakeaways()
+    pages = [_cover_page(), _summary_page("page2", "", _REVENUE_TREND)]
+
+    # when
+    run = _execute_single_document_run(
+        _ScriptedChatClient([_editor_turn(pages, ["page2"], version="v1")]),
+        "conv-1",
+        "q",
+        {"narrative": _NARRATIVE},
+        4,
+        _FakeJudge(),
+        takeaways,
+    )
+
+    # then
+    assert takeaways.requests == []
+    assert run.evaluation.failures[0] == "page 'page2' has a summary slot with no written text"
+
+
+@pytest.mark.parametrize(
+    ("response", "reason"),
+    [
+        ({"takeaway": None, "noData": True}, "the editor's takeaway request found no data"),
+        ({"takeaway": "  ", "noData": False}, "the takeaway endpoint wrote no text"),
+    ],
+    ids=["no data", "no text"],
+)
+def test_a_takeaway_the_endpoint_does_not_write_fails_with_why(response: dict, reason: str) -> None:
+    # when
+    run = _editor_run(_editor_pages(), ["page3", "page4"], _StubTakeaways(response))
+
+    # then
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+    assert run.evaluation.failures == ["page 'page3' has a takeaway with no written text", f"page 'page3': {reason}"]
+    assert run.takeaways_by_editor == 1
+
+
+def test_a_takeaway_whose_request_the_eval_cannot_build_fails_with_why() -> None:
+    # given
+    pages = _editor_pages()
+    pages[2] = _v2_content_page("page3", takeaway="")
+
+    # when
+    run = _editor_run(pages, ["page3", "page4"], _StubTakeaways())
+
+    # then
+    assert run.evaluation.failures == [
+        "page 'page3' has a takeaway with no written text",
+        "page 'page3': the eval cannot build the editor's takeaway request: page 'page3' has no visualization to summarize",
+    ]
+
+
+def test_a_draft_the_editor_cannot_read_fails_with_why() -> None:
+    # given
+    takeaways = _StubTakeaways()
+    turn = _editor_turn(
+        _editor_pages(), ["page3"], period={"type": "relative", "granularity": "CENTURY", "from": -1, "to": -1}
+    )
+
+    # when
+    run = _execute_single_document_run(
+        _ScriptedChatClient([turn]), "conv-1", "q", {"narrative": _NARRATIVE}, 4, _FakeJudge(), takeaways
+    )
+
+    # then
+    assert takeaways.requests == []
+    assert run.evaluation.failures[:2] == [
+        "page 'page3' has a takeaway with no written text",
+        "page 'page4' has a takeaway with no written text",
+    ]
+    assert len(run.evaluation.failures) == 3
+    assert run.evaluation.failures[2].startswith("the eval cannot read the draft as the editor does: ")
+    assert "CENTURY" in run.evaluation.failures[2]
+
+
+def test_an_endpoint_that_refuses_the_request_stops_the_item(monkeypatch: pytest.MonkeyPatch) -> None:
+    # given
+    _install_client(monkeypatch, _ScriptedChatClient([_editor_turn(_editor_pages(), ["page3"])]))
+    takeaways = _StubTakeaways(_http_error(404))
+    _install_takeaways(monkeypatch, takeaways)
+
+    # when
+    with pytest.raises(httpx.HTTPStatusError, match="404"):
+        run_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=_FakeJudge())
+
+    # then
+    assert takeaways.closed
+
+
+def test_a_transient_endpoint_failure_leaves_the_run_ungraded(monkeypatch: pytest.MonkeyPatch) -> None:
+    # given
+    turns = [_editor_turn(_editor_pages(), ["page3", "page4"]) for _ in range(2)]
+    _install_client(monkeypatch, _ScriptedChatClient(turns))
+    _install_takeaways(monkeypatch, _StubTakeaways(_http_error(503)))
+    judge = _FakeJudge()
+
+    # when
+    summary = run_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, k=2, judge=judge)
+
+    # then
+    first, second = summary.run_results
+    assert first.ungraded
+    assert first.judge_error is not None and first.judge_error.startswith("takeaway endpoint for page 'page3'")
+    assert "document_summaries_present" not in first.evaluation.strict_checks
+    assert not second.ungraded and second.evaluation.strict_pass
+    assert len(judge.calls) == 1, "a run with a takeaway still unwritten is not judged"
+    assert summary.request_errors == [first.judge_error]
+    assert summary.judge_errors == []
+    assert summary.pass_at_k
+    assert not summary.pass_power_k
+
+
+def test_an_item_whose_every_run_the_takeaway_endpoint_left_ungraded_raises_naming_the_takeaway_endpoint(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # given
+    _install_client(monkeypatch, _ScriptedChatClient([_editor_turn(_editor_pages(), ["page3", "page4"])]))
+    _install_takeaways(monkeypatch, _StubTakeaways(_http_error(503)))
+
+    # when
+    with pytest.raises(JudgeResponseError) as raised:
+        evaluate_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, judge=_FakeJudge())
+
+    # then
+    assert str(raised.value).startswith("no run of 1 could be graded: request failed for 1 run(s): ")
+    assert "takeaway endpoint for page 'page3'" in str(raised.value)
+
+
+def test_a_transient_failure_after_a_listed_takeaway_already_failed_is_a_failure() -> None:
+    # when
+    run = _editor_run(
+        _editor_pages(), ["page3", "page4"], _StubTakeaways({"takeaway": None, "noData": True}, _http_error(503))
+    )
+
+    # then
+    assert not run.ungraded
+    assert run.evaluation.fill_error is None
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+    assert "page 'page3': the editor's takeaway request found no data" in run.evaluation.failures
+    assert (
+        "takeaway endpoint for page 'page4': HTTPStatusError: 503: the takeaway stays empty" in run.evaluation.failures
+    )
+
+
+def test_a_transient_failure_beside_an_empty_takeaway_not_left_to_the_editor_is_a_failure() -> None:
+    # when
+    run = _editor_run(_editor_pages(), ["page4"], _StubTakeaways(_http_error(503)))
+
+    # then
+    assert not run.ungraded
+    assert run.evaluation.fill_error is None
+    assert run.evaluation.strict_checks["document_summaries_present"] is False
+    assert (
+        "takeaway endpoint for page 'page4': HTTPStatusError: 503: the takeaway stays empty" in run.evaluation.failures
+    )
+
+
+def test_a_transient_failure_does_not_stop_the_takeaways_after_it() -> None:
+    # given
+    takeaways = _StubTakeaways(httpx.ConnectError("refused"))
+
+    # when
+    run = _editor_run(_editor_pages(), ["page3", "page4"], takeaways)
+
+    # then
+    assert len(takeaways.requests) == 2
+    assert run.ungraded
+    assert run.takeaways_by_editor == 1
+
+
+def test_the_takeaways_written_by_the_editor_reach_langfuse(monkeypatch: pytest.MonkeyPatch) -> None:
+    # given
+    _install_takeaways(monkeypatch, _StubTakeaways())
+
+    # when
+    ctx = _scored(
+        monkeypatch, {"narrative": _NARRATIVE}, [_editor_turn(_editor_pages(), ["page3", "page4"])], judge=_FakeJudge()
+    )
+
+    # then
+    assert ctx.scores["document_takeaways_by_editor"] == 2
+    assert ctx.score_types["document_takeaways_by_editor"] == "NUMERIC"
+    assert ctx.scores["document_summaries_present"] == 1.0
+
+
+def test_no_takeaway_score_is_published_when_nothing_was_left_to_the_editor(monkeypatch: pytest.MonkeyPatch) -> None:
+    # given
+    _install_takeaways(monkeypatch, _StubTakeaways())
+
+    # when
+    ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, [_editor_turn(_v2_written_pages(), [])], judge=_FakeJudge())
+
+    # then
+    assert "document_takeaways_by_editor" not in ctx.scores
 
 
 def test_the_report_skill_module_still_exports_the_old_names() -> None:

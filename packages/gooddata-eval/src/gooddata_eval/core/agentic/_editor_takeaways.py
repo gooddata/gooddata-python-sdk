@@ -213,7 +213,8 @@ def _generation_instructions(holder: Any) -> Any:
 def editor_takeaway_input(document: dict, page: dict, takeaway: dict) -> TakeawayInput | str:
     """The request the editor sends to write ``takeaway`` on ``page``, or why it cannot be built.
 
-    ``document`` is a v2 document with its content keys under ``content`` or at the top level.
+    ``document`` is a v2 document in its declarative form, the one the editor reads, with its content
+    keys under ``content`` or at the top level.
     """
     content = document.get("content")
     content = content if isinstance(content, dict) else document
