@@ -26,10 +26,10 @@ def render_search_results(part: dict) -> str:
 
 
 def render_unhandled_part(part: dict) -> str:
-    """Best-effort rendering of a part gd-eval does not model, truncated to a sane size."""
+    """Render an unmodelled part, preserving questionnaires and capping other payloads."""
     ptype = str(part.get("type") or "unknown")
     body = json.dumps({k: v for k, v in part.items() if k != "type"}, ensure_ascii=False)
-    if len(body) > _MAX_UNHANDLED_PART_CHARS:
+    if ptype != "clarifyingQuestions" and len(body) > _MAX_UNHANDLED_PART_CHARS:
         body = body[:_MAX_UNHANDLED_PART_CHARS] + "… (truncated)"
     return f"[{ptype}]\n{body}"
 

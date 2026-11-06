@@ -155,6 +155,39 @@ def test_a_huge_unmodelled_part_is_truncated():
     assert len(rendered) < 3_000
 
 
+def test_long_questionnaire_keeps_every_offered_option() -> None:
+    questions: list[dict] = []
+    for question_index in range(4):
+        options = [
+            {"text": "{dashboard/00000000-0000-4000-8000-" + f"{question_index * 6 + option_index:012d}" + "}"}
+            for option_index in range(6)
+        ]
+        questions.append(
+            {
+                "text": (
+                    f"Which dashboard should receive the alert for metric {question_index}, considering the department, "
+                    "reporting period, audience, and the business context in my original request? "
+                    "For example: choose the closest match."
+                ),
+                "control": {"type": "singleChoice", "options": options},
+            }
+        )
+    result = parse_sse_lines(
+        _multipart_lines(
+            {"type": "text", "text": "Pick one for each metric."},
+            {"type": "clarifyingQuestions", "questions": questions},
+        )
+    )
+
+    rendered = render_answer_text(result)
+
+    assert "Pick one for each metric." in rendered
+    for question in questions:
+        assert question["text"] in rendered
+        for option in question["control"]["options"]:
+            assert option["text"] in rendered
+
+
 @pytest.mark.parametrize("ptype", ["dashboard", "dashboardPatch", "report", "kda", "whatIf", "clarifyingQuestions"])
 def test_no_known_part_type_is_silently_dropped(ptype):
     result = parse_sse_lines(_multipart_lines({"type": ptype, "payload": {"a": 1}}))

@@ -378,9 +378,7 @@ def _execute_single_metric_run(
                 metric_result = candidate
                 exit_reason = LoopExit.SUCCESS
                 break
-            response_text = (chat_result.text_response or "").strip()
-            if not response_text:
-                response_text = render_answer_text(chat_result)
+            response_text = render_answer_text(chat_result)
             if not response_text and not chat_result.tool_call_events:
                 exit_reason = LoopExit.AGENT_SILENT
                 break
