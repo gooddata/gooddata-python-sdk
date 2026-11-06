@@ -133,10 +133,20 @@ def _rollback_dashboard_permissions(sdk: GoodDataSdk) -> None:
 
 def test_single_workspace_permission_validation(test_config):
     _validation_helper(CatalogDeclarativeSingleWorkspacePermission, "name")
+    data = {"name": "CREATE_DOCUMENT", "assignee": {"id": "demo2", "type": "user"}}
+    permission = CatalogDeclarativeSingleWorkspacePermission.from_dict(data)
+    assert permission.name == "CREATE_DOCUMENT"
+    assert permission.to_api().name == "CREATE_DOCUMENT"
+    assert permission.to_dict(camel_case=True) == data
 
 
 def test_workspace_hierarchy_permission(test_config):
     _validation_helper(CatalogDeclarativeWorkspaceHierarchyPermission, "name")
+    data = {"name": "CREATE_DOCUMENT", "assignee": {"id": "demo2", "type": "user"}}
+    permission = CatalogDeclarativeWorkspaceHierarchyPermission.from_dict(data)
+    assert permission.name == "CREATE_DOCUMENT"
+    assert permission.to_api().name == "CREATE_DOCUMENT"
+    assert permission.to_dict(camel_case=True) == data
 
 
 def test_data_source_permission(test_config):

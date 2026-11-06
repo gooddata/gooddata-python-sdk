@@ -84,8 +84,11 @@ class FeatureFlagsContext(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'controlled_feature_rollout': (str,),  # noqa: E501
+            'data_center': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'early_access_values': ([str],),  # noqa: E501
+            'tier': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -94,8 +97,11 @@ class FeatureFlagsContext(ModelNormal):
 
 
     attribute_map = {
+        'controlled_feature_rollout': 'controlledFeatureRollout',  # noqa: E501
+        'data_center': 'dataCenter',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'early_access_values': 'earlyAccessValues',  # noqa: E501
+        'tier': 'tier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -105,12 +111,15 @@ class FeatureFlagsContext(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, early_access, early_access_values, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, controlled_feature_rollout, data_center, early_access, early_access_values, tier, *args, **kwargs):  # noqa: E501
         """FeatureFlagsContext - a model defined in OpenAPI
 
         Args:
+            controlled_feature_rollout (str):
+            data_center (str):
             early_access (str):
             early_access_values ([str]):
+            tier (str):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -174,8 +183,11 @@ class FeatureFlagsContext(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.controlled_feature_rollout = controlled_feature_rollout
+        self.data_center = data_center
         self.early_access = early_access
         self.early_access_values = early_access_values
+        self.tier = tier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,12 +208,15 @@ class FeatureFlagsContext(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, early_access, early_access_values, *args, **kwargs):  # noqa: E501
+    def __init__(self, controlled_feature_rollout, data_center, early_access, early_access_values, tier, *args, **kwargs):  # noqa: E501
         """FeatureFlagsContext - a model defined in OpenAPI
 
         Args:
+            controlled_feature_rollout (str):
+            data_center (str):
             early_access (str):
             early_access_values ([str]):
+            tier (str):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -263,8 +278,11 @@ class FeatureFlagsContext(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.controlled_feature_rollout = controlled_feature_rollout
+        self.data_center = data_center
         self.early_access = early_access
         self.early_access_values = early_access_values
+        self.tier = tier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

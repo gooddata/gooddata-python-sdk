@@ -1,0 +1,57 @@
+{
+  "analytics": {
+    "documents": [
+      {
+        "id": "doc_1",
+        "title": "Doc 1",
+        "description": "Monthly",
+        "tags": ["finance"],
+        "version": "2",
+        "period": {"type": "absolute", "granularity": "GDC.time.date", "from": "2026-01-01", "to": "2026-01-31"},
+        "content": {
+          "locale": "en-US",
+          "pages": [
+            {
+              "id": "p1",
+              "kind": "content",
+              "layout": {"type": "row", "children": [{"type": "text", "id": "t1", "markdown": "Hello"}]}
+            }
+          ]
+        },
+        "createdBy": {"id": "admin", "type": "user"},
+        "createdAt": "2000-01-01 00:00",
+        "modifiedBy": {"id": "admin", "type": "user"},
+        "modifiedAt": "2026-11-02 11:00"
+      }
+    ],
+    "documentTemplates": [
+      {
+        "id": "tpl_1",
+        "title": "Tpl 1",
+        "description": "Brand review",
+        "tags": ["brand"],
+        "version": "2",
+        "content": {
+          "locale": "en-US",
+          "pages": [
+            {
+              "id": "p1",
+              "kind": "content",
+              "layout": {"type": "row", "children": [{"type": "text", "id": "t1", "markdown": "Hello"}]}
+            }
+          ]
+        }
+      }
+    ],
+    "pageTemplates": [
+      {
+        "id": "pt_1",
+        "title": "Page 1",
+        "description": "Cover",
+        "tags": ["brand"],
+        "version": "2",
+        "content": {"layout": {"type": "text", "id": "t1", "markdown": "Hello"}}
+      }
+    ]
+  }
+}

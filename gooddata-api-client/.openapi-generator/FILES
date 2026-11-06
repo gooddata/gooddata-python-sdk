@@ -49,7 +49,6 @@ docs/AlertDescription.md
 docs/AlertEvaluationRow.md
 docs/AllTimeDateFilter.md
 docs/AllTimeDateFilterAllTimeDateFilter.md
-docs/AmplitudeService.md
 docs/AnalyticalDashboardControllerApi.md
 docs/AnalyticsCatalogCreatedBy.md
 docs/AnalyticsCatalogTags.md
@@ -1077,7 +1076,9 @@ docs/JsonApiPublisherDocumentInDocument.md
 docs/JsonApiPublisherDocumentOut.md
 docs/JsonApiPublisherDocumentOutAttributes.md
 docs/JsonApiPublisherDocumentOutDocument.md
+docs/JsonApiPublisherDocumentOutIncludes.md
 docs/JsonApiPublisherDocumentOutList.md
+docs/JsonApiPublisherDocumentOutRelationships.md
 docs/JsonApiPublisherDocumentOutWithLinks.md
 docs/JsonApiPublisherDocumentPageTemplateIn.md
 docs/JsonApiPublisherDocumentPageTemplateInAttributes.md
@@ -1432,6 +1433,7 @@ docs/ObjectConditionalFormatting.md
 docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
 docs/ObjectStorageInfo.md
+docs/ObjectStorageRef.md
 docs/ObservabilityApi.md
 docs/OpenAIProviderConfig.md
 docs/OpenAiApiKeyAuth.md
@@ -1968,7 +1970,6 @@ gooddata_api_client/model/alert_description.py
 gooddata_api_client/model/alert_evaluation_row.py
 gooddata_api_client/model/all_time_date_filter.py
 gooddata_api_client/model/all_time_date_filter_all_time_date_filter.py
-gooddata_api_client/model/amplitude_service.py
 gooddata_api_client/model/analytics_catalog_created_by.py
 gooddata_api_client/model/analytics_catalog_tags.py
 gooddata_api_client/model/analytics_catalog_user.py
@@ -2925,7 +2926,9 @@ gooddata_api_client/model/json_api_publisher_document_in_document.py
 gooddata_api_client/model/json_api_publisher_document_out.py
 gooddata_api_client/model/json_api_publisher_document_out_attributes.py
 gooddata_api_client/model/json_api_publisher_document_out_document.py
+gooddata_api_client/model/json_api_publisher_document_out_includes.py
 gooddata_api_client/model/json_api_publisher_document_out_list.py
+gooddata_api_client/model/json_api_publisher_document_out_relationships.py
 gooddata_api_client/model/json_api_publisher_document_out_with_links.py
 gooddata_api_client/model/json_api_publisher_document_page_template_in.py
 gooddata_api_client/model/json_api_publisher_document_page_template_in_attributes.py
@@ -3259,6 +3262,7 @@ gooddata_api_client/model/object_conditional_formatting.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
 gooddata_api_client/model/object_storage_info.py
+gooddata_api_client/model/object_storage_ref.py
 gooddata_api_client/model/open_ai_api_key_auth.py
 gooddata_api_client/model/open_ai_api_key_auth_all_of.py
 gooddata_api_client/model/open_ai_provider_auth.py

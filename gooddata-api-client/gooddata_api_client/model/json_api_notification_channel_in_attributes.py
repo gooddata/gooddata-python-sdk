@@ -78,7 +78,7 @@ class JsonApiNotificationChannelInAttributes(ModelNormal):
 
     validations = {
         ('custom_dashboard_url',): {
-            'max_length': 255,
+            'max_length': 2048,
         },
         ('description',): {
             'max_length': 10000,

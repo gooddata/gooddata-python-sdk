@@ -1,0 +1,31 @@
+# (C) 2026 GoodData Corporation
+# A document presents a finished period as pages of visualizations and text.
+# Its period becomes a date filter on every visualization that does not opt out,
+# and a page places what it draws in a tree of rows and columns.
+
+type: document
+id: doc_1
+version: "2"
+title: Doc 1
+description: Monthly
+tags:
+  - finance
+period:
+  granularity: MONTH
+  from: -1
+  to: 0
+content:
+  locale: en-US
+  future_field:
+    nested:
+      - 1
+      - deep: true
+  pages:
+    - id: p1
+      kind: content
+      layout:
+        type: row
+        children:
+          - type: text
+            id: t1
+            markdown: Hello

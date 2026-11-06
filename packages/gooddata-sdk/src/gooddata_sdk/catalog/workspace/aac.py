@@ -1,16 +1,21 @@
 # (C) 2026 GoodData Corporation
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, Literal
 
 from gooddata_code_convertors import (
+    ConversionError,
     declarative_attribute_hierarchy_to_yaml,
     declarative_dashboard_to_yaml,
     declarative_dataset_to_yaml,
     declarative_date_instance_to_yaml,
     declarative_metric_to_yaml,
     declarative_plugin_to_yaml,
+    declarative_publisher_document_template_to_yaml_v2,
+    declarative_publisher_document_to_yaml_v2,
+    declarative_publisher_page_template_to_yaml_v2,
     declarative_visualisation_to_yaml,
     yaml_attribute_hierarchy_to_declarative,
     yaml_dashboard_to_declarative,
@@ -18,6 +23,9 @@ from gooddata_code_convertors import (
     yaml_date_dataset_to_declarative,
     yaml_metric_to_declarative,
     yaml_plugin_to_declarative,
+    yaml_publisher_document_template_to_declarative_v2,
+    yaml_publisher_document_to_declarative_v2,
+    yaml_publisher_page_template_to_declarative_v2,
     yaml_visualisation_to_declarative,
 )
 
@@ -54,7 +62,20 @@ _VISUALIZATION_TYPES = frozenset(
 
 # All known AAC type values
 _ALL_AAC_TYPES = (
-    frozenset({"dataset", "date", "metric", "dashboard", "plugin", "attribute_hierarchy"}) | _VISUALIZATION_TYPES
+    frozenset(
+        {
+            "dataset",
+            "date",
+            "metric",
+            "dashboard",
+            "plugin",
+            "attribute_hierarchy",
+            "document",
+            "document_template",
+            "page_template",
+        }
+    )
+    | _VISUALIZATION_TYPES
 )
 
 # Types that are "dataset-like" for the entities array
@@ -81,6 +102,36 @@ def _build_entities(aac_objects: list[dict[str, Any]]) -> list[dict[str, Any]]:
         }
         for obj in aac_objects
     ]
+
+
+# ---------------------------------------------------------------------------
+# Convertor refusal errors (documents, document templates, page templates)
+# ---------------------------------------------------------------------------
+
+
+def _convert(
+    convert: Callable[[dict[str, Any]], dict[str, Any]],
+    aac_type: str,
+    obj: dict[str, Any],
+    direction: Literal["read", "write"],
+) -> dict[str, Any]:
+    """Run a convertor on one object and name the object when the convertor refuses it.
+
+    Args:
+        convert: The gooddata-code-convertors function to apply to obj.
+        aac_type: The AAC type of obj, used to name it in the error.
+        obj: The AAC dict when reading from code, the declarative dict when writing as code.
+        direction: "read" for AAC to declarative on load, "write" for declarative to AAC on store.
+
+    Raises:
+        ValueError: The convertor refused obj.
+    """
+    try:
+        return convert(obj)
+    except ConversionError as e:
+        name = f'{aac_type} "{obj.get("id")}" (version "{obj.get("version")}")'
+        action = f"read {name} from code" if direction == "read" else f"write {name} as code"
+        raise ValueError(f"Cannot {action}: {e}") from e
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +206,33 @@ def aac_attribute_hierarchy_to_declarative(aac: dict[str, Any]) -> dict[str, Any
     return yaml_attribute_hierarchy_to_declarative(aac)
 
 
+def aac_document_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
+    """Convert an AAC document dict to declarative format.
+
+    Raises:
+        ValueError: The convertor refused the document, for example because its version is not "2".
+    """
+    return _convert(yaml_publisher_document_to_declarative_v2, "document", aac, "read")
+
+
+def aac_document_template_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
+    """Convert an AAC document template dict to declarative format.
+
+    Raises:
+        ValueError: The convertor refused the document template, for example because its version is not "2".
+    """
+    return _convert(yaml_publisher_document_template_to_declarative_v2, "document_template", aac, "read")
+
+
+def aac_page_template_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
+    """Convert an AAC page template dict to declarative format.
+
+    Raises:
+        ValueError: The convertor refused the page template, for example because its version is not "2".
+    """
+    return _convert(yaml_publisher_page_template_to_declarative_v2, "page_template", aac, "read")
+
+
 # ---------------------------------------------------------------------------
 # Individual object conversions: Declarative dict → AAC dict
 # Returns {"json": dict, "content": str}
@@ -226,6 +304,35 @@ def declarative_attribute_hierarchy_to_aac(declarative: dict[str, Any]) -> dict[
     return declarative_attribute_hierarchy_to_yaml(declarative)
 
 
+def declarative_document_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
+    """Convert a declarative document dict to AAC format.
+
+    The AAC form carries no author fields (createdBy, createdAt, modifiedBy, modifiedAt).
+
+    Raises:
+        ValueError: The convertor refused the document, for example because its version is not "2".
+    """
+    return _convert(declarative_publisher_document_to_yaml_v2, "document", declarative, "write")
+
+
+def declarative_document_template_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
+    """Convert a declarative document template dict to AAC format.
+
+    Raises:
+        ValueError: The convertor refused the document template, for example because its version is not "2".
+    """
+    return _convert(declarative_publisher_document_template_to_yaml_v2, "document_template", declarative, "write")
+
+
+def declarative_page_template_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
+    """Convert a declarative page template dict to AAC format.
+
+    Raises:
+        ValueError: The convertor refused the page template, for example because its version is not "2".
+    """
+    return _convert(declarative_publisher_page_template_to_yaml_v2, "page_template", declarative, "write")
+
+
 # ---------------------------------------------------------------------------
 # Format detection
 # ---------------------------------------------------------------------------
@@ -245,7 +352,17 @@ def detect_yaml_format(path: Path) -> Literal["aac", "declarative"]:
         return "declarative"
 
     # Check for AAC markers: typed subdirectories
-    aac_subdirs = {"datasets", "metrics", "visualisations", "dashboards", "plugins", "attributeHierarchies"}
+    aac_subdirs = {
+        "datasets",
+        "metrics",
+        "visualisations",
+        "dashboards",
+        "plugins",
+        "attributeHierarchies",
+        "documents",
+        "documentTemplates",
+        "pageTemplates",
+    }
     for subdir in aac_subdirs:
         if (path / subdir).is_dir():
             return "aac"
@@ -319,6 +436,9 @@ def load_aac_workspace_from_disk(
     analytical_dashboards: list[dict[str, Any]] = []
     dashboard_plugins: list[dict[str, Any]] = []
     attribute_hierarchies: list[dict[str, Any]] = []
+    documents: list[dict[str, Any]] = []
+    document_templates: list[dict[str, Any]] = []
+    page_templates: list[dict[str, Any]] = []
 
     for aac in aac_objects:
         aac_type = aac.get("type")
@@ -341,6 +461,12 @@ def load_aac_workspace_from_disk(
                 dashboard_plugins.append(aac_plugin_to_declarative(aac))
             case "attribute_hierarchy":
                 attribute_hierarchies.append(aac_attribute_hierarchy_to_declarative(aac))
+            case "document":
+                documents.append(aac_document_to_declarative(aac))
+            case "document_template":
+                document_templates.append(aac_document_template_to_declarative(aac))
+            case "page_template":
+                page_templates.append(aac_page_template_to_declarative(aac))
             case vis_type if vis_type in _VISUALIZATION_TYPES:
                 visualization_objects.append(aac_visualization_to_declarative(aac, entities))
 
@@ -365,6 +491,12 @@ def load_aac_workspace_from_disk(
         analytics["dashboardPlugins"] = dashboard_plugins
     if attribute_hierarchies:
         analytics["attributeHierarchyObjects"] = attribute_hierarchies
+    if documents:
+        analytics["documents"] = documents
+    if document_templates:
+        analytics["documentTemplates"] = document_templates
+    if page_templates:
+        analytics["pageTemplates"] = page_templates
     if analytics:
         workspace_model_dict["analytics"] = analytics
 
@@ -388,13 +520,25 @@ def store_aac_workspace_to_disk(model: CatalogDeclarativeWorkspaceModel, source_
     """Convert a declarative workspace model to AAC YAML files and write to disk.
 
     Creates typed subdirectories (datasets/, metrics/, visualisations/, dashboards/,
-    plugins/, attributeHierarchies/) under source_dir.
+    plugins/, attributeHierarchies/, documents/, documentTemplates/, pageTemplates/)
+    under source_dir.
+
+    Raises:
+        ValueError: The convertor refused a document, document template or page template.
+            Nothing is written in that case.
     """
-    source_dir.mkdir(parents=True, exist_ok=True)
     model_dict = model.to_dict(camel_case=True)
 
     ldm = model_dict.get("ldm", {})
     analytics = model_dict.get("analytics", {})
+
+    documents = [(d["id"], declarative_document_to_aac(d)) for d in analytics.get("documents", [])]
+    document_templates = [
+        (t["id"], declarative_document_template_to_aac(t)) for t in analytics.get("documentTemplates", [])
+    ]
+    page_templates = [(p["id"], declarative_page_template_to_aac(p)) for p in analytics.get("pageTemplates", [])]
+
+    source_dir.mkdir(parents=True, exist_ok=True)
 
     for dataset in ldm.get("datasets", []):
         result = declarative_dataset_to_aac(dataset)
@@ -423,3 +567,12 @@ def store_aac_workspace_to_disk(model: CatalogDeclarativeWorkspaceModel, source_
     for hierarchy in analytics.get("attributeHierarchyObjects", []):
         result = declarative_attribute_hierarchy_to_aac(hierarchy)
         _write_aac_file(source_dir, "attributeHierarchies", hierarchy["id"], result["content"])
+
+    for document_id, result in documents:
+        _write_aac_file(source_dir, "documents", document_id, result["content"])
+
+    for template_id, result in document_templates:
+        _write_aac_file(source_dir, "documentTemplates", template_id, result["content"])
+
+    for page_template_id, result in page_templates:
+        _write_aac_file(source_dir, "pageTemplates", page_template_id, result["content"])

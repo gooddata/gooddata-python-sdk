@@ -31,10 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.amplitude_service import AmplitudeService
     from gooddata_api_client.model.matomo_service import MatomoService
     from gooddata_api_client.model.open_telemetry_service import OpenTelemetryService
-    globals()['AmplitudeService'] = AmplitudeService
     globals()['MatomoService'] = MatomoService
     globals()['OpenTelemetryService'] = OpenTelemetryService
 
@@ -92,7 +90,6 @@ class TelemetryServices(ModelNormal):
         """
         lazy_import()
         return {
-            'amplitude': (AmplitudeService,),  # noqa: E501
             'matomo': (MatomoService,),  # noqa: E501
             'open_telemetry': (OpenTelemetryService,),  # noqa: E501
         }
@@ -103,7 +100,6 @@ class TelemetryServices(ModelNormal):
 
 
     attribute_map = {
-        'amplitude': 'amplitude',  # noqa: E501
         'matomo': 'matomo',  # noqa: E501
         'open_telemetry': 'openTelemetry',  # noqa: E501
     }
@@ -149,7 +145,6 @@ class TelemetryServices(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            amplitude (AmplitudeService): [optional]  # noqa: E501
             matomo (MatomoService): [optional]  # noqa: E501
             open_telemetry (OpenTelemetryService): [optional]  # noqa: E501
         """
@@ -237,7 +232,6 @@ class TelemetryServices(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            amplitude (AmplitudeService): [optional]  # noqa: E501
             matomo (MatomoService): [optional]  # noqa: E501
             open_telemetry (OpenTelemetryService): [optional]  # noqa: E501
         """

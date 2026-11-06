@@ -23,12 +23,15 @@ interactions:
           traceId: NORMALIZED_TRACE_ID_000000000000
       headers:
         Content-Type:
-          - application/problem+json
+          - application/json
         DATE: &id001
           - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
       status:
         code: 404
         message: Not Found
@@ -494,6 +497,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '7492'
       status:
         code: 200
         message: OK
@@ -958,10 +963,13 @@ interactions:
           analyticalDashboards: []
           attributeHierarchies: []
           dashboardPlugins: []
+          documentTemplates: []
+          documents: []
           exportDefinitions: []
           filterContexts: []
           memoryItems: []
           metrics: []
+          pageTemplates: []
           parameters: []
           visualizationObjects: []
       headers:
@@ -1329,6 +1337,8 @@ interactions:
                     description: Testing record dashboard_plugin_2
                     id: dashboard_plugin_2
                     title: dashboard_plugin_2
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts:
                   - content:
@@ -1505,6 +1515,7 @@ interactions:
                       maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
                     id: total_revenue-no_filters
                     title: Total Revenue (No Filters)
+                pageTemplates: []
                 parameters: []
                 visualizationObjects:
                   - content:
@@ -2818,10 +2829,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:
@@ -2853,10 +2867,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:

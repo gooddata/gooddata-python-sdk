@@ -1226,6 +1226,13 @@ def get_possible_classes(cls, from_server_context):
     if from_server_context:
         return possible_classes
     if hasattr(cls, 'discriminator') and cls.discriminator is not None:
+        if issubclass(cls, ModelComposed):
+            # A discriminated oneOf must stay a single candidate so that
+            # _new_from_openapi_data dispatches on the discriminator value.
+            # Listing its members instead makes attempt_convert_item try each
+            # in turn, and a member missing a required argument raises a
+            # plain TypeError, which that function does not catch.
+            return possible_classes
         possible_classes = []
         possible_classes.extend(get_discriminated_classes(cls))
     elif issubclass(cls, ModelComposed):

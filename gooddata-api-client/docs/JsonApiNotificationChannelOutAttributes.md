@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **dashboard_link_visibility** | **str** | Dashboard link visibility in notifications. HIDDEN - the link will not be included INTERNAL_ONLY - only internal users will see the link ALL - all users will see the link  | [optional] 
 **description** | **str, none_type** |  | [optional] 
 **destination** | [**JsonApiNotificationChannelInAttributesDestination**](JsonApiNotificationChannelInAttributesDestination.md) |  | [optional] 
-**destination_type** | **str, none_type** |  | [optional] 
+**destination_type** | **str, none_type** |  | [optional] [readonly] 
 **in_platform_notification** | **str** | In-platform notifications configuration. No effect if the destination type is IN_PLATFORM. DISABLED - in-platform notifications are not sent ENABLED - in-platform notifications are sent in addition to the regular notifications  | [optional] 
 **name** | **str, none_type** |  | [optional] 
 **notification_source** | **str** | Human-readable description of the source of the notification. If specified, this propertywill be included in the notifications to this channel.Allowed placeholders are: {{workspaceId}} {{workspaceName}} {{workspaceDescription}} {{dashboardId}} {{dashboardName}} {{dashboardDescription}}  | [optional] 
