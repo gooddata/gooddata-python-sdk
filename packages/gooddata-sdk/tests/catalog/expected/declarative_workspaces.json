@@ -469,6 +469,9 @@
               "title": "dashboard_plugin_2"
             }
           ],
+          "documentTemplates": [],
+          "documents": [],
+          "pageTemplates": [],
           "exportDefinitions": [],
           "filterContexts": [
             {
@@ -2944,6 +2947,9 @@
           "analyticalDashboards": [],
           "attributeHierarchies": [],
           "dashboardPlugins": [],
+          "documentTemplates": [],
+          "documents": [],
+          "pageTemplates": [],
           "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],
@@ -2991,6 +2997,9 @@
           "analyticalDashboards": [],
           "attributeHierarchies": [],
           "dashboardPlugins": [],
+          "documentTemplates": [],
+          "documents": [],
+          "pageTemplates": [],
           "exportDefinitions": [],
           "filterContexts": [],
           "metrics": [],

@@ -21,11 +21,16 @@ interactions:
           status: 404
           title: Not Found
           traceId: NORMALIZED_TRACE_ID_000000000000
+          type: about:blank
       headers:
         Content-Type:
           - application/problem+json
         DATE: &id001
           - PLACEHOLDER
+        Expires:
+          - '0'
+        Pragma:
+          - no-cache
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
@@ -494,6 +499,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '7492'
       status:
         code: 200
         message: OK
@@ -2259,6 +2266,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '27788'
       status:
         code: 200
         message: OK
@@ -2615,6 +2624,8 @@ interactions:
               description: Testing record dashboard_plugin_2
               id: dashboard_plugin_2
               title: dashboard_plugin_2
+          documentTemplates: []
+          documents: []
           exportDefinitions: []
           filterContexts:
             - content:
@@ -2883,6 +2894,7 @@ interactions:
                 type: user
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
+          pageTemplates: []
           parameters: []
           visualizationObjects:
             - content:
@@ -5212,6 +5224,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '27788'
       status:
         code: 200
         message: OK
@@ -5513,6 +5527,8 @@ interactions:
                     description: Testing record dashboard_plugin_2
                     id: dashboard_plugin_2
                     title: dashboard_plugin_2
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts:
                   - content:
@@ -5689,6 +5705,7 @@ interactions:
                       maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
                     id: total_revenue-no_filters
                     title: Total Revenue (No Filters)
+                pageTemplates: []
                 parameters: []
                 visualizationObjects:
                   - content:
@@ -7002,10 +7019,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:
@@ -7037,10 +7057,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:

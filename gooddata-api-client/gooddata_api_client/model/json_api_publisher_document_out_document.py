@@ -33,11 +33,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_agent_out_document_meta import JsonApiAgentOutDocumentMeta
     from gooddata_api_client.model.json_api_publisher_document_out import JsonApiPublisherDocumentOut
-    from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
+    from gooddata_api_client.model.json_api_publisher_document_out_includes import JsonApiPublisherDocumentOutIncludes
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAgentOutDocumentMeta'] = JsonApiAgentOutDocumentMeta
     globals()['JsonApiPublisherDocumentOut'] = JsonApiPublisherDocumentOut
-    globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
+    globals()['JsonApiPublisherDocumentOutIncludes'] = JsonApiPublisherDocumentOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -97,7 +97,7 @@ class JsonApiPublisherDocumentOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiPublisherDocumentOut,),  # noqa: E501
-            'included': ([JsonApiUserIdentifierOutWithLinks],),  # noqa: E501
+            'included': ([JsonApiPublisherDocumentOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'meta': (JsonApiAgentOutDocumentMeta,),  # noqa: E501
         }
@@ -158,7 +158,7 @@ class JsonApiPublisherDocumentOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiPublisherDocumentOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """
@@ -250,7 +250,7 @@ class JsonApiPublisherDocumentOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiPublisherDocumentOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             meta (JsonApiAgentOutDocumentMeta): [optional]  # noqa: E501
         """

@@ -32,15 +32,15 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
     from gooddata_api_client.model.json_api_publisher_document_out import JsonApiPublisherDocumentOut
     from gooddata_api_client.model.json_api_publisher_document_out_attributes import JsonApiPublisherDocumentOutAttributes
+    from gooddata_api_client.model.json_api_publisher_document_out_relationships import JsonApiPublisherDocumentOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
     globals()['JsonApiPublisherDocumentOut'] = JsonApiPublisherDocumentOut
     globals()['JsonApiPublisherDocumentOutAttributes'] = JsonApiPublisherDocumentOutAttributes
+    globals()['JsonApiPublisherDocumentOutRelationships'] = JsonApiPublisherDocumentOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -110,7 +110,7 @@ class JsonApiPublisherDocumentOutWithLinks(ModelComposed):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiPublisherDocumentOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -171,7 +171,7 @@ class JsonApiPublisherDocumentOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiPublisherDocumentOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -281,7 +281,7 @@ class JsonApiPublisherDocumentOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiPublisherDocumentOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

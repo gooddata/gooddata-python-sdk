@@ -48,7 +48,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         PublisherDocumentAttributeFilterConfig(
                             display_as_label=PublisherDocumentObjRef(
                                 identifier="identifier_example",
-                                type="type_example",
+                                type="insight",
                             ),
                             local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                             mode="readonly",
@@ -542,7 +542,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         PublisherDocumentAttributeFilterConfig(
                             display_as_label=PublisherDocumentObjRef(
                                 identifier="identifier_example",
-                                type="type_example",
+                                type="insight",
                             ),
                             local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                             mode="readonly",
@@ -786,7 +786,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         PublisherDocumentAttributeFilterConfig(
                             display_as_label=PublisherDocumentObjRef(
                                 identifier="identifier_example",
-                                type="type_example",
+                                type="insight",
                             ),
                             local_identifier="26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1",
                             mode="readonly",

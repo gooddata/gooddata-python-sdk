@@ -65,7 +65,7 @@ def rest_op(op, url_path, data=None, raise_ex=True):
         else:
             return None
 
-    if response.status_code == 200:
+    if response.status_code in (200, 201):
         return response.json()
     else:
         return None

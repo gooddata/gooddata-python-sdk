@@ -1,0 +1,17 @@
+# (C) 2026 GoodData Corporation
+# A page template is one page a document or a document template can copy.
+# It places widgets in a tree of rows and columns, and a widget left empty
+# here is one the document is expected to fill.
+
+type: page_template
+id: pt_1
+version: "2"
+title: Page 1
+description: Cover
+tags:
+  - finance
+content:
+  layout:
+    type: text
+    id: t1
+    markdown: Hello

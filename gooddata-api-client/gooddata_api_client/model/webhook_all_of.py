@@ -73,7 +73,7 @@ class WebhookAllOf(ModelNormal):
             'max_length': 10000,
         },
         ('url',): {
-            'max_length': 255,
+            'max_length': 2048,
             'regex': {
                 'pattern': r'https?\:\/\/.*',  # noqa: E501
             },

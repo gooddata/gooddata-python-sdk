@@ -114,7 +114,7 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
 
         Args:
             name (str): Name of the database instance
-            storage_ids ([str]): Set of ids of the storage instances this database instance should access.
+            storage_ids ([str]): Set of ids of the storage instances this database instance should access. Each entry is a `storageId` from the ObjectStorages listing or, for backward compatibility, a storage name. Must contain exactly one entry.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -207,7 +207,7 @@ class ProvisionDatabaseInstanceRequest(ModelNormal):
 
         Args:
             name (str): Name of the database instance
-            storage_ids ([str]): Set of ids of the storage instances this database instance should access.
+            storage_ids ([str]): Set of ids of the storage instances this database instance should access. Each entry is a `storageId` from the ObjectStorages listing or, for backward compatibility, a storage name. Must contain exactly one entry.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

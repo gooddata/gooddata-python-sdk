@@ -1741,6 +1741,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '35279'
       status:
         code: 200
         message: OK
@@ -3484,6 +3486,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '35279'
       status:
         code: 200
         message: OK
