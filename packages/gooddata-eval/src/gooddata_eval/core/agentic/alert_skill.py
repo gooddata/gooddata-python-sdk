@@ -39,6 +39,7 @@ from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
     AgenticAssertionError,
     AgenticEvalOutcome,
+    ChatResult,
     LoopExit,
     ReasoningStepEvent,
     ToolCallEvent,
@@ -928,6 +929,18 @@ def render_alert_proposal(proposal: dict) -> str:
     return f"{cta}\n\nAlert proposal:\n{json.dumps(summary, indent=2, sort_keys=True)}"
 
 
+def render_turn_for_simulated_user(chat_result: ChatResult) -> str:
+    """Render the whole agent turn the simulated user answers: prose, every other part, and the last proposal.
+
+    A ``clarifyingQuestions`` part carries the options the agent asks the user to pick from, so the
+    simulated user cannot answer a question whose options it never reads.
+    """
+    chunks = [render_answer_text(chat_result)]
+    if chat_result.alert_proposals:
+        chunks.append(render_alert_proposal(chat_result.alert_proposals[-1]))
+    return "\n\n".join(chunk for chunk in chunks if chunk)
+
+
 def run_agentic_alert_skill(
     host: str,
     token: str,
@@ -1027,11 +1040,7 @@ def run_agentic_alert_skill(
                     alert_id_to_delete = alert_id
                     exit_reason = LoopExit.SUCCESS
                     break
-                response_text = (chat_result.text_response or "").strip()
-                if not response_text and chat_result.alert_proposals:
-                    response_text = render_alert_proposal(chat_result.alert_proposals[-1])
-                if not response_text:
-                    response_text = render_answer_text(chat_result)
+                response_text = render_turn_for_simulated_user(chat_result)
                 # Stop if agent gave a completely empty response (stuck)
                 if not response_text and not chat_result.tool_call_events:
                     exit_reason = LoopExit.AGENT_SILENT
