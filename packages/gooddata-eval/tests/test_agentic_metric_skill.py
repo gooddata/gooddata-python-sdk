@@ -331,6 +331,42 @@ def test_run_agentic_metric_skill_creates_conversation(monkeypatch):
     mock_client.close.assert_called_once()
 
 
+def test_run_agentic_metric_skill_passes_question_options_to_simulated_user() -> None:
+    client = _client()
+    client.send_message.return_value = ChatResult(
+        text_response="Pick one.",
+        unhandled_parts=[
+            {
+                "type": "clarifyingQuestions",
+                "questions": [
+                    {
+                        "text": "Which metric?",
+                        "control": {
+                            "type": "singleChoice",
+                            "options": [{"text": "{metric/revenue}"}, {"text": "{metric/profit}"}],
+                        },
+                    }
+                ],
+            }
+        ],
+    )
+    with _patched(client, simulated_reply="Use profit.") as (mock_sim, _):
+        run_agentic_metric_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Create a metric",
+            expected_output={"maql": "SELECT {metric/profit}"},
+            k=1,
+            max_iterations=2,
+        )
+
+    agent_message = mock_sim.call_args.args[0]
+    assert "Pick one." in agent_message
+    assert "{metric/revenue}" in agent_message
+    assert "{metric/profit}" in agent_message
+
+
 def test_run_agentic_metric_skill_closes_client_on_no_result():
     mock_client = _client()
     mock_client.send_message.return_value = ChatResult.model_validate(
