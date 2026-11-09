@@ -1,0 +1,336 @@
+# (C) 2026 GoodData Corporation
+interactions:
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_1
+    response:
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: NORMALIZED_TRACE_ID_000000000000
+          type: about:blank
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: &id001
+          - PLACEHOLDER
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 404
+        message: Not Found
+  - request:
+      body:
+        data:
+          attributes:
+            applicationName: test_app_a
+            content:
+              version: 1
+          id: test_custom_app_setting_1
+          type: customApplicationSetting
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              applicationName: test_app_a
+              content:
+                version: 1
+            id: test_custom_app_setting_1
+            meta:
+              origin:
+                originId: demo
+                originType: NATIVE
+            type: customApplicationSetting
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_1
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_2
+    response:
+      body:
+        string:
+          detail: The requested endpoint does not exist or you do not have permission
+            to access it.
+          status: 404
+          title: Not Found
+          traceId: NORMALIZED_TRACE_ID_000000000000
+          type: about:blank
+      headers:
+        Content-Type:
+          - application/problem+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 404
+        message: Not Found
+  - request:
+      body:
+        data:
+          attributes:
+            applicationName: test_app_b
+            content:
+              enabled: true
+          id: test_custom_app_setting_2
+          type: customApplicationSetting
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        Content-Type:
+          - application/json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: POST
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings
+    response:
+      body:
+        string:
+          data:
+            attributes:
+              applicationName: test_app_b
+              content:
+                enabled: true
+            id: test_custom_app_setting_2
+            meta:
+              origin:
+                originId: demo
+                originType: NATIVE
+            type: customApplicationSetting
+          links:
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_2
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 201
+        message: Created
+  - request:
+      body: null
+      headers:
+        Accept:
+          - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings?page=0&size=500
+    response:
+      body:
+        string:
+          data:
+            - attributes:
+                applicationName: test_app_a
+                content:
+                  version: 1
+              id: test_custom_app_setting_1
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_1
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: customApplicationSetting
+            - attributes:
+                applicationName: test_app_b
+                content:
+                  enabled: true
+              id: test_custom_app_setting_2
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_2
+              meta:
+                origin:
+                  originId: demo
+                  originType: NATIVE
+              type: customApplicationSetting
+          links:
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings?page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings?page=0&size=500
+      headers:
+        Content-Type:
+          - application/json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 200
+        message: OK
+  - request:
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_1
+    response:
+      body:
+        string: ''
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 204
+        message: No Content
+  - request:
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+      method: DELETE
+      uri: http://localhost:3000/api/v1/entities/workspaces/demo/customApplicationSettings/test_custom_app_setting_2
+    response:
+      body:
+        string: ''
+      headers:
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        Featurepolicy:
+          - geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr
+            'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope
+            'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';
+        Pragma:
+          - no-cache
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-GDC-TRACE-ID: *id001
+      status:
+        code: 204
+        message: No Content
+version: 1

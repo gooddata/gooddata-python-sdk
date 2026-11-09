@@ -30,6 +30,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaces,
     get_workspace_folder,
 )
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.custom_application_setting import (
+    CatalogCustomApplicationSetting,
+)
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
 from gooddata_sdk.catalog.workspace.entity_model.filter_view import (
     CatalogFilterView,
@@ -203,6 +206,96 @@ class CatalogWorkspaceService(CatalogServiceBase):
         )
         workspace_settings = load_all_entities(get_workspace_settings).data
         return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
+
+    def create_or_update_custom_application_setting(
+        self, workspace_id: str, custom_application_setting: CatalogCustomApplicationSetting
+    ) -> UpsertOutcome:
+        """Create a new custom application setting or overwrite an existing one with the same id.
+
+        Args:
+            workspace_id (str):
+                ID of workspace where we create the setting
+            custom_application_setting (CatalogCustomApplicationSetting):
+                Catalog Custom Application Setting object to be created or updated.
+                If its id is None, the backend generates one. The generated id is not
+                returned or set on the object; use list_custom_application_settings to find it.
+
+        Returns:
+            UpsertOutcome:
+                CREATED if the setting did not exist yet, UPDATED if it did.
+        """
+        if custom_application_setting.id is None:
+            self._entities_api.create_entity_custom_application_settings(
+                workspace_id, custom_application_setting.to_api(True)
+            )
+            return UpsertOutcome.CREATED
+        try:
+            self.get_custom_application_setting(workspace_id, custom_application_setting.id)
+            self._entities_api.update_entity_custom_application_settings(
+                workspace_id,
+                custom_application_setting.id,
+                custom_application_setting.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_custom_application_settings(
+                workspace_id, custom_application_setting.to_api(True)
+            )
+            return UpsertOutcome.CREATED
+        return UpsertOutcome.UPDATED
+
+    def delete_custom_application_setting(self, workspace_id: str, custom_application_setting_id: str) -> None:
+        """Delete a custom application setting. Deleting a setting that does not exist is a no-op.
+
+        Args:
+            workspace_id (str):
+                ID of workspace containing the setting
+            custom_application_setting_id (str):
+                ID of the setting to delete
+        """
+        try:
+            self._entities_api.delete_entity_custom_application_settings(workspace_id, custom_application_setting_id)
+        except NotFoundException:
+            pass
+
+    def get_custom_application_setting(
+        self, workspace_id: str, custom_application_setting_id: str
+    ) -> CatalogCustomApplicationSetting:
+        """Get a single custom application setting.
+
+        Args:
+            workspace_id (str):
+                ID of workspace containing the setting
+            custom_application_setting_id (str):
+                ID of the setting
+
+        Returns:
+            CatalogCustomApplicationSetting:
+                The requested setting.
+        """
+        return CatalogCustomApplicationSetting.from_api(
+            self._entities_api.get_entity_custom_application_settings(
+                workspace_id, custom_application_setting_id, _check_return_type=False
+            ).data
+        )
+
+    def list_custom_application_settings(self, workspace_id: str) -> list[CatalogCustomApplicationSetting]:
+        """List all custom application settings in a workspace.
+
+        Args:
+            workspace_id (str):
+                ID of workspace
+
+        Returns:
+            list[CatalogCustomApplicationSetting]:
+                Settings of all custom applications in the workspace.
+        """
+        get_custom_application_settings = functools.partial(
+            self._entities_api.get_all_entities_custom_application_settings,
+            workspace_id,
+            _check_return_type=False,
+        )
+        custom_application_settings = load_all_entities(get_custom_application_settings).data
+        return [CatalogCustomApplicationSetting.from_api(cas) for cas in custom_application_settings]
 
     def resolve_all_workspace_settings(self, workspace_id: str) -> dict:
         """Resolve values for all settings in a workspace.
