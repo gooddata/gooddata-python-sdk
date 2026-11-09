@@ -15,6 +15,20 @@ Manage workspaces. Entity and Declarative methods are supported.
 * [delete_workspace](./delete_workspace/)
 * [list_workspaces](./list_workspaces/)
 
+### Workspace Setting Methods
+
+* [list_workspace_settings](./list_workspace_settings/)
+* [get_workspace_setting](./get_workspace_setting/)
+* [create_or_update_workspace_setting](./create_or_update_workspace_setting/)
+* [delete_workspace_setting](./delete_workspace_setting/)
+
+### Custom Application Setting Methods
+
+* [list_custom_application_settings](./list_custom_application_settings/)
+* [get_custom_application_setting](./get_custom_application_setting/)
+* [create_or_update_custom_application_setting](./create_or_update_custom_application_setting/)
+* [delete_custom_application_setting](./delete_custom_application_setting/)
+
 ### Declarative Methods
 
 * [get_declarative_workspace](./get_declarative_workspace/)
