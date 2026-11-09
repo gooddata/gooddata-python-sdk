@@ -217,7 +217,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 ID of workspace where we create the setting
             custom_application_setting (CatalogCustomApplicationSetting):
                 Catalog Custom Application Setting object to be created or updated.
-                If its id is None, the backend generates one.
+                If its id is None, the backend generates one. The generated id is not
+                returned or set on the object; use list_custom_application_settings to find it.
 
         Returns:
             UpsertOutcome:

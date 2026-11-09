@@ -10,7 +10,9 @@ api_ref: "CatalogWorkspaceService.create_or_update_custom_application_setting"
 
 ``create_or_update_custom_application_setting(workspace_id: str, custom_application_setting: CatalogCustomApplicationSetting)``
 
-Creates a new custom application setting or overwrites an existing one with the same id. If the setting has no id, the server generates one.
+Creates a new custom application setting or overwrites an existing one with the same id.
+
+If the setting has no id, the server generates one. The generated id is not returned and is not assigned to the setting object, so calling the method again with the same id-less setting creates another setting. To update or delete the setting later, either supply an explicit id or look the generated id up with [list_custom_application_settings](../list_custom_application_settings/).
 
 {{% parameters-block title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}

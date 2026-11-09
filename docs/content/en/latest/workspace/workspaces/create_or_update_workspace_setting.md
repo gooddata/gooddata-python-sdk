@@ -12,6 +12,8 @@ api_ref: "CatalogWorkspaceService.create_or_update_workspace_setting"
 
 Creates a new workspace setting or overwrites an existing workspace setting with the same id.
 
+The setting must have an explicit id. Creating a setting whose id is left as the default `None` currently fails.
+
 {{% parameters-block title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}
 Workspace identification string e.g. "demo"
