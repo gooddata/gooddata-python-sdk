@@ -55,10 +55,13 @@ def create_workspace(
     sdk_wrapper: GoodDataSdkWrapper,
     workspace_id: str,
     workspace_title: str,
+    early_access_values: list[str] | None = None,
 ) -> None:
-    logger.info(f"Create workspace {workspace_id=} {workspace_title=}")
+    logger.info(f"Create workspace {workspace_id=} {workspace_title=} {early_access_values=}")
     # Create workspaces, if they do not exist yet, otherwise update them
-    workspace = CatalogWorkspace(workspace_id=workspace_id, name=workspace_title)
+    workspace = CatalogWorkspace(
+        workspace_id=workspace_id, name=workspace_title, early_access_values=early_access_values
+    )
     sdk_wrapper.sdk_facade.create_workspace(workspace=workspace)
 
 
@@ -358,7 +361,13 @@ def process_organization(
                     workspace_id = f"{data_product.id}_{environment.id}"
                     workspace_title = f"{data_product.name} ({environment.name})"
                     if args.method == "provision_workspaces":
-                        create_workspace(logger, sdk_wrapper, workspace_id, workspace_title)
+                        create_workspace(
+                            logger,
+                            sdk_wrapper,
+                            workspace_id,
+                            workspace_title,
+                            data_product.get_early_access_values(environment),
+                        )
                     elif args.method == "deploy_ldm":
                         deploy_ldm(
                             logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id

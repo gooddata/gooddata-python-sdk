@@ -24,6 +24,7 @@ class CatalogWorkspace(Base):
     name: str
     parent_id: str | None = field(default=None)
     description: str | None = field(default=None)
+    early_access_values: list[str] | None = field(default=None)
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspace:
@@ -37,6 +38,7 @@ class CatalogWorkspace(Base):
                 ["parent", "data", "id"],
             ),
             description=ea.get("description"),
+            early_access_values=ea.get("early_access_values"),
         )
 
     def to_api(self) -> JsonApiWorkspaceInDocument:
@@ -50,6 +52,8 @@ class CatalogWorkspace(Base):
         attributes_dict = {"name": self.name}
         if self.description:
             attributes_dict["description"] = self.description
+        if self.early_access_values is not None:
+            attributes_dict["early_access_values"] = self.early_access_values
         return JsonApiWorkspaceInDocument(
             data=JsonApiWorkspaceIn(
                 id=self.id,

@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 from typing import Any, Union
 
+from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogDataSourceMotherDuck,
     CatalogDataSourcePostgres,
@@ -73,8 +74,16 @@ class GoodDataApiWrapper:
     def create_workspace(self, workspace: CatalogWorkspace) -> None:
         if self.dry_run:
             self.logger.info("Dry run - skipping workspace creation")
-        else:
-            self.sdk.catalog_workspace.create_or_update(workspace=workspace)
+            return
+        if workspace.early_access_values is None:
+            # Workspace update is a PUT, which would drop early access values configured outside of this tool.
+            # Keep them, if the workspace already exists.
+            try:
+                existing = self.sdk.catalog_workspace.get_workspace(workspace.id)
+                workspace.early_access_values = existing.early_access_values
+            except NotFoundException:
+                pass
+        self.sdk.catalog_workspace.create_or_update(workspace=workspace)
 
     def create_or_update_data_source(self, data_source: DataSource) -> None:
         if self.dry_run:

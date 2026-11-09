@@ -8,6 +8,9 @@ environment_setups:
       - id: development
         name: Development
         elt_environment: dev
+        # Optional - overrides data product early_access_values in this environment
+        early_access_values:
+          - "<early_access_feature_id>"
       - id: staging
         name: Staging
         elt_environment: staging
@@ -33,6 +36,9 @@ data_products:
     environment_setup_id: default
     model_ids:
       - hubspot
+    # Optional - early access features enabled in workspaces of this data product.
+    # Omit to keep whatever is set in the workspace, use [] to disable all.
+    early_access_values: []
     # If execution of an visualization fails, and you need some time to fix it
     skip_tests:
       - "<visualization_id>"
