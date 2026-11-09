@@ -637,6 +637,7 @@ def _run(config: RunConfig) -> int:
                     provider_type=resolved.provider_type,
                     reasoning_effort=config.reasoning_effort,
                     tags=config.tags,
+                    run_metadata=config.run_metadata,
                 )
 
                 def on_langfuse_item_done(

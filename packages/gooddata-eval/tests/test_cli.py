@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation
 import io
+import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
@@ -391,7 +392,16 @@ def test_cli_langfuse_sink_called_per_item(monkeypatch, fixtures_dir):
     langfuse_calls: list = []
 
     class _FakeSink:
-        def __init__(self, dataset_name, run_name, model_id="", provider_type="", reasoning_effort=None, tags=()): ...
+        def __init__(
+            self,
+            dataset_name,
+            run_name,
+            model_id="",
+            provider_type="",
+            reasoning_effort=None,
+            tags=(),
+            run_metadata=None,
+        ): ...
         def log_item(self, report, *, dataset_item_id):
             langfuse_calls.append(dataset_item_id)
 
@@ -1022,6 +1032,66 @@ def test_cli_passes_custom_tags_to_both_langfuse_paths(monkeypatch):
     assert exit_code == 0
     assert sink_kwargs["tags"] == ("acme", "nightly")
     assert agentic_kwargs["tags"] == ("acme", "nightly")
+
+
+def test_cli_run_metadata_json_reaches_the_non_agentic_langfuse_sink(monkeypatch, tmp_path):
+    """--run-metadata-json used to only reach run_agentic_items; run_items got nothing."""
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())
+    monkeypatch.setattr(
+        cli_main,
+        "_load_dataset",
+        lambda config: [
+            DatasetItem(id="q1", dataset_name="d", test_kind="visualization", question="q", expected_output="a")
+        ],
+    )
+    monkeypatch.setattr(cli_main, "run_items", lambda items, backend, **kw: EvalReport(model="gpt-5.2"))
+
+    sink_kwargs: dict = {}
+
+    class _FakeSink:
+        def __init__(self, **kwargs):
+            sink_kwargs.update(kwargs)
+
+        def log_item(self, report, *, dataset_item_id): ...
+
+    monkeypatch.setattr(cli_main, "LangfuseSink", _FakeSink)
+
+    metadata_path = tmp_path / "run_metadata.json"
+    metadata_path.write_text(json.dumps({"agent_id": "a-1"}), encoding="utf-8")
+
+    exit_code = cli_main.main(
+        [
+            "run",
+            "--host",
+            "https://h",
+            "--token",
+            "tok",
+            "--workspace",
+            "ws1",
+            "--langfuse-dataset",
+            "my_dataset",
+            "--langfuse",
+            "--run-metadata-json",
+            str(metadata_path),
+        ]
+    )
+
+    assert exit_code == 0
+    assert sink_kwargs["run_metadata"] == {"agent_id": "a-1"}
 
 
 def test_cli_timers_flag_enables_timer_output(monkeypatch):
