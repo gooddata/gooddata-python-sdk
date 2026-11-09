@@ -1,0 +1,90 @@
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_load_and_put_declarative_analytics_model.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 24,30-33,502-503,2269-2270,2627-2628,2897,5227-5228,5530-5531,5708,7022-7023,7028,7060-7061,7066
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_load_and_put_declarative_workspace.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 2174-2175,2444,5556-5557,5859-5860,6037,7351-7352,7357,7389-7390,7395
+  s_ec27b4a96828cf::t_a37a38dabe4416 1744-1745
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_put_declarative_workspaces.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 2233-2234,2411,3725-3726,3731,3763-3764,3769,5672-5673,5975-5976,6153,7467-7468,7473,7505-7506,7511
+  s_ec27b4a96828cf::t_f866016e2f08e6 1868-1869
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_clone_workspace.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 24,2010-2011,2071,2073-2076,2105,2107-2110,2557-2558,2827,6242-6243,8163-8164,8224,8226-8229,8258,8260-8263,8724-8725,8994,12505-12506,12660-12661,12714,12719-12722,13184-13185,13454,15218-15219,15396,16710-16711,16716,16748-16749,16754
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_translate_workspace.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 4016-4019,4466-4467,4736,6185,6273,6638-6639,6816,8130-8131,8136,8168-8169,8174
+  s_ec27b4a96828cf::t_3fc0d3a61c473b 1953-1954,3986-3987,4014
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_documents_store_load_and_put.yaml
+  s_0a3b916b3fa04e::t_a7e38700073d50 18-23,25,29-66,68-499,502-914,916-917,920-991,1020-1023,1096-1097,1669-1676,1679,1682-1683,3545-3551,3553-3554
+  s_ec27b4a96828cf::t_6b3eaec0f52bd1 1
+  s_0a3b916b3fa04e::t_be772c75ab36e7 26,67,1176,1359
+  s_0a3b916b3fa04e::t_bd40c33b977e62 1980-1981,2158,3472-3473,3478,3510-3511,3516
+  s_dc5469ae2c06ba::t_3d640d82f5c039 915
+  s_0a3b916b3fa04e::t_00c2b19bfcd3a0 992-1019,1024-1095,1098-1106,1109-1157,1160-1171,1173-1175,1177-1289,1292-1340,1343-1354,1356-1358,1360-1380,1430-1433,1446-1494,1544-1547,1664-1668,1680-1681
+  s_ec27b4a96828cf::t_fde64089f04145 1108,1291,1574,1678
+  s_0a3b916b3fa04e::t_a32ec4d8f546fa 1381-1429,1434-1445,1495-1543,1548-1572,1575-1663
+  s_dc5469ae2c06ba::t_60ad1325a78df7 2-17,24,27-28,918-919,1684-1979,1982-2157,2159-3471,3474-3477,3479-3509,3512-3515,3517-3544,3552,3555
+  s_ec27b4a96828cf::t_aa5e6650aaa611 500-501,1107,1158-1159,1172,1290,1341-1342,1355,1573,1677
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_put_declarative_analytics_model.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 29-32,500-501,966-967,972,1340-1341,1518,2832-2833,2838,2870-2871,2876
+  s_ec27b4a96828cf::t_436e8f39f32713 26
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_put_declarative_workspace.yaml
+  s_90c5f69dbdf876::t_e83396a16134dd 26,1822,5295
+  s_90c5f69dbdf876::t_80b52763f2e044 29-32,2081-2082,2255,5598-5599,5776,7090-7091,7096,7128-7129,7134
+  s_ec27b4a96828cf::t_ff9e570cd845fb 1823,5296
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_declarative_workspaces.yaml
+  s_90c5f69dbdf876::t_ed4b0b81d44321 1868,3737
+  s_ec27b4a96828cf::t_ae9768ae770644 1869,3738
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/export_definition_analytics_layout.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 1612-1613,1791,4369-4370,4547,5861-5862,5867,5899-5900,5905
+  s_90c5f69dbdf876::t_302456c59a2235 1353,4066
+  s_ec27b4a96828cf::t_d6d3af5dcee0ec 1354,4067
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_load_and_put_declarative_workspaces.yaml
+  s_90c5f69dbdf876::t_80b52763f2e044 443-444,621,1913-1914,1919,1951-1952,1957,3838-3839,4141-4142,4319,5633-5634,5639,5671-5672,5677
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_get_declarative_workspace.yaml
+  s_90c5f69dbdf876::t_ed4b0b81d44321 1744,3489
+  s_ec27b4a96828cf::t_3d9ba38206bb34 1745,3490
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_get_declarative_analytics_model.yaml
+  s_ec27b4a96828cf::t_73e2e779c4e308 1353-1354
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_get_declarative_workspaces.yaml
+  s_ec27b4a96828cf::t_0cd7c6516e51aa 1868-1869
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/demo_get_declarative_workspaces_snake_case.yaml
+  s_ec27b4a96828cf::t_3e471546e51c8c 1868-1869
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1017175e3ebbdd397f69f22170d4f4a9f97dc0bb",
+  "prompts": {},
+  "sessions": {
+    "s_0a3b916b3fa04e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ea0f9adc-3644-4cbe-98c8-0df092da7d08",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    },
+    "s_90c5f69dbdf876": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2e262cd3-af91-4d9b-95d3-38301ce9fd91",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    },
+    "s_dc5469ae2c06ba": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f6edfe36-6c20-4fcf-a816-b82cf9bb7030",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    },
+    "s_ec27b4a96828cf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56686d1f-41ca-4193-9411-ca05e3c5e39b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

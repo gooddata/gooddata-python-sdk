@@ -1,0 +1,39 @@
+packages/gooddata-sdk/tests/catalog/test_catalog_permission.py
+  s_8c48a6d16ff724::t_83b7be32c36e09 136-139,144-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0daa31a9efd1e56f40614ea61753629aa1b52f3e",
+  "prompts": {},
+  "sessions": {
+    "s_8c48a6d16ff724": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d38c6991-22f3-4fa4-9ff3-0e2f6ab2918c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-sdk/tests/catalog/test_catalog_permission.py
+  s_41fc5517c56c3f::t_095ef30cf1cd85 136-137,139-140,145-146,148-149
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "37423417eda266516901407810505f240bfb9ae0",
+  "prompts": {},
+  "sessions": {
+    "s_41fc5517c56c3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9ebcc92b-9160-41c1-a962-5afcd3cdfaaf",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
