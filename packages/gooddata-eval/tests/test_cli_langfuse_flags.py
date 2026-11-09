@@ -39,6 +39,20 @@ def test_item_metadata_keeps_an_empty_value():
     assert args.langfuse_item_metadata == [("language", "")]
 
 
+def test_first_duplicate_metadata_key_finds_a_repeat():
+    assert cli_main._first_duplicate_metadata_key([("language", "en"), ("complexity", "Basic")]) is None
+    assert cli_main._first_duplicate_metadata_key([("language", "en"), ("language", "fr")]) == "language"
+
+
+def test_cli_rejects_repeated_item_metadata_keys(capsys):
+    """dict(pairs) would silently keep only 'fr', reading as the filter the run asked for."""
+    exit_code = cli_main.main(
+        [*_BASE, "--langfuse-item-metadata", "language=en", "--langfuse-item-metadata", "language=fr"]
+    )
+    assert exit_code == 2
+    assert "language" in capsys.readouterr().err
+
+
 def test_all_three_flags_default_to_empty():
     args = cli_main.parse_args([*_BASE])
     assert args.langfuse_item_ids == []

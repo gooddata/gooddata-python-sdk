@@ -434,6 +434,20 @@ def _parse_item_metadata(val: str) -> tuple[str, str]:
     return key.strip(), value.strip()
 
 
+def _first_duplicate_metadata_key(pairs: list[tuple[str, str]]) -> str | None:
+    """Return the first key repeated across --langfuse-item-metadata pairs, else None.
+
+    `dict(pairs)` silently keeps only the last value for a repeated key, which would read
+    as the filter the item satisfied rather than a flag mistake.
+    """
+    seen: set[str] = set()
+    for key, _value in pairs:
+        if key in seen:
+            return key
+        seen.add(key)
+    return None
+
+
 def _load_run_metadata(path: str) -> dict[str, Any]:
     """Read --run-metadata-json.
 
@@ -790,6 +804,14 @@ def main(argv: list[str] | None = None) -> int:
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)
         return _EXIT_OPERATIONAL_ERROR
+    if hasattr(args, "langfuse_item_metadata"):
+        dup_key = _first_duplicate_metadata_key(args.langfuse_item_metadata)
+        if dup_key is not None:
+            print(
+                f"error: --langfuse-item-metadata repeats key {dup_key!r}; each key may be given once.",
+                file=sys.stderr,
+            )
+            return _EXIT_OPERATIONAL_ERROR
     try:
         # Rendering existing JSON needs no host, token or workspace -- dispatch before
         # resolve_connection so `report` works on a laptop with no credentials at all.
