@@ -1,0 +1,19 @@
+packages/gooddata-eval/README.md
+  s_513d800a7c9432::t_1fc967df3ebc61 280-281
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "05f5975f00ec8e23020c5d03bf839201b272870f",
+  "prompts": {},
+  "sessions": {
+    "s_513d800a7c9432": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e8dd978-0e20-4727-972a-d81d06f33867",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}
