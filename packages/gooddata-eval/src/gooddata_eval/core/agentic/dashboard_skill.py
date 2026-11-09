@@ -1222,10 +1222,12 @@ def _validate_expectation(expected_output: dict) -> None:
     Raises:
         ValueError: the expectation is unusable.
     """
-    must_include, must_not_match = _answer_assertions(expected_output)
-    for key, value in (("answer_must_include", must_include), ("answer_must_not_match", must_not_match)):
-        if not isinstance(expected_output.get(key, []), list):
-            raise ValueError(f"{key} must be a list of strings, got {expected_output.get(key)!r}")
+    for key in ("answer_must_include", "answer_must_not_match"):
+        value = expected_output.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, list):
+            raise ValueError(f"{key} must be a list of strings, got {value!r}")
         # isinstance, not str(entry): `- no` in YAML loads as the bool False, which str()
         # turns into the assertion "false" -- a fixture that looks strict while checking
         # text the question never mentions. Same for a bare number.
@@ -1233,6 +1235,7 @@ def _validate_expectation(expected_output: dict) -> None:
             raise ValueError(f"{key} must be a list of strings, got {value!r}")
         if any(not entry.strip() for entry in value):
             raise ValueError(f"{key} carries an empty entry, which asserts nothing: {value!r}")
+    must_include, must_not_match = _answer_assertions(expected_output)
     # Compiled here so an unparseable pattern fails the fixture before the first API call,
     # rather than raising mid-scoring with a run already spent.
     for pattern in must_not_match:

@@ -2687,6 +2687,16 @@ class TestAnswerAssertions:
             _run_with(client, {**_DC05_EXPECTED, "answer_must_include": [entry]})
         client.send_message.assert_not_called()
 
+    @pytest.mark.parametrize("key", ["answer_must_include", "answer_must_not_match"])
+    @pytest.mark.parametrize("value", [5, True, "oops"])
+    def test_a_non_list_value_is_rejected_up_front(self, key: str, value: object) -> None:
+        """A truthy non-iterable raises `TypeError` if coerced with `list(...)` before this
+        check runs, instead of the `ValueError` the docstring promises."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="must be a list of strings"):
+            _run_with(client, {**_DC05_EXPECTED, key: value})
+        client.send_message.assert_not_called()
+
     def test_the_text_of_the_turn_that_drafted_is_what_gets_scored(self):
         """The draft arrives with the sentence describing it, and that sentence is what the
         assertions are about -- so the loop must read every turn, not only the ones that
