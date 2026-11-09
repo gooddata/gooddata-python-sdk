@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_1fed2936afd5a3::t_638f084e6fea9b 69,188-196,329-330,348-359,480,504,553-554,605-609,629-642,656,673,734,751,800
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_1fed2936afd5a3::t_9ac5ad5d0d8a57 441,460,530-604,629,899-914
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "80a3755f52b8348c880ebdbf4e14da95428c35c5",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}
