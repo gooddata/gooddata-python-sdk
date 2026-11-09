@@ -287,6 +287,9 @@ if TYPE_CHECKING:
         CatalogDeclarativeWorkspaceModel,
         CatalogDeclarativeWorkspaces,
     )
+    from gooddata_sdk.catalog.workspace.entity_model.content_objects.custom_application_setting import (
+        CatalogCustomApplicationSetting,
+    )
     from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
         CatalogAttribute,
         CatalogDataset,
@@ -411,6 +414,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "CatalogContentSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
     "CatalogCoverSlideTemplate": "gooddata_sdk.catalog.organization.common.slide_template",
     "CatalogCspDirective": "gooddata_sdk.catalog.organization.entity_model.directive",
+    "CatalogCustomApplicationSetting": "gooddata_sdk.catalog.workspace.entity_model.content_objects.custom_application_setting",
     "CatalogDashboardAssigneeIdentifier": "gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions",
     "CatalogDashboardPermissions": "gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions",
     "CatalogDashboardSlidesTemplate": "gooddata_sdk.catalog.organization.common.dashboard_slides_template",
@@ -684,6 +688,7 @@ __all__ = [
     "CatalogContentSlideTemplate",
     "CatalogCoverSlideTemplate",
     "CatalogCspDirective",
+    "CatalogCustomApplicationSetting",
     "CatalogDashboardAssigneeIdentifier",
     "CatalogDashboardPermissions",
     "CatalogDashboardSlidesTemplate",
