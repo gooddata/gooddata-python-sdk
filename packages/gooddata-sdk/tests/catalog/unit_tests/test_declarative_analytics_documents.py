@@ -8,13 +8,17 @@ The analytics layer carries ``documents``, ``documentTemplates`` and
 
 from __future__ import annotations
 
+import json
 import shutil
 from datetime import date
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
 from cattrs import structure
+from gooddata_api_client.api_client import ApiClient
+from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_sdk import (
     CatalogAbsolutePublisherDocumentPeriod,
     CatalogDeclarativeAnalytics,
@@ -37,6 +41,14 @@ _AUTHOR = {
     "modifiedAt": "2026-11-02 11:00",
 }
 _TEXT = {"type": "text", "id": "t1", "markdown": "Hello"}
+_THEME_PADDING = "{theme.spacing.padding.normal}"
+# Style values are typed number-or-string (`display.*.visible`: boolean-or-string) by the API.
+_VISUALIZATION = {"type": "visualization", "id": "v1", "display": {"dataLabels": {"visible": "auto"}}}
+_STYLED_ROW = {
+    "type": "row",
+    "style": {"padding": _THEME_PADDING, "borderRadius": 4.5},
+    "children": [_TEXT, _VISUALIZATION],
+}
 _DOCUMENT = {
     "id": "doc_1",
     "title": "Doc 1",
@@ -44,13 +56,23 @@ _DOCUMENT = {
     "period": {"type": "relative", "granularity": "GDC.time.month", "from": -1, "to": 0},
     "content": {
         "locale": "en-US",
-        "pages": [{"id": "p1", "kind": "content", "layout": {"type": "row", "children": [_TEXT]}}],
+        "pages": [{"id": "p1", "kind": "content", "style": {"gap": 20}, "layout": _STYLED_ROW}],
         "futureField": {"nested": [1, {"deep": True}]},
     },
     **_AUTHOR,
 }
-_DOCUMENT_TEMPLATE = {"id": "tpl_1", "title": "Tpl 1", "version": "1", "content": {"locale": "en-US"}}
-_PAGE_TEMPLATE = {"id": "pt_1", "title": "Page 1", "version": "1", "content": {"layout": _TEXT}}
+_DOCUMENT_TEMPLATE = {
+    "id": "tpl_1",
+    "title": "Tpl 1",
+    "version": "1",
+    "content": {"locale": "en-US", "style": {"gap": 20}},
+}
+_PAGE_TEMPLATE = {
+    "id": "pt_1",
+    "title": "Page 1",
+    "version": "1",
+    "content": {"style": {"gap": 20, "padding": _THEME_PADDING}, "layout": _STYLED_ROW},
+}
 _LAYER = {"documents": [_DOCUMENT], "documentTemplates": [_DOCUMENT_TEMPLATE], "pageTemplates": [_PAGE_TEMPLATE]}
 _METRIC = {"id": "bmk_w_fraud_charged_back", "title": "BMK", "content": {"format": "#,##0", "maql": "SELECT 1"}}
 _DOCUMENT_FOLDERS = ("documents", "document_templates", "page_templates")
@@ -79,12 +101,38 @@ def _round_trip(layer: CatalogDeclarativeAnalyticsLayer) -> dict[str, Any]:
     return layer.to_api().to_dict(camel_case=True)
 
 
+def _assert_same(actual: Any, expected: Any) -> None:
+    """Asserts equality that also tells `20` from `20.0`, which `==` treats as equal."""
+    assert type(actual) is type(expected), f"{actual!r} is not {expected!r}"
+    if isinstance(expected, dict):
+        assert actual.keys() == expected.keys()
+        for key, value in expected.items():
+            _assert_same(actual[key], value)
+    elif isinstance(expected, list):
+        assert len(actual) == len(expected)
+        for actual_item, expected_item in zip(actual, expected, strict=True):
+            _assert_same(actual_item, expected_item)
+    else:
+        assert actual == expected
+
+
 def test_documents_survive_api_round_trip() -> None:
     layer = CatalogDeclarativeAnalyticsLayer.from_dict(_LAYER)
 
     round_tripped = _round_trip(layer)
 
-    assert {key: round_tripped[key] for key in _LAYER} == _LAYER
+    _assert_same({key: round_tripped[key] for key in _LAYER}, _LAYER)
+
+
+def test_documents_survive_response_deserialization() -> None:
+    """A layout read from the API keeps every style value as the backend sent it."""
+    response = SimpleNamespace(data=json.dumps({"analytics": _LAYER}))
+    api_layout = ApiClient().deserialize(response, (DeclarativeAnalytics,), True)
+
+    analytics = CatalogDeclarativeAnalytics.from_dict(api_layout.to_dict(camel_case=False), camel_case=False)
+
+    round_tripped = analytics.to_api().to_dict(camel_case=True)["analytics"]
+    _assert_same({key: round_tripped[key] for key in _LAYER}, _LAYER)
 
 
 def test_document_author_fields_are_typed() -> None:
@@ -117,7 +165,7 @@ def test_templates_have_no_author_attributes(
     assert isinstance(template, item_class)
     assert not hasattr(template, "created_by")
     round_tripped = _round_trip(layer)[layer_key]
-    assert round_tripped == [item]
+    _assert_same(round_tripped, [item])
     assert not set(_AUTHOR) & set(round_tripped[0])
 
 
@@ -132,7 +180,7 @@ def test_document_without_author_fields() -> None:
     assert loaded.modified_by is None
     assert loaded.modified_at is None
     round_tripped = _round_trip(layer)["documents"]
-    assert round_tripped == [document]
+    _assert_same(round_tripped, [document])
     assert not set(_AUTHOR) & set(round_tripped[0])
 
 
@@ -159,7 +207,7 @@ def test_documents_survive_disk_round_trip(tmp_path: Path, sort: bool) -> None:
     assert (analytics_model_folder / "document_templates" / "tpl_1.yaml").is_file()
     assert (analytics_model_folder / "page_templates" / "pt_1.yaml").is_file()
     round_tripped = _round_trip(CatalogDeclarativeAnalyticsLayer.load_from_disk(tmp_path))
-    assert {key: round_tripped[key] for key in _LAYER} == _LAYER
+    _assert_same({key: round_tripped[key] for key in _LAYER}, _LAYER)
 
 
 def test_load_without_document_folders(tmp_path: Path) -> None:
@@ -177,6 +225,11 @@ def test_load_without_document_folders(tmp_path: Path) -> None:
 
 def _document_with(period: dict[str, Any]) -> dict[str, Any]:
     return {**{key: value for key, value in _DOCUMENT.items() if key not in _AUTHOR}, "period": period}
+
+
+def _content_in_memory() -> dict[str, Any]:
+    """`_DOCUMENT`'s content as a read holds it: keys the client models carry its python names."""
+    return CatalogDeclarativePublisherDocument.from_dict(_document_with(_RELATIVE_PERIOD)).content
 
 
 @_PERIODS
@@ -205,7 +258,7 @@ def test_hand_built_document_equals_read_document(
         id=_DOCUMENT["id"],
         title=_DOCUMENT["title"],
         version=_DOCUMENT["version"],
-        content=_DOCUMENT["content"],
+        content=_content_in_memory(),
         period=typed_period,
     )
 
