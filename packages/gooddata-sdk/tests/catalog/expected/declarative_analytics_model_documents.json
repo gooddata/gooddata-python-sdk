@@ -14,7 +14,15 @@
             {
               "id": "p1",
               "kind": "content",
-              "layout": {"type": "row", "children": [{"type": "text", "id": "t1", "markdown": "Hello"}]}
+              "style": {"gap": 20},
+              "layout": {
+                "type": "row",
+                "style": {"padding": "{theme.spacing.padding.normal}", "borderRadius": 4.5},
+                "children": [
+                  {"type": "text", "id": "t1", "markdown": "Hello"},
+                  {"type": "visualization", "id": "v1", "display": {"dataLabels": {"visible": "auto"}}}
+                ]
+              }
             }
           ]
         },
