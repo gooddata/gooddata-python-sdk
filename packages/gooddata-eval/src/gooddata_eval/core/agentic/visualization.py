@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
@@ -34,10 +34,12 @@ from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators.visualization import (
     EvaluationResult,
+    ExpectationOptions,
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
     evaluation_result_detail,
     with_execution,
+    with_options,
 )
 from gooddata_eval.core.langfuse.item_scope import item_scope
 from gooddata_eval.core.models import (
@@ -64,7 +66,8 @@ class RunResult:
     conversation_id: str
     actual_output: CreatedVisualization | None
     eval_result: EvaluationResult
-    best_expected: CreatedVisualization
+    # None for an item that expects no chart.
+    best_expected: CreatedVisualization | None
     total_turns: int
     total_steps: int
     reasoning_steps: list[str] = field(default_factory=list)
@@ -76,6 +79,8 @@ class RunResult:
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
     # This run's own wall time, from just before its first chat call to the end of its scoring.
     run_latency_s: float = 0.0
+    # Everything the final turn said, which the answer patterns are matched against.
+    answer_text: str = ""
 
 
 @dataclass
@@ -196,8 +201,13 @@ def _execute_single_run(
     expected_outputs: list[CreatedVisualization],
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     requires_execution: bool = False,
+    options: ExpectationOptions | None = None,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
+    options = _effective_options(options, requires_execution)
+    one_turn = not options.expects_visualization or options.visualization_optional
+    if one_turn:
+        max_iterations = min(max_iterations, 1)
     total_turns = 0
     total_steps = 0
     all_tool_call_events: list[ToolCallEvent] = []
@@ -207,7 +217,8 @@ def _execute_single_run(
     turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
     reasoning_index_offset = 0  # ditto for ReasoningStepEvent.index, which also restarts per turn
     tool_index_offset = 0  # ditto for ToolCallEvent.index
-    simulated_response_guide = expected_outputs[0]  # primary candidate guides the simulated user
+    # The primary candidate guides the simulated user. An item with no chart never replies.
+    simulated_response_guide = expected_outputs[0] if expected_outputs else None
 
     # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
     # simply runs out of range() is labelled correctly with no trailing else.
@@ -258,7 +269,11 @@ def _execute_single_run(
         if not response_text:
             exit_reason = LoopExit.AGENT_SILENT
             break
-        if iteration >= max_iterations - 1:
+        if one_turn:
+            # Answering without a chart is an outcome this item accepts.
+            exit_reason = LoopExit.SUCCESS
+            break
+        if iteration >= max_iterations - 1 or simulated_response_guide is None:
             break
 
         try:
@@ -288,7 +303,18 @@ def _execute_single_run(
         actual_output = current_result.created_visualizations.objects[0]
 
     eval_result, best_expected = _evaluate_against_candidates(expected_outputs, actual_output, skill_activated)
-    eval_result = with_execution(eval_result, all_tool_call_events, current_result.text_response, requires_execution)
+    eval_result = with_execution(
+        eval_result, all_tool_call_events, current_result.text_response, options.requires_execution
+    )
+    answer_text = render_answer_text(current_result)
+    eval_result = with_options(
+        eval_result,
+        options,
+        actual_output,
+        all_tool_call_events,
+        answer_text,
+        interrupted=exit_reason is LoopExit.CHAT_ERROR,
+    )
 
     return RunResult(
         conversation_id=conversation_id,
@@ -303,7 +329,14 @@ def _execute_single_run(
         reasoning_step_events=all_reasoning_step_events,
         exit_reason=exit_reason,
         run_latency_s=time.monotonic() - run_started,
+        answer_text=answer_text,
     )
+
+
+def _effective_options(options: ExpectationOptions | None, requires_execution: bool) -> ExpectationOptions:
+    """``options`` with the separate ``requires_execution`` argument folded in."""
+    options = options or ExpectationOptions()
+    return replace(options, requires_execution=True) if requires_execution else options
 
 
 def run_agentic_visualization(
@@ -319,6 +352,7 @@ def run_agentic_visualization(
     agent_id: str | None = None,
     user_context: dict | None = None,
     requires_execution: bool = False,
+    options: ExpectationOptions | None = None,
 ) -> AgenticRunSummary:
     """Run K independent conversations and return evaluation results.
 
@@ -328,7 +362,18 @@ def run_agentic_visualization(
     conversations created by this function are deleted on completion.
 
     ``requires_execution`` fails a run whose agent built the chart but never ran it.
+
+    Raises:
+        ValueError: ``expected_outputs`` and ``options.expects_visualization`` disagree. An
+            empty candidate list is only right for an item that expects no chart, and the
+            scorer would otherwise read the default ``expects_visualization`` and fail it.
     """
+    expects_visualization = (options or ExpectationOptions()).expects_visualization
+    if expects_visualization != bool(expected_outputs):
+        raise ValueError(
+            "expected_outputs must list the candidate charts unless options.expects_visualization is false, "
+            f"got {len(expected_outputs)} candidate(s) with expects_visualization={expects_visualization}"
+        )
     client = ChatClient(
         host=host,
         token=token,
@@ -343,7 +388,9 @@ def run_agentic_visualization(
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
             run_results.append(
-                _execute_single_run(client, conv_id_0, question, expected_outputs, max_iterations, requires_execution)
+                _execute_single_run(
+                    client, conv_id_0, question, expected_outputs, max_iterations, requires_execution, options
+                )
             )
         finally:
             if initial_conversation_id is None:
@@ -353,7 +400,9 @@ def run_agentic_visualization(
             conv_id = client.create_conversation()
             try:
                 run_results.append(
-                    _execute_single_run(client, conv_id, question, expected_outputs, max_iterations, requires_execution)
+                    _execute_single_run(
+                        client, conv_id, question, expected_outputs, max_iterations, requires_execution, options
+                    )
                 )
             finally:
                 client.delete_conversation(conv_id)
@@ -393,6 +442,68 @@ def _run_detail(run: RunResult) -> dict:
     }
 
 
+def _strict_checks(ev: EvaluationResult) -> dict[str, bool]:
+    """The scores one run is gated on, by their Langfuse names.
+
+    An item that expects no chart is scored on that and on its answer only: the chart checks
+    would all read False and say nothing about it.
+    """
+    if ev.scored_without_chart:
+        checks = {"assertion-vis-no-chart": not ev.visualization_created}
+    else:
+        checks = {
+            "assertion-cross-ref-valid": ev.cross_ref_valid,
+            "assertion-vis-metric": ev.metrics_correct,
+            "assertion-vis-dimensions": ev.dimensions_correct,
+            "assertion-vis-filters": ev.filters_correct,
+            "assertion-vis-type": ev.viz_type_hard,
+        }
+        if ev.requires_execution:
+            checks["assertion-vis-executed"] = ev.executed
+        # Only when the expectation sorts: an item without a sort accepts any order, so the check
+        # would always read True and only dilute the quality score.
+        if ev.expected_sorts:
+            checks["assertion-vis-sort"] = ev.sorts_correct
+        if ev.buckets_correct is not None:
+            checks["assertion-vis-buckets"] = ev.buckets_correct
+        if ev.format_correct is not None:
+            checks["assertion-vis-format"] = ev.format_correct
+        if ev.part_present is not None:
+            checks["assertion-vis-part-present"] = ev.part_present
+    if ev.answer_correct is not None:
+        checks["assertion-vis-answer"] = ev.answer_correct
+    return checks
+
+
+def _options_lines(ev: EvaluationResult, answer_text: str) -> str:
+    """The item-level verdicts for the failure summary; only the ones the item asks for."""
+    lines = ""
+    if ev.scored_without_chart:
+        lines += f"  No Chart              : {not ev.visualization_created}\n"
+    if ev.answer_correct is not None:
+        lines += f"  Answer Correct        : {ev.answer_correct}\n"
+        lines += "".join(f"    {problem}\n" for problem in ev.answer_problems)
+        if ev.answer_problems:
+            lines += f"    answer   : {answer_text[:500]!r}\n"
+    if ev.format_correct is not None:
+        lines += f"  Format Correct        : {ev.format_correct}\n"
+        lines += "".join(f"    {problem}\n" for problem in ev.format_problems)
+    if ev.part_present is not None:
+        lines += f"  Part Present          : {ev.part_present}\n"
+    return lines
+
+
+def _buckets_line(ev: EvaluationResult) -> str:
+    """The bucket-by-bucket verdict for the failure summary, or "" when the item does not ask for it."""
+    lines = "".join(f"    {problem}\n" for problem in ev.metric_layout_problems)
+    if ev.buckets_correct is None:
+        return lines
+    lines += f"  Buckets Correct       : {ev.buckets_correct}\n"
+    if not ev.buckets_correct:
+        lines += f"    expected : {ev.expected_buckets}\n    actual   : {ev.actual_buckets}\n"
+    return lines
+
+
 def _filter_diff(category: str, ev: EvaluationResult) -> str:
     """Expected-vs-actual lines for one filter category, or "" when they matched.
 
@@ -426,6 +537,7 @@ def evaluate_agentic_visualization(
     submit_trace_link: SubmitTraceLink = run_trace_link_inline,
     user_context: dict | None = None,
     requires_execution: bool = False,
+    options: ExpectationOptions | None = None,
     gate: EvalGate = DEFAULT_GATE,
 ) -> AgenticEvalOutcome:
     """Run visualization evaluation, log to Langfuse, and raise VisualizationAssertionError on failure.
@@ -461,6 +573,7 @@ def evaluate_agentic_visualization(
             agent_id=agent_id,
             user_context=user_context,
             requires_execution=requires_execution,
+            options=options,
         )
 
     if langfuse is not None and dataset_item_id:
@@ -474,21 +587,12 @@ def evaluate_agentic_visualization(
             for run_idx, run in enumerate(summary.run_results):
                 pt = ctx.trace(run.conversation_id)
                 ev = run.eval_result
-                strict_checks = {
-                    "assertion-cross-ref-valid": ev.cross_ref_valid,
-                    "assertion-vis-metric": ev.metrics_correct,
-                    "assertion-vis-dimensions": ev.dimensions_correct,
-                    "assertion-vis-filters": ev.filters_correct,
-                    "assertion-vis-type": ev.viz_type_hard,
-                }
-                if ev.requires_execution:
-                    strict_checks["assertion-vis-executed"] = ev.executed
+                strict_checks = _strict_checks(ev)
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
-                    ctx.score(tid, name="assertion-cross-ref-valid", value=ev.cross_ref_valid, data_type="BOOLEAN")
-                    ctx.score(tid, name="assertion-vis-metric", value=ev.metrics_correct, data_type="BOOLEAN")
-                    ctx.score(tid, name="assertion-vis-dimensions", value=ev.dimensions_correct, data_type="BOOLEAN")
-                    ctx.score(tid, name="assertion-vis-filters", value=ev.filters_correct, data_type="BOOLEAN")
-                    ctx.score(tid, name="assertion-vis-type", value=ev.viz_type_hard, data_type="BOOLEAN")
+                    for score_name, value in strict_checks.items():
+                        # Scored below on every item, gating or not.
+                        if score_name != "assertion-vis-executed":
+                            ctx.score(tid, name=score_name, value=value, data_type="BOOLEAN")
                     ctx.score(tid, name="skill_selection", value=ev.skill_activated, data_type="BOOLEAN")
                     # Scored on every item, gating or not, so the run rate is visible per model.
                     ctx.score(tid, name="assertion-vis-executed", value=ev.executed, data_type="BOOLEAN")
@@ -557,7 +661,11 @@ def evaluate_agentic_visualization(
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
-        expected_dump = best.best_expected.model_dump(exclude_none=True)
+        expected_dump = (
+            best.best_expected.model_dump(exclude_none=True)
+            if best.best_expected is not None
+            else {"expects_visualization": False}
+        )
         actual_dump = best.actual_output.model_dump(exclude_none=True) if best.actual_output else None
         exc = VisualizationAssertionError(
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
@@ -587,7 +695,9 @@ def evaluate_agentic_visualization(
             f"    attribute : {ev.filter_attribute_score}\n"
             f"{_filter_diff('attribute', ev)}"
             f"  Viz Type Hard         : {ev.viz_type_hard}\n"
+            f"{_buckets_line(ev)}"
             f"  Executed              : {ev.executed}{' (required)' if ev.requires_execution else ''}\n"
+            f"{_options_lines(ev, best.answer_text)}"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
         )

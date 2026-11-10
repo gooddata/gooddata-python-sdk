@@ -16,6 +16,7 @@ from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
+from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
 from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
 from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
@@ -27,7 +28,7 @@ from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualizat
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.evaluators.visualization import requires_execution_of
+from gooddata_eval.core.evaluators.visualization import expectation_options
 from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import TraceRecorder
@@ -58,6 +59,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_conversation",
         "agentic_kda_skill",
         "agentic_forecasting",
+        "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
     }
@@ -121,6 +123,8 @@ def _parse_visualization_expected(expected_output: Any) -> list[CreatedVisualiza
       {"visualization": {...}} or {"visualization": [{...}]}  <- single/multi candidate
       [{"visualization": {...}}, ...]                          <- bare list
     """
+    if isinstance(expected_output, dict) and expected_output.get("expects_visualization") is False:
+        return []
     if isinstance(expected_output, dict):
         raw_list = expected_output.get("expected_outputs")
         if raw_list is not None:
@@ -189,7 +193,7 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_outputs=_parse_visualization_expected(eo),
-            requires_execution=requires_execution_of(eo),
+            options=expectation_options(eo),
             k=k,
             gate=gate,
             agent_id=agent_id,
@@ -314,6 +318,28 @@ def _dispatch_agentic(
             gate=gate,
             agent_id=agent_id,
             user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_dashboard_summary":
+        summary_input = item.summary_input
+        if summary_input is None:
+            raise ValueError(f"agentic_dashboard_summary item '{item.id}' is missing required 'summary_input'.")
+        return evaluate_agentic_dashboard_summary(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            dashboard_id=summary_input.dashboard_id,
+            expected_output=eo,
+            # The fixture's own wording is the prompt under test -- a localized fixture is
+            # only meaningful if its own phrasing is what reaches the agent.
+            question=item.question,
+            # Each widget costs an execution, so a fixture asserting on a handful of charts
+            # can name them instead of paying for the whole dashboard. Same field and meaning
+            # the headless /summary endpoint gives it; None summarizes everything.
+            only_visualizations=summary_input.visualizations,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_what_if":

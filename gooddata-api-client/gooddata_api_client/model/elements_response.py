@@ -222,7 +222,7 @@ class ElementsResponse(ModelNormal):
             data_type (str): Data type of the element values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
-            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format and INT or NUMERIC data type.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -320,7 +320,7 @@ class ElementsResponse(ModelNormal):
             data_type (str): Data type of the element values, only filled for computed attributes.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
-            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the element values, the same kind of format string as the measure format. Only filled for computed attributes with a format and INT or NUMERIC data type.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

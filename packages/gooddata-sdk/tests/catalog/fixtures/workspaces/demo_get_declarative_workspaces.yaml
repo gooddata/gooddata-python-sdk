@@ -1865,6 +1865,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '37668'
       status:
         code: 200
         message: OK

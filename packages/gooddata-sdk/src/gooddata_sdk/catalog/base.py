@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 import builtins
+import keyword
 from typing import Any, TypeVar
 
-from attrs import Attribute, asdict, define, field
+from attrs import Attribute, define, field, fields, has
 from cattrs import structure
 
 from gooddata_sdk.utils import AllPagedEntities
@@ -22,6 +23,17 @@ def value_in_allowed(instance: type[Base], attribute: Attribute, value: str, cli
             f"Allowed values for attribute {attribute.name} are: {', '.join(list(allowed_values.values()))}. "
             f"But value {value} was passed."
         )
+
+
+def _client_attribute_name(name: str) -> str:
+    """
+    Returns the generated client's attribute name for an attrs attribute name.
+
+    The client prefixes a keyword-named attribute with an underscore (``_from``); attrs code suffixes it (``from_``).
+    """
+    if name.endswith("_") and keyword.iskeyword(name[:-1]):
+        return f"_{name[:-1]}"
+    return name
 
 
 @define
@@ -57,9 +69,30 @@ class Base:
         return attribute.name.startswith("_")
 
     def _get_snake_dict(self) -> dict[str, Any]:
-        return asdict(
-            self, filter=lambda attribute, value: value is not None and not self._is_attribute_private(attribute)
-        )
+        """
+        Converts object into a snake_case dictionary keyed by the generated client's attribute names.
+
+        Attributes that are None or private are left out at every depth. An attribute named after a Python keyword
+        plus a trailing underscore (``from_``) is written under the client's name for it (``_from``); keys inside a
+        ``dict`` value are user data and are never renamed.
+        """
+        return self._snake_value(self)
+
+    @classmethod
+    def _snake_value(cls, value: Any) -> Any:
+        if has(type(value)):
+            dictionary: dict[str, Any] = {}
+            for attribute in fields(type(value)):
+                attribute_value = getattr(value, attribute.name)
+                if attribute_value is None or cls._is_attribute_private(attribute):
+                    continue
+                dictionary[_client_attribute_name(attribute.name)] = cls._snake_value(attribute_value)
+            return dictionary
+        if isinstance(value, dict):
+            return {key: cls._snake_value(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple, set, frozenset)):
+            return [cls._snake_value(item) for item in value]
+        return value
 
     @staticmethod
     def client_class() -> Any:

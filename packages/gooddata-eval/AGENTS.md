@@ -27,6 +27,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/agentic/` | multi-turn agentic evaluation per capability, **plus** all Langfuse trace polling and linking (`_langfuse.py`, `_trace_linker.py`) |
 | `core/chat/` | SSE client for the agent's streaming chat endpoint |
 | `core/summary/` | HTTP client for the dedicated dashboard-summary endpoint — a single-shot chat backend, not reporting |
+| `core/takeaway/` | HTTP client for the AI Publisher takeaway endpoint — a single-shot backend like `core/summary/`, keeping the whole response on `ChatResult.raw_response` — plus `evaluate_document_takeaway`, the K-run, gate and Langfuse entry point the Tavern shim calls |
 | `core/dataset/` | dataset format, loading, and `from_insights.py` — dataset generation from a workspace's real insights |
 | `core/evaluators/` | single-shot evaluators and their registry |
 | `core/langfuse/` | the whole Langfuse v4 client: `_env` (base URL + credentials), `otlp` (OTLP/JSON encoding), `experiment` (root-span construction, score targets), `item_scope` (an item's experiment scope sent to gen-ai as baggage, and which conversations joined), `observations` (trace reads), `client` (httpx calls), `sink` (single-shot results as experiments) |
@@ -59,7 +60,8 @@ implementation, sometimes under different `test_kind` strings (`search_tool` vs
 `expected_output: Any`. `expected_output` is deliberately untyped — each evaluator parses
 its own shape. `test_kind` on the item is what labels the result, not the evaluator class,
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
-`dashboard_summary` items additionally need `summary_input`.
+`dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
+`takeaway_input`.
 
 ## Running the pipeline
 
@@ -155,8 +157,8 @@ Run this before guessing a `--model` string.
 | `GD_EVAL_JUDGE_MODEL` | judge model, same as `--judge-model` |
 | `GD_EVAL_AGENT_ID` | which agent to drive, same as `--agent-id` |
 | `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` | `--langfuse`, `--langfuse-dataset` |
-| `GOODDATA_EVAL_CHAT_*` | SSE retry, backoff and timeout knobs |
-| `GOODDATA_EVAL_TRACE_LABELS` | `key=value,...` labels stamped on every observation of a chat conversation via W3C baggage; `model_version` also sets the observation `version`, so set it only for a one-model run: every `--model` in one process gets the same labels. Keys must match `[A-Za-z0-9_-]+`; others are skipped with a warning. Dashboard-summary runs are not labelled |
+| `GOODDATA_EVAL_CHAT_*` | retry and backoff knobs shared by the chat and takeaway clients (`core/_retry.py`), and the SSE turn and item timeouts |
+| `GOODDATA_EVAL_TRACE_LABELS` | `key=value,...` labels stamped on every observation of a chat conversation via W3C baggage; `model_version` also sets the observation `version`, so set it only for a one-model run: every `--model` in one process gets the same labels. Keys must match `[A-Za-z0-9_-]+`; others are skipped with a warning. Dashboard-summary and document-takeaway runs are not labelled |
 | `GOODDATA_EVAL_JOIN_GENAI_TRACE` | on unless set to `0`, `false`, `no`, `off` or empty. An agentic item's chat turns ask gen-ai to open them under gd-eval's experiment root, so each item is one Langfuse trace with its scores written once. A gen-ai that drops caller baggage keeps today's separate traces; see the gotcha below |
 | `GD_EVAL_TIMERS` | same as `--timers` |
 
@@ -181,12 +183,15 @@ That default is correct: agent tool calls create real server-side objects (metri
 Adding a kind to `PARALLEL_SAFE_TEST_KINDS` is a deliberate assertion that it is read-only,
 which nothing in the package can prove for you.
 
-**The SSE client's retry predicate is load-bearing.** `core/chat/sse_client.py` retries
-429/502/503/504 and `httpx.RemoteProtocolError` (a mid-stream disconnect) with exponential
-backoff, and treats a `METADATA_SYNC_IN_PROGRESS` payload as transient. The
-`RemoteProtocolError` case was added after it was confirmed live to contaminate a small
-percentage of visualization runs with a hard fail and no retry. Narrowing that predicate
-reintroduces the problem.
+**The SSE client's retry predicate is load-bearing.** The backoff loop and the retryable
+status set (429/500/502/503/504) live in `core/_retry.py`, shared by the chat and takeaway
+clients and tuned by the same `GOODDATA_EVAL_CHAT_*` knobs. `core/chat/sse_client.py`
+retries that status set and `httpx.RemoteProtocolError` (a mid-stream disconnect), and
+treats a `METADATA_SYNC_IN_PROGRESS` payload as transient. The `RemoteProtocolError` case
+was added after it was confirmed live to contaminate a small percentage of visualization
+runs with a hard fail and no retry. Narrowing that predicate reintroduces the problem. The
+takeaway client retries the same status set plus connection failures, but not a read
+timeout: a slow page would spend the whole timeout again on every attempt.
 
 **Langfuse trace linking is deliberately off the item critical path.** Polling for trace
 ingestion has no pass/fail signal and inflates or misattributes per-item latency, so

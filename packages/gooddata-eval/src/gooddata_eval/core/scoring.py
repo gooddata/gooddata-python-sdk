@@ -21,6 +21,36 @@ _AAC_TYPE_MAP = {
 }
 
 
+# Every `type` the AAC visualization schema defines. An expectation naming anything else is a typo.
+AAC_VISUALIZATION_TYPES = frozenset(
+    {
+        "table",
+        "headline_chart",
+        "bar_chart",
+        "column_chart",
+        "line_chart",
+        "area_chart",
+        "pie_chart",
+        "donut_chart",
+        "scatter_chart",
+        "bubble_chart",
+        "treemap_chart",
+        "pyramid_chart",
+        "funnel_chart",
+        "heatmap_chart",
+        "bullet_chart",
+        "waterfall_chart",
+        "dependency_wheel_chart",
+        "sankey_chart",
+        "geo_chart",
+        "geo_area_chart",
+        "repeater_chart",
+        "radar_chart",
+        "combo_chart",
+    }
+)
+
+
 @dataclass
 class FilterScores:
     date_ok: bool
@@ -50,21 +80,126 @@ def resolve_alias_to_uri(alias: str, fields: Mapping[str, AacQueryField | str | 
     return field.using
 
 
-def _resolve_bucket_to_uri_set(bucket: list[AacBucketRef | str], fields: dict[str, AacQueryField | str]) -> set[str]:
-    uris: set[str] = set()
-    for ref in bucket:
-        alias = ref.field if isinstance(ref, AacBucketRef) else ref
-        uris.add(canonical_date_uri(resolve_alias_to_uri(alias, fields)))
-    return uris
+BucketItem = AacBucketRef | str
+
+
+def _ref_uri(ref: BucketItem, fields: Mapping[str, AacQueryField | str]) -> str:
+    alias = ref.field if isinstance(ref, AacBucketRef) else ref
+    return canonical_date_uri(resolve_alias_to_uri(alias, fields))
+
+
+def _resolve_bucket_to_uri_set(
+    bucket: list[BucketItem] | list[BucketItem | None], fields: dict[str, AacQueryField | str]
+) -> set[str]:
+    return {_ref_uri(ref, fields) for ref in bucket if ref is not None}
+
+
+def _is_measure(ref: BucketItem, fields: dict[str, AacQueryField | str]) -> bool:
+    """Whether a bucket item names a metric, a fact, or a field the chart aggregates itself."""
+    alias = ref.field if isinstance(ref, AacBucketRef) else ref
+    field = fields.get(alias)
+    if isinstance(field, AacQueryField) and field.aggregation:
+        return True
+    return resolve_alias_to_uri(alias, fields).startswith(("metric/", "fact/"))
+
+
+def _column_split(viz: CreatedVisualization) -> tuple[list[BucketItem], list[BucketItem]]:
+    """`columns` split into its measures and its attributes.
+
+    A table's `columns` holds attributes only. A repeater writes its metrics there too, as
+    `{field, display_as}` entries next to a clone of its row attribute, and the same chart
+    comes back with the metrics under `metrics` on another run. Splitting by what each item
+    names scores both spellings alike.
+    """
+    measures = [ref for ref in viz.columns if _is_measure(ref, viz.query.fields)]
+    attributes = [ref for ref in viz.columns if not _is_measure(ref, viz.query.fields)]
+    return measures, attributes
 
 
 def get_metric_uri_set(viz: CreatedVisualization) -> set[str]:
-    return _resolve_bucket_to_uri_set(viz.metrics, viz.query.fields)
+    measures_in_columns, _ = _column_split(viz)
+    return _resolve_bucket_to_uri_set(viz.metrics + viz.size_by + measures_in_columns, viz.query.fields)
 
 
 def get_dimension_uri_set(viz: CreatedVisualization) -> set[str]:
-    all_dim_buckets = viz.view_by + viz.segment_by + viz.rows + viz.columns
+    _, attributes_in_columns = _column_split(viz)
+    ends = [ref for ref in (viz.from_, viz.to) if ref is not None]
+    all_dim_buckets = viz.view_by + viz.segment_by + viz.rows + attributes_in_columns + ends
     return _resolve_bucket_to_uri_set(all_dim_buckets, viz.query.fields)
+
+
+def bucket_layout(viz: CreatedVisualization) -> dict[str, list[str]]:
+    """Each bucket's fields, as uris, for comparing bucket by bucket.
+
+    Sorted lists rather than sets so the layout reads in a report. An attribute in `columns`
+    that already sits in `rows` or `view_by` is left out: the repeater adds that clone of
+    its row attribute on its own, so it says nothing about where the agent put the field.
+    """
+    fields = viz.query.fields
+    _, attributes_in_columns = _column_split(viz)
+    placed = _resolve_bucket_to_uri_set(viz.rows + viz.view_by, fields)
+    columns = _resolve_bucket_to_uri_set(attributes_in_columns, fields) - placed
+    return {
+        "view_by": sorted(_resolve_bucket_to_uri_set(viz.view_by, fields)),
+        "segment_by": sorted(_resolve_bucket_to_uri_set(viz.segment_by, fields)),
+        "rows": sorted(_resolve_bucket_to_uri_set(viz.rows, fields)),
+        "columns": sorted(columns),
+        "size_by": sorted(_resolve_bucket_to_uri_set(viz.size_by, fields)),
+        "from": [_ref_uri(viz.from_, fields)] if viz.from_ is not None else [],
+        "to": [_ref_uri(viz.to, fields)] if viz.to is not None else [],
+    }
+
+
+def check_buckets(expected: CreatedVisualization, actual: CreatedVisualization) -> bool | None:
+    """Whether every field sits in the bucket the expectation puts it in; None when not asked.
+
+    The dimension check compares the union of the buckets, so a heatmap with its rows and
+    columns swapped, a treemap segment moved into `view_by`, or a sankey with source and
+    destination reversed would all pass it.
+    """
+    if not expected.buckets_strict:
+        return None
+    return bucket_layout(actual) == bucket_layout(expected)
+
+
+def ordered_metric_uris(viz: CreatedVisualization) -> list[str | None]:
+    """The chart's `metrics` in order, a null entry kept as None."""
+    return [None if ref is None else _ref_uri(ref, viz.query.fields) for ref in viz.metrics]
+
+
+_PRIMARY_AXIS = "primary"
+
+
+def metric_axes(viz: CreatedVisualization) -> dict[str, str]:
+    """The axis each metric of a combo chart is drawn on, by metric uri."""
+    axes: dict[str, str] = {}
+    for ref in viz.metrics:
+        if isinstance(ref, AacBucketRef):
+            axis = (ref.model_extra or {}).get("axis")
+            if isinstance(axis, str):
+                axes[_ref_uri(ref, viz.query.fields)] = axis
+    return axes
+
+
+def check_metric_layout(expected: CreatedVisualization, actual: CreatedVisualization) -> list[str]:
+    """What is wrong with the order and the axes of the metrics, when the expectation states them.
+
+    Order is checked under `metrics_ordered`: a bullet chart reads actual, target and
+    comparative by position, and a bubble chart x and y. An axis is checked for every
+    expected metric entry that names one. An actual metric that names no axis, written as a
+    plain alias or as an entry without `axis`, is drawn on the primary axis.
+    """
+    problems: list[str] = []
+    if expected.metrics_ordered and ordered_metric_uris(actual) != ordered_metric_uris(expected):
+        problems.append(f"metric order {ordered_metric_uris(actual)}, expected {ordered_metric_uris(expected)}")
+    expected_axes = metric_axes(expected)
+    if expected_axes:
+        present = set(ordered_metric_uris(actual))
+        actual_axes = {uri: _PRIMARY_AXIS for uri in present if uri is not None} | metric_axes(actual)
+        wrong = {uri: actual_axes.get(uri) for uri, axis in expected_axes.items() if actual_axes.get(uri) != axis}
+        if wrong:
+            problems.append(f"metric axes {wrong}, expected {expected_axes}")
+    return problems
 
 
 def uri_to_display_name(uri: str) -> str:
@@ -385,6 +520,11 @@ def check_filters(
 
 def _normalize_viz_type(raw_type: str) -> str:
     return _AAC_TYPE_MAP.get(raw_type, raw_type.replace("_chart", "").upper())
+
+
+def same_viz_type(expected: str, actual: str) -> bool:
+    """Whether two chart-type names denote the same type, spelled either way."""
+    return _normalize_viz_type(expected) == _normalize_viz_type(actual)
 
 
 def check_viz_type(expected: CreatedVisualization, actual: CreatedVisualization) -> bool:

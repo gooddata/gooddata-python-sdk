@@ -9,9 +9,12 @@ from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
     AlertSkillAssertionError,
     _check_attributes,
+    _check_comparison,
+    _check_dashboard,
     _check_filters,
     _check_granularity,
     _check_recipients,
+    _check_title,
     _check_trigger,
     _deep_subset,
     _normalize_expected_output,
@@ -20,6 +23,7 @@ from gooddata_eval.core.agentic.alert_skill import (
     evaluate_agentic_alert_skill,
     generate_simulated_alert_response,
     render_alert_proposal,
+    render_turn_for_simulated_user,
     run_agentic_alert_skill,
 )
 from gooddata_eval.core.chat.sse_client import ChatError
@@ -353,6 +357,64 @@ def test_check_recipients_accepts_the_current_user_alongside_an_email() -> None:
     assert _check_recipients(expected, extra, current_user_id="admin") is False
 
 
+@pytest.mark.parametrize(
+    ("internal_recipients", "passes"),
+    [
+        # Some models (haiku) JSON-encode the list; gen-ai decodes it before calling the server.
+        ('["admin"]', True),
+        ("admin", True),
+        (["admin"], True),
+        ('["someone_else"]', False),
+        ("[]", False),
+        ("null", False),
+        ("", False),
+        ("  ", False),
+        # Not a list of strings, so the whole string is one (unknown) id.
+        ('["admin", 1]', False),
+    ],
+)
+def test_check_recipients_decodes_a_json_encoded_internal_recipients_string(
+    internal_recipients: object, passes: bool
+) -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    args = {"internal_recipients": internal_recipients}
+    assert _check_recipients(expected, args, sdk=MagicMock(), current_user_id="admin") is passes
+
+
+def test_check_recipients_decodes_json_encoded_strings_next_to_an_email() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
+    args = {"internal_recipients": '["admin"]', "external_recipients": '["bob@example.com"]'}
+    assert _check_recipients(expected, args, current_user_id="admin") is True
+    extra = {"internal_recipients": '["admin", "carol.id"]', "external_recipients": '["bob@example.com"]'}
+    assert _check_recipients(expected, extra, current_user_id="admin") is False
+
+
+@pytest.mark.parametrize(
+    ("external_recipients", "passes"),
+    [
+        ('["a@example.com", "b@example.com"]', True),
+        (["a@example.com", "b@example.com"], True),
+        ("a@example.com; b@example.com", True),
+        ("a@example.com, b@example.com", True),
+        ('["a@example.com"]', False),
+        ("null", False),
+        ("", False),
+        (" ; ", False),
+        (None, False),
+    ],
+)
+def test_check_recipients_normalizes_every_external_recipients_shape(external_recipients: object, passes: bool) -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "a@example.com, b@example.com"})
+    args = {"external_recipients": external_recipients}
+    assert _check_recipients(expected, args) is passes
+
+
+def test_check_recipients_scores_a_non_string_internal_recipient_false_instead_of_raising() -> None:
+    expected = _normalize_expected_output({"Recipient(s)": "me"})
+    args = {"internal_recipients": ["admin", {"id": "carol.id"}]}
+    assert _check_recipients(expected, args, current_user_id="admin") is False
+
+
 def test_check_recipients_accepts_an_email_delivered_as_a_user_id_next_to_the_current_user() -> None:
     expected = _normalize_expected_output({"Recipient(s)": "me, bob@example.com"})
     mock_sdk = MagicMock()
@@ -408,7 +470,12 @@ def test_sim_user_still_volunteers_an_email_recipient() -> None:
     assert "Proactively include your email recipient" in prompt
 
 
-def test_run_agentic_alert_skill_scores_a_current_user_alert() -> None:
+@pytest.mark.parametrize(
+    "internal_recipients",
+    # As sent in the tool call: a JSON list, or that list JSON-encoded into a string.
+    ['["admin"]', '"[\\"admin\\"]"'],
+)
+def test_run_agentic_alert_skill_scores_a_current_user_alert(internal_recipients: str) -> None:
     asked_turn = ChatResult.model_validate({"text_response": "Which dashboard?", "tool_call_events": []})
     created_turn = ChatResult.model_validate(
         {
@@ -416,7 +483,9 @@ def test_run_agentic_alert_skill_scores_a_current_user_alert() -> None:
             "tool_call_events": [
                 {
                     "functionName": "create_metric_alert",
-                    "functionArguments": '{"operator": "LESS_THAN", "threshold": 30000, "internal_recipients": ["admin"]}',
+                    "functionArguments": (
+                        f'{{"operator": "LESS_THAN", "threshold": 30000, "internal_recipients": {internal_recipients}}}'
+                    ),
                     "result": '{"id": "alert-1"}',
                 }
             ],
@@ -753,15 +822,67 @@ def test_render_alert_proposal_falls_back_to_default_cta():
     assert render_alert_proposal({}).startswith("Should I create this alert?")
 
 
-def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
-    """GDAI-2032 regression: confirmation turn has no text part, only an alertProposal.
+_QUESTIONS_PART = {
+    "type": "clarifyingQuestions",
+    "questions": [
+        {
+            "text": "Which date?",
+            "control": {
+                "type": "singleChoice",
+                "options": [{"text": "{dataset/date}"}, {"text": "{dataset/created}"}],
+            },
+        },
+    ],
+}
 
-    Without the fallback the simulated user is handed an empty agent message, so the agent
-    never receives an explicit "yes" and create_metric_alert is never called.
-    """
+
+@pytest.mark.parametrize(
+    ("turn", "must_contain"),
+    [
+        ({"text_response": "Pick both.", "unhandled_parts": [_QUESTIONS_PART]}, ["Pick both.", "{dataset/date}"]),
+        ({"text_response": "Here it is.", "alert_proposals": [_PROPOSAL]}, ["Here it is.", "GREATER_THAN"]),
+        ({"alert_proposals": [_PROPOSAL]}, ["Should I create this alert?", "GREATER_THAN"]),
+        ({"text_response": "Which metric?"}, ["Which metric?"]),
+    ],
+    ids=["text_and_questions", "text_and_proposal", "proposal_only", "text_only"],
+)
+def test_simulated_user_reads_every_part_of_the_turn(turn, must_contain):
+    rendered = render_turn_for_simulated_user(ChatResult(**turn))
+    for fragment in must_contain:
+        assert fragment in rendered
+
+
+def test_simulated_user_reads_nothing_of_a_silent_turn():
+    assert render_turn_for_simulated_user(ChatResult()) == ""
+
+
+def test_run_agentic_alert_skill_passes_question_options_to_simulated_user() -> None:
+    client = MagicMock()
+    client.send_message.return_value = ChatResult(text_response="Pick one.", unhandled_parts=[_QUESTIONS_PART])
+    with _patched(client, simulated_reply="Use the created date.") as mock_sim:
+        run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Create an alert",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=2,
+            initial_conversation_id="conv-1",
+        )
+
+    agent_message = mock_sim.call_args.args[0]
+    assert "Pick one." in agent_message
+    assert "{dataset/date}" in agent_message
+    assert "{dataset/created}" in agent_message
+
+
+@pytest.mark.parametrize("text_response", [None, "Here it is."])
+def test_run_agentic_alert_skill_answers_proposal_confirmation_turn(text_response: str | None) -> None:
+    """Confirmation keeps the proposal fields visible alongside any prose."""
     proposal_turn = ChatResult.model_validate(
         {
-            "text_response": None,
+            "text_response": text_response,
             "alertProposals": [_PROPOSAL],
             "tool_call_events": [
                 {"functionName": "prepare_metric_alert_proposal", "functionArguments": "{}", "result": None}
@@ -798,6 +919,8 @@ def test_run_agentic_alert_skill_answers_proposal_only_confirmation_turn():
         )
 
     agent_message = mock_sim.call_args.args[0]
+    if text_response:
+        assert text_response in agent_message
     assert "Should I create this alert?" in agent_message
     assert "admin@gooddata.com" in agent_message
     assert summary.best.eval.alert_created is True
@@ -1218,6 +1341,292 @@ def test_every_gen_ai_interval_is_accepted():
         assert AnomalyDetectionGranularity.parse(value.lower()) is AnomalyDetectionGranularity(value)
     assert AnomalyDetectionGranularity.parse(None) is None
     assert AnomalyDetectionGranularity.parse("  ") is None
+
+
+# --- Period comparison ------------------------------------------------------------------
+
+# What create_metric_alert receives for "decreases by more than 15% compared with the previous
+# period": the comparison properties plus the date filter that sets the compared period.
+_PREVIOUS_PERIOD_ARGS = {
+    "metric_id": "net_sales",
+    "operator": "DECREASES_BY",
+    "threshold": 0.15,
+    "arithmetic_operator": "CHANGE",
+    "comparison_kind": "PREVIOUS_PERIOD",
+    "comparison_date_dataset_id": "date",
+    "comparison_periods_ago": 1,
+    "filters": [_DATE_FILTER],
+}
+_PREVIOUS_PERIOD_EXPECTATION = {
+    "Operator": "DECREASES_BY",
+    "Threshold": "0.15",
+    "Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": 1, "arithmetic_operator": "CHANGE"},
+}
+
+
+def test_comparison_matching_the_request_passes() -> None:
+    expected = _normalize_expected_output(_PREVIOUS_PERIOD_EXPECTATION)
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+
+
+@pytest.mark.parametrize(
+    "wrong_args",
+    [
+        {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR"},
+        {"comparison_periods_ago": 2},
+        {"arithmetic_operator": "DIFFERENCE"},
+        # A hand-made "previous period" metric instead of a comparison.
+        {"comparison_kind": None, "compare_metric_id": "net_sales_previous_period"},
+    ],
+)
+def test_comparison_differing_from_the_request_fails(wrong_args: dict) -> None:
+    expected = _normalize_expected_output(_PREVIOUS_PERIOD_EXPECTATION)
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, **wrong_args}) is False
+
+
+def test_omitted_comparison_arguments_count_as_the_tool_defaults() -> None:
+    expected = _normalize_expected_output(
+        {"Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": 1, "arithmetic_operator": "DIFFERENCE"}}
+    )
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD"}) is True
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD", "arithmetic_operator": None}) is True
+
+
+def test_only_the_stated_comparison_properties_are_asserted() -> None:
+    expected = _normalize_expected_output({"Comparison": {"kind": "previous_period", "date_dataset_id": ""}})
+    assert expected.comparison == {"comparison_kind": "PREVIOUS_PERIOD"}
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_periods_ago": 3}) is True
+
+
+def test_comparison_accepts_tool_argument_spellings() -> None:
+    expected = _normalize_expected_output(
+        {"comparison": {"comparison_kind": "PREVIOUS_PERIOD", "date_dataset_id": "date"}}
+    )
+    assert expected.comparison == {"comparison_kind": "PREVIOUS_PERIOD", "comparison_date_dataset_id": "date"}
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_date_dataset_id": "order_date"}) is False
+    assert _check_comparison(expected, {**_PREVIOUS_PERIOD_ARGS, "comparison_date_dataset_id": " date "}) is False
+
+
+@pytest.mark.parametrize("unstated", [{}, {"Comparison": ""}, {"Comparison": {}}, {"Comparison": "vs last month"}])
+def test_comparison_is_unasserted_when_the_fixture_states_none(unstated: dict) -> None:
+    expected = _normalize_expected_output({"Operator": "DECREASES_BY", **unstated})
+    assert expected.comparison is None
+    assert _check_comparison(expected, {}) is True
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is True
+
+
+@pytest.mark.parametrize("marker", ["None", "no comparison"])
+def test_a_none_comparison_rejects_any_period_comparison(marker: str) -> None:
+    expected = _normalize_expected_output({"Operator": "GREATER_THAN", "Comparison": marker})
+    assert _check_comparison(expected, {"operator": "GREATER_THAN"}) is True
+    assert _check_comparison(expected, _PREVIOUS_PERIOD_ARGS) is False
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"Comparison": {"period": "MONTH"}},
+        {"Comparison": ["PREVIOUS_PERIOD"]},
+        {"Comparison": {"kind": "PREVIOUS_PERIOD", "periods_ago": "one"}},
+    ],
+)
+def test_a_malformed_comparison_expectation_fails_before_the_run(bad: dict) -> None:
+    with pytest.raises(ValueError, match="omparison"):
+        _normalize_expected_output(bad)
+
+
+def test_a_none_comparison_display_string_with_a_note_is_still_stated() -> None:
+    expected = _normalize_expected_output({"Comparison": "None (no period comparison)"})
+    assert expected.comparison == {"comparison_kind": None}
+
+
+def test_a_metric_comparison_is_read_the_same_whether_its_kind_is_spelled_or_defaulted() -> None:
+    implicit = {"operator": "INCREASES_BY", "compare_metric_id": "budget"}
+    explicit = {**implicit, "comparison_kind": "METRIC"}
+    as_metric = _normalize_expected_output({"Comparison": {"kind": "METRIC"}})
+    no_comparison = _normalize_expected_output({"Comparison": "None"})
+    assert _check_comparison(as_metric, implicit) is True
+    assert _check_comparison(as_metric, explicit) is True
+    assert _check_comparison(no_comparison, implicit) is False
+    assert _check_comparison(no_comparison, explicit) is False
+
+
+def test_tool_defaults_do_not_stand_in_for_a_missing_comparison() -> None:
+    expected = _normalize_expected_output({"Comparison": {"periods_ago": 1}})
+    assert _check_comparison(expected, {"operator": "GREATER_THAN"}) is False
+    assert _check_comparison(expected, {"comparison_kind": "PREVIOUS_PERIOD"}) is True
+
+
+def test_a_metric_comparison_gets_no_periods_ago_default() -> None:
+    """A hand-made "previous period" metric must not satisfy a stated periods_ago."""
+    expected = _normalize_expected_output({"Comparison": {"periods_ago": 1}})
+    assert _check_comparison(expected, {"compare_metric_id": "net_sales_previous_period"}) is False
+    assert _check_comparison(expected, {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR"}) is True
+    # arithmetic_operator does default on a METRIC comparison: the tool applies it to every relative alert.
+    arithmetic = _normalize_expected_output({"Comparison": {"arithmetic_operator": "DIFFERENCE"}})
+    assert _check_comparison(arithmetic, {"compare_metric_id": "budget"}) is True
+
+
+def test_same_period_prior_year_date_attribute_can_be_asserted() -> None:
+    expected = _normalize_expected_output(
+        {"Comparison": {"kind": "SAME_PERIOD_PRIOR_YEAR", "date_attribute_id": "date.year"}}
+    )
+    args = {"comparison_kind": "SAME_PERIOD_PRIOR_YEAR", "comparison_date_attribute_id": "date.year"}
+    assert _check_comparison(expected, args) is True
+    assert _check_comparison(expected, {**args, "comparison_date_attribute_id": "date.month"}) is False
+
+
+def test_a_mismatched_comparison_fails_strict_pass() -> None:
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        comparison_correct=False,
+    )
+    assert ev.strict_pass is False
+
+
+# --- Title and dashboard binding --------------------------------------------------------
+
+_SALES_DASHBOARD_ID = "bf439696-d6c6-4d41-a102-dd98e2f3da35"
+
+
+def test_requested_title_is_asserted_exactly() -> None:
+    expected = _normalize_expected_output({"Title": " QA margin watch qz7 "})
+    assert expected.title == "QA margin watch qz7"
+    assert _check_title(expected, {"title": "QA margin watch qz7"}) is True
+    assert _check_title(expected, {"title": "Gross Profit Margin Alert"}) is False
+    assert _check_title(expected, {"title": "qa margin watch qz7"}) is False
+    assert _check_title(expected, {"title": " QA margin watch qz7 "}) is False
+
+
+def test_a_title_surviving_only_in_the_automation_id_fails() -> None:
+    expected = _normalize_expected_output({"Title": "QA margin watch qz7"})
+    assert _check_title(expected, {"automation_id": "qa-margin-watch-qz7"}) is False
+    assert _check_title(expected, {"automation_id": "qa-margin-watch-qz7", "title": None}) is False
+
+
+@pytest.mark.parametrize("unstated", [{}, {"Title": ""}, {"Title": "  "}])
+def test_title_is_unasserted_when_the_fixture_states_none(unstated: dict) -> None:
+    expected = _normalize_expected_output(unstated)
+    assert expected.title is None
+    assert _check_title(expected, {"title": "Anything"}) is True
+    assert _check_title(expected, {}) is True
+
+
+@pytest.mark.parametrize(
+    "stated",
+    [
+        {"Dashboard": f"2. Sales ({_SALES_DASHBOARD_ID})"},
+        {"dashboard_id": _SALES_DASHBOARD_ID},
+    ],
+)
+def test_dashboard_binding_is_asserted_by_id(stated: dict) -> None:
+    expected = _normalize_expected_output(stated)
+    assert expected.dashboard_id == _SALES_DASHBOARD_ID
+    assert _check_dashboard(expected, {"dashboard_id": _SALES_DASHBOARD_ID}) is True
+    assert _check_dashboard(expected, {"dashboard_id": "092929af-375a-4e9c-964f-2add8cdbd259"}) is False
+    assert _check_dashboard(expected, {"dashboard_id": f" {_SALES_DASHBOARD_ID} "}) is False
+    assert _check_dashboard(expected, {}) is False
+
+
+@pytest.mark.parametrize("unstated", [{}, {"Dashboard": ""}, {"dashboard_id": None}])
+def test_dashboard_is_unasserted_when_the_fixture_states_none(unstated: dict) -> None:
+    expected = _normalize_expected_output(unstated)
+    assert expected.dashboard_id is None
+    assert _check_dashboard(expected, {"dashboard_id": _SALES_DASHBOARD_ID}) is True
+    assert _check_dashboard(expected, {}) is True
+
+
+@pytest.mark.parametrize("bad", [{"Title": 7}, {"Dashboard": ["2. Sales"]}])
+def test_a_non_string_title_or_dashboard_expectation_fails_before_the_run(bad: dict) -> None:
+    with pytest.raises(ValueError, match="must be a string"):
+        _normalize_expected_output(bad)
+
+
+@pytest.mark.parametrize("display", ["2. Sales", _SALES_DASHBOARD_ID])
+def test_a_dashboard_without_an_id_fails_before_the_run(display: str) -> None:
+    with pytest.raises(ValueError, match="Title \\(id\\)"):
+        _normalize_expected_output({"Dashboard": display})
+
+
+def test_unasserted_conditional_checks_are_neither_reported_nor_gated() -> None:
+    refused = AlertEvaluation(
+        alert_created=False,
+        operator_correct=False,
+        threshold_correct=False,
+        trigger_correct=False,
+        filters_correct=False,
+        metric_correct=False,
+        recipients_correct=False,
+    )
+    assert not {"comparison_correct", "title_correct", "dashboard_correct"} & refused.checks().keys()
+    passed = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        title_correct=True,
+    )
+    assert passed.checks()["title_correct"] is True
+    assert "dashboard_correct" not in passed.checks()
+    assert passed.strict_pass is True
+
+
+def test_a_refusal_fails_a_stated_title_and_reports_no_unstated_check() -> None:
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.return_value = _no_alert_chat_result()
+
+    with _patched(mock_client):
+        summary = run_agentic_alert_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create an alert titled 'QA margin watch qz7'",
+            expected_output={"operator": "LESS_THAN", "threshold": 0.2, "Title": "QA margin watch qz7"},
+            k=1,
+            max_iterations=1,
+        )
+
+    checks = summary.best.eval.checks()
+    assert checks["title_correct"] is False
+    assert "comparison_correct" not in checks
+    assert "dashboard_correct" not in checks
+
+
+@pytest.mark.parametrize("field", ["title_correct", "dashboard_correct"])
+def test_a_wrong_title_or_dashboard_fails_strict_pass(field: str) -> None:
+    ev = AlertEvaluation(
+        alert_created=True,
+        operator_correct=True,
+        threshold_correct=True,
+        trigger_correct=True,
+        filters_correct=True,
+        metric_correct=True,
+        recipients_correct=True,
+        **{field: False},
+    )
+    assert ev.strict_pass is False
+
+
+def test_sim_user_insists_on_a_stated_title() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Title": "QA margin watch qz7"})
+    assert 'named exactly "QA margin watch qz7"' in prompt
+
+
+def test_sim_user_is_not_told_a_title_or_dashboard_the_fixture_leaves_open() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Dashboard": f"2. Sales ({_SALES_DASHBOARD_ID})"})
+    assert "named exactly" not in prompt
+    assert _SALES_DASHBOARD_ID not in prompt
 
 
 # --- LoopExit: why the simulated-user loop stopped ------------------------------------------

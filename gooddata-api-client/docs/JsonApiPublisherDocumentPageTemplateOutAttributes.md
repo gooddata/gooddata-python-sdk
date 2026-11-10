@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **content** | [**JsonApiPublisherDocumentPageTemplateInAttributesContent**](JsonApiPublisherDocumentPageTemplateInAttributesContent.md) |  | 
+**is_default** | **bool** | Whether the backend ships this page template as a read-only default. | [readonly] 
 **title** | **str** |  | 
 **version** | **str** | Version of the content format. | 
 **are_relations_valid** | **bool** |  | [optional] 

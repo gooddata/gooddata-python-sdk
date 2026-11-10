@@ -112,6 +112,18 @@ then every parent, so an invocation deep in a tree can pick up a `gooddata.yaml`
 not expect. Note the spelling: this CLI uses `gooddata.yaml`, while `gooddata-dbt` uses
 `gooddata.yml`.
 
+**A field the generated client types as a model gets its own Catalog class, never
+`dict[str, Any]`.** `Base.from_dict` reads through the client class, so such a dict comes
+back with the client's Python names (`_from`, `default_value`) and value types
+(`datetime.date`), while `to_dict` still writes the API's names. Model a oneOf as a `Union`
+of classes behind a `global_converter` structure hook, as dashboard `permissions` and the
+publisher document `period` do. Name a keyword field `from_`; `Base` writes it back as the
+client's `_from`. One exception, by convention: an analytics object's `content` is its body
+and stays an opaque `dict` whatever the client types it as, so its keys follow the client in
+memory. After regenerating the client, check the fields that were free-form `JsonNode`: a
+regeneration can type one unnoticed, as it typed `Automation.metadata`
+(`AutomationMetadata`, 2025-04).
+
 ## Testing
 
 Cassette-heavy — `tests/catalog/fixtures/` is the single largest churn point in the repo.

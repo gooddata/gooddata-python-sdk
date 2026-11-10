@@ -2873,7 +2873,10 @@
           ],
           "exportDefinitions": [],
           "memoryItems": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "documentTemplates": [],
+          "pageTemplates": []
         }
       },
       "permissions": [
@@ -2959,7 +2962,10 @@
           "visualizationObjects": [],
           "exportDefinitions": [],
           "memoryItems": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "documentTemplates": [],
+          "pageTemplates": []
         }
       },
       "parent": {
@@ -2992,7 +2998,10 @@
           "visualizationObjects": [],
           "exportDefinitions": [],
           "memoryItems": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "documentTemplates": [],
+          "pageTemplates": []
         }
       },
       "parent": {

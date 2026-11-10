@@ -9,7 +9,7 @@ import re
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, SerializerFunctionWrapHandler, field_validator, model_serializer
 
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -96,7 +96,7 @@ class AacQuery(BaseModel):
 class CreatedVisualization(BaseModel):
     """Visualization in the AAC format (agent output and dataset expected output)."""
 
-    model_config = ConfigDict(extra="ignore")
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
 
     # Optional on purpose: nothing scores on it, and the agent sometimes omits it. A
     # required field here turns a scorable chart into a parse error and an errored item.
@@ -104,17 +104,33 @@ class CreatedVisualization(BaseModel):
     title: str | None = None
     type: str
     query: AacQuery
-    metrics: list[AacBucketRef | str] = Field(default_factory=list)
+    # A null entry holds a position: a bubble chart with no x measure is `[null, y]`.
+    metrics: list[AacBucketRef | str | None] = Field(default_factory=list)
     view_by: list[AacBucketRef | str] = Field(default_factory=list)
     segment_by: list[AacBucketRef | str] = Field(default_factory=list)
     rows: list[AacBucketRef | str] = Field(default_factory=list)
     columns: list[AacBucketRef | str] = Field(default_factory=list)
+    # The metric that sizes each bubble of a bubble chart.
+    size_by: list[AacBucketRef | str] = Field(default_factory=list)
+    # The source and the destination of a sankey or dependency wheel: one bucket item each, not a list.
+    from_: AacBucketRef | str | None = Field(default=None, alias="from")
+    to: AacBucketRef | str | None = None
     config: dict | None = None
+    # Expectation switches. An agent never sends them, and a recorded output leaves them out.
+    buckets_strict: bool = Field(default=False, exclude=True)
+    metrics_ordered: bool = Field(default=False, exclude=True)
 
-    @field_validator("metrics", "view_by", "segment_by", "rows", "columns", mode="before")
+    @field_validator("metrics", "view_by", "segment_by", "rows", "columns", "size_by", mode="before")
     @classmethod
     def _coerce_list_fields(cls, v: object) -> object:
         return v if v is not None else []
+
+    @model_serializer(mode="wrap")
+    def _dump_from_under_its_aac_name(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
+        # `from` is a keyword, so the field is `from_`. A dump without `by_alias` must still
+        # write the AAC key: a dataset or a fixture holding `from_` loses the source bucket in
+        # every reader that does not know the Python name.
+        return {"from" if key == "from_" else key: value for key, value in handler(self).items()}
 
 
 class CreatedVisualizations(BaseModel):
@@ -335,6 +351,9 @@ class ChatResult(BaseModel):
     alert_proposals: list[dict] = Field(default_factory=list, alias="alertProposals")
     search_results: list[dict] = Field(default_factory=list, alias="searchResults")
     unhandled_parts: list[dict] = Field(default_factory=list, alias="unhandledParts")
+    # The itemId of the assistant item holding a clarifyingQuestions part: a clarifyingAnswers
+    # message names it as questionsItemId.
+    clarifying_questions_item_id: str | None = Field(default=None, alias="clarifyingQuestionsItemId")
     tool_call_events: list[ToolCallEvent] = Field(default_factory=list, alias="toolCallEvents")
     reasoning_step_count: int = Field(default=0, alias="reasoningStepCount")
     reasoning_steps: list[str] = Field(default_factory=list, alias="reasoningSteps")
@@ -347,6 +366,9 @@ class ChatResult(BaseModel):
     stream_ended: bool = False
     # Wall-clock seconds for the whole chat turn, timed by the client.
     turn_wall_clock_sec: float | None = None
+    # The endpoint's whole JSON response, for single-shot endpoints whose answer carries
+    # more than its text (the takeaway endpoint's `noData`). None for chat responses.
+    raw_response: dict[str, Any] | None = None
 
 
 def shift_and_index_events(
@@ -467,6 +489,42 @@ class SummaryInput(BaseModel):
     format_hint: str | None = None
 
 
+class TakeawayVisualization(BaseModel):
+    """A takeaway visualization placed with its own filters."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    visualization_id: str
+    filters: list[dict] = Field(default_factory=list)
+
+
+class TakeawayInstructions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    document: str | None = None
+    slot: str | None = None
+    format_hint: str | None = None
+
+
+class TakeawayInput(BaseModel):
+    """Structured input for the `document_takeaway` test kind.
+
+    Maps onto the takeaway endpoint's request body
+    (`POST /api/v1/ai/workspaces/{ws}/takeaway`). Authored in snake_case in the
+    dataset; the TakeawayClient maps it to the endpoint's camelCase fields. Unknown
+    keys are rejected at every level so a typo in a dataset item fails loudly instead
+    of being dropped.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    visualizations: list[str | TakeawayVisualization] = Field(min_length=1)
+    filter_context: list[dict] = Field(default_factory=list)
+    instructions: TakeawayInstructions = Field(default_factory=TakeawayInstructions)
+    max_characters: int | None = None
+    agent_id: str | None = None
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -479,6 +537,8 @@ class DatasetItem(BaseModel):
     expected_output: Any
     # Only used by the `dashboard_summary` test kind; ignored by all others.
     summary_input: SummaryInput | None = None
+    # Only used by the `document_takeaway` test kind; ignored by all others.
+    takeaway_input: TakeawayInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

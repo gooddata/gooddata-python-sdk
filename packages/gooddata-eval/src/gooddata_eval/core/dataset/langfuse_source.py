@@ -15,9 +15,10 @@ Credentials are read from the standard Langfuse environment variables:
 from typing import Any, TypeVar, cast
 
 import httpx
+from pydantic import ValidationError
 
 from gooddata_eval.core.langfuse._env import make_http_client
-from gooddata_eval.core.models import DatasetItem, SummaryInput
+from gooddata_eval.core.models import DatasetItem, SummaryInput, TakeawayInput
 
 _PAGE_SIZE = 100
 
@@ -57,6 +58,27 @@ def _summary_input_from_raw(raw: dict, expected_output: Any) -> SummaryInput | N
     """Locate a dashboard_summary item's `summary_input`."""
     candidate = _first_of(dict, "summary_input", raw.get("input"), raw.get("metadata"), expected_output)
     return SummaryInput.model_validate(candidate) if candidate is not None else None
+
+
+def _takeaway_input_from_raw(raw: dict, expected_output: Any) -> TakeawayInput | None:
+    """Locate a document_takeaway item's `takeaway_input`.
+
+    A value that is not an object raises rather than being skipped: skipping it would
+    drop the item back to the CLI's --kind and judge it as something it was not written as.
+    """
+    for source in (raw.get("input"), raw.get("metadata"), expected_output):
+        if not isinstance(source, dict) or source.get("takeaway_input") is None:
+            continue
+        found = source["takeaway_input"]
+        if not isinstance(found, dict):
+            raise ValueError(
+                f"Langfuse item {raw.get('id')!r}: takeaway_input must be a JSON object, got {type(found).__name__}"
+            )
+        try:
+            return TakeawayInput.model_validate(found)
+        except ValidationError as e:
+            raise ValueError(f"Langfuse item {raw.get('id')!r}: invalid takeaway_input: {e}") from e
+    return None
 
 
 def _user_context_from_raw(raw: dict) -> dict[str, Any] | None:
@@ -115,7 +137,11 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
     """Map a Langfuse REST API dataset-item dict to a DatasetItem."""
     # REST API returns camelCase: expectedOutput, not expected_output
     expected_output = raw.get("expectedOutput") or raw.get("expected_output")
-    resolved_kind = _infer_test_kind(expected_output, test_kind, raw.get("metadata"))
+    takeaway_input = _takeaway_input_from_raw(raw, expected_output)
+    # An item carrying `takeaway_input` can only be a takeaway item, so it stands in for
+    # the CLI default; an explicit test_kind or a structural match still wins.
+    default_kind = "document_takeaway" if takeaway_input is not None else test_kind
+    resolved_kind = _infer_test_kind(expected_output, default_kind, raw.get("metadata"))
     return DatasetItem(
         id=str(raw["id"]),
         dataset_name=raw.get("datasetName") or dataset_name,
@@ -123,6 +149,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         question=_question_from_input(raw.get("input")),
         expected_output=expected_output,
         summary_input=_summary_input_from_raw(raw, expected_output),
+        takeaway_input=takeaway_input,
         user_context=_user_context_from_raw(raw),
     )
 

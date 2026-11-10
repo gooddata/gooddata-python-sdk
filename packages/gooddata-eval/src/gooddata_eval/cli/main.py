@@ -7,7 +7,7 @@ import sys
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import get_args
+from typing import Any, get_args
 
 import httpx
 from gooddata_api_client.exceptions import ApiException, ApiTypeError
@@ -36,32 +36,31 @@ from gooddata_eval.core.reporting.html_report import load_report_files, write_ht
 from gooddata_eval.core.reporting.json_report import build_multi_model_report, write_multi_model_report
 from gooddata_eval.core.runner import ItemReport, run_items
 from gooddata_eval.core.summary.http_client import SummaryClient
+from gooddata_eval.core.takeaway.http_client import TakeawayClient
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
 from gooddata_eval.core.workspace import ModelResolutionError, WorkspaceModelController
 
 _EXIT_OK = 0
 _EXIT_OPERATIONAL_ERROR = 2
-_SUMMARY_TEST_KIND = "dashboard_summary"
 
 
 class _RoutingBackend:
     """Dispatch each item to the right backend by test_kind.
 
-    `dashboard_summary` items go to the dedicated summary endpoint; everything
-    else uses the conversational chat endpoint.
+    Kinds in `by_kind` go to their dedicated endpoint client (`dashboard_summary` to the
+    summary endpoint, `document_takeaway` to the takeaway endpoint); everything else uses
+    the conversational chat endpoint.
     """
 
-    def __init__(self, chat: ChatClient, summary: SummaryClient):
+    def __init__(self, chat: ChatClient, by_kind: dict[str, Any]):
         self._chat = chat
-        self._summary = summary
+        self._by_kind = by_kind
 
     def ask(self, item: DatasetItem) -> ChatResult:
-        if item.test_kind == _SUMMARY_TEST_KIND:
-            return self._summary.ask(item)
-        return self._chat.ask(item)
+        return self._by_kind.get(item.test_kind, self._chat).ask(item)
 
     def close(self) -> None:
-        for backend in (self._chat, self._summary):
+        for backend in (self._chat, *self._by_kind.values()):
             if hasattr(backend, "close"):
                 backend.close()
 
@@ -614,7 +613,14 @@ def _run(config: RunConfig) -> int:
                     turn_timeout_s=config.turn_timeout_s,
                     item_timeout_s=config.item_timeout_s,
                 ),
-                SummaryClient(host=config.host, token=config.token, workspace_id=config.workspace_id),
+                {
+                    "dashboard_summary": SummaryClient(
+                        host=config.host, token=config.token, workspace_id=config.workspace_id
+                    ),
+                    "document_takeaway": TakeawayClient(
+                        host=config.host, token=config.token, workspace_id=config.workspace_id
+                    ),
+                },
             )
             try:
                 single_report = run_items(

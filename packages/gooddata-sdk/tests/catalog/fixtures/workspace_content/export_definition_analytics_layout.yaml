@@ -1350,6 +1350,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '27788'
       status:
         code: 200
         message: OK
@@ -1607,6 +1609,8 @@ interactions:
               description: Testing record dashboard_plugin_2
               id: dashboard_plugin_2
               title: dashboard_plugin_2
+          documentTemplates: []
+          documents: []
           exportDefinitions:
             - id: export_definition_id
               requestPayload:
@@ -1784,6 +1788,7 @@ interactions:
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
+          pageTemplates: []
           parameters: []
           visualizationObjects:
             - content:
@@ -4058,6 +4063,8 @@ interactions:
         X-Content-Type-Options:
           - nosniff
         X-GDC-TRACE-ID: *id001
+        content-length:
+          - '27902'
       status:
         code: 200
         message: OK
@@ -4359,6 +4366,8 @@ interactions:
                     description: Testing record dashboard_plugin_2
                     id: dashboard_plugin_2
                     title: dashboard_plugin_2
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts:
                   - content:
@@ -4535,6 +4544,7 @@ interactions:
                       maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
                     id: total_revenue-no_filters
                     title: Total Revenue (No Filters)
+                pageTemplates: []
                 parameters: []
                 visualizationObjects:
                   - content:
@@ -5848,10 +5858,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:
@@ -5883,10 +5896,13 @@ interactions:
                 analyticalDashboards: []
                 attributeHierarchies: []
                 dashboardPlugins: []
+                documentTemplates: []
+                documents: []
                 exportDefinitions: []
                 filterContexts: []
                 memoryItems: []
                 metrics: []
+                pageTemplates: []
                 parameters: []
                 visualizationObjects: []
               ldm:

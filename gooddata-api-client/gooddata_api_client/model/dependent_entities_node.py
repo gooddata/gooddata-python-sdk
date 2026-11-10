@@ -74,6 +74,7 @@ class DependentEntitiesNode(ModelNormal):
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
             'FILTERVIEW': "filterView",
+            'DOCUMENT': "document",
         },
     }
 

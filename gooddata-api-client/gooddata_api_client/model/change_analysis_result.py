@@ -89,6 +89,7 @@ class ChangeAnalysisResult(ModelNormal):
         lazy_import()
         return {
             'data': ([MetricValueChange],),  # noqa: E501
+            'restricted_count': (int,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +99,7 @@ class ChangeAnalysisResult(ModelNormal):
 
     attribute_map = {
         'data': 'data',  # noqa: E501
+        'restricted_count': 'restrictedCount',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +109,12 @@ class ChangeAnalysisResult(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, data, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data, restricted_count, *args, **kwargs):  # noqa: E501
         """ChangeAnalysisResult - a model defined in OpenAPI
 
         Args:
             data ([MetricValueChange]): The change analysis result data containing significant changes.
+            restricted_count (int): Number of attributes and computed attributes left out of the analysis because the user has no access to them.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -176,6 +179,7 @@ class ChangeAnalysisResult(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.data = data
+        self.restricted_count = restricted_count
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +200,12 @@ class ChangeAnalysisResult(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data, *args, **kwargs):  # noqa: E501
+    def __init__(self, data, restricted_count, *args, **kwargs):  # noqa: E501
         """ChangeAnalysisResult - a model defined in OpenAPI
 
         Args:
             data ([MetricValueChange]): The change analysis result data containing significant changes.
+            restricted_count (int): Number of attributes and computed attributes left out of the analysis because the user has no access to them.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -263,6 +268,7 @@ class ChangeAnalysisResult(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.data = data
+        self.restricted_count = restricted_count
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

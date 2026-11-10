@@ -247,7 +247,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
             format (AttributeFormat): [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
-            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format and INT or NUMERIC data type.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
 
@@ -352,7 +352,7 @@ class AttributeHeaderAttributeHeader(ModelNormal):
             format (AttributeFormat): [optional]  # noqa: E501
             geo_area_config (GeoAreaConfig): [optional]  # noqa: E501
             granularity (str): Date granularity of the attribute, only filled for date attributes.. [optional]  # noqa: E501
-            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format.. [optional]  # noqa: E501
+            number_format (str): Format to be used to format the attribute values, the same kind of format string as the measure format. Only filled for computed attributes with a format and INT or NUMERIC data type.. [optional]  # noqa: E501
             value_type (str): Attribute value type.. [optional]  # noqa: E501
         """
 

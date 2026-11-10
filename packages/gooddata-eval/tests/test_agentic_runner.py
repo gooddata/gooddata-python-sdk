@@ -99,9 +99,18 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_kda_skill", {"Measure": {"type": "metric", "id": "revenue"}}, "evaluate_agentic_kda_skill"),
     ("agentic_conversation", {"fixture": _MIN_CONVERSATION_FIXTURE}, "evaluate_agentic_conversation"),
     ("agentic_forecasting", {"forecast_period": 3}, "evaluate_agentic_forecasting"),
+    (
+        "agentic_dashboard_summary",
+        {"must_include": ["States the overall trend."]},
+        "evaluate_agentic_dashboard_summary",
+    ),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
 ]
+
+# The one kind whose dispatch needs more than question/expected_output: the dashboard to
+# summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
+_SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
 
 
 def test_all_agentic_kind_cases_covers_every_registered_kind():
@@ -120,6 +129,7 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}") as mock_eval:
         _dispatch_agentic(
@@ -134,6 +144,42 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
             agent_id="agent-1",
         )
     assert mock_eval.call_args.kwargs["agent_id"] == "agent-1"
+
+
+def _dispatch_visualization(expected_output: dict) -> Any:
+    item = DatasetItem(
+        id="q1", dataset_name="ds", test_kind="vis_agentic", question="q", expected_output=expected_output
+    )
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_visualization") as mock_eval:
+        _dispatch_agentic(
+            item,
+            host="https://h",
+            token="tok",
+            workspace_id="ws1",
+            k=1,
+            langfuse=None,
+            run_ts="2026-01-01",
+            model_version_override=None,
+        )
+    return mock_eval.call_args.kwargs
+
+
+def test_dispatch_agentic_relays_an_item_without_a_chart_with_no_candidates():
+    kwargs = _dispatch_visualization({"expects_visualization": False, "answer_must_include": ["destination"]})
+    assert kwargs["expected_outputs"] == []
+    assert kwargs["options"].expects_visualization is False
+    assert kwargs["options"].answer_must_include == ("destination",)
+
+
+@pytest.mark.parametrize(
+    "candidates",
+    [{"visualization": _MIN_VIZ}, {"expected_outputs": [{"visualization": _MIN_VIZ}]}],
+    ids=["visualization", "expected_outputs"],
+)
+def test_dispatch_agentic_rejects_an_item_without_a_chart_that_lists_candidates(candidates):
+    """Dropping the candidates would score the contradiction as a no-chart item and read green."""
+    with pytest.raises(ValueError, match="must not list 'visualization' candidates"):
+        _dispatch_visualization({"expects_visualization": False, **candidates})
 
 
 def _item(test_kind: str = "agentic_alert_skill") -> DatasetItem:
@@ -225,6 +271,7 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
         test_kind=kind,
         question="q",
         expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], conversation_id="c1", response_id="r1", detail={"k": "v"})
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned) as mock_eval:
@@ -797,6 +844,7 @@ _KIND_EVALUATORS = [
     ("agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("agentic_document_skill", "evaluate_agentic_document_skill", {}),
     ("agentic_forecasting", "evaluate_agentic_forecasting", {}),
+    ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
@@ -819,6 +867,7 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
         question="What does the visualization I attached show?",
         expected_output=expected_output,
         user_context=user_context,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{evaluator}") as mock_eval:
         _dispatch_agentic(
@@ -831,7 +880,16 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
             run_ts="2026-01-01",
             model_version_override=None,
         )
+    if kind in _KINDS_WITHOUT_USER_CONTEXT:
+        assert "user_context" not in mock_eval.call_args.kwargs
+        return
     assert mock_eval.call_args.kwargs["user_context"] == user_context
+
+
+# agentic_dashboard_summary builds its own context from the dashboard it summarises and
+# takes its scope from summary_input, so relaying the item's context would override the
+# thing under test rather than add to it. Excluded on purpose, not by omission.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
 
 
 class _Stop(Exception):
@@ -841,7 +899,14 @@ class _Stop(Exception):
 # Kinds whose run_* hands the item's context to its ChatClient, which sends it on every turn.
 # conversation passes it per turn instead, covered in its own test file.
 _CLIENT_CONTEXT_KINDS = [
-    ("visualization", "run_agentic_visualization", "evaluate_agentic_visualization", []),
+    # An empty candidate list is rejected before the client exists: it is only right for an item
+    # that expects no chart.
+    (
+        "visualization",
+        "run_agentic_visualization",
+        "evaluate_agentic_visualization",
+        [CreatedVisualization.model_validate(_MIN_VIZ)],
+    ),
     ("metric_skill", "run_agentic_metric_skill", "evaluate_agentic_metric_skill", {}),
     (
         "dashboard_skill",
@@ -963,7 +1028,14 @@ def test_failed_runs_reaches_the_report_for_every_kind(kind, expected_output, ta
     field empty on every item (confirmed live: 135 agentic_guardrail results, all with
     `failed_runs: []`, including 16 items that passed 1 of 3 runs). A kind whose evaluator
     stops attaching them fails here rather than quietly reporting nothing."""
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, failed_runs=[_A_FAILED_RUN])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
@@ -1028,10 +1100,9 @@ class _FirstSendClient:
         pass
 
 
-_RUN_ZERO_KINDS = [
-    (m, run_fn, expected or [CreatedVisualization.model_validate(_MIN_VIZ)] if m == "visualization" else expected)
-    for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS
-] + [("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)]
+_RUN_ZERO_KINDS = [(m, run_fn, expected) for m, run_fn, _, expected in _CLIENT_CONTEXT_KINDS] + [
+    ("conversation", "run_agentic_conversation", _MIN_CONVERSATION_FIXTURE)
+]
 
 
 @pytest.mark.parametrize(("module_name", "run_fn", "expected"), _RUN_ZERO_KINDS)
@@ -1100,7 +1171,14 @@ def test_every_evaluator_hands_out_its_run_latencies(kind, expected_output, targ
 
 @pytest.mark.parametrize(("kind", "expected_output", "target"), _ALL_AGENTIC_KIND_CASES)
 def test_run_latencies_reach_the_report_for_every_kind(kind, expected_output, target):
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, run_latencies_s=[4.5, 6.0])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
@@ -1164,7 +1242,14 @@ def _noting(*latencies: float, then: Any = None):
 def test_every_kind_gets_its_chat_turns_recorded_as_trace_latencies(kind, expected_output, target):
     """The recorder wraps the item, so a kind needs no code of its own to be covered -- which is
     the point: nothing a new evaluator forgets can drop it out of the per-trace percentiles."""
-    item = DatasetItem(id="q1", dataset_name="ds", test_kind=kind, question="q", expected_output=expected_output)
+    item = DatasetItem(
+        id="q1",
+        dataset_name="ds",
+        test_kind=kind,
+        question="q",
+        expected_output=expected_output,
+        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+    )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", side_effect=_noting(1.5, 2.5, 0.5)):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].trace_latencies_s == [1.5, 2.5, 0.5]

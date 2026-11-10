@@ -2815,7 +2815,10 @@
           ],
           "export_definitions": [],
           "memory_items": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "document_templates": [],
+          "page_templates": []
         }
       },
       "permissions": [
@@ -2900,7 +2903,10 @@
           "visualization_objects": [],
           "export_definitions": [],
           "memory_items": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "document_templates": [],
+          "page_templates": []
         }
       },
       "parent": {
@@ -2932,7 +2938,10 @@
           "visualization_objects": [],
           "export_definitions": [],
           "memory_items": [],
-          "parameters": []
+          "parameters": [],
+          "documents": [],
+          "document_templates": [],
+          "page_templates": []
         }
       },
       "parent": {

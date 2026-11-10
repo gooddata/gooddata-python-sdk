@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -40,6 +41,7 @@ from gooddata_eval.core.models import (
     build_latency_breakdown,
     shift_and_index_events,
 )
+from gooddata_eval.core.scoring import AAC_VISUALIZATION_TYPES, same_viz_type
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
 _DEFAULT_K = 1
@@ -272,6 +274,65 @@ def _check_visualizations(widgets: list[dict], new_ids: set[str], expected: list
     return failures, title_mismatches
 
 
+def _check_forbidden(widgets: list[dict], forbidden: list[dict]) -> list[str]:
+    """Report charts the expectation says must NOT be on the dashboard.
+
+    The counterpart to ``_check_visualizations``, which allows extras. Extras are the right
+    default -- a user asking for three charts is not wronged by a fourth -- but it leaves the
+    cases that are about what the agent must *refrain* from unassertable: a chart the agent was
+    told it could not use, and a substitute authored in place of one it could not resolve.
+
+    An entry with an ``id`` is matched on that id alone; a ``title`` beside it is documentation
+    for whoever reads the fixture, not a second matcher. Titles are not unique in a real
+    workspace -- the catalog this was written against has 102 visualizations whose title
+    contains "approval rate" -- so widening an id entry to also match its title would fail the
+    case on a chart that merely shares a name with the forbidden one.
+
+    An entry with only a ``title`` matches on the title, which is what catches a substitution
+    whose id is not known in advance.
+    """
+    failures: list[str] = []
+    for entry in forbidden:
+        exp_id = entry.get("id")
+        exp_title = str(entry.get("title") or "")
+        if exp_id is not None:
+            if any(w.get("visualization") == exp_id for w in widgets):
+                failures.append(f"chart id={exp_id!r} title={exp_title!r} is on the dashboard and must not be")
+        else:
+            hits = [w for w in widgets if _norm(str(w.get("title") or "")) == _norm(exp_title)]
+            if hits:
+                ids = ", ".join(repr(w.get("visualization")) for w in hits)
+                failures.append(f"a chart titled {exp_title!r} is on the dashboard ({ids}) and must not be")
+    return failures
+
+
+def _check_answer(answer: str, must_include: list[str], must_not_match: list[str]) -> list[str]:
+    """Score the text the user actually reads.
+
+    Nothing else in this evaluator looks at the answer: every other check reads the drafted
+    document, so a run that builds the right dashboard and describes it wrongly scores as a
+    clean pass. The two cases that need this are the ones where the text *is* the deliverable
+    -- an agent that cannot build what was asked has to say so, and one that can has to say it
+    without leaking the raw ``{visualization/<uuid>}`` tokens the renderer was meant to resolve.
+
+    ``must_include`` is substring, case- and whitespace-insensitive, because it asserts that a
+    point was made rather than that a sentence was phrased a particular way. ``must_not_match``
+    is a regular expression, because what it rules out is usually a shape -- a token, an id, a
+    claim pattern -- and not a fixed string.
+    """
+    normalized = _norm(answer)
+    failures: list[str] = [
+        f"the answer does not mention {phrase!r}" for phrase in must_include if _norm(str(phrase)) not in normalized
+    ]
+    for pattern in must_not_match:
+        # Compiled at validation time too, so a bad pattern fails the fixture rather than the
+        # run; compiling again here keeps this function usable on its own.
+        found = re.search(str(pattern), answer, re.IGNORECASE)
+        if found:
+            failures.append(f"the answer matches {pattern!r}, which it must not (matched {found.group(0)!r})")
+    return failures
+
+
 def _check_references(widgets: list[dict], known_ids: set[str]) -> list[str]:
     """Report widgets whose id the response's references never carried.
 
@@ -312,20 +373,33 @@ def _grouped_filter_entries(dashboard: dict) -> list[tuple[str, dict, str | None
         if tabs
         else [("", dashboard.get("filters") or {})]
     )
-    entries: list[tuple[str, dict, str | None]] = []
-    for where, filters in maps:
-        for key, value in filters.items():
-            if not isinstance(value, dict):
-                continue
-            label = where or f"filter {key!r}"
-            if value.get("type") != "filter_group":
-                entries.append((label, value, None))
-                continue
-            group = str(value.get("title") or "")
-            entries.extend(
-                (label, member, group) for member in (value.get("filters") or {}).values() if isinstance(member, dict)
-            )
-    return entries
+    return [
+        (where or f"filter {entry_key!r}", value, group)
+        for where, filters in maps
+        for entry_key, _key, value, group in _members_of(filters)
+    ]
+
+
+def _members_of(filters: dict) -> list[tuple[str, str, dict, str | None]]:
+    """``(entry key, filter key, filter, group title)`` for every filter of one filter map.
+
+    A group's members are read in its place, each under its own key and with the group's key as
+    the entry key; a filter outside a group is its own entry and has no group title.
+    """
+    members: list[tuple[str, str, dict, str | None]] = []
+    for entry_key, value in filters.items():
+        if not isinstance(value, dict):
+            continue
+        if value.get("type") != "filter_group":
+            members.append((entry_key, entry_key, value, None))
+            continue
+        group = str(value.get("title") or "")
+        members.extend(
+            (entry_key, key, member, group)
+            for key, member in (value.get("filters") or {}).items()
+            if isinstance(member, dict)
+        )
+    return members
 
 
 def _filters_of_type(dashboard: dict, filter_type: str) -> list[tuple[str, dict]]:
@@ -548,6 +622,11 @@ def _matching_widgets(widgets: list[dict], new_ids: set[str], expected: dict) ->
     return [w for w in widgets if w.get("visualization") in new_ids and _norm(str(w.get("title") or "")) == title]
 
 
+def _chart_entry(chart: str | dict) -> dict:
+    """A chart as ``tabs`` and ``layout`` name it -- an id, or ``{"title": ...}`` -- as a ``_matching_widgets`` entry."""
+    return {"id": chart} if isinstance(chart, str) else {"id": None, **chart}
+
+
 def _has_date_bindings(expected_output: dict) -> bool:
     """Whether any expected chart states the date dataset its widget must follow.
 
@@ -582,6 +661,64 @@ def _check_date_bindings(widgets: list[dict], new_ids: set[str], expected: list[
     return failures
 
 
+def _has_chart_types(expected_output: dict) -> bool:
+    """Whether any expected chart states the type it must be placed as."""
+    return any(isinstance(v, dict) and "chart_type" in v for v in expected_output.get("visualizations") or [])
+
+
+def _bodies_by_id(*references: dict) -> dict[str, dict]:
+    """Every chart body the response's references carry, existing and authored, by chart id."""
+    bodies: dict[str, dict] = {}
+    for refs in references:
+        for key in ("visualizations", "new_visualizations"):
+            for body in refs.get(key) or []:
+                if isinstance(body, dict) and body.get("id"):
+                    bodies[body["id"]] = body
+    return bodies
+
+
+def _check_chart_types(
+    widgets: list[dict], new_ids: set[str], expected: list[dict], bodies: dict[str, dict]
+) -> tuple[list[str], list[str]]:
+    """Every widget of a chart that states a ``chart_type`` must show a chart of exactly that type.
+
+    A widget names only the chart id, so the type is read from the chart body the references
+    carry. The title alone cannot catch a chart authored as another type than the one asked
+    for, which is the silent swap GDAI-2054 rules out.
+
+    Returns the failures and the notes. A widget whose chart has no body in the references
+    cannot be checked: gen-ai carries a body only when it could resolve one, so a missing
+    body is a platform fault, noted as ``_check_references`` notes a missing id, and not
+    scored as the agent's.
+    """
+    failures: list[str] = []
+    notes: list[str] = []
+    for exp in expected:
+        if not isinstance(exp, dict) or "chart_type" not in exp:
+            continue
+        wanted = exp["chart_type"]
+        label = exp.get("title") if exp.get("id") is None else exp.get("id")
+        candidates = _matching_widgets(widgets, new_ids, exp)
+        if not candidates:
+            failures.append(f"cannot check the type of chart {label!r}: it is not on the dashboard")
+            continue
+        types: list[str] = []
+        for widget in candidates:
+            chart_type = (bodies.get(widget.get("visualization")) or {}).get("type")
+            if isinstance(chart_type, str):
+                types.append(chart_type)
+            else:
+                notes.append(
+                    f"cannot check the type of chart {label!r}: the response's references carry no body "
+                    f"for {widget.get('visualization')!r}"
+                )
+        # Every placement, as for date bindings: one right placement must not hide a wrong one.
+        if not all(same_viz_type(wanted, t) for t in types):
+            found = ", ".join(repr(t) for t in types)
+            failures.append(f"chart {label!r} is {found}, expected {wanted!r}")
+    return failures, notes
+
+
 def _tabs_of(dashboard: dict) -> list[dict]:
     """The dashboard's tabs, reading a document with root sections as its single tab."""
     tabs = dashboard.get("tabs")
@@ -606,10 +743,11 @@ def _check_tabs(dashboard: dict, new_ids: set[str], expected: list[dict]) -> lis
         if "title" in exp and _norm(str(tab.get("title") or "")) != _norm(str(exp["title"] or "")):
             failures.append(f"tab {index} is titled {tab.get('title')!r}, expected {exp['title']!r}")
         tab_widgets = [w for section in tab.get("sections") or [] for w in section.get("widgets") or []]
-        for chart in exp.get("visualizations") or []:
-            entry = {"id": chart} if isinstance(chart, str) else {"id": None, **chart}
-            if not _matching_widgets(tab_widgets, new_ids, entry):
-                failures.append(f"tab {index} ({tab.get('title')!r}) does not hold chart {chart!r}")
+        failures.extend(
+            f"tab {index} ({tab.get('title')!r}) does not hold chart {chart!r}"
+            for chart in exp.get("visualizations") or []
+            if not _matching_widgets(tab_widgets, new_ids, _chart_entry(chart))
+        )
     return failures
 
 
@@ -673,27 +811,10 @@ def _check_tab_filters(dashboard: dict, expected: dict[str, dict]) -> list[str]:
     Exact on purpose: GDAI-2540 is a filter that turns up on a tab it never belonged to, which a
     check of only the expected entries would pass. Keyed by the saved dashboard's local filter
     id rather than by label, so two filters on the same label stay distinguishable.
+
+    It is ``filter_bar`` with every filter known by key, so the two read filter groups the same way.
     """
-    tabs = {tab.get("id"): tab for tab in dashboard.get("tabs") or []}
-    failures: list[str] = []
-    for tab_id, expected_filters in expected.items():
-        tab = tabs.get(tab_id)
-        if tab is None:
-            failures.append(f"the dashboard has no tab {tab_id!r}")
-            continue
-        actual = {k: v for k, v in (tab.get("filters") or {}).items() if isinstance(v, dict)}
-        failures.extend(
-            f"tab {tab_id!r} carries filter {filter_id!r}, which it should not"
-            for filter_id in sorted(actual.keys() - expected_filters.keys())
-        )
-        failures.extend(
-            f"tab {tab_id!r} lost filter {filter_id!r}" for filter_id in sorted(expected_filters.keys() - actual.keys())
-        )
-        for filter_id in sorted(expected_filters.keys() & actual.keys()):
-            failures.extend(
-                _filter_mismatch(f"tab {tab_id!r} filter {filter_id!r}", actual[filter_id], expected_filters[filter_id])
-            )
-    return failures
+    return _check_filter_bar(dashboard, [{"tab": tab_id, "filters": filters} for tab_id, filters in expected.items()])
 
 
 def _filters_by_id(dashboard: dict) -> dict[str, list[tuple[str, dict]]]:
@@ -758,6 +879,167 @@ def _check_preserved_widgets(widgets: list[dict], expected: list[dict]) -> list[
         changed = ", ".join(f"{k} {widget.get(k)!r} (expected {exp[k]!r})" for k in keys if widget.get(k) != exp[k])
         failures.append(f"the widget showing {viz_id!r} changed: {changed}")
     return failures
+
+
+def _named_tab(dashboard: dict, tab_id: str | None) -> tuple[dict | None, str]:
+    """The tab an entry of ``layout`` or ``filter_bar`` names, and how to refer to it in a failure.
+
+    An entry without ``tab`` is for a dashboard with one tab only, root sections included: on a
+    dashboard with several it would be a guess which one the case meant, so it is a failure.
+    """
+    tabs = _tabs_of(dashboard)
+    if tab_id is None:
+        if len(tabs) != 1:
+            return None, f"the dashboard has {len(tabs)} tabs, so the expectation must name one"
+        return tabs[0], "the dashboard"
+    tab = next((t for t in tabs if t.get("id") == tab_id), None)
+    return tab, f"tab {tab_id!r}" if tab is not None else f"the dashboard has no tab {tab_id!r}"
+
+
+def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> list[str]:
+    """Each named tab must hold exactly the expected sections, in order, each with exactly its charts in order.
+
+    Exact on purpose. A move that leaves the widget where it was, places a second copy, or puts
+    it in the wrong section keeps every chart "on the dashboard", and so does a removal that
+    never happened; only the whole arrangement tells them apart. A section's ``title`` is
+    compared when the entry states it, ``null`` meaning untitled. Its ``visualizations`` are
+    always stated, ``[]`` for a section without charts. A chart is an id, or
+    ``{"title": ...}`` for one the agent authored. Widgets that show no visualization are not
+    charts and are left out on both sides.
+    """
+    failures: list[str] = []
+    for entry in expected:
+        tab, where = _named_tab(dashboard, entry.get("tab"))
+        if tab is None:
+            failures.append(where)
+            continue
+        sections = tab.get("sections") or []
+        wanted = entry["sections"]
+        if len(sections) != len(wanted):
+            titles = ", ".join(repr(s.get("title")) for s in sections)
+            failures.append(f"{where} has {len(sections)} section(s) ({titles}), expected {len(wanted)}")
+            continue
+        for index, (section, want) in enumerate(zip(sections, wanted, strict=True)):
+            if "title" in want and _norm(str(section.get("title") or "")) != _norm(str(want["title"] or "")):
+                failures.append(
+                    f"{where} section {index} is titled {section.get('title')!r}, expected {want['title']!r}"
+                )
+            charts = [w for w in section.get("widgets") or [] if w.get("visualization")]
+            charts_wanted = want["visualizations"]
+            if len(charts) != len(charts_wanted) or not all(
+                _matching_widgets([w], new_ids, _chart_entry(c)) for w, c in zip(charts, charts_wanted, strict=True)
+            ):
+                shown = [w.get("visualization") for w in charts]
+                failures.append(f"{where} section {index} holds {shown}, expected {charts_wanted}")
+    return failures
+
+
+def _check_filter_bar(dashboard: dict, expected: list[dict]) -> list[str]:
+    """Each named tab must carry exactly the expected filters: the kept ones by key, the new ones by content.
+
+    ``filters`` names a filter the case knows the key of, the saved one or one the change keeps.
+    ``added`` holds a filter whose key the agent mints at run time -- a new one, or one it
+    replaced by removing and re-adding it -- each matched to a different filter that ``filters``
+    did not claim. Anything left over fails: a filter that should have been removed, a duplicate,
+    or one copied in from elsewhere. Unlike ``tab_filters``, it reads a dashboard without tabs too.
+
+    A grouped filter is read by its own key. Its entry names the group's title as ``group``, and
+    an entry without one must sit outside every group, so a filter moved into or out of a group
+    fails. A group none of the expected filters sits in fails like a leftover filter -- an empty
+    one, or one whose members should have been ungrouped -- and so does a key the tab carries twice.
+    """
+    failures: list[str] = []
+    for entry in expected:
+        tab, where = _named_tab(dashboard, entry.get("tab"))
+        if tab is None:
+            failures.append(where)
+            continue
+        filters = tab.get("filters") or {}
+        groups = {
+            key: str(value.get("title") or "")
+            for key, value in filters.items()
+            if isinstance(value, dict) and value.get("type") == "filter_group"
+        }
+        # Each filter by its own key, with the key of the group it sits in.
+        actual: dict[str, tuple[dict, str | None]] = {}
+        for entry_key, key, value, group in _members_of(filters):
+            if key in actual:
+                failures.append(f"{where} carries filter {key!r} more than once")
+                continue
+            actual[key] = (value, None if group is None else entry_key)
+        claimed: set[str | None] = set()
+        for filter_id, want in (entry.get("filters") or {}).items():
+            got = actual.pop(filter_id, None)
+            if got is None:
+                failures.append(f"{where} lost filter {filter_id!r}")
+                continue
+            value, group_key = got
+            failures.extend(_filter_mismatch(f"{where} filter {filter_id!r}", value, _without_group(want)))
+            if _in_wanted_group(groups, group_key, want):
+                claimed.add(group_key)
+            else:
+                sits = "no group" if group_key is None else f"group {groups[group_key]!r}"
+                wanted = f"group {want['group']!r}" if "group" in want else "no group"
+                failures.append(f"{where} filter {filter_id!r} sits in {sits}, expected {wanted}")
+        added = entry.get("added") or []
+        keys = list(actual)
+        fits = [
+            [
+                not _filter_mismatch("", actual[key][0], _without_group(want))
+                and _in_wanted_group(groups, actual[key][1], want)
+                for key in keys
+            ]
+            for want in added
+        ]
+        for want, index in zip(added, _one_to_one(fits), strict=True):
+            if index is None:
+                failures.append(f"{where} carries no new filter matching {want!r}")
+                continue
+            claimed.add(actual.pop(keys[index])[1])
+        failures.extend(f"{where} carries filter {key!r}, which it should not" for key in sorted(actual))
+        failures.extend(
+            f"{where} carries filter group {key!r} ({title!r}), which holds none of the expected filters"
+            for key, title in sorted(groups.items())
+            if key not in claimed
+        )
+    return failures
+
+
+def _without_group(expected: dict) -> dict:
+    return {k: v for k, v in expected.items() if k != "group"}
+
+
+def _in_wanted_group(groups: dict[str, str], group_key: str | None, expected: dict) -> bool:
+    """Whether a filter in the group keyed ``group_key`` (``None`` for none) sits where ``expected`` puts it."""
+    if group_key is None or "group" not in expected:
+        return group_key is None and "group" not in expected
+    return _norm(groups[group_key]) == _norm(expected["group"])
+
+
+def _one_to_one(fits: list[list[bool]]) -> list[int | None]:
+    """For each row, a column it fits, no column taken twice, with as many rows matched as there can be.
+
+    First fit is not enough: an expectation that names fewer keys can take the filter a stricter
+    one needed and fail a correct dashboard on the order the entries are listed in. Each row
+    that finds every fitting column taken tries to move that column's owner to another one.
+    """
+    owner: dict[int, int] = {}
+
+    def claim(row: int, seen: set[int]) -> bool:
+        for column, fit in enumerate(fits[row]):
+            if fit and column not in seen:
+                seen.add(column)
+                if column not in owner or claim(owner[column], seen):
+                    owner[column] = row
+                    return True
+        return False
+
+    for row in range(len(fits)):
+        claim(row, set())
+    matched: list[int | None] = [None] * len(fits)
+    for column, row in owner.items():
+        matched[row] = column
+    return matched
 
 
 def _date_range_text(date_range: dict | None) -> str:
@@ -840,6 +1122,76 @@ def _min_new_visualizations(expected_output: dict) -> int:
     return value
 
 
+def _max_new_visualizations(expected_output: dict) -> int | None:
+    """Upper bound on the number of charts the agent may author, or ``None`` for no bound.
+
+    The bound that was missing. ``min_new_visualizations`` alone cannot express "use what is
+    already there", which is the central requirement wherever a curated catalog exists: with
+    only a floor, ``0`` is satisfied by any number of authored charts, so a case meant to
+    assert that the agent reused existing work passes however much it invented. Pairing it
+    with ``max_new_visualizations: 0`` is what turns that into an assertion.
+
+    Absent means unbounded, which is the behaviour every fixture written before this had.
+    ``0`` is a real bound and must not be read as absence.
+
+    Raises:
+        ValueError: the bound is not a number, is negative, or is below the floor — a ceiling
+            under the floor cannot be satisfied by any run, so the fixture is unscoreable
+            rather than strict.
+    """
+    raw = expected_output.get("max_new_visualizations")
+    if raw is None:
+        return None
+    try:
+        value = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"max_new_visualizations is not a number: {raw!r}") from exc
+    if value < 0:
+        raise ValueError(f"max_new_visualizations must not be negative, got {value}")
+    minimum = _min_new_visualizations(expected_output)
+    if value < minimum:
+        raise ValueError(f"max_new_visualizations ({value}) is below min_new_visualizations ({minimum})")
+    return value
+
+
+def _forbidden_visualizations(expected_output: dict) -> list[dict]:
+    """The ``must_not_contain`` entries, as a list."""
+    return expected_output.get("must_not_contain") or []
+
+
+def _answer_assertions(expected_output: dict) -> tuple[list[str], list[str]]:
+    """The answer-text assertions, as ``(must_include, must_not_match)``."""
+    return (
+        list(expected_output.get("answer_must_include") or []),
+        list(expected_output.get("answer_must_not_match") or []),
+    )
+
+
+def _compile_pattern(pattern: object) -> re.Pattern[str]:
+    """Compile one ``answer_must_not_match`` entry, naming the fixture key on failure.
+
+    Raises:
+        ValueError: the pattern does not compile.
+    """
+    try:
+        return re.compile(str(pattern))
+    except re.error as exc:
+        raise ValueError(f"answer_must_not_match carries an invalid regular expression {pattern!r}: {exc}") from exc
+
+
+def _expects_dashboard(expected_output: dict) -> bool:
+    """Whether the case expects a dashboard at all.
+
+    ``false`` is the refusal shape: the agent was asked for something it cannot build, and the
+    right outcome is that it says so and drafts nothing. Those cases could not be authored
+    before, because an expectation with no ``visualizations`` is rejected as vacuous -- and
+    correctly so, since every chart check would pass against nothing. What makes a refusal
+    scoreable is not relaxing that rule but replacing the assertion: the answer carries the
+    whole of what the run is judged on, so a refusal fixture has to state it.
+    """
+    return expected_output.get("expects_dashboard", True) is not False
+
+
 def _has_filters(expected_output: dict) -> bool:
     """Whether the expectation says anything about the attribute filters.
 
@@ -870,7 +1222,47 @@ def _validate_expectation(expected_output: dict) -> None:
     Raises:
         ValueError: the expectation is unusable.
     """
-    if not expected_output.get("visualizations"):
+    for key in ("answer_must_include", "answer_must_not_match"):
+        value = expected_output.get(key)
+        if value is None:
+            continue
+        if not isinstance(value, list):
+            raise ValueError(f"{key} must be a list of strings, got {value!r}")
+        # isinstance, not str(entry): `- no` in YAML loads as the bool False, which str()
+        # turns into the assertion "false" -- a fixture that looks strict while checking
+        # text the question never mentions. Same for a bare number.
+        if any(not isinstance(entry, str) for entry in value):
+            raise ValueError(f"{key} must be a list of strings, got {value!r}")
+        if any(not entry.strip() for entry in value):
+            raise ValueError(f"{key} carries an empty entry, which asserts nothing: {value!r}")
+    must_include, must_not_match = _answer_assertions(expected_output)
+    # Compiled here so an unparseable pattern fails the fixture before the first API call,
+    # rather than raising mid-scoring with a run already spent.
+    for pattern in must_not_match:
+        _compile_pattern(pattern)
+
+    forbidden = _forbidden_visualizations(expected_output)
+    if not isinstance(forbidden, list):
+        raise ValueError(f"must_not_contain must be a list of chart expectations, got {forbidden!r}")
+    for entry in forbidden:
+        if not isinstance(entry, dict):
+            raise ValueError(f"a must_not_contain entry must be an object, got {entry!r}")
+        if entry.get("id") is None and not str(entry.get("title") or "").strip():
+            raise ValueError(f"a must_not_contain entry needs an id or a title, got {entry!r}")
+
+    if not _expects_dashboard(expected_output):
+        # The refusal shape. Each of these would otherwise produce a fixture that looks strict
+        # and asserts nothing, which is the failure mode the vacuity check below exists to stop.
+        if expected_output.get("visualizations"):
+            raise ValueError("expects_dashboard is false, so the case must not list visualizations to find")
+        if _is_edit(expected_output):
+            raise ValueError("expects_dashboard is false is a creation shape; an edit always produces a patch")
+        if not must_include and not must_not_match:
+            raise ValueError(
+                "expects_dashboard is false needs an answer assertion; without one the case scores nothing "
+                "beyond the absence of a draft, which an agent that fell over satisfies too"
+            )
+    elif not expected_output.get("visualizations"):
         raise ValueError("expected_output lists no visualizations; every chart check would pass vacuously")
     if _has_date_range(expected_output):
         date_range = expected_output.get("date_range")
@@ -924,10 +1316,11 @@ def _validate_expectation(expected_output: dict) -> None:
     elif saved_id is not None:
         raise ValueError(f"a creation expectation must not name a saved_dashboard_id, got {saved_id!r}")
     _min_new_visualizations(expected_output)
+    _max_new_visualizations(expected_output)
 
 
 def _validate_layout_expectations(expected_output: dict) -> None:
-    """Shape checks for the opt-in keys on charts, tabs, per-tab filters and preserved widgets.
+    """Shape checks for the opt-in keys on charts, tabs, per-tab filters, preserved widgets, layout and filter bar.
 
     Raises:
         ValueError: one of them is unusable. Loud for the same reason as the rest of the
@@ -936,6 +1329,12 @@ def _validate_layout_expectations(expected_output: dict) -> None:
     for chart in expected_output.get("visualizations") or []:
         if isinstance(chart, dict) and "date_dataset" in chart and not _is_dataset_or_null(chart["date_dataset"]):
             raise ValueError(f"date_dataset must name a date dataset or be null, got {chart!r}")
+        if (
+            isinstance(chart, dict)
+            and "chart_type" in chart
+            and (not isinstance(chart["chart_type"], str) or chart["chart_type"] not in AAC_VISUALIZATION_TYPES)
+        ):
+            raise ValueError(f"chart_type must be an AAC visualization type, got {chart!r}")
 
     if "tabs" in expected_output:
         tabs = expected_output["tabs"]
@@ -958,8 +1357,7 @@ def _validate_layout_expectations(expected_output: dict) -> None:
             ):
                 raise ValueError(f"tab_filters[{tab_id!r}] must map filter ids to typed filters, got {filters!r}")
             for filter_id, entry in filters.items():
-                if entry["type"] == "attribute_filter":
-                    _validate_tab_attribute_filter(f"tab_filters[{tab_id!r}][{filter_id!r}]", entry)
+                _validate_bar_filter(f"tab_filters[{tab_id!r}][{filter_id!r}]", entry)
 
     if "date_filters" in expected_output:
         date_filters = expected_output["date_filters"]
@@ -991,6 +1389,87 @@ def _validate_layout_expectations(expected_output: dict) -> None:
         for widget in preserved:
             if not isinstance(widget, dict) or not widget.get("visualization") or len(widget) < 2:
                 raise ValueError(f"a preserved widget needs its visualization and a key to guard, got {widget!r}")
+
+    if "layout" in expected_output:
+        for entry in _tab_entries(expected_output, "layout", {"tab", "sections"}):
+            sections = entry.get("sections")
+            if not isinstance(sections, list):
+                raise ValueError(f"a layout entry needs its sections as a list, got {entry!r}")
+            for section in sections:
+                if not isinstance(section, dict) or section.keys() - {"title", "visualizations"}:
+                    raise ValueError(f"a layout section takes only title and visualizations, got {section!r}")
+                if section.get("title") is not None and not isinstance(section["title"], str):
+                    raise ValueError(f"a layout section's title must be a string or null, got {section!r}")
+                if "visualizations" not in section:
+                    # Missing would read as "no charts" here but as "any charts" in `tabs`.
+                    raise ValueError(f"a layout section must list its visualizations, [] for none, got {section!r}")
+                charts = section["visualizations"]
+                if not isinstance(charts, list) or not all(
+                    (isinstance(c, str) and c)
+                    or (isinstance(c, dict) and c.keys() == {"title"} and isinstance(c["title"], str) and c["title"])
+                    for c in charts
+                ):
+                    raise ValueError(
+                        f"a layout section's visualizations must be chart ids or {{'title': ...}}, got {section!r}"
+                    )
+
+    if "filter_bar" in expected_output:
+        for entry in _tab_entries(expected_output, "filter_bar", {"tab", "filters", "added"}):
+            where = f"filter_bar[{entry.get('tab')!r}]"
+            kept = entry.get("filters", {})
+            added = entry.get("added", [])
+            if not isinstance(kept, dict) or not isinstance(added, list):
+                raise ValueError(f"{where} needs filters as a map of keys and added as a list, got {entry!r}")
+            named = [(f"{where}[{key!r}]", f) for key, f in kept.items()]
+            named += [(f"{where} added[{index}]", f) for index, f in enumerate(added)]
+            for label, body in named:
+                _validate_bar_filter(label, body)
+
+
+def _validate_bar_filter(label: str, body: object) -> None:
+    """A filter ``tab_filters`` or ``filter_bar`` expects: typed, in the AAC shape, and never a group.
+
+    A group is not a filter there: both checks read its members by their own keys, so an
+    expected ``filter_group`` could never match. Its members say which group they sit in.
+
+    Raises:
+        ValueError: the filter is unusable.
+    """
+    if not isinstance(body, dict) or not body.get("type"):
+        raise ValueError(f"{label} must be a typed filter, got {body!r}")
+    if body["type"] == "filter_group":
+        raise ValueError(f"{label} is a filter_group; list its members instead, each with group set to its title")
+    if "group" in body and not (isinstance(body["group"], str) and body["group"]):
+        raise ValueError(f"{label} group must be the title of the filter group, got {body['group']!r}")
+    if body["type"] == "attribute_filter":
+        _validate_tab_attribute_filter(label, body)
+
+
+def _tab_entries(expected_output: dict, key: str, allowed: set[str]) -> list[dict]:
+    """The entries of a per-tab expectation, checked for the shape ``layout`` and ``filter_bar`` share.
+
+    Raises:
+        ValueError: not a non-empty list of objects, a key outside ``allowed``, or a tab named
+            twice. An entry without ``tab`` is for a dashboard with one tab, so it must be the
+            only entry: beside another, both could name that one tab.
+    """
+    entries = expected_output[key]
+    if not isinstance(entries, list) or not entries or not all(isinstance(e, dict) for e in entries):
+        raise ValueError(f"{key} must be a non-empty list of per-tab objects, got {entries!r}")
+    seen: set[str | None] = set()
+    for entry in entries:
+        unknown = sorted(entry.keys() - allowed)
+        if unknown:
+            raise ValueError(f"a {key} entry cannot state {unknown}, got {entry!r}")
+        tab = entry.get("tab")
+        if tab is not None and not (isinstance(tab, str) and tab):
+            raise ValueError(f"a {key} entry's tab must be a tab id, got {entry!r}")
+        if tab in seen:
+            raise ValueError(f"{key} names tab {tab!r} more than once")
+        seen.add(tab)
+    if None in seen and len(entries) > 1:
+        raise ValueError(f"a {key} entry without tab must be the only entry, got {entries!r}")
+    return entries
 
 
 def _is_dataset_or_null(value: object) -> bool:
@@ -1037,9 +1516,25 @@ class _Applies:
     tab_filters: bool = False
     date_filters: bool = False
     preserved_widgets: bool = False
+    chart_types: bool = False
+    layout: bool = False
+    filter_bar: bool = False
+    forbidden: bool = False
+    answer: bool = False
+    # Not a check of its own but a switch over the whole set: a refusal case is scored on the
+    # absence of a draft and on what the answer said, so publishing the document checks beside
+    # it would report six passes for a document that was never produced.
+    refusal: bool = False
 
     @classmethod
-    def of(cls, expected_output: dict) -> _Applies:
+    def of(
+        cls,
+        expected_output: dict,
+        *,
+        forbidden: bool = False,
+        answer: bool = False,
+        refusal: bool = False,
+    ) -> _Applies:
         return cls(
             patch=_is_edit(expected_output),
             date=_has_date_range(expected_output),
@@ -1049,6 +1544,12 @@ class _Applies:
             tab_filters="tab_filters" in expected_output,
             date_filters="date_filters" in expected_output,
             preserved_widgets="preserved_widgets" in expected_output,
+            chart_types=_has_chart_types(expected_output),
+            layout="layout" in expected_output,
+            filter_bar="filter_bar" in expected_output,
+            forbidden=forbidden,
+            answer=answer,
+            refusal=refusal,
         )
 
 
@@ -1089,6 +1590,15 @@ class DashboardEvaluation:
     tab_filters_correct: bool = False
     date_filters_correct: bool = False
     widgets_preserved: bool = False
+    chart_types_correct: bool = False
+    layout_correct: bool = False
+    filter_bar_correct: bool = False
+    forbidden_absent: bool = True
+    answer_matched: bool = True
+    # Whether EITHER dashboard-producing tool was called at all, successful or not. Only a
+    # refusal case reads it: everywhere else a failed call is a retry the agent recovered
+    # from, which is why `_extract_tool_result` skips it.
+    producing_tool_called: bool = False
     failures: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -1098,6 +1608,25 @@ class DashboardEvaluation:
 
     @property
     def strict_checks(self) -> dict[str, bool]:
+        if self.applies.refusal:
+            # Named for what has to be true, not negated at read time: `dashboard_not_drafted`
+            # false means a dashboard came back from a case that asked for none, which is the
+            # failure. A successful tool call with no part, or a part with no successful call,
+            # are each a dashboard the user would be shown.
+            #
+            # The third term is the one that is easy to miss: an agent that CALLED the tool and
+            # had the call rejected leaves no result and no part, so the first two would read it
+            # as a clean refusal. It is not one -- the agent tried to build and the tool stopped
+            # it, and scoring that as correct credits the model for a guardrail.
+            checks = {
+                "dashboard_not_drafted": (
+                    not self.drafted and not self.part_present and not self.producing_tool_called
+                ),
+                "dashboard_skill_activated": self.skill_activated,
+            }
+            if self.applies.answer:
+                checks["answer_matched"] = self.answer_matched
+            return checks
         checks = {
             # Kept as-is through the editing work: every Langfuse view, saved filter and
             # combo-report field list already refers to it, and a rename would break them for
@@ -1129,6 +1658,16 @@ class DashboardEvaluation:
             checks["dashboard_date_filters_correct"] = self.date_filters_correct
         if self.applies.preserved_widgets:
             checks["dashboard_widgets_preserved"] = self.widgets_preserved
+        if self.applies.chart_types:
+            checks["dashboard_chart_types_correct"] = self.chart_types_correct
+        if self.applies.layout:
+            checks["dashboard_layout_correct"] = self.layout_correct
+        if self.applies.filter_bar:
+            checks["dashboard_filter_bar_correct"] = self.filter_bar_correct
+        if self.applies.forbidden:
+            checks["forbidden_charts_absent"] = self.forbidden_absent
+        if self.applies.answer:
+            checks["answer_matched"] = self.answer_matched
         return checks
 
     @property
@@ -1187,6 +1726,8 @@ def evaluate_dashboard_response(
     expected_output: dict,
     skill_activated: bool,
     patch_part: dict | None = None,
+    answer_text: str = "",
+    producing_tool_called: bool = False,
 ) -> DashboardEvaluation:
     """Score one dashboard response against its expectation.
 
@@ -1198,8 +1739,56 @@ def evaluate_dashboard_response(
     without an agent.
     """
     is_edit = _is_edit(expected_output)
-    applies = _Applies.of(expected_output)
+    forbidden = _forbidden_visualizations(expected_output)
+    must_include, must_not_match = _answer_assertions(expected_output)
+    expects_dashboard = _expects_dashboard(expected_output)
+    applies = _Applies.of(
+        expected_output,
+        forbidden=bool(forbidden),
+        answer=bool(must_include or must_not_match),
+        refusal=not expects_dashboard,
+    )
     tool = _producing_tool(expected_output)
+    answer_failures = _check_answer(answer_text, must_include, must_not_match)
+
+    if not expects_dashboard:
+        # The whole of a refusal case: nothing was drafted, and the answer said the right
+        # thing. Scored before the branches below so the absence of a tool result reads as the
+        # outcome asked for rather than as "the agent never produced a successful draft".
+        drafted = tool_result is not None
+        return DashboardEvaluation(
+            drafted=drafted,
+            part_present=dashboard_part is not None,
+            charts_matched=True,
+            date_range_correct=True,
+            filters_correct=True,
+            new_visualizations_met=True,
+            applies=applies,
+            skill_activated=skill_activated,
+            producing_tool_called=producing_tool_called,
+            answer_matched=not answer_failures,
+            failures=[
+                *(
+                    [f"the case expects no dashboard, but the agent produced a successful {tool} call"]
+                    if drafted
+                    else []
+                ),
+                *(
+                    ["the case expects no dashboard, but the response carries a 'dashboard' part"]
+                    if dashboard_part is not None
+                    else []
+                ),
+                *(
+                    [
+                        "the case expects no dashboard, but the agent called a dashboard-producing "
+                        "tool (the call did not succeed)"
+                    ]
+                    if producing_tool_called and not drafted
+                    else []
+                ),
+                *answer_failures,
+            ],
+        )
 
     if tool_result is None:
         return DashboardEvaluation(
@@ -1213,15 +1802,25 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=False,
             patch_applies=False,
-            failures=[f"the agent never produced a successful {tool} call"],
+            answer_matched=not answer_failures,
+            failures=[f"the agent never produced a successful {tool} call", *answer_failures],
         )
 
     min_new = _min_new_visualizations(expected_output)
+    max_new = _max_new_visualizations(expected_output)
     actual_new = tool_result.get("new_visualization_count")
     if isinstance(actual_new, int):
-        new_met = actual_new >= min_new
+        over = max_new is not None and actual_new > max_new
+        new_met = actual_new >= min_new and not over
         # Naming the shortfall, never "expected at least 0" -- see the envelope branch below.
-        new_failures = [] if new_met else [f"expected at least {min_new} authored chart(s), tool reported {actual_new}"]
+        # The ceiling is reported as its own sentence: "too few" and "too many" are opposite
+        # diagnoses and a single range message would make whoever reads the failure work out
+        # which end was missed.
+        new_failures: list[str] = []
+        if actual_new < min_new:
+            new_failures.append(f"expected at least {min_new} authored chart(s), tool reported {actual_new}")
+        if over:
+            new_failures.append(f"expected at most {max_new} authored chart(s), tool reported {actual_new}")
     else:
         # Not a shortfall: the tool result no longer carries the key. Said plainly, because
         # "expected at least 0 authored chart(s), tool reported None" reads as a broken test
@@ -1246,9 +1845,11 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=False,
             patch_applies=False,
+            answer_matched=not answer_failures,
             failures=[
                 f"the response carries no {' and no '.join(repr(p) for p in missing_parts)} part",
                 *new_failures,
+                *answer_failures,
             ],
         )
 
@@ -1280,12 +1881,14 @@ def evaluate_dashboard_response(
             | {v.get("id") for v in patch_references.get("visualizations") or [] if v.get("id")}
             | new_ids
         )
+        bodies = _bodies_by_id(base_references, patch_references)
     else:
         if actual_saved_id is not None:
             saved_failures.append(f"a new draft must not be saved yet, but it reports id {actual_saved_id!r}")
         document = base
         new_ids = {v.get("id") for v in base_references.get("new_visualizations") or [] if v.get("id")}
         known_ids = {v.get("id") for v in base_references.get("visualizations") or [] if v.get("id")} | new_ids
+        bodies = _bodies_by_id(base_references)
 
     if document is None:
         return DashboardEvaluation(
@@ -1299,7 +1902,8 @@ def evaluate_dashboard_response(
             skill_activated=skill_activated,
             saved_dashboard_id_correct=not saved_failures,
             patch_applies=False,
-            failures=[*patch_failures, *saved_failures, *new_failures],
+            answer_matched=not answer_failures,
+            failures=[*patch_failures, *saved_failures, *new_failures, *answer_failures],
         )
 
     widgets = _widgets_of(document)
@@ -1315,6 +1919,7 @@ def evaluate_dashboard_response(
         title_notes: list[str] = []
     else:
         title_notes = title_mismatches
+    forbidden_failures = _check_forbidden(widgets, forbidden)
     reference_notes = _check_references(widgets, known_ids)
     date_failures = (
         _check_date_range(document, expected_output.get("date_range"), applies.patch)
@@ -1337,6 +1942,13 @@ def evaluate_dashboard_response(
     preserved_failures = (
         _check_preserved_widgets(widgets, expected_output["preserved_widgets"]) if applies.preserved_widgets else []
     )
+    chart_type_failures, chart_type_notes = (
+        _check_chart_types(widgets, new_ids, expected_output.get("visualizations") or [], bodies)
+        if applies.chart_types
+        else ([], [])
+    )
+    layout_failures = _check_layout(document, new_ids, expected_output["layout"]) if applies.layout else []
+    filter_bar_failures = _check_filter_bar(document, expected_output["filter_bar"]) if applies.filter_bar else []
 
     return DashboardEvaluation(
         drafted=True,
@@ -1356,8 +1968,14 @@ def evaluate_dashboard_response(
         tab_filters_correct=not tab_filter_failures,
         date_filters_correct=not date_filter_failures,
         widgets_preserved=not preserved_failures,
+        chart_types_correct=not chart_type_failures,
+        layout_correct=not layout_failures,
+        filter_bar_correct=not filter_bar_failures,
+        forbidden_absent=not forbidden_failures,
+        answer_matched=not answer_failures,
         failures=[
             *chart_failures,
+            *forbidden_failures,
             *saved_failures,
             *date_failures,
             *filter_failures,
@@ -1366,9 +1984,13 @@ def evaluate_dashboard_response(
             *tab_filter_failures,
             *date_filter_failures,
             *preserved_failures,
+            *chart_type_failures,
+            *layout_failures,
+            *filter_bar_failures,
             *new_failures,
+            *answer_failures,
         ],
-        notes=[*title_notes, *reference_notes],
+        notes=[*title_notes, *reference_notes, *chart_type_notes],
     )
 
 
@@ -1386,6 +2008,8 @@ def _execute_single_dashboard_run(
     """
     tool = _producing_tool(expected_output)
     is_edit = _is_edit(expected_output)
+    expects_dashboard = _expects_dashboard(expected_output)
+    answer_text = ""
     tool_result: dict | None = None
     dashboard_part: dict | None = None
     patch_part: dict | None = None
@@ -1420,6 +2044,13 @@ def _execute_single_dashboard_run(
         all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
         steps += chat_result.reasoning_step_count
 
+        # Read every turn, not only the ones that answer without drafting: the turn that
+        # produces the draft carries the text describing it, and that text is exactly what the
+        # answer assertions are about. Kept as the last turn that said anything, so a silent
+        # turn after a spoken one does not erase what the user was shown.
+        response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
+        answer_text = response_text or answer_text
+
         candidate = _extract_tool_result(chat_result.tool_call_events or [], tool)
         if candidate is not None:
             log_timer(
@@ -1442,8 +2073,13 @@ def _execute_single_dashboard_run(
                 patch_part = _extract_dashboard_part(chat_result, _PATCH_TYPE)
             break
 
-        response_text = (chat_result.text_response or "").strip() or render_answer_text(chat_result)
         if not response_text and not chat_result.tool_call_events:
+            break
+        if not expects_dashboard:
+            # A refusal case is answered in one turn. The reply this loop would otherwise send
+            # restates the charts and the date range and asks again for the dashboard, which is
+            # pressure to build the very thing the case says must not be built -- so a correct
+            # agent would be talked out of the right answer by the harness.
             break
         if iteration >= max_iterations - 1:
             break
@@ -1467,6 +2103,12 @@ def _execute_single_dashboard_run(
             expected_output,
             _skill_activated(all_tool_call_events, _required_skill(expected_output)),
             patch_part=patch_part,
+            answer_text=answer_text,
+            # Any call, not just a successful one -- see DashboardEvaluation. BOTH tools,
+            # not the one this case selected: a refusal is a creation shape, so `tool` is
+            # `draft_dashboard`, and an agent that routed to the editor and had a
+            # `patch_dashboard` call rejected would otherwise leave this false and pass.
+            producing_tool_called=any(tc.function_name in (_DRAFT_TOOL, _PATCH_TOOL) for tc in all_tool_call_events),
         ),
         tool_result=tool_result,
         dashboard_part=dashboard_part,

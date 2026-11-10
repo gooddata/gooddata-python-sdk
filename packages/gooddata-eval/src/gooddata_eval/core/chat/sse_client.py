@@ -20,17 +20,30 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Any, Iterable
 from urllib.parse import quote
 
 import httpx
 
-from gooddata_eval.core.config import ReasoningEffort, normalize_reasoning_effort
+from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, float_env, int_env, retry_transient
+from gooddata_eval.core.config import (
+    DocumentFormat,
+    ReasoningEffort,
+    normalize_document_format,
+    normalize_reasoning_effort,
+)
 from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
 from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import note_trace_latency
 
 _log = logging.getLogger(__name__)
+
+# The retry helpers live in core/_retry.py, shared with the takeaway client. The private
+# names stay importable from here: gdc-nas tavern-e2e imports them from this module.
+_int_env = int_env
+_float_env = float_env
+_RETRYABLE_STATUS_CODES = RETRYABLE_STATUS_CODES
+_retry_transient = retry_transient
 
 SSE_DATA_PREFIX = "data: "
 SSE_EVENT_PREFIX = "event: "
@@ -39,17 +52,12 @@ _RESPONSE_ENDED_EVENT = "response_ended"
 # gen-ai's first event of a turn; its data carries the turn's responseId and traceId.
 _RESPONSE_STARTED_EVENT = "response_started"
 
-# 500 is here on evidence, not on principle: in one visualization eval batch it hard-failed
-# 10 of 56 runs with zero retry attempts, and every affected question scored normally when the
-# same question/model ran again the next day -- i.e. transient gen-ai faults, not deterministic
-# server bugs. A genuinely deterministic 500 still terminates, just after the bounded backoff.
-_RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
 _METADATA_SYNC_MARKER = "METADATA_SYNC_IN_PROGRESS"
 # `reason` values gen-ai puts on the error event of a turn that finished without an answer.
 _TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tokens", "content_filter"})
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.
-_ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
+ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
 
 _KNOWN_PART_TYPES: frozenset[str] = frozenset(
     {
@@ -111,27 +119,6 @@ class TurnTimeoutError(ChatError):
     one spanning every turn of a conversation. Not retryable: a slow turn stays slow, and
     retrying it spends the budget again."""
 
-
-def _int_env(name: str, default: int) -> int:
-    """Read an int from the environment, falling back to ``default`` when unset or blank."""
-    raw = os.getenv(name)
-    return int(raw) if raw else default
-
-
-def _float_env(name: str, default: float) -> float:
-    """Read a float from the environment, falling back to ``default`` when unset or blank."""
-    raw = os.getenv(name)
-    return float(raw) if raw else default
-
-
-# Retry budget defaults, giving a ~2 min worst-case cap per send (5/10/20/40/60s).
-# Each is overridable via env so CI can retune without cutting a new release --
-# read per call rather than at import, so an exported value cannot silently
-# rewrite what a test that patches these attributes expects.
-_MAX_RETRIES_DEFAULT = 5
-_INITIAL_BACKOFF_S_DEFAULT = 5.0
-_BACKOFF_FACTOR_DEFAULT = 2.0
-_MAX_BACKOFF_S_DEFAULT = 60.0
 
 # Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
 # so an agent that keeps emitting reasoning events can stream for many minutes without
@@ -199,44 +186,16 @@ def set_default_item_timeout(seconds: float | None) -> None:
     _ITEM_TIMEOUT_S = seconds or 0.0
 
 
-T = TypeVar("T")
-
-
 def _is_retryable_exc(exc: Exception) -> bool:
     if isinstance(exc, TransientChatError):
         return True
     if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in _RETRYABLE_STATUS_CODES
+        return exc.response.status_code in RETRYABLE_STATUS_CODES
     # Mid-stream disconnect ("peer closed connection without sending complete
     # message body") -- pure network flake, not a real agent/content failure.
     # Confirmed live: contaminated ~1-4% of visualization runs with a hard
     # fail and zero retry attempts.
     return isinstance(exc, httpx.RemoteProtocolError)
-
-
-def _retry_transient(operation: Callable[[], T], *, is_retryable: Callable[[Exception], bool]) -> T:
-    """Run ``operation``; retry retryable failures with bounded exponential backoff."""
-    max_retries = _int_env("GOODDATA_EVAL_CHAT_MAX_RETRIES", _MAX_RETRIES_DEFAULT)
-    delay = _float_env("GOODDATA_EVAL_CHAT_INITIAL_BACKOFF_S", _INITIAL_BACKOFF_S_DEFAULT)
-    factor = _float_env("GOODDATA_EVAL_CHAT_BACKOFF_FACTOR", _BACKOFF_FACTOR_DEFAULT)
-    max_backoff = _float_env("GOODDATA_EVAL_CHAT_MAX_BACKOFF_S", _MAX_BACKOFF_S_DEFAULT)
-    for attempt in range(max_retries + 1):  # 0..N => N retries + 1 initial attempt
-        try:
-            return operation()
-        except Exception as exc:  # noqa: PERF203 — retry loop: per-attempt try/except is intentional
-            if attempt == max_retries or not is_retryable(exc):
-                raise
-            sleep_s = min(delay, max_backoff)
-            _log.warning(
-                "Transient gen-ai error (attempt %d/%d): %s; retrying in %.0fs",
-                attempt + 1,
-                max_retries + 1,
-                exc,
-                sleep_s,
-            )
-            time.sleep(sleep_s)
-            delay *= factor
-    raise AssertionError("unreachable")  # loop either returns or raises
 
 
 @dataclass
@@ -247,6 +206,7 @@ class _SseAccumulator:
     alert_proposals: list[dict[str, Any]] = field(default_factory=list)
     search_results: list[dict[str, Any]] = field(default_factory=list)
     unhandled_parts: list[dict[str, Any]] = field(default_factory=list)
+    clarifying_questions_item_id: str | None = None
     tool_call_events: list[dict[str, Any]] = field(default_factory=list)
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
@@ -267,7 +227,8 @@ def _handle_text(content: dict[str, Any], acc: _SseAccumulator) -> None:
         acc.text_parts.append(text)
 
 
-def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
+def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator, item_id: str | None = None) -> None:
+    """Sort the item's parts; a ``clarifyingQuestions`` part keeps ``item_id``, since answers number questions per item."""
     for part in content.get("parts", []):
         ptype = part.get("type")
         if ptype == "text":
@@ -288,7 +249,8 @@ def _handle_multipart(content: dict[str, Any], acc: _SseAccumulator) -> None:
         else:
             if ptype not in _KNOWN_PART_TYPES:
                 _log.warning("unknown multipart part type %r; captured as an unhandled part", ptype)
-            acc.unhandled_parts.append(part)
+            tagged = ptype == "clarifyingQuestions" and item_id
+            acc.unhandled_parts.append({**part, "itemId": item_id} if tagged else part)
 
 
 def _handle_reasoning(content: dict[str, Any], acc: _SseAccumulator) -> None:
@@ -341,6 +303,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         "alertProposals": acc.alert_proposals,
         "searchResults": acc.search_results,
         "unhandledParts": acc.unhandled_parts,
+        "clarifyingQuestionsItemId": acc.clarifying_questions_item_id,
         "toolCallEvents": acc.tool_call_events,
         "reasoningStepCount": len(acc.reasoning_steps),
         "reasoningSteps": [step["summary"] for step in acc.reasoning_steps],
@@ -357,7 +320,8 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
         # accessible). The last attempt is the agent's best answer.
         #
         # These are raw tool-call arguments, so they carry no `id` -- the server
-        # mints it. The sentinel marks the chart as never persisted. Logged because
+        # mints it. The sentinel marks the chart as never persisted, and goes last so
+        # that an `id` in the arguments cannot hide that. Logged because
         # a turn that called the tool and answered without a chart is otherwise
         # invisible: the user saw no chart either.
         _log.warning(
@@ -366,7 +330,7 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
             len(acc.adhoc_viz_args),
         )
         payload["createdVisualizations"] = {
-            "objects": [{"id": _ADHOC_VIZ_ID, **acc.adhoc_viz_args[-1]}],
+            "objects": [{**acc.adhoc_viz_args[-1], "id": ADHOC_VIZ_ID}],
             "reasoning": "\n".join(acc.viz_reasoning_parts),
         }
     result = ChatResult.model_validate(payload)
@@ -456,7 +420,7 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
                 raise TurnIncompleteError(
                     message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
-            if code in _RETRYABLE_STATUS_CODES:
+            if code in RETRYABLE_STATUS_CODES:
                 raise TransientChatError(
                     message, status_code=code, detail=detail, partial_result=_build_chat_result(acc), reason=reason
                 )
@@ -479,7 +443,9 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             if ctype == "text":
                 _handle_text(content, acc)
             elif ctype == "multipart":
-                _handle_multipart(content, acc)
+                _handle_multipart(content, acc, item_id=item.get("itemId"))
+                if any(p.get("type") == "clarifyingQuestions" for p in content.get("parts", [])):
+                    acc.clarifying_questions_item_id = item.get("itemId") or acc.clarifying_questions_item_id
             elif ctype == "reasoning":
                 _handle_reasoning(content, acc)
             elif ctype == "toolCall":
@@ -505,6 +471,7 @@ class ChatClient:
         reasoning_effort: ReasoningEffort | None = None,
         agent_id: str | None = None,
         user_context: dict[str, Any] | None = None,
+        document_format: DocumentFormat | None = None,
     ):
         """Create a chat client bound to one workspace.
 
@@ -521,6 +488,13 @@ class ChatClient:
         back to it: a caller that changes or clears the context per message builds the
         client without one. The server grounds answers in it only while
         the ``enableAiContextSetup`` feature flag is on for the organization.
+
+        ``document_format`` (``aac-v1``/``aac-v2``) is sent as ``options.documentFormat``
+        on every message and selects the document content format gen-ai drafts in for
+        that turn. gen-ai keeps a draft in the format of the turn that wrote it and a
+        turn in the other format cannot continue it, so follow-up and clarification
+        turns carry it too. When None the key is omitted and the server picks the format
+        from the ``enablePublisherV2`` feature flag. Any other value raises ``ValueError``.
         """
         self._base = f"{host.rstrip('/')}/api/v1/ai/workspaces/{workspace_id}/chat/conversations"
         self._auth = {"Authorization": f"Bearer {token}", **_trace_baggage()}
@@ -539,6 +513,7 @@ class ChatClient:
         self._client = httpx.Client(timeout=http_timeout)
         self._preserve_failed = preserve_failed
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
+        self._document_format = normalize_document_format(document_format)
         self._agent_id = agent_id
         self._user_context = user_context
         # Run index of each conversation this client has sent to, in first-send order: every
@@ -557,7 +532,7 @@ class ChatClient:
 
         # NOTE: retrying create is not idempotent — a created-then-503 can leak an
         # orphaned (ephemeral) conversation. Acceptable for eval; do not reuse blindly.
-        conversation_id = _retry_transient(_do, is_retryable=_is_retryable_exc)
+        conversation_id = retry_transient(_do, is_retryable=_is_retryable_exc)
         # Anchor the per-item clock here: for an agentic item this conversation carries
         # every turn, so the budget must run from its creation, not from each send.
         self._conversation_started = time.monotonic()
@@ -572,12 +547,37 @@ class ChatClient:
     def send_message(
         self, conversation_id: str, question: str, *, user_context: dict[str, Any] | None = None
     ) -> ChatResult:
+        return self._send(conversation_id, {"type": "text", "text": question}, user_context=user_context)
+
+    def send_clarifying_answers(
+        self,
+        conversation_id: str,
+        questions_item_id: str,
+        answers: list[dict[str, Any]],
+        *,
+        user_context: dict[str, Any] | None = None,
+    ) -> ChatResult:
+        """Answer a questionnaire the way the chat panel does: positions plus the texts shown.
+
+        A question left out of ``answers`` is skipped; an empty list skips them all.
+        """
+        content = {"type": "clarifyingAnswers", "questionsItemId": questions_item_id, "answers": answers}
+        return self._send(conversation_id, content, user_context=user_context)
+
+    def _send(
+        self, conversation_id: str, content: dict[str, Any], *, user_context: dict[str, Any] | None = None
+    ) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         join_headers, joined = self._join_item_trace(conversation_id)
         headers = {**self._auth, "Accept": "text/event-stream", "Content-Type": "application/json", **join_headers}
-        body: dict[str, Any] = {"item": {"role": "user", "content": {"type": "text", "text": question}}}
+        body: dict[str, Any] = {"item": {"role": "user", "content": content}}
+        options: dict[str, str] = {}
         if self._reasoning_effort is not None:
-            body["options"] = {"reasoningEffort": self._reasoning_effort}
+            options["reasoningEffort"] = self._reasoning_effort
+        if self._document_format is not None:
+            options["documentFormat"] = self._document_format
+        if options:
+            body["options"] = options
         # A per-call context overrides the client's. Only sent when there is one: gen-ai
         # accepts an explicit null, so assigning unconditionally would quietly change every
         # request that has no attachment.
@@ -603,7 +603,7 @@ class ChatClient:
                 return result
 
         try:
-            result = _retry_transient(_do, is_retryable=_is_retryable_exc)
+            result = retry_transient(_do, is_retryable=_is_retryable_exc)
         except ChatError as exc:
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)

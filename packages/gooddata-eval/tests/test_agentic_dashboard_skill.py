@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.core.agentic.dashboard_skill import (
+    DashboardEvaluation,
     DashboardSkillAssertionError,
     _date_range_text,
     _extract_tool_result,
@@ -1236,6 +1237,118 @@ class TestDateBindings:
         client.send_message.assert_not_called()
 
 
+class TestChartTypes:
+    """GDAI-2054: a chart asked for by type is placed as that type, never as a silent swap.
+    The widget names only the chart id, so the type comes from the body in the references."""
+
+    _WATERFALL = "authored-waterfall"
+
+    def _create(self, authored_type: str, expected_type: str = "waterfall_chart") -> DashboardEvaluation:
+        part = _dashboard_part(
+            [_widget("Gross Profit Bridge", self._WATERFALL)],
+            date_filter=_THIS_YEAR_FILTER,
+            visualizations=[],
+            new_visualizations=[self._WATERFALL],
+        )
+        part["references"]["new_visualizations"][0]["type"] = authored_type
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": None, "title": "Gross Profit Bridge", "chart_type": expected_type}],
+            "min_new_visualizations": 1,
+        }
+        expected.pop("date_range")
+        return evaluate_dashboard_response(_draft_result(new_visualization_count=1), part, expected, True)
+
+    def test_an_authored_chart_of_the_requested_type_passes(self) -> None:
+        ev = self._create("waterfall_chart")
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_an_authored_chart_of_another_type_fails(self) -> None:
+        ev = self._create("column_chart")
+        assert ev.strict_checks["dashboard_chart_types_correct"] is False
+        assert any("is 'column_chart', expected 'waterfall_chart'" in f for f in ev.failures)
+
+    def test_an_existing_chart_is_typed_from_the_visualizations_reference(self) -> None:
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "headline_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.chart_types_correct, ev.failures
+
+    def test_an_edit_reads_the_type_from_the_patch_references(self) -> None:
+        new_widget = _widget("Net Sales Flow", "authored-sankey")
+        patch = _patch_part(
+            [{"op": "add", "path": "/sections/0/widgets/-", "value": new_widget}],
+            new_visualizations=["authored-sankey"],
+        )
+        patch["patch"]["references"]["new_visualizations"][0]["type"] = "sankey_chart"
+        expected = {
+            "type": "dashboardPatch",
+            "saved_dashboard_id": _OVERVIEW_DASHBOARD,
+            "visualizations": [{"id": None, "title": "Net Sales Flow", "chart_type": "sankey_chart"}],
+            "min_new_visualizations": 1,
+        }
+        ev = evaluate_dashboard_response(_patch_result(1), _edit_base_part(), expected, True, patch_part=patch)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+
+    def test_a_chart_not_on_the_dashboard_cannot_pass_the_type_check(self) -> None:
+        part = _dashboard_part([_widget("Active Customers", _ACTIVE_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": None, "title": "Gross Profit Bridge", "chart_type": "waterfall_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert not ev.chart_types_correct
+        assert any("cannot check the type of chart 'Gross Profit Bridge'" in f for f in ev.failures)
+
+    @pytest.mark.parametrize("reference", [None, {"id": _TOTAL_CUSTOMERS}], ids=["absent", "untyped"])
+    def test_a_chart_without_a_body_is_noted_not_scored(self, reference: dict | None) -> None:
+        """gen-ai carries a body only when it could resolve one: a missing body is a platform fault."""
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        part["references"]["visualizations"] = [reference] if reference else []
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "bar_chart"}],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+        assert any(f"carry no body for {_TOTAL_CUSTOMERS!r}" in note for note in ev.notes)
+
+    def test_only_the_charts_that_state_a_type_are_checked(self) -> None:
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [
+                {"id": _TOTAL_CUSTOMERS, "title": "Total Customers", "chart_type": "headline_chart"},
+                {"id": _ACTIVE_CUSTOMERS, "title": "Active Customers"},
+            ],
+        }
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, True)
+        assert ev.strict_checks["dashboard_chart_types_correct"] is True, ev.failures
+
+    def test_a_case_without_chart_types_does_not_publish_the_check(self) -> None:
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_THIS_YEAR_FILTER)
+        ev = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "dashboard_chart_types_correct" not in ev.strict_checks
+
+    @pytest.mark.parametrize("chart_type", ["waterfall", ["waterfall_chart"]], ids=["unknown", "not_a_string"])
+    def test_an_unknown_chart_type_is_rejected_up_front(self, chart_type: object) -> None:
+        client = MagicMock()
+        expected = {
+            **_DC05_EXPECTED,
+            "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "T", "chart_type": chart_type}],
+        }
+        with pytest.raises(ValueError, match="chart_type must be an AAC visualization type"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+
 class TestTabs:
     """GDAI-2426: the tabs the user named, in their order; a plain request stays on one tab."""
 
@@ -1364,8 +1477,31 @@ class TestTabFilters:
         expected = {**_TABBED_EDIT, "tab_filters": {"tab_finance": {}}}
         assert any("has no tab 'tab_finance'" in f for f in _score_tabbed_edit(expected, _RESIZE_AMOUNT).failures)
 
+    def test_a_group_is_read_as_filter_bar_reads_it(self):
+        """By its members' own keys, so the two exact filter checks agree on the same dashboard."""
+        expected = {
+            **_TABBED_EDIT,
+            "tab_filters": {
+                "tab_products": {
+                    "tab2_date": _TAB2_DATE,
+                    "category_filter": _GROUPED_CATEGORY,
+                    "product_brand": {**_BRAND, "group": "Product"},
+                }
+            },
+        }
+        assert _score_tabbed_edit(expected, _GROUP_CATEGORY_WITH_BRAND).tab_filters_correct
+        ev = self._score(_GROUP_CATEGORY_WITH_BRAND)
+        assert "tab 'tab_products' filter 'category_filter' sits in group 'Product', expected no group" in ev.failures
+        assert "tab 'tab_products' carries filter 'product_brand', which it should not" in ev.failures
+
     @pytest.mark.parametrize(
-        "tab_filters", [{}, {"tab_customers": []}, {"tab_customers": {"main_date": {"granularity": "MONTH"}}}]
+        "tab_filters",
+        [
+            {},
+            {"tab_customers": []},
+            {"tab_customers": {"main_date": {"granularity": "MONTH"}}},
+            {"tab_products": {"product": {"type": "filter_group", "title": "Product", "filters": {}}}},
+        ],
     )
     def test_a_malformed_expectation_is_rejected_up_front(self, tab_filters):
         client = MagicMock()
@@ -1517,6 +1653,339 @@ class TestPreservedWidgets:
         client = MagicMock()
         with pytest.raises(ValueError, match="preserved"):
             _run_with(client, {**_TABBED_EDIT, "preserved_widgets": preserved})
+        client.send_message.assert_not_called()
+
+
+_LAYOUT_UNTOUCHED = [
+    {"tab": "tab_customers", "sections": [{"title": "Overview", "visualizations": [_NET_SALES, _TOTAL_CUSTOMERS]}]},
+    {"tab": "tab_products", "sections": [{"title": None, "visualizations": [_ACTIVE_CUSTOMERS]}]},
+]
+# A move between tabs as the agent emits it: placed on the target tab, then taken off the source.
+_MOVE_NET_SALES_TO_PRODUCTS = [
+    {"op": "test", "path": "/tabs/1/sections/0/widgets/0/visualization", "value": _ACTIVE_CUSTOMERS},
+    {
+        "op": "add",
+        "path": "/tabs/1/sections/0/widgets/1",
+        "value": {"visualization": _NET_SALES, "title": False, "columns": 6, "rows": 12, "interactions": _DRILL},
+    },
+    {"op": "test", "path": "/tabs/0/sections/0/widgets/0/visualization", "value": _NET_SALES},
+    {"op": "remove", "path": "/tabs/0/sections/0/widgets/0"},
+]
+_LAYOUT_AFTER_MOVE = [
+    {"tab": "tab_customers", "sections": [{"title": "Overview", "visualizations": [_TOTAL_CUSTOMERS]}]},
+    {"tab": "tab_products", "sections": [{"title": None, "visualizations": [_ACTIVE_CUSTOMERS, _NET_SALES]}]},
+]
+
+
+def _two_section_base() -> dict:
+    """A saved single-tab dashboard as relayed for editing: version 2, sections at the root."""
+    part = _edit_base_part([_widget("Net Sales", _NET_SALES), _widget("Activity by Hour", _ACTIVITY_BY_HOUR)])
+    part["dashboard"]["sections"].append({"title": "Orders", "widgets": [_widget("Order status", _ORDER_STATUS)]})
+    part["references"]["visualizations"].append({"id": _ORDER_STATUS, "type": "funnel_chart", "title": "Order status"})
+    return part
+
+
+def _score_root_edit(expected: dict, operations: list[dict], new_visualizations: list[str] | None = None):
+    patch_part = _patch_part(operations, new_visualizations=new_visualizations)
+    return evaluate_dashboard_response(
+        _patch_result(len(new_visualizations or [])), _two_section_base(), expected, True, patch_part=patch_part
+    )
+
+
+_ROOT_EDIT = {**_DE01_EXPECTED, "visualizations": [{"id": _NET_SALES, "title": "Net Sales"}]}
+
+
+class TestLayout:
+    """A move or a removal is only visible in the whole arrangement: every chart staying "on the
+    dashboard" also passes a move that never happened or left a second copy behind."""
+
+    def test_a_move_between_tabs_matches(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _MOVE_NET_SALES_TO_PRODUCTS)
+        assert ev.strict_checks["dashboard_layout_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_a_move_that_leaves_the_original_behind_fails(self):
+        """Placing alone adds a second copy -- the mistake gen-ai's editor prompt warns about."""
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _MOVE_NET_SALES_TO_PRODUCTS[:2])
+        assert not ev.layout_correct
+        assert any("tab 'tab_customers' section 0 holds" in f for f in ev.failures)
+
+    def test_a_move_that_never_happened_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": _LAYOUT_AFTER_MOVE}, _RESIZE_AMOUNT)
+        assert not ev.layout_correct
+
+    def test_a_reorder_is_read_in_order(self):
+        layout = [{"tab": "tab_customers", "sections": [{"visualizations": [_TOTAL_CUSTOMERS, _NET_SALES]}]}]
+        swap = [{"op": "move", "from": "/tabs/0/sections/0/widgets/1", "path": "/tabs/0/sections/0/widgets/0"}]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, swap).layout_correct
+        assert not _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT).layout_correct
+
+    def test_only_the_named_tabs_are_compared(self):
+        layout = [_LAYOUT_UNTOUCHED[1]]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT).layout_correct
+
+    def test_removing_the_last_widget_of_a_section_removes_the_section(self):
+        expected = {
+            **_ROOT_EDIT,
+            "layout": [
+                {"sections": [{"title": "Products overview", "visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]}]}
+            ],
+        }
+        removed = [{"op": "test", "path": "/sections/1/widgets/0/visualization", "value": _ORDER_STATUS}]
+        assert _score_root_edit(expected, [*removed, {"op": "remove", "path": "/sections/1"}]).strict_pass
+        ev = _score_root_edit(expected, [*removed, {"op": "remove", "path": "/sections/1/widgets/0"}])
+        assert not ev.layout_correct
+        assert any("the dashboard has 2 section(s)" in f for f in ev.failures)
+
+    def test_a_section_title_is_compared_when_stated(self):
+        new_section = {"title": "Order health", "widgets": [_widget("Order status", _ORDER_STATUS)]}
+        operations = [
+            {"op": "remove", "path": "/sections/1"},
+            {"op": "add", "path": "/sections/-", "value": new_section},
+        ]
+        layout = [
+            {
+                "sections": [
+                    {"visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]},
+                    {"title": "order  HEALTH", "visualizations": [_ORDER_STATUS]},
+                ]
+            }
+        ]
+        assert _score_root_edit({**_ROOT_EDIT, "layout": layout}, operations).layout_correct
+        layout[0]["sections"][1]["title"] = "Orders"
+        ev = _score_root_edit({**_ROOT_EDIT, "layout": layout}, operations)
+        assert any("section 1 is titled 'Order health', expected 'Orders'" in f for f in ev.failures)
+
+    def test_an_authored_chart_is_matched_by_title(self):
+        authored = "b5c2f8d4-0000-4000-8000-000000000001"
+        operations = [{"op": "add", "path": "/sections/1/widgets/-", "value": _widget("Returns by Category", authored)}]
+        layout = [
+            {
+                "sections": [
+                    {"visualizations": [_NET_SALES, _ACTIVITY_BY_HOUR]},
+                    {"visualizations": [_ORDER_STATUS, {"title": "Returns by category"}]},
+                ]
+            }
+        ]
+        expected = {**_ROOT_EDIT, "layout": layout}
+        assert _score_root_edit(expected, operations, new_visualizations=[authored]).layout_correct
+        # The same title on a chart that already existed is not the authored one.
+        assert not _score_root_edit(expected, operations).layout_correct
+
+    def test_an_entry_without_a_tab_on_a_tabbed_dashboard_fails(self):
+        layout = [{"sections": _LAYOUT_UNTOUCHED[0]["sections"]}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT)
+        assert any("the dashboard has 2 tabs, so the expectation must name one" in f for f in ev.failures)
+
+    @pytest.mark.parametrize(
+        "layout",
+        [
+            [],
+            [{"sections": "Overview"}],
+            [{"sections": [{"name": "Overview"}]}],
+            [{"sections": [{"visualizations": [{"id": _NET_SALES}]}]}],
+            [{"sections": [{"title": 3, "visualizations": []}]}],
+            # A chart title that is not text would crash the run instead of failing here.
+            [{"sections": [{"visualizations": [{"title": 3}]}]}],
+            # Without visualizations, `layout` would read "no charts" where `tabs` reads "any".
+            [{"sections": [{"title": "Orders"}]}],
+            [{"tab": "tab_customers", "sections": []}, {"tab": "tab_customers", "sections": []}],
+            # On a one-tab dashboard both entries could name that tab.
+            [{"sections": []}, {"tab": "tab_customers", "sections": []}],
+            [{"tabs": "tab_customers", "sections": []}],
+        ],
+    )
+    def test_a_malformed_expectation_is_rejected_up_front(self, layout):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="layout"):
+            _run_with(client, {**_TABBED_EDIT, "layout": layout})
+        client.send_message.assert_not_called()
+
+
+_CUSTOMER_CONTAINS = {"type": "text_filter", "using": "label/customer_name", "condition": "contains", "value": "Aaron"}
+# A list filter turned into a text filter as the agent emits it: removed, then added under a minted key.
+_CUSTOMER_TO_TEXT = [
+    {"op": "test", "path": "/tabs/0/filters/customer_filter", "value": _CUSTOMER_BY_NAME},
+    {"op": "remove", "path": "/tabs/0/filters/customer_filter"},
+    {"op": "add", "path": "/tabs/0/filters/customer_name", "value": _CUSTOMER_CONTAINS},
+]
+_BAR_AFTER_TEXT = [
+    {
+        "tab": "tab_customers",
+        "filters": {"main_date": _MAIN_DATE, "second_date": _SECOND_DATE},
+        "added": [_CUSTOMER_CONTAINS],
+    },
+    {"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _CATEGORY_ALL}},
+]
+_BRAND = {"type": "attribute_filter", "using": "label/product_brand"}
+_GROUPED_CATEGORY = {**_CATEGORY_ALL, "group": "Product"}
+# The category filter taken off the bar and put in a new group beside a new brand filter.
+_GROUP_CATEGORY_WITH_BRAND = [
+    {"op": "remove", "path": "/tabs/1/filters/category_filter"},
+    {
+        "op": "add",
+        "path": "/tabs/1/filters/product",
+        "value": {
+            "type": "filter_group",
+            "title": "Product",
+            "filters": {"category_filter": _CATEGORY_ALL, "product_brand": _BRAND},
+        },
+    },
+]
+
+
+class TestFilterBar:
+    """Exact filters per tab, like ``tab_filters``, but able to hold a filter whose key the agent
+    mints at run time, and to read a dashboard without tabs."""
+
+    def test_a_list_filter_turned_into_a_text_filter_matches(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT)
+        assert ev.strict_checks["dashboard_filter_bar_correct"] is True
+        assert ev.strict_pass, ev.failures
+
+    def test_a_change_that_keeps_the_key_matches_too(self):
+        operations = [{"op": "replace", "path": "/tabs/0/filters/customer_filter", "value": _CUSTOMER_CONTAINS}]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, operations).filter_bar_correct
+
+    def test_the_list_filter_left_beside_the_new_one_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT[2:])
+        assert not ev.filter_bar_correct
+        assert any(
+            "tab 'tab_customers' carries filter 'customer_filter', which it should not" in f for f in ev.failures
+        )
+
+    def test_a_new_filter_that_is_not_there_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, _CUSTOMER_TO_TEXT[:2])
+        assert any("tab 'tab_customers' carries no new filter matching" in f for f in ev.failures)
+
+    def test_a_new_filter_added_twice_fails(self):
+        twice = [
+            *_CUSTOMER_TO_TEXT,
+            {"op": "add", "path": "/tabs/0/filters/customer_name_2", "value": _CUSTOMER_CONTAINS},
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": _BAR_AFTER_TEXT}, twice)
+        assert any("carries filter 'customer_name_2', which it should not" in f for f in ev.failures)
+
+    def test_a_new_filter_on_the_wrong_tab_fails(self):
+        operations = [{"op": "add", "path": "/tabs/1/filters/customer_name", "value": _CUSTOMER_CONTAINS}]
+        bar = [
+            {
+                "tab": "tab_customers",
+                "filters": {"main_date": _MAIN_DATE, "second_date": _SECOND_DATE, "customer_filter": _CUSTOMER_BY_NAME},
+                "added": [_CUSTOMER_CONTAINS],
+            },
+            _BAR_AFTER_TEXT[1],
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+        assert any("tab 'tab_customers' carries no new filter" in f for f in ev.failures)
+        assert any("tab 'tab_products' carries filter 'customer_name'" in f for f in ev.failures)
+
+    def test_a_removed_filter_on_a_dashboard_without_tabs(self):
+        """What `filters` cannot see: it ignores filters beyond the expected ones."""
+        kept = {k: v for k, v in _SAVED_FILTERS.items() if k != "1b0255ea4bfd4f11a832a8649abd73b2"}
+        expected = {**_ROOT_EDIT, "filter_bar": [{"filters": kept}]}
+        removal = [{"op": "remove", "path": "/filters/1b0255ea4bfd4f11a832a8649abd73b2"}]
+        assert _score_root_edit(expected, removal).strict_pass
+        ev = _score_root_edit(expected, [{"op": "add", "path": "/sections/0/widgets/0/columns", "value": 12}])
+        assert any("the dashboard carries filter '1b0255ea4bfd4f11a832a8649abd73b2'" in f for f in ev.failures)
+
+    def test_a_changed_selection_is_compared(self):
+        country = "c47fea61aa7247cca2bab2096ce6e297"
+        canada = {"type": "attribute_filter", "using": "label/customer_country", "state": {"include": ["Canada"]}}
+        expected = {**_ROOT_EDIT, "filter_bar": [{"filters": {**_SAVED_FILTERS, country: canada}}]}
+        assert _score_root_edit(
+            expected, [{"op": "replace", "path": f"/filters/{country}", "value": canada}]
+        ).strict_pass
+        ev = _score_root_edit(expected, [{"op": "add", "path": "/sections/0/widgets/0/columns", "value": 12}])
+        assert any(
+            f"the dashboard filter {country!r} selects all, expected include ['Canada']" in f for f in ev.failures
+        )
+
+    def test_a_groups_members_are_read_by_their_own_keys_and_name_the_group(self):
+        bar = [
+            {
+                "tab": "tab_products",
+                "filters": {"tab2_date": _TAB2_DATE, "category_filter": {**_CATEGORY_ALL, "group": "product"}},
+                "added": [{**_BRAND, "group": "Product"}],
+            }
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _GROUP_CATEGORY_WITH_BRAND)
+        assert ev.filter_bar_correct, ev.failures
+
+    def test_a_filter_moved_into_a_group_fails_when_it_should_stand_alone(self):
+        bar = [
+            {
+                "tab": "tab_products",
+                "filters": {"tab2_date": _TAB2_DATE, "category_filter": _CATEGORY_ALL},
+                "added": [_BRAND],
+            }
+        ]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _GROUP_CATEGORY_WITH_BRAND)
+        assert not ev.filter_bar_correct
+        assert "tab 'tab_products' filter 'category_filter' sits in group 'Product', expected no group" in ev.failures
+        assert any("carries no new filter matching" in f for f in ev.failures)
+        assert any("carries filter group 'product' ('Product'), which holds none" in f for f in ev.failures)
+
+    def test_a_filter_left_outside_its_group_fails(self):
+        bar = [{"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _GROUPED_CATEGORY}}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, _RESIZE_AMOUNT)
+        assert "tab 'tab_products' filter 'category_filter' sits in no group, expected group 'Product'" in ev.failures
+
+    def test_a_filter_both_grouped_and_left_on_its_own_fails(self):
+        """Grouped without being taken off the bar: shown twice, under one key."""
+        group = {"type": "filter_group", "title": "Product", "filters": {"category_filter": _CATEGORY_ALL}}
+        operations = [{"op": "add", "path": "/tabs/1/filters/product", "value": group}]
+        bar = [{"tab": "tab_products", "filters": {"tab2_date": _TAB2_DATE, "category_filter": _GROUPED_CATEGORY}}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+        assert "tab 'tab_products' carries filter 'category_filter' more than once" in ev.failures
+
+    def test_an_empty_group_fails(self):
+        empty = {"type": "filter_group", "title": "Product", "filters": {}}
+        operations = [{"op": "add", "path": "/tabs/1/filters/product", "value": empty}]
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": [_BAR_AFTER_TEXT[1]]}, operations)
+        assert ev.failures == [
+            "tab 'tab_products' carries filter group 'product' ('Product'), which holds none of the expected filters"
+        ]
+
+    def test_added_entries_match_whatever_order_they_are_listed_in(self):
+        """A looser entry listed first must not take the filter only the stricter one fits."""
+        aaron = _CUSTOMER_CONTAINS
+        bella = {**_CUSTOMER_CONTAINS, "value": "Bella"}
+        operations = [
+            {"op": "add", "path": "/tabs/1/filters/customer_aaron", "value": aaron},
+            {"op": "add", "path": "/tabs/1/filters/customer_bella", "value": bella},
+        ]
+        loose = {"type": "text_filter", "using": "label/customer_name"}
+        for added in ([loose, aaron], [aaron, loose]):
+            bar = [{**_BAR_AFTER_TEXT[1], "added": added}]
+            ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": bar}, operations)
+            assert ev.filter_bar_correct, (added, ev.failures)
+
+    def test_an_entry_without_a_tab_on_a_tabbed_dashboard_fails(self):
+        ev = _score_tabbed_edit({**_TABBED_EDIT, "filter_bar": [{"filters": {}}]}, _RESIZE_AMOUNT)
+        assert any("must name one" in f for f in ev.failures)
+
+    @pytest.mark.parametrize(
+        ("bar", "match"),
+        [
+            ([], "filter_bar must be a non-empty list"),
+            ([{"filters": []}], "needs filters as a map"),
+            ([{"added": {}}], "needs filters as a map"),
+            ([{"filters": {"main_date": {"granularity": "MONTH"}}}], "must be a typed filter"),
+            ([{"added": [{"type": "attribute_filter", "using": "label/x", "include": ["a"]}]}], r"puts \['include'\]"),
+            ([{"tab": "tab_products"}, {"tab": "tab_products"}], "more than once"),
+            ([{"filters": {}}, {"tab": "tab_products"}], "without tab must be the only entry"),
+            ([{"tab": 3, "filters": {}}], "tab must be a tab id"),
+            ([{"filters": {}, "kept": {}}], r"cannot state \['kept'\]"),
+            # The check reads a group's members by their own keys, so a group could never match.
+            ([{"filters": {"product": {"type": "filter_group", "filters": {}}}}], "is a filter_group"),
+            ([{"added": [{**_BRAND, "group": ""}]}], "group must be the title"),
+        ],
+    )
+    def test_a_malformed_expectation_is_rejected_up_front(self, bar, match):
+        client = MagicMock()
+        with pytest.raises(ValueError, match=match):
+            _run_with(client, {**_TABBED_EDIT, "filter_bar": bar})
         client.send_message.assert_not_called()
 
 
@@ -1756,6 +2225,8 @@ class TestNewChecksOnAnEmptyRun:
             "tab_filters": {"tab_customers": {}},
             "date_filters": {"main_date": None},
             "preserved_widgets": [{"visualization": _NET_SALES, "title": False}],
+            "layout": _LAYOUT_UNTOUCHED,
+            "filter_bar": [{"tab": "tab_customers"}],
         }
         ev = evaluate_dashboard_response(None, None, expected, True)
         for name in (
@@ -1764,8 +2235,15 @@ class TestNewChecksOnAnEmptyRun:
             "dashboard_tab_filters_correct",
             "dashboard_date_filters_correct",
             "dashboard_widgets_preserved",
+            "dashboard_layout_correct",
+            "dashboard_filter_bar_correct",
         ):
             assert ev.strict_checks[name] is False
+
+    def test_a_case_without_layout_or_filter_bar_publishes_neither(self):
+        ev = _score_tabbed_edit(_TABBED_EDIT, _RESIZE_AMOUNT)
+        assert "dashboard_layout_correct" not in ev.strict_checks
+        assert "dashboard_filter_bar_correct" not in ev.strict_checks
 
 
 class TestRunLoop:
@@ -1974,3 +2452,399 @@ def _evaluate_with(client, expected_output):
             expected_output=expected_output,
             initial_conversation_id="conv-1",
         )
+
+
+# ── negative and answer-text assertions ─────────────────────────────────────
+# The four capabilities a curated-catalog engagement needs and the document checks above
+# cannot express: a ceiling on authored charts, charts that must not appear, a case whose
+# right outcome is no dashboard at all, and the text the user actually reads.
+
+_SUBSTITUTE = "269d4650-2c1f-4bbf-8e30-5f2bba7f74b3"
+
+
+class TestMaxNewVisualizations:
+    """`min` alone cannot say "use what is already there"."""
+
+    def test_the_ceiling_is_unbounded_when_absent(self):
+        """Every fixture written before the ceiling existed carries no key, and must keep
+        passing when the agent authors charts it was not asked for."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        ev = evaluate_dashboard_response(
+            _draft_result(new_visualization_count=5), part, _DC05_EXPECTED, skill_activated=True
+        )
+        assert ev.new_visualizations_met
+        assert ev.strict_pass
+
+    def test_authoring_beyond_the_ceiling_fails(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "max_new_visualizations": 0}
+        ev = evaluate_dashboard_response(_draft_result(new_visualization_count=1), part, expected, skill_activated=True)
+        assert not ev.new_visualizations_met
+        assert any("at most 0" in f for f in ev.failures)
+
+    def test_a_zero_ceiling_is_a_bound_not_an_absence(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "max_new_visualizations": 0}
+        assert evaluate_dashboard_response(
+            _draft_result(new_visualization_count=0), part, expected, skill_activated=True
+        ).strict_pass
+
+    def test_too_few_and_too_many_are_reported_as_different_diagnoses(self):
+        """One range message would make whoever reads the failure work out which end was
+        missed, and the two have opposite fixes."""
+        part = _dashboard_part([_widget("Activity by Hour", _ACTIVITY_BY_HOUR)], date_filter=_ALL_TIME_FILTER)
+        under = evaluate_dashboard_response(
+            _draft_result(new_visualization_count=0),
+            part,
+            {**_DC03_EXPECTED, "max_new_visualizations": 2},
+            skill_activated=True,
+        )
+        assert any("at least 1" in f for f in under.failures)
+        assert not any("at most" in f for f in under.failures)
+
+    def test_a_ceiling_below_the_floor_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {**_DC05_EXPECTED, "min_new_visualizations": 2, "max_new_visualizations": 1}
+        with pytest.raises(ValueError, match="below min_new_visualizations"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_an_unparseable_ceiling_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="max_new_visualizations is not a number"):
+            _run_with(client, {**_DC05_EXPECTED, "max_new_visualizations": "none"})
+        client.send_message.assert_not_called()
+
+
+class TestMustNotContain:
+    def test_a_forbidden_chart_id_on_the_dashboard_fails(self):
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("Approval Rate", _SUBSTITUTE),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE, "title": "Approval Rate"}]}
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert not ev.forbidden_absent
+        assert not ev.strict_pass
+        assert any(_SUBSTITUTE in f for f in ev.failures)
+
+    def test_the_check_is_published_only_when_the_case_carries_it(self):
+        """A check that could not fail is not evidence, and publishing it as passed lifts
+        `quality_score` above what the run earned."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        plain = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "forbidden_charts_absent" not in plain.strict_checks
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE}]}
+        guarded = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert guarded.strict_checks["forbidden_charts_absent"] is True
+
+    def test_an_id_entry_does_not_also_forbid_its_title(self):
+        """Titles are not unique in a real workspace -- the catalog this was written against
+        holds 102 visualizations whose title contains "approval rate" -- so widening an id
+        entry to match its title too would fail the case on a different chart."""
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("Approval Rate", _RETURN_CUSTOMERS),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"id": _SUBSTITUTE, "title": "Approval Rate"}]}
+        assert evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True).forbidden_absent
+
+    def test_a_title_only_entry_catches_a_substitute_whose_id_is_not_known_up_front(self):
+        part = _dashboard_part(
+            [
+                _widget("Total Customers", _TOTAL_CUSTOMERS),
+                _widget("Active Customers", _ACTIVE_CUSTOMERS),
+                _widget("approval   RATE", _SUBSTITUTE),
+            ],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "must_not_contain": [{"title": "Approval Rate"}]}
+        ev = evaluate_dashboard_response(_draft_result(), part, expected, skill_activated=True)
+        assert not ev.forbidden_absent
+        assert any(_SUBSTITUTE in f for f in ev.failures)
+
+    def test_an_entry_naming_neither_id_nor_title_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="needs an id or a title"):
+            _run_with(client, {**_DC05_EXPECTED, "must_not_contain": [{"columns": 6}]})
+        client.send_message.assert_not_called()
+
+
+class TestAnswerAssertions:
+    def test_a_missing_phrase_fails_the_case(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["could not be covered"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(), part, expected, skill_activated=True, answer_text="Here is your dashboard."
+        )
+        assert not ev.answer_matched
+        assert not ev.strict_pass
+
+    def test_the_phrase_match_ignores_case_and_whitespace(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["Could Not Be Covered"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text="One widget\ncould   not\nbe covered by the catalog.",
+        )
+        assert ev.answer_matched
+
+    def test_a_forbidden_pattern_in_the_answer_fails(self):
+        """The raw `{visualization/<uuid>}` token the renderer was meant to resolve. A run
+        that leaks it builds the right dashboard and still shows the user markup."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_not_match": [r"\{visualization/[0-9a-f-]+\}"]}
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text=f"I can use {{visualization/{_SUBSTITUTE}}} for approvals.",
+        )
+        assert not ev.answer_matched
+        assert any("visualization/" in f for f in ev.failures)
+
+    def test_a_clean_answer_passes_both_kinds_of_assertion(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        expected = {
+            **_DC05_EXPECTED,
+            "answer_must_include": ["Total Customers"],
+            "answer_must_not_match": [r"\{visualization/"],
+        }
+        ev = evaluate_dashboard_response(
+            _draft_result(),
+            part,
+            expected,
+            skill_activated=True,
+            answer_text="I put Total Customers and Active Customers on the draft.",
+        )
+        assert ev.answer_matched
+        assert ev.strict_pass
+
+    def test_the_check_is_published_only_when_the_case_carries_it(self):
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        ev = evaluate_dashboard_response(_draft_result(), part, _DC05_EXPECTED, skill_activated=True)
+        assert "answer_matched" not in ev.strict_checks
+
+    def test_an_invalid_regular_expression_is_rejected_up_front(self):
+        client = MagicMock()
+        with pytest.raises(ValueError, match="invalid regular expression"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_not_match": ["([unclosed"]})
+        client.send_message.assert_not_called()
+
+    def test_an_empty_phrase_is_rejected_up_front(self):
+        """`""` is a substring of everything, so it would read as an assertion and be none."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="asserts nothing"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_include": ["  "]})
+        client.send_message.assert_not_called()
+
+    @pytest.mark.parametrize("entry", [False, 123, None])
+    def test_a_non_string_entry_is_rejected_up_front(self, entry: object) -> None:
+        """An unquoted `no` in YAML loads as the bool False. Coerced with str() it would
+        become the assertion "false" -- a fixture that looks strict while checking text the
+        question never mentions, and passes or fails for reasons nobody wrote down."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="must be a list of strings"):
+            _run_with(client, {**_DC05_EXPECTED, "answer_must_include": [entry]})
+        client.send_message.assert_not_called()
+
+    @pytest.mark.parametrize("key", ["answer_must_include", "answer_must_not_match"])
+    @pytest.mark.parametrize("value", [5, True, "oops"])
+    def test_a_non_list_value_is_rejected_up_front(self, key: str, value: object) -> None:
+        """A truthy non-iterable raises `TypeError` if coerced with `list(...)` before this
+        check runs, instead of the `ValueError` the docstring promises."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="must be a list of strings"):
+            _run_with(client, {**_DC05_EXPECTED, key: value})
+        client.send_message.assert_not_called()
+
+    def test_the_text_of_the_turn_that_drafted_is_what_gets_scored(self):
+        """The draft arrives with the sentence describing it, and that sentence is what the
+        assertions are about -- so the loop must read every turn, not only the ones that
+        answer without drafting."""
+        part = _dashboard_part(
+            [_widget("Total Customers", _TOTAL_CUSTOMERS), _widget("Active Customers", _ACTIVE_CUSTOMERS)],
+            date_filter=_THIS_YEAR_FILTER,
+        )
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("draft_dashboard", _draft_result())],
+            parts=[part],
+            text="I left one widget out because the catalog has no fraud data.",
+        )
+        expected = {**_DC05_EXPECTED, "answer_must_include": ["no fraud data"]}
+        summary = _run_with(client, expected)
+        assert summary.best.evaluation.answer_matched
+        assert summary.best.evaluation.strict_pass
+
+
+class TestRefusalCases:
+    """`expects_dashboard: false` -- the agent was asked for something it cannot build."""
+
+    _NO_DATA = {
+        "type": "dashboard",
+        "saved_dashboard_id": None,
+        "expects_dashboard": False,
+        "visualizations": [],
+        "answer_must_include": ["no fraud data"],
+    }
+
+    def test_an_answer_with_no_draft_passes(self):
+        ev = evaluate_dashboard_response(
+            None,
+            None,
+            self._NO_DATA,
+            skill_activated=True,
+            answer_text="The workspace has no fraud data, so I cannot build that dashboard.",
+        )
+        assert ev.strict_pass
+        assert ev.failures == []
+
+    def test_the_document_checks_are_not_published_for_a_refusal(self):
+        """Reporting six passes for a document that was never produced would make a refusal
+        read as the best-scoring case in the suite."""
+        ev = evaluate_dashboard_response(
+            None, None, self._NO_DATA, skill_activated=True, answer_text="There is no fraud data here."
+        )
+        assert set(ev.strict_checks) == {"dashboard_not_drafted", "dashboard_skill_activated", "answer_matched"}
+
+    def test_building_anyway_fails(self):
+        """The defect this shape exists to catch: an agent that proxies the request with
+        whatever it could find rather than saying it cannot be met."""
+        part = _dashboard_part([_widget("Total Customers", _TOTAL_CUSTOMERS)], date_filter=_ALL_TIME_FILTER)
+        ev = evaluate_dashboard_response(
+            _draft_result(), part, self._NO_DATA, skill_activated=True, answer_text="There is no fraud data here."
+        )
+        assert not ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.strict_pass
+
+    def test_falling_over_silently_is_not_a_refusal(self):
+        """Absence of a draft alone is satisfied by an agent that crashed, which is why the
+        answer assertion is mandatory for this shape."""
+        ev = evaluate_dashboard_response(None, None, self._NO_DATA, skill_activated=True, answer_text="")
+        assert ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.answer_matched
+        assert not ev.strict_pass
+
+    def test_a_rejected_draft_attempt_is_not_a_refusal(self):
+        """The gap the first two checks leave: `_extract_tool_result` takes only SUCCESSFUL
+        calls, so an agent whose draft the tool rejected leaves no result and no part and
+        would read as a clean refusal. It is not one -- it tried to build and a guardrail
+        stopped it, and scoring that as correct credits the model for the guardrail."""
+        ev = evaluate_dashboard_response(
+            None,
+            None,
+            self._NO_DATA,
+            skill_activated=True,
+            answer_text="There is no fraud data here.",
+            producing_tool_called=True,
+        )
+        assert not ev.strict_checks["dashboard_not_drafted"]
+        assert not ev.strict_pass
+        assert any("did not succeed" in f for f in ev.failures)
+
+    def test_a_failed_draft_attempt_is_read_off_the_turn_not_the_result(self):
+        """End to end, because the flag is computed in the run loop rather than passed in by
+        a fixture: the tool call is present on the turn, its result is an error, so nothing
+        reaches the scorer except the fact that the call happened."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("draft_dashboard", {"status": "error", "message": "no such metric"})],
+            text="There is no fraud data in this workspace, so I cannot build that.",
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert summary.best.evaluation.producing_tool_called
+        assert not summary.best.evaluation.strict_pass
+
+    def test_a_rejected_patch_call_counts_too(self):
+        """A refusal is a creation shape, so the case's selected tool is `draft_dashboard`.
+        An agent that routed to the editor instead and had its `patch_dashboard` call
+        rejected leaves the same empty result, so matching only the selected tool would let
+        it pass."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("patch_dashboard", {"status": "error", "message": "no such dashboard"})],
+            text="There is no fraud data in this workspace, so I cannot build that.",
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert summary.best.evaluation.producing_tool_called
+        assert not summary.best.evaluation.strict_pass
+
+    def test_an_answer_alone_still_passes_when_nothing_was_called(self):
+        """The control for the two above: the flag must not fail a genuine refusal."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            text="There is no fraud data in this workspace, so I cannot build that."
+        )
+        summary = _run_with(client, self._NO_DATA)
+        assert not summary.best.evaluation.producing_tool_called
+        assert summary.best.evaluation.strict_pass
+
+    def test_a_refusal_case_without_an_answer_assertion_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {"type": "dashboard", "expects_dashboard": False, "visualizations": []}
+        with pytest.raises(ValueError, match="needs an answer assertion"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_a_refusal_case_listing_charts_is_rejected_up_front(self):
+        client = MagicMock()
+        expected = {**self._NO_DATA, "visualizations": [{"id": _TOTAL_CUSTOMERS, "title": "Total Customers"}]}
+        with pytest.raises(ValueError, match="must not list visualizations"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_an_edit_cannot_be_a_refusal_case(self):
+        client = MagicMock()
+        expected = {**self._NO_DATA, "type": "dashboardPatch", "saved_dashboard_id": _OVERVIEW_DASHBOARD}
+        with pytest.raises(ValueError, match="creation shape"):
+            _run_with(client, expected)
+        client.send_message.assert_not_called()
+
+    def test_the_simulated_user_never_argues_a_refusal_into_building(self):
+        """The reply this loop sends restates the charts and asks again, which is pressure to
+        build the very thing the case says must not be built."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(text="The workspace has no fraud data.")
+        summary = _run_with(client, self._NO_DATA)
+        assert client.send_message.call_count == 1
+        assert summary.best.evaluation.strict_pass

@@ -1,5 +1,7 @@
 # (C) 2026 GoodData Corporation
 import json
+from datetime import date, datetime
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -27,6 +29,7 @@ from gooddata_eval.core.dataset.from_insights import (
     resolve_type,
 )
 from gooddata_eval.core.dataset.local import load_local_dataset
+from gooddata_eval.core.models import CreatedVisualization
 from gooddata_eval.core.scoring import (
     check_filters,
     get_metric_uri_set,
@@ -999,6 +1002,54 @@ def test_generate_saves_the_fetched_snapshot_for_replay(tmp_path):
     assert json.loads((tmp_path / "snap-out.json").read_text())["workspace_id"] == "ws"
 
 
+def test_generate_saves_a_snapshot_with_an_absolute_period_document(tmp_path: Path) -> None:
+    # The declarative layer parses an absolute document period into dates, which plain JSON cannot hold.
+    class _Sdk:
+        pass
+
+    snapshot = _snapshot(_bar("spend", "merchant.NAME"))
+    snapshot["analytics"]["documents"] = [
+        {
+            "id": "doc_1",
+            "period": {
+                "type": "absolute",
+                "granularity": "GDC.time.date",
+                "from": date(2026, 1, 1),
+                "to": date(2026, 1, 31),
+            },
+            "modifiedAt": datetime(2026, 1, 15, 9, 30),
+        }
+    ]
+
+    args = _args(tmp_path, snapshot_out=str(tmp_path / "snap-out.json"))
+    with patch.object(from_insights_mod, "fetch_snapshot", lambda sdk, workspace_id: snapshot):
+        assert generate(args, sdk_factory=_Sdk) == 0
+
+    saved = json.loads((tmp_path / "snap-out.json").read_text())
+    assert isinstance(saved, dict)
+    document = saved["analytics"]["documents"][0]
+    assert (document["period"]["from"], document["period"]["to"]) == ("2026-01-01", "2026-01-31")
+    assert document["modifiedAt"] == "2026-01-15T09:30:00"
+
+
+def test_generate_refuses_to_save_a_snapshot_value_json_cannot_hold(tmp_path: Path) -> None:
+    class _Sdk:
+        pass
+
+    snapshot = _snapshot(_bar("spend", "merchant.NAME"))
+    snapshot["analytics"]["documents"] = [{"id": "doc_1", "tags": {"a", "b"}}]
+
+    out = tmp_path / "snap-out.json"
+    args = _args(tmp_path, snapshot_out=str(out))
+    with (
+        patch.object(from_insights_mod, "fetch_snapshot", lambda sdk, workspace_id: snapshot),
+        pytest.raises(TypeError, match="set"),
+    ):
+        generate(args, sdk_factory=_Sdk)
+
+    assert not out.exists()
+
+
 def test_generate_without_a_snapshot_or_an_sdk_says_which_is_missing(tmp_path):
     with pytest.raises(ValueError, match="snapshot-in"):
         generate(_args(tmp_path))
@@ -1192,3 +1243,26 @@ def test_all_selection_filters_are_dropped_not_fatal(noop):
     """
     spec = convert(spend_by_merchant(filters=[noop]))
     assert spec.query.filter_by == {}
+
+
+def test_a_null_metric_keeps_its_position_and_size_by_is_normalized() -> None:
+    """A bubble with no x measure is `[null, y]`: dropping the null would move y onto the x axis."""
+    raw = CreatedVisualization.model_validate(
+        {
+            "type": "bubble_chart",
+            "query": {"fields": {"y": {"using": "metric/margin"}, "s": {"using": "metric/orders"}, "b": "label/brand"}},
+            "metrics": [None, {"field": "y", "format": "#,##0"}],
+            "size_by": [{"field": "s", "format": "#,##0"}],
+            "view_by": ["b"],
+        }
+    )
+    with patch.object(from_insights_mod, "_to_aac", return_value=raw):
+        spec = convert(viz("local:bubble", []))
+    assert spec.metrics == [None, "y"]
+    assert spec.size_by == ["s"]
+
+
+def test_a_chart_with_only_a_null_metric_has_no_measures() -> None:
+    raw = CreatedVisualization.model_validate({"type": "bubble_chart", "query": {"fields": {}}, "metrics": [None]})
+    with patch.object(from_insights_mod, "_to_aac", return_value=raw), pytest.raises(Unsupported, match="no measures"):
+        convert(viz("local:bubble", []))

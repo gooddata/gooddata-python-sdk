@@ -33,6 +33,9 @@ def judge_model() -> str:
 ReasoningEffort = Literal["LOW", "MEDIUM", "HIGH"]
 """Effort values the AI chat endpoint accepts, uppercase as the server enum requires."""
 
+DocumentFormat = Literal["aac-v1", "aac-v2"]
+"""Document content formats the AI chat endpoint accepts as ``options.documentFormat``."""
+
 EvalGate = Literal["any", "power"]
 """`any` = pass@K, `power` = pass^K. Behaviour is in core/agentic/_gate.py; the type lives here
 because putting it there would make config import the agentic package, whose __init__ imports
@@ -71,6 +74,22 @@ def normalize_reasoning_effort(value: str | None) -> ReasoningEffort | None:
     if candidate not in get_args(ReasoningEffort):
         raise ValueError(f"Invalid reasoning effort {value!r}; expected one of {', '.join(get_args(ReasoningEffort))}.")
     return cast("ReasoningEffort", candidate)
+
+
+def normalize_document_format(value: str | None) -> DocumentFormat | None:
+    """Canonical document format, or None when unset.
+
+    gen-ai rejects any value outside `DocumentFormat`, so an unknown value raises here,
+    before a run sends its first request.
+    """
+    if value is None:
+        return None
+    candidate = value.strip().lower()
+    if not candidate:
+        return None
+    if candidate not in get_args(DocumentFormat):
+        raise ValueError(f"Invalid document format {value!r}; expected one of {', '.join(get_args(DocumentFormat))}.")
+    return cast("DocumentFormat", candidate)
 
 
 @dataclass

@@ -5,6 +5,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+import pytest
 import yaml
 from gooddata_sdk.catalog.workspace.aac import (
     aac_dataset_to_declarative,
@@ -228,6 +229,16 @@ class TestFormatDetection:
 
     def test_detect_aac_with_flat_files(self, tmp_path: Path) -> None:
         (tmp_path / "orders.yaml").write_text("type: dataset\nid: orders\n")
+        assert detect_yaml_format(tmp_path) == "aac"
+
+    @pytest.mark.parametrize("subdir", ["documents", "documentTemplates", "pageTemplates"])
+    def test_detect_aac_with_publisher_subdirs(self, tmp_path: Path, subdir: str) -> None:
+        (tmp_path / subdir).mkdir()
+        (tmp_path / subdir / "x.yaml").write_text("type: document\nid: x\n")
+        assert detect_yaml_format(tmp_path) == "aac"
+
+    def test_detect_aac_with_flat_document_file(self, tmp_path: Path) -> None:
+        (tmp_path / "doc_1.yaml").write_text("type: document\nid: doc_1\n")
         assert detect_yaml_format(tmp_path) == "aac"
 
     def test_detect_declarative_with_workspaces_dir(self, tmp_path: Path) -> None:

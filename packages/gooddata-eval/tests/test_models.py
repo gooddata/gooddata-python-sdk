@@ -1,9 +1,12 @@
 # (C) 2026 GoodData Corporation
+import pytest
 from gooddata_eval.core.models import (
     ChatResult,
     CreatedVisualization,
     DatasetItem,
     ReasoningStepEvent,
+    TakeawayInput,
+    TakeawayVisualization,
     ToolCallEvent,
     build_tool_calls,
     timeline_detail,
@@ -171,3 +174,50 @@ def test_a_visualization_without_an_id_still_parses():
     """The agent sometimes omits `id`; nothing scores on it, so it must not error the item."""
     viz = CreatedVisualization.model_validate({"type": "bar_chart", "query": {"fields": {"m": "metric/x"}}})
     assert viz.id is None
+
+
+def test_takeaway_input_accepts_id_and_placement_visualizations() -> None:
+    takeaway_input = TakeawayInput.model_validate(
+        {
+            "visualizations": ["v1", {"visualization_id": "v2", "filters": [{"positiveAttributeFilter": {}}]}],
+            "instructions": {"slot": "page", "format_hint": "one sentence"},
+            "max_characters": 400,
+        }
+    )
+    assert takeaway_input.visualizations == [
+        "v1",
+        TakeawayVisualization(visualization_id="v2", filters=[{"positiveAttributeFilter": {}}]),
+    ]
+    assert takeaway_input.filter_context == []
+    assert takeaway_input.instructions.format_hint == "one sentence"
+    assert takeaway_input.max_characters == 400
+    assert takeaway_input.agent_id is None
+
+
+def test_takeaway_input_rejects_unknown_key() -> None:
+    with pytest.raises(ValueError, match="max_chars"):
+        TakeawayInput.model_validate({"visualizations": ["v1"], "max_chars": 400})
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        {"visualizations": [{"visualization_id": "v1", "filter": []}]},
+        {"visualizations": ["v1"], "instructions": {"formatHint": "one sentence"}},
+    ],
+)
+def test_takeaway_input_rejects_unknown_nested_key(raw: dict) -> None:
+    with pytest.raises(ValueError, match="Extra inputs are not permitted"):
+        TakeawayInput.model_validate(raw)
+
+
+def test_takeaway_input_requires_a_visualization() -> None:
+    with pytest.raises(ValueError, match="visualizations"):
+        TakeawayInput.model_validate({"visualizations": []})
+
+
+def test_dataset_item_takeaway_input_defaults_to_none() -> None:
+    item = DatasetItem.model_validate(
+        {"id": "q1", "dataset_name": "d1", "test_kind": "dashboard_summary", "question": "q", "expected_output": {}}
+    )
+    assert item.takeaway_input is None

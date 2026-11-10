@@ -221,6 +221,8 @@ No authorization required
 
 Get all Page Templates
 
+Lists the default page templates first, in a fixed order, then the workspace page templates. Paging counts both as one sequence. `filter` and `sort` apply to the workspace page templates only; the default page templates are always listed first and in full, and `isDefault` is not filterable. The default page templates are listed only with `origin=ALL`.
+
 ### Example
 
 

@@ -536,6 +536,74 @@ def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: p
     assert client.sent == []
 
 
+def test_the_document_format_reaches_the_chat_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    built: list[dict[str, Any]] = []
+
+    def _build(**kwargs: Any) -> _ScriptedChatClient:
+        built.append(kwargs)
+        return client
+
+    monkeypatch.setattr(document_skill, "ChatClient", _build)
+    evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, document_format="aac-v2")
+    assert [kwargs["document_format"] for kwargs in built] == ["aac-v2"]
+
+
+def test_an_unknown_document_format_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    with pytest.raises(ValueError, match="Invalid document format 'v2'"):
+        evaluate_agentic_document_skill("https://h", "tok", "ws", "Create a document", {}, document_format="v2")
+    assert client.created == client.sent == []
+
+
+def test_an_unknown_document_format_fails_before_the_narrative_judge_is_built(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    with pytest.raises(ValueError, match="Invalid document format 'v2'"):
+        run_agentic_document_skill("https://h", "tok", "ws", "q", {"narrative": _NARRATIVE}, document_format="v2")
+    assert client.created == client.sent == []
+
+
+@pytest.mark.parametrize(
+    ("document_format", "extra", "expected"),
+    [
+        ("AAC-V2", {"tags": ["ci"]}, {"tags": ["ci"], "document_format": "aac-v2"}),
+        (None, {"tags": ["ci"]}, {"tags": ["ci"]}),
+        (None, None, None),
+    ],
+)
+def test_the_document_format_is_recorded_in_the_run_metadata(
+    monkeypatch: pytest.MonkeyPatch,
+    document_format: str | None,
+    extra: dict[str, Any] | None,
+    expected: dict[str, Any] | None,
+) -> None:
+    _install_client(monkeypatch, _ScriptedChatClient([_drafting_turn()]))
+    identities: list[Any] = []
+    monkeypatch.setattr(
+        document_skill, "submit_trace_scoring", lambda _link, identity, **_kw: identities.append(identity)
+    )
+    try:
+        evaluate_agentic_document_skill(
+            "https://h",
+            "tok",
+            "ws",
+            "Create a document",
+            {},
+            langfuse=object(),
+            dataset_item_id="item-1",
+            run_metadata_extra=extra,
+            document_format=document_format,
+        )
+    except DocumentSkillAssertionError:
+        pass  # the identity is handed to scoring before the gate raises
+    assert [identity.run_metadata_extra for identity in identities] == [expected]
+
+
 # ── fixture validation ──────────────────────────────────────────────────────
 
 
@@ -547,6 +615,10 @@ def test_a_user_context_with_view_report_fails_before_any_request(monkeypatch: p
         ({"visualizations": []}, "visualizations is empty"),
         ({"visualizations": [{"title": "Revenue"}]}, "every visualization needs an 'id'"),
         ({"expects_clarification": "yes"}, "expects_clarification must be true or false"),
+        ({"asked_first_required": "yes"}, "asked_first_required must be true or false"),
+        ({"asked_first_required": True}, "asked_first_required needs expects_clarification: true"),
+        ({"clarification_reply": " "}, "clarification_reply must be a non-empty reply"),
+        ({"clarification_reply": "Use 2026."}, "clarification_reply needs expects_clarification: true"),
     ],
 )
 def test_an_unusable_fixture_is_rejected_before_any_request(expected: dict, message: str) -> None:
@@ -718,6 +790,77 @@ def test_a_structured_clarifying_question_counts_as_asking() -> None:
     expected = {"expects_clarification": True}
     run = _execute_single_document_run(_ScriptedChatClient([question, _drafting_turn()]), "c", "q", expected, 4)
     assert run.diagnostics == {"document_asked_first": True}
+
+
+def test_a_run_that_must_ask_first_fails_when_it_drafts_straight_away() -> None:
+    expected = {"expects_clarification": True, "asked_first_required": True}
+    run = _execute_single_document_run(_ScriptedChatClient([_drafting_turn()]), "c", "q", expected, 4)
+    assert run.evaluation.strict_checks["document_asked_first"] is False
+    assert not run.evaluation.strict_pass
+    assert run.diagnostics == {}
+
+
+def test_a_run_that_must_ask_first_passes_when_it_asks_then_drafts() -> None:
+    question = _chat_result(text="The pages show no data for 2030. Drop them, change the period, or keep them?")
+    expected = {"expects_clarification": True, "asked_first_required": True}
+    run = _execute_single_document_run(_ScriptedChatClient([question, _drafting_turn()]), "c", "q", expected, 4)
+    assert run.evaluation.strict_checks["document_asked_first"] is True
+    assert run.evaluation.strict_pass
+
+
+def test_a_run_that_must_ask_first_passes_when_it_asks_for_confirmation() -> None:
+    question = _chat_result(text="I could not find any data for 2030. Should I create the document anyway?")
+    expected = {"expects_clarification": True, "asked_first_required": True}
+    run = _execute_single_document_run(_ScriptedChatClient([question, _drafting_turn()]), "c", "q", expected, 4)
+    assert run.evaluation.strict_checks["document_asked_first"] is True
+    assert run.evaluation.strict_pass
+
+
+def test_a_run_that_must_ask_first_passes_when_it_asks_after_a_status_turn() -> None:
+    status = _chat_result(text="Working on it.")
+    question = _chat_result(text="Which period?")
+    expected = {"expects_clarification": True, "asked_first_required": True}
+    run = _execute_single_document_run(_ScriptedChatClient([status, question, _drafting_turn()]), "c", "q", expected, 4)
+    assert run.evaluation.strict_checks["document_asked_first"] is True
+    assert run.evaluation.strict_pass
+
+
+def test_a_run_that_must_ask_first_and_never_drafts_fails_only_for_the_missing_draft() -> None:
+    expected = {"expects_clarification": True, "asked_first_required": True}
+    run = _execute_single_document_run(_ScriptedChatClient([_chat_result()]), "c", "q", expected, 4)
+    assert run.evaluation.failures == ["the agent never produced a successful draft_document call"]
+
+
+def test_the_fixture_reply_answers_the_copilots_question() -> None:
+    client = _ScriptedChatClient([_chat_result(text="Which period?"), _drafting_turn()])
+    expected = {"expects_clarification": True, "clarification_reply": "Use the first half of 2026 instead."}
+    _execute_single_document_run(client, "c", "q", expected, 4)
+    assert client.sent == ["q", "Use the first half of 2026 instead."]
+
+
+def test_the_fixture_reply_answers_only_the_first_question() -> None:
+    client = _ScriptedChatClient(
+        [_chat_result(text="Which period?"), _chat_result(text="Which charts?"), _drafting_turn()]
+    )
+    expected = {"expects_clarification": True, "clarification_reply": "Use the first half of 2026 instead."}
+    _execute_single_document_run(client, "c", "q", expected, 4)
+    assert client.sent == [
+        "q",
+        "Use the first half of 2026 instead.",
+        "Anything else is up to you. Please create the document now.",
+    ]
+
+
+def test_the_fixture_reply_waits_for_a_question() -> None:
+    expected = {"expects_clarification": True, "clarification_reply": "Use the first half of 2026 instead."}
+    status = _chat_result(text="Working on it.")
+    client = _ScriptedChatClient([status, _chat_result(text="Which period?"), _drafting_turn()])
+    _execute_single_document_run(client, "c", "q", expected, 4)
+    assert client.sent == [
+        "q",
+        "Anything else is up to you. Please create the document now.",
+        "Use the first half of 2026 instead.",
+    ]
 
 
 # ── page kinds, fixture keys, asking, two drafts in one turn ───────────────

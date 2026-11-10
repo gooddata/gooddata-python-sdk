@@ -75,6 +75,7 @@ class DeclarativeWorkspaceHierarchyPermission(ModelNormal):
             'MANAGE_VISUALIZATIONS': "MANAGE_VISUALIZATIONS",
             'CREATE_VISUALIZATION': "CREATE_VISUALIZATION",
             'CREATE_COMPUTED_ATTRIBUTE': "CREATE_COMPUTED_ATTRIBUTE",
+            'CREATE_DOCUMENT': "CREATE_DOCUMENT",
             'VIEW': "VIEW",
         },
     }

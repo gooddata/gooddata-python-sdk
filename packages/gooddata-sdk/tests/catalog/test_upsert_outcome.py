@@ -7,6 +7,7 @@ import pytest
 from attrs import evolve
 from gooddata_api_client.exceptions import ApiTypeError, NotFoundException
 from gooddata_sdk import (
+    CatalogCustomApplicationSetting,
     CatalogExportTemplate,
     CatalogWorkspaceSetting,
     UpsertOutcome,
@@ -91,6 +92,29 @@ class TestWorkspaceSettingOutcome:
         setting = CatalogWorkspaceSetting(id="locale", setting_type="LOCALE", content={"value": "fr-FR"})
         assert service.create_or_update_workspace_setting("demo", setting) == UpsertOutcome.UPDATED
         service._entities_api.update_entity_workspace_settings.assert_called_once()
+
+
+class TestCustomApplicationSettingOutcome:
+    def _setting(self, setting_id: str | None = "app_setting") -> CatalogCustomApplicationSetting:
+        return CatalogCustomApplicationSetting(id=setting_id, application_name="app", content={"version": 1})
+
+    def test_created_when_absent(self):
+        service = _service(CatalogWorkspaceService, "get_custom_application_setting", found=False)
+        assert service.create_or_update_custom_application_setting("demo", self._setting()) == UpsertOutcome.CREATED
+        service._entities_api.create_entity_custom_application_settings.assert_called_once()
+
+    def test_updated_when_present(self):
+        service = _service(CatalogWorkspaceService, "get_custom_application_setting", found=True)
+        assert service.create_or_update_custom_application_setting("demo", self._setting()) == UpsertOutcome.UPDATED
+        service._entities_api.update_entity_custom_application_settings.assert_called_once()
+        service._entities_api.create_entity_custom_application_settings.assert_not_called()
+
+    def test_created_without_id(self):
+        # Unlike the other entities, the id-less path works: to_api omits the id key.
+        service = _service(CatalogWorkspaceService, "get_custom_application_setting", found=False)
+        assert service.create_or_update_custom_application_setting("demo", self._setting(None)) == UpsertOutcome.CREATED
+        service.get_custom_application_setting.assert_not_called()
+        service._entities_api.create_entity_custom_application_settings.assert_called_once()
 
 
 class TestExportTemplateOutcome:
