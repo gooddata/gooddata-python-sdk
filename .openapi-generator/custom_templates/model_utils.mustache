@@ -881,6 +881,12 @@ def get_discriminated_classes(cls):
 def get_possible_classes(cls, from_server_context):
     # TODO: lru_cache this
     possible_classes = [cls]
+    primitive_oneof_types = getattr(cls, '_primitive_oneof_types', None)
+    if primitive_oneof_types:
+        # an OpenAPI number also admits integers
+        if float in primitive_oneof_types and int not in primitive_oneof_types:
+            return [int, *primitive_oneof_types]
+        return list(primitive_oneof_types)
     if from_server_context:
         return possible_classes
     if hasattr(cls, 'discriminator') and cls.discriminator is not None:
@@ -1340,7 +1346,13 @@ def validate_and_convert_types(input_value, required_types_mixed, path_to_item,
                                  key_type=False)
 
     # input_value's type is in valid_classes
-    if len(valid_classes) > 1 and configuration:
+    # A value that already matches a primitive oneOf member is kept as it is,
+    # so an int on a number|string union is not upconverted to a float. This
+    # also skips every other conversion for such a union: a future union with
+    # a `format: date` string member would keep its value a str, not a date.
+    is_primitive_union = any(
+        getattr(t, '_primitive_oneof_types', None) for t in required_types_mixed if inspect.isclass(t))
+    if len(valid_classes) > 1 and configuration and not is_primitive_union:
         # there are valid classes which are not the current class
         valid_classes_coercible = remove_uncoercible(
             valid_classes, input_value, spec_property_naming, must_convert=False)

@@ -97,6 +97,13 @@ class PublisherDocumentDateFilterDateFilterFrom(ModelNormal):
 
     _composed_schemas = {}
 
+    # A oneOf of primitive members only: values are validated against these
+    # types and kept as plain values, this class is never instantiated.
+    _primitive_oneof_types = (
+        float,
+        str,
+    )
+
     @classmethod
     @convert_js_args_to_python_args
     def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
