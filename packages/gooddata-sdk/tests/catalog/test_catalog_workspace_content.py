@@ -276,6 +276,11 @@ def test_documents_survive_store_load_and_put(test_config):
         assert document.created_at == seed_document["createdAt"]
         assert document.modified_by.id == seed_document["modifiedBy"]["id"]
         assert document.modified_at == seed_document["modifiedAt"]
+        page = document.to_api().to_dict(camel_case=True)["content"]["pages"][0]
+        assert page["style"]["gap"] == 20
+        assert type(page["style"]["gap"]) is int
+        assert page["layout"]["style"]["padding"] == "{theme.spacing.padding.normal}"
+        assert page["layout"]["style"]["borderRadius"] == 4.5
     finally:
         safe_delete(_refresh_workspaces, sdk)
 
