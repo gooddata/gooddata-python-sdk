@@ -10,7 +10,8 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "gooddata-sdk~=1.73.0",
+    # TEMP: revert to "gooddata-sdk~=1.73.0" before release
+    "gooddata-sdk @ git+https://github.com/marek-zelc-gd/gooddata-python-sdk@gooddata-dbt-early-access#subdirectory=packages/gooddata-sdk",
     "pyyaml>=6.0",
     "attrs>=21.4.0,<=24.2.0",
     "cattrs>=22.1.0,<=24.1.1",
