@@ -1,0 +1,26 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_documents.py
+  s_97101252f35000::t_fca4f2727493af 261
+  s_97101252f35000::t_c63b2ae02f4b3b 11,15,20-21
+  s_97101252f35000::t_71d3062e92e12c 230-234
+  s_97101252f35000::t_45d9fb4837965b 44-51,59,64-75
+  s_97101252f35000::t_b92637a2309c2b 168
+  s_97101252f35000::t_ec20602166534c 183
+  s_97101252f35000::t_7026ca05681624 104-118,124-135
+  s_97101252f35000::t_1e11f719ba3623 210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e543eec35d99eac8c96224b6a0c885c75991fc24",
+  "prompts": {},
+  "sessions": {
+    "s_97101252f35000": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "11b218ee-a070-43ac-a5cc-43bd84b6b52f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
