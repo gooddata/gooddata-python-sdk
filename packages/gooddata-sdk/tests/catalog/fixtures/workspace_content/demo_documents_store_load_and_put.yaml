@@ -947,7 +947,17 @@ interactions:
                         - id: t1
                           markdown: Hello
                           type: text
+                        - display:
+                            dataLabels:
+                              visible: auto
+                          id: v1
+                          type: visualization
+                      style:
+                        borderRadius: 4.5
+                        padding: '{theme.spacing.padding.normal}'
                       type: row
+                    style:
+                      gap: 20
               createdAt: 2000-01-01 00:00
               createdBy:
                 id: admin
@@ -1038,6 +1048,10 @@ interactions:
                             markdown: Hello
                             type: text
                         type: row
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Brand review
                 id: tpl_1
                 tags:
@@ -1055,7 +1069,17 @@ interactions:
                           - id: t1
                             markdown: Hello
                             type: text
+                          - display:
+                              dataLabels:
+                                visible: auto
+                            id: v1
+                            type: visualization
+                        style:
+                          borderRadius: 4.5
+                          padding: '{theme.spacing.padding.normal}'
                         type: row
+                      style:
+                        gap: 20
                 createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
@@ -1085,6 +1109,10 @@ interactions:
                     id: t1
                     markdown: Hello
                     type: text
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Cover
                 id: pt_1
                 tags:
@@ -1105,7 +1133,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1165'
+          - '1479'
       status:
         code: 200
         message: OK
@@ -1221,6 +1249,10 @@ interactions:
                             markdown: Hello
                             type: text
                         type: row
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Brand review
                 id: tpl_1
                 tags:
@@ -1238,7 +1270,17 @@ interactions:
                           - id: t1
                             markdown: Hello
                             type: text
+                          - display:
+                              dataLabels:
+                                visible: auto
+                            id: v1
+                            type: visualization
+                        style:
+                          borderRadius: 4.5
+                          padding: '{theme.spacing.padding.normal}'
                         type: row
+                      style:
+                        gap: 20
                 createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
@@ -1268,6 +1310,10 @@ interactions:
                     id: t1
                     markdown: Hello
                     type: text
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Cover
                 id: pt_1
                 tags:
@@ -1288,7 +1334,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1165'
+          - '1479'
       status:
         code: 200
         message: OK
@@ -1407,7 +1453,17 @@ interactions:
                         - id: t1
                           markdown: Hello
                           type: text
+                        - display:
+                            dataLabels:
+                              visible: auto
+                          id: v1
+                          type: visualization
+                      style:
+                        borderRadius: 4.5
+                        padding: '{theme.spacing.padding.normal}'
                       type: row
+                    style:
+                      gap: 20
               createdAt: 2000-01-01 00:00
               createdBy:
                 id: admin
@@ -1504,6 +1560,10 @@ interactions:
                             markdown: Hello
                             type: text
                         type: row
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Brand review
                 id: tpl_1
                 tags:
@@ -1521,7 +1581,17 @@ interactions:
                           - id: t1
                             markdown: Hello
                             type: text
+                          - display:
+                              dataLabels:
+                                visible: auto
+                            id: v1
+                            type: visualization
+                        style:
+                          borderRadius: 4.5
+                          padding: '{theme.spacing.padding.normal}'
                         type: row
+                      style:
+                        gap: 20
                 createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
@@ -1551,6 +1621,10 @@ interactions:
                     id: t1
                     markdown: Hello
                     type: text
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Cover
                 id: pt_1
                 tags:
@@ -1571,7 +1645,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1165'
+          - '1479'
       status:
         code: 200
         message: OK
@@ -1608,6 +1682,10 @@ interactions:
                             markdown: Hello
                             type: text
                         type: row
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Brand review
                 id: tpl_1
                 tags:
@@ -1625,7 +1703,17 @@ interactions:
                           - id: t1
                             markdown: Hello
                             type: text
+                          - display:
+                              dataLabels:
+                                visible: auto
+                            id: v1
+                            type: visualization
+                        style:
+                          borderRadius: 4.5
+                          padding: '{theme.spacing.padding.normal}'
                         type: row
+                      style:
+                        gap: 20
                 createdAt: 2000-01-01 00:00
                 createdBy:
                   id: admin
@@ -1655,6 +1743,10 @@ interactions:
                     id: t1
                     markdown: Hello
                     type: text
+                createdAt: 2000-01-01 00:00
+                createdBy:
+                  id: admin
+                  type: user
                 description: Cover
                 id: pt_1
                 tags:
@@ -1675,7 +1767,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1165'
+          - '1479'
       status:
         code: 200
         message: OK
