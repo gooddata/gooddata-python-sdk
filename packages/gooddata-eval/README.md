@@ -117,7 +117,16 @@ gd-eval run \
 |---|---|
 | `--dataset PATH` | Flat folder of JSON files — one question per file. |
 | `--langfuse-dataset NAME` | Pull items by name from a Langfuse dataset. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` (or the legacy `LANGFUSE_HOST`). |
+| `--langfuse-item-id ITEM_ID` | Run only this item from the Langfuse dataset. Repeatable. An id the dataset does not have is an error, not a skip — asking for twelve items and evaluating nine, silently, reads downstream as a pass-rate change. Requires `--langfuse-dataset`. |
+| `--langfuse-item-metadata KEY=VALUE` | Run only the items whose Langfuse item metadata carries this key and value, e.g. `--langfuse-item-metadata language=es`. Repeatable; several are ANDed, and values compare as strings. Combined with `--langfuse-item-id`, an item must satisfy both. Requires `--langfuse-dataset`. |
 | `--kind TEST_KIND` | Fallback `test_kind` for dataset items that do not embed one. Defaults to `visualization`; use e.g. `agentic_metric_skill` for multi-turn agentic evaluation. Items that declare their own `test_kind` ignore this. |
+
+Both item filters are applied after the fetch — the Langfuse dataset-items endpoint selects
+by dataset but not by item id or item metadata. The fetch costs the same either way; what
+the filters save is the part that actually costs, evaluating an item against a live agent.
+They exist so one published dataset can hold every variant of a question (its locales, say)
+and still be dispatched a slice at a time, instead of being split into datasets that
+Langfuse can then no longer compare against each other.
 
 #### Model selection
 
@@ -159,6 +168,7 @@ interleaves when K > 1, and per-item latencies rise, so they stop being clean si
 | Flag | Description |
 |---|---|
 | `--langfuse` | Log scores and traces to Langfuse after each item. Requires `--langfuse-dataset`. Names each experiment run `{dataset_name}_{timestamp}_{model}`, suffixed `_effort-{level}` when `--reasoning-effort` is set (so runs differing only by effort stay separate) and `_run{N}` per run when `--runs` > 1 — e.g. `general_question_2026-09-02-11-13_gpt-5.2_run0`. Requires `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY` and `LANGFUSE_BASE_URL` (or the legacy `LANGFUSE_HOST`). |
+| `--run-metadata-json PATH` | A JSON object merged into the Langfuse **dataset-run** metadata. Per run, not per item — for what is constant across the run and otherwise only recoverable from the repo that launched it: the agent id and its personality text, the workspace actually evaluated, the memory snapshot in force. A payload that is not an object is rejected up front, since run metadata merges key by key and a list would be dropped after the run had already cost its agent calls. Merged under `--tag`, which wins on a `tags` key. |
 
 ##### Langfuse v4
 

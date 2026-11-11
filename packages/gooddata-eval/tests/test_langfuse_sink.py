@@ -265,6 +265,44 @@ def test_langfuse_sink_tags_without_custom_tags(monkeypatch):
     assert _tags_from(requests) == ["gd-eval", "visualization", "OPENAI", "effort-low"]
 
 
+def _experiment_metadata_from(requests: list[httpx.Request]) -> dict[str, str]:
+    attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
+    prefix = "langfuse.experiment.metadata."
+    return {k[len(prefix) :]: v["stringValue"] for k, v in attrs.items() if k.startswith(prefix)}
+
+
+def test_langfuse_sink_merges_run_metadata_into_experiment_metadata(monkeypatch):
+    requests: list[httpx.Request] = []
+    sink = _make_sink(
+        monkeypatch,
+        _known_item_handler(requests),
+        model_id="gpt-5.4-mini",
+        run_metadata={"agent_id": "a-1", "child_workspace_id": "ws-1"},
+    )
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    metadata = _experiment_metadata_from(requests)
+    assert metadata["agent_id"] == "a-1"
+    assert metadata["child_workspace_id"] == "ws-1"
+    assert metadata["model"] == "gpt-5.4-mini"
+
+
+def test_langfuse_sink_run_metadata_cannot_override_automatic_fields(monkeypatch):
+    """Matches the agentic path: the SDK-derived model_version cannot be overwritten."""
+    requests: list[httpx.Request] = []
+    sink = _make_sink(
+        monkeypatch,
+        _known_item_handler(requests),
+        model_id="gpt-5.4-mini",
+        run_metadata={"model": "attacker-supplied-model"},
+    )
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    assert _experiment_metadata_from(requests)["model"] == "gpt-5.4-mini"
+
+
 def test_langfuse_sink_appends_custom_tags_after_the_automatic_ones(monkeypatch):
     requests: list[httpx.Request] = []
     sink = _make_sink(
