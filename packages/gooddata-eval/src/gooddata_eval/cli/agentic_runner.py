@@ -18,6 +18,7 @@ from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluat
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
 from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
 from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
+from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -57,6 +58,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_guardrail",
         "agentic_conversation",
         "agentic_kda_skill",
+        "agentic_forecasting",
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
@@ -294,6 +296,19 @@ def _dispatch_agentic(
         )
     elif kind == "agentic_kda_skill":
         return evaluate_agentic_kda_skill(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_forecasting":
+        return evaluate_agentic_forecasting(
             host=host,
             token=token,
             workspace_id=workspace_id,
