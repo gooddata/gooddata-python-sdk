@@ -937,6 +937,19 @@ class TestSimulatedReply:
             "Anything else is up to you. Please create the dashboard now."
         )
 
+    def test_a_case_without_a_date_range_says_no_period(self) -> None:
+        """The case does not look at the date filter, so the reply must not pick one -- "all time"
+        could contradict the date filter of an existing chart the case expects to be reused."""
+        expected = {k: v for k, v in _DC03_EXPECTED.items() if k != "date_range"}
+        assert build_simulated_reply(expected) == (
+            'Please use these charts: Activity by Hour, and a new chart titled "Net Orders by Customer Age". '
+            "Anything else is up to you. Please create the dashboard now."
+        )
+
+    def test_a_null_date_range_still_asks_for_all_time(self) -> None:
+        """Null is a stated range: the case requires all time and checks it."""
+        assert "Date range: all time. " in build_simulated_reply({**_DC03_EXPECTED, "date_range": None})
+
     def test_an_authored_chart_alone_reads_naturally(self):
         expected = {"visualizations": [{"id": None, "title": "Net Orders by Customer Age"}], "date_range": None}
         assert 'Please use these charts: a new chart titled "Net Orders by Customer Age".' in build_simulated_reply(

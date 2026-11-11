@@ -1067,9 +1067,14 @@ def build_simulated_reply(expected_output: dict) -> str:
     """Build the reply the simulated user sends when the agent asks back instead of drafting.
 
     Deterministic and LLM-free: the only things the agent still needs are the charts and the
-    date range, and both are already in the expectation. A fixed reply also keeps a failure
-    attributable to the agent rather than to a simulated user that phrased things differently
-    each run.
+    date range, and the expectation states both whenever the case checks them. A fixed reply
+    also keeps a failure attributable to the agent rather than to a simulated user that
+    phrased things differently each run.
+
+    The date range is said only when the case states one, ``null`` included. A case without
+    the key does not look at the date filter, so naming a period would be the reply asserting
+    something the case never did -- and "all time" can contradict the date filters of the
+    existing charts the case expects to be reused.
     """
     visualizations = expected_output.get("visualizations") or []
     existing = [str(v.get("title", "")) for v in visualizations if v.get("id") is not None]
@@ -1095,11 +1100,16 @@ def build_simulated_reply(expected_output: dict) -> str:
         quoted = " and ".join(f'"{c}"' for c in charts)
         placements.append(f"{quoted} on {on_tab}" if charts else on_tab)
     tabs = f"Use these tabs: {'; '.join(placements)}. " if placements else ""
+    date = (
+        f"Date range: {_date_range_text(expected_output.get('date_range'))}. "
+        if _has_date_range(expected_output)
+        else ""
+    )
 
     return (
         f"Please use these charts: {', and '.join(segments)}. "
         f"{tabs}"
-        f"Date range: {_date_range_text(expected_output.get('date_range'))}. "
+        f"{date}"
         f"Anything else is up to you. Please create the dashboard now."
     )
 
