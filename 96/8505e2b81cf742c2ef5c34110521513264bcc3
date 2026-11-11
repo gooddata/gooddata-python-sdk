@@ -1,0 +1,27 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_filters.py
+  s_1fed2936afd5a3::t_602bc2c8d43db0 23-36,38-46
+  s_1fed2936afd5a3::t_3b5d7e0b799d4a 1-22,37
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_1fed2936afd5a3::t_dccd9140b491d0 14,80-84,303-309,356-364,392-399,404-415,436-445,501-502,516-541,561,584,610,663-664,713-776,779-780,817-822,832-854,872,933-934,951,958-964,967,1006
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_1fed2936afd5a3::t_f614349a1bcaa7 466-480,627,632-911,923-929,1104-1148,1266-1301,2009-2045
+  s_1fed2936afd5a3::t_18f08350bd57f2 424
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_1fed2936afd5a3::t_5946b3c022071f 14,518-520,551,561,737,739-740
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "968505e2b81cf742c2ef5c34110521513264bcc3",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}
