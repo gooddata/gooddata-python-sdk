@@ -434,6 +434,7 @@ class AgenticAssertionError(AssertionError):
     runs_effective: int
     failed_runs: list[dict]
     run_latencies_s: list[float]
+    best_run_latency_s: float | None
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -470,6 +471,12 @@ class AgenticEvalOutcome(BaseModel):
     # needs one per run. Empty means the kind recorded none, which the report reads as "no
     # sample", not as zero-second runs.
     run_latencies_s: list[float] = Field(default_factory=list)
+    # The rank-selected run's own wall time -- mirrors the single-shot path's
+    # ItemReport.best_run_latency_s (see core/runner.py's _run_one_item), which the
+    # agentic path never populated because its K runs happen inside the evaluator,
+    # not in a loop the runner itself can time. None for a kind that has not yet been
+    # wired to measure it (see AgenticAssertionError.best_run_latency_s, same default).
+    best_run_latency_s: float | None = None
 
 
 class SummaryInput(BaseModel):

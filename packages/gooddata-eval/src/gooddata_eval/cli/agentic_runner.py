@@ -18,6 +18,7 @@ from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluat
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
 from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
 from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
+from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
@@ -57,6 +58,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_guardrail",
         "agentic_conversation",
         "agentic_kda_skill",
+        "agentic_forecasting",
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
@@ -305,6 +307,19 @@ def _dispatch_agentic(
             user_context=item.user_context,
             **lf_kw,
         )
+    elif kind == "agentic_forecasting":
+        return evaluate_agentic_forecasting(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
+            **lf_kw,
+        )
     elif kind == "agentic_dashboard_summary":
         summary_input = item.summary_input
         if summary_input is None:
@@ -428,6 +443,18 @@ def _apply_timings(item_report: ItemReport, timings: Any) -> None:
     item_report.simulated_user_latency_s = timings.simulated_user_s
 
 
+def _apply_best_run_latency(item_report: ItemReport, source: Any) -> None:
+    """Copy the rank-selected run's own wall time, mirroring the single-shot path's
+    ``ItemReport.best_run_latency_s`` (see ``core/runner.py``'s ``_run_one_item``).
+
+    Kinds not yet wired to measure it pass None and keep the field at its own None
+    default rather than reporting an invented number.
+    """
+    best_run_latency_s = getattr(source, "best_run_latency_s", None)
+    if best_run_latency_s is not None:
+        item_report.best_run_latency_s = best_run_latency_s
+
+
 def run_agentic_items(
     items: list[DatasetItem],
     host: str,
@@ -525,6 +552,7 @@ def run_agentic_items(
             item_report.response_id = response_id
             item_report.best_detail = detail or {}
             _apply_timings(item_report, getattr(outcome, "timings", None))
+            _apply_best_run_latency(item_report, outcome)
             _apply_run_counts(item_report, outcome)
             _apply_failed_runs(item_report, outcome)
             _apply_run_latencies(item_report, outcome)
@@ -536,6 +564,7 @@ def run_agentic_items(
             item_report.response_id = getattr(exc, "response_id", None)
             item_report.best_detail = getattr(exc, "detail", None) or {}
             _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_best_run_latency(item_report, exc)
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
             _apply_run_latencies(item_report, exc)
@@ -579,6 +608,7 @@ def run_agentic_items(
             # runs and then raised would otherwise show up in the per-response table and not in
             # the per-conversation one.
             traces.discard()
+            _apply_best_run_latency(item_report, exc)
         finally:
             item_report.latency_s = time.perf_counter() - t0
             item_report.trace_latencies_s = traces.stop()

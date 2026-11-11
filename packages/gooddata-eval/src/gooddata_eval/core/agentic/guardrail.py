@@ -15,6 +15,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -87,7 +88,8 @@ class GuardrailResult:
     # Set when the judge returned something unreadable for THIS run. Excluded from pass@K
     # and from Langfuse scoring rather than counted as a failure -- see score_run.
     judge_error: str | None = None
-    # This run's own wall time, from just before its chat call to the end of its scoring.
+    # This run's own wall time (agent call + its grading) -- mirrors the single-shot
+    # path's best_run_latency_s (see core/runner.py's _run_one_item).
     run_latency_s: float = 0.0
 
 
@@ -211,6 +213,7 @@ def _attach_diagnostics(
     runs_passed: int,
     runs_effective: int,
     run_latencies_s: list[float],
+    best_run_latency_s: float | None,
 ) -> None:
     """Hang the report payload on a raised error, whichever error it is.
 
@@ -226,6 +229,7 @@ def _attach_diagnostics(
     error.runs_effective = runs_effective
     error.failed_runs = failed_runs
     error.run_latencies_s = run_latencies_s
+    error.best_run_latency_s = best_run_latency_s
 
 
 def _run_detail(run: GuardrailResult) -> dict:
@@ -354,12 +358,16 @@ def evaluate_agentic_guardrail(
     run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
-    detail = {
-        **_run_detail(best),
+    detail = agentic_detail(
+        best.tool_call_events,
+        best.reasoning_step_events,
+        judge_passed=best.passed,
+        judge_reasoning=best.reasoning,
+        actual_output=best.actual_output,
         # Only present when it happened, so the usual JSON shape is unchanged. A
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
-    }
+    )
     # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
     # non-passing here so it is recorded with its judge_error rather than silently dropped.
     failed_runs = build_failed_runs(
@@ -375,25 +383,34 @@ def evaluate_agentic_guardrail(
             f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
             + " | ".join(unscored)
         )
-        _attach_diagnostics(error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
+        _attach_diagnostics(
+            error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, best.run_latency_s
+        )
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
-        exc = GuardrailAssertionError(
-            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}"
+        raise_agentic_failure(
+            GuardrailAssertionError,
+            f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            reasoning_steps=best.reasoning_steps,
+            conversation_id=best.conversation_id,
+            response_id=best.response_id,
+            detail=detail,
+            runs_passed=runs_passed,
+            runs_effective=runs_effective,
+            failed_runs=failed_runs,
+            run_latencies_s=run_latencies_s,
+            best_run_latency_s=best.run_latency_s,
         )
-        _attach_diagnostics(exc, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s)
-        raise exc
-    return AgenticEvalOutcome(
-        runs_passed=runs_passed,
-        runs_effective=runs_effective,
+    return agentic_success(
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,
         detail=detail,
-        # Also on the success path: pass@K clears the gate with one passing run, so a
-        # 1/3 item reports success while two of its runs failed for reasons worth reading.
+        runs_passed=runs_passed,
+        runs_effective=runs_effective,
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
+        best_run_latency_s=best.run_latency_s,
     )
