@@ -3,13 +3,18 @@
 
 from __future__ import annotations
 
+import copy
 import re
 import time
 from collections.abc import Iterator
 from dataclasses import dataclass, field, replace
 from typing import Any
 
+import httpx
+from gooddata_sdk.catalog.workspace.aac import aac_document_to_declarative
+
 from gooddata_eval.core.agentic._conversation_context import classify_reply
+from gooddata_eval.core.agentic._editor_takeaways import editor_takeaway_input
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
@@ -44,6 +49,7 @@ from gooddata_eval.core.models import (
     build_latency_breakdown,
     shift_and_index_events,
 )
+from gooddata_eval.core.takeaway.http_client import TakeawayClient, is_transient
 from gooddata_eval.core.timing import PhaseTimings, log_timer, sum_timings
 
 _DEFAULT_K = 1
@@ -83,6 +89,9 @@ _SUMMARY_SLOT = "summary"
 _V2 = "2"
 _V2_HEADING_WIDGETS = frozenset({"title", "heading"})
 _V2_TAKEAWAY_WIDGET = "takeaway"
+# The draft_document result field listing the pages whose takeaway the copilot left for the editor
+# to write from the data.
+_EDITOR_PAGES_KEY = "takeaway_editor_page_ids"
 
 _NARRATIVE_EVALUATION_STEPS = [
     "The actual output is a document rendered as text: its title, period, and per page the heading, "
@@ -541,20 +550,24 @@ class DocumentEvaluation:
     # Set when the judge returned something unreadable. The run then has no narrative verdict:
     # it is neither published as a 0 nor allowed to pass on the remaining checks.
     judge_error: str | None = None
+    # Set when the only takeaways left without text are those the takeaway endpoint failed transiently
+    # to write. The summaries and the narrative then have no verdict, as above.
+    fill_error: str | None = None
     failures: list[str] = field(default_factory=list)
 
     @property
     def strict_pass(self) -> bool:
-        return self.judge_error is None and all(self.strict_checks.values())
+        return self.judge_error is None and self.fill_error is None and all(self.strict_checks.values())
 
     @property
     def ungraded(self) -> bool:
-        """The judge returned nothing readable and the narrative was the only check still open.
+        """The judge or the takeaway endpoint left the narrative without a verdict, and it was the only check still open.
 
         A run that already failed another check is a failure whatever the judge would have said,
-        so a judge error there leaves it failed rather than ungraded.
+        so a judge or fill error there leaves it failed rather than ungraded. A fill error is only
+        set when nothing but the transient endpoint failure left a takeaway without text.
         """
-        return self.judge_error is not None and all(self.strict_checks.values())
+        return (self.judge_error is not None or self.fill_error is not None) and all(self.strict_checks.values())
 
     @property
     def strict_checks(self) -> dict[str, bool]:
@@ -573,7 +586,7 @@ class DocumentEvaluation:
             checks["document_period_correct"] = self.period_correct
         if self.applies.charts:
             checks["document_charts_matched"] = self.charts_matched
-        if self.applies.narrative:
+        if self.applies.narrative and self.fill_error is None:
             checks["document_summaries_present"] = self.summaries_present
             if self.judge_error is None:
                 checks["document_narrative_judged"] = self.narrative_judged
@@ -618,6 +631,7 @@ def evaluate_document_response(
     *,
     skill_activated: bool,
     legacy_names: list[str] | None = None,
+    exempt_takeaways: frozenset[tuple[str, str]] = frozenset(),
 ) -> DocumentEvaluation:
     """Score one document response against its expectation.
 
@@ -625,10 +639,15 @@ def evaluate_document_response(
     Any of them fails ``document_wire_names`` and leads the failures, because a gen-ai still on
     the Report names also fails every check that looks for the Document ones.
 
+    ``exempt_takeaways`` are ``(page id, takeaway id)`` pairs that may stay empty, from
+    ``_saved_empty_takeaways``.
+
     Pure: no network and no conversation state, so the whole assertion surface is unit-testable
     without an agent.
     """
-    evaluation = _score_response(tool_result, document_part, expected_output, skill_activated=skill_activated)
+    evaluation = _score_response(
+        tool_result, document_part, expected_output, skill_activated=skill_activated, exempt_takeaways=exempt_takeaways
+    )
     if legacy_names:
         evaluation.wire_names_current = False
         evaluation.failures.insert(0, f"gen-ai sends the Report names: {', '.join(legacy_names)}")
@@ -697,6 +716,7 @@ def _score_response(
     expected_output: dict,
     *,
     skill_activated: bool,
+    exempt_takeaways: frozenset[tuple[str, str]] = frozenset(),
 ) -> DocumentEvaluation:
     rework = _rework(expected_output)
     applies = _Applies(
@@ -810,7 +830,7 @@ def _score_response(
         unwritten = [
             f"page {page.get('id')!r} has a {_slot_name(slot)} with no written text"
             for page, slot in slots
-            if _summary_text(slot) is None
+            if _summary_text(slot) is None and (page.get("id"), slot.get("id")) not in exempt_takeaways
         ]
         if not slots:
             missing = "takeaway" if _is_v2(document) else "summary slot"
@@ -837,6 +857,199 @@ def _score_response(
         filters_kept=filters_kept,
         failures=failures,
     )
+
+
+@dataclass
+class _EditorFill:
+    """The document part with the takeaways the editor would write filled in, and how that went."""
+
+    document_part: dict
+    filled_page_ids: list[str] = field(default_factory=list)
+    failures: list[str] = field(default_factory=list)
+    # The pages whose takeaway the endpoint failed transiently to write, and the first such failure.
+    transient_page_ids: set[str] = field(default_factory=set)
+    error: str | None = None
+    # The editor starts every takeaway at once, so the reader waits for the slowest request, retries included.
+    waited_s: float = 0.0
+    # The pages with a takeaway the editor writes, as the editor's rule decides; unknown when the draft
+    # did not convert.
+    generated_page_ids: set[str] = field(default_factory=set)
+    readable: bool = True
+    # The takeaways allowed to stay empty, see ``_saved_empty_takeaways``.
+    exempt: frozenset[tuple[str, str]] = frozenset()
+
+    def ungraded_error(self) -> str | None:
+        """The transient failure, when it alone left takeaways of the filled part without text."""
+        document = self.document_part.get(_PART_TYPE)
+        if self.error is None or self.failures or not isinstance(document, dict):
+            return None
+        unwritten = {
+            page.get("id")
+            for _number, page in _content_pages(document)
+            for slot in _summary_slots(page)
+            if _summary_text(slot) is None and (page.get("id"), slot.get("id")) not in self.exempt
+        }
+        return self.error if unwritten <= self.transient_page_ids else None
+
+
+def _editor_page_ids(tool_result: dict | None, document_part: dict | None) -> list[str] | None:
+    """The pages the copilot says it left to the editor; None unless a v2 draft carries the field."""
+    document, _ = _read_document(document_part)
+    listed = (tool_result or {}).get(_EDITOR_PAGES_KEY)
+    if document is None or not _is_v2(document) or not isinstance(listed, list):
+        return None
+    return [page_id for page_id in listed if isinstance(page_id, str)]
+
+
+def _saved_definition(user_context: dict | None) -> dict | None:
+    """The open document the item sends as ``user_context.view.document.definition``, when it is a v2 document."""
+    view = (user_context or {}).get("view")
+    document = view.get("document") if isinstance(view, dict) else None
+    definition = document.get("definition") if isinstance(document, dict) else None
+    return definition if isinstance(definition, dict) and _is_v2(definition) else None
+
+
+def _saved_empty_takeaways(document_part: dict | None, user_context: dict | None) -> frozenset[tuple[str, str]]:
+    """The empty takeaways of the draft that the editor leaves empty, as ``(page id, takeaway id)``.
+
+    The editor keeps an empty takeaway empty when the open document holds the same takeaway, empty, on
+    the same page and the editor's request for it (visualizations under their filters, period included,
+    and instructions) is identical. Every other empty takeaway is written. No open document, one that
+    is not a v2 document, or a request that cannot be built exempts nothing.
+    """
+    saved_definition = _saved_definition(user_context)
+    document, _ = _read_document(document_part)
+    if saved_definition is None or document is None or not _is_v2(document):
+        return frozenset()
+    try:
+        saved = aac_document_to_declarative(saved_definition)
+        current = aac_document_to_declarative(document)
+    except ValueError:
+        return frozenset()
+    saved_pages = {page.get("id"): page for page in _pages(saved) if isinstance(page, dict)}
+    current_pages = {page.get("id"): page for page in _pages(current) if isinstance(page, dict)}
+    exempt: set[tuple[str, str]] = set()
+    for _number, page in _content_pages(document):
+        page_id = page.get("id")
+        saved_page = saved_pages.get(page_id)
+        if not isinstance(page_id, str) or saved_page is None:
+            continue
+        saved_slots = {slot.get("id"): slot for slot in _summary_slots(saved_page)}
+        current_slots = {slot.get("id"): slot for slot in _summary_slots(current_pages.get(page_id, {}))}
+        for slot in _summary_slots(page):
+            slot_id = slot.get("id")
+            if not isinstance(slot_id, str):
+                continue
+            saved_slot, current_slot = saved_slots.get(slot_id), current_slots.get(slot_id)
+            if not _is_takeaway(slot) or _summary_text(slot) is not None:
+                continue
+            if saved_slot is None or current_slot is None or _summary_text(saved_slot) is not None:
+                continue
+            saved_request = editor_takeaway_input(saved, saved_page, saved_slot)
+            current_request = editor_takeaway_input(current, current_pages[page_id], current_slot)
+            if not isinstance(saved_request, str) and saved_request == current_request:
+                exempt.add((page_id, slot_id))
+    return frozenset(exempt)
+
+
+def _unavailable_chart(exc: httpx.HTTPStatusError) -> str | None:
+    """The endpoint's ``detail`` when it refused a request because a chart does not exist or is not available to AI."""
+    if exc.response.status_code != 404 or "not available to ai" not in exc.response.text.lower():
+        return None
+    try:
+        detail = exc.response.json().get("detail")
+    except ValueError:
+        detail = None
+    return detail if isinstance(detail, str) and detail else exc.response.text
+
+
+def _fill_editor_takeaways(
+    client: TakeawayClient, document_part: dict, exempt: frozenset[tuple[str, str]], agent_id: str | None
+) -> _EditorFill:
+    """Write each unwritten takeaway the way the editor does, on a copy of the part.
+
+    The editor writes every empty takeaway except the ones it keeps empty, see ``_saved_empty_takeaways``.
+    The part carries the document as code; each request is built from its declarative form, which is
+    what the editor reads, and the text is written into the copy of the part. A document that does not
+    convert is a failure of the run, and so is a request for a chart that does not exist or is not
+    available to AI. A takeaway that already has text is left as the copilot wrote it. A transient
+    endpoint failure leaves that takeaway unwritten, records its page, and the fill goes on.
+
+    Raises:
+        httpx.HTTPError: the endpoint refused a request for a reason that is not transient (flag
+            off, unknown agent, invalid body): a setup problem, not a result.
+    """
+    fill = _EditorFill(document_part=copy.deepcopy(document_part), exempt=exempt)
+    document = fill.document_part[_PART_TYPE]
+    try:
+        declarative = aac_document_to_declarative(document)
+    except ValueError as exc:
+        fill.failures.append(f"the eval cannot read the draft as the editor does: {exc}")
+        fill.readable = False
+        return fill
+    editor_pages = {page.get("id"): page for page in _pages(declarative) if isinstance(page, dict)}
+    for _number, page in _content_pages(document):
+        page_id = page.get("id")
+        if not isinstance(page_id, str):
+            continue
+        editor_page = editor_pages.get(page_id, {})
+        # The conversion keeps each widget's id, so a takeaway finds its declarative form by id.
+        editor_slots = {editor_slot.get("id"): editor_slot for editor_slot in _summary_slots(editor_page)}
+        for slot in _summary_slots(page):
+            if not _is_takeaway(slot) or _summary_text(slot) is not None or (page_id, slot.get("id")) in exempt:
+                continue
+            fill.generated_page_ids.add(page_id)
+            editor_slot = editor_slots.get(slot.get("id"))
+            if editor_slot is None:
+                fill.failures.append(
+                    f"page {page_id!r}: the eval cannot build the editor's takeaway request: "
+                    f"takeaway {slot.get('id')!r} is missing from the converted document"
+                )
+                continue
+            takeaway_input = editor_takeaway_input(declarative, editor_page, editor_slot)
+            if isinstance(takeaway_input, str):
+                fill.failures.append(
+                    f"page {page_id!r}: the eval cannot build the editor's takeaway request: {takeaway_input}"
+                )
+                continue
+            requested = time.monotonic()
+            try:
+                result = client.request(takeaway_input.model_copy(update={"agent_id": agent_id}))
+            except httpx.HTTPError as exc:
+                if isinstance(exc, httpx.HTTPStatusError) and (detail := _unavailable_chart(exc)) is not None:
+                    fill.failures.append(f"page {page_id!r}: the takeaway endpoint refused the chart: {detail}")
+                    continue
+                if not is_transient(exc):
+                    raise
+                fill.transient_page_ids.add(page_id)
+                if fill.error is None:
+                    fill.error = f"takeaway endpoint for page {page_id!r}: {type(exc).__name__}: {exc}"
+                continue
+            finally:
+                fill.waited_s = max(fill.waited_s, time.monotonic() - requested)
+            text = (result.text_response or "").strip()
+            if (result.raw_response or {}).get("noData") is True:
+                fill.failures.append(f"page {page_id!r}: the editor's takeaway request found no data")
+            elif not text:
+                fill.failures.append(f"page {page_id!r}: the takeaway endpoint wrote no text")
+            else:
+                slot["markdown"] = text
+                fill.filled_page_ids.append(page_id)
+    return fill
+
+
+def _listed_pages_mismatch(listed: list[str], generated: set[str]) -> list[str]:
+    """Failures for ``takeaway_editor_page_ids`` where it differs from the pages the editor writes a takeaway on."""
+    failures = [
+        f"page {page_id!r} has a takeaway the editor writes, but draft_document does not list it in {_EDITOR_PAGES_KEY}"
+        for page_id in sorted(generated - set(listed))
+    ]
+    failures.extend(
+        f"draft_document lists page {page_id!r} in {_EDITOR_PAGES_KEY}, but the editor writes no takeaway there"
+        for page_id in dict.fromkeys(listed)
+        if page_id not in generated
+    )
+    return failures
 
 
 def _judge_narrative(
@@ -882,6 +1095,9 @@ class DocumentRunResult:
     timings: PhaseTimings = field(default_factory=PhaseTimings)
     # This run's own wall time, from just before its chat call to the end of its scoring.
     run_latency_s: float = 0.0
+    # How many takeaways the editor's takeaway request wrote; None when no takeaway was requested:
+    # the copilot left none to the editor, or the fixture states no narrative.
+    takeaways_by_editor: int | None = None
 
     @property
     def diagnostics(self) -> dict[str, bool]:
@@ -897,7 +1113,13 @@ class DocumentRunResult:
 
     @property
     def judge_error(self) -> str | None:
-        return self.evaluation.judge_error
+        """Why the run has no narrative verdict: the judge's error, or the takeaway endpoint's."""
+        return self.evaluation.judge_error or self.evaluation.fill_error
+
+    @property
+    def request_error(self) -> str | None:
+        """The takeaway endpoint's transient failure, when it alone left the run without a narrative verdict."""
+        return self.evaluation.fill_error
 
     @property
     def ungraded(self) -> bool:
@@ -924,8 +1146,23 @@ class AgenticDocumentSummary:
         return [r for r in self.run_results if not r.ungraded]
 
     @property
-    def judge_errors(self) -> list[str]:
+    def unscored_errors(self) -> list[str]:
+        """Why each ungraded run has no narrative verdict, whichever source failed."""
         return [r.judge_error for r in self.run_results if r.ungraded and r.judge_error is not None]
+
+    @property
+    def judge_errors(self) -> list[str]:
+        """The judge's errors on ungraded runs; the takeaway endpoint's are in ``request_errors``."""
+        return [
+            r.evaluation.judge_error
+            for r in self.run_results
+            if r.ungraded and r.request_error is None and r.evaluation.judge_error is not None
+        ]
+
+    @property
+    def request_errors(self) -> list[str]:
+        """The takeaway endpoint's transient failures on ungraded runs."""
+        return [r.request_error for r in self.run_results if r.ungraded and r.request_error is not None]
 
 
 def _execute_single_document_run(
@@ -935,11 +1172,23 @@ def _execute_single_document_run(
     expected_output: dict,
     max_iterations: int,
     judge: LLMJudge | None = None,
+    takeaways: TakeawayClient | None = None,
+    user_context: dict | None = None,
+    agent_id: str | None = None,
 ) -> DocumentRunResult:
     """Drive one conversation until the copilot drafts a document, then evaluate it.
 
+    When the fixture states a narrative and the draft carries ``takeaway_editor_page_ids``,
+    ``takeaways`` writes each empty takeaway as the editor does, as ``agent_id``, the agent of the
+    chat turn, and the document is graded with them. A takeaway the open document in
+    ``user_context`` held empty under the same request stays empty, see ``_saved_empty_takeaways``.
+    The field is checked against the pages the editor writes a takeaway on.
+
     Nothing is cleaned up on the way out by design: gen-ai keeps the draft in conversation
     state and persists nothing until a user saves it.
+
+    Raises:
+        httpx.HTTPError: the takeaway endpoint refused a request for a reason that is not transient.
     """
     tool_result: dict | None = None
     document_part: dict | None = None
@@ -1006,20 +1255,52 @@ def _execute_single_document_run(
         current_question = build_simulated_reply(expected_output, asked=asked and not replied)
         replied = replied or asked
 
+    graded_part = document_part
+    fill: _EditorFill | None = None
+    editor_page_ids = _editor_page_ids(tool_result, document_part)
+    # A draft that carries the field has the takeaway contract: the editor writes each empty takeaway,
+    # whatever the field lists. Any other draft is graded as before.
+    exempt = _saved_empty_takeaways(document_part, user_context) if editor_page_ids is not None else frozenset()
+    if (
+        takeaways is not None
+        and document_part is not None
+        and editor_page_ids is not None
+        and _has_narrative(expected_output)
+    ):
+        fill_started = time.monotonic()
+        fill = _fill_editor_takeaways(takeaways, document_part, exempt, agent_id)
+        fill_elapsed = time.monotonic() - fill_started
+        # The takeaway endpoint is gen-ai too: the reader waits for the slowest request before the document is complete.
+        timings.agent_s += fill.waited_s
+        log_timer(
+            f"[timer] document_skill {conversation_id} editor takeaways complete after {fill_elapsed:.2f}s "
+            f"({fill.waited_s:.2f}s for the slowest); {len(fill.filled_page_ids)} written"
+        )
+        graded_part = fill.document_part
+
     evaluation = evaluate_document_response(
         tool_result,
-        document_part,
+        graded_part,
         expected_output,
         skill_activated=_skill_activated(all_tool_call_events, _BUILDER_SKILL),
         legacy_names=legacy_wire_names(all_parts, all_tool_call_events),
+        exempt_takeaways=exempt,
     )
     if _asked_first_required(expected_output):
         evaluation.applies = replace(evaluation.applies, asked_first=True)
         evaluation.asked_first = asked_before_draft
         if tool_result is not None and not asked_before_draft:
             evaluation.failures.append("the copilot drafted without asking first")
-    if judge is not None and _has_narrative(expected_output):
-        timings.judge_s += _judge_narrative(evaluation, judge, document_part, question, expected_output["narrative"])
+    if fill is not None:
+        evaluation.failures.extend(fill.failures)
+        if editor_page_ids is not None and fill.readable:
+            evaluation.failures.extend(_listed_pages_mismatch(editor_page_ids, fill.generated_page_ids))
+        evaluation.fill_error = fill.ungraded_error()
+        if fill.error is not None and evaluation.fill_error is None:
+            # The run is graded on its other failures; the outage still explains its empty takeaway.
+            evaluation.failures.append(f"{fill.error}: the takeaway stays empty")
+    if judge is not None and _has_narrative(expected_output) and evaluation.fill_error is None:
+        timings.judge_s += _judge_narrative(evaluation, judge, graded_part, question, expected_output["narrative"])
 
     return DocumentRunResult(
         conversation_id=conversation_id,
@@ -1036,6 +1317,7 @@ def _execute_single_document_run(
         reasoning_step_events=all_reasoning_step_events,
         timings=timings,
         run_latency_s=time.monotonic() - run_started,
+        takeaways_by_editor=None if fill is None or not fill.generated_page_ids else len(fill.filled_page_ids),
     )
 
 
@@ -1062,10 +1344,16 @@ def run_agentic_document_skill(
     ``document_format`` is sent on every turn of every run, see ``ChatClient``; None leaves
     the format to the server's ``enablePublisherV2`` feature flag.
 
+    A takeaway the copilot left to the editor is written through the takeaway endpoint before
+    the narrative is graded, see ``_execute_single_document_run``.
+
     Raises:
         ValueError: the fixture is unusable — see ``_validate_expectation``,
             ``_validate_user_context`` and ``_validate_rework_target``, or ``document_format``
             is not a format gen-ai accepts. Raised before any chat request.
+        httpx.HTTPError: the takeaway endpoint refused a request for a reason that is not
+            transient and not the copilot's, such as a 404 while the takeaway feature flag is off
+            or for an agent that does not exist.
     """
     _validate_expectation(expected_output)
     _validate_user_context(user_context)
@@ -1083,12 +1371,24 @@ def run_agentic_document_skill(
         user_context=user_context,
         document_format=document_format,
     )
+    # Opens no connection until the first request, which only a draft listing editor pages makes.
+    takeaways = TakeawayClient(host=host, token=token, workspace_id=workspace_id)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
         try:
             run_results.append(
-                _execute_single_document_run(client, conv_id_0, question, expected_output, max_iterations, judge)
+                _execute_single_document_run(
+                    client,
+                    conv_id_0,
+                    question,
+                    expected_output,
+                    max_iterations,
+                    judge,
+                    takeaways,
+                    user_context,
+                    agent_id,
+                )
             )
         finally:
             if initial_conversation_id is None:  # only delete conversations we created
@@ -1098,14 +1398,25 @@ def run_agentic_document_skill(
             conv_id = client.create_conversation()
             try:
                 run_results.append(
-                    _execute_single_document_run(client, conv_id, question, expected_output, max_iterations, judge)
+                    _execute_single_document_run(
+                        client,
+                        conv_id,
+                        question,
+                        expected_output,
+                        max_iterations,
+                        judge,
+                        takeaways,
+                        user_context,
+                        agent_id,
+                    )
                 )
             finally:
                 client.delete_conversation(conv_id)
     finally:
         client.close()
+        takeaways.close()
 
-    # An ungraded run is a fault of that judge request, not of the document: it is left out of
+    # An ungraded run is a fault of that judge or takeaway request, not of the document: it is left out of
     # pass@K, and it keeps pass^K from holding, since "every run passed" was never verified.
     scored = [r for r in run_results if not r.ungraded]
     return AgenticDocumentSummary(
@@ -1159,7 +1470,11 @@ def evaluate_agentic_document_skill(
             request, so it means a fixture to fix rather than a result to read. Also raised, equally before any
             request, when the caller passes a ``document_format`` gen-ai does not accept.
         JudgeResponseError: the fixture states a narrative and the judge returned no readable
-            verdict for any run -- an item without a result, not K failures.
+            verdict for any run, or the takeaway endpoint failed transiently while writing the
+            takeaways the copilot left to the editor -- an item without a result, not K failures.
+        httpx.HTTPError: the takeaway endpoint refused a request for a reason that is not
+            transient and not the copilot's, such as a 404 while the takeaway feature flag is off
+            or for an agent that does not exist.
     """
     document_format = normalize_document_format(document_format)
     if document_format is not None:
@@ -1219,6 +1534,10 @@ def evaluate_agentic_document_skill(
                         ctx.score(
                             tid, name="document_summaries_from_data", value=run.summaries_from_data, data_type="NUMERIC"
                         )
+                    if run.takeaways_by_editor is not None:
+                        ctx.score(
+                            tid, name="document_takeaways_by_editor", value=run.takeaways_by_editor, data_type="NUMERIC"
+                        )
                     ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
                     ctx.score(tid, name="steps", value=run.total_steps, data_type="NUMERIC")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
@@ -1249,11 +1568,16 @@ def evaluate_agentic_document_skill(
         )
 
     item_timings = sum_timings([r.timings for r in summary.run_results])
-    unscored = summary.judge_errors
+    unscored = summary.unscored_errors
+    judge_errors = summary.judge_errors
+    request_errors = summary.request_errors
     if not summary.scored_run_results:
+        causes = [
+            *([f"judge returned no readable verdict for {len(judge_errors)} run(s)"] if judge_errors else []),
+            *([f"request failed for {len(request_errors)} run(s)"] if request_errors else []),
+        ]
         exc_judge = JudgeResponseError(
-            f"judge returned no readable verdict for any of the {len(summary.run_results)} run(s): "
-            + " | ".join(unscored)
+            f"no run of {len(summary.run_results)} could be graded: {', '.join(causes)}: " + " | ".join(unscored)
         )
         exc_judge.timings = item_timings
         exc_judge.run_latencies_s = [r.run_latency_s for r in summary.run_results]
@@ -1272,6 +1596,7 @@ def evaluate_agentic_document_skill(
             **run.evaluation.strict_checks,
             **run.diagnostics,
             "summaries_from_data": run.summaries_from_data,
+            **({"takeaways_by_editor": run.takeaways_by_editor} if run.takeaways_by_editor is not None else {}),
             "turns": run.total_turns,
             **({"judge_reasoning": run.evaluation.judge_reasoning} if run.evaluation.applies.narrative else {}),
             "failures": run.evaluation.failures,
@@ -1280,7 +1605,9 @@ def evaluate_agentic_document_skill(
 
     detail: dict[str, Any] = {
         **_run_detail(best),
-        **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
+        **({"unscored_runs": len(unscored)} if unscored else {}),
+        **({"judge_errors": judge_errors} if judge_errors else {}),
+        **({"request_errors": request_errors} if request_errors else {}),
     }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.

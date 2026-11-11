@@ -41,7 +41,8 @@ class PhaseTimings:
     item, so an item's ``agent_s`` is the sum of every agent turn it took.
     """
 
-    # The system under test: time inside ChatClient.send_message.
+    # The system under test: time inside ChatClient.send_message, and inside the takeaway
+    # endpoint when a run writes takeaways through it.
     agent_s: float = 0.0
     # Our grading of the answer (LLMJudge). Post-hoc -- never blocks the agent.
     judge_s: float = 0.0
