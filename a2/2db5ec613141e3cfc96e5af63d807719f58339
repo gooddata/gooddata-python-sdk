@@ -1,44 +1,26 @@
-packages/gooddata-eval/tests/test_agentic_document_skill.py
-  s_071b99cf79f516::t_9d0edfdc308a3f 9,28,1158-1160,1457-1948
 packages/gooddata-eval/AGENTS.md
-  s_071b99cf79f516::t_9d0edfdc308a3f 30
-packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
-  s_071b99cf79f516::t_9d0edfdc308a3f 6,13-15,17,52,83-85,439-441,446,450,453-454,456,475,508,516-518,522-524,537,624,647-803,847-849,865-871,898-899,902-915,924-925,929-933,936-938,1005-1021,1024,1028,1035-1042,1059,1086-1088,1093-1094,1111-1112,1118-1120,1130-1132,1138,1140,1194-1197,1257-1260,1291-1293,1295-1298,1300,1319,1328-1330
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 30
 packages/gooddata-eval/src/gooddata_eval/core/agentic/_editor_takeaways.py
-  s_071b99cf79f516::t_9d0edfdc308a3f 216-217
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 216-217
 packages/gooddata-eval/src/gooddata_eval/core/timing.py
-  s_071b99cf79f516::t_9d0edfdc308a3f 44-45
----
-{
-  "schema_version": "authorship/3.0.0",
-  "git_ai_version": "1.7.5",
-  "base_commit_sha": "1181e59c88eef2cecfd18c060f5cea9a5255abd6",
-  "prompts": {},
-  "sessions": {
-    "s_071b99cf79f516": {
-      "agent_id": {
-        "tool": "claude",
-        "id": "68ba0f1b-db9a-47f9-b608-db125543ea5e",
-        "model": "claude-sonnet-5-5"
-      },
-      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
-    }
-  }
-}
-
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 44-45
 packages/gooddata-eval/README.md
-  s_513d800a7c9432::t_1fc967df3ebc61 280-281
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 280-281
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 6,13-15,17,52,92-94,553-555,560,564,567-568,570,589,634,642-644,648-650,719,833,862-1018,1062-1064,1080-1086,1113-1114,1117-1130,1139-1140,1144-1148,1151-1153,1220-1236,1239,1243,1250-1257,1274,1301-1303,1308-1309,1327-1328,1334-1336,1346-1348,1354,1356,1410-1413,1473-1476,1507-1509,1511-1514,1516,1535,1544-1546
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_7cb2336d83cc6e::t_e8e975a99b3d34 9,28,1464-1466,1763-2254
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "05f5975f00ec8e23020c5d03bf839201b272870f",
+  "base_commit_sha": "a22db5ec613141e3cfc96e5af63d807719f58339",
   "prompts": {},
   "sessions": {
-    "s_513d800a7c9432": {
+    "s_7cb2336d83cc6e": {
       "agent_id": {
         "tool": "claude",
-        "id": "9e8dd978-0e20-4727-972a-d81d06f33867",
+        "id": "7485518e-294e-4d2f-a113-0d218d7c1819",
         "model": "claude-sonnet-5-5"
       },
       "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
