@@ -11,6 +11,7 @@ from typing import Any
 import jsonpatch
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._filters import describe_selection, same_unordered_values, selection_of
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -465,24 +466,6 @@ def _check_date_range(dashboard: dict, expected: dict | None, is_edit: bool) -> 
     return [reason for m in mismatches for reason in m]
 
 
-def _selection_of(attribute_filter: dict) -> tuple[str, list] | None:
-    """The elements an attribute filter restricts to, or ``None`` when it restricts nothing.
-
-    An unrestricted filter is spelled as the absence of a selection, and an empty list means
-    the same thing, so both read as "all".
-    """
-    state = attribute_filter.get("state") or {}
-    for kind in ("include", "exclude"):
-        values = state.get(kind)
-        if values:
-            return kind, list(values)
-    return None
-
-
-def _describe_selection(selection: tuple[str, list] | None) -> str:
-    return "all" if selection is None else f"{selection[0]} {selection[1]!r}"
-
-
 def _check_filters(dashboard: dict, expected: list[dict]) -> list[str]:
     """Every expected filter must be on the dashboard, with the stated selection or condition.
 
@@ -534,9 +517,9 @@ def _check_filters(dashboard: dict, expected: list[dict]) -> list[str]:
                 continue
             matches = shown
         wanted = _expected_selection(exp)
-        if not any(_selection_of(f) == wanted for f in matches):
-            found = ", ".join(_describe_selection(_selection_of(f)) for f in matches)
-            failures.append(f"filter on {using!r} selects {found}, expected {_describe_selection(wanted)}")
+        if not any(selection_of(f) == wanted for f in matches):
+            found = ", ".join(describe_selection(selection_of(f)) for f in matches)
+            failures.append(f"filter on {using!r} selects {found}, expected {describe_selection(wanted)}")
     return failures
 
 
@@ -567,7 +550,7 @@ def _filter_value_mismatch(actual: dict, expected: dict) -> list[str]:
             continue
         want, got = expected[key], actual.get(key)
         same = (
-            _same_unordered_values(want, got)
+            same_unordered_values(want, got)
             if key == "values" and isinstance(want, list) and isinstance(got, list)
             else got == want
         )
@@ -576,25 +559,8 @@ def _filter_value_mismatch(actual: dict, expected: dict) -> list[str]:
     return mismatches
 
 
-def _same_unordered_values(want: list, got: list) -> bool:
-    """One-to-one match in any order, with each pair of the same type.
-
-    Not sorted: AAC allows `null` among the values, and Python cannot order it with strings.
-    Not stringified: `1` and `"1"` are different values.
-    """
-    remaining = list(got)
-    for expected in want:
-        index = next(
-            (i for i, actual in enumerate(remaining) if type(actual) is type(expected) and actual == expected), None
-        )
-        if index is None:
-            return False
-        del remaining[index]
-    return not remaining
-
-
 def _expected_selection(expected_filter: dict) -> tuple[str, list] | None:
-    """Read a fixture's filter entry into the same shape ``_selection_of`` produces.
+    """Read a fixture's filter entry into the same shape ``selection_of`` produces.
 
     Raises:
         ValueError: the entry states no selection the evaluator knows how to check.
@@ -770,10 +736,10 @@ def _filter_mismatch(label: str, actual: dict, expected: dict) -> list[str]:
     if expected.get("type") == "date_filter":
         keys: tuple[str, ...] = _DATE_FILTER_KEYS
     elif expected.get("type") == "attribute_filter":
-        if _selection_of(actual) != _selection_of(expected):
+        if selection_of(actual) != selection_of(expected):
             return [
-                f"{label} selects {_describe_selection(_selection_of(actual))}, "
-                f"expected {_describe_selection(_selection_of(expected))}"
+                f"{label} selects {describe_selection(selection_of(actual))}, "
+                f"expected {describe_selection(selection_of(expected))}"
             ]
         keys = ("using", "display_as")
     else:
