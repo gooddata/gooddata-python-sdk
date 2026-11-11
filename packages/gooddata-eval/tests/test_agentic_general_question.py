@@ -726,3 +726,69 @@ def test_an_item_with_no_gradeable_run_raises_instead_of_reporting_failures():
     assert [r["error"] for r in err.value.failed_runs] == ["empty body twice", "no 'score' key"]
     assert (err.value.runs_passed, err.value.runs_effective) == (0, 2)
     assert len(err.value.run_latencies_s) == err.value.runs_effective
+
+
+# --- document format -------------------------------------------------------------------
+
+
+def test_the_document_format_reaches_the_chat_client():
+    client, judge = _pass_client_and_judge()
+    with (
+        patch("gooddata_eval.core.agentic.general_question.ChatClient", return_value=client) as chat_client,
+        patch("gooddata_eval.core.agentic.general_question.LLMJudge", return_value=judge),
+    ):
+        run_agentic_general_question(
+            "https://h", "tok", "ws", "What period does it cover?", "2025", document_format="aac-v2"
+        )
+    assert chat_client.call_args.kwargs["document_format"] == "aac-v2"
+
+
+def test_no_document_format_leaves_it_to_the_server():
+    client, judge = _pass_client_and_judge()
+    with (
+        patch("gooddata_eval.core.agentic.general_question.ChatClient", return_value=client) as chat_client,
+        patch("gooddata_eval.core.agentic.general_question.LLMJudge", return_value=judge),
+    ):
+        run_agentic_general_question("https://h", "tok", "ws", "What is ETL?", "Extract, Transform, Load")
+    assert chat_client.call_args.kwargs["document_format"] is None
+
+
+def test_an_unknown_document_format_fails_before_any_request():
+    client, judge = _pass_client_and_judge()
+    with _patched(client, judge), pytest.raises(ValueError, match="aac-v3"):
+        evaluate_agentic_general_question("https://h", "tok", "ws", "What period?", "2025", document_format="aac-v3")
+    client.create_conversation.assert_not_called()
+    client.send_message.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("document_format", "extra", "expected"),
+    [
+        ("aac-v2", None, {"document_format": "aac-v2"}),
+        ("aac-v2", {"leg": "luna"}, {"leg": "luna", "document_format": "aac-v2"}),
+        (None, {"leg": "luna"}, {"leg": "luna"}),
+        (None, None, None),
+    ],
+)
+def test_the_document_format_is_recorded_in_the_run_metadata(document_format, extra, expected):
+    client, judge = _pass_client_and_judge()
+    identities = []
+    with (
+        _patched(client, judge),
+        patch(
+            "gooddata_eval.core.agentic.general_question.submit_trace_scoring",
+            side_effect=lambda _link, identity, **_kw: identities.append(identity),
+        ),
+    ):
+        evaluate_agentic_general_question(
+            "https://h",
+            "tok",
+            "ws",
+            "What period?",
+            "2025",
+            langfuse=object(),
+            dataset_item_id="item-1",
+            run_metadata_extra=extra,
+            document_format=document_format,
+        )
+    assert [identity.run_metadata_extra for identity in identities] == [expected]
