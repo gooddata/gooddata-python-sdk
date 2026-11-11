@@ -7,7 +7,7 @@ import subprocess
 import orjson
 import pytest
 from gooddata_eval.cli.main import main
-from gooddata_eval.core.reporting.html_report import build_html, load_report_files, merge_docs
+from gooddata_eval.core.reporting.html_report import _aliases, build_html, load_report_files, merge_docs
 
 
 def _doc(model: str, passed: bool) -> dict:
@@ -127,6 +127,17 @@ def test_redact_gives_one_model_one_alias_across_its_runs() -> None:
     # What the page counts models by (its provider and its model name) is the same for both runs.
     assert {run["model"] for run in data["runs"].values()} == {"Model A"}
     assert {entry["provider_name"] for entry in data["comparison"].values()} == {""}
+
+
+def test_redact_alias_survives_past_twenty_six_models() -> None:
+    """chr(65 + n) walked off the alphabet: the 27th model was `Model [`."""
+    doc = {"runs": {f"m{i}": {"model": f"model-{i}", "items": {}} for i in range(30)}, "comparison": {}}
+
+    names = [name.removeprefix("Model ") for _, name in _aliases(doc).values()]
+
+    assert len(set(names)) == 30
+    assert all(name.isalpha() for name in names), names
+    assert names[25:28] == ["Z", "AA", "AB"]
 
 
 def test_redact_gives_each_model_its_own_letter_and_numbers_only_a_repeated_model() -> None:

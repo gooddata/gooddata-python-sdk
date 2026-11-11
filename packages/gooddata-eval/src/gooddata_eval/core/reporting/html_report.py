@@ -74,6 +74,20 @@ def _model_of(label: str, run: dict) -> str:
     return run.get("model") or (label.split(" · ", 1)[1] if " · " in label else label)
 
 
+def _alias_name(n: int) -> str:
+    """``Model A`` .. ``Model Z``, then ``Model AA``, ``Model AB``, ...
+
+    Spelled out rather than ``chr(65 + n)``, which walks straight off the end of the alphabet: the
+    27th model came out as ``Model [``, then ``Model \\``, ``Model ]``.
+    """
+    letters = ""
+    n += 1
+    while n:
+        n, remainder = divmod(n - 1, 26)
+        letters = chr(65 + remainder) + letters
+    return f"Model {letters}"
+
+
 def _aliases(doc: dict) -> dict[str, tuple[str, str]]:
     """Map each run label to its redacted ``(run label, model name)``.
 
@@ -92,7 +106,7 @@ def _aliases(doc: dict) -> dict[str, tuple[str, str]]:
     }
     letters: dict[tuple[str, str], str] = {}
     for model in identity.values():
-        letters.setdefault(model, f"Model {chr(65 + len(letters))}")
+        letters.setdefault(model, _alias_name(len(letters)))
     per_model = Counter(identity.values())
     seen: Counter[tuple[str, str]] = Counter()
     aliases: dict[str, tuple[str, str]] = {}
