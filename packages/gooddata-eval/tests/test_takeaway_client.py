@@ -99,6 +99,21 @@ def test_placement_visualization_serialized_with_filters() -> None:
     }
 
 
+def test_a_bare_input_posts_the_body_an_item_with_it_posts() -> None:
+    # given
+    takeaway_input = {"visualizations": [{"visualization_id": "v2"}], "instructions": {"document": "Be brief."}}
+    from_item: dict = {}
+    from_input: dict = {}
+
+    # when
+    _client(_capturing(from_item)).ask(_item(takeaway_input))
+    result = _client(_capturing(from_input)).request(TakeawayInput.model_validate(takeaway_input))
+
+    # then
+    assert from_input["body"] == from_item["body"]
+    assert result.text_response == _TAKEAWAY_RESPONSE["takeaway"]
+
+
 def test_instructions_omitted_when_empty() -> None:
     captured: dict = {}
     client = _client(_capturing(captured))

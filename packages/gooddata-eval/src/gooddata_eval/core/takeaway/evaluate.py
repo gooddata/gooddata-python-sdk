@@ -47,7 +47,7 @@ from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.evaluators.takeaway import DocumentTakeawayEvaluator
 from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, ChatResult, DatasetItem
-from gooddata_eval.core.takeaway.http_client import TakeawayClient
+from gooddata_eval.core.takeaway.http_client import TakeawayClient, is_transient
 from gooddata_eval.core.timing import PhaseTimings, sum_timings
 
 _TEST_KIND = "document_takeaway"
@@ -84,19 +84,12 @@ def _dataset_item(dataset_item: dict, dataset_name: str) -> DatasetItem:
     return item
 
 
-def _is_transient(exc: httpx.HTTPError) -> bool:
-    if isinstance(exc, httpx.HTTPStatusError):
-        status = exc.response.status_code
-        return status == 429 or status >= 500
-    return isinstance(exc, httpx.TransportError) and not isinstance(exc, httpx.UnsupportedProtocol)
-
-
 def _run_once(client: TakeawayClient, evaluator: DocumentTakeawayEvaluator, item: DatasetItem) -> _TakeawayRun:
     started = time.monotonic()
     try:
         chat_result = client.ask(item)
     except httpx.HTTPError as exc:
-        if not _is_transient(exc):
+        if not is_transient(exc):
             raise
         elapsed = time.monotonic() - started
         error = f"{type(exc).__name__}: {exc}"

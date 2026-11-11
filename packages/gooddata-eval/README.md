@@ -277,7 +277,8 @@ Each item additionally carries a per-phase breakdown:
 ```
 
 Every item reports `runs_ungraded` beside `runs_passed`: runs the agent answered but the LLM judge returned
-nothing readable for. Agentic items also list them as `unscored_runs` / `judge_errors` in their `detail`, and a
+nothing readable for. Agentic items also list them as `unscored_runs` / `judge_errors` in their `detail` (a document item whose takeaway-endpoint request failed
+lists that failure under `request_errors` instead), and a
 `dashboard_summary` item carries `ungraded_criteria`. Such a run — or, for `dashboard_summary`, such a
 criterion — is excluded from pass@K and from the quality score rather than counted as a failure: scoring it 0
 would be indistinguishable from the judge genuinely failing the answer, which is the confusion
