@@ -13,6 +13,7 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -631,6 +632,21 @@ def evaluate_agentic_metric_skill(
             **timeline_detail(run.tool_call_events, run.reasoning_step_events),
         }
 
+    def _failed_checks(run: MetricRunResult) -> list[dict]:
+        """The checks this run failed; the MAQL pair is the whole diagnosis for this kind."""
+        checks: list[FailedCheck] = []
+        if not run.metric_created:
+            checks.append(FailedCheck("metric_created", expected=True, actual=False))
+        if not run.maql_correct:
+            checks.append(
+                FailedCheck(
+                    "maql_correct",
+                    expected=[c.get("maql", "") for c in expected_outputs_list],
+                    actual=run.actual_maql,
+                )
+            )
+        return failed_check_records(checks)
+
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
@@ -650,10 +666,11 @@ def evaluate_agentic_metric_skill(
         summary.run_results,
         passed=lambda r: r.metric_created and r.maql_correct,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         raise_agentic_failure(
             MetricSkillAssertionError,

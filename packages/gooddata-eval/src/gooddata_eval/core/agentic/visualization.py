@@ -12,6 +12,7 @@ import time
 from dataclasses import dataclass, field, replace
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -445,6 +446,70 @@ def _run_detail(run: RunResult) -> dict:
     }
 
 
+def _failed_checks(run: RunResult) -> list[dict]:
+    """The checks this run failed, by their ``detail`` names, with expected/actual where known.
+
+    Follows ``EvaluationResult.strict_pass`` term by term, so the list is empty exactly when
+    the run passed.
+    """
+    ev = run.eval_result
+    checks: list[FailedCheck] = []
+    if ev.scored_without_chart:
+        if ev.visualization_created:
+            actual_type = run.actual_output.type if run.actual_output else None
+            checks.append(FailedCheck("no_chart", expected="no chart", actual=actual_type))
+        if ev.answer_correct is False:
+            checks.append(FailedCheck("answer_correct", actual=ev.answer_problems))
+        return failed_check_records(checks)
+    if not ev.visualization_created:
+        checks.append(FailedCheck("visualization_created", expected=True, actual=False))
+    if not ev.cross_ref_valid:
+        checks.append(FailedCheck("cross_ref_valid", actual=ev.cross_ref_errors))
+    if not ev.metrics_correct:
+        checks.append(
+            FailedCheck(
+                "metrics_correct", expected=sorted(ev.expected_metric_uris), actual=sorted(ev.actual_metric_uris)
+            )
+        )
+    if not ev.dimensions_correct:
+        checks.append(
+            FailedCheck("dimensions_correct", expected=sorted(ev.expected_dim_uris), actual=sorted(ev.actual_dim_uris))
+        )
+    if not ev.filters_correct:
+        differing = [
+            FailedCheck(
+                "filters_correct",
+                label=category,
+                expected=ev.expected_filters.get(category, []),
+                actual=ev.actual_filters.get(category, []),
+            )
+            for category in sorted(set(ev.expected_filters) | set(ev.actual_filters))
+            if ev.expected_filters.get(category, []) != ev.actual_filters.get(category, [])
+        ]
+        checks.extend(differing or [FailedCheck("filters_correct")])
+    if not ev.sorts_correct:
+        checks.append(FailedCheck("sorts_correct", expected=ev.expected_sorts, actual=ev.actual_sorts))
+    if not ev.viz_type_hard:
+        checks.append(
+            FailedCheck(
+                "viz_type_hard",
+                expected=run.best_expected.type if run.best_expected else None,
+                actual=run.actual_output.type if run.actual_output else None,
+            )
+        )
+    if ev.requires_execution and not ev.executed:
+        checks.append(FailedCheck("executed", expected=True, actual=False))
+    if ev.buckets_correct is False:
+        checks.append(FailedCheck("buckets_correct", expected=ev.expected_buckets, actual=ev.actual_buckets))
+    if ev.answer_correct is False:
+        checks.append(FailedCheck("answer_correct", actual=ev.answer_problems))
+    if ev.format_correct is False:
+        checks.append(FailedCheck("format_correct", actual=ev.format_problems))
+    if ev.part_present is False:
+        checks.append(FailedCheck("part_present", expected=True, actual=False))
+    return failed_check_records(checks)
+
+
 def _strict_checks(ev: EvaluationResult) -> dict[str, bool]:
     """The scores one run is gated on, by their Langfuse names.
 
@@ -664,10 +729,11 @@ def evaluate_agentic_visualization(
         summary.run_results,
         passed=lambda r: r.eval_result.strict_pass,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""

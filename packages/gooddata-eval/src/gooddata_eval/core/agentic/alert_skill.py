@@ -15,6 +15,7 @@ from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -1164,6 +1165,11 @@ def _run_detail(run: AlertRunResult) -> dict:
     }
 
 
+def _failed_checks(run: AlertRunResult) -> list[dict]:
+    """The checks this run failed, by name. The arguments the run sent are in its detail."""
+    return failed_check_records(FailedCheck(name) for name, ok in run.eval.checks().items() if not ok)
+
+
 def evaluate_agentic_alert_skill(
     host: str,
     token: str,
@@ -1288,10 +1294,11 @@ def evaluate_agentic_alert_skill(
         summary.run_results,
         passed=lambda r: r.eval.strict_pass,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
         raise_agentic_failure(
             AlertSkillAssertionError,
             f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "

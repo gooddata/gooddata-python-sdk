@@ -11,6 +11,7 @@ from typing import Any
 import jsonpatch
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -2178,8 +2179,15 @@ def _run_detail(run: DashboardRunResult) -> dict[str, Any]:
         **run.evaluation.diagnostics,
         "failures": run.evaluation.failures,
         "notes": run.evaluation.notes,
+        # Why the loop stopped -- see LoopExit.
+        "exit_reason": run.exit_reason.value,
         "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
     }
+
+
+def _failed_checks(run: DashboardRunResult) -> list[dict]:
+    """The checks this run failed, by name. What each one found is in the run's ``failures``."""
+    return failed_check_records(FailedCheck(name) for name, ok in run.evaluation.strict_checks.items() if not ok)
 
 
 def run_agentic_dashboard_skill(
@@ -2366,10 +2374,11 @@ def evaluate_agentic_dashboard_skill(
         summary.run_results,
         passed=lambda r: r.evaluation.strict_pass,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
         # Two failures wear the same missing skill, and the advice differs. If the other
         # dashboard skill was activated, the flag that registers both is plainly on and the
         # model simply routed the wrong way. If neither was, the flag is off or the agent has
