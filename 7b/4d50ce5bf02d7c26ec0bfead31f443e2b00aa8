@@ -1,0 +1,43 @@
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_49b4bb7872d3b9::t_52260860e081e4 783,787-791,793-794,796-811,845,848,851
+  s_49b4bb7872d3b9::t_a0df4c82e34001 721-722,734-738,740-760,762-775,777-781,784-786,849-850,852-861,863-867,869-873
+  s_49b4bb7872d3b9::t_3cf392bc2ce347 739,761,782,795,844,862,868
+  s_49b4bb7872d3b9::t_ee18ba85a982a0 846-847
+  s_49b4bb7872d3b9::t_809053aeb9c511 732-733,776,792,812-842
+  s_49b4bb7872d3b9::t_9cd4020dd0c901 843
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_7fe73bdd069bac::t_74a7f2e25deec0 13,2047,2078-2079,2182-2186,2189,2191-2192,2201
+  s_49b4bb7872d3b9::t_ae78b6dd1d5616 58-61
+  s_49b4bb7872d3b9::t_447c3aa944a0ee 1258-1267
+  s_49b4bb7872d3b9::t_4f08ed7784d7f2 2027-2030,2043-2046,2048-2050,2053-2055
+  s_49b4bb7872d3b9::t_53d9a71de5457c 2179-2181,2195,2202-2207,2210,2212-2226,2233
+  s_49b4bb7872d3b9::t_9081b3ae8b430a 2080-2082
+  s_49b4bb7872d3b9::t_42aebab6409d0b 2031-2042,2051-2052,2092,2187-2188,2190,2193-2194,2197-2199,2229
+  s_49b4bb7872d3b9::t_809053aeb9c511 2227-2228
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_49b4bb7872d3b9::t_42aebab6409d0b 43-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7b4d50ce5bf02d7c26ec0bfead31f443e2b00aa8",
+  "prompts": {},
+  "sessions": {
+    "s_49b4bb7872d3b9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "298ebaed-c1b2-45b3-8ae0-c6e9006098a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_7fe73bdd069bac": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a86d6cea20686cbea",
+        "model": "unknown"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

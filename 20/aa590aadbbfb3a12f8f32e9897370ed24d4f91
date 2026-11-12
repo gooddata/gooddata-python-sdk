@@ -1,0 +1,49 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_clarification.py
+  s_49b4bb7872d3b9::t_42d2d82b15317e 373-374,506
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_49b4bb7872d3b9::t_9f0687b080a412 44-47
+  s_49b4bb7872d3b9::t_42aebab6409d0b 43,48
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_49b4bb7872d3b9::t_883d751f57a6e5 794-797,799-802,807-812,815-819,821-822,3072-3073
+  s_49b4bb7872d3b9::t_809053aeb9c511 733-734,777,793,824-854
+  s_49b4bb7872d3b9::t_9cd4020dd0c901 855
+  s_49b4bb7872d3b9::t_6db947983313f4 7
+  s_49b4bb7872d3b9::t_52260860e081e4 784,788-792,798,803-806,813-814,820,823,857,860,863
+  s_49b4bb7872d3b9::t_ee18ba85a982a0 858-859
+  s_49b4bb7872d3b9::t_a0df4c82e34001 722-723,735-739,741-761,763-776,778-782,785-787,861-862,864-873,875-879,881-885
+  s_49b4bb7872d3b9::t_3cf392bc2ce347 740,762,783,856,874,880
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_49b4bb7872d3b9::t_4f08ed7784d7f2 2028-2031,2057-2060,2062-2063,2066-2068
+  s_49b4bb7872d3b9::t_83a1df9c9340c7 2220
+  s_49b4bb7872d3b9::t_447c3aa944a0ee 1259-1268
+  s_7fe73bdd069bac::t_74a7f2e25deec0 2091-2092,2197-2200,2209
+  s_49b4bb7872d3b9::t_42aebab6409d0b 2032-2037,2039-2041,2056,2064-2065,2105,2204-2205,2208,2216
+  s_49b4bb7872d3b9::t_53d9a71de5457c 2194-2196,2217,2229-2234,2237,2239-2252,2258
+  s_49b4bb7872d3b9::t_9ff50361881d44 13-14,62,2038,2042-2055,2061,2094-2095,2191,2193,2201-2203,2206-2207,2210-2215,2219,2221-2223,2225-2228,2253-2254
+  s_49b4bb7872d3b9::t_9081b3ae8b430a 2093
+  s_49b4bb7872d3b9::t_ae78b6dd1d5616 59-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20aa590aadbbfb3a12f8f32e9897370ed24d4f91",
+  "prompts": {},
+  "sessions": {
+    "s_49b4bb7872d3b9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "298ebaed-c1b2-45b3-8ae0-c6e9006098a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_7fe73bdd069bac": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a86d6cea20686cbea",
+        "model": "unknown"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
