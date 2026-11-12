@@ -134,6 +134,28 @@ def test_any_date_dataset_is_accepted_and_recorded():
     assert scores.date_inherited_dataset == "dataset/order_date"
 
 
+@pytest.mark.parametrize(("actual_dataset", "date_ok"), [("dataset/order_date", True), ("dataset/ship_date", False)])
+def test_a_dashboard_filter_naming_a_dataset_accepts_only_that_one(actual_dataset, date_ok):
+    context = {
+        "view": {
+            "dashboard": {
+                "filters": [
+                    {"type": "date_filter", "using": "dataset/order_date", "granularity": "MONTH", "from": -11, "to": 0}
+                ]
+            }
+        }
+    }
+    scores = check_filters(
+        _viz(),
+        _viz({"f": _date(-11, 0, using=actual_dataset)}),
+        _TODAY,
+        user_context=context,
+        accept_context_date_filter=True,
+    )
+    assert scores.date_ok is date_ok
+    assert scores.date_inherited is date_ok
+
+
 def test_the_same_span_written_absolutely_is_accepted():
     # MONTH -11..0 on 2026-11-12 is 2025-12-01..2026-11-30.
     absolute = {"type": "date_filter", "using": "dataset/transaction_date", "from": "2025-12-01", "to": "2026-11-30"}

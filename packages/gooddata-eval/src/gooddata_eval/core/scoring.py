@@ -539,10 +539,11 @@ def _inherited_date_filter_dataset(
 
     Holds only when the expected output states no date filter and the actual chart has
     exactly one, whose span equals that of one of the dashboard's date filters resolved
-    against the same ``today``. The dashboard filter names no dataset, so it is compared
-    on the actual filter's dataset: any date dataset is accepted.
+    against the same ``today``. The dashboard's common date filter names no dataset (it
+    resolves per widget), so it is compared on the actual filter's dataset and accepts any
+    date dataset. A dashboard date filter that names one in ``using`` accepts only that one.
     """
-    if exp_date or len(act_date) != 1 or not dashboard_filters:
+    if exp_date or not dashboard_filters:
         return None
     actual_filters = [f for f in actual.query.filter_by.values() if f.get("type") == "date_filter"]
     if len(actual_filters) != 1:
@@ -550,9 +551,11 @@ def _inherited_date_filter_dataset(
     dataset = actual_filters[0].get("using", "")
     fields = actual.query.fields
     for dashboard_filter in dashboard_filters:
-        candidate = _normalize_date_filter({**dashboard_filter, "using": dataset}, fields, today)
+        candidate = _normalize_date_filter(
+            {**dashboard_filter, "using": dashboard_filter.get("using") or dataset}, fields, today
+        )
         if json.dumps(candidate, sort_keys=True) in act_date:
-            return dataset if isinstance(dataset, str) else str(dataset)
+            return dataset if isinstance(dataset, str) else ""
     return None
 
 

@@ -18,8 +18,8 @@ def env_flag(name: str) -> bool:
 
 
 # Opt-in: accept a date filter the agent carried over from the dashboard open in
-# the item's `user_context`, when the expected output states no date filter. Off by default so
-# scoring stays exactly as it was for every caller that does not ask for it.
+# the item's `user_context`, when the expected output states no date filter. Off by default:
+# a caller that does not ask for it gets the strict date comparison.
 ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR = "GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER"
 
 

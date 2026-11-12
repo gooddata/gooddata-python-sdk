@@ -914,7 +914,8 @@ Set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1` (or pass `accept_context_date_filter=
   `user_context.view.dashboard.filters` (resolved against the same day), and
 - belongs to an item whose expected output has no date filter.
 
-Any date dataset is accepted; the one the chart used is reported in the run detail as
+The dashboard's common date filter (no `using`) accepts any date dataset, one that names a
+dataset accepts only that one; the one the chart used is reported in the run detail as
 `filter_date_context: {"inherited": true, "dataset": ...}`, and a failure summary shows
 `date : True (inherited from dashboard context)`. A chart with no date filter passes as
 before; an expected date filter, a different period, ranking and attribute filters stay

@@ -718,7 +718,7 @@ def evaluate_agentic_visualization(
             f"  Filters Correct       : {ev.filters_correct}\n"
             f"    date      : {ev.filter_date_score}"
             f"{' (inherited from dashboard context)' if ev.filter_date_inherited else ''}\n"
-            f"{_filter_diff('date', ev)}"
+            f"{'' if ev.filter_date_inherited else _filter_diff('date', ev)}"
             f"    ranking   : {ev.filter_ranking_score}\n"
             f"{_filter_diff('ranking', ev)}"
             f"    attribute : {ev.filter_attribute_score}\n"

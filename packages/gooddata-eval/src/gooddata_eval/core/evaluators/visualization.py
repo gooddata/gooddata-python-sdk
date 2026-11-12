@@ -657,7 +657,7 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "expected_filters": ev.expected_filters,
         "actual_filters": ev.actual_filters,
         # Nested and only when it applies: `quality_score` counts every top-level boolean, and
-        # a run scored without the opt-in rule must report exactly what it did before.
+        # a run scored without the opt-in rule must not carry the key at all.
         **(
             {"filter_date_context": {"inherited": True, "dataset": ev.filter_date_inherited_dataset}}
             if ev.filter_date_inherited
