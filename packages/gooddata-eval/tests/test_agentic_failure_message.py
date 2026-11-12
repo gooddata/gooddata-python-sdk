@@ -131,6 +131,45 @@ def test_a_kind_that_names_no_checks_writes_no_failed_checks_key() -> None:
     assert "failed_checks" not in records[0]
 
 
+def test_a_string_exit_reason_gets_the_same_outcome_as_its_enum() -> None:
+    # exit_reason and outcome must agree whether a kind records the member or its value.
+    @dataclass
+    class _StrRun:
+        exit_reason: str = "chat_error"
+
+    record = build_failed_runs([_StrRun()], passed=lambda r: False, detail=lambda r: {})[0]
+
+    assert record["exit_reason"] == "chat_error"
+    assert record["outcome"]["status"] == "error"
+    assert record["outcome"]["source"] == "backend"
+
+
+def test_a_metric_layout_failure_names_the_layout_problem_not_two_equal_sets() -> None:
+    ev = MagicMock(
+        scored_without_chart=False,
+        visualization_created=True,
+        cross_ref_valid=True,
+        metrics_correct=False,
+        expected_metric_uris={"metric/revenue"},
+        actual_metric_uris={"metric/revenue"},
+        metric_layout_problems=["metric/revenue is on the secondary axis"],
+        dimensions_correct=True,
+        filters_correct=True,
+        sorts_correct=True,
+        viz_type_hard=True,
+        requires_execution=False,
+        buckets_correct=None,
+        answer_correct=None,
+        format_correct=None,
+        part_present=None,
+    )
+    run = MagicMock(eval_result=ev)
+
+    assert agentic_visualization._failed_checks(run) == [
+        {"name": "metrics_correct", "label": "layout", "actual": ["metric/revenue is on the secondary axis"]}
+    ]
+
+
 # ── visualization: a partial gate failure names the run that failed ──────────
 
 

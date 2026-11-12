@@ -21,8 +21,7 @@ from collections.abc import Callable, Sequence
 from enum import Enum
 from typing import Any
 
-from gooddata_eval.core.models import LoopExit
-from gooddata_eval.core.outcome import outcome_from_loop_exit
+from gooddata_eval.core.agentic._outcome import run_outcome
 
 
 def _exit_reason(run: Any) -> str | None:
@@ -76,9 +75,7 @@ def build_failed_runs(
             "tool_names": [getattr(e, "function_name", None) for e in tool_calls],
             "exit_reason": _exit_reason(run),
             # Recorded whether or not GD_EVAL_ERROR_OUTCOME lets it decide the verdict.
-            "outcome": outcome_from_loop_exit(
-                run.exit_reason if isinstance(getattr(run, "exit_reason", None), LoopExit) else None, passed=False
-            ).as_record(),
+            "outcome": run_outcome(run, passed=False).as_record(),
         }
         if failed_checks is not None:
             record["failed_checks"] = failed_checks(run)

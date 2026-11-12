@@ -471,11 +471,15 @@ def _failed_checks(run: RunResult) -> list[dict]:
     if not ev.cross_ref_valid:
         checks.append(FailedCheck("cross_ref_valid", actual=ev.cross_ref_errors))
     if not ev.metrics_correct:
-        checks.append(
-            FailedCheck(
-                "metrics_correct", expected=sorted(ev.expected_metric_uris), actual=sorted(ev.actual_metric_uris)
+        if ev.expected_metric_uris == ev.actual_metric_uris and ev.metric_layout_problems:
+            # The metric set matched; the order or axis did not, and only these say which.
+            checks.append(FailedCheck("metrics_correct", label="layout", actual=ev.metric_layout_problems))
+        else:
+            checks.append(
+                FailedCheck(
+                    "metrics_correct", expected=sorted(ev.expected_metric_uris), actual=sorted(ev.actual_metric_uris)
+                )
             )
-        )
     if not ev.dimensions_correct:
         checks.append(
             FailedCheck("dimensions_correct", expected=sorted(ev.expected_dim_uris), actual=sorted(ev.actual_dim_uris))

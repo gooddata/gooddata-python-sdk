@@ -180,7 +180,9 @@ class LangfuseSink:
         if report.error is not None:
             # Only reached with GD_EVAL_ERROR_OUTCOME on. An errored item has no verdict, so it
             # gets no pass or quality score: a 0 would count it as a failure of the agent.
-            score_defs = [d for d in score_defs if d[0] == "latency_s"]
+            # Nor a latency one when it raised before completing a run: avg_latency_s is then a
+            # 0.0 that measured nothing and would drag the latency averages down.
+            score_defs = [d for d in score_defs if d[0] == "latency_s" and report.runs_total > 0]
         for name, value, data_type in score_defs:
             try:
                 self._client.create_score(

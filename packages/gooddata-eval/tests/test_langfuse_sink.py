@@ -303,3 +303,18 @@ def test_a_report_without_an_error_has_no_error_metadata(monkeypatch):
 
     attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
     assert "langfuse.experiment.item.metadata.error" not in attrs
+
+
+def test_an_item_that_errored_before_any_run_gets_no_latency_score(monkeypatch):
+    # runs == 0 makes avg_latency_s a 0.0 that measured nothing.
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+    report = _passing_report()
+    report.pass_at_k = False
+    report.runs = 0
+    report.latency_s = 0.0
+    report.error = "RuntimeError: network down"
+
+    sink.log_item(report, dataset_item_id="item-1")
+
+    assert [r for r in requests if r.url.path == "/api/public/scores"] == []
