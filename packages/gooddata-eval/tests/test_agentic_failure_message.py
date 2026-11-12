@@ -254,5 +254,5 @@ def test_a_partial_metric_failure_lists_the_failing_run_with_its_maql() -> None:
 @pytest.mark.parametrize("module_name", ["visualization", "alert_skill", "metric_skill", "dashboard_skill"])
 def test_each_checked_kind_heads_its_message_through_the_shared_renderer(module_name: str) -> None:
     source = inspect.getsource(importlib.import_module(f"gooddata_eval.core.agentic.{module_name}"))
-    assert "failure_head(" in source
+    assert "gate_head(gate, runs_verdict, failed_runs)" in source
     assert "failed_checks=_failed_checks" in source

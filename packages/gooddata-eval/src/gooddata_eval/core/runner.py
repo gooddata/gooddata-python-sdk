@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from functools import cached_property, partial
 from typing import Callable, Protocol
 
-from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
+from gooddata_eval.core.config import DEFAULT_GATE, EvalGate, error_outcome_enabled
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.interaction import INTERACTION_MODES, MULTI_TURN, InteractionMode, interaction_mode
@@ -322,6 +322,10 @@ def _run_one_item(
         conv_id = getattr(e, "conversation_id", None)
         report.conversation_id = conv_id or report.conversation_id
         report.error = f"{type(e).__name__}: {e}" + (f" [conversation_id={conv_id}]" if conv_id else "")
+        if error_outcome_enabled():
+            # An item is passed or errored, never both: a run that passed before the error
+            # stays counted in runs_passed, but the item did not complete its K runs.
+            report.pass_at_k = False
         if best is not None:
             report.best_detail = best.detail
             report.best_run_latency_s = best_run_latency
@@ -381,6 +385,7 @@ def run_items(
       - on_run_done(index, total, run_index, runs, passed, latency) after each individual run
       - on_item_done(index, total, report)                         after an item is fully evaluated
       - on_langfuse_item_done(index, total, report)                after non-skipped, non-errored items only
+                                                                   (errored ones too with GD_EVAL_ERROR_OUTCOME on)
 
     concurrency > 1 dispatches items to a ThreadPoolExecutor so multiple
     questions are sent to the agent simultaneously. Each item still runs
@@ -403,7 +408,14 @@ def run_items(
         try:
             if on_item_done is not None:
                 on_item_done(index, total, item_report)
-            if on_langfuse_item_done is not None and not item_report.skipped and item_report.error is None:
+            # With GD_EVAL_ERROR_OUTCOME on, an errored item is logged too: leaving it out would
+            # make an outage invisible in the experiment instead of an error in it.
+            logs_errors = error_outcome_enabled()
+            if (
+                on_langfuse_item_done is not None
+                and not item_report.skipped
+                and (item_report.error is None or logs_errors)
+            ):
                 on_langfuse_item_done(index, total, item_report)
         except Exception:  # non-fatal — log but don't abort
             traceback.print_exc()

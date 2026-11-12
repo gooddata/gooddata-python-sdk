@@ -19,6 +19,7 @@ from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_time
 from gooddata_eval.core.config import (
     DEFAULT_GATE,
     DEFAULT_JUDGE_MODEL,
+    ERROR_OUTCOME_ENV_VAR,
     JUDGE_MODEL_ENV_VAR,
     EvalGate,
     ReasoningEffort,
@@ -135,6 +136,15 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Print per-turn [timer] diagnostics (agent response, judge, simulated user). "
         "Off by default because a large run emits hundreds of lines; the same measurements "
         "are always in the JSON report's latency_breakdown_s. Equivalent to GD_EVAL_TIMERS=1.",
+    )
+    run.add_argument(
+        "--error-outcome",
+        dest="error_outcome",
+        action="store_true",
+        help="Report a run that ended on a harness or backend error (simulated user failed, chat "
+        "call failed after retries) as an error instead of a failure: it is left out of the gate's "
+        "K, and an item with no other run errors instead of failing. Off by default because it "
+        "changes verdicts. Equivalent to GD_EVAL_ERROR_OUTCOME=1.",
     )
     run.add_argument(
         "--turn-timeout",
@@ -307,6 +317,15 @@ def _apply_timer_flag(enabled: bool) -> None:
     """
     if enabled:
         os.environ[TIMERS_ENV_VAR] = "1"
+
+
+def _apply_error_outcome_flag(enabled: bool) -> None:
+    """Publish --error-outcome for the agentic evaluators and the runner, like --timers.
+
+    Only ever sets it -- never clears a value the caller exported themselves.
+    """
+    if enabled:
+        os.environ[ERROR_OUTCOME_ENV_VAR] = "1"
 
 
 def _reject_power_gate_on_ungated_items(config: RunConfig, items: list) -> None:
@@ -722,6 +741,7 @@ def _generate(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     _apply_timer_flag(getattr(args, "timers", False))
+    _apply_error_outcome_flag(getattr(args, "error_outcome", False))
     _apply_judge_model(getattr(args, "judge_model", None))
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)

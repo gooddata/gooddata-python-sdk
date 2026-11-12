@@ -5,22 +5,27 @@ from __future__ import annotations
 
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 import jsonpatch
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
-from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    gate_head,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -2312,6 +2317,16 @@ def evaluate_agentic_dashboard_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -2353,13 +2368,15 @@ def evaluate_agentic_dashboard_skill(
         )
 
     item_timings = sum_timings([r.timings for r in summary.run_results])
-    runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
-    runs_effective = len(summary.run_results)
+    runs_passed = runs_verdict.runs_passed
+    runs_effective = runs_verdict.runs_effective
 
     best = summary.best
     detail: dict[str, Any] = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
+        # Empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+        **runs_verdict.detail(),
         **best.evaluation.strict_checks,
         **best.evaluation.diagnostics,
         failures=best.evaluation.failures,
@@ -2377,8 +2394,8 @@ def evaluate_agentic_dashboard_skill(
         failed_checks=_failed_checks,
     )
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         # Two failures wear the same missing skill, and the advice differs. If the other
         # dashboard skill was activated, the flag that registers both is plainly on and the
         # model simply routed the wrong way. If neither was, the flag is off or the agent has
@@ -2397,11 +2414,12 @@ def evaluate_agentic_dashboard_skill(
             )
         notes = "; ".join(best.evaluation.notes)
         raise_agentic_failure(
-            DashboardSkillAssertionError,
+            runs_verdict.exception_cls(DashboardSkillAssertionError),
             f"Dashboard skill assertion failed. {gate_note}{skill_note} "
             f"Checks: {best.evaluation.strict_checks}. "
             f"Failures: {'; '.join(best.evaluation.failures) or 'none reported'}."
             + (f" Notes (not scored): {notes}." if notes else ""),
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,

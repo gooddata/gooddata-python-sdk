@@ -12,16 +12,21 @@ import time
 from dataclasses import dataclass, field, replace
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
-from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failure_head
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    gate_head,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -644,6 +649,16 @@ def evaluate_agentic_visualization(
             options=options,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.eval_result.strict_pass,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -705,8 +720,8 @@ def evaluate_agentic_visualization(
         with open(record_output_path, "w") as _f:
             _j.dump(_fixture, _f, indent=2)
 
-    runs_passed = sum(1 for r in summary.run_results if r.eval_result.strict_pass)
-    runs_effective = len(summary.run_results)
+    runs_passed = runs_verdict.runs_passed
+    runs_effective = runs_verdict.runs_effective
     run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
@@ -714,6 +729,8 @@ def evaluate_agentic_visualization(
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
+        # Empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+        **runs_verdict.detail(),
         **evaluation_result_detail(ev),
         # Why the loop stopped -- see LoopExit. total_turns is already the turn count for
         # this run, so it doubles as turns_used.
@@ -732,8 +749,8 @@ def evaluate_agentic_visualization(
         failed_checks=_failed_checks,
     )
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = failure_head(gate_failure_note(gate, runs_passed, runs_effective), failed_runs, runs_effective)
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
@@ -744,7 +761,7 @@ def evaluate_agentic_visualization(
         )
         actual_dump = best.actual_output.model_dump(exclude_none=True) if best.actual_output else None
         raise_agentic_failure(
-            VisualizationAssertionError,
+            runs_verdict.exception_cls(VisualizationAssertionError),
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "Agentic Visualization Assertion Failed! (Critical Mode)\n"
             f"{gate_note}\n"
@@ -777,6 +794,7 @@ def evaluate_agentic_visualization(
             f"{_options_lines(ev, best.answer_text)}"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,

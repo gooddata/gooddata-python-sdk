@@ -9,7 +9,13 @@ import orjson
 import pytest
 from gooddata_eval.cli import main as cli_main
 from gooddata_eval.cli.main import _parse_model_arg
-from gooddata_eval.core.config import JUDGE_MODEL_ENV_VAR, RunConfig, judge_model
+from gooddata_eval.core.config import (
+    ERROR_OUTCOME_ENV_VAR,
+    JUDGE_MODEL_ENV_VAR,
+    RunConfig,
+    error_outcome_enabled,
+    judge_model,
+)
 from gooddata_eval.core.connection import (
     ConnectionError_,  # noqa: F401 - used in test_cli_operational_error_exits_nonzero
 )
@@ -1197,3 +1203,16 @@ def test_routing_backend_closes_every_client() -> None:
 
     for client in (chat, summary, takeaway):
         client.close.assert_called_once_with()
+
+
+def test_error_outcome_flag_is_off_by_default_and_publishes_the_env_var(monkeypatch):
+    base = ["run", "--host", "h", "--workspace", "w", "--dataset", "d"]
+    assert cli_main.parse_args(base).error_outcome is False
+    assert cli_main.parse_args([*base, "--error-outcome"]).error_outcome is True
+
+    # Set, not deleted, so monkeypatch restores what the flag writes.
+    monkeypatch.setenv(ERROR_OUTCOME_ENV_VAR, "0")
+    cli_main._apply_error_outcome_flag(False)
+    assert error_outcome_enabled() is False
+    cli_main._apply_error_outcome_flag(True)
+    assert error_outcome_enabled() is True

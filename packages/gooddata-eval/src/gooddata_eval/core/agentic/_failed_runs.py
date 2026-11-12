@@ -21,6 +21,9 @@ from collections.abc import Callable, Sequence
 from enum import Enum
 from typing import Any
 
+from gooddata_eval.core.models import LoopExit
+from gooddata_eval.core.outcome import outcome_from_loop_exit
+
 
 def _exit_reason(run: Any) -> str | None:
     value = getattr(run, "exit_reason", None)
@@ -49,7 +52,8 @@ def build_failed_runs(
     verdict-level accounting of ungraded runs stays with the caller's ``unscored_runs``.
 
     ``exit_reason`` is the run's ``LoopExit`` value, or null for a kind whose loop records
-    none. ``failed_checks`` is written only when the caller supplies it: a missing key means
+    none, and ``outcome`` its ``core.outcome.Outcome`` record (FAIL, or ERROR for a harness or
+    backend exit). ``failed_checks`` is written only when the caller supplies it: a missing key means
     the kind does not name its failing checks, while an empty list would claim the run
     failed none.
     """
@@ -71,6 +75,10 @@ def build_failed_runs(
             "tool_call_count": len(tool_calls),
             "tool_names": [getattr(e, "function_name", None) for e in tool_calls],
             "exit_reason": _exit_reason(run),
+            # Recorded whether or not GD_EVAL_ERROR_OUTCOME lets it decide the verdict.
+            "outcome": outcome_from_loop_exit(
+                run.exit_reason if isinstance(getattr(run, "exit_reason", None), LoopExit) else None, passed=False
+            ).as_record(),
         }
         if failed_checks is not None:
             record["failed_checks"] = failed_checks(run)
