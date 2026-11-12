@@ -1,0 +1,27 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_071b99cf79f516::t_9d0edfdc308a3f 9,28,1158-1160,1457-1948
+packages/gooddata-eval/AGENTS.md
+  s_071b99cf79f516::t_9d0edfdc308a3f 30
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_071b99cf79f516::t_9d0edfdc308a3f 6,13-15,17,52,83-85,439-441,446,450,453-454,456,475,508,516-518,522-524,537,624,647-803,847-849,865-871,898-899,902-915,924-925,929-933,936-938,1005-1021,1024,1028,1035-1042,1059,1086-1088,1093-1094,1111-1112,1118-1120,1130-1132,1138,1140,1194-1197,1257-1260,1291-1293,1295-1298,1300,1319,1328-1330
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_editor_takeaways.py
+  s_071b99cf79f516::t_9d0edfdc308a3f 216-217
+packages/gooddata-eval/src/gooddata_eval/core/timing.py
+  s_071b99cf79f516::t_9d0edfdc308a3f 44-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1181e59c88eef2cecfd18c060f5cea9a5255abd6",
+  "prompts": {},
+  "sessions": {
+    "s_071b99cf79f516": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "68ba0f1b-db9a-47f9-b608-db125543ea5e",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}

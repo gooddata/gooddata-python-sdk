@@ -1,0 +1,25 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_1fed2936afd5a3::t_dccd9140b491d0 14,80-83,302-308,355-362,390-397,402-410,431-440,529,552,578,631-632,681-724,727-728,765-770,781-795,813,874-875,892,899-905,908,947
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_1fed2936afd5a3::t_5946b3c022071f 14,518-520,578,754,756-757
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_filters.py
+  s_1fed2936afd5a3::t_3b5d7e0b799d4a 1-22
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_1fed2936afd5a3::t_f614349a1bcaa7 466-480,627,632-822,834-840,1132-1154,1862-1898
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c87cabc35a0c9c281b1a605893ca8f93d36262c0",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}
