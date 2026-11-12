@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import itertools
 from contextlib import contextmanager
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic.guardrail import (
     GuardrailAssertionError,
     GuardrailResult,
@@ -12,7 +14,7 @@ from gooddata_eval.core.agentic.guardrail import (
     run_agentic_guardrail,
 )
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.models import ChatResult, ToolCallEvent
 
 
 @contextmanager
@@ -337,6 +339,55 @@ def test_failed_runs_carries_each_run_s_tool_calls():
         )
 
     assert [(r["tool_call_count"], r["tool_names"]) for r in outcome.failed_runs] == [(0, [])]
+    assert [r["tool_calls"] for r in outcome.failed_runs] == [[]]
+
+
+def test_failed_runs_carries_each_call_s_arguments_and_result() -> None:
+    client = MagicMock()
+    client.create_conversation.side_effect = (f"conv-{i}" for i in itertools.count(1))
+    client.send_message.return_value = ChatResult.model_validate(
+        {
+            "textResponse": "answer",
+            "toolCallEvents": [
+                {
+                    "functionName": "search_objects",
+                    "functionArguments": '{"keywords": ["Net Sales"]}',
+                    "result": '{"objects": []}',
+                    "index": 0,
+                },
+                # No index: nothing can join to it, so it is left out as build_tool_calls does.
+                {"functionName": "draft_dashboard", "functionArguments": "{}"},
+            ],
+            "reasoningSteps": [],
+            "responseId": "r",
+        }
+    )
+    judge = MagicMock()
+    judge.model = "gpt-4o"
+    judge.score.return_value = (False, "answered it")
+
+    with _patched(client, judge), pytest.raises(GuardrailAssertionError) as exc_info:
+        evaluate_agentic_guardrail(host="h", token="t", workspace_id="ws", question="q", expected_output="e", k=1)
+
+    (run,) = exc_info.value.failed_runs
+    assert run["tool_names"] == ["search_objects", "draft_dashboard"]
+    assert run["tool_calls"] == [
+        {"index": 0, "name": "search_objects", "arguments": {"keywords": ["Net Sales"]}, "result": '{"objects": []}'}
+    ]
+
+
+def test_failed_runs_carries_tool_calls_when_the_kind_s_detail_has_none() -> None:
+    # Guardrail's detail already holds tool_calls; dashboard, document and KDA build theirs
+    # from build_latency_breakdown alone, which is the case the run-level field exists for.
+    event = ToolCallEvent(functionName="create_kda", functionArguments='{"metric": "m"}', result="refused", index=0)
+    run = SimpleNamespace(passed=False, tool_call_events=[event])
+
+    (record,) = build_failed_runs([run], passed=lambda r: r.passed, detail=lambda r: {"latency_breakdown": []})
+
+    assert "tool_calls" not in record["detail"]
+    assert record["tool_calls"] == [
+        {"index": 0, "name": "create_kda", "arguments": {"metric": "m"}, "result": "refused"}
+    ]
 
 
 # --- an item whose every run went ungraded is still diagnosable ---
