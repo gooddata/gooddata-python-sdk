@@ -1,0 +1,25 @@
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_49b4bb7872d3b9::t_a0df4c82e34001 721-722,732-808
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_49b4bb7872d3b9::t_4f08ed7784d7f2 2026-2043
+  s_49b4bb7872d3b9::t_53d9a71de5457c 2170-2184,2187,2189-2204,2208
+  s_49b4bb7872d3b9::t_447c3aa944a0ee 1257-1266
+  s_49b4bb7872d3b9::t_9081b3ae8b430a 2066-2069
+  s_49b4bb7872d3b9::t_ae78b6dd1d5616 57-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ced31197cf1a5a67062a1501a2bf3e354866c26b",
+  "prompts": {},
+  "sessions": {
+    "s_49b4bb7872d3b9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "298ebaed-c1b2-45b3-8ae0-c6e9006098a5",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
