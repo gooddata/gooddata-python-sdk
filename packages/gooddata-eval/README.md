@@ -133,6 +133,7 @@ gd-eval run \
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
+| `--error-outcome` | off | Report a run that ended on a harness or backend error as an **error**, not a failure. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ERROR_OUTCOME=1`. See *Harness and backend errors* below. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
@@ -264,6 +265,47 @@ the best run, which under pass^K can be a run that passed, and the console repea
 the same reason. When some runs were ungraded the note says so instead of calling the remainder unstable.
 `agentic_conversation` has no K gate, so `--gate power` is refused for a dataset containing one rather than
 labelling a report `power` that only part of the dataset was decided under.
+
+**Which runs failed, and why.** A failure message names every failing run right after the gate note, with the
+reason its loop stopped and only the checks it failed (expected/actual where the kind knows them), then the best
+run's summary as before:
+
+```
+Gate pass^3 failed: 2/3 runs passed — unstable, not a clean failure. Failing runs: run 2/3 FAIL (exit=success): filters_correct[date: expected none, actual ...].
+```
+
+The same data is in each `failed_runs[]` record: `exit_reason` (the run's `LoopExit`, `null` for a kind without
+one), `outcome` (see below) and, for the visualization, alert, metric and dashboard skills, `failed_checks`
+(`[{"name", "label"?, "expected"?, "actual"?}]`).
+
+### Harness and backend errors (`GD_EVAL_ERROR_OUTCOME`)
+
+A run can end for a reason that is not the agent's: the simulated user's own model call fails
+(`simulated_user_failed`), the chat call still fails after its retries (`chat_error`), or the run never starts
+(`not_run`). Each run gets an outcome, from one mapping (`gooddata_eval.outcome_from_loop_exit`):
+
+| Loop exit | Outcome |
+|---|---|
+| `success`, `budget_exhausted`, `agent_silent` | scored: `pass` or `fail` |
+| `simulated_user_failed`, `not_run` | `error`, source `harness` |
+| `chat_error` | `error`, source `backend` |
+
+A run that passed its checks is `pass` whatever its exit. The outcome is always written to `failed_runs[].outcome`
+(`{"status", "source", "reason"}`), but by default it decides nothing: such a run counts as a failure, exactly as
+in earlier releases.
+
+With `--error-outcome` or `GD_EVAL_ERROR_OUTCOME=1` (`0`, `false`, `no`, `off` and empty mean off):
+
+- **Agentic kinds** (visualization, alert, metric, dashboard, KDA, anomaly detection, what-if): `error` runs are
+  left out of K and the gate is applied to the scored runs. `[error, pass, pass]` passes under `--gate power`;
+  the excluded runs are listed in `detail.excluded_runs` and, on a failure, after the gate note
+  (`1 run excluded (harness error): run 1/3 the simulated user failed to reply.`). `runs_effective` is the number of
+  scored runs. An item with **no** scored run raises `gooddata_eval.EvalHarnessError` — not an `AssertionError`,
+  so pytest records `<error>` instead of `<failure>` — and is reported with `error` set, its runs and
+  `failed_runs` kept. Kinds whose runs record no loop exit are unaffected.
+- **Single-shot kinds**: an item that raised is errored only — it no longer also reports `pass_at_k: true` from a
+  run that passed before the exception (`runs_passed` still counts that run) — and it is still sent to the
+  Langfuse sink, with the error in its item metadata and only the `latency_s` score.
 
 Each item additionally carries a per-phase breakdown:
 
