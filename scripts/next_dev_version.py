@@ -20,12 +20,11 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import tomllib
 import urllib.error
 import urllib.request
 from collections.abc import Iterable
 from pathlib import Path
-
-import tomllib
 
 _ROOT_DIR = Path(__file__).resolve().parent.parent
 _STABLE = re.compile(r"^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$")
