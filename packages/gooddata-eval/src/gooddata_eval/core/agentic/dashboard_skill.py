@@ -10,6 +10,8 @@ from typing import Any
 
 import jsonpatch
 
+from gooddata_eval.core.agentic._clarification import all_questions
+from gooddata_eval.core.agentic._conversation_context import CONFIRMATION_REPLY, asks_in_text, classify_reply, clip
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
@@ -54,9 +56,10 @@ _DEFAULT_K = 1
 # the loop ends there rather than replying into silence. Fewer than metric_skill's seven
 # because those rounds do carry new content, its reply being generated per turn by an LLM.
 #
-# Only creation ever reaches the later rounds. An edit stops after the first turn, since the
-# creation reply names charts and a date range and answers nothing a rename or a resize could
-# have asked.
+# Only creation ever reaches the later rounds. The creation reply names charts and a date range
+# and answers nothing a rename or a resize could have asked, so an edit that asks back is
+# answered once with its fixture's `clarification_reply`, and stops there when it has none or
+# asks again. An edit that only asks to go ahead is told yes, which spends no reply.
 #
 # The cost of the slack is that four turns at ChatClient's 300s read timeout exceed the 720s
 # per-test timeout gdc-nas derives for a k=1 dataset, so a run that stalls on every turn is cut
@@ -1067,9 +1070,14 @@ def build_simulated_reply(expected_output: dict) -> str:
     """Build the reply the simulated user sends when the agent asks back instead of drafting.
 
     Deterministic and LLM-free: the only things the agent still needs are the charts and the
-    date range, and both are already in the expectation. A fixed reply also keeps a failure
-    attributable to the agent rather than to a simulated user that phrased things differently
-    each run.
+    date range, and the expectation states both whenever the case checks them. A fixed reply
+    also keeps a failure attributable to the agent rather than to a simulated user that
+    phrased things differently each run.
+
+    The date range is said only when the case states one, ``null`` included. A case without
+    the key does not look at the date filter, so naming a period would be the reply asserting
+    something the case never did -- and "all time" can contradict the date filters of the
+    existing charts the case expects to be reused.
     """
     visualizations = expected_output.get("visualizations") or []
     existing = [str(v.get("title", "")) for v in visualizations if v.get("id") is not None]
@@ -1095,11 +1103,16 @@ def build_simulated_reply(expected_output: dict) -> str:
         quoted = " and ".join(f'"{c}"' for c in charts)
         placements.append(f"{quoted} on {on_tab}" if charts else on_tab)
     tabs = f"Use these tabs: {'; '.join(placements)}. " if placements else ""
+    date = (
+        f"Date range: {_date_range_text(expected_output.get('date_range'))}. "
+        if _has_date_range(expected_output)
+        else ""
+    )
 
     return (
         f"Please use these charts: {', and '.join(segments)}. "
         f"{tabs}"
-        f"Date range: {_date_range_text(expected_output.get('date_range'))}. "
+        f"{date}"
         f"Anything else is up to you. Please create the dashboard now."
     )
 
@@ -1242,6 +1255,16 @@ def _validate_expectation(expected_output: dict) -> None:
     # rather than raising mid-scoring with a run already spent.
     for pattern in must_not_match:
         _compile_pattern(pattern)
+
+    if "clarification_reply" in expected_output:
+        reply = expected_output["clarification_reply"]
+        if not isinstance(reply, str) or not reply.strip():
+            raise ValueError(f"clarification_reply must be a non-empty reply, got {reply!r}")
+        if not _is_edit(expected_output):
+            raise ValueError(
+                "clarification_reply is for an edit case; a creation case is answered with the reply "
+                "built from its charts and date range"
+            )
 
     forbidden = _forbidden_visualizations(expected_output)
     if not isinstance(forbidden, list):
@@ -2002,6 +2025,47 @@ def evaluate_dashboard_response(
     )
 
 
+# Long enough for a question with its options, short enough to keep the assertion message readable.
+_QUOTED_QUESTION_CHARS = 300
+
+
+def _asked_question(chat_result: ChatResult, response_text: str) -> str:
+    """What the agent asked: the ``clarifyingQuestions`` part's questions when it sent one, else its text.
+
+    The structured part is what ``classify_reply`` reads as the question, and prose sent beside it
+    ("I need more details.") would quote the lead-in rather than what was asked.
+    """
+    questions = [str(q.get("text") or "").strip() for q in all_questions(chat_result)]
+    return " ".join(q for q in questions if q) or response_text
+
+
+def _quote(text: str) -> str:
+    """The agent's words cut to a readable length and quoted, or a marker when it said nothing."""
+    clipped = clip(text, _QUOTED_QUESTION_CHARS)
+    return repr(clipped) if clipped else "(no text)"
+
+
+def _unacted_edit_note(response_text: str) -> str:
+    """Say what an edit run stopped on when the agent neither patched nor asked.
+
+    Not scored, like ``_unanswered_edit_note``: it tells a reply that gave up apart from one that asked.
+    """
+    return f"the agent replied on an edit without a patch or a question, so the run stopped: {_quote(response_text)}"
+
+
+def _unanswered_edit_note(question: str, *, replied: bool, has_reply: bool) -> str:
+    """Say which question an edit run stopped on, so triage can tell a fixture gap from the agent.
+
+    Not scored: the run already fails on the missing patch, and this only says why it never got one.
+    """
+    quoted = _quote(question)
+    if replied:
+        return f"the agent asked again after the case's clarification_reply, and the run stopped: {quoted}"
+    if has_reply:
+        return f"the turn budget ran out before the case's clarification_reply could be sent: {quoted}"
+    return f"the agent asked back on an edit and the case has no clarification_reply, so the run stopped: {quoted}"
+
+
 def _execute_single_dashboard_run(
     client: ChatClient,
     conversation_id: str,
@@ -2024,6 +2088,11 @@ def _execute_single_dashboard_run(
     turns = 0
     steps = 0
     current_question = question
+    # Validated to be on an edit case only, and a non-empty string when present.
+    clarification_reply: str | None = expected_output.get("clarification_reply")
+    reply_sent = False
+    # Why an edit stopped without a patch, appended to the evaluation as an unscored note.
+    edit_note: str | None = None
     reasoning_steps: list[str] = []
     response_id: str | None = None
     all_tool_call_events: list[ToolCallEvent] = []
@@ -2033,9 +2102,7 @@ def _execute_single_dashboard_run(
     tool_index_offset = 0
     reasoning_index_offset = 0
     # Defaults to BUDGET_EXHAUSTED: every other exit assigns explicitly, so a loop that
-    # simply runs out of range() (or the is_edit "no reply of its own" branch below, which
-    # is the same shape of outcome -- the agent answered, just not with the dashboard tool)
-    # is labelled correctly with no trailing else.
+    # simply runs out of range() is labelled correctly with no trailing else.
     exit_reason = LoopExit.BUDGET_EXHAUSTED
 
     run_started = time.monotonic()
@@ -2121,36 +2188,77 @@ def _execute_single_dashboard_run(
             # restates the charts and the date range and asks again for the dashboard, which is
             # pressure to build the very thing the case says must not be built -- so a correct
             # agent would be talked out of the right answer by the harness.
+            exit_reason = LoopExit.STOPPED_EARLY
             break
-        if iteration >= max_iterations - 1:
-            break
-        log_timer(
-            f"[timer] dashboard_skill {conversation_id} GoodData turn {turns} complete after "
-            f"{agent_elapsed:.2f}s; answering with the expected charts and date range"
-        )
+        reply_kind = classify_reply(chat_result, response_text)
+        if is_edit and reply_kind == "confirmation" and asks_in_text(chat_result, response_text):
+            # "Which widget should I resize? Please confirm." asks something a yes does not answer.
+            reply_kind = "question"
         if is_edit:
             # The creation reply names charts and a date range, which answers nothing a rename
-            # or a resize could have asked. Rather than send something the question did not
-            # ask for, stop: the failure is the signal that an edit case needs a reply of its
-            # own, and inventing one here would hide which cases actually need it.
+            # or a resize could have asked, and nothing here can guess what an edit question
+            # needs. Only the fixture's own reply is sent, only to a turn that asked (as
+            # document_skill gates it), and only once: a second question is one its author did
+            # not foresee, so the run stops and says what was asked, which tells a fixture that
+            # needs a reply apart from an agent that did the wrong thing. A turn that asked
+            # nothing -- a rejected patch reported back, say -- is not nudged into a retry. A turn
+            # that only asks to go ahead is told yes, as conversation.py does; that spends no reply,
+            # and the iteration cap still bounds it.
+            # Checked before the iteration cap: these stops are the harness having nothing to
+            # send, not the budget running out, and each still says what went unanswered.
+            if reply_kind == "no_action":
+                edit_note = _unacted_edit_note(response_text)
+                exit_reason = LoopExit.STOPPED_EARLY
+                break
+            if reply_kind == "question" and (clarification_reply is None or reply_sent):
+                edit_note = _unanswered_edit_note(
+                    _asked_question(chat_result, response_text),
+                    replied=reply_sent,
+                    has_reply=clarification_reply is not None,
+                )
+                exit_reason = LoopExit.STOPPED_EARLY
+                break
+        if iteration >= max_iterations - 1:
+            if is_edit and reply_kind == "question":
+                # A question here still had its reply to send; a confirmation needs no note.
+                edit_note = _unanswered_edit_note(
+                    _asked_question(chat_result, response_text), replied=False, has_reply=True
+                )
             break
-        current_question = build_simulated_reply(expected_output)
+        if is_edit and reply_kind == "confirmation":
+            current_question = CONFIRMATION_REPLY
+            answering_with = "a confirmation"
+        elif is_edit and clarification_reply is not None:
+            reply_sent = True
+            current_question = clarification_reply
+            answering_with = "the case's clarification_reply"
+        else:
+            current_question = build_simulated_reply(expected_output)
+            answering_with = "the expected charts and date range"
+        log_timer(
+            f"[timer] dashboard_skill {conversation_id} GoodData turn {turns} complete after "
+            f"{agent_elapsed:.2f}s; answering with {answering_with}"
+        )
+
+    evaluation = evaluate_dashboard_response(
+        tool_result,
+        dashboard_part,
+        expected_output,
+        _skill_activated(all_tool_call_events, _required_skill(expected_output)),
+        patch_part=patch_part,
+        answer_text=answer_text,
+        # Any call, not just a successful one -- see DashboardEvaluation. BOTH tools,
+        # not the one this case selected: a refusal is a creation shape, so `tool` is
+        # `draft_dashboard`, and an agent that routed to the editor and had a
+        # `patch_dashboard` call rejected would otherwise leave this false and pass.
+        producing_tool_called=any(tc.function_name in (_DRAFT_TOOL, _PATCH_TOOL) for tc in all_tool_call_events),
+    )
+    if edit_note is not None:
+        evaluation.notes.append(edit_note)
 
     return DashboardRunResult(
         conversation_id=conversation_id,
-        evaluation=evaluate_dashboard_response(
-            tool_result,
-            dashboard_part,
-            expected_output,
-            _skill_activated(all_tool_call_events, _required_skill(expected_output)),
-            patch_part=patch_part,
-            answer_text=answer_text,
-            # Any call, not just a successful one -- see DashboardEvaluation. BOTH tools,
-            # not the one this case selected: a refusal is a creation shape, so `tool` is
-            # `draft_dashboard`, and an agent that routed to the editor and had a
-            # `patch_dashboard` call rejected would otherwise leave this false and pass.
-            producing_tool_called=any(tc.function_name in (_DRAFT_TOOL, _PATCH_TOOL) for tc in all_tool_call_events),
-        ),
+        evaluation=evaluation,
         tool_result=tool_result,
         dashboard_part=dashboard_part,
         patch_part=patch_part,
