@@ -29,7 +29,7 @@ from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.visualization import expectation_options
-from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem, EvalHarnessError
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import TraceRecorder
 
@@ -397,6 +397,10 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
     if effective:
         # Only when the kind knows better than K -- agentic_conversation runs once.
         item_report.runs_effective = effective
+    runs_scored = getattr(source, "runs_scored", None)
+    if isinstance(runs_scored, int):
+        # Only with GD_EVAL_ERROR_OUTCOME on: the runs the gate counted, beside those executed.
+        item_report.runs_scored = runs_scored
     # The agentic kinds record their unscored runs in the detail; the report field is the
     # one place every kind's count is read from.
     unscored = (getattr(source, "detail", None) or {}).get("unscored_runs")
@@ -594,6 +598,22 @@ def run_agentic_items(
             # kind that attaches no diagnostics would leave at 0.
             item_report.runs_ungraded = item_report.runs
             print(f"[agentic] {item.id} UNGRADED: {exc}", flush=True)
+        except EvalHarnessError as exc:
+            # Raised only with GD_EVAL_ERROR_OUTCOME on: every run ended for a reason that is not
+            # the agent's. Errored, with the runs it drove and their records kept, like the
+            # ungraded branch above.
+            item_report.error = f"{type(exc).__name__}: {exc}"
+            item_report.runs = k
+            item_report.reasoning_steps = getattr(exc, "reasoning_steps", None) or []
+            item_report.conversation_id = getattr(exc, "conversation_id", None)
+            item_report.response_id = getattr(exc, "response_id", None)
+            item_report.best_detail = getattr(exc, "detail", None) or {}
+            _apply_timings(item_report, getattr(exc, "timings", None))
+            _apply_best_run_latency(item_report, exc)
+            _apply_run_counts(item_report, exc)
+            _apply_failed_runs(item_report, exc)
+            _apply_run_latencies(item_report, exc)
+            print(f"[agentic] {item.id} ERROR: {exc}", flush=True)
         except Exception as exc:
             item_report.error = f"{type(exc).__name__}: {exc}"
             item_report.runs = 0

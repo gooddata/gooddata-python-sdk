@@ -17,7 +17,7 @@ from gooddata_eval.core.agentic.dashboard_skill import (
     evaluate_dashboard_response,
     run_agentic_dashboard_skill,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 
 # Ids and titles are the ones the eval layout seeds; shapes are trimmed from real runs of
@@ -2361,6 +2361,22 @@ class TestRunLoop:
         _run_with(client, _DC05_EXPECTED, initial_conversation_id="conv-1")
         client.create_conversation.assert_not_called()
         client.delete_conversation.assert_not_called()
+
+    @pytest.mark.parametrize(
+        ("exc", "loop_exit"),
+        [
+            (TurnTimeoutError("agent exceeded the 60s turn budget"), LoopExit.AGENT_TIMEOUT),
+            (TurnIncompleteError("no final answer", reason="max iterations"), LoopExit.TURN_INCOMPLETE),
+        ],
+    )
+    def test_the_agents_own_chat_failure_is_recorded_as_its_own_exit(self, exc, loop_exit) -> None:
+        client = MagicMock()
+        client.send_message.side_effect = exc
+
+        summary = _run_with(client, _DC05_EXPECTED)
+
+        assert summary.run_results[0].exit_reason is loop_exit
+        assert summary.pass_at_k is False
 
     def test_a_chat_error_is_recorded_rather_than_left_to_escape(self) -> None:
         """It used to escape run_agentic_dashboard_skill, taking every completed K-run with

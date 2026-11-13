@@ -29,19 +29,26 @@ import logging
 import os
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    gate_head,
+    log_eval_error_score,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -421,7 +428,7 @@ def run_agentic_anomaly_detection(
                     _accumulate(partial)
                     viz_args, execute_result = _extract_anomaly_calls(all_tool_call_events)
                 turn_completed = False
-                exit_reason = LoopExit.CHAT_ERROR
+                exit_reason = chat_failure_exit(exc)
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -583,6 +590,16 @@ def evaluate_agentic_anomaly_detection(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -613,6 +630,10 @@ def evaluate_agentic_anomaly_detection(
                     }
                 )
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id) as tid:
+                    # Left out of the gate: eval_error only, nothing that reads as a verdict.
+                    if (run_error := runs_verdict.excluded_outcome(run_idx + 1)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
+                        continue
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
@@ -649,7 +670,8 @@ def evaluate_agentic_anomaly_detection(
 
     best = summary.best
     ev = best.evaluation
-    detail = _detail(best)
+    # excluded_runs is empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+    detail = {**_detail(best), **runs_verdict.detail()}
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
@@ -657,12 +679,12 @@ def evaluate_agentic_anomaly_detection(
         passed=lambda r: r.evaluation.strict_pass,
         detail=_detail,
     )
-    runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
+    runs_passed = runs_verdict.runs_passed
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, len(summary.run_results))
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         message = (
-            f"Anomaly detection assertion failed. {gate_note} strict_pass={ev.strict_pass} "
+            f"{runs_verdict.message_lead('Anomaly detection assertion failed.', 'Anomaly detection')} {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, success={ev.success}, "
             f"turn_completed={ev.turn_completed}, metric_correct={ev.metric_correct}, "
             f"granularity_correct={ev.granularity_correct}). "
@@ -670,14 +692,16 @@ def evaluate_agentic_anomaly_detection(
             f"Actual execute result: {best.actual_execute_result}."
         )
         raise_agentic_failure(
-            AnomalyDetectionAssertionError,
+            runs_verdict.exception_cls(AnomalyDetectionAssertionError),
             message,
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
             detail=detail,
             runs_passed=runs_passed,
-            runs_effective=len(summary.run_results),
+            runs_effective=runs_verdict.runs_effective,
+            runs_scored=runs_verdict.runs_scored,
             failed_runs=failed_runs,
             run_latencies_s=[r.run_latency_s for r in summary.run_results],
             best_run_latency_s=best.run_latency_s,
@@ -689,7 +713,8 @@ def evaluate_agentic_anomaly_detection(
         response_id=best.response_id,
         detail=detail,
         runs_passed=runs_passed,
-        runs_effective=len(summary.run_results),
+        runs_effective=runs_verdict.runs_effective,
+        runs_scored=runs_verdict.runs_scored,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
         best_run_latency_s=best.run_latency_s,

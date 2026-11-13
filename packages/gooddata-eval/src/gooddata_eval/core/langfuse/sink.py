@@ -8,6 +8,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
 
+from gooddata_eval.core.config import error_outcome_enabled
 from gooddata_eval.core.langfuse.client import HttpxLangfuseClient
 from gooddata_eval.core.langfuse.experiment import (
     ExperimentItem,
@@ -15,6 +16,7 @@ from gooddata_eval.core.langfuse.experiment import (
     build_experiment_root_span,
     trace_tags,
 )
+from gooddata_eval.core.outcome import EVAL_ERROR_SCORE
 
 _MAX_LATENCY_S = 60.0
 _QUALITY_WEIGHT = 0.6
@@ -132,7 +134,7 @@ class LangfuseSink:
                 dataset_item_id,
                 input={"question": report.question},
                 output=report.best_detail,
-                metadata={"test_kind": report.test_kind},
+                metadata={"test_kind": report.test_kind, **({"error": report.error} if report.error else {})},
             ),
             start=start,
             end=end,
@@ -153,7 +155,10 @@ class LangfuseSink:
     def log_item(self, report: ItemReport, *, dataset_item_id: str) -> None:
         """Export one experiment root span plus its four scores for an evaluated item.
 
-        Swallows all errors — Langfuse failures never abort the eval run.
+        Swallows all errors — Langfuse failures never abort the eval run. With
+        GD_EVAL_ERROR_OUTCOME on, an errored item gets its error in the item metadata, no pass
+        or quality score, ``eval_error`` = 1 with the error as its comment, and the latency
+        score when it completed a run. With the flag off the scores are written as always.
         """
         scores = compute_scores(
             pass_at_k=report.pass_at_k,
@@ -175,7 +180,18 @@ class LangfuseSink:
             ("value_score", scores["value_score"], "NUMERIC"),
             ("latency_s", scores["latency_s"], "NUMERIC"),
         ]
+        comments: dict[str, str] = {}
+        if report.error is not None and error_outcome_enabled():
+            # An errored item has no verdict, so it gets no pass or quality score: a 0 would
+            # count it as a failure of the agent. Nor a latency one when it raised before
+            # completing a run: avg_latency_s is then a 0.0 that measured nothing and would
+            # drag the latency averages down. It gets eval_error = 1 instead, the score an
+            # agentic run left out of the gate gets too (core/agentic/_outcome.py).
+            score_defs = [d for d in score_defs if d[0] == "latency_s" and report.runs_total > 0]
+            score_defs.append((EVAL_ERROR_SCORE, 1, "NUMERIC"))
+            comments[EVAL_ERROR_SCORE] = report.error
         for name, value, data_type in score_defs:
+            extra = {"comment": comments[name]} if name in comments else {}
             try:
                 self._client.create_score(
                     trace_id=span.trace_id,
@@ -183,6 +199,7 @@ class LangfuseSink:
                     name=name,
                     value=value,
                     data_type=data_type,
+                    **extra,
                 )
             except Exception as exc:  # noqa: PERF203 — one score's failure must not skip the rest
                 print(f"warning: Langfuse score '{name}' failed for item '{report.id}': {exc}", file=sys.stderr)

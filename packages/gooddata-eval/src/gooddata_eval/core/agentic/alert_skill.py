@@ -7,7 +7,7 @@ import json
 import os
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 import httpx
@@ -15,15 +15,23 @@ from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    gate_head,
+    log_eval_error_score,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1021,7 +1029,7 @@ def run_agentic_alert_skill(
                         partial_alert_id, _, partial_tool_called = _extract_alert_call(partial.tool_call_events or [])
                         if partial_tool_called:
                             alert_id_to_delete = partial_alert_id
-                    exit_reason = LoopExit.CHAT_ERROR
+                    exit_reason = chat_failure_exit(exc)
                     break
                 # `turns_used` counts attempts (set above, so a failed send still shows the
                 # loop reached this iteration); `turns`/`steps` count completed work, so they
@@ -1164,6 +1172,11 @@ def _run_detail(run: AlertRunResult) -> dict:
     }
 
 
+def _failed_checks(run: AlertRunResult) -> list[dict]:
+    """The checks this run failed, by name. The arguments the run sent are in its detail."""
+    return failed_check_records(FailedCheck(name) for name, ok in run.eval.checks().items() if not ok)
+
+
 def evaluate_agentic_alert_skill(
     host: str,
     token: str,
@@ -1220,6 +1233,16 @@ def evaluate_agentic_alert_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.eval.strict_pass,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -1231,6 +1254,10 @@ def evaluate_agentic_alert_skill(
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.eval.checks()
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    # Left out of the gate: eval_error only, nothing that reads as a verdict.
+                    if (run_error := runs_verdict.excluded_outcome(run_idx + 1)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
+                        continue
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
@@ -1258,14 +1285,16 @@ def evaluate_agentic_alert_skill(
             item_input=question,
         )
 
-    runs_passed = sum(1 for r in summary.run_results if r.eval.strict_pass)
-    runs_effective = len(summary.run_results)
+    runs_passed = runs_verdict.runs_passed
+    runs_effective = runs_verdict.runs_effective
 
     best = summary.best
     ev = best.eval
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
+        # Empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+        **runs_verdict.detail(),
         alert_created=ev.alert_created,
         operator_correct=ev.operator_correct,
         threshold_correct=ev.threshold_correct,
@@ -1288,13 +1317,14 @@ def evaluate_agentic_alert_skill(
         summary.run_results,
         passed=lambda r: r.eval.strict_pass,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         raise_agentic_failure(
-            AlertSkillAssertionError,
-            f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
+            runs_verdict.exception_cls(AlertSkillAssertionError),
+            f"{runs_verdict.message_lead('Alert skill assertion failed.', 'Alert skill')} {gate_note} strict_pass={ev.strict_pass}. "
             f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
             f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
             f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
@@ -1302,12 +1332,14 @@ def evaluate_agentic_alert_skill(
             f"attributes_correct={ev.attributes_correct}, "
             f"granularity_correct={ev.granularity_correct}. "
             f"Actual args: {best.actual_alert_arguments}",
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
             detail=detail,
             runs_passed=runs_passed,
             runs_effective=runs_effective,
+            runs_scored=runs_verdict.runs_scored,
             failed_runs=failed_runs,
             run_latencies_s=[r.run_latency_s for r in summary.run_results],
             best_run_latency_s=best.run_latency_s,
@@ -1319,6 +1351,7 @@ def evaluate_agentic_alert_skill(
         detail=detail,
         runs_passed=runs_passed,
         runs_effective=runs_effective,
+        runs_scored=runs_verdict.runs_scored,
         failed_runs=failed_runs,
         run_latencies_s=[r.run_latency_s for r in summary.run_results],
         best_run_latency_s=best.run_latency_s,

@@ -71,6 +71,9 @@ def _build_run_dict(report: EvalReport) -> dict:
                 # runs_ungraded says how many runs pass@K was NOT computed over.
                 "runs_passed": item.runs_passed,
                 "runs_ungraded": item.runs_ungraded,
+                # Only with GD_EVAL_ERROR_OUTCOME on: the runs the gate counted, `runs` minus
+                # those that ended on a harness or backend error.
+                **({"runs_scored": item.runs_scored} if item.runs_scored is not None else {}),
                 "pass_power_k": item.pass_power_k,
                 "best_run_latency_s": (
                     round(item.best_run_latency_s, 3) if item.best_run_latency_s is not None else None

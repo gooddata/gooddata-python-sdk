@@ -7,6 +7,7 @@ import re
 
 import httpx
 import pytest
+from gooddata_eval.core.config import ERROR_OUTCOME_ENV_VAR
 from gooddata_eval.core.langfuse.sink import LangfuseSink, compute_scores
 from gooddata_eval.core.runner import ItemReport
 
@@ -277,3 +278,66 @@ def test_langfuse_sink_appends_custom_tags_after_the_automatic_ones(monkeypatch)
     sink.log_item(_passing_report(), dataset_item_id="item-1")
 
     assert _tags_from(requests) == ["gd-eval", "visualization", "OPENAI", "acme", "nightly"]
+
+
+def _scores_from(requests: list[httpx.Request]) -> list[dict]:
+    return [json.loads(r.content) for r in requests if r.url.path == "/api/public/scores"]
+
+
+def test_on_an_errored_item_gets_its_error_eval_error_and_the_latency_score(monkeypatch):
+    # A pass_at_k of 0 would read as an agent failure.
+    monkeypatch.setenv(ERROR_OUTCOME_ENV_VAR, "1")
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+    report = _passing_report()
+    report.pass_at_k = False
+    report.error = "RuntimeError: network down"
+
+    sink.log_item(report, dataset_item_id="item-1")
+
+    scores = _scores_from(requests)
+    assert [s["name"] for s in scores] == ["latency_s", "eval_error"]
+    assert scores[1]["value"] == 1
+    assert scores[1]["comment"] == "RuntimeError: network down"
+    assert all("comment" not in s or s["name"] == "eval_error" for s in scores)
+    attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
+    assert attrs["langfuse.experiment.item.metadata.error"]["stringValue"] == "RuntimeError: network down"
+
+
+def test_off_an_errored_item_passed_to_the_sink_gets_every_score_as_before(monkeypatch):
+    monkeypatch.delenv(ERROR_OUTCOME_ENV_VAR, raising=False)
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+    report = _passing_report()
+    report.pass_at_k = False
+    report.error = "RuntimeError: network down"
+
+    sink.log_item(report, dataset_item_id="item-1")
+
+    assert [s["name"] for s in _scores_from(requests)] == ["pass_at_k", "quality_score", "value_score", "latency_s"]
+
+
+def test_a_report_without_an_error_has_no_error_metadata(monkeypatch):
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+
+    sink.log_item(_passing_report(), dataset_item_id="item-1")
+
+    attrs = {a["key"]: a["value"] for a in _span_from(requests)["attributes"]}
+    assert "langfuse.experiment.item.metadata.error" not in attrs
+
+
+def test_on_an_item_that_errored_before_any_run_gets_no_latency_score(monkeypatch):
+    # runs == 0 makes avg_latency_s a 0.0 that measured nothing.
+    monkeypatch.setenv(ERROR_OUTCOME_ENV_VAR, "1")
+    requests: list[httpx.Request] = []
+    sink = _make_sink(monkeypatch, _known_item_handler(requests))
+    report = _passing_report()
+    report.pass_at_k = False
+    report.runs = 0
+    report.latency_s = 0.0
+    report.error = "RuntimeError: network down"
+
+    sink.log_item(report, dataset_item_id="item-1")
+
+    assert [s["name"] for s in _scores_from(requests)] == ["eval_error"]

@@ -28,6 +28,11 @@ class LoopExit(str, Enum):
     This does not change any verdict -- an exhausted run still fails. It makes the three
     cases countable, so "is the turn budget too tight" becomes a question the data can
     answer rather than one that has to be argued.
+
+    Which members say nothing about the agent (an ERROR rather than a scored run) is decided
+    in one place, ``core/outcome.py``, and decides a verdict only with
+    ``GD_EVAL_ERROR_OUTCOME`` on. ``AGENT_TIMEOUT`` and ``TURN_INCOMPLETE`` are deliberately
+    not among them: they are raised as ``ChatError`` subclasses, but the agent caused them.
     """
 
     SUCCESS = "success"
@@ -45,8 +50,18 @@ class LoopExit(str, Enum):
     fault, not an agent one -- reporting should treat it as an error, not a scored failure."""
 
     CHAT_ERROR = "chat_error"
-    """The chat call itself raised mid-conversation. Like SIMULATED_USER_FAILED this is
-    infrastructure rather than agent capability, but it comes from the GoodData side."""
+    """The chat call itself raised mid-conversation and was not one of the agent's own
+    failures below: a transport fault, or a 5xx still failing after its retries. Like
+    SIMULATED_USER_FAILED this is infrastructure rather than agent capability, but it comes
+    from the GoodData side."""
+
+    AGENT_TIMEOUT = "agent_timeout"
+    """The agent exceeded the per-turn or per-item wall-clock budget (``TurnTimeoutError``).
+    The agent's own failure to answer in time, so the run is scored, not an error."""
+
+    TURN_INCOMPLETE = "turn_incomplete"
+    """The agent ended its turn without a final answer, e.g. at its own iteration limit
+    (``TurnIncompleteError``). The agent's own failure, so the run is scored, not an error."""
 
     NOT_RUN = "not_run"
     """The loop never started -- e.g. an agentic_conversation turn whose $ref to an earlier
@@ -435,6 +450,33 @@ class AgenticAssertionError(AssertionError):
     failed_runs: list[dict]
     run_latencies_s: list[float]
     best_run_latency_s: float | None
+    runs_scored: int
+
+
+class EvalHarnessError(Exception):
+    """An item with no scored run: every run ended for a reason that is not the agent's.
+
+    Raised only with ``GD_EVAL_ERROR_OUTCOME`` on (see ``core/outcome.py``). Deliberately not
+    an ``AssertionError``: it is a distinct type so a runner can tell a harness or backend
+    outage apart from an agent failure and keep it out of the agent's pass rate. Turning it
+    into a JUnit error is the runner's job (e.g. a pytest hook matching this type); pytest
+    alone writes any exception raised in a test body as a failure. Carries the same fields
+    as ``AgenticAssertionError`` so a caller reads both the same way, plus ``outcome``: the
+    item's ``Outcome`` as a record (``{"status": "error", "source": ..., "reason": ...}``).
+    """
+
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
+    timings: PhaseTimings
+    runs_passed: int
+    runs_effective: int
+    failed_runs: list[dict]
+    run_latencies_s: list[float]
+    best_run_latency_s: float | None
+    runs_scored: int
+    outcome: dict
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -477,6 +519,10 @@ class AgenticEvalOutcome(BaseModel):
     # not in a loop the runner itself can time. None for a kind that has not yet been
     # wired to measure it (see AgenticAssertionError.best_run_latency_s, same default).
     best_run_latency_s: float | None = None
+    # The runs the gate was applied to, set only with GD_EVAL_ERROR_OUTCOME on: the runs that
+    # ended on a harness or backend error are left out. ``runs_effective`` stays the runs
+    # executed, which per-run latency divides by. None means every executed run was gated.
+    runs_scored: int | None = None
 
 
 class SummaryInput(BaseModel):

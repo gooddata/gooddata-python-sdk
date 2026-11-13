@@ -6,22 +6,30 @@ from __future__ import annotations
 import os
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import GoodDataSdk
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    gate_head,
+    log_eval_error_score,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -352,7 +360,7 @@ def _execute_single_metric_run(
                     for metric_id in _extract_created_metric_ids(partial.tool_call_events or []):
                         if metric_id not in created_metric_ids:
                             created_metric_ids.append(metric_id)
-                exit_reason = LoopExit.CHAT_ERROR
+                exit_reason = chat_failure_exit(exc)
                 break
             agent_elapsed = time.monotonic() - agent_started
             timings.agent_s += agent_elapsed
@@ -562,6 +570,16 @@ def evaluate_agentic_metric_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.metric_created and r.maql_correct,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -577,6 +595,10 @@ def evaluate_agentic_metric_skill(
                     conversation_id=run.conversation_id,
                     output={"metric_created": run.metric_created, "maql_correct": run.maql_correct},
                 ) as tid:
+                    # Left out of the gate: eval_error only, nothing that reads as a verdict.
+                    if (run_error := runs_verdict.excluded_outcome(run_idx + 1)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
+                        continue
                     ctx.score(tid, name="metric_created", value=float(run.metric_created), data_type="BOOLEAN")
                     ctx.score(tid, name="maql_correct", value=float(run.maql_correct), data_type="BOOLEAN")
                     ctx.score(tid, name="turns", value=run.total_turns, data_type="NUMERIC")
@@ -606,8 +628,8 @@ def evaluate_agentic_metric_skill(
 
     item_timings = sum_timings([r.timings for r in summary.run_results])
 
-    runs_passed = sum(1 for r in summary.run_results if r.metric_created and r.maql_correct)
-    runs_effective = len(summary.run_results)
+    runs_passed = runs_verdict.runs_passed
+    runs_effective = runs_verdict.runs_effective
     run_latencies_s = [r.run_latency_s for r in summary.run_results]
 
     best = summary.best
@@ -631,9 +653,26 @@ def evaluate_agentic_metric_skill(
             **timeline_detail(run.tool_call_events, run.reasoning_step_events),
         }
 
+    def _failed_checks(run: MetricRunResult) -> list[dict]:
+        """The checks this run failed; the MAQL pair is the whole diagnosis for this kind."""
+        checks: list[FailedCheck] = []
+        if not run.metric_created:
+            checks.append(FailedCheck("metric_created", expected=True, actual=False))
+        if not run.maql_correct:
+            checks.append(
+                FailedCheck(
+                    "maql_correct",
+                    expected=[c.get("maql", "") for c in expected_outputs_list],
+                    actual=run.actual_maql,
+                )
+            )
+        return failed_check_records(checks)
+
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
+        # Empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+        **runs_verdict.detail(),
         metric_created=best.metric_created,
         maql_correct=best.maql_correct,
         expected_maql_candidates=[c.get("maql", "") for c in expected_outputs_list],
@@ -650,23 +689,26 @@ def evaluate_agentic_metric_skill(
         summary.run_results,
         passed=lambda r: r.metric_created and r.maql_correct,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         candidates_str = "; ".join(repr(c.get("maql", "")) for c in expected_outputs_list)
         raise_agentic_failure(
-            MetricSkillAssertionError,
-            f"Metric skill assertion failed. {gate_note} "
+            runs_verdict.exception_cls(MetricSkillAssertionError),
+            f"{runs_verdict.message_lead('Metric skill assertion failed.', 'Metric skill')} {gate_note} "
             f"metric_created={best.metric_created}, maql_correct={best.maql_correct}. "
             f"Expected MAQL (candidates): {candidates_str}. "
             f"Actual MAQL: {best.actual_maql}.",
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
             detail=detail,
             runs_passed=runs_passed,
             runs_effective=runs_effective,
+            runs_scored=runs_verdict.runs_scored,
             best_run_latency_s=run_latency_s(best.timings),
             timings=item_timings,
             failed_runs=failed_runs,
@@ -679,6 +721,7 @@ def evaluate_agentic_metric_skill(
         detail=detail,
         runs_passed=runs_passed,
         runs_effective=runs_effective,
+        runs_scored=runs_verdict.runs_scored,
         failed_runs=failed_runs,
         run_latencies_s=run_latencies_s,
         best_run_latency_s=run_latency_s(best.timings),

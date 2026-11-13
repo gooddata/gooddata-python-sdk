@@ -647,3 +647,29 @@ def test_comparison_table_sets_single_shot_trace_median_and_tail_side_by_side():
     assert "19.00s" in text  # gpt-5.2 P90
     assert "10.00s" in text  # gpt-4o median of 8 and 12
     assert "single-shot chat-turn response time" in text
+
+
+def _gate_failed_item(*, runs_scored: int | None) -> ItemReport:
+    r = _item("gated", runs=3, runs_passed=1, passed=False)
+    r.gate_passed = False
+    r.runs_scored = runs_scored
+    return r
+
+
+def test_console_gate_note_names_the_excluded_runs_when_some_were_left_out():
+    report = EvalReport(model="m", gate="power")
+    report.items = [_gate_failed_item(runs_scored=2)]
+
+    row = next(line for line in _rendered(report).splitlines() if "gated" in line)
+
+    assert "pass^3 (1 excluded) failed: 1/2 scored runs passed" in row
+
+
+def test_console_gate_note_without_excluded_runs_is_as_before():
+    report = EvalReport(model="m", gate="power")
+    report.items = [_gate_failed_item(runs_scored=None)]
+
+    row = next(line for line in _rendered(report).splitlines() if "gated" in line)
+
+    assert "pass^3 failed: 1/3 runs passed" in row
+    assert "excluded" not in row

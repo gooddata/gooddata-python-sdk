@@ -4,7 +4,7 @@
 from rich.console import Console
 from rich.table import Table
 
-from gooddata_eval.core.agentic._gate import gate_label
+from gooddata_eval.core.agentic._gate import gate_count_note
 from gooddata_eval.core.interaction import MULTI_TURN, SINGLE_SHOT
 from gooddata_eval.core.runner import EvalReport, ItemReport
 from gooddata_eval.core.timing import LATENCY_PERCENTILES
@@ -89,7 +89,7 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
             # was, and every other column looks identical for the two: quality_score reads
             # best_detail, which describes the winning run alone. So say it here.
             result = "PASS"
-            notes = "" if item.pass_power_k else f"{item.runs_passed}/{item.runs_total} runs passed"
+            notes = "" if item.pass_power_k else f"{item.runs_passed}/{item.runs_gated} runs passed"
         else:
             # Evaluator-agnostic: report whichever boolean checks came back False
             # (visualization uses metrics_correct/…; dashboard_summary uses
@@ -99,8 +99,12 @@ def render_console(report: EvalReport, *, console: Console | None = None) -> str
                 # Only pass^K fails an item whose runs passed, and best_detail then
                 # describes one of those -- so no check reads False and Quality prints
                 # 100%. The count is the whole reason the row is a FAIL.
-                label = gate_label(report.gate, item.runs_total)
-                notes = f"{label} failed: {item.runs_passed}/{item.runs_total} runs passed"
+                notes = gate_count_note(
+                    report.gate,
+                    item.runs_passed,
+                    item.runs_gated,
+                    runs_excluded=item.runs_total - item.runs_gated,
+                )
             elif failing:
                 notes = "failed: " + ", ".join(failing)
             else:

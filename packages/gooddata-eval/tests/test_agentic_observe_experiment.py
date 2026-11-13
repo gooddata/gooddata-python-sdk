@@ -345,3 +345,15 @@ def test_the_run_context_forwards_its_window_and_item_input_to_observe():
         "item_input": "Show revenue by month",
         "output": {"passed": True},
     }
+
+
+def test_the_run_context_forwards_a_score_comment_only_when_given():
+    lf = MagicMock()
+    ctx = RunTraceContext({}, lf, "client", "item-1", "base", True, {}, _WINDOW, "q")
+
+    ctx.score("tid", name="gate_passed", value=True, data_type="BOOLEAN")
+    ctx.score("tid", name="eval_error", value=1, data_type="NUMERIC", comment="backend: the chat call failed")
+
+    plain, commented = lf.score_safe.call_args_list
+    assert plain.kwargs == {"name": "gate_passed", "value": True, "data_type": "BOOLEAN"}
+    assert commented.kwargs["comment"] == "backend: the chat call failed"

@@ -56,7 +56,13 @@ from gooddata_eval.core.agentic._conversation_context import (
     summarize_visualizations,
 )
 from gooddata_eval.core.agentic._gate import log_gate_scores
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    CHAT_FAILURE_EXITS,
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1038,7 +1044,7 @@ def run_agentic_conversation(
                         conversation_reasoning_step_events.extend(partial.reasoning_step_events or [])
                         reasoning_steps.extend(partial.reasoning_steps or [])
                         response_id = partial.response_id or response_id
-                    turn_exit = LoopExit.CHAT_ERROR
+                    turn_exit = chat_failure_exit(exc)
                     break
                 final_result = chat_result
                 total_steps += chat_result.reasoning_step_count
@@ -1255,7 +1261,7 @@ def run_agentic_conversation(
                     # A chat fault used to escape the whole run, so reaching here did mean no
                     # error. Now that it is caught and recorded, this has to read it back --
                     # otherwise a turn whose chat call failed reports no_error=True.
-                    no_error=turn_exit is not LoopExit.CHAT_ERROR,
+                    no_error=turn_exit not in CHAT_FAILURE_EXITS,
                     activated_skills=declared or [],
                     active_skills=sorted(active_skills),
                     clarification_turns_used=clarification_turns,

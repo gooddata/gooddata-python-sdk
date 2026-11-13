@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from unittest.mock import MagicMock
 
 import httpx
@@ -9,13 +9,22 @@ import orjson
 import pytest
 from gooddata_eval.cli import main as cli_main
 from gooddata_eval.cli.main import _parse_model_arg
-from gooddata_eval.core.config import JUDGE_MODEL_ENV_VAR, RunConfig, judge_model
+from gooddata_eval.core.config import (
+    ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR,
+    ERROR_OUTCOME_ENV_VAR,
+    JUDGE_MODEL_ENV_VAR,
+    RunConfig,
+    accept_context_date_filter,
+    error_outcome_enabled,
+    judge_model,
+)
 from gooddata_eval.core.connection import (
     ConnectionError_,  # noqa: F401 - used in test_cli_operational_error_exits_nonzero
 )
 from gooddata_eval.core.dataset.langfuse_source import _item_from_raw
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
+from gooddata_eval.core.scoring import FilterScores, check_filters
 from gooddata_eval.core.timing import TIMERS_ENV_VAR, timers_enabled
 from gooddata_eval.core.workspace import ActiveLlmProvider, ResolvedModel
 from rich.console import Console
@@ -1197,3 +1206,61 @@ def test_routing_backend_closes_every_client() -> None:
 
     for client in (chat, summary, takeaway):
         client.close.assert_called_once_with()
+
+
+def test_error_outcome_flag_is_off_by_default_and_publishes_the_env_var(monkeypatch):
+    base = ["run", "--host", "h", "--workspace", "w", "--dataset", "d"]
+    assert cli_main.parse_args(base).error_outcome is False
+    assert cli_main.parse_args([*base, "--error-outcome"]).error_outcome is True
+
+    # Set, not deleted, so monkeypatch restores what the flag writes.
+    monkeypatch.setenv(ERROR_OUTCOME_ENV_VAR, "0")
+    cli_main._apply_error_outcome_flag(False)
+    assert error_outcome_enabled() is False
+    cli_main._apply_error_outcome_flag(True)
+    assert error_outcome_enabled() is True
+
+
+def test_accept_context_date_filter_flag_is_off_by_default_and_publishes_the_env_var(monkeypatch):
+    base = ["run", "--host", "h", "--workspace", "w", "--dataset", "d"]
+    assert cli_main.parse_args(base).accept_context_date_filter is False
+    assert cli_main.parse_args([*base, "--accept-context-date-filter"]).accept_context_date_filter is True
+
+    # Set, not deleted, so monkeypatch restores what the flag writes.
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "0")
+    cli_main._apply_accept_context_date_filter_flag(False)
+    assert accept_context_date_filter() is False
+    cli_main._apply_accept_context_date_filter_flag(True)
+    assert accept_context_date_filter() is True
+
+
+def test_accept_context_date_filter_flag_never_clears_an_exported_env_var(monkeypatch):
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "1")
+    cli_main._apply_accept_context_date_filter_flag(False)
+    assert accept_context_date_filter() is True
+
+
+def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch):
+    def viz(filter_by: dict) -> CreatedVisualization:
+        return CreatedVisualization.model_validate(
+            {
+                "id": "v",
+                "type": "headline_chart",
+                "query": {"fields": {"m": {"using": "metric/m"}}, "filter_by": filter_by},
+                "metrics": ["m"],
+            }
+        )
+
+    inherited = {"type": "date_filter", "using": "dataset/d", "granularity": "MONTH", "from": -11, "to": 0}
+    user_context = {
+        "view": {"dashboard": {"filters": [{"type": "date_filter", "granularity": "MONTH", "from": -11, "to": 0}]}}
+    }
+
+    def score() -> FilterScores:
+        return check_filters(viz({}), viz({"f": inherited}), date(2026, 11, 12), user_context=user_context)
+
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "0")
+    assert score().date_ok is False  # default: strict date comparison
+    cli_main._apply_accept_context_date_filter_flag(True)
+    assert score().date_ok is True
+    assert score().date_inherited is True

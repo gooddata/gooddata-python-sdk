@@ -133,6 +133,8 @@ gd-eval run \
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
+| `--error-outcome` | off | Report a run that ended on a harness or backend error as an **error**, not a failure. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ERROR_OUTCOME=1`. See *Harness and backend errors* below. |
+| `--accept-context-date-filter` | off | Visualization scoring also accepts a date filter the agent carried over from the dashboard in the item's `user_context` when the expected output has none. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`. See *Date filter carried over from the dashboard* below. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
@@ -264,6 +266,95 @@ the best run, which under pass^K can be a run that passed, and the console repea
 the same reason. When some runs were ungraded the note says so instead of calling the remainder unstable.
 `agentic_conversation` has no K gate, so `--gate power` is refused for a dataset containing one rather than
 labelling a report `power` that only part of the dataset was decided under.
+
+**Which runs failed, and why.** A failure message names every failing run right after the gate note, with the
+reason its loop stopped and only the checks it failed (expected/actual where the kind knows them), then the best
+run's summary as before:
+
+```
+Gate pass^3 failed: 2/3 runs passed — unstable, not a clean failure. Failing runs: run 2/3 FAIL (loop exit: success): filters_correct[date: expected none, actual ...].
+```
+
+The same data is in each `failed_runs[]` record: `exit_reason` (the run's `LoopExit`, `null` for a kind without
+one), `outcome` (see below) and, for the visualization, alert, metric and dashboard skills, `failed_checks`
+(`[{"name", "label"?, "expected"?, "actual"?}]`, each `expected`/`actual` longer than 160 characters stored cut to
+that length; the run's `detail` keeps the whole value).
+
+These are **always on**, independent of `GD_EVAL_ERROR_OUTCOME`: the "Failing runs" part of an agentic failure
+message, the `failed_runs[]` fields `exit_reason`, `outcome` and `failed_checks`, and the dashboard skill's
+per-run `exit_reason` in its run detail. They add information only; no verdict, score or exception type changes.
+With the flag off, a run's `outcome` is what the gate counted it as, so every failing run reads `FAIL` — also one
+that ended on `chat_error` or `simulated_user_failed` (its exit is still named).
+
+### Harness and backend errors (`GD_EVAL_ERROR_OUTCOME`)
+
+A run can end for a reason that is not the agent's: the simulated user's own model call fails
+(`simulated_user_failed`) or the chat call still fails after its retries (`chat_error`). Each run gets an outcome,
+from one mapping (`gooddata_eval.outcome_from_loop_exit`):
+
+| Loop exit | Outcome |
+|---|---|
+| `success`, `budget_exhausted`, `agent_silent`, `agent_timeout`, `turn_incomplete` | scored: `pass` or `fail` |
+| `simulated_user_failed`, `not_run` | `error`, source `harness` |
+| `chat_error` | `error`, source `backend` |
+
+`agent_timeout` (the agent exceeded the turn or item time budget) and `turn_incomplete` (the agent ended its turn
+without a final answer) are the agent's own failures, so they stay scored. `chat_error` is what is left: a
+transport fault or a 5xx that still fails after its retries. `not_run` is mapped for completeness, but only an
+`agentic_conversation` turn records it, and that kind does not use outcomes (see below), so it never decides
+anything today.
+
+The item budget (`--item-timeout`, `GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S`) runs from conversation creation, so on a
+multi-turn item it also covers the simulated user's replies and the chat retries' backoff in between. An
+`agent_timeout` caused by the item budget can therefore include harness time; the per-turn budget
+(`GOODDATA_EVAL_CHAT_TURN_TIMEOUT_S`) times one agent turn only.
+
+**Changed with the flag off too:** a run whose turn timed out or ended without a final answer used to record
+`exit_reason` `chat_error`; it now records `agent_timeout` or `turn_incomplete`, in the run detail and in
+`failed_runs[]` (every agentic kind, and the turn results of `agentic_conversation`). Verdicts, scores and
+exceptions do not change; only that value does, so filters on `exit_reason == "chat_error"` see fewer runs.
+
+A run that passed its checks is `pass` whatever its exit. By default the outcome decides nothing: such a run counts
+as a failure, exactly as in earlier releases, and is recorded in `failed_runs[].outcome`
+(`{"status", "source", "reason"}`) as the `fail` it was counted as.
+
+With `--error-outcome` or `GD_EVAL_ERROR_OUTCOME=1` (`0`, `false`, `no`, `off` and empty mean off):
+
+- **Agentic kinds** (visualization, alert, metric, dashboard, KDA, anomaly detection, what-if): `error` runs are
+  left out of K and the gate is applied to the scored runs. `[error, pass, pass]` passes under `--gate power`;
+  the excluded runs are listed in `detail.excluded_runs` and, on a failure, once, after the gate note
+  (`Gate pass^3 (1 excluded) failed: 1/2 scored runs passed ... 1 run excluded (harness error): run 1/3 the
+  simulated user failed to reply.`), not again under "Failing runs". `runs_effective` and the report's `runs` stay
+  the runs executed (so `avg_latency_s` divides by them); the new `runs_scored` is the runs the gate counted. An
+  item with **no** scored run raises `gooddata_eval.EvalHarnessError` — deliberately not an `AssertionError`, so a
+  runner can tell it apart from an agent failure — and is reported with `error` set, its runs and `failed_runs`
+  kept. Its message says the item could not be scored rather than that an assertion failed. Note that pytest
+  itself does not make this a JUnit `<error>`: an exception raised in a test body is written as `<failure>` (and
+  Tavern turns any exception into a failure). Recording it as an error is the runner's job, e.g. a pytest hook
+  that matches `EvalHarnessError`. Only the seven kinds above use outcomes; the other agentic kinds
+  (`agentic_conversation`, `agentic_general_question`, `agentic_search`, `agentic_guardrail`,
+  `agentic_document_skill`, `agentic_forecasting`, `agentic_dashboard_summary`) are unaffected, even where their
+  runs record a loop exit.
+- **Langfuse, agentic kinds**: a run left out of K gets one score, `eval_error` = 1 (NUMERIC, commented
+  `<source>: <reason>`), and no pass, gate, strict-check or quality score. Scored runs keep their usual scores,
+  so an item whose runs all errored has no `gate_passed` at all. Read `eval_error` = 1 as the error marker, not
+  a missing `gate_passed`: a score write that failed also leaves `gate_passed` missing.
+- **Single-shot kinds**: an item that raised is errored only — it no longer also reports `pass_at_k: true` from a
+  run that passed before the exception (`runs_passed` still counts that run) — and it is still sent to the
+  Langfuse sink, with the error in its item metadata, `eval_error` = 1 commented with the error, the `latency_s`
+  score when a run completed, and no pass or quality score.
+
+**Single-shot and agentic kinds treat a chat failure differently.** A single-shot item (`visualization`,
+`search_tool`, ...) stops at the first `chat_error` (or any other exception) from its chat call and the whole item
+is errored (`error` set), with or without the flag; the flag only stops it from also reporting a pass and sends it
+to Langfuse. An agentic item records the failure on that run, carries on with its remaining runs, and with the
+flag on leaves only that run out of K.
+
+An agent timeout or incomplete turn is the agent's own failure. With the flag on, a single-shot run that ends that
+way is a failed run (`failed_runs[]` with `exit_reason` `agent_timeout` / `turn_incomplete`, outcome `fail`), the
+item's other runs go on, and the item gets its normal pass and quality scores; an agentic run that ends that way
+is scored as a failure too. With the flag off a single-shot item still errors on it, exactly as in earlier
+releases.
 
 Each item additionally carries a per-phase breakdown:
 
@@ -901,6 +992,31 @@ In a Langfuse dataset, put it in the item `metadata` (or in the `input` object) 
 `user_context`. An object in `input` wins and `metadata` is then not read; a missing or
 `null` value in `input` falls back to `metadata`. The value used must be an object or `null`;
 anything else fails the dataset load.
+
+#### Date filter carried over from the dashboard (opt-in)
+
+A user who asks for a new chart from an open dashboard without naming a period may get
+the dashboard's date filter on the chart, and the product accepts that. By default the
+visualization scoring still requires the chart's date filters to equal the expected ones.
+Pass `--accept-context-date-filter` to `gd-eval run`, set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`
+(`0`, `false`, `no`, `off` and empty mean off), or pass `accept_context_date_filter=True` to
+`check_filters` to also accept, for the date filter only, a chart that:
+
+- has exactly one date filter, whose period equals a `date_filter` in
+  `user_context.view.dashboard.filters` (resolved against the same day), and
+- belongs to an item whose expected output has no date filter.
+
+The dashboard's common date filter (no `using`) accepts any date dataset, one that names a
+dataset accepts only that one; the one the chart used is reported in the run detail as
+`filter_date_context: {"inherited": true, "dataset": ...}`, and a failure summary shows
+`date : True (inherited from dashboard context)`. A chart with no date filter passes as
+before; an expected date filter, a different period, ranking and attribute filters stay
+strict. Applies to `visualization`, `vis_agentic` and `agentic_visualization` items; with the
+variable unset the scores and the detail are exactly as without it.
+
+With the flag on, an expected output cannot say "all time, on purpose": an expected output
+with no date filter then also accepts a chart that copied the dashboard's period. An item
+that must reject the dashboard's period needs to run without the flag.
 
 `agentic_conversation` items take the item's `user_context` as the context of the first
 turn. A turn in `expected_output.turns` can set its own `user_context`, which applies

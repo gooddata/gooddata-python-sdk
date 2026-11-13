@@ -217,9 +217,10 @@ class RunTraceContext:
         with self.observe(self.trace(conversation_id), run_idx, conversation_id=conversation_id):
             pass
 
-    def score(self, trace_id: Any, *, name: str, value: Any, data_type: str) -> None:
+    def score(self, trace_id: Any, *, name: str, value: Any, data_type: str, comment: str | None = None) -> None:
         """Write one score, swallowing Langfuse failures the way ``score_safe`` always has."""
-        self._lf.score_safe(self._client, trace_id, name=name, value=value, data_type=data_type)
+        extra = {"comment": comment} if comment is not None else {}
+        self._lf.score_safe(self._client, trace_id, name=name, value=value, data_type=data_type, **extra)
 
     def quality(self, trace_id: Any, *, strict_checks: dict, latency_sec: Any, cost_usd: Any) -> None:
         """Write the derived quality/value scores for one run."""

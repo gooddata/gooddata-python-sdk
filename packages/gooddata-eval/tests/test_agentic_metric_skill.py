@@ -22,7 +22,8 @@ from gooddata_eval.core.agentic.metric_skill import (
     generate_simulated_response,
     run_agentic_metric_skill,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
+from gooddata_eval.core.config import ERROR_OUTCOME_ENV_VAR
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
 from gooddata_eval.core.timing import TIMERS_ENV_VAR
 
@@ -1098,3 +1099,91 @@ def test_extract_created_metric_ids_skips_a_metric_updated_in_place() -> None:
         )
 
     assert _extract_created_metric_ids([call("new", True), call("old", False)]) == ["new"]
+
+
+@pytest.mark.parametrize(
+    ("exc", "loop_exit"),
+    [
+        (TurnTimeoutError("agent exceeded the 60s turn budget"), LoopExit.AGENT_TIMEOUT),
+        (TurnIncompleteError("no final answer", reason="max iterations"), LoopExit.TURN_INCOMPLETE),
+    ],
+)
+def test_the_agents_own_chat_failure_is_recorded_as_its_own_exit(exc, loop_exit):
+    mock_client = _client()
+    mock_client.send_message.side_effect = exc
+
+    with _patched(mock_client):
+        summary = run_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=1,
+            max_iterations=3,
+        )
+
+    assert summary.run_results[0].exit_reason is loop_exit
+    assert summary.pass_at_k is False
+
+
+@pytest.mark.parametrize("flag", [True, False], ids=["flag_on", "flag_off"])
+def test_an_errored_run_gets_eval_error_only_with_the_flag_on(monkeypatch, flag):
+    if flag:
+        monkeypatch.setenv(ERROR_OUTCOME_ENV_VAR, "1")
+    else:
+        monkeypatch.delenv(ERROR_OUTCOME_ENV_VAR, raising=False)
+    mock_client = _client()
+    mock_client.send_message.side_effect = [
+        ChatError("gen-ai fell over"),
+        ChatResult.model_validate(
+            {
+                "textResponse": "done",
+                "toolCallEvents": [
+                    {
+                        "functionName": "create_metric",
+                        "functionArguments": "{}",
+                        "result": '{"data": {"maql": "SELECT {metric/foo}"}}',
+                    }
+                ],
+            }
+        ),
+    ]
+    captured = {}
+
+    def _capture(_submit, _identity, **kwargs):
+        captured["write_scores"] = kwargs["write_scores"]
+
+    with (
+        _patched(mock_client),
+        patch("gooddata_eval.core.agentic.metric_skill.submit_trace_scoring", _capture),
+    ):
+        evaluate_agentic_metric_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="Create metric foo",
+            expected_output={"maql": "SELECT {metric/foo}"},
+            k=2,
+            max_iterations=1,
+            langfuse=MagicMock(),
+            dataset_item_id="item-1",
+        )
+
+    ctx = MagicMock()
+    run_ids = [MagicMock(name="run-1"), MagicMock(name="run-2")]
+    ctx.observe.return_value.__enter__.side_effect = run_ids
+    captured["write_scores"](ctx)
+    by_run = {id(t): [c.kwargs["name"] for c in ctx.score.call_args_list if c.args[0] is t] for t in run_ids}
+
+    first, second = by_run[id(run_ids[0])], by_run[id(run_ids[1])]
+    if flag:
+        assert first == ["eval_error"]
+        (eval_error,) = [c for c in ctx.score.call_args_list if c.kwargs["name"] == "eval_error"]
+        assert eval_error.kwargs["value"] == 1
+        assert eval_error.kwargs["comment"] == "backend: the chat call failed after its retries"
+    else:
+        assert "eval_error" not in first
+        assert "gate_passed" in first
+    assert "eval_error" not in second
+    assert "gate_passed" in second

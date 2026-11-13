@@ -10,6 +10,7 @@ from gooddata_eval.core.config import DEFAULT_GATE, EvalGate, normalize_gate
 __all__ = [
     "DEFAULT_GATE",
     "EvalGate",
+    "gate_count_note",
     "gate_failure_note",
     "gate_label",
     "gate_passed",
@@ -29,7 +30,19 @@ def gate_label(gate: str | None, k: int) -> str:
     return f"pass^{k}" if normalize_gate(gate) == "power" else f"pass@{k}"
 
 
-def gate_failure_note(gate: str | None, runs_passed: int, runs_total: int, runs_ungraded: int = 0) -> str:
+def gate_count_note(gate: str | None, runs_passed: int, runs_total: int, *, runs_excluded: int = 0) -> str:
+    """E.g. ``pass^3 failed: 2/3 runs passed``, or with runs left out of the gate
+    ``pass^3 (1 excluded) failed: 1/2 scored runs passed`` (``runs_total`` is then the scored
+    runs). Shared by the assertion message and the console, so the two cannot disagree."""
+    if runs_excluded:
+        label = f"{gate_label(gate, runs_total + runs_excluded)} ({runs_excluded} excluded)"
+        return f"{label} failed: {runs_passed}/{runs_total} scored runs passed"
+    return f"{gate_label(gate, runs_total)} failed: {runs_passed}/{runs_total} runs passed"
+
+
+def gate_failure_note(
+    gate: str | None, runs_passed: int, runs_total: int, runs_ungraded: int = 0, *, runs_excluded: int = 0
+) -> str:
     """Gate and how many runs met it, for the assertion message.
 
     Needed because the message body describes the BEST run, which under pass^K can be a run
@@ -37,9 +50,12 @@ def gate_failure_note(gate: str | None, runs_passed: int, runs_total: int, runs_
 
     An ungraded run counts in runs_total but can never count in runs_passed, so the remainder
     is not evidence of instability — saying so would blame the agent for a judge outage.
+
+    ``runs_excluded`` (only with ``GD_EVAL_ERROR_OUTCOME`` on) counts the runs left out of the
+    gate; ``runs_total`` is then the scored runs. The label keeps the K that ran, e.g.
+    ``pass^3 (1 excluded) failed: 1/2 scored runs passed``.
     """
-    label = gate_label(gate, runs_total)
-    note = f"Gate {label} failed: {runs_passed}/{runs_total} runs passed"
+    note = f"Gate {gate_count_note(gate, runs_passed, runs_total, runs_excluded=runs_excluded)}"
     if runs_ungraded:
         return f"{note}, {runs_ungraded} ungraded."
     if normalize_gate(gate) == "power" and runs_passed:

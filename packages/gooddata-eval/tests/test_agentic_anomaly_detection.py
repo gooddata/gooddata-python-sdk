@@ -16,6 +16,7 @@ from gooddata_eval.core.agentic.anomaly_detection import (
     evaluate_agentic_anomaly_detection,
     run_agentic_anomaly_detection,
 )
+from gooddata_eval.core.chat.sse_client import TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.models import ChatResult, LoopExit
 
 _MODULE = "gooddata_eval.core.agentic.anomaly_detection"
@@ -539,3 +540,15 @@ def test_any_gate_still_passes_the_same_item():
 
 def test_the_default_gate_is_pass_at_k():
     assert _two_runs().runs_passed == 1
+
+
+@pytest.mark.parametrize(
+    ("exc", "loop_exit"),
+    [
+        (TurnTimeoutError("agent exceeded the 60s turn budget"), LoopExit.AGENT_TIMEOUT),
+        (TurnIncompleteError("no final answer", reason="max iterations"), LoopExit.TURN_INCOMPLETE),
+    ],
+)
+def test_the_agents_own_chat_failure_is_recorded_as_its_own_exit(exc, loop_exit):
+    summary = _run([_chat(_pair()), exc], k=2)
+    assert summary.run_results[1].exit_reason is loop_exit

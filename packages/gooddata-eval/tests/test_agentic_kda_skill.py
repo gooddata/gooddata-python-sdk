@@ -16,8 +16,8 @@ from gooddata_eval.core.agentic.kda_skill import (
     evaluate_agentic_kda_skill,
     run_agentic_kda_skill,
 )
-from gooddata_eval.core.chat.sse_client import ChatError, TransientChatError
-from gooddata_eval.core.models import ChatResult
+from gooddata_eval.core.chat.sse_client import ChatError, TransientChatError, TurnIncompleteError, TurnTimeoutError
+from gooddata_eval.core.models import ChatResult, LoopExit
 
 _EXPECTED = {"Measure": {"type": "metric", "id": "revenue"}}
 
@@ -1296,3 +1296,29 @@ def test_kda_skill_writes_the_turn_and_step_counts_to_langfuse():
 
     assert scores["turns"] == 1
     assert scores["steps"] == 1
+
+
+@pytest.mark.parametrize(
+    ("exc", "loop_exit"),
+    [
+        (TurnTimeoutError("agent exceeded the 60s turn budget"), LoopExit.AGENT_TIMEOUT),
+        (TurnIncompleteError("no final answer", reason="max iterations"), LoopExit.TURN_INCOMPLETE),
+        (TransientChatError("gen-ai returned 503"), LoopExit.CHAT_ERROR),
+    ],
+)
+def test_run_agentic_kda_skill_names_why_the_chat_call_failed(exc, loop_exit):
+    mock_client = _client()
+    mock_client.send_message.side_effect = exc
+
+    with _patched(mock_client):
+        summary = run_agentic_kda_skill(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            question="What drove revenue change?",
+            expected_output=_EXPECTED,
+            k=1,
+            max_iterations=1,
+        )
+
+    assert summary.best.exit_reason is loop_exit

@@ -9,11 +9,13 @@ from datetime import datetime, timezone
 from functools import cached_property, partial
 from typing import Callable, Protocol
 
-from gooddata_eval.core.config import DEFAULT_GATE, EvalGate
+from gooddata_eval.core.chat.sse_client import TurnIncompleteError, TurnTimeoutError
+from gooddata_eval.core.config import DEFAULT_GATE, EvalGate, error_outcome_enabled
 from gooddata_eval.core.evaluators import get_evaluator, supported_test_kinds
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.interaction import INTERACTION_MODES, MULTI_TURN, InteractionMode, interaction_mode
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, LoopExit
+from gooddata_eval.core.outcome import Outcome
 from gooddata_eval.core.timing import latency_stats
 
 
@@ -102,6 +104,10 @@ class ItemReport:
     # agentic_conversation drives its fixture exactly once whatever --runs says, so
     # trusting K there reports four runs that never happened.
     runs_effective: int | None = None
+    # The runs the gate was applied to, when GD_EVAL_ERROR_OUTCOME left some out (agentic
+    # kinds only). runs_total stays the runs executed, the divisor of avg_latency_s; None
+    # means every executed run was gated.
+    runs_scored: int | None = None
 
     @property
     def interaction_mode(self) -> InteractionMode:
@@ -130,7 +136,12 @@ class ItemReport:
         a later one raised before returning a verdict). That is not unanimity, it is an
         item whose last run has no verdict at all, so an error disqualifies the claim.
         """
-        return self.error is None and self.runs_total > 0 and self.runs_passed == self.runs_total
+        return self.error is None and self.runs_gated > 0 and self.runs_passed == self.runs_gated
+
+    @property
+    def runs_gated(self) -> int:
+        """The runs the gate was applied to: ``runs_scored`` when set, else every run executed."""
+        return self.runs_total if self.runs_scored is None else self.runs_scored
 
     @property
     def avg_latency_s(self) -> float:
@@ -273,6 +284,32 @@ def _failed_run_record(run_index: int, evaluation: ItemEvaluation, chat_result: 
     }
 
 
+def _agent_failed_run_record(
+    run_index: int, exc: TurnTimeoutError | TurnIncompleteError, loop_exit: LoopExit, latency: float
+) -> dict:
+    """``_failed_run_record`` for a run whose turn the agent itself timed out or left unanswered.
+
+    Nothing was evaluated, so ``detail`` holds why the turn ended; the ids and turn time come
+    from the partial result when the stream delivered one.
+    """
+    partial = exc.partial_result
+    return {
+        "run_index": run_index,
+        "passed": False,
+        "error": None,
+        "detail": {"exit_reason": loop_exit.value, "chat_error": f"{type(exc).__name__}: {exc}"},
+        "conversation_id": getattr(partial, "conversation_id", None) or getattr(exc, "conversation_id", None),
+        "response_id": getattr(partial, "response_id", None),
+        "stream_ended": getattr(partial, "stream_ended", None),
+        "turn_wall_clock_sec": getattr(partial, "turn_wall_clock_sec", None),
+        "latency_s": round(latency, 3),
+        "reasoning_step_count": getattr(partial, "reasoning_step_count", 0),
+        "reasoning_steps": list(getattr(partial, "reasoning_steps", None) or []),
+        "exit_reason": loop_exit.value,
+        "outcome": Outcome.failed(f"loop exit: {loop_exit.value}").as_record(),
+    }
+
+
 def _run_one_item(
     item: DatasetItem, backend: ChatBackend, runs: int, on_run_done: RunCallback | None = None
 ) -> ItemReport:
@@ -291,9 +328,29 @@ def _run_one_item(
     best_run_latency: float | None = None
     judge_errors: list[str] = []
     try:
+        scores_agent_failures = error_outcome_enabled()
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
-            chat_result = backend.ask(item)
+            try:
+                chat_result = backend.ask(item)
+            except (TurnTimeoutError, TurnIncompleteError) as exc:
+                if not scores_agent_failures:
+                    raise
+                # With GD_EVAL_ERROR_OUTCOME on, an error is reserved for faults that say nothing
+                # about the agent. Running out of time, or ending the turn without an answer, is
+                # the agent's own failure: a failed run, scored, and the item's other runs go on.
+                loop_exit = LoopExit.AGENT_TIMEOUT if isinstance(exc, TurnTimeoutError) else LoopExit.TURN_INCOMPLETE
+                latency = time.perf_counter() - t0
+                turn_latency = getattr(exc.partial_result, "turn_wall_clock_sec", None)
+                if isinstance(turn_latency, (int, float)):
+                    report.trace_latencies_s.append(turn_latency)
+                report.runs += 1
+                report.latency_s += latency
+                report.run_latencies_s.append(latency)
+                report.failed_runs.append(_agent_failed_run_record(run_index, exc, loop_exit, latency))
+                if on_run_done is not None:
+                    on_run_done(run_index, runs, False, latency)
+                continue
             trace_latency = getattr(chat_result, "turn_wall_clock_sec", None)
             if isinstance(trace_latency, (int, float)):
                 report.trace_latencies_s.append(trace_latency)
@@ -322,6 +379,10 @@ def _run_one_item(
         conv_id = getattr(e, "conversation_id", None)
         report.conversation_id = conv_id or report.conversation_id
         report.error = f"{type(e).__name__}: {e}" + (f" [conversation_id={conv_id}]" if conv_id else "")
+        if error_outcome_enabled():
+            # An item is passed or errored, never both: a run that passed before the error
+            # stays counted in runs_passed, but the item did not complete its K runs.
+            report.pass_at_k = False
         if best is not None:
             report.best_detail = best.detail
             report.best_run_latency_s = best_run_latency
@@ -381,6 +442,7 @@ def run_items(
       - on_run_done(index, total, run_index, runs, passed, latency) after each individual run
       - on_item_done(index, total, report)                         after an item is fully evaluated
       - on_langfuse_item_done(index, total, report)                after non-skipped, non-errored items only
+                                                                   (errored ones too with GD_EVAL_ERROR_OUTCOME on)
 
     concurrency > 1 dispatches items to a ThreadPoolExecutor so multiple
     questions are sent to the agent simultaneously. Each item still runs
@@ -403,7 +465,14 @@ def run_items(
         try:
             if on_item_done is not None:
                 on_item_done(index, total, item_report)
-            if on_langfuse_item_done is not None and not item_report.skipped and item_report.error is None:
+            # With GD_EVAL_ERROR_OUTCOME on, an errored item is logged too: leaving it out would
+            # make an outage invisible in the experiment instead of an error in it.
+            logs_errors = error_outcome_enabled()
+            if (
+                on_langfuse_item_done is not None
+                and not item_report.skipped
+                and (item_report.error is None or logs_errors)
+            ):
                 on_langfuse_item_done(index, total, item_report)
         except Exception:  # non-fatal — log but don't abort
             traceback.print_exc()
