@@ -1,0 +1,42 @@
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_cc738f5f3db26e::t_3af83cc1f364d5 1107-1121
+  s_cc738f5f3db26e::t_b98add550a75cd 13
+  s_cc738f5f3db26e::t_9a4f65153d43d9 2190-2254,2279-2290,2292-2303,2305,2307,2309-2334,2336-2350,2352-2360,2362-2368,2370-2372
+  s_cc738f5f3db26e::t_d1a196d77f4722 1093-1096,1098-1099
+  s_cc738f5f3db26e::t_53a7376de617d2 1097
+  s_cc738f5f3db26e::t_4ac918e1869a83 1916-1986,1988-1989,1991-2013
+  s_cc738f5f3db26e::t_51ff791a5c17a2 2306,2308
+  s_cc738f5f3db26e::t_f996eb3a045d81 2369
+  s_cc738f5f3db26e::t_d083ac1da96f7d 1100-1106,1987,1990,2182-2187,2255-2278,2304
+  s_cc738f5f3db26e::t_2c4323179f548d 2113-2149,2158-2181
+  s_cc738f5f3db26e::t_0b246ea4d1a982 2188-2189,2291,2335,2351,2361
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_cc738f5f3db26e::t_995a60be215079 1580-1604,1608-1626,1628-1665,1667
+  s_cc738f5f3db26e::t_2b326ccb0272a6 202,204-207,209,213-214
+  s_cc738f5f3db26e::t_68d06b445e1d3c 930,934-943,952-961,972-974,976-979
+  s_cc738f5f3db26e::t_e397199bf5e72e 1000
+  s_cc738f5f3db26e::t_7cf7671c50e994 1013-1014
+  s_cc738f5f3db26e::t_98aff9a8dbdda6 1516,1521-1524,1527,1529-1541,1543
+  s_cc738f5f3db26e::t_e2fc83b4309375 1605
+  s_cc738f5f3db26e::t_8eed0e2cab8882 990-999,1001-1010,1012,1015-1038
+  s_cc738f5f3db26e::t_29db2bfb2a821a 975,1011,1606-1607
+  s_cc738f5f3db26e::t_496ee1b8780c2c 189,192-194,198-201,203,208,210-212,215-223
+  s_cc738f5f3db26e::t_ea0d3ea014f7c4 775
+  s_cc738f5f3db26e::t_c4915c2b83f674 1627
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9b294c53b80da67b53981013477f21f40f1d3f8b",
+  "prompts": {},
+  "sessions": {
+    "s_cc738f5f3db26e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "70fc1179-bc10-41f9-a95d-229c061aad6d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
