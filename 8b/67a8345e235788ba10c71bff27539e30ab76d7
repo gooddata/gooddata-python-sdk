@@ -1,0 +1,23 @@
+packages/gooddata-eval/README.md
+  s_d5a90247078f0f::t_a522fa95af15a2 333-342
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_d5a90247078f0f::t_441466903986df 12,17-18,287-312,331,334-353
+packages/gooddata-eval/tests/test_outcome.py
+  s_d5a90247078f0f::t_3798d8e5d136b6 647-724
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8b67a8345e235788ba10c71bff27539e30ab76d7",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
