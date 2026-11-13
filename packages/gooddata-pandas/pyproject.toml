@@ -30,7 +30,9 @@ keywords = [
 requires-python = ">=3.10"
 dependencies = [
     "gooddata-sdk~=1.80.0",
-    "pandas>=2.0.0,<3.0.0",
+    # pandas 2 has no CPython 3.15 wheels; pandas 2.3.3 built from source segfaults there.
+    "pandas>=2.0.0,<4.0.0; python_version < '3.15'",
+    "pandas>=3.0.0,<4.0.0; python_version >= '3.15'",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
