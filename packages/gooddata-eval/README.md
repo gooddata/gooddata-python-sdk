@@ -134,6 +134,7 @@ gd-eval run \
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
 | `--error-outcome` | off | Report a run that ended on a harness or backend error as an **error**, not a failure. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ERROR_OUTCOME=1`. See *Harness and backend errors* below. |
+| `--accept-context-date-filter` | off | Visualization scoring also accepts a date filter the agent carried over from the dashboard in the item's `user_context` when the expected output has none. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`. See *Date filter carried over from the dashboard* below. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
@@ -949,8 +950,9 @@ anything else fails the dataset load.
 A user who asks for a new chart from an open dashboard without naming a period may get
 the dashboard's date filter on the chart, and the product accepts that. By default the
 visualization scoring still requires the chart's date filters to equal the expected ones.
-Set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1` (or pass `accept_context_date_filter=True` to
-`check_filters`) to also accept, for the date filter only, a chart that:
+Pass `--accept-context-date-filter` to `gd-eval run`, set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`
+(`0`, `false`, `no`, `off` and empty mean off), or pass `accept_context_date_filter=True` to
+`check_filters` to also accept, for the date filter only, a chart that:
 
 - has exactly one date filter, whose period equals a `date_filter` in
   `user_context.view.dashboard.filters` (resolved against the same day), and

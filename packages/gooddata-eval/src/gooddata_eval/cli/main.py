@@ -17,6 +17,7 @@ from rich.table import Table
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
 from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_timeout, set_default_turn_timeout
 from gooddata_eval.core.config import (
+    ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR,
     DEFAULT_GATE,
     DEFAULT_JUDGE_MODEL,
     ERROR_OUTCOME_ENV_VAR,
@@ -145,6 +146,15 @@ def _build_parser() -> argparse.ArgumentParser:
         "call failed after retries) as an error instead of a failure: it is left out of the gate's "
         "K, and an item with no other run errors instead of failing. Off by default because it "
         "changes verdicts. Equivalent to GD_EVAL_ERROR_OUTCOME=1.",
+    )
+    run.add_argument(
+        "--accept-context-date-filter",
+        dest="accept_context_date_filter",
+        action="store_true",
+        help="Visualization scoring also accepts a chart whose single date filter equals one of the "
+        "dashboard's in the item's user_context, when the expected output has no date filter. "
+        "Off by default because it changes verdicts. Equivalent to "
+        "GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1.",
     )
     run.add_argument(
         "--turn-timeout",
@@ -326,6 +336,15 @@ def _apply_error_outcome_flag(enabled: bool) -> None:
     """
     if enabled:
         os.environ[ERROR_OUTCOME_ENV_VAR] = "1"
+
+
+def _apply_accept_context_date_filter_flag(enabled: bool) -> None:
+    """Publish --accept-context-date-filter for check_filters, like --error-outcome.
+
+    Only ever sets it -- never clears a value the caller exported themselves.
+    """
+    if enabled:
+        os.environ[ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR] = "1"
 
 
 def _reject_power_gate_on_ungated_items(config: RunConfig, items: list) -> None:
@@ -742,6 +761,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv if argv is not None else sys.argv[1:])
     _apply_timer_flag(getattr(args, "timers", False))
     _apply_error_outcome_flag(getattr(args, "error_outcome", False))
+    _apply_accept_context_date_filter_flag(getattr(args, "accept_context_date_filter", False))
     _apply_judge_model(getattr(args, "judge_model", None))
     if hasattr(args, "concurrency") and args.concurrency < 1:
         print("error: --concurrency must be >= 1.", file=sys.stderr)

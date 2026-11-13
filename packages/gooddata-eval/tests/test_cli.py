@@ -10,9 +10,11 @@ import pytest
 from gooddata_eval.cli import main as cli_main
 from gooddata_eval.cli.main import _parse_model_arg
 from gooddata_eval.core.config import (
+    ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR,
     ERROR_OUTCOME_ENV_VAR,
     JUDGE_MODEL_ENV_VAR,
     RunConfig,
+    accept_context_date_filter,
     error_outcome_enabled,
     judge_model,
 )
@@ -1216,3 +1218,53 @@ def test_error_outcome_flag_is_off_by_default_and_publishes_the_env_var(monkeypa
     assert error_outcome_enabled() is False
     cli_main._apply_error_outcome_flag(True)
     assert error_outcome_enabled() is True
+
+
+def test_accept_context_date_filter_flag_is_off_by_default_and_publishes_the_env_var(monkeypatch):
+    base = ["run", "--host", "h", "--workspace", "w", "--dataset", "d"]
+    assert cli_main.parse_args(base).accept_context_date_filter is False
+    assert cli_main.parse_args([*base, "--accept-context-date-filter"]).accept_context_date_filter is True
+
+    # Set, not deleted, so monkeypatch restores what the flag writes.
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "0")
+    cli_main._apply_accept_context_date_filter_flag(False)
+    assert accept_context_date_filter() is False
+    cli_main._apply_accept_context_date_filter_flag(True)
+    assert accept_context_date_filter() is True
+
+
+def test_accept_context_date_filter_flag_never_clears_an_exported_env_var(monkeypatch):
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "1")
+    cli_main._apply_accept_context_date_filter_flag(False)
+    assert accept_context_date_filter() is True
+
+
+def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch):
+    from datetime import date  # noqa: PLC0415
+
+    from gooddata_eval.core.models import CreatedVisualization  # noqa: PLC0415
+    from gooddata_eval.core.scoring import check_filters  # noqa: PLC0415
+
+    def viz(filter_by: dict) -> CreatedVisualization:
+        return CreatedVisualization.model_validate(
+            {
+                "id": "v",
+                "type": "headline_chart",
+                "query": {"fields": {"m": {"using": "metric/m"}}, "filter_by": filter_by},
+                "metrics": ["m"],
+            }
+        )
+
+    inherited = {"type": "date_filter", "using": "dataset/d", "granularity": "MONTH", "from": -11, "to": 0}
+    user_context = {
+        "view": {"dashboard": {"filters": [{"type": "date_filter", "granularity": "MONTH", "from": -11, "to": 0}]}}
+    }
+
+    def score():
+        return check_filters(viz({}), viz({"f": inherited}), date(2026, 11, 12), user_context=user_context)
+
+    monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "0")
+    assert score().date_ok is False  # default: strict date comparison
+    cli_main._apply_accept_context_date_filter_flag(True)
+    assert score().date_ok is True
+    assert score().date_inherited is True
