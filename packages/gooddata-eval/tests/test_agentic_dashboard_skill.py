@@ -10,6 +10,8 @@ from gooddata_eval.core.agentic.dashboard_skill import (
     DashboardSkillAssertionError,
     _date_range_text,
     _extract_tool_result,
+    _holds,
+    _is_container,
     _skill_activated,
     _validate_expectation,
     _widgets_of,
@@ -1089,6 +1091,51 @@ class TestLayoutShapes:
         drafted = _dashboard_part([_widget("A", "id-a")], date_filter=_ALL_TIME_FILTER)["dashboard"]
         assert [w["visualization"] for w in _widgets_of(drafted)] == ["id-a"]
 
+    def test_widgets_inside_containers_are_read_and_a_switcher_stays_whole(self):
+        switcher = {"visualizations": [{"visualization": "id-c"}, {"visualization": "id-d"}]}
+        inner = {"container": "inner", "sections": [{"widgets": [_widget("B", "id-b"), switcher]}]}
+        outer = {"container": "outer", "sections": [{"widgets": [_widget("A", "id-a"), inner]}]}
+        base = _edit_base_part([outer, _widget("E", "id-e")], visualizations=[])["dashboard"]
+        assert _widgets_of(base) == [_widget("A", "id-a"), _widget("B", "id-b"), switcher, _widget("E", "id-e")]
+
+    def test_an_empty_container_or_section_holds_no_widgets(self):
+        """The AAC converter leaves out `sections` of an empty container and `widgets` of an empty section."""
+        group = {"container": "g", "sections": [{"title": "Empty"}, {"widgets": [_widget("A", "id-a")]}]}
+        emptied = {"container": "emptied", "columns": 12, "rows": 10}
+        base = _edit_base_part([emptied, group], visualizations=[])["dashboard"]
+        assert _widgets_of(base) == [_widget("A", "id-a")]
+
+    @pytest.mark.parametrize(
+        ("widget", "container"),
+        [
+            ({"container": "g", "sections": []}, True),
+            ({"sections": []}, True),
+            # An empty container: the AAC converter writes `sections` only when there are some.
+            ({"container": "g", "columns": 12, "rows": 10}, True),
+            (_widget("A", "id-a"), False),
+            ({"content": "Europe only"}, False),
+            ({"id": "s", "visualizations": [{"visualization": "id-a"}]}, False),
+        ],
+    )
+    def test_a_widget_is_a_container_by_its_container_or_sections_key(self, widget, container):
+        assert _is_container(widget) is container
+
+    # The converter reads a widget's kind as container, then switcher, then note, then chart.
+    @pytest.mark.parametrize(
+        ("widget", "expected", "holds"),
+        [
+            ({"content": "Europe only"}, {"text": "Europe only"}, True),
+            ({"visualizations": [{"visualization": "id-a"}], "content": "Europe only"}, {"text": "Europe only"}, False),
+            ({"container": "g", "content": "Europe only"}, {"text": "Europe only"}, False),
+            ({"visualizations": [{"visualization": "id-a"}]}, {"switcher": ["id-a"]}, True),
+            ({"container": "g", "visualizations": [{"visualization": "id-a"}]}, {"switcher": ["id-a"]}, False),
+            (_widget("A", "id-a"), "id-a", True),
+            ({**_widget("A", "id-a"), "content": "Europe only"}, "id-a", False),
+        ],
+    )
+    def test_a_child_matches_only_as_the_kind_it_renders_as(self, widget, expected, holds):
+        assert _holds(widget, set(), expected) is holds
+
 
 class TestSimulatedReply:
     def test_existing_charts_are_listed_verbatim(self):
@@ -1883,6 +1930,104 @@ def _score_root_edit(expected: dict, operations: list[dict], new_visualizations:
 
 _ROOT_EDIT = {**_DE01_EXPECTED, "visualizations": [{"id": _NET_SALES, "title": "Net Sales"}]}
 
+# A container on the overview tab: a note, a drilled chart and a switcher side by side, and beside
+# it a second container that nests a third one. Unit-fixture ids, not the live workspace's.
+_PRODUCT_BREAKDOWN = "product_breakdown"
+_ORDER_VOLUME = "order_volume_by_category"
+_NET_SALES_BY_CATEGORY = "net_sales_by_product_category"
+_EUROPE_NOTE = "All figures cover Europe only."
+_GROUP_PATH = [{"section": 0, "widget_index": 0}]
+_INNER_GROUP_PATH = [{"section": 0, "widget_index": 1}, {"section": 0, "widget_index": 1}]
+
+
+def _group(group_id: str, *widgets: dict, direction: str | None = None) -> dict:
+    group = {"container": group_id, "columns": 12, "rows": 22, "sections": [{"widgets": list(widgets)}]}
+    return group if direction is None else {**group, "layout_direction": direction}
+
+
+def _switcher(*charts: str) -> dict:
+    return {"visualizations": [{"visualization": c, "title": c} for c in charts], "columns": 4, "rows": 22}
+
+
+def _grouped_base_part(*, tabbed: bool) -> dict:
+    product_group = _group(
+        "product_group",
+        {"content": _EUROPE_NOTE, "columns": 4, "rows": 22},
+        {**_widget("Product breakdown", _PRODUCT_BREAKDOWN, columns=4), "interactions": _DRILL},
+        _switcher(_ORDER_VOLUME, _NET_SALES_BY_CATEGORY),
+        direction="row",
+    )
+    inner_group = _group(
+        "inner_group", _widget("Active Customers", _ACTIVE_CUSTOMERS), _widget("Return Customers", _RETURN_CUSTOMERS)
+    )
+    kpi_group = _group("kpi_group", _widget("Total Customers", _TOTAL_CUSTOMERS), inner_group)
+    sections = [{"widgets": [product_group, kpi_group]}]
+    charts = [_PRODUCT_BREAKDOWN, _ORDER_VOLUME, _NET_SALES_BY_CATEGORY, _TOTAL_CUSTOMERS, _ACTIVE_CUSTOMERS]
+    part = _edit_base_part(visualizations=[*charts, _RETURN_CUSTOMERS], filters={})
+    if tabbed:
+        part["dashboard"] = {
+            **part["dashboard"],
+            "version": "3",
+            "tabs": [{"id": "overview", "title": "Overview", "filters": {}, "sections": sections}],
+        }
+        del part["dashboard"]["sections"], part["dashboard"]["filters"]
+    else:
+        part["dashboard"]["sections"] = sections
+    return part
+
+
+def _group_ops(tabbed: bool, *, swap: bool = True, column: bool = True) -> list[dict]:
+    """Stack the product group: the chart moves ahead of the note, and the row becomes a column."""
+    group = f"{'/tabs/0' if tabbed else ''}/sections/0/widgets/0"
+    chart = f"{group}/sections/0/widgets/1"
+    operations = [{"op": "test", "path": f"{chart}/visualization", "value": _PRODUCT_BREAKDOWN}]
+    if swap:
+        operations.append({"op": "move", "from": chart, "path": f"{group}/sections/0/widgets/0"})
+    if column:
+        operations.append({"op": "replace", "path": f"{group}/layout_direction", "value": "column"})
+    return operations
+
+
+_STACKED = {
+    "container_path": _GROUP_PATH,
+    "layout_direction": "column",
+    "sections": [
+        {
+            "widgets": [
+                _PRODUCT_BREAKDOWN,
+                {"text": _EUROPE_NOTE},
+                {"switcher": [_ORDER_VOLUME, _NET_SALES_BY_CATEGORY]},
+            ]
+        }
+    ],
+}
+# The inner container carries no layout_direction, which the dashboard lays out as a row.
+_INNER_ACTIVE_FIRST = {
+    "container_path": _INNER_GROUP_PATH,
+    "layout_direction": "row",
+    "sections": [{"visualizations": [_ACTIVE_CUSTOMERS, _RETURN_CUSTOMERS]}],
+}
+_GROUP_EDIT = {
+    **_DE01_EXPECTED,
+    "visualizations": [{"id": _PRODUCT_BREAKDOWN, "title": "Product breakdown"}],
+    "preserved_widgets": [{"visualization": _PRODUCT_BREAKDOWN, "interactions": _DRILL}],
+}
+
+
+def _score_group_edit(
+    layout: list[dict], operations: list[dict], *, tabbed: bool = True, new_visualizations: list[str] | None = None
+):
+    if tabbed:
+        layout = [{"tab": "overview", **entry} for entry in layout]
+    patch_part = _patch_part(operations, new_visualizations=new_visualizations)
+    return evaluate_dashboard_response(
+        _patch_result(len(new_visualizations or [])),
+        _grouped_base_part(tabbed=tabbed),
+        {**_GROUP_EDIT, "layout": layout},
+        True,
+        patch_part=patch_part,
+    )
+
 
 class TestLayout:
     """A move or a removal is only visible in the whole arrangement: every chart staying "on the
@@ -1982,6 +2127,43 @@ class TestLayout:
             # On a one-tab dashboard both entries could name that tab.
             [{"sections": []}, {"tab": "tab_customers", "sections": []}],
             [{"tabs": "tab_customers", "sections": []}],
+            # A container path is a non-empty list of two non-negative indices per hop.
+            [{"container_path": None, "sections": []}],
+            [{"container_path": [], "sections": []}],
+            [{"container_path": "0/0", "sections": []}],
+            [{"container_path": [{"section": 0}], "sections": []}],
+            [{"container_path": [{"section": 0, "widget_index": True}], "sections": []}],
+            [{"container_path": [{"section": -1, "widget_index": 0}], "sections": []}],
+            [{"container_path": [{"section": "0", "widget_index": 0}], "sections": []}],
+            [{"container_path": [{"section": 0, "widget_index": 0, "tab": "x"}], "sections": []}],
+            # A direction belongs to a container, and is row or column.
+            [{"layout_direction": "column", "sections": []}],
+            [{"container_path": _GROUP_PATH, "layout_direction": "diagonal", "sections": []}],
+            [{"container_path": _GROUP_PATH, "layout_direction": None, "sections": []}],
+            # A section lists its charts or its widgets, never both.
+            [{"sections": [{"visualizations": [], "widgets": []}]}],
+            [{"sections": [{"widgets": "chart"}]}],
+            *(
+                [{"sections": [{"widgets": [entry]}]}]
+                for entry in (
+                    "",
+                    3,
+                    {"text": 3},
+                    {"switcher": []},
+                    {"switcher": "a"},
+                    {"switcher": [{"id": "a"}]},
+                    {"switcher": [{"switcher": ["a"]}]},
+                    {"chart": "a"},
+                    {"title": ""},
+                    {"title": "A", "text": "B"},
+                )
+            ),
+            # One target per (tab, path); an unnamed tab still cannot sit beside a named one.
+            [
+                {"tab": "tab_customers", "container_path": _GROUP_PATH, "sections": []},
+                {"tab": "tab_customers", "container_path": _GROUP_PATH, "sections": []},
+            ],
+            [{"container_path": _GROUP_PATH, "sections": []}, {"tab": "tab_customers", "sections": []}],
         ],
     )
     def test_a_malformed_expectation_is_rejected_up_front(self, layout):
@@ -1989,6 +2171,221 @@ class TestLayout:
         with pytest.raises(ValueError, match="layout"):
             _run_with(client, {**_TABBED_EDIT, "layout": layout})
         client.send_message.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "layout",
+        [
+            # Distinct containers on one tab, beside the tab's own layout.
+            [
+                {"tab": "tab_customers", "sections": []},
+                {"tab": "tab_customers", "container_path": _GROUP_PATH, "layout_direction": "row", "sections": []},
+                {"tab": "tab_customers", "container_path": [*_GROUP_PATH, _GROUP_PATH[0]], "sections": []},
+            ],
+            # Several unnamed entries all name the one implicit tab.
+            [{"sections": []}, {"container_path": _GROUP_PATH, "sections": []}],
+            [
+                {
+                    "container_path": _GROUP_PATH,
+                    "sections": [
+                        {"title": None, "widgets": ["a", {"title": "B"}, {"text": "C"}, {"switcher": ["d"]}]},
+                        {"widgets": []},
+                    ],
+                }
+            ],
+        ],
+    )
+    def test_a_container_expectation_is_accepted(self, layout):
+        _validate_expectation({**_TABBED_EDIT, "layout": layout})
+
+    def test_widgets_also_describe_a_tab_layout(self):
+        layout = [{"tab": "tab_customers", "sections": [{"widgets": [_TOTAL_CUSTOMERS, _NET_SALES]}]}]
+        swap = [{"op": "move", "from": "/tabs/0/sections/0/widgets/1", "path": "/tabs/0/sections/0/widgets/0"}]
+        assert _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, swap).layout_correct
+        assert not _score_tabbed_edit({**_TABBED_EDIT, "layout": layout}, _RESIZE_AMOUNT).layout_correct
+
+
+class TestContainerLayout:
+    """A container is checked by its path: its direction and its exact children, charts, notes and
+    switchers alike. Charts inside it count as on the dashboard for every chart check."""
+
+    @pytest.mark.parametrize("tabbed", [True, False])
+    def test_the_stacked_container_matches(self, tabbed):
+        ev = _score_group_edit([_STACKED, _INNER_ACTIVE_FIRST], _group_ops(tabbed), tabbed=tabbed)
+        assert ev.strict_checks["dashboard_layout_correct"] is True
+        assert ev.strict_checks["dashboard_widgets_preserved"] is True
+        assert ev.strict_pass, ev.failures
+
+    @pytest.mark.parametrize(
+        ("operations", "failure"),
+        [
+            pytest.param(
+                _group_ops(True, swap=False),
+                "tab 'overview' container at section 0, widget_index 0 section 0 holds "
+                "[{'text': 'All figures cover Europe only.'}, 'product_breakdown', ",
+                id="note-and-chart-not-swapped",
+            ),
+            pytest.param(
+                _group_ops(True, column=False),
+                "tab 'overview' container at section 0, widget_index 0 is laid out as a row, expected a column",
+                id="left-as-a-row",
+            ),
+            pytest.param(
+                [
+                    *_group_ops(True),
+                    {
+                        "op": "move",
+                        "from": "/tabs/0/sections/0/widgets/0/sections/0/widgets/2/visualizations/1",
+                        "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/2/visualizations/0",
+                    },
+                ],
+                "{'switcher': ['net_sales_by_product_category', 'order_volume_by_category']}]",
+                id="switcher-members-reversed",
+            ),
+            pytest.param(
+                [
+                    *_group_ops(True),
+                    {
+                        "op": "add",
+                        "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/-",
+                        "value": _widget("Product breakdown", _PRODUCT_BREAKDOWN),
+                    },
+                ],
+                "'order_volume_by_category', 'net_sales_by_product_category']}, 'product_breakdown']",
+                id="chart-placed-twice",
+            ),
+            pytest.param(
+                [*_group_ops(True), {"op": "remove", "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/1"}],
+                "holds ['product_breakdown', {'switcher':",
+                id="note-removed",
+            ),
+            pytest.param(
+                [
+                    *_group_ops(True),
+                    {
+                        "op": "replace",
+                        "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/2",
+                        "value": _widget("Order volume", _ORDER_VOLUME),
+                    },
+                ],
+                "{'text': 'All figures cover Europe only.'}, 'order_volume_by_category']",
+                id="switcher-replaced-by-a-chart",
+            ),
+            pytest.param(
+                [
+                    *_group_ops(True),
+                    {
+                        "op": "replace",
+                        "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/1/content",
+                        "value": "All figures cover Europe.",
+                    },
+                ],
+                "holds ['product_breakdown', {'text': 'All figures cover Europe.'}, ",
+                id="note-text-changed",
+            ),
+            pytest.param(
+                [
+                    *_group_ops(True),
+                    {
+                        "op": "replace",
+                        "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/0/visualization",
+                        "value": _TOTAL_CUSTOMERS,
+                    },
+                ],
+                f"holds [{_TOTAL_CUSTOMERS!r}, {{'text': ",
+                id="another-chart-in-place",
+            ),
+            pytest.param([], "the patch carries no operations", id="empty-patch"),
+        ],
+    )
+    def test_a_wrong_arrangement_fails(self, operations, failure):
+        ev = _score_group_edit([_STACKED], operations)
+        assert not ev.layout_correct
+        assert any(failure in f for f in ev.failures), ev.failures
+
+    def test_another_container_on_the_same_tab_is_checked_too(self):
+        reversed_inner = {
+            **_INNER_ACTIVE_FIRST,
+            "sections": [{"visualizations": [_RETURN_CUSTOMERS, _ACTIVE_CUSTOMERS]}],
+        }
+        ev = _score_group_edit([_STACKED, reversed_inner], _group_ops(True))
+        assert not ev.layout_correct
+        assert ev.failures == [
+            "tab 'overview' container at section 0, widget_index 1 > section 0, widget_index 1 section 0 holds "
+            f"[{_ACTIVE_CUSTOMERS!r}, {_RETURN_CUSTOMERS!r}], expected [{_RETURN_CUSTOMERS!r}, {_ACTIVE_CUSTOMERS!r}]"
+        ]
+
+    @pytest.mark.parametrize(
+        ("path", "failure"),
+        [
+            ([{"section": 0, "widget_index": 5}], "tab 'overview' has no widget at section 0, widget_index 5"),
+            ([{"section": 1, "widget_index": 0}], "tab 'overview' has no widget at section 1, widget_index 0"),
+            (
+                [*_GROUP_PATH, {"section": 0, "widget_index": 0}],
+                "tab 'overview' container at section 0, widget_index 0 holds 'product_breakdown' at "
+                "section 0, widget_index 0, not a container",
+            ),
+            (
+                [*_GROUP_PATH, {"section": 0, "widget_index": 2}],
+                "holds {'switcher': ['order_volume_by_category', 'net_sales_by_product_category']} at "
+                "section 0, widget_index 2, not a container",
+            ),
+        ],
+    )
+    def test_a_path_that_reaches_no_container_fails_the_case(self, path, failure):
+        ev = _score_group_edit([{**_STACKED, "container_path": path}], _group_ops(True))
+        assert not ev.layout_correct
+        assert any(failure in f for f in ev.failures), ev.failures
+
+    def test_an_authored_chart_in_a_container_is_matched_by_title(self):
+        authored = "b5c2f8d4-0000-4000-8000-000000000001"
+        operations = [
+            *_group_ops(True),
+            {
+                "op": "add",
+                "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/-",
+                "value": _widget("Returns by Category", authored),
+            },
+        ]
+        layout = [
+            {
+                **_STACKED,
+                "sections": [{"widgets": [*_STACKED["sections"][0]["widgets"], {"title": "returns by category"}]}],
+            }
+        ]
+        assert _score_group_edit(layout, operations, new_visualizations=[authored]).layout_correct
+        assert not _score_group_edit(layout, operations).layout_correct
+
+    @pytest.mark.parametrize(
+        ("last", "passes"),
+        [(_switcher(_ORDER_VOLUME), True), (_widget("Order volume", _ORDER_VOLUME), False)],
+        ids=["one-chart-switcher", "plain-chart"],
+    )
+    def test_a_one_chart_switcher_is_not_a_chart(self, last, passes):
+        replace = {"op": "replace", "path": "/tabs/0/sections/0/widgets/0/sections/0/widgets/2", "value": last}
+        layout = [
+            {
+                **_STACKED,
+                "sections": [{"widgets": [_PRODUCT_BREAKDOWN, {"text": _EUROPE_NOTE}, {"switcher": [_ORDER_VOLUME]}]}],
+            }
+        ]
+        assert _score_group_edit(layout, [*_group_ops(True), replace]).layout_correct is passes
+
+    def test_tabs_and_chart_checks_see_charts_inside_containers(self):
+        expected = {
+            **_GROUP_EDIT,
+            "visualizations": [
+                {"id": _PRODUCT_BREAKDOWN, "title": "Product breakdown"},
+                {"id": _ACTIVE_CUSTOMERS, "title": "Active Customers"},
+            ],
+            "tabs": [{"title": "Overview", "visualizations": [_PRODUCT_BREAKDOWN, _ACTIVE_CUSTOMERS]}],
+        }
+        patch_part = _patch_part(_group_ops(True))
+        ev = evaluate_dashboard_response(
+            _patch_result(), _grouped_base_part(tabbed=True), expected, True, patch_part=patch_part
+        )
+        assert ev.strict_checks["charts_matched"] is True
+        assert ev.strict_checks["dashboard_tabs_correct"] is True
+        assert ev.strict_pass, ev.failures
 
 
 _CUSTOMER_CONTAINS = {"type": "text_filter", "using": "label/customer_name", "condition": "contains", "value": "Aaron"}
