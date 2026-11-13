@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.14 installed; Python 3.13, 3.12, 3.11 and 3.10 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.14 installed; Python 3.15, 3.13, 3.12, 3.11 and 3.10 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
