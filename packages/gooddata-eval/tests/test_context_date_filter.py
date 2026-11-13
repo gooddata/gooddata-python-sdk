@@ -361,3 +361,40 @@ def test_strict_check_summary_is_unchanged_with_the_flag_off():
     message = str(exc_info.value)
     assert "    date      : False\n" in message
     assert "inherited" not in message
+
+
+def test_failed_checks_leave_out_an_accepted_inherited_date(monkeypatch):
+    monkeypatch.setenv(_ENV, "1")
+    # An extra attribute filter fails the filters; the inherited date filter must not be blamed.
+    chat = ChatResult.model_validate(
+        {
+            "createdVisualizations": {
+                "objects": [
+                    _headline(
+                        {
+                            "f_transaction_date": _INHERITED,
+                            "a": {"type": "attribute_filter", "using": "label/region", "state": {"include": ["x"]}},
+                        }
+                    )
+                ],
+                "reasoning": "",
+            },
+            "toolCallEvents": [],
+        }
+    )
+    with patch.object(agentic_visualization, "ChatClient", return_value=_agentic_client(chat)):
+        summary = run_agentic_visualization(
+            host="https://example.com",
+            token="tok",
+            workspace_id="ws",
+            question="Show Gross Margin Percent as a headline.",
+            expected_outputs=[_viz()],
+            k=1,
+            user_context=_USER_CONTEXT,
+        )
+    run = summary.best
+    assert run.eval_result.filter_date_inherited is True
+    assert run.eval_result.filters_correct is False
+    labels = [c.get("label") for c in agentic_visualization._failed_checks(run) if c.get("name") == "filters_correct"]
+    assert "date" not in labels
+    assert "attribute" in labels

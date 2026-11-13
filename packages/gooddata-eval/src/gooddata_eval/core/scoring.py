@@ -57,13 +57,16 @@ class FilterScores:
     date_ok: bool
     ranking_ok: bool
     attribute_ok: bool
-    # True only when `date_ok` holds because the actual date filter is the one the dashboard
+    # Set only when `date_ok` holds because the actual date filter is the one the dashboard
     # in the item's `user_context` applies (see `check_filters`), not because it matched the
-    # expected output. Always False unless that rule is switched on.
-    date_inherited: bool = False
-    # The date dataset (`using`) of the inherited filter. The dashboard filter names none, so
-    # any date dataset is accepted and the one the agent picked is recorded here.
+    # expected output: the date dataset (`using`) of that filter. The dashboard filter may name
+    # none, so any date dataset is accepted and the one the agent picked is recorded here.
     date_inherited_dataset: str | None = None
+
+    @property
+    def date_inherited(self) -> bool:
+        """Whether `date_ok` holds only through the dashboard-context rule."""
+        return self.date_inherited_dataset is not None
 
     @property
     def all_ok(self) -> bool:
@@ -597,7 +600,6 @@ def check_filters(
         date_ok=date_ok,
         ranking_ok=act_rank == exp_rank,
         attribute_ok=act_attr == exp_attr,
-        date_inherited=inherited_dataset is not None,
         date_inherited_dataset=inherited_dataset,
     )
 

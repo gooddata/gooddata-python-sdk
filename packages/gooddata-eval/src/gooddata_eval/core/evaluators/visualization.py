@@ -83,11 +83,15 @@ class EvaluationResult:
     format_correct: bool | None = None
     format_problems: list[str] = field(default_factory=list)
     part_present: bool | None = None
-    # Whether `filter_date_score` holds only because the actual date filter is the one the
-    # dashboard in the item's `user_context` applies (opt-in, see `check_filters`), and the
-    # date dataset that filter used. Reported in the detail only when True.
-    filter_date_inherited: bool = False
+    # Set only when `filter_date_score` holds because the actual date filter is the one the
+    # dashboard in the item's `user_context` applies (opt-in, see `check_filters`): the date
+    # dataset that filter used. Reported in the detail only when set.
     filter_date_inherited_dataset: str | None = None
+
+    @property
+    def filter_date_inherited(self) -> bool:
+        """Whether `filter_date_score` holds only through the dashboard-context rule."""
+        return self.filter_date_inherited_dataset is not None
 
     @property
     def scored_without_chart(self) -> bool:
@@ -530,7 +534,6 @@ def _evaluate_visualization(
         expected_buckets=bucket_layout(expected) if expected.buckets_strict else None,
         actual_buckets=bucket_layout(actual) if expected.buckets_strict else None,
         metric_layout_problems=metric_layout_problems,
-        filter_date_inherited=filter_scores.date_inherited,
         filter_date_inherited_dataset=filter_scores.date_inherited_dataset,
     )
 

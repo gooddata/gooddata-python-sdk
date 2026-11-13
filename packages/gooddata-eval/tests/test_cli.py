@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from unittest.mock import MagicMock
 
 import httpx
@@ -22,8 +22,9 @@ from gooddata_eval.core.connection import (
     ConnectionError_,  # noqa: F401 - used in test_cli_operational_error_exits_nonzero
 )
 from gooddata_eval.core.dataset.langfuse_source import _item_from_raw
-from gooddata_eval.core.models import DatasetItem
+from gooddata_eval.core.models import CreatedVisualization, DatasetItem
 from gooddata_eval.core.runner import EvalReport, ItemReport
+from gooddata_eval.core.scoring import FilterScores, check_filters
 from gooddata_eval.core.timing import TIMERS_ENV_VAR, timers_enabled
 from gooddata_eval.core.workspace import ActiveLlmProvider, ResolvedModel
 from rich.console import Console
@@ -1240,11 +1241,6 @@ def test_accept_context_date_filter_flag_never_clears_an_exported_env_var(monkey
 
 
 def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch):
-    from datetime import date  # noqa: PLC0415
-
-    from gooddata_eval.core.models import CreatedVisualization  # noqa: PLC0415
-    from gooddata_eval.core.scoring import check_filters  # noqa: PLC0415
-
     def viz(filter_by: dict) -> CreatedVisualization:
         return CreatedVisualization.model_validate(
             {
@@ -1260,7 +1256,7 @@ def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch):
         "view": {"dashboard": {"filters": [{"type": "date_filter", "granularity": "MONTH", "from": -11, "to": 0}]}}
     }
 
-    def score():
+    def score() -> FilterScores:
         return check_filters(viz({}), viz({"f": inherited}), date(2026, 11, 12), user_context=user_context)
 
     monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "0")

@@ -511,6 +511,8 @@ def _failed_checks(run: RunResult) -> list[dict]:
             )
             for category in sorted(set(ev.expected_filters) | set(ev.actual_filters))
             if ev.expected_filters.get(category, []) != ev.actual_filters.get(category, [])
+            # An inherited date filter was accepted, so it is not why the filters failed.
+            and not (category == "date" and ev.filter_date_inherited)
         ]
         checks.extend(differing or [FailedCheck("filters_correct")])
     if not ev.sorts_correct:
