@@ -39,11 +39,14 @@ _REDACTED_DETAIL_FIELDS = frozenset({"transcript", "tool_calls"})
 # item's top level left the identical content exposed one level deeper -- the top-level
 # `reasoning` dropped while the same text survived verbatim in `failed_runs`.
 #
+# The run's own `tool_calls` goes for the reason `detail.tool_calls` goes: its arguments
+# and results carry semantic-layer internals and real query rows.
+#
 # Kept on purpose, matching what the top level keeps: `reasoning_step_count` (a count, like
 # `detail.turns`), `tool_call_count`/`tool_names` (which tool ran, never its arguments or
 # its result -- the same line `latency_breakdown` draws), and the run's verdict, error and
 # timings, which are facts about the run rather than about our infrastructure.
-_REDACTED_RUN_FIELDS = frozenset({"conversation_id", "response_id", "reasoning_steps"})
+_REDACTED_RUN_FIELDS = frozenset({"conversation_id", "response_id", "reasoning_steps", "tool_calls"})
 
 
 def _redact_detail(detail: dict) -> dict:

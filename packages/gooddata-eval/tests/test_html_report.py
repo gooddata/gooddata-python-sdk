@@ -49,6 +49,7 @@ def _doc(model: str, passed: bool) -> dict:
                                 "reasoning_steps": ["**Thinking**\n\nper-run internal thoughts"],
                                 "tool_call_count": 1,
                                 "tool_names": ["search_objects"],
+                                "tool_calls": [{"index": 0, "name": "search_objects", "result": "run-level row data"}],
                                 "latency_s": 3.5,
                                 "detail": {
                                     "metrics_correct": False,
@@ -186,11 +187,13 @@ def test_redact_reaches_inside_failed_runs():
     assert "run-conv-secret" not in html
     assert "run-resp-secret" not in html
     assert "per-run internal thoughts" not in html
+    assert "run-level row data" not in html
 
     run = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["failed_runs"][0]
     assert "conversation_id" not in run
     assert "response_id" not in run
     assert "reasoning_steps" not in run
+    assert "tool_calls" not in run
     # What the run actually did survives -- the same line the top level draws.
     assert run["run_index"] == 2
     assert run["passed"] is False
