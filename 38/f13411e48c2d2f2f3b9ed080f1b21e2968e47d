@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_eval_error_scores.py
+  s_d5a90247078f0f::t_5155ba3a44f433 1-154
+packages/gooddata-eval/tests/test_outcome.py
+  s_d5a90247078f0f::t_30fd8d6d752891 725-825
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "38f13411e48c2d2f2f3b9ed080f1b21e2968e47d",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
