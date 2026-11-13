@@ -4,6 +4,7 @@ import json
 from unittest.mock import MagicMock, patch
 
 import pytest
+from gooddata_eval.core.agentic._conversation_context import CONFIRMATION_REPLY
 from gooddata_eval.core.agentic.dashboard_skill import (
     DashboardEvaluation,
     DashboardSkillAssertionError,
@@ -718,8 +719,8 @@ class TestEditing:
 
     def test_an_edit_that_asks_back_stops_rather_than_sending_the_creation_reply(self):
         """The creation reply names charts and a date range, which answers nothing a rename or
-        a resize could have asked. Sending it anyway would hide which cases need a reply of
-        their own."""
+        a resize could have asked. Without a reply of its own the run stops, and says what the
+        agent asked so triage sees the case needs one."""
         client = MagicMock()
         client.send_message.return_value = _chat_result(
             tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
@@ -729,6 +730,180 @@ class TestEditing:
         assert client.send_message.call_count == 1
         assert summary.best.total_turns == 1
         assert not summary.pass_at_k
+        # Three turns were left: the run stopped because nothing could answer, not on the budget.
+        assert summary.best.exit_reason is LoopExit.STOPPED_EARLY
+        assert summary.best.evaluation.notes == [
+            "the agent asked back on an edit and the case has no clarification_reply, so the run stopped: "
+            "'Which widget did you mean?'"
+        ]
+
+    def test_an_edit_that_asks_back_is_answered_with_its_clarification_reply(self) -> None:
+        reply = "Rename the Order status chart. Apply it now, no need to confirm."
+        client = MagicMock()
+        client.send_message.side_effect = [
+            _chat_result(
+                tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+                text="Which widget did you mean?",
+            ),
+            _chat_result(
+                tool_calls=[_tool_call("patch_dashboard", _patch_result())],
+                parts=[_edit_base_part(), _patch_part(TestPreservedFilters._RENAME, visualizations=[_ORDER_STATUS])],
+            ),
+        ]
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": reply}, max_iterations=None)
+        assert [call.args[1] for call in client.send_message.call_args_list] == [
+            "Could you create a dashboard?",
+            reply,
+        ]
+        assert summary.pass_at_k
+        assert summary.best.total_turns == 2
+        assert summary.best.evaluation.notes == []
+
+    def test_the_clarification_reply_is_sent_once_and_a_second_question_is_quoted(self) -> None:
+        """A second question is one the fixture's author did not foresee. Repeating the same
+        reply would not answer it, so the run stops and names it."""
+        reply = "Add both at the end of the section. Apply it now, no need to confirm."
+        client = MagicMock()
+        client.send_message.side_effect = [
+            _chat_result(
+                tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+                text="Where should I place them?",
+            ),
+            _chat_result(text="Should the new chart be  full width?"),
+        ]
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": reply}, max_iterations=None)
+        assert client.send_message.call_count == 2
+        assert not summary.pass_at_k
+        assert summary.best.exit_reason is LoopExit.STOPPED_EARLY
+        assert summary.best.evaluation.notes == [
+            "the agent asked again after the case's clarification_reply, and the run stopped: "
+            "'Should the new chart be full width?'"
+        ]
+
+    def test_an_edit_turn_that_asks_nothing_is_not_sent_the_clarification_reply(self) -> None:
+        """A turn that reports a rejected patch asked nothing; sending the reply would nudge a retry."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+            text="I could not apply the change to the dashboard.",
+        )
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": "Apply it now."}, max_iterations=None)
+        assert client.send_message.call_count == 1
+        assert not summary.pass_at_k
+        assert summary.best.exit_reason is LoopExit.STOPPED_EARLY
+        assert summary.best.evaluation.notes == [
+            "the agent replied on an edit without a patch or a question, so the run stopped: "
+            "'I could not apply the change to the dashboard.'"
+        ]
+
+    def test_an_edit_that_asks_to_go_ahead_is_told_yes_without_spending_its_reply(self) -> None:
+        """A confirmation asks nothing the fixture has to answer: "Yes, go ahead." settles it, and the
+        clarification_reply stays for a real question."""
+        reply = "Add both at the end of the section. Apply it now, no need to confirm."
+        client = MagicMock()
+        client.send_message.side_effect = [
+            _chat_result(
+                tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+                text="I will rename the chart. Shall I apply this?",
+            ),
+            _chat_result(text="Where should I place them?"),
+            _chat_result(
+                tool_calls=[_tool_call("patch_dashboard", _patch_result())],
+                parts=[_edit_base_part(), _patch_part(TestPreservedFilters._RENAME, visualizations=[_ORDER_STATUS])],
+            ),
+        ]
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": reply}, max_iterations=None)
+        assert [call.args[1] for call in client.send_message.call_args_list] == [
+            "Could you create a dashboard?",
+            CONFIRMATION_REPLY,
+            reply,
+        ]
+        assert summary.pass_at_k
+        assert summary.best.evaluation.notes == []
+
+    def test_a_question_asked_beside_a_confirmation_is_sent_the_clarification_reply(self) -> None:
+        """A real question followed by "Please confirm" is still a question, so the fixture's reply answers it."""
+        reply = "Resize the Order status chart. Apply it now, no need to confirm."
+        client = MagicMock()
+        client.send_message.side_effect = [
+            _chat_result(
+                tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+                text="Which widget should I resize? Please confirm.",
+            ),
+            _chat_result(
+                tool_calls=[_tool_call("patch_dashboard", _patch_result())],
+                parts=[_edit_base_part(), _patch_part(TestPreservedFilters._RENAME, visualizations=[_ORDER_STATUS])],
+            ),
+        ]
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": reply}, max_iterations=None)
+        assert [call.args[1] for call in client.send_message.call_args_list] == [
+            "Could you create a dashboard?",
+            reply,
+        ]
+        assert summary.pass_at_k
+
+    def test_a_cap_reached_before_the_clarification_reply_is_sent_still_quotes_the_question(self) -> None:
+        """With one turn there is no room for the reply: the budget ended the run, and the note says so."""
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+            text="Where should I place them?",
+        )
+        summary = _run_with(client, {**_DE01_EXPECTED, "clarification_reply": "At the end."}, max_iterations=1)
+        assert client.send_message.call_count == 1
+        assert summary.best.exit_reason is LoopExit.BUDGET_EXHAUSTED
+        assert summary.best.evaluation.notes == [
+            "the turn budget ran out before the case's clarification_reply could be sent: 'Where should I place them?'"
+        ]
+
+    def test_a_structured_question_is_quoted_rather_than_the_text_beside_it(self) -> None:
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+            parts=[
+                {
+                    "type": "clarifyingQuestions",
+                    "questions": [{"text": "Which widget?", "control": {"options": []}}],
+                }
+            ],
+            text="I need more details.",
+        )
+        summary = _run_with(client, _DE01_EXPECTED, max_iterations=None)
+        assert summary.best.evaluation.notes == [
+            "the agent asked back on an edit and the case has no clarification_reply, so the run stopped: "
+            "'Which widget?'"
+        ]
+
+    def test_a_long_unanswered_question_is_cut_in_the_note(self) -> None:
+        client = MagicMock()
+        client.send_message.return_value = _chat_result(
+            tool_calls=[_tool_call("set_skills", {"skills_to_activate": ["dashboard_editor"]})],
+            text="Which option? " + "Option " * 100,
+        )
+        note = _run_with(client, _DE01_EXPECTED, max_iterations=None).best.evaluation.notes[0]
+        assert note.endswith("…'")
+        assert len(note) < 450
+
+    @pytest.mark.parametrize(
+        ("reply", "message"),
+        [
+            ("", "clarification_reply must be a non-empty reply"),
+            ("   ", "clarification_reply must be a non-empty reply"),
+            (["Add it at the end."], "clarification_reply must be a non-empty reply"),
+        ],
+    )
+    def test_an_unusable_clarification_reply_is_rejected_up_front(self, reply: object, message: str) -> None:
+        client = MagicMock()
+        with pytest.raises(ValueError, match=message):
+            _run_with(client, {**_DE01_EXPECTED, "clarification_reply": reply})
+        client.send_message.assert_not_called()
+
+    def test_a_creation_case_cannot_carry_a_clarification_reply(self) -> None:
+        """A creation case is answered with the reply built from its charts and date range."""
+        client = MagicMock()
+        with pytest.raises(ValueError, match="clarification_reply is for an edit case"):
+            _run_with(client, {**_DC05_EXPECTED, "clarification_reply": "Use these charts."})
+        client.send_message.assert_not_called()
 
     def test_a_creation_case_still_gets_its_clarifying_round(self):
         """The same cap that an edit never reaches is still spent on creation."""
@@ -936,6 +1111,19 @@ class TestSimulatedReply:
             "Date range: all time. "
             "Anything else is up to you. Please create the dashboard now."
         )
+
+    def test_a_case_without_a_date_range_says_no_period(self) -> None:
+        """The case does not look at the date filter, so the reply must not pick one -- "all time"
+        could contradict the date filter of an existing chart the case expects to be reused."""
+        expected = {k: v for k, v in _DC03_EXPECTED.items() if k != "date_range"}
+        assert build_simulated_reply(expected) == (
+            'Please use these charts: Activity by Hour, and a new chart titled "Net Orders by Customer Age". '
+            "Anything else is up to you. Please create the dashboard now."
+        )
+
+    def test_a_null_date_range_still_asks_for_all_time(self) -> None:
+        """Null is a stated range: the case requires all time and checks it."""
+        assert "Date range: all time. " in build_simulated_reply({**_DC03_EXPECTED, "date_range": None})
 
     def test_an_authored_chart_alone_reads_naturally(self):
         expected = {"visualizations": [{"id": None, "title": "Net Orders by Customer Age"}], "date_range": None}
@@ -2902,3 +3090,5 @@ class TestRefusalCases:
         summary = _run_with(client, self._NO_DATA)
         assert client.send_message.call_count == 1
         assert summary.best.evaluation.strict_pass
+        # Turns were left: the harness chose not to reply, so the budget did not end it.
+        assert summary.best.exit_reason is LoopExit.STOPPED_EARLY

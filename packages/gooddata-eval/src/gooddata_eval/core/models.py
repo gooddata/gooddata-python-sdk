@@ -40,6 +40,12 @@ class LoopExit(str, Enum):
     """The loop hit ``max_iterations`` without the agent producing its output. Says nothing
     about whether the agent was on track; it may have been one turn away."""
 
+    STOPPED_EARLY = "stopped_early"
+    """The agent replied and the harness had nothing to send back, so the loop stopped with
+    turns left: a question the case has no reply for, a second question after the case's
+    reply was spent, a reply that neither asked nor acted, or a refusal case answered in one
+    turn, where any follow-up would press the agent to build what it must not."""
+
     SIMULATED_USER_FAILED = "simulated_user_failed"
     """The harness's own simulated-user model failed to produce a follow-up. A harness-side
     fault, not an agent one -- reporting should treat it as an error, not a scored failure."""

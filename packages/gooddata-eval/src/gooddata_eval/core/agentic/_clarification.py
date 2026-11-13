@@ -370,7 +370,8 @@ class ClarifyingAnswers(BaseModel):
         return "\n\n".join(f"**{text}**\n\n{answer}" for _, text, answer in sorted(sections, key=lambda s: s[0]))
 
 
-def _all_questions(chat_result: ChatResult) -> list[dict]:
+def all_questions(chat_result: ChatResult) -> list[dict]:
+    """Every question of every ``clarifyingQuestions`` part the reply carried, in order, whatever item it belongs to."""
     parts = [p for p in chat_result.unhandled_parts or [] if p.get("type") == "clarifyingQuestions"]
     return [q for p in parts for q in p.get("questions") or []]
 
@@ -502,7 +503,7 @@ def after_answers_mismatches(
     if skipped_questions_not_reasked:
         for question in skipped:
             asked_again = any(
-                _same_question(later, question) for _, reply, _ in replies_after for later in _all_questions(reply)
+                _same_question(later, question) for _, reply, _ in replies_after for later in all_questions(reply)
             )
             if asked_again:
                 out.append(f"asked the skipped question {question['text']!r} again")
