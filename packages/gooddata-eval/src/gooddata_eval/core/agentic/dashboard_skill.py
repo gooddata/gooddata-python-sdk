@@ -186,16 +186,41 @@ def _sections_of(dashboard: dict) -> list[dict]:
 
 
 def _widgets_of(dashboard: dict) -> list[dict]:
-    """Every widget of the dashboard, flattened across sections.
+    """Every leaf widget of the dashboard, flattened across sections and the containers in them.
 
     Charts are matched dashboard-wide on purpose: the expectation names charts, not a layout,
-    so which section or tab one lands on is the agent's call. The date filter is deliberately
-    the opposite -- ``_check_date_range`` requires *every* tab to match. That one is defensive
-    rather than observed: ``draft_dashboard`` copies a single filter onto every tab
+    so which section, tab or container one lands on is the agent's call. The date filter is
+    deliberately the opposite -- ``_check_date_range`` requires *every* tab to match. That one is
+    defensive rather than observed: ``draft_dashboard`` copies a single filter onto every tab
     unconditionally, so a draft cannot currently disagree with itself across tabs, and the
     per-tab check is there to notice if that stops being true.
     """
-    return [widget for section in _sections_of(dashboard) for widget in section.get("widgets") or []]
+    return _leaf_widgets(_sections_of(dashboard))
+
+
+def _is_container(widget: dict) -> bool:
+    """Whether a widget is a container, named by either of its two keys.
+
+    The AAC converter writes ``container`` on every container but ``sections`` only when it has
+    some, so a saved empty container arrives with ``container`` alone.
+    """
+    return "container" in widget or "sections" in widget
+
+
+def _leaf_widgets(sections: list[dict]) -> list[dict]:
+    """The widgets of ``sections`` in document order, each container replaced by the widgets inside it.
+
+    A switcher stays one widget, as it does at the top level, so the chart checks reading this
+    list do not see its member charts.
+    """
+    leaves: list[dict] = []
+    for section in sections:
+        for widget in section.get("widgets") or []:
+            if _is_container(widget):
+                leaves.extend(_leaf_widgets(widget.get("sections") or []))
+            else:
+                leaves.append(widget)
+    return leaves
 
 
 def _apply_patch(base: dict, operations: list[dict]) -> tuple[dict | None, str | None]:
@@ -747,7 +772,7 @@ def _check_tabs(dashboard: dict, new_ids: set[str], expected: list[dict]) -> lis
     for index, (tab, exp) in enumerate(zip(tabs, expected)):
         if "title" in exp and _norm(str(tab.get("title") or "")) != _norm(str(exp["title"] or "")):
             failures.append(f"tab {index} is titled {tab.get('title')!r}, expected {exp['title']!r}")
-        tab_widgets = [w for section in tab.get("sections") or [] for w in section.get("widgets") or []]
+        tab_widgets = _leaf_widgets(tab.get("sections") or [])
         failures.extend(
             f"tab {index} ({tab.get('title')!r}) does not hold chart {chart!r}"
             for chart in exp.get("visualizations") or []
@@ -902,15 +927,20 @@ def _named_tab(dashboard: dict, tab_id: str | None) -> tuple[dict | None, str]:
 
 
 def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> list[str]:
-    """Each named tab must hold exactly the expected sections, in order, each with exactly its charts in order.
+    """Each named layout must hold exactly the expected sections, in order, each with exactly its widgets in order.
 
     Exact on purpose. A move that leaves the widget where it was, places a second copy, or puts
     it in the wrong section keeps every chart "on the dashboard", and so does a removal that
-    never happened; only the whole arrangement tells them apart. A section's ``title`` is
-    compared when the entry states it, ``null`` meaning untitled. Its ``visualizations`` are
-    always stated, ``[]`` for a section without charts. A chart is an id, or
-    ``{"title": ...}`` for one the agent authored. Widgets that show no visualization are not
-    charts and are left out on both sides.
+    never happened; only the whole arrangement tells them apart.
+
+    The layout is a tab's own, or with ``container_path`` the container that path reaches from
+    it, compared on ``layout_direction`` too when the entry states it. A section's ``title`` is
+    compared when the entry states it, ``null`` meaning untitled. Its ``visualizations`` list the
+    charts, ``[]`` for a section without any, and the widgets that show no visualization are
+    left out on both sides. Its ``widgets`` instead list every child: a chart is an id, or
+    ``{"title": ...}`` for one the agent authored, a note ``{"text": ...}`` and a switcher
+    ``{"switcher": [charts]}``, which is how a swap of a note and a chart, or a switcher taken
+    apart, is told from the arrangement asked for.
     """
     failures: list[str] = []
     for entry in expected:
@@ -919,6 +949,16 @@ def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> l
             failures.append(where)
             continue
         sections = tab.get("sections") or []
+        if "container_path" in entry:
+            container, where = _container_at(sections, entry["container_path"], where)
+            if container is None:
+                failures.append(where)
+                continue
+            sections = container.get("sections") or []
+            # The converter writes no direction for a row, and the dashboard lays a container out as one.
+            direction = container.get("layout_direction") or "row"
+            if "layout_direction" in entry and direction != entry["layout_direction"]:
+                failures.append(f"{where} is laid out as a {direction}, expected a {entry['layout_direction']}")
         wanted = entry["sections"]
         if len(sections) != len(wanted):
             titles = ", ".join(repr(s.get("title")) for s in sections)
@@ -929,6 +969,14 @@ def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> l
                 failures.append(
                     f"{where} section {index} is titled {section.get('title')!r}, expected {want['title']!r}"
                 )
+            if "widgets" in want:
+                children = section.get("widgets") or []
+                if len(children) != len(want["widgets"]) or not all(
+                    _holds(w, new_ids, c) for w, c in zip(children, want["widgets"], strict=True)
+                ):
+                    shown = [_widget_entry(w) for w in children]
+                    failures.append(f"{where} section {index} holds {shown}, expected {want['widgets']}")
+                continue
             charts = [w for w in section.get("widgets") or [] if w.get("visualization")]
             charts_wanted = want["visualizations"]
             if len(charts) != len(charts_wanted) or not all(
@@ -937,6 +985,64 @@ def _check_layout(dashboard: dict, new_ids: set[str], expected: list[dict]) -> l
                 shown = [w.get("visualization") for w in charts]
                 failures.append(f"{where} section {index} holds {shown}, expected {charts_wanted}")
     return failures
+
+
+def _container_at(sections: list[dict], path: list[dict], where: str) -> tuple[dict | None, str]:
+    """The container ``path`` reaches from ``sections``, and how to name it in a failure.
+
+    Each hop is a section and a widget index inside the layout the previous hop reached. A hop
+    that lands on nothing, or on a widget that is not a container, gives ``None`` and the reason:
+    the result left no container where the case expects one, which fails the case.
+    """
+    container: dict | None = None
+    for depth, hop in enumerate(path):
+        at = f"section {hop['section']}, widget_index {hop['widget_index']}"
+        widgets = (sections[hop["section"]].get("widgets") or []) if hop["section"] < len(sections) else []
+        if hop["widget_index"] >= len(widgets):
+            return None, f"{where} has no widget at {at}"
+        container = widgets[hop["widget_index"]]
+        if not _is_container(container):
+            return None, f"{where} holds {_widget_entry(container)!r} at {at}, not a container"
+        where = f"{where} {'container at' if depth == 0 else '>'} {at}"
+        sections = container.get("sections") or []
+    return container, where
+
+
+def _holds(widget: dict, new_ids: set[str], expected: str | dict) -> bool:
+    """Whether ``widget`` is the child a layout section's ``widgets`` entry names.
+
+    The widget is read as the kind ``_widget_entry`` names it, so a widget carrying the keys of
+    two kinds matches only the one it renders as.
+    """
+    shown = _widget_entry(widget)
+    if isinstance(expected, dict) and "text" in expected:
+        return shown == expected
+    if isinstance(expected, dict) and "switcher" in expected:
+        members = widget.get("visualizations") or []
+        return (
+            isinstance(shown, dict)
+            and "switcher" in shown
+            and len(members) == len(expected["switcher"])
+            and all(
+                _matching_widgets([m], new_ids, _chart_entry(c))
+                for m, c in zip(members, expected["switcher"], strict=True)
+            )
+        )
+    return not isinstance(shown, dict) and bool(_matching_widgets([widget], new_ids, _chart_entry(expected)))
+
+
+def _widget_entry(widget: dict) -> object:
+    """A child widget written the way a layout section's ``widgets`` entry names it, for a failure message.
+
+    Kinds are read in the converter's order, container first, so a widget is named as it renders.
+    """
+    if _is_container(widget):
+        return {"container": widget.get("container")}
+    if "visualizations" in widget:
+        return {"switcher": [m.get("visualization") for m in widget["visualizations"] or []]}
+    if "content" in widget:
+        return {"text": widget["content"]}
+    return widget.get("visualization")
 
 
 def _check_filter_bar(dashboard: dict, expected: list[dict]) -> list[str]:
@@ -1416,24 +1522,34 @@ def _validate_layout_expectations(expected_output: dict) -> None:
                 raise ValueError(f"a preserved widget needs its visualization and a key to guard, got {widget!r}")
 
     if "layout" in expected_output:
-        for entry in _tab_entries(expected_output, "layout", {"tab", "sections"}):
+        for entry in _layout_entries(expected_output):
             sections = entry.get("sections")
             if not isinstance(sections, list):
                 raise ValueError(f"a layout entry needs its sections as a list, got {entry!r}")
             for section in sections:
-                if not isinstance(section, dict) or section.keys() - {"title", "visualizations"}:
-                    raise ValueError(f"a layout section takes only title and visualizations, got {section!r}")
+                if not isinstance(section, dict) or section.keys() - {"title", "visualizations", "widgets"}:
+                    raise ValueError(
+                        f"a layout section takes only title and visualizations or widgets, got {section!r}"
+                    )
                 if section.get("title") is not None and not isinstance(section["title"], str):
                     raise ValueError(f"a layout section's title must be a string or null, got {section!r}")
-                if "visualizations" not in section:
+                if ("visualizations" in section) == ("widgets" in section):
                     # Missing would read as "no charts" here but as "any charts" in `tabs`.
-                    raise ValueError(f"a layout section must list its visualizations, [] for none, got {section!r}")
+                    raise ValueError(
+                        f"a layout section must list either its visualizations or its widgets, [] for none, "
+                        f"got {section!r}"
+                    )
+                if "widgets" in section:
+                    if not isinstance(section["widgets"], list) or not all(
+                        _is_widget_entry(w) for w in section["widgets"]
+                    ):
+                        raise ValueError(
+                            "a layout section's widgets must be chart ids, {'title': ...}, {'text': ...} or "
+                            f"{{'switcher': [charts]}}, got {section!r}"
+                        )
+                    continue
                 charts = section["visualizations"]
-                if not isinstance(charts, list) or not all(
-                    (isinstance(c, str) and c)
-                    or (isinstance(c, dict) and c.keys() == {"title"} and isinstance(c["title"], str) and c["title"])
-                    for c in charts
-                ):
+                if not isinstance(charts, list) or not all(_is_chart_entry(c) for c in charts):
                     raise ValueError(
                         f"a layout section's visualizations must be chart ids or {{'title': ...}}, got {section!r}"
                     )
@@ -1470,8 +1586,94 @@ def _validate_bar_filter(label: str, body: object) -> None:
         _validate_tab_attribute_filter(label, body)
 
 
+def _layout_entries(expected_output: dict) -> list[dict]:
+    """The entries of ``layout``, each naming one layout: a tab's own, or a container on it by path.
+
+    Raises:
+        ValueError: not a non-empty list of objects, an unknown key, a malformed tab, path or
+            direction, or one layout named twice. A layout is its tab and its path, the tab's own
+            layout having none, so one tab can hold several entries. An entry without ``tab`` is
+            for a dashboard with one tab, so it cannot sit beside an entry that names a tab: both
+            could name that one tab.
+    """
+    entries = expected_output["layout"]
+    if not isinstance(entries, list) or not entries or not all(isinstance(e, dict) for e in entries):
+        raise ValueError(f"layout must be a non-empty list of layout objects, got {entries!r}")
+    seen: set[tuple[str | None, tuple[tuple[int, int], ...]]] = set()
+    for entry in entries:
+        unknown = sorted(entry.keys() - {"tab", "container_path", "layout_direction", "sections"})
+        if unknown:
+            raise ValueError(f"a layout entry cannot state {unknown}, got {entry!r}")
+        tab = entry.get("tab")
+        if tab is not None and not (isinstance(tab, str) and tab):
+            raise ValueError(f"a layout entry's tab must be a tab id, got {entry!r}")
+        path = _container_path(entry)
+        if "layout_direction" in entry and (not path or entry["layout_direction"] not in ("row", "column")):
+            raise ValueError(f"a layout entry's layout_direction is 'row' or 'column' on a container, got {entry!r}")
+        if (tab, path) in seen:
+            target = f"the container at {entry['container_path']}" if path else "the layout"
+            owner = "the dashboard" if tab is None else f"tab {tab!r}"
+            raise ValueError(f"layout names {target} of {owner} more than once")
+        seen.add((tab, path))
+    tabs = {tab for tab, _ in seen}
+    if None in tabs and len(tabs) > 1:
+        raise ValueError(f"a layout entry without tab cannot sit beside one that names a tab, got {entries!r}")
+    return entries
+
+
+def _container_path(entry: dict) -> tuple[tuple[int, int], ...]:
+    """A layout entry's ``container_path`` as ``(section, widget_index)`` hops, ``()`` for the tab's own layout.
+
+    Raises:
+        ValueError: present, but not a non-empty list of hops that each carry exactly a
+            non-negative ``section`` and ``widget_index``. ``null`` and ``[]`` are refused rather
+            than read as the tab's own layout: leaving the key out says that.
+    """
+    if "container_path" not in entry:
+        return ()
+    path = entry["container_path"]
+    # bool is an int, so `True` would otherwise read as index 1.
+    if (
+        not isinstance(path, list)
+        or not path
+        or not all(
+            isinstance(hop, dict)
+            and hop.keys() == {"section", "widget_index"}
+            and all(isinstance(i, int) and not isinstance(i, bool) and i >= 0 for i in hop.values())
+            for hop in path
+        )
+    ):
+        raise ValueError(
+            f"a layout entry's container_path must be a non-empty list of {{'section', 'widget_index'}} hops, "
+            f"got {entry!r}"
+        )
+    return tuple((hop["section"], hop["widget_index"]) for hop in path)
+
+
+def _is_chart_entry(entry: object) -> bool:
+    """A chart as a layout section names it: an id, or ``{"title": ...}`` for one the agent authored."""
+    return (isinstance(entry, str) and bool(entry)) or (
+        isinstance(entry, dict)
+        and entry.keys() == {"title"}
+        and isinstance(entry["title"], str)
+        and bool(entry["title"])
+    )
+
+
+def _is_widget_entry(entry: object) -> bool:
+    """A child as a layout section's ``widgets`` names it: a chart, ``{"text": ...}`` or ``{"switcher": [charts]}``."""
+    if _is_chart_entry(entry):
+        return True
+    if not isinstance(entry, dict) or len(entry) != 1:
+        return False
+    if "text" in entry:
+        return isinstance(entry["text"], str)
+    charts = entry.get("switcher")
+    return isinstance(charts, list) and bool(charts) and all(_is_chart_entry(c) for c in charts)
+
+
 def _tab_entries(expected_output: dict, key: str, allowed: set[str]) -> list[dict]:
-    """The entries of a per-tab expectation, checked for the shape ``layout`` and ``filter_bar`` share.
+    """The entries of a per-tab expectation such as ``filter_bar``, checked for the shape they share.
 
     Raises:
         ValueError: not a non-empty list of objects, a key outside ``allowed``, or a tab named
