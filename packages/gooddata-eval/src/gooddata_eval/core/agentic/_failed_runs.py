@@ -9,16 +9,23 @@ are not lost -- every kind keeps its ``run_results`` list -- they simply never l
 evaluator. This turns that list into the same records the single-shot path writes.
 
 Keys mirror ``core.runner._failed_run_record`` so one consumer can read ``failed_runs`` from
-either path without branching on test kind. ``tool_call_count``/``tool_names`` are the
-addition: the agentic kinds capture tool calls per run, and an agent that produced a final
-answer having made no tool call at all answered from the model's own knowledge rather than
-from the workspace -- a distinction no other recorded field exposes.
+either path without branching on test kind. ``tool_call_count``/``tool_names``/``tool_calls``
+are the addition: the agentic kinds capture tool calls per run, and an agent that produced a
+final answer having made no tool call at all answered from the model's own knowledge rather
+than from the workspace -- a distinction no other recorded field exposes.
+
+``tool_calls`` holds each call's arguments and result, in the shape of ``build_tool_calls``.
+It is recorded for every kind whose run result keeps ``tool_call_events``, including the
+kinds whose ``detail`` has no ``tool_calls``. A run result without that list, such as a
+document takeaway run, records an empty list.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from typing import Any
+
+from gooddata_eval.core.models import build_tool_calls
 
 
 def build_failed_runs(
@@ -33,7 +40,9 @@ def build_failed_runs(
     kinds: guardrail reads ``run.passed`` while visualization reads
     ``run.eval_result.strict_pass``, and each kind's diagnostic dict is its own. Everything
     read here directly goes through ``getattr`` with a default, so a kind whose run result
-    lacks a field (no response id, no tool capture) records a null instead of raising.
+    lacks a field (no response id, no tool capture) records a null instead of raising. The
+    events inside ``tool_call_events`` are the exception: ``build_tool_calls`` reads them as
+    ``ToolCallEvent``s, so a run that has the list must hold real events in it.
 
     A run the judge could not grade is recorded like any other non-passing run, with its
     ``error`` set. That matches ``core/runner.py``, which also records ungraded runs; the
@@ -57,6 +66,7 @@ def build_failed_runs(
                 "reasoning_steps": reasoning_steps,
                 "tool_call_count": len(tool_calls),
                 "tool_names": [getattr(e, "function_name", None) for e in tool_calls],
+                "tool_calls": build_tool_calls(tool_calls),
             }
         )
     return records
