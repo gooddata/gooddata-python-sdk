@@ -944,6 +944,26 @@ In a Langfuse dataset, put it in the item `metadata` (or in the `input` object) 
 `null` value in `input` falls back to `metadata`. The value used must be an object or `null`;
 anything else fails the dataset load.
 
+#### Date filter carried over from the dashboard (opt-in)
+
+A user who asks for a new chart from an open dashboard without naming a period may get
+the dashboard's date filter on the chart, and the product accepts that. By default the
+visualization scoring still requires the chart's date filters to equal the expected ones.
+Set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1` (or pass `accept_context_date_filter=True` to
+`check_filters`) to also accept, for the date filter only, a chart that:
+
+- has exactly one date filter, whose period equals a `date_filter` in
+  `user_context.view.dashboard.filters` (resolved against the same day), and
+- belongs to an item whose expected output has no date filter.
+
+The dashboard's common date filter (no `using`) accepts any date dataset, one that names a
+dataset accepts only that one; the one the chart used is reported in the run detail as
+`filter_date_context: {"inherited": true, "dataset": ...}`, and a failure summary shows
+`date : True (inherited from dashboard context)`. A chart with no date filter passes as
+before; an expected date filter, a different period, ranking and attribute filters stay
+strict. Applies to `visualization` and `vis_agentic` items; with the variable unset the
+scores and the detail are exactly as without it.
+
 `agentic_conversation` items take the item's `user_context` as the context of the first
 turn. A turn in `expected_output.turns` can set its own `user_context`, which applies
 from that turn on until another turn changes it, as the attached context does in the UI:

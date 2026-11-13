@@ -29,6 +29,17 @@ def error_outcome_enabled() -> bool:
     return env_flag(ERROR_OUTCOME_ENV_VAR)
 
 
+# Opt-in: accept a date filter the agent carried over from the dashboard open in
+# the item's `user_context`, when the expected output states no date filter. Off by default:
+# a caller that does not ask for it gets the strict date comparison.
+ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR = "GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER"
+
+
+def accept_context_date_filter() -> bool:
+    """Whether `check_filters` may accept a date filter inherited from the dashboard context."""
+    return env_flag(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR)
+
+
 # The judge model, overridable for comparison experiments. The default is deliberate on
 # two counts: gpt-4o honours temperature=0, so a given response always gets the same
 # verdict; and it is NOT the family under test, so the judge is not grading its own

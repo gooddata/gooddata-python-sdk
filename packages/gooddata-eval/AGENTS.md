@@ -163,6 +163,7 @@ Run this before guessing a `--model` string.
 | `GOODDATA_EVAL_JOIN_GENAI_TRACE` | on unless set to `0`, `false`, `no`, `off` or empty. An agentic item's chat turns ask gen-ai to open them under gd-eval's experiment root, so each item is one Langfuse trace with its scores written once. A gen-ai that drops caller baggage keeps today's separate traces; see the gotcha below |
 | `GD_EVAL_TIMERS` | same as `--timers` |
 | `GD_EVAL_ERROR_OUTCOME` | same as `--error-outcome`; off by default. A run that ended on a harness or backend error (`core/outcome.py`) leaves the gate's K instead of failing, and an item with no scored run raises `EvalHarnessError` (not an `AssertionError`). Changes verdicts, so keep it opt-in |
+| `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER` | off unless truthy. Visualization scoring accepts a date filter equal to one of the dashboard's in the item's `user_context` when the expected output has none (`check_filters`, see the README) |
 
 A gitignored `.env` at the repo root is the normal place for these; load it with
 `set -a && . ./.env && set +a` before the command.
