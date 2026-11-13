@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 import os
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import httpx
 
@@ -14,12 +14,17 @@ from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    gate_head,
+    raise_agentic_failure,
+    resolve_runs,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -499,6 +504,16 @@ def evaluate_agentic_kda_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so the gate they record is the one that decides the item.
+    runs_verdict = resolve_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        gate=gate,
+        pass_at_k=summary.pass_at_k,
+        pass_power_k=summary.pass_power_k,
+    )
+    summary = replace(summary, pass_at_k=runs_verdict.pass_at_k, pass_power_k=runs_verdict.pass_power_k)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -561,14 +576,16 @@ def evaluate_agentic_kda_skill(
             item_input=question,
         )
 
-    runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
-    runs_effective = len(summary.run_results)
+    runs_passed = runs_verdict.runs_passed
+    runs_effective = runs_verdict.runs_effective
 
     best = summary.best
     ev = best.evaluation
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
+        # Empty unless GD_EVAL_ERROR_OUTCOME left runs out of the gate.
+        **runs_verdict.detail(),
         triggered=ev.triggered,
         executed=ev.executed,
         success=ev.success,
@@ -589,8 +606,8 @@ def evaluate_agentic_kda_skill(
         detail=_run_detail,
     )
 
-    if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+    if runs_verdict.errored or not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
+        gate_note = gate_head(gate, runs_verdict, failed_runs)
         message = (
             f"KDA skill assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
@@ -599,8 +616,9 @@ def evaluate_agentic_kda_skill(
             f"Actual execute result: {best.actual_execute_result}."
         )
         raise_agentic_failure(
-            KdaSkillAssertionError,
+            runs_verdict.exception_cls(KdaSkillAssertionError),
             message,
+            outcome=runs_verdict.outcome_record,
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,

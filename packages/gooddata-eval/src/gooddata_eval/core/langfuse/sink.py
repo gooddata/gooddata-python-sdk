@@ -132,7 +132,7 @@ class LangfuseSink:
                 dataset_item_id,
                 input={"question": report.question},
                 output=report.best_detail,
-                metadata={"test_kind": report.test_kind},
+                metadata={"test_kind": report.test_kind, **({"error": report.error} if report.error else {})},
             ),
             start=start,
             end=end,
@@ -153,7 +153,9 @@ class LangfuseSink:
     def log_item(self, report: ItemReport, *, dataset_item_id: str) -> None:
         """Export one experiment root span plus its four scores for an evaluated item.
 
-        Swallows all errors — Langfuse failures never abort the eval run.
+        Swallows all errors — Langfuse failures never abort the eval run. An errored item (only
+        logged with GD_EVAL_ERROR_OUTCOME on) gets its error in the item metadata and only the
+        latency score.
         """
         scores = compute_scores(
             pass_at_k=report.pass_at_k,
@@ -175,6 +177,12 @@ class LangfuseSink:
             ("value_score", scores["value_score"], "NUMERIC"),
             ("latency_s", scores["latency_s"], "NUMERIC"),
         ]
+        if report.error is not None:
+            # Only reached with GD_EVAL_ERROR_OUTCOME on. An errored item has no verdict, so it
+            # gets no pass or quality score: a 0 would count it as a failure of the agent.
+            # Nor a latency one when it raised before completing a run: avg_latency_s is then a
+            # 0.0 that measured nothing and would drag the latency averages down.
+            score_defs = [d for d in score_defs if d[0] == "latency_s" and report.runs_total > 0]
         for name, value, data_type in score_defs:
             try:
                 self._client.create_score(

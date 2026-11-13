@@ -34,6 +34,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/reporting/` | console and JSON output rendering |
 | `core/scoring.py`, `core/runner.py` | scoring and orchestration |
 | `core/models.py` | `DatasetItem`, `ChatResult`, `ItemReport` and friends |
+| `core/outcome.py` | `Outcome` (PASS / FAIL / ERROR), the one `LoopExit` → `Outcome` mapping, and the gate over scored runs behind `GD_EVAL_ERROR_OUTCOME`; the agentic kinds reach it through `core/agentic/_outcome.py`'s `resolve_runs` |
 
 **Depends on**: `gooddata-sdk`, `httpx`, `pydantic`, `orjson`, `rich`. The LLM-judge
 evaluator is an optional extra (`llm-judge`, pulling `openai>=1.45,<2.0`); every `openai`
@@ -161,6 +162,8 @@ Run this before guessing a `--model` string.
 | `GOODDATA_EVAL_TRACE_LABELS` | `key=value,...` labels stamped on every observation of a chat conversation via W3C baggage; `model_version` also sets the observation `version`, so set it only for a one-model run: every `--model` in one process gets the same labels. Keys must match `[A-Za-z0-9_-]+`; others are skipped with a warning. Dashboard-summary and document-takeaway runs are not labelled |
 | `GOODDATA_EVAL_JOIN_GENAI_TRACE` | on unless set to `0`, `false`, `no`, `off` or empty. An agentic item's chat turns ask gen-ai to open them under gd-eval's experiment root, so each item is one Langfuse trace with its scores written once. A gen-ai that drops caller baggage keeps today's separate traces; see the gotcha below |
 | `GD_EVAL_TIMERS` | same as `--timers` |
+| `GD_EVAL_ERROR_OUTCOME` | same as `--error-outcome`; off by default. A run that ended on a harness or backend error (`core/outcome.py`) leaves the gate's K instead of failing, and an item with no scored run raises `EvalHarnessError` (not an `AssertionError`). Changes verdicts, so keep it opt-in |
+| `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER` | same as `--accept-context-date-filter`; off by default. Visualization scoring accepts a date filter equal to one of the dashboard's in the item's `user_context` when the expected output has none (`check_filters`, see the README) |
 
 A gitignored `.env` at the repo root is the normal place for these; load it with
 `set -a && . ./.env && set +a` before the command.

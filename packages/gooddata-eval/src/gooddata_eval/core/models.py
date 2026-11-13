@@ -443,6 +443,29 @@ class AgenticAssertionError(AssertionError):
     best_run_latency_s: float | None
 
 
+class EvalHarnessError(Exception):
+    """An item with no scored run: every run ended for a reason that is not the agent's.
+
+    Raised only with ``GD_EVAL_ERROR_OUTCOME`` on (see ``core/outcome.py``). Deliberately not
+    an ``AssertionError``, so pytest records the item as an error rather than a failure and a
+    harness or backend outage is kept out of the agent's pass rate. Carries the same fields
+    as ``AgenticAssertionError`` so a caller reads both the same way, plus ``outcome``: the
+    item's ``Outcome`` as a record (``{"status": "error", "source": ..., "reason": ...}``).
+    """
+
+    reasoning_steps: list[str]
+    conversation_id: str
+    response_id: str | None
+    detail: dict
+    timings: PhaseTimings
+    runs_passed: int
+    runs_effective: int
+    failed_runs: list[dict]
+    run_latencies_s: list[float]
+    best_run_latency_s: float | None
+    outcome: dict
+
+
 class AgenticEvalOutcome(BaseModel):
     """Reasoning trace, trace-lookup IDs, and per-kind diagnostics from an evaluate_agentic_* call.
 
