@@ -13,7 +13,7 @@ import itertools
 import json
 import signal
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
@@ -36,7 +36,7 @@ def observation_rows(session_id: str) -> list[dict]:
     """A gen-ai-shaped root row plus two child rows for one conversation session."""
     trace_id = _short_hash(session_id, 32)
     root_id = _short_hash(f"{session_id}:root", 16)
-    start = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    start = datetime(2026, 1, 1, tzinfo=UTC)
     times = {"startTime": start.isoformat(), "endTime": (start + timedelta(seconds=_ROOT_LATENCY_SECONDS)).isoformat()}
     shared = {"traceId": trace_id, "type": "GENERATION", "sessionId": session_id, **times}
     root = {

@@ -5,7 +5,7 @@ helpers, managed as one `uv` workspace on a single shared version number.
 
 ## Tech Stack
 
-- **Python** — `>=3.10` is the published floor; develop on 3.14. Tests run py310–py315.
+- **Python** — `>=3.11` is the published floor; develop on 3.14. Tests run py311–py315.
 - **uv** workspace (`uv ~= 0.13.4`) — one lock file at the root covers every package.
 - **ruff** — lint and format. Line length 120, Google docstring convention.
 - **ty** — type checking. Not mypy; `make type-check` runs `uv run ty check`.
@@ -44,7 +44,7 @@ Run from the workspace root; every target also exists per package via
 Test runs are controlled by environment variables rather than flags:
 
 ```bash
-TEST_ENVS=py314 make test                    # one interpreter instead of all six
+TEST_ENVS=py314 make test                    # one interpreter instead of all five
 ADD_ARGS="-k test_catalog" make test         # pass args through to pytest
 RECREATE_ENVS=1 make test                    # force tox to rebuild its venvs
 ```
@@ -86,7 +86,7 @@ meaningless once an earlier one has failed.
 TEST_ENVS=py314 make -C packages/<name> test
 ```
 
-`py314` is the fastest useful signal. Drop `TEST_ENVS` to run the full py310–py315 matrix
+`py314` is the fastest useful signal. Drop `TEST_ENVS` to run the full py311–py315 matrix
 the way CI does — slow, and worth it only when the change could be version-sensitive.
 
 ### 4. If a shared package changed, validate a consumer

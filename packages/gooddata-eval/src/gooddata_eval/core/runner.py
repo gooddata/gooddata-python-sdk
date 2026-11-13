@@ -5,7 +5,7 @@ import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from functools import cached_property, partial
 from typing import Callable, Protocol
 
@@ -409,7 +409,7 @@ def run_items(
             traceback.print_exc()
         return item_report
 
-    report.started_at = datetime.now(timezone.utc)
+    report.started_at = datetime.now(UTC)
     _t0 = time.perf_counter()
     if concurrency <= 1:
         for index, item in enumerate(items, start=1):
@@ -425,5 +425,5 @@ def run_items(
         for index in range(1, total + 1):
             report.items.append(results[index])
     report.wall_clock_s = time.perf_counter() - _t0
-    report.finished_at = datetime.now(timezone.utc)
+    report.finished_at = datetime.now(UTC)
     return report
