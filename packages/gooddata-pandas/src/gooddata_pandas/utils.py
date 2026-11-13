@@ -31,6 +31,17 @@ DataItemDef = Union[Attribute, Metric, ObjId, str]
 IndexDef = Union[LabelItemDef, dict[str, LabelItemDef]]
 ColumnsDef = dict[str, DataItemDef]
 
+
+def to_datetime_ns(value: Any) -> Any:
+    """
+    pandas.to_datetime pinned to nanosecond resolution.
+
+    pandas 3 infers the resolution from the input (e.g. datetime64[s] for dates) while
+    pandas 2 always produces datetime64[ns]; pinning gives the same dtype on both.
+    """
+    return pandas.to_datetime(value).as_unit("ns")
+
+
 # Maps SDK attribute converters to the pandas function that converts their parsed
 # (already-typed) values into the external pandas type. These pandas functions are
 # vectorized: they accept a single value OR a whole column. This lets the JSON
@@ -38,8 +49,8 @@ ColumnsDef = dict[str, DataItemDef]
 # value - see _typed_attribute_values.
 _ATTRIBUTE_EXTERNAL_CONVERSIONS: dict[type[Converter], Callable[[Any], Any]] = {
     IntegerConverter: pandas.to_numeric,
-    DateConverter: pandas.to_datetime,
-    DatetimeConverter: pandas.to_datetime,
+    DateConverter: to_datetime_ns,
+    DatetimeConverter: to_datetime_ns,
 }
 
 

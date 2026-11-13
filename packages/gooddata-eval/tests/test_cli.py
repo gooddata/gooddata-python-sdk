@@ -1,7 +1,7 @@
 # (C) 2026 GoodData Corporation
 import io
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import MagicMock
 
 import httpx
@@ -930,7 +930,7 @@ def test_cli_report_spans_the_agentic_and_single_shot_phases(monkeypatch, tmp_pa
     )
 
     def _at(minute: int, second: int = 0) -> datetime:
-        return datetime(2026, 10, 14, 9, minute, second, tzinfo=timezone.utc)
+        return datetime(2026, 10, 14, 9, minute, second, tzinfo=UTC)
 
     monkeypatch.setattr(
         cli_main,

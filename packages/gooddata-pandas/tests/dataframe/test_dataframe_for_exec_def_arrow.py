@@ -15,11 +15,15 @@ import pandas
 import pyarrow as pa
 import pytest
 from gooddata_pandas.arrow_convertor import (
+    _META_VIEW,
+    _META_XTAB,
     _build_field_index,
     _build_inline_index,
     _compute_primary_labels_from_fields,
     _compute_primary_labels_from_inline,
+    _get_computed_shape,
     _metric_title,
+    _parse_schema_metadata,
     compute_column_totals_indexes,
     compute_primary_labels,
     compute_row_totals_indexes,
@@ -101,6 +105,13 @@ def test_arrow_converter_arrow_strings(case_name: str) -> None:
     actual_df = convert_arrow_table_to_dataframe(table, types_mapper=TypesMapper.ARROW_STRINGS)
 
     _assert_df_matches(actual_df, expected_df)
+
+    # An index built from Arrow field metadata (transposed results, or no row labels) is not
+    # Arrow-mapped, so only an index built from the inline row-label columns is checked.
+    schema_meta = _parse_schema_metadata(table)
+    row_label_refs = _get_computed_shape(schema_meta[_META_XTAB]).get("rows", [])
+    if schema_meta[_META_VIEW]["isTransposed"] or not row_label_refs:
+        return
 
     # String index levels must use the Arrow-backed StringDtype.
     idx = actual_df.index

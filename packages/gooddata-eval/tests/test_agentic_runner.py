@@ -5,7 +5,7 @@ import inspect
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from unittest.mock import patch
 
@@ -382,7 +382,7 @@ def test_run_agentic_items_records_phase_timings_and_wall_clock():
 
 def test_run_agentic_items_records_when_the_run_started_and_finished() -> None:
     outcome = AgenticEvalOutcome(conversation_id="c1", detail={"alert_created": True})
-    before = datetime.now(timezone.utc)
+    before = datetime.now(UTC)
     with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", return_value=outcome):
         report = run_agentic_items(
             [_timed_item()],
@@ -391,7 +391,7 @@ def test_run_agentic_items_records_when_the_run_started_and_finished() -> None:
             workspace_id="ws1",
             run_ts="2026-01-01",
         )
-    after = datetime.now(timezone.utc)
+    after = datetime.now(UTC)
 
     assert report.started_at is not None
     assert report.finished_at is not None
@@ -1202,7 +1202,7 @@ def test_evaluate_agentic_runs_its_k_runs_inside_the_item_scope(
     else:
         args = ("q", expected)
     with (
-        patch.object(module, "open_item_trace", return_value=(None, datetime.now(timezone.utc), scope)),
+        patch.object(module, "open_item_trace", return_value=(None, datetime.now(UTC), scope)),
         patch.object(module, run_fn, side_effect=run),
         pytest.raises(_Stop),
     ):
