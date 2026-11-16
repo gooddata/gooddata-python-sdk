@@ -1,0 +1,38 @@
+packages/gooddata-eval/scripts/calibrate_takeaway_judge.py
+  s_c9e6b31f85e827::t_b2dbb85829fb47 58-59,63,71,74-75
+  s_c9e6b31f85e827::t_00426103c4f1c9 52
+  s_c9e6b31f85e827::t_d75f059cf309ee 9-11
+packages/gooddata-eval/tests/test_takeaway_evaluator.py
+  s_c9e6b31f85e827::t_c90b7d3225b3dd 363
+  s_c9e6b31f85e827::t_028923e0160f87 364
+  s_c9e6b31f85e827::t_90822528ae8df4 365,380-381
+packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
+  s_c9e6b31f85e827::t_028923e0160f87 48-52
+  s_c9e6b31f85e827::t_82734efc75927f 29-44,126
+  s_c9e6b31f85e827::t_d75f059cf309ee 127-147
+  s_c9e6b31f85e827::t_345370d8452a9f 47
+  s_c9e6b31f85e827::t_455b34f75ceaa8 45-46,53-75,113-125
+  s_c9e6b31f85e827::t_c9c19326530d0e 148-154
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
+  s_c9e6b31f85e827::t_028923e0160f87 54-57
+  s_c9e6b31f85e827::t_40f6ac17421d0d 49
+  s_c9e6b31f85e827::t_3fe03941b946a2 48,50,68
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_085f41b905ea20 855-856
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "944f6a6acf7ea905e70e9668164592f3aa3ee2b5",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
