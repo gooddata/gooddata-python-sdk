@@ -1,0 +1,22 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_1ecbe904a73cc1::t_1f1fe2d7b9ca31 869,875,877
+  s_1ecbe904a73cc1::t_0f76ff3eec857c 26
+  s_1ecbe904a73cc1::t_764284575d2a2e 36
+  s_1ecbe904a73cc1::t_ee663602bed854 806-814,816-831
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4875804ac747204e875a8d0bfc699376ab5bc777",
+  "prompts": {},
+  "sessions": {
+    "s_1ecbe904a73cc1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f753f7d2-8ca0-4c84-b1d2-3fcdda335528",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

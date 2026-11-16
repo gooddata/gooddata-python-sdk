@@ -1,0 +1,19 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_047ad65b518e2b::t_b36d89c5b696d3 105-107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "716a8522e1ca13d638d1b7bd4a1cdd321a07d3f4",
+  "prompts": {},
+  "sessions": {
+    "s_047ad65b518e2b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "78f81de2-bf10-458b-bf95-3713a8e8daad",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

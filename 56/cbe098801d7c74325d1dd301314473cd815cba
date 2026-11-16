@@ -1,0 +1,23 @@
+Dockerfile
+  s_0b97148191cf36::t_4be1836430fdd4 42-46
+pyproject.toml
+  s_0b97148191cf36::t_1d2d5411a47979 79-85
+uv.lock
+  s_0b97148191cf36::t_02f7b0d9b33821 1151,1202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.18",
+  "base_commit_sha": "56cbe098801d7c74325d1dd301314473cd815cba",
+  "prompts": {},
+  "sessions": {
+    "s_0b97148191cf36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c6354c0-fd12-49b4-849a-e38d81a65b86",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

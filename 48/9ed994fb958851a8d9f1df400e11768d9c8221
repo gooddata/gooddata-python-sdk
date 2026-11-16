@@ -1,0 +1,39 @@
+packages/gooddata-eval/tests/test_scoring.py
+  s_9581792d57de34::t_d508e4f0a7d6cf 67
+  s_9581792d57de34::t_e63524c303d0db 38-66,68
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_9581792d57de34::t_d508e4f0a7d6cf 310-318
+packages/gooddata-eval/src/gooddata_eval/core/dataset/from_insights.py
+  s_9581792d57de34::t_0d89038a8d14e1 45-47
+  s_9581792d57de34::t_dfb2c9911747f7 572
+  s_9581792d57de34::t_26e8f9041df404 263,417-418,474-484,487
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_9581792d57de34::t_88ba58f5bdd0a4 13-21,107
+  s_9581792d57de34::t_e575ca79e037b5 113-115
+  s_9581792d57de34::t_08e34ba032bd69 142-156
+  s_9581792d57de34::t_3a62d409a61ca9 8,25
+  s_9581792d57de34::t_6d25c255be3170 111,116-118,131-139,157-178
+  s_9581792d57de34::t_b3fad9c445ce42 26,108-109
+packages/gooddata-eval/tests/test_sse_client.py
+  s_9581792d57de34::t_d508e4f0a7d6cf 368,371-372,374-375,386-387,390,428
+packages/gooddata-eval/src/gooddata_eval/core/scoring.py
+  s_9581792d57de34::t_02061ae3bf0d42 62,66-74
+packages/gooddata-eval/tests/test_models.py
+  s_9581792d57de34::t_e63524c303d0db 174-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "489ed994fb958851a8d9f1df400e11768d9c8221",
+  "prompts": {},
+  "sessions": {
+    "s_9581792d57de34": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4fa57ff-9ade-42a8-a203-efd5eb66e000",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

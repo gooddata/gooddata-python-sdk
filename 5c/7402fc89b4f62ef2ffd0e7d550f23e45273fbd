@@ -1,0 +1,23 @@
+README.md
+  a6e86fac390ebabf 55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "5c7402fc89b4f62ef2ffd0e7d550f23e45273fbd",
+  "prompts": {
+    "a6e86fac390ebabf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "278f5969-4229-4417-bce7-e2701d743077",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}

@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/scoring.py
+  s_90905292b36e6b::t_80827fc0533389 1-156
+packages/gooddata-eval/tests/test_scoring.py
+  s_90905292b36e6b::t_b55272a41a53d2 1-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "02eaf69b5e9e3c92786930b5cd1c09f97fe4566a",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

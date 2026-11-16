@@ -1,0 +1,817 @@
+gooddata-api-client/.openapi-generator/FILES
+  s_ba054ecc9dedfc::t_5792b2267c35d7 12-13,64-69,324-327,336-338,365-368,399-400,486,512-515,1072-1114,1356-1377,1460,1493-1564,1591-1592,1755,1822-1823,1859,1877,1882,1934-1935,1981-1986,2200-2203,2212-2214,2241-2244,2341,2363-2366,2920-2962,3194-3214,3308-3378,3404-3405,3532
+gooddata-api-client/README.md
+  s_ba054ecc9dedfc::t_6515adc43f0aa7 280,283,403-409,518-535,538,540-541,698,721,745-746,763,789-792,846-848,951-962,977-978,993,1025-1026,1041,1078-1079,1099,1139-1140,1161,1196-1197,1214,1269-1270,1286,1459-1464,1583-1584,1629-1634,1848-1851,1860-1862,1889-1892,1989,2011-2014,2568-2610,2842-2862,2956-3026,3052-3053,3180
+gooddata-api-client/docs/AbsoluteGranularityDateFilter.md
+  s_ba054ecc9dedfc::t_e0810598969ade 3
+gooddata-api-client/docs/AbsolutePublisherDocumentPeriod.md
+  s_ba054ecc9dedfc::t_a7864e8aebb01d 1-16
+gooddata-api-client/docs/AbsolutePublisherDocumentPeriodAllOf.md
+  s_ba054ecc9dedfc::t_07681230a38e40 1-15
+gooddata-api-client/docs/ActionsApi.md
+  s_ba054ecc9dedfc::t_e489f42ea7c6d6 14,37,61-62,79,105-108,162-164,639-715,2618-2705,3025,3050,4403,4416-4418,4758-4759,4761,4763,4772,4790-4791,4794,4816,4828-4829,4831,4833,4859-4860,4862,4875,4884,4891,4895-4896,4898,4900,4926-4928,4930,4943,4952,4959-4960,4964-4965,4967,4969,4978,4996-4998,5000,5013,5022,5029-5030,5034-5035,5037,5039,5060-5061,5065-5066,5068,5076-5077,5081,5097,5101-5102,5104,5106,5127-5274,5456,5465,5526,5602,5865,6058-6136,7675-7938,7940-7942,7951,7965,7967-7969,7971,7976,7980,7989,7996,8000-8001,8003,8005,8014,8028,8030-8032,8034,8039,8043,8052,8059,8063-8064,8066,8068,8077,8090-8095,8098,8100-8101,8104,8112-8117,8121,8141-8142,8144-8146,8155,8168-8173,8176,8178-8179,8182,8190-8195,8199,12440-12661
+gooddata-api-client/docs/AnalyticsModelApi.md
+  s_ba054ecc9dedfc::t_8a458a87531dd6 233-545,637-639,644-694,796-798
+gooddata-api-client/docs/AnalyzeSavRequest.md
+  s_ba054ecc9dedfc::t_f8721878856bd1 1-13
+gooddata-api-client/docs/AnalyzeSavRequestItem.md
+  s_ba054ecc9dedfc::t_305a0f19d49f9c 1-14
+gooddata-api-client/docs/AnalyzeSavRequestItemConfig.md
+  s_ba054ecc9dedfc::t_181d0e441526f7 1-13
+gooddata-api-client/docs/AnalyzeSavResponse.md
+  s_ba054ecc9dedfc::t_4096531a674630 1-15
+gooddata-api-client/docs/AnalyzeSavResponseColumn.md
+  s_ba054ecc9dedfc::t_fb12baac795b7e 1-16
+gooddata-api-client/docs/AnalyzeSavResponseValueLabel.md
+  s_ba054ecc9dedfc::t_69e1df740af787 1-14
+gooddata-api-client/docs/AttributeHeaderAttributeHeader.md
+  s_ba054ecc9dedfc::t_7eefbb978b960a 13,17
+gooddata-api-client/docs/DataSourceControllerApi.md
+  s_ba054ecc9dedfc::t_d95267fd2020fb 54,394,506
+gooddata-api-client/docs/DataSourceDeclarativeAPIsApi.md
+  s_ba054ecc9dedfc::t_c08bf7f72006dc 119
+gooddata-api-client/docs/DataSourceEntityAPIsApi.md
+  s_ba054ecc9dedfc::t_1aab658254491b 56,554,666
+gooddata-api-client/docs/DataSourceFilesAnalysisApi.md
+  s_ba054ecc9dedfc::t_88798c643d6c08 8,93-169
+gooddata-api-client/docs/DataSourceFilesImportApi.md
+  s_ba054ecc9dedfc::t_54f59b1abbdbcc 8,16,145-223
+gooddata-api-client/docs/DeclarativeAnalyticalDashboard.md
+  s_ba054ecc9dedfc::t_bf9b1a6fe0b5e0 19
+gooddata-api-client/docs/DeclarativeAnalyticsLayer.md
+  s_ba054ecc9dedfc::t_eeb1e7f69608f8 12-13,18
+gooddata-api-client/docs/DeclarativeColumn.md
+  s_ba054ecc9dedfc::t_004352d1dbadb1 10
+gooddata-api-client/docs/DeclarativeDataSource.md
+  s_ba054ecc9dedfc::t_2c18e30cec893c 21
+gooddata-api-client/docs/DeclarativeMetric.md
+  s_ba054ecc9dedfc::t_4e9cbe119ef0e4 22
+gooddata-api-client/docs/DeclarativeMetricPermissionAssignment.md
+  s_ba054ecc9dedfc::t_c2f08f8aea7713 1-13
+gooddata-api-client/docs/DeclarativeMetricPermissionForAssignee.md
+  s_ba054ecc9dedfc::t_2e52c36aa32e34 1-14
+gooddata-api-client/docs/DeclarativeMetricPermissionForAssigneeRule.md
+  s_ba054ecc9dedfc::t_1ea5f956fd7781 1-14
+gooddata-api-client/docs/DeclarativeMetricPermissionsInner.md
+  s_ba054ecc9dedfc::t_204ffde61e6119 1-14
+gooddata-api-client/docs/DeclarativePublisherDocument.md
+  s_ba054ecc9dedfc::t_5ee0ab0fb3b027 1-18
+gooddata-api-client/docs/DeclarativePublisherDocumentPageTemplate.md
+  s_ba054ecc9dedfc::t_0374353f6eb424 1-17
+gooddata-api-client/docs/DeclarativePublisherDocumentTemplate.md
+  s_ba054ecc9dedfc::t_15d6db69ca1745 1-17
+gooddata-api-client/docs/DeclarativeTable.md
+  s_ba054ecc9dedfc::t_8f5bc9cbb22582 13
+gooddata-api-client/docs/DeclarativeVisualizationObject.md
+  s_ba054ecc9dedfc::t_d0d5ce18401c8e 21
+gooddata-api-client/docs/DeclarativeVisualizationObjectPermissionAssignment.md
+  s_ba054ecc9dedfc::t_a033f132117dac 1-13
+gooddata-api-client/docs/DeclarativeVisualizationObjectPermissionForAssignee.md
+  s_ba054ecc9dedfc::t_0fb7b30bcb30a4 1-14
+gooddata-api-client/docs/DeclarativeVisualizationObjectPermissionForAssigneeRule.md
+  s_ba054ecc9dedfc::t_e34345afbbff68 1-14
+gooddata-api-client/docs/DeclarativeVisualizationObjectPermissionsInner.md
+  s_ba054ecc9dedfc::t_62320e76332cb4 1-14
+gooddata-api-client/docs/DocumentControllerApi.md
+  s_ba054ecc9dedfc::t_4b4b48b77ed7f5 1-998
+gooddata-api-client/docs/DocumentTemplateControllerApi.md
+  s_ba054ecc9dedfc::t_759aa1d7a0bc6c 1-995
+gooddata-api-client/docs/ElementsResponse.md
+  s_ba054ecc9dedfc::t_3ef4a93e69a108 12,15
+gooddata-api-client/docs/EntitiesApi.md
+  s_ba054ecc9dedfc::t_75f5d1fc40dc58 21-22,37,69-70,85,122-123,143,183-184,205,240-241,258,313-314,330,1875,1940-2428,3833-3971,6601-6730,7575-7638,7659-7660,7664-7665,7667,7675-7676,10450-10641,12204-12282,12302-12303,12305,12314,12327-12332,12338,12340,12343-12350,12354-12355,12358,12366-12367,12369,12373,12378,15705-15880,17391-17473,17477-17478,17481,17486-17487,17490,17500-17501,17505,17525-17526,17528,17537,17550-17552,17554,17556,17558,17563-17564,17567,17572-17573,17576,17584-17585,17588,17593,20692-20903,20912-20913,20928-20930,20938,20940-20941,20943,20948-20949,20952,20957-20958,20961,20971,20977,20997-20998,21000,21009-21010,21023-21171,21173-21176,21178-21179,21182,21184-21188,21192-21193,21196,21201-21202,21205,21213-21215,21217,21221,21241-21242,21244,21253-21254,21269-21417,21419,21424,21427,21429-21430,21432,21437-21438,21441,21446-21447,21450,21460,21466,23031-23134,23139-23140,23143,23152,23154,23158,23178-23179,23181,23190-23191,23204-23252,23254-23255,23258,23260-23261,23263,23268-23269,23272,23277-23278,23281,23289-23291,23297,28743-28936,28950-28976,28979,28981-28982,28986-28987,28990,28995-28996,28999,29008,29013,29033-29034,29036,29045-29046,29061-29063,29065-29209,29215,29218,29220-29221,29228-29229,29232,29237-29238,29241,29251,29257,29277-29278,29280,29289-29290,29303-29451,29453-29457,29459-29460,29463,29465-29469,29473-29474,29477,29482-29483,29486,29494-29496,29498,29502,31108-31246
+gooddata-api-client/docs/GdStorageFile.md
+  s_ba054ecc9dedfc::t_0705b3b57db984 11
+gooddata-api-client/docs/GenerateLogicalDataModelApi.md
+  s_ba054ecc9dedfc::t_a102252773496f 83,96-98
+gooddata-api-client/docs/GetDocumentExport202ResponseInner.md
+  s_ba054ecc9dedfc::t_da052c65d6b658 1
+gooddata-api-client/docs/ImageExportApi.md
+  s_ba054ecc9dedfc::t_5722eea4024f8e 116
+gooddata-api-client/docs/ImportSavRequest.md
+  s_ba054ecc9dedfc::t_bf28a4d968f32f 1-13
+gooddata-api-client/docs/ImportSavRequestTable.md
+  s_ba054ecc9dedfc::t_56335039987ae7 1-14
+gooddata-api-client/docs/ImportSavRequestTableSource.md
+  s_ba054ecc9dedfc::t_812b3a6df93123 1-13
+gooddata-api-client/docs/ImportSavResponse.md
+  s_ba054ecc9dedfc::t_60c829b00e19d0 1-14
+gooddata-api-client/docs/JsonApiDataSourceInAttributes.md
+  s_ba054ecc9dedfc::t_c6ac23570aefde 18
+gooddata-api-client/docs/JsonApiDataSourceOutAttributes.md
+  s_ba054ecc9dedfc::t_4f42600f51a3ea 18
+gooddata-api-client/docs/JsonApiDataSourcePatchAttributes.md
+  s_ba054ecc9dedfc::t_bf0bdb7ff8beb5 15
+gooddata-api-client/docs/JsonApiPublisherDocumentIn.md
+  s_ba054ecc9dedfc::t_e7c6a0a710f246 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentInAttributes.md
+  s_ba054ecc9dedfc::t_9cf77a10578c1b 1-18
+gooddata-api-client/docs/JsonApiPublisherDocumentInAttributesContent.md
+  s_ba054ecc9dedfc::t_67f328523cd9ce 1-20
+gooddata-api-client/docs/JsonApiPublisherDocumentInAttributesPeriod.md
+  s_ba054ecc9dedfc::t_14a018c045f35c 1-16
+gooddata-api-client/docs/JsonApiPublisherDocumentInDocument.md
+  s_ba054ecc9dedfc::t_715e8dd6a0b28a 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentOut.md
+  s_ba054ecc9dedfc::t_893ca30ea8f78f 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentOutAttributes.md
+  s_ba054ecc9dedfc::t_799587ad75a3a0 1-20
+gooddata-api-client/docs/JsonApiPublisherDocumentOutDocument.md
+  s_ba054ecc9dedfc::t_27fc6af45a3e22 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentOutList.md
+  s_ba054ecc9dedfc::t_4e2fa879a2d748 1-16
+gooddata-api-client/docs/JsonApiPublisherDocumentOutWithLinks.md
+  s_ba054ecc9dedfc::t_34a343307f0693 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateIn.md
+  s_ba054ecc9dedfc::t_34901978871c70 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateInAttributes.md
+  s_ba054ecc9dedfc::t_acd98620b0874a 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateInAttributesContent.md
+  s_ba054ecc9dedfc::t_f2a30b4481f2f4 1-18
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateInDocument.md
+  s_ba054ecc9dedfc::t_7925350868c14c 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOut.md
+  s_ba054ecc9dedfc::t_67acd41733a07e 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOutAttributes.md
+  s_ba054ecc9dedfc::t_3375d6ac1c4b6b 1-19
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOutDocument.md
+  s_ba054ecc9dedfc::t_66260d06863e3e 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOutList.md
+  s_ba054ecc9dedfc::t_f9d9114145a39f 1-16
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOutWithLinks.md
+  s_ba054ecc9dedfc::t_850cd705dd0b4b 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplatePatch.md
+  s_ba054ecc9dedfc::t_3be1b62987f93d 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplatePatchAttributes.md
+  s_ba054ecc9dedfc::t_dd04afcfbfca4d 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplatePatchDocument.md
+  s_ba054ecc9dedfc::t_6fb671c8284d05 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplatePostOptionalId.md
+  s_ba054ecc9dedfc::t_576b614ee32f6d 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplatePostOptionalIdDocument.md
+  s_ba054ecc9dedfc::t_62923d2457b55e 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentPatch.md
+  s_ba054ecc9dedfc::t_66699b91f6880e 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPatchAttributes.md
+  s_ba054ecc9dedfc::t_9e14d0fae09fa2 1-18
+gooddata-api-client/docs/JsonApiPublisherDocumentPatchDocument.md
+  s_ba054ecc9dedfc::t_7e22e1f8535ba6 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentPostOptionalId.md
+  s_ba054ecc9dedfc::t_1322686580b1ed 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentPostOptionalIdDocument.md
+  s_ba054ecc9dedfc::t_0d0f515cfd78d6 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateIn.md
+  s_ba054ecc9dedfc::t_ad3f56f9be3c3d 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateInAttributes.md
+  s_ba054ecc9dedfc::t_09fea0e128c7d2 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateInAttributesContent.md
+  s_ba054ecc9dedfc::t_e28bfe647a22b4 1-20
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateInDocument.md
+  s_ba054ecc9dedfc::t_16d880204943e8 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateOut.md
+  s_ba054ecc9dedfc::t_273c6190ffec0d 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateOutAttributes.md
+  s_ba054ecc9dedfc::t_cdcfa960f841ac 1-19
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateOutDocument.md
+  s_ba054ecc9dedfc::t_46edcfc0ae3aa1 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateOutList.md
+  s_ba054ecc9dedfc::t_f530452bc783a0 1-16
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplateOutWithLinks.md
+  s_ba054ecc9dedfc::t_cb060b4d6aee2f 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplatePatch.md
+  s_ba054ecc9dedfc::t_3bcdb4e3304512 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplatePatchAttributes.md
+  s_ba054ecc9dedfc::t_101eeaa9f5ce90 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplatePatchDocument.md
+  s_ba054ecc9dedfc::t_c67fb351877c45 1-12
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplatePostOptionalId.md
+  s_ba054ecc9dedfc::t_1a7eef91c96f5a 1-15
+gooddata-api-client/docs/JsonApiPublisherDocumentTemplatePostOptionalIdDocument.md
+  s_ba054ecc9dedfc::t_b0163632a78a10 1-12
+gooddata-api-client/docs/LayoutApi.md
+  s_ba054ecc9dedfc::t_b2a3c60d72021d 1901,2416-2728,2820-2822,2827-2877,2979-2981,3510-3822,3914-3916,3921-3971,4073-4075,5481,6368-6680,6772-6774,6779-6829,6931-6933,8405-8717,8809-8811,8816-8866,8968-8970
+gooddata-api-client/docs/LocalizationApi.md
+  s_ba054ecc9dedfc::t_6e31faf9eb1468 1-519
+gooddata-api-client/docs/LocalizationContent.md
+  s_ba054ecc9dedfc::t_ad8c508928af07 1-12
+gooddata-api-client/docs/LocalizationCount.md
+  s_ba054ecc9dedfc::t_dcc6b40e061aa4 1-13
+gooddata-api-client/docs/LocalizationDataStatistics.md
+  s_ba054ecc9dedfc::t_f2f7a7cb71d8c5 1-13
+gooddata-api-client/docs/LocalizationDefault.md
+  s_ba054ecc9dedfc::t_bd0075251fd7dc 1-14
+gooddata-api-client/docs/LocalizationDefaults.md
+  s_ba054ecc9dedfc::t_e36cf878b1f5af 1-14
+gooddata-api-client/docs/LocalizationMetadataStatistics.md
+  s_ba054ecc9dedfc::t_d0d759cf0b7456 1-13
+gooddata-api-client/docs/LocalizationResolvedValue.md
+  s_ba054ecc9dedfc::t_bcd78c57c56909 1-15
+gooddata-api-client/docs/LocalizationResolvedValues.md
+  s_ba054ecc9dedfc::t_13484be23e8c7d 1-15
+gooddata-api-client/docs/LocalizationSettingUsage.md
+  s_ba054ecc9dedfc::t_ec65cc1aebee94 1-13
+gooddata-api-client/docs/LocalizationSettingUsages.md
+  s_ba054ecc9dedfc::t_1b250a422b6ecc 1-15
+gooddata-api-client/docs/LocalizationSourceCounts.md
+  s_ba054ecc9dedfc::t_858777044d52d8 1-18
+gooddata-api-client/docs/LocalizationStatistics.md
+  s_ba054ecc9dedfc::t_dfcb79855d5e2c 1-13
+gooddata-api-client/docs/LocalizationStatisticsLocale.md
+  s_ba054ecc9dedfc::t_2ee78cdaa69968 1-12
+gooddata-api-client/docs/LocalizationUsage.md
+  s_ba054ecc9dedfc::t_b49e7709849530 1-13
+gooddata-api-client/docs/LocalizationUsageUser.md
+  s_ba054ecc9dedfc::t_0276045b4ed69f 1-16
+gooddata-api-client/docs/LocalizationUsageUsers.md
+  s_ba054ecc9dedfc::t_1fe523fd852eef 1-13
+gooddata-api-client/docs/LocalizationUsageValue.md
+  s_ba054ecc9dedfc::t_c2b551700475a4 1-16
+gooddata-api-client/docs/LocalizationUsageWorkspace.md
+  s_ba054ecc9dedfc::t_3758389aead2d5 1-17
+gooddata-api-client/docs/LocalizationUsageWorkspaces.md
+  s_ba054ecc9dedfc::t_843b7cb4b1f406 1-13
+gooddata-api-client/docs/LocalizationUserValue.md
+  s_ba054ecc9dedfc::t_73459e34e19364 1-14
+gooddata-api-client/docs/LocalizationUserValues.md
+  s_ba054ecc9dedfc::t_a38a8342270332 1-15
+gooddata-api-client/docs/OrganizationDeclarativeAPIsApi.md
+  s_ba054ecc9dedfc::t_4b4e85fe2f0217 482,1369-1681,1773-1775,1780-1830,1932-1934
+gooddata-api-client/docs/PageTemplateControllerApi.md
+  s_ba054ecc9dedfc::t_e76fb03ca886b0 1-680
+gooddata-api-client/docs/PublisherDocumentArbitraryAttributeFilter.md
+  s_ba054ecc9dedfc::t_6da9c229cf2642 1-13
+gooddata-api-client/docs/PublisherDocumentArbitraryAttributeFilterArbitraryAttributeFilter.md
+  s_ba054ecc9dedfc::t_b6532374aed0a5 1-19
+gooddata-api-client/docs/PublisherDocumentAreaStyle.md
+  s_ba054ecc9dedfc::t_d658d626b06eb6 1-25
+gooddata-api-client/docs/PublisherDocumentAreaStyleGap.md
+  s_ba054ecc9dedfc::t_2eafaedcbefbfa 1-12
+gooddata-api-client/docs/PublisherDocumentAttributeElements.md
+  s_ba054ecc9dedfc::t_3c929ff200518b 1-14
+gooddata-api-client/docs/PublisherDocumentAttributeElementsByUri.md
+  s_ba054ecc9dedfc::t_79fb57e5cf9d56 1-12
+gooddata-api-client/docs/PublisherDocumentAttributeElementsByValue.md
+  s_ba054ecc9dedfc::t_90578471aef4f8 1-12
+gooddata-api-client/docs/PublisherDocumentAttributeFilter.md
+  s_ba054ecc9dedfc::t_1fbfd87dade71f 1-13
+gooddata-api-client/docs/PublisherDocumentAttributeFilterAttributeFilter.md
+  s_ba054ecc9dedfc::t_e2b06a4e1858e1 1-20
+gooddata-api-client/docs/PublisherDocumentAttributeFilterByDate.md
+  s_ba054ecc9dedfc::t_130e5d5a4516c9 1-15
+gooddata-api-client/docs/PublisherDocumentAttributeFilterConfig.md
+  s_ba054ecc9dedfc::t_f6c6e7ba45428a 1-16
+gooddata-api-client/docs/PublisherDocumentAttributeFilterParent.md
+  s_ba054ecc9dedfc::t_f4874b185b38a6 1-14
+gooddata-api-client/docs/PublisherDocumentAttributeFilterParentOver.md
+  s_ba054ecc9dedfc::t_2e3f2b5cafe476 1-13
+gooddata-api-client/docs/PublisherDocumentAttributeFilterReference.md
+  s_ba054ecc9dedfc::t_b47b80fdd671e5 1-13
+gooddata-api-client/docs/PublisherDocumentAutoVisibility.md
+  s_ba054ecc9dedfc::t_3405b375c770aa 1-12
+gooddata-api-client/docs/PublisherDocumentAutoVisibilityVisible.md
+  s_ba054ecc9dedfc::t_9299f3cf267f0a 1-12
+gooddata-api-client/docs/PublisherDocumentAxisDisplay.md
+  s_ba054ecc9dedfc::t_87060c09003ed8 1-16
+gooddata-api-client/docs/PublisherDocumentAxisNameDisplay.md
+  s_ba054ecc9dedfc::t_aeb2b623d6fd03 1-13
+gooddata-api-client/docs/PublisherDocumentAxisValuesDisplay.md
+  s_ba054ecc9dedfc::t_a5df0639314ff2 1-13
+gooddata-api-client/docs/PublisherDocumentBoundedFilter.md
+  s_ba054ecc9dedfc::t_398b59250c3908 1-15
+gooddata-api-client/docs/PublisherDocumentChartStyle.md
+  s_ba054ecc9dedfc::t_c45452506d4468 1-25
+gooddata-api-client/docs/PublisherDocumentColumn.md
+  s_ba054ecc9dedfc::t_f146661d75ad0a 1-18
+gooddata-api-client/docs/PublisherDocumentComparisonCondition.md
+  s_ba054ecc9dedfc::t_2c2bf571bd0784 1-12
+gooddata-api-client/docs/PublisherDocumentContainerStyle.md
+  s_ba054ecc9dedfc::t_bf893bacf83fd8 1-69
+gooddata-api-client/docs/PublisherDocumentContainerStyleBorderBottomLeftRadius.md
+  s_ba054ecc9dedfc::t_02a05d5e395166 1-12
+gooddata-api-client/docs/PublisherDocumentContainerStylePadding.md
+  s_ba054ecc9dedfc::t_efd5f5db7463e4 1-12
+gooddata-api-client/docs/PublisherDocumentContent.md
+  s_ba054ecc9dedfc::t_6054094ed8be5d 1-20
+gooddata-api-client/docs/PublisherDocumentDataSetRef.md
+  s_ba054ecc9dedfc::t_9df0bb7ba0a418 1-14
+gooddata-api-client/docs/PublisherDocumentDateFilter.md
+  s_ba054ecc9dedfc::t_0157b02ec7d33c 1-13
+gooddata-api-client/docs/PublisherDocumentDateFilterDateFilter.md
+  s_ba054ecc9dedfc::t_b8a61dd99c64e5 1-20
+gooddata-api-client/docs/PublisherDocumentDateFilterDateFilterFrom.md
+  s_ba054ecc9dedfc::t_0f48205cf3fe86 1-12
+gooddata-api-client/docs/PublisherDocumentDateFilterReference.md
+  s_ba054ecc9dedfc::t_075a094849585c 1-13
+gooddata-api-client/docs/PublisherDocumentDefaults.md
+  s_ba054ecc9dedfc::t_3952cee3f6ca08 1-15
+gooddata-api-client/docs/PublisherDocumentFilter.md
+  s_ba054ecc9dedfc::t_213c0fd5b1c2f0 1-17
+gooddata-api-client/docs/PublisherDocumentFilterReference.md
+  s_ba054ecc9dedfc::t_49bca4627a89e9 1-16
+gooddata-api-client/docs/PublisherDocumentHeadingWidget.md
+  s_ba054ecc9dedfc::t_ac8a452eb2bdb8 1-20
+gooddata-api-client/docs/PublisherDocumentHeadlineStyle.md
+  s_ba054ecc9dedfc::t_2978b7f7cc7be8 1-18
+gooddata-api-client/docs/PublisherDocumentImageWidget.md
+  s_ba054ecc9dedfc::t_551d1399c720d9 1-21
+gooddata-api-client/docs/PublisherDocumentImageWidgetStyle.md
+  s_ba054ecc9dedfc::t_a66968df8bddf4 1-60
+gooddata-api-client/docs/PublisherDocumentLayoutNode.md
+  s_ba054ecc9dedfc::t_1f7160a8635d4d 1-32
+gooddata-api-client/docs/PublisherDocumentLegendDisplay.md
+  s_ba054ecc9dedfc::t_dd675a5d3f9524 1-13
+gooddata-api-client/docs/PublisherDocumentMatchAttributeFilter.md
+  s_ba054ecc9dedfc::t_4fbc09a3381a10 1-13
+gooddata-api-client/docs/PublisherDocumentMatchAttributeFilterMatchAttributeFilter.md
+  s_ba054ecc9dedfc::t_1eb981e8fdee62 1-18
+gooddata-api-client/docs/PublisherDocumentMeasureValueCondition.md
+  s_ba054ecc9dedfc::t_2ee3c3881925b6 1-14
+gooddata-api-client/docs/PublisherDocumentMeasureValueFilter.md
+  s_ba054ecc9dedfc::t_a9e7428bc129fc 1-13
+gooddata-api-client/docs/PublisherDocumentMeasureValueFilterDashboardMeasureValueFilter.md
+  s_ba054ecc9dedfc::t_7232a142ab307c 1-16
+gooddata-api-client/docs/PublisherDocumentMeasureValueFilterReference.md
+  s_ba054ecc9dedfc::t_925cbf85c1adbc 1-13
+gooddata-api-client/docs/PublisherDocumentObjRef.md
+  s_ba054ecc9dedfc::t_747924a3df200b 1-14
+gooddata-api-client/docs/PublisherDocumentPage.md
+  s_ba054ecc9dedfc::t_2aaa4fa0cc9f73 1-20
+gooddata-api-client/docs/PublisherDocumentPageStyle.md
+  s_ba054ecc9dedfc::t_3f1932812a7309 1-41
+gooddata-api-client/docs/PublisherDocumentPageTemplateContent.md
+  s_ba054ecc9dedfc::t_0a326402cfa7bf 1-18
+gooddata-api-client/docs/PublisherDocumentPeriod.md
+  s_ba054ecc9dedfc::t_38277fcae1e302 1-16
+gooddata-api-client/docs/PublisherDocumentRangeCondition.md
+  s_ba054ecc9dedfc::t_87c32fa59f9a0d 1-12
+gooddata-api-client/docs/PublisherDocumentRow.md
+  s_ba054ecc9dedfc::t_9d67de686c0c5e 1-18
+gooddata-api-client/docs/PublisherDocumentSection.md
+  s_ba054ecc9dedfc::t_6ce85209c12660 1-16
+gooddata-api-client/docs/PublisherDocumentTableStyle.md
+  s_ba054ecc9dedfc::t_a95eee7d7b7fc7 1-22
+gooddata-api-client/docs/PublisherDocumentTakeawayContext.md
+  s_ba054ecc9dedfc::t_7c0bbb81791b51 1-16
+gooddata-api-client/docs/PublisherDocumentTakeawayDefaults.md
+  s_ba054ecc9dedfc::t_985491b5daf24d 1-13
+gooddata-api-client/docs/PublisherDocumentTakeawayGeneration.md
+  s_ba054ecc9dedfc::t_8178d6a36d808c 1-14
+gooddata-api-client/docs/PublisherDocumentTakeawayWidget.md
+  s_ba054ecc9dedfc::t_c4a8d2343fd562 1-21
+gooddata-api-client/docs/PublisherDocumentTextStyle.md
+  s_ba054ecc9dedfc::t_99a686cdd9f03f 1-23
+gooddata-api-client/docs/PublisherDocumentTextWidget.md
+  s_ba054ecc9dedfc::t_aa945405c15e01 1-20
+gooddata-api-client/docs/PublisherDocumentTextWidgetStyle.md
+  s_ba054ecc9dedfc::t_a15a953db0bac3 1-68
+gooddata-api-client/docs/PublisherDocumentTitleWidget.md
+  s_ba054ecc9dedfc::t_0b9a2158745282 1-19
+gooddata-api-client/docs/PublisherDocumentVisibility.md
+  s_ba054ecc9dedfc::t_2584683dcac51b 1-12
+gooddata-api-client/docs/PublisherDocumentVisualizationDisplay.md
+  s_ba054ecc9dedfc::t_af6b2b7c54b8a2 1-19
+gooddata-api-client/docs/PublisherDocumentVisualizationRef.md
+  s_ba054ecc9dedfc::t_b2c0aca10c1936 1-14
+gooddata-api-client/docs/PublisherDocumentVisualizationStyle.md
+  s_ba054ecc9dedfc::t_467baa6ae15a12 1-60
+gooddata-api-client/docs/PublisherDocumentVisualizationWidget.md
+  s_ba054ecc9dedfc::t_caa2303ca231db 1-26
+gooddata-api-client/docs/PublisherDocumentWidgetPlaceholder.md
+  s_ba054ecc9dedfc::t_2abfd5a0e66bab 1-14
+gooddata-api-client/docs/PublisherDocumentWidgetTitle.md
+  s_ba054ecc9dedfc::t_8a5060e602285b 1-15
+gooddata-api-client/docs/PublisherDocumentsApi.md
+  s_ba054ecc9dedfc::t_5ff894e72c7bcf 1-2657
+gooddata-api-client/docs/RelativePublisherDocumentPeriod.md
+  s_ba054ecc9dedfc::t_1169782c02f743 1-16
+gooddata-api-client/docs/RelativePublisherDocumentPeriodAllOf.md
+  s_ba054ecc9dedfc::t_3fa29d1b561d4c 1-15
+gooddata-api-client/docs/ReportExportApi.md
+  s_ba054ecc9dedfc::t_3b6021d57ab002 7,9-10,15-102,108,133,191-327,333,342,403
+gooddata-api-client/docs/ReportExportRequest.md
+  s_ba054ecc9dedfc::t_24a4b238a6bb34 3,10,12
+gooddata-api-client/docs/SlidesExportApi.md
+  s_ba054ecc9dedfc::t_53d76a42742436 120
+gooddata-api-client/docs/WorkspaceLocalizationUsage.md
+  s_ba054ecc9dedfc::t_7e432ffe9f0253 1-13
+gooddata-api-client/docs/WorkspacesDeclarativeAPIsApi.md
+  s_ba054ecc9dedfc::t_981a8c48032073 305-617,709-711,716-766,868-870,1800-2112,2204-2206,2211-2261,2363-2365
+gooddata-api-client/gooddata_api_client/api/actions_api.py
+  s_ba054ecc9dedfc::t_912e4b1794dea3 36-37,81,90-91,101-104,157,537-586,1977-2037,3400-3509,4434-4489,5894,5896,5898-6162,9041,9043,9045-9046,9090,9092,9094-9096,9135,9139-9174,9176-9353,9930-10012,11936,11939,11942,11944,11948,11953,12020-12022,12024,12027,12030,12032,12036,12041-12129,12295,14013-14186,14883,14970,15401,15567,15569-15656,17684-18012,18041,18043,18047,18049,18053,18058-18063,18096,18125,22601-22855
+gooddata-api-client/gooddata_api_client/api/data_source_files_analysis_api.py
+  s_ba054ecc9dedfc::t_45d2f12e75fdc8 27-28,92-141,226-308
+gooddata-api-client/gooddata_api_client/api/data_source_files_import_api.py
+  s_ba054ecc9dedfc::t_1ee748bde6ea3b 27-28,98-153,163,242-328
+gooddata-api-client/gooddata_api_client/api/document_controller_api.py
+  s_ba054ecc9dedfc::t_9b6adcdd86a42b 1-1106
+gooddata-api-client/gooddata_api_client/api/document_template_controller_api.py
+  s_ba054ecc9dedfc::t_6f98f8cdf3078d 1-1106
+gooddata-api-client/gooddata_api_client/api/entities_api.py
+  s_ba054ecc9dedfc::t_9aed307ef401ca 177-191,1282-1459,2440,2442,2444-2445,2452,2458,2494-2495,2508-2686,4635,4639-4640,4688,4692-4693,4699-4700,4703-4704,4719-4721,4725-4726,4729-4730,4741,4745-4746,4794,4798-4906,5491,5495-5496,5544,5548-5549,5597,5601-5602,5650,5654-5655,5703,5707-5708,5756,5760-5761,5810,5814-6036,8391,8393,8395-8396,8402-8403,8405,8409,8412-8414,8418-8419,8433-8445,8448,8455-8458,8461-8462,8469-8470,8475-8476,8478,8482,8486-8487,8489,8493,8497,8511,8513,8515-8516,8631,8633,8635-8636,8712,8714,8716-8717,8762-8770,8838,8840,8842-8924,8970,8975,9039,9041,9043-9044,9089-9094,9099,9162,9164,9166-9167,9176,9190,9210-9217,9232-9233,9249,9260,9268,9282,9284,9286-9287,9293-9294,9299,9302-9304,9308,9322-9327,9336-9339,9348-9349,9354-9355,9360,9364-9365,9370,9387,9389,9391-9392,9468,9470,9472-9473,9480,9490,9504-9509,9520-9521,9533,9541,9548,9562,9564,9566-9567,9579,9643,9645,9647-9648,9693-9696,9764,9766,9768-9769,9775-9776,9778,9782,9785-9787,9791-9792,9806-9817,9820-9821,9828-9831,9834-9835,9842-9843,9848-9849,9851,9855,9859-9860,9862,9866,9870,9884,9886,9888-9889,9901,9965,9967,9969-9970,10085,10087,10089-10090,10096-10097,10099,10103,10106-10108,10112-10113,10127,10129-10131,10133,10135-10146,10150-10151,10158-10161,10164-10165,10172-10173,10178-10179,10181,10185,10189-10190,10192,10196,10200,10214,10216,10218-10219,10295,10297,10299-10300,10376,10378,10380-10381,10394,10471,10473,10475-10476,10488,10552,10554,10556-10557,10672,10674,10676-10677,10792,10794,10796-10797,10803-10804,10806,10810,10813-10815,10819-10820,10834-10846,10849,10856-10859,10862-10863,10870-10871,10876-10877,10879,10883,10887-10888,10890,10894,10898,10912,10914,10916-10917,10962-10964,11032,11034,11036-11037,11043-11044,11050,11053-11055,11059,11074-11079,11082-11084,11089,11096-11099,11110-11111,11116-11117,11123,11127-11128,11134,11152,11154,11156-11157,11233,11235,11237-11238,11244-11245,11247,11251,11255,11260-11261,11275-11295,11298,11305-11307,11311-11312,11319-11320,11325-11326,11328,11332,11336-11337,11339,11343,11347,11361,11363,11365-11629,14260-14453,16042-16138,18924-19089,20362-20444,24568-24733,25925-26007,28033-28289,28291,28293-28294,28297,28302,28306-28307,28342,28371-28375,28377,28380,28383,28388,28393,28396,28430,28461-28463,28465,28467,28470,28472,28476,28480,28483,28516,28545-28547,28549,28552,28555,28560,28565,28602,28633-28635,28637,28639-28640,28643,28648,28652-28653,28656,28690,28719-28723,29909-29999,31805-32060,32063,32065,32071,32076,32149,32151,32153,32156,32158,32162,32166,32230-32232,32234,32236-32237,32240,32245,32249-32250,32314-32318,32320,32322,32325,32330,32334,32398-32400,32402,32404,32408,32413,32417,32482-32483,32486,32488,32494,32499,32572,32574,32579,32581,32585,32655,32657,32659-32660,32663,32668,32672-32673,32737-32741,32743,32749,32754,32827,32829,32831-32832,32835,32840,32844-32845,32909-32913,32915,32917,32920,32925,32929,32993-32995,32997,32999-33000,33003,33008,33012-33013,33077-33081,33083,33089,33094,33167,33169,33171,33174,33179,33183,33247-33249,33251,33256,33261,33331,33333,33338,33340,33344,33414,33416,33418-33419,33422,33427,33431-33432,33496-33500,33502,33504,33507,33512,33516,33580-33582,33584,33586-33587,33590,33595,33599-33600,33664-33668,33670,33676,33681,33754,33756,33758,33761,33766,33770,33834-33836,33838,33843,33848,33918,33920,33925,33930,34000,34002,34004-34005,34008,34013,34017-34018,34082-34086,34681-34850,34852,34854-34855,34858,34863,34867-34868,34932-34936,34938,34940-34941,34944,34949,34953-34954,35018-35022,35024,35030,35035,35108,35110,35116,35121,35194,35196,35202,35207,35280,35282,35288,35293,35366,35368,35374,35379,35452,35454,35456,35459,35461,35465,35469,35533-35535,35537,35541,35546,35551-35556,35589,35618,35620,35624,35626,35630,35696,35698,35702,35707,35750,35779,35781,35783,35786,35791,35794-35795,35798-35805,35838,35867-35869,35871,35873,35876,35881,35884-35885,35888,35894,35928,35957-35959,35961,35963,35966,35971,35975,36015,36044-36046,36048,36053,36058,36105,36136,36138,36140,36143,36148,36152,36155,36157,36161,36195,36224-36226,36228,36233,36238,36285,36316,36318,36322,36327,36369,36398,36400,36405,36410,36457,36488,36490,36494,36496,36500,36542,36571,36573,36578,36583,36629,36660,36662,36666,36671,36713,36742,36744,36746,36749,36754,36758,36798,36827-36829,36831,36833,36836,36841,36844-36845,36848,36850,36854,36888,36917-36919,36921,36925,36930,36972,37001,37003,37007,37009,37013,37055,37084,37086,37088,37091,37096,37099-37100,37103,37105,37109,37143,37172-37174,37176,37178,37181,37186,37189-37190,37193,37195,37199,37233,37262-37264,37266,37271,37276,37323,37354,38987-39077,42467-42646,44369-44461,47471-47654,49084-49180,53998-54181,55521-55612
+gooddata-api-client/gooddata_api_client/api/image_export_api.py
+  s_ba054ecc9dedfc::t_f6a47face2d198 26
+gooddata-api-client/gooddata_api_client/api/localization_api.py
+  s_ba054ecc9dedfc::t_c0955fa54a62e4 1-1078
+gooddata-api-client/gooddata_api_client/api/page_template_controller_api.py
+  s_ba054ecc9dedfc::t_e6d175a8817fc0 1-1106
+gooddata-api-client/gooddata_api_client/api/publisher_documents_api.py
+  s_ba054ecc9dedfc::t_b712a7f80087c2 1-3242
+gooddata-api-client/gooddata_api_client/api/report_export_api.py
+  s_ba054ecc9dedfc::t_0aabecfaa184e9 26,41-101,163-272,384-471,480,560-733,742,829
+gooddata-api-client/gooddata_api_client/api/slides_export_api.py
+  s_ba054ecc9dedfc::t_72606661e46224 26
+gooddata-api-client/gooddata_api_client/apis/__init__.py
+  s_ba054ecc9dedfc::t_35144f800d20c6 67,81,129-130,153
+gooddata-api-client/gooddata_api_client/model/absolute_publisher_document_period.py
+  s_ba054ecc9dedfc::t_62819b2fbb5b79 1-342
+gooddata-api-client/gooddata_api_client/model/absolute_publisher_document_period_all_of.py
+  s_ba054ecc9dedfc::t_e5744cd8826d78 1-282
+gooddata-api-client/gooddata_api_client/model/analyze_sav_request.py
+  s_ba054ecc9dedfc::t_c24bf011651f85 1-276
+gooddata-api-client/gooddata_api_client/model/analyze_sav_request_item.py
+  s_ba054ecc9dedfc::t_89a20138b0332b 1-280
+gooddata-api-client/gooddata_api_client/model/analyze_sav_request_item_config.py
+  s_ba054ecc9dedfc::t_93c744759f1cf1 1-264
+gooddata-api-client/gooddata_api_client/model/analyze_sav_response.py
+  s_ba054ecc9dedfc::t_a0cda74ce0362d 1-288
+gooddata-api-client/gooddata_api_client/model/analyze_sav_response_column.py
+  s_ba054ecc9dedfc::t_eee9fbfb44050e 1-290
+gooddata-api-client/gooddata_api_client/model/analyze_sav_response_value_label.py
+  s_ba054ecc9dedfc::t_0f9a8749124554 1-276
+gooddata-api-client/gooddata_api_client/model/attribute_header_attribute_header.py
+  s_ba054ecc9dedfc::t_aa5d7a38aec6dc 67-76,169,173,189,193,246,250,351,355
+gooddata-api-client/gooddata_api_client/model/declarative_agent.py
+  s_ba054ecc9dedfc::t_28b6a1a42d2205 83
+gooddata-api-client/gooddata_api_client/model/declarative_analytical_dashboard.py
+  s_ba054ecc9dedfc::t_c0172afc44f7b6 224,329
+gooddata-api-client/gooddata_api_client/model/declarative_analytics_layer.py
+  s_ba054ecc9dedfc::t_83b0f07dfd14f6 44-46,61-63,128-129,134,153-154,159,213-214,219,315-316,321
+gooddata-api-client/gooddata_api_client/model/declarative_column.py
+  s_ba054ecc9dedfc::t_180cab5c637079 75-77,112,129,183,281
+gooddata-api-client/gooddata_api_client/model/declarative_data_source.py
+  s_ba054ecc9dedfc::t_883184c11f33aa 194,224,291,404
+gooddata-api-client/gooddata_api_client/model/declarative_metric.py
+  s_ba054ecc9dedfc::t_b66bb0ba702bc7 34,38,143,168,230,337
+gooddata-api-client/gooddata_api_client/model/declarative_metric_permission_assignment.py
+  s_ba054ecc9dedfc::t_12b9301b2a48af 1-275
+gooddata-api-client/gooddata_api_client/model/declarative_metric_permission_for_assignee.py
+  s_ba054ecc9dedfc::t_8e19dad872ec66 1-334
+gooddata-api-client/gooddata_api_client/model/declarative_metric_permission_for_assignee_rule.py
+  s_ba054ecc9dedfc::t_9ac8ad7173b009 1-334
+gooddata-api-client/gooddata_api_client/model/declarative_metric_permissions_inner.py
+  s_ba054ecc9dedfc::t_01a95f89c6783d 1-340
+gooddata-api-client/gooddata_api_client/model/declarative_publisher_document.py
+  s_ba054ecc9dedfc::t_39cdd23882f050 1-323
+gooddata-api-client/gooddata_api_client/model/declarative_publisher_document_page_template.py
+  s_ba054ecc9dedfc::t_8f1d507a78fd01 1-315
+gooddata-api-client/gooddata_api_client/model/declarative_publisher_document_template.py
+  s_ba054ecc9dedfc::t_0db9e3f09355fc 1-315
+gooddata-api-client/gooddata_api_client/model/declarative_table.py
+  s_ba054ecc9dedfc::t_246d88a4d2fb7d 104,118,169,266
+gooddata-api-client/gooddata_api_client/model/declarative_visualization_object.py
+  s_ba054ecc9dedfc::t_ec1a5d89a68bf3 36,40,142,166,227,333
+gooddata-api-client/gooddata_api_client/model/declarative_visualization_object_permission_assignment.py
+  s_ba054ecc9dedfc::t_fa2fb0e1f1761f 1-275
+gooddata-api-client/gooddata_api_client/model/declarative_visualization_object_permission_for_assignee.py
+  s_ba054ecc9dedfc::t_e9925de5f9fb86 1-334
+gooddata-api-client/gooddata_api_client/model/declarative_visualization_object_permission_for_assignee_rule.py
+  s_ba054ecc9dedfc::t_3a5b3b9c83e393 1-334
+gooddata-api-client/gooddata_api_client/model/declarative_visualization_object_permissions_inner.py
+  s_ba054ecc9dedfc::t_b3b70b969a74e0 1-340
+gooddata-api-client/gooddata_api_client/model/elements_response.py
+  s_ba054ecc9dedfc::t_483b63ff349147 69-78,153,156,169,172,222,225,320,323
+gooddata-api-client/gooddata_api_client/model/gd_storage_file.py
+  s_ba054ecc9dedfc::t_62525f590a0402 61,114,121,209,216
+gooddata-api-client/gooddata_api_client/model/get_document_export202_response_inner.py
+  s_ba054ecc9dedfc::t_b6b53000abc183 34,119,212
+gooddata-api-client/gooddata_api_client/model/identifier_ref_identifier.py
+  s_ba054ecc9dedfc::t_bdc33e2b9ccad0 88-90
+gooddata-api-client/gooddata_api_client/model/import_sav_request.py
+  s_ba054ecc9dedfc::t_29c4509475758d 1-276
+gooddata-api-client/gooddata_api_client/model/import_sav_request_table.py
+  s_ba054ecc9dedfc::t_f2ca39cd52da7e 1-282
+gooddata-api-client/gooddata_api_client/model/import_sav_request_table_source.py
+  s_ba054ecc9dedfc::t_4ed572832e5ae5 1-270
+gooddata-api-client/gooddata_api_client/model/import_sav_response.py
+  s_ba054ecc9dedfc::t_9b248adff0c8b4 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_agent_in_attributes.py
+  s_ba054ecc9dedfc::t_0764a7c435c625 80
+gooddata-api-client/gooddata_api_client/model/json_api_agent_out_attributes.py
+  s_ba054ecc9dedfc::t_b3ae2e4b88e006 80
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_in_attributes.py
+  s_ba054ecc9dedfc::t_35cc774734174d 186,213,277,386
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_out_attributes.py
+  s_ba054ecc9dedfc::t_88b6de6bad4b99 171,195,256,362
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_patch_attributes.py
+  s_ba054ecc9dedfc::t_60cffbe5f5ea8d 183,210,272,376
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_in.py
+  s_ba054ecc9dedfc::t_0013feec893090 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_in_attributes.py
+  s_ba054ecc9dedfc::t_3e81c7efc2a321 1-314
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_in_attributes_content.py
+  s_ba054ecc9dedfc::t_dce1b2e50b356b 1-308
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_in_attributes_period.py
+  s_ba054ecc9dedfc::t_1df5f19fa68b14 1-361
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_in_document.py
+  s_ba054ecc9dedfc::t_3990e147e3cf61 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out.py
+  s_ba054ecc9dedfc::t_76ce6005b6582c 1-310
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_attributes.py
+  s_ba054ecc9dedfc::t_73b5ee24537e0f 1-332
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_document.py
+  s_ba054ecc9dedfc::t_ffa7ad7cea8404 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_list.py
+  s_ba054ecc9dedfc::t_70b9b3c51cd9fc 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_with_links.py
+  s_ba054ecc9dedfc::t_0132103c5a9357 1-361
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_in.py
+  s_ba054ecc9dedfc::t_2350c94cca8f81 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_in_attributes.py
+  s_ba054ecc9dedfc::t_c7ea0d625e1929 1-306
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_in_attributes_content.py
+  s_ba054ecc9dedfc::t_3f602d1f233a5a 1-308
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_in_document.py
+  s_ba054ecc9dedfc::t_bb5818120b0be5 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out.py
+  s_ba054ecc9dedfc::t_4c0f44a39d1007 1-310
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out_attributes.py
+  s_ba054ecc9dedfc::t_2396e4e64cc629 1-324
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out_document.py
+  s_ba054ecc9dedfc::t_84b7896ae87b71 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out_list.py
+  s_ba054ecc9dedfc::t_11120c36cca01b 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out_with_links.py
+  s_ba054ecc9dedfc::t_681b944cd1ad1e 1-361
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_patch.py
+  s_ba054ecc9dedfc::t_d90e37c4d085ea 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_patch_attributes.py
+  s_ba054ecc9dedfc::t_4a82c237321110 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_patch_document.py
+  s_ba054ecc9dedfc::t_1d2b6091bdaa12 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_post_optional_id.py
+  s_ba054ecc9dedfc::t_eee9b9fd439fb5 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_post_optional_id_document.py
+  s_ba054ecc9dedfc::t_fb2fb11106265b 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_patch.py
+  s_ba054ecc9dedfc::t_97b1b569c65e2f 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_patch_attributes.py
+  s_ba054ecc9dedfc::t_f6a0f2a423f6bb 1-302
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_patch_document.py
+  s_ba054ecc9dedfc::t_498f0424e8307c 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_post_optional_id.py
+  s_ba054ecc9dedfc::t_497b789b91ed36 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_post_optional_id_document.py
+  s_ba054ecc9dedfc::t_dd6cfc849fcdf1 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_in.py
+  s_ba054ecc9dedfc::t_1f0a2cd27bd32d 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_in_attributes.py
+  s_ba054ecc9dedfc::t_5c175d30340e8c 1-306
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_in_attributes_content.py
+  s_ba054ecc9dedfc::t_2f654a07b515dd 1-308
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_in_document.py
+  s_ba054ecc9dedfc::t_f8d455029d8864 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_out.py
+  s_ba054ecc9dedfc::t_4cd206e3f26064 1-310
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_out_attributes.py
+  s_ba054ecc9dedfc::t_da544108c1486f 1-324
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_out_document.py
+  s_ba054ecc9dedfc::t_24cd582a707082 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_out_list.py
+  s_ba054ecc9dedfc::t_500e7aa6a94ddc 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_out_with_links.py
+  s_ba054ecc9dedfc::t_b95cda000630a6 1-361
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_patch.py
+  s_ba054ecc9dedfc::t_f7bf8718ca5be4 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_patch_attributes.py
+  s_ba054ecc9dedfc::t_d47ab5585c0e13 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_patch_document.py
+  s_ba054ecc9dedfc::t_49a5b82f57e475 1-276
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_post_optional_id.py
+  s_ba054ecc9dedfc::t_c6b5167bf71347 1-296
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_template_post_optional_id_document.py
+  s_ba054ecc9dedfc::t_148f2568a38b52 1-276
+gooddata-api-client/gooddata_api_client/model/localization_content.py
+  s_ba054ecc9dedfc::t_4397755425e62e 1-264
+gooddata-api-client/gooddata_api_client/model/localization_count.py
+  s_ba054ecc9dedfc::t_c66b747c88bbd8 1-282
+gooddata-api-client/gooddata_api_client/model/localization_data_statistics.py
+  s_ba054ecc9dedfc::t_3e33c3e12ac199 1-276
+gooddata-api-client/gooddata_api_client/model/localization_default.py
+  s_ba054ecc9dedfc::t_63cc7285d74840 1-290
+gooddata-api-client/gooddata_api_client/model/localization_defaults.py
+  s_ba054ecc9dedfc::t_382b73e6fe398d 1-278
+gooddata-api-client/gooddata_api_client/model/localization_metadata_statistics.py
+  s_ba054ecc9dedfc::t_a5b50224ffc0d6 1-276
+gooddata-api-client/gooddata_api_client/model/localization_resolved_value.py
+  s_ba054ecc9dedfc::t_bd39d50b6b3f1a 1-294
+gooddata-api-client/gooddata_api_client/model/localization_resolved_values.py
+  s_ba054ecc9dedfc::t_1aaddee11e3e17 1-288
+gooddata-api-client/gooddata_api_client/model/localization_setting_usage.py
+  s_ba054ecc9dedfc::t_749b9c9faa2b3a 1-282
+gooddata-api-client/gooddata_api_client/model/localization_setting_usages.py
+  s_ba054ecc9dedfc::t_82e0562cf823f6 1-278
+gooddata-api-client/gooddata_api_client/model/localization_source_counts.py
+  s_ba054ecc9dedfc::t_0698660dcdc69c 1-284
+gooddata-api-client/gooddata_api_client/model/localization_statistics.py
+  s_ba054ecc9dedfc::t_1e6a3c5506c8be 1-284
+gooddata-api-client/gooddata_api_client/model/localization_statistics_locale.py
+  s_ba054ecc9dedfc::t_bc5e1afdce03e4 1-270
+gooddata-api-client/gooddata_api_client/model/localization_usage.py
+  s_ba054ecc9dedfc::t_f5e532e1fdd219 1-284
+gooddata-api-client/gooddata_api_client/model/localization_usage_user.py
+  s_ba054ecc9dedfc::t_3d733ba9a86392 1-304
+gooddata-api-client/gooddata_api_client/model/localization_usage_users.py
+  s_ba054ecc9dedfc::t_6e15c0d17c6290 1-282
+gooddata-api-client/gooddata_api_client/model/localization_usage_value.py
+  s_ba054ecc9dedfc::t_0e958b5d00b09f 1-298
+gooddata-api-client/gooddata_api_client/model/localization_usage_workspace.py
+  s_ba054ecc9dedfc::t_c1d8f8cf3f5f46 1-312
+gooddata-api-client/gooddata_api_client/model/localization_usage_workspaces.py
+  s_ba054ecc9dedfc::t_f22248bfcfd2a9 1-282
+gooddata-api-client/gooddata_api_client/model/localization_user_value.py
+  s_ba054ecc9dedfc::t_33217d8170ff24 1-290
+gooddata-api-client/gooddata_api_client/model/localization_user_values.py
+  s_ba054ecc9dedfc::t_20e6331913093b 1-278
+gooddata-api-client/gooddata_api_client/model/publisher_document_arbitrary_attribute_filter.py
+  s_ba054ecc9dedfc::t_0810e25a70d35e 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_arbitrary_attribute_filter_arbitrary_attribute_filter.py
+  s_ba054ecc9dedfc::t_62631f01a59eef 1-317
+gooddata-api-client/gooddata_api_client/model/publisher_document_area_style.py
+  s_ba054ecc9dedfc::t_2ef4192649aa7c 1-357
+gooddata-api-client/gooddata_api_client/model/publisher_document_area_style_gap.py
+  s_ba054ecc9dedfc::t_a7057e5f68d3cc 1-260
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_elements.py
+  s_ba054ecc9dedfc::t_eda625f57300c0 1-327
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_elements_by_uri.py
+  s_ba054ecc9dedfc::t_89919e5b1ebaec 1-270
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_elements_by_value.py
+  s_ba054ecc9dedfc::t_4b475692f36f19 1-270
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter.py
+  s_ba054ecc9dedfc::t_565f2c68e37141 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_attribute_filter.py
+  s_ba054ecc9dedfc::t_654f176a99a4d2 1-327
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_by_date.py
+  s_ba054ecc9dedfc::t_9944c70b338de8 1-286
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_config.py
+  s_ba054ecc9dedfc::t_2c5db3bc2cf039 1-303
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_parent.py
+  s_ba054ecc9dedfc::t_60cbb192cb5aad 1-282
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_parent_over.py
+  s_ba054ecc9dedfc::t_429ca2cba40a15 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_attribute_filter_reference.py
+  s_ba054ecc9dedfc::t_85dd5189555f64 1-287
+gooddata-api-client/gooddata_api_client/model/publisher_document_auto_visibility.py
+  s_ba054ecc9dedfc::t_6dd53c877bf37b 1-270
+gooddata-api-client/gooddata_api_client/model/publisher_document_auto_visibility_visible.py
+  s_ba054ecc9dedfc::t_69570c8cbda824 1-260
+gooddata-api-client/gooddata_api_client/model/publisher_document_axis_display.py
+  s_ba054ecc9dedfc::t_7cc3e2aacdddd2 1-288
+gooddata-api-client/gooddata_api_client/model/publisher_document_axis_name_display.py
+  s_ba054ecc9dedfc::t_1426f2fad527db 1-273
+gooddata-api-client/gooddata_api_client/model/publisher_document_axis_values_display.py
+  s_ba054ecc9dedfc::t_9385259101de4c 1-272
+gooddata-api-client/gooddata_api_client/model/publisher_document_bounded_filter.py
+  s_ba054ecc9dedfc::t_f4420e919a6784 1-291
+gooddata-api-client/gooddata_api_client/model/publisher_document_chart_style.py
+  s_ba054ecc9dedfc::t_1cb71483b5a690 1-327
+gooddata-api-client/gooddata_api_client/model/publisher_document_column.py
+  s_ba054ecc9dedfc::t_a6339d2f995dcf 1-313
+gooddata-api-client/gooddata_api_client/model/publisher_document_comparison_condition.py
+  s_ba054ecc9dedfc::t_61a6c4096c62bd 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_container_style.py
+  s_ba054ecc9dedfc::t_88d2b869c42e38 1-638
+gooddata-api-client/gooddata_api_client/model/publisher_document_container_style_border_bottom_left_radius.py
+  s_ba054ecc9dedfc::t_00d8e34a91ef85 1-260
+gooddata-api-client/gooddata_api_client/model/publisher_document_container_style_padding.py
+  s_ba054ecc9dedfc::t_9b9fc28d169ccc 1-260
+gooddata-api-client/gooddata_api_client/model/publisher_document_content.py
+  s_ba054ecc9dedfc::t_5243837c476609 1-308
+gooddata-api-client/gooddata_api_client/model/publisher_document_data_set_ref.py
+  s_ba054ecc9dedfc::t_a20a46182a8094 1-281
+gooddata-api-client/gooddata_api_client/model/publisher_document_date_filter.py
+  s_ba054ecc9dedfc::t_881b35ebd9c343 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_date_filter_date_filter.py
+  s_ba054ecc9dedfc::t_4036d89581019c 1-341
+gooddata-api-client/gooddata_api_client/model/publisher_document_date_filter_date_filter_from.py
+  s_ba054ecc9dedfc::t_f95e6390652413 1-260
+gooddata-api-client/gooddata_api_client/model/publisher_document_date_filter_reference.py
+  s_ba054ecc9dedfc::t_c51e7627be0141 1-287
+gooddata-api-client/gooddata_api_client/model/publisher_document_defaults.py
+  s_ba054ecc9dedfc::t_eb75b91a8fe8c0 1-283
+gooddata-api-client/gooddata_api_client/model/publisher_document_filter.py
+  s_ba054ecc9dedfc::t_a4e5c3ffbfe2ee 1-358
+gooddata-api-client/gooddata_api_client/model/publisher_document_filter_reference.py
+  s_ba054ecc9dedfc::t_36ce2473575637 1-355
+gooddata-api-client/gooddata_api_client/model/publisher_document_heading_widget.py
+  s_ba054ecc9dedfc::t_e0962ddc2b4112 1-329
+gooddata-api-client/gooddata_api_client/model/publisher_document_headline_style.py
+  s_ba054ecc9dedfc::t_a41fcbb780c07e 1-290
+gooddata-api-client/gooddata_api_client/model/publisher_document_image_widget.py
+  s_ba054ecc9dedfc::t_49c49c27db4dca 1-325
+gooddata-api-client/gooddata_api_client/model/publisher_document_image_widget_style.py
+  s_ba054ecc9dedfc::t_ff5bc862ed423e 1-570
+gooddata-api-client/gooddata_api_client/model/publisher_document_layout_node.py
+  s_ba054ecc9dedfc::t_18c1e67b4b05e2 1-476
+gooddata-api-client/gooddata_api_client/model/publisher_document_legend_display.py
+  s_ba054ecc9dedfc::t_b1006ec62f77a3 1-275
+gooddata-api-client/gooddata_api_client/model/publisher_document_match_attribute_filter.py
+  s_ba054ecc9dedfc::t_1a6f5e4e054b51 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_match_attribute_filter_match_attribute_filter.py
+  s_ba054ecc9dedfc::t_9589350f857c66 1-314
+gooddata-api-client/gooddata_api_client/model/publisher_document_measure_value_condition.py
+  s_ba054ecc9dedfc::t_d401000319fff2 1-331
+gooddata-api-client/gooddata_api_client/model/publisher_document_measure_value_filter.py
+  s_ba054ecc9dedfc::t_9037700f4cc64c 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_measure_value_filter_dashboard_measure_value_filter.py
+  s_ba054ecc9dedfc::t_0a3b552b94ae04 1-301
+gooddata-api-client/gooddata_api_client/model/publisher_document_measure_value_filter_reference.py
+  s_ba054ecc9dedfc::t_1d10c799424f78 1-287
+gooddata-api-client/gooddata_api_client/model/publisher_document_obj_ref.py
+  s_ba054ecc9dedfc::t_af3e746370162d 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_page.py
+  s_ba054ecc9dedfc::t_0531c39c78b294 1-321
+gooddata-api-client/gooddata_api_client/model/publisher_document_page_style.py
+  s_ba054ecc9dedfc::t_796a21dafef3b8 1-468
+gooddata-api-client/gooddata_api_client/model/publisher_document_page_template_content.py
+  s_ba054ecc9dedfc::t_81a4e4684a9110 1-308
+gooddata-api-client/gooddata_api_client/model/publisher_document_period.py
+  s_ba054ecc9dedfc::t_818922dc1ab356 1-361
+gooddata-api-client/gooddata_api_client/model/publisher_document_range_condition.py
+  s_ba054ecc9dedfc::t_82a204e4c82ac0 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_row.py
+  s_ba054ecc9dedfc::t_aa4b89433fb3ad 1-313
+gooddata-api-client/gooddata_api_client/model/publisher_document_section.py
+  s_ba054ecc9dedfc::t_ffdfdaec230cad 1-293
+gooddata-api-client/gooddata_api_client/model/publisher_document_table_style.py
+  s_ba054ecc9dedfc::t_62b2633ea9e821 1-306
+gooddata-api-client/gooddata_api_client/model/publisher_document_takeaway_context.py
+  s_ba054ecc9dedfc::t_bbd4aa26cc7740 1-276
+gooddata-api-client/gooddata_api_client/model/publisher_document_takeaway_defaults.py
+  s_ba054ecc9dedfc::t_d0eddb927996ab 1-270
+gooddata-api-client/gooddata_api_client/model/publisher_document_takeaway_generation.py
+  s_ba054ecc9dedfc::t_43e93ef9c1159a 1-274
+gooddata-api-client/gooddata_api_client/model/publisher_document_takeaway_widget.py
+  s_ba054ecc9dedfc::t_2f777231224f4c 1-329
+gooddata-api-client/gooddata_api_client/model/publisher_document_text_style.py
+  s_ba054ecc9dedfc::t_cce45682a563c2 1-349
+gooddata-api-client/gooddata_api_client/model/publisher_document_text_widget.py
+  s_ba054ecc9dedfc::t_4d0816742e57cc 1-321
+gooddata-api-client/gooddata_api_client/model/publisher_document_text_widget_style.py
+  s_ba054ecc9dedfc::t_8369ed6f4f0e2c 1-632
+gooddata-api-client/gooddata_api_client/model/publisher_document_title_widget.py
+  s_ba054ecc9dedfc::t_55a357d527b229 1-317
+gooddata-api-client/gooddata_api_client/model/publisher_document_visibility.py
+  s_ba054ecc9dedfc::t_3bc6f4f0b6f68c 1-264
+gooddata-api-client/gooddata_api_client/model/publisher_document_visualization_display.py
+  s_ba054ecc9dedfc::t_a98c41b94a23c2 1-300
+gooddata-api-client/gooddata_api_client/model/publisher_document_visualization_ref.py
+  s_ba054ecc9dedfc::t_b670310e5f2bc2 1-281
+gooddata-api-client/gooddata_api_client/model/publisher_document_visualization_style.py
+  s_ba054ecc9dedfc::t_26a7c62f67be69 1-561
+gooddata-api-client/gooddata_api_client/model/publisher_document_visualization_widget.py
+  s_ba054ecc9dedfc::t_27db9c6c5bf16e 1-357
+gooddata-api-client/gooddata_api_client/model/publisher_document_widget_placeholder.py
+  s_ba054ecc9dedfc::t_ad6448c54487cf 1-268
+gooddata-api-client/gooddata_api_client/model/publisher_document_widget_title.py
+  s_ba054ecc9dedfc::t_765aa3e2e16fdb 1-278
+gooddata-api-client/gooddata_api_client/model/relative_publisher_document_period.py
+  s_ba054ecc9dedfc::t_89540ddcef50a6 1-350
+gooddata-api-client/gooddata_api_client/model/relative_publisher_document_period_all_of.py
+  s_ba054ecc9dedfc::t_ea813d237688d9 1-292
+gooddata-api-client/gooddata_api_client/model/report_export_request.py
+  s_ba054ecc9dedfc::t_fdb4c68b73d584 96,98,110,112,123,161,163,219,257,259
+gooddata-api-client/gooddata_api_client/model/workspace_localization_usage.py
+  s_ba054ecc9dedfc::t_b74f128382cccb 1-284
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  s_ba054ecc9dedfc::t_861a786871c67f 17-18,63-68,282-285,294-296,323-326,423,445-448,1002-1044,1276-1296,1390-1460,1486-1487,1614
+schemas/gooddata-afm-client.json
+  s_ba054ecc9dedfc::t_3fdb293b225588 106,935-948,1013-1016,1977-1990,2047-2050
+schemas/gooddata-api-client.json
+  s_ba054ecc9dedfc::t_12b110065250f1 151,246-297,1292-1415,1890-1903,1968-1971,5380-5381,5595,5799-5812,5841-5847,6290-6295,6728-6732,7955-7969,7997-8057,8444-8579,9055-9061,9515-9529,9557-9617,10499-10512,10569-10572,11936-11937,12520-12522,12714-12778,13005-13006,13163-13164,13430-13431,19591-19592,19594-19830,20079-20083,29342-29343,29351,29353-29360,29365,29368,29371-29373,29379,29384-29390,29393-29399,29402,29404-29408,29411,29416-29419,29424-29442,29445-29464,29467-29468,29471-29472,29474-29477,29479-29486,29489-29535,29543-29550,29552-29568,29572-29575,29580-29582,29595,29597,29608,29611,29619-29620,29628,29630-29637,29642,29645,29648-29650,29656,29661-29667,29670-29676,29679,29681-29685,29688,29693-29696,29701-29719,29722-29741,29744-29745,29748-29749,29751-29754,29756-29763,29766-29812,29836-29853,29865-29868,29873-29875,29941,29943,29954,29957,29989,29994,30032,30035,30042-30043,30051,30057-30065,30072-30079,30082-30089,30092-30093,30096-30104,30107-30108,30113-30122,30125-30134,30137-30138,30141-30148,30150-30176,30178-30180,30196-30200,30205-30206,30219,30221,30232,30235,30243-30244,30252,30258-30266,30273-30280,30283-30290,30293-30294,30297-30305,30308-30309,30314-30323,30326-30335,30338-30339,30342-30349,30351-30377,30379-30381,30413-30417,30422-30423,30489,30491,30502,30505,30537,30542,30580,30583,30590-30591,30599,30605-30613,30620-30627,30630-30637,30640-30641,30644-30652,30655-30656,30661-30670,30673-30682,30685-30686,30689-30696,30698-30724,30726-30728,30744-30748,30762,30764,30775,30778,30786-30787,30795,30801-30809,30816-30823,30826-30833,30836-30837,30840-30848,30851-30852,30857-30866,30869-30878,30881-30882,30885-30892,30894-30920,30922-30924,30940-30944,30949-30950,30963,30965,30975,30978,30986-30987,30995,30997-31004,31009,31012,31015-31017,31023,31028-31034,31037-31043,31046,31048-31052,31055,31060-31063,31068-31086,31089-31108,31111-31112,31115-31116,31118-31121,31123-31130,31133-31179,31187-31204,31216-31219,31233,31235,31246,31249,31257-31258,31266,31268-31275,31280,31283,31286-31288,31294,31299-31305,31308-31314,31317,31319-31323,31326,31331-31334,31339-31357,31360-31379,31382-31383,31386-31387,31389-31392,31394-31401,31404-31450,31458-31475,31487-31490,31495-31497,31510,31512,31522,31525,31533-31534,31542,31544-31567,31570,31575-31581,31584-31590,31593,31595-31599,31602,31607-31610,31615-31633,31636-31655,31658-31659,31662-31663,31665-31668,31670-31677,31680-31726,31743-31747,31752-31753,31766,31768,31779,31782,31790-31791,31799,31801-31824,31827,31832-31838,31841-31847,31850,31852-31856,31859,31864-31867,31872-31890,31893-31912,31915-31916,31919-31920,31922-31925,31927-31934,31937-31983,32016-32020,32025-32026,32092,32094,32105,32108,32140,32145,32183,32186,32193-32194,32202,32204-32227,32230,32235-32241,32244-32250,32253,32255-32259,32262,32267-32270,32275-32293,32296-32849,32919-32921,32974-32985,32995-33000,33003-33008,33020,33022,33033,33036,33044-33045,33053,33055-33072,33262-33264,33313-33320,33325-33344,33354-33359,33364-33365,33376,33378-33396,33402,33404-33412,33415-33424,33432,33434,33445,33448-33456,33460-33472,33480,33485-33493,33505-33512,33523,33526,33533-33534,33538-33540,33542-33667,33670-33680,33685-33688,33700,33702,33713,33716,33724-33725,33732-33868,33873-33878,33893-33894,33904-33929,33932,33935,33943,33946,33960,33962,33973,33976,33981,34008,34013,34021,34051,34054,34061-34062,34069-34196,34198,34224,34226,34237,34240,34248-34249,34256-34381,34384-34397,34400-34403,34406-34411,34415,34417,34422,34427,34430,34438-34439,34443-34729,34732-34737,34751,34753,34758,34764,34767-41136,41139,41166,41171,41179,41209,41212,41219-41220,41224-41271,41274-41281,41295,41298,41312,41314,41324,41327,41335-41425,41427-41431,41433-41610,41612-41615,41619-41620,41622-41695,41697-41699,41703,41705,41707,41717-41729,41733-41736,41738-41799,41814,41816,41825,41828,41836-41837,41841-41844,41846,41851-41854,41866,41868,41873,41879,41882,41890-41891,41895-41898,41900,41905-41908,41917,41919,41921-41931,41935-41936,41946,41948,41953,41959,41962,41973,41978,42000,42003,42010-42011,42015-42018,42020,42033-42166,42168,42170-42175,42177-42178,42184,42188-42206,42209,42217-42218,42221-42222,42227,42229,42231,42241,42243-42262,42266-42268,42272-42273,42275-42297,42299-42300,42305-42306,42308-42309,42313-42316,42318-42336,42338-42354,42358,42362,42364-42369,42371,42373,42375-42390,42392-42393,42397-42398,42402,42405,42408-42413,42415-42421,42423-42444,42446-42450,42452-42453,42456-42465,42469,42471-42477,42479-42481,42484-42488,42493,42497,42499-42502,42506,42510,42512-42515,42517-42524,42526-42560,42562-42567,42573-42574,42578,42580-42581,42583-42584,42586-42597,42599-42611,42613-42616,42618-42619,42621-42626,42632-42633,42637-42638,42640-42641,42643-42644,42646-42660,42662-42663,42667-42668,42672-42673,42675-42676,42678-42679,42681-42692,42694-42712,42717-42720,42722-42723,42725-42730,42732,42734-42752,42754-42770,42775-42781,42783-42788,42794,42796,42800,42802-42811,42815-42816,42820-42821,42823-42852,42857-42866,42868-42873,42879-42883,42887,42889-42898,42902-42903,42907-42925,42927-42931,42933-42943,42945-42946,42948-42949,42951,42953,42956-42959,42961-42962,42964-42966,42969-42970,42972-42977,42979,42981-42984,42987-42991,42993-43005,43007-43008,43010-43014,43018-43019,43023-43024,43027,43030,43033,43036-43122,43125-43134,43137,43140,43142-43143,43145,43147-43149,43151-43152,43154,43156-43170,43172-43174,43176-43178,43182-43184,43188-43192,43194-43195,43197-43202,43204,43206-43209,43211,43213-43218,43220-43225,43229-43231,43235-43236,43238-43247,43251,43255-43260,43262-43263,43267-43279,43281,43283-43284,43288-43299,43301-43304,43308,43312-43313,43315-43318,43320-43369,43373-43384,43388-43389,43391-43393,43395-43397,43399-43401,43405-43407,43411-43412,43414,43416-43417,43419-43422,43424-43430,43433-43435,43437,43441,43445,43447-43498,43502,43504-43508,43510,43512-43522,43524-43525,43527,43532-43533,43535,43540-43541,43543,43547-43559,43564-43568,43570-43572,43582,43584,43587,43592-43593,43597,43599-43600,43602-43603,43605-43606,43608-43609,43613-43614,43618,43622,43624,43627,43631-43632,43636,43638-43639,43644,43646-43652,43656-43657,43661,43663-43665,43667-43677,43679-43681,43684,43686,43692,43697-43699,43701-43710,43714-43715,43719,43721-43723,43728,43732,43734-43745,43748-43751,43753,43756-43758,43760-43762,43767-43770,43774-43775,43777-43778,43780-43784,43786-43790,43792-43797,43801-43802,43806-43808,43810-43815,43817-43822,43827,43829,43833-43835,43837,43839-43840,43842-43843,43845-43861,43863-43865,43867,43870-43871,43873-43876,43878-43880,43886-43887,43891-43892,43894-43905,43909-43911,43915-43922,43924-43928,43930-43937,43939-43942,43944-43950,43952-43956,43958-43959,43961-43967,43969,43971-43988,43990-43992,43994-43998,44002-44003,44007-44008,44010-44022,44026-44027,44031,44034-44036,44038,44040-44063,44066-44068,44070-44071,44073-44074,44076-44078,44085-44087,44091,44094,44098,44102,44104-44105,44107,44109-44110,44112-44121,44123-44124,44129-44130,44134,44137-44138,44140,44144,44148,44150-44168,44173-44174,44176-44180,44182-44209,44212,44217-44218,44222-44243,44245-44250,44254-44255,44259-44261,44264-44265,44268-44299,44301-44309,44311,44313-44314,44319,44323-44324,44326-44332,44336-44337,44341-44342,44344-44380,44383-44403,44405,44412-44413,44417,44419-44421,44423-44424,44426-44430,44432-44449,44451-44452,44456-44468,44470,44472-44473,44477-44490,44492,44494-44496,44502,44506,44508,44510-44515,44519-44530,44532-44548,44550-44551,44553,44555-44558,44561-44564,44569,44573-44574,44576-44577,44579-44595,44597-44598,44600,44602-44605,44608-44611,44616,44620-44621,44623,44626,44628-44629,44631-44632,44634,44636-44637,44639-44640,44642-44643,44645,44648-44650,44653-44655,44657,44661,44665,44667-44711,44715-44722,44726,44728-44729,44731,44734,44739-44741,44745-44746,44748-44767,44771-44772,44776-44777,44779,44781-44782,44784-44804,44806-44818,44821-44825,44827-44838,44840-44846,44849-44855,44857-44897,44899-44901,44904-44915,44918-44928,44932,44934-44939,44943,44947,44949-44950,44952,44954,44958,44962-44963,44965,44967-44968,44970-44995,44997-44998,45001-45009,45012-45015,45017,45021,45025-45026,45028-45035,45039-45040,45044-45045,45047-45048,45050-45051,45054,45056-45066,45072,45076-45077,45079-45083,45087-45088,45092-45093,45096-45097,45099-45110,45114,45120,45125,45127-45136,45141,45143-45145,45147-45149,45151-45152,45154-45165,45167-45169,45172-45174,45179,45181-45186,45188-45189,45194-45195,45197-45199,45201-45215,45217-45219,45223,45227-45231,45233-45277,45279-45280,45282-45283,45285-45288,45290,45293,45296-45309,45312,45318,45323,45325-45351,45355,45359-45360,45362-45363,45365-45371,45374-45380,45382-45422,45424-45426,45430-45431,45433-45463,45466-45477,45479-45482,45486-45726,45728,45730-45739,45743-45749,45752,45754-45756,45763-45772,45774-45821,45823-45889,45891-45904,45908,45910,45914-45915,45917-45918,45920,45924-45925,45928-45929,45932-45935,45937,45939-45947,45952-45953,45955,45958-45961,45966-45967,45971-45972,45974,45976-45977,45979-45980,45982-45983,45985-46018,46022-46023,46026-46038,46040-46041,46047-46048,46054,46058,46060-46061,46063-46066,46071-46072,46076-46077,46079-46090,46095-46096,46099,46102-46111,46116-46125,46128,46131,46134,46139-46140,46142-46144,46147-46184,46188-46189,46193-46194,46196,46199,46202,46205-46208,46210-46211,46213-46216,46221-46222,46224-46225,46227-46229,46231-46233,46236-46244,46246,46248-46261,46265-46266,46270-46271,46273,46276-46283,46285-46290,46293-46294,46296,46298-46299,46302,46304,46307,46309,46312,46314,46317,46319,46322,46324,46327,46329-46330,46332-46338,46341,46344-46349,46351,46353-46361,46363-46407,46409-46410,46412-46422,46424-46431,46433-46436,46438,46440-46441,46443-46473,46476-46479,46481-46484,46486-46491,46494-46499,46502-46509,46512-46513,46516,46520-46530,46532-46542,46544-46554,46556-46566,46568,46571-46574,46576,46579-46583,46585,46589,46593,46597,46599-46601,46608-46619,46621,46623-46625,46627-46628,46630-46631,46633-46646,46651,46653,46655-46659,46662-46664,46669-46672,46674-46675,46677-46691,46693-46695,46698-46700,46703-46707,46710,46712,46716-46717,46720-46723,46728-46729,46731-46761,46765,46769,46771-46772,46774,46776,46782-46783,46787-46788,46790,46793-46795,46799-46800,46804-46805,46807-46808,46810,46813-46846,46850,46854-46855,46857-46858,46860-46953,46955-47172,47174,47176,47180-47181,47183-47185,47189-47190,47192-47196,47198,47201-47203,47207,47211-47218,47220-47226,47230,47232-47235,47238-47252,47254-47258,47263,47267-47268,47270-47271,47273,47277-47279,47281-47283,47285-47290,47292-47293,47295-47299,47303-47304,47308-47309,47311,47314-47316,47319-47323,47325,47330,47334-47335,47337-47342,47345,47348,47351-47368,47374-47375,47377-47387,47389-47390,47397-47398,47400-47401,47406-47407,47409-47410,47412-47413,47418-47419,47421-47422,47424-47434,47437-47448,47450-47455,47460-47461,47465-47466,47468-47473,47475-47542,47549-47550,47552-47554,47556-47559,47561-47585,47589-47590,47594-47598,47600-47676,47678,47680-47688,47690,47692,47694-47979,47986-47987,47989-48018,48022-48023,48027,48029-48030,48035-48036,48038-48057,48062-48063,48065-48066,48068-48072,48076-48077,48081-48082,48084-48160,48162-48163,48165,48167-48172,48174-48218,48220-48259,48261,48263-48271,48273-48274,48276-48283,48285,48287-48310,48313-48314,48317,48321-48331,48333-48343,48345-48369,48372-48377,48380-48384,48386-48388,48390-48399,48404-48405,48407-48408,48411-48426,48429-48461,48463-48465,48469-48470,48474-48475,48477,48480-48490,48492-48493,48496-48498,49240-49301,49327,49329-49333,49351-49352,49365,52608-52625,53897,53947-53998,54135-54176,54698-54973,58828-59030,59378-59379,59437-59438,59540-59541,60458-60652,68747-69250,69254,69259,69266,69268,69270-69288,69290-69300,69302-69303,69305-69312,69318,69331,69336,69343,69345,69347-69348,69351,69353-69360,69366,69378,69383,69394,69399,69406,69408,69410-69411,69414,69416,69428,69472,69477,69484,69486,69488,69492,69507,69512,69523,69528,69535,69537,69539,69543,69545,69564,69566,69568,69572,69587,69600,69605,69612,69614,69616,69618-69620,69630-69687,69690,69697-69716,69728,69737-69740,69758,69763,69770,69772,69774-69781,69784-69785,69788-69793,69795-69830,69837,69842,69853,69858,69865,69867,69869-69876,69879,69881-69882,69885-69917,69923-69965,69969-69982,69985,69987,69989-69996,69998-70000,70007,70013-70032,70035-70049,70055,70060,70067,70069,70071-70078,70081-70082,70089,70095-70114,70121,70126,70137,70142,70149,70151,70153-70160,70163,70165,70169,70175-70189,70192,70199-70222,70232-70240,70243,70252,70270,70275,70282,70284,70286-70296,70298,70302,70307-70330,70337,70341,70345,70349,70354,70361,70363,70365-70372,70375-70377,70381,70389,70397,70403-70457,70465,70470,70477,70479,70481-70493,70497,70505-70506,70508-70514,70520,70529,70537-70549,70567-70575,70578,70588-70589,70607,70612,70619,70621,70623,70633,70635-70642,70645,70653-70665,70676,70686-70687,70703,70708,70719,70724,70731,70733,70735,70740,70745-70824,70826,70829-70842,70850,70852,70854,70859,70864,70867-70880,70884,70893,70901-70913,70922-70930,70933,70943-70944,70961,70966,70973,70975,70977,70987,70990-71003,71007,71016,71024-71036,71050,71055,71066,71071,71078,71080,71082,71087,71092,71095-71108,71112,71121,71129-71141,71155,71160,71171,71176,71183,71185,71187,71192,71197,71199,71226,71235,71243,71245-71246,71302,71307,71314,71316,71318,71326-71426,71429,71431,71482,71487,71496,71498,71508-71546,71548,71568,71577,71585,71587-71588,71634,71639,71646,71648,71650,71658-71660,71671-71673,71689,71698,71708-71721,71723-71757,71759-71764,71767-71772,71775-71778,71780,71784-71785,71788,71793-71796,71801,71806-71820,71826,71831,71838,71840,71842,71845,71847,71850-71854,71864-71887,71890,71899-71902,71911-71928,71931,71942,71955,71959,71964,71971,71973,71975,71978,71980,71985,71987,72038,72043,72052,72054,72064,72066,72086,72095,72104-72107,72127,72154,72159,72166,72168,72170,72180,72200,72209,72218-72221,72235,72240,72251,72256,72263,72265,72267,72272,72275-72279,72291-72292,72294-72300,72305-72306,72309-72311,72318,72322,72330,72335,72342,72344,72346,72349,72351,72356,72358,72385,72394,72402-72403,72405-72408,72410-72415,72418,72474,72479,72486,72488,72490,72500,72512,72520-72521,72523-72526,72528-72533,72536,72572,72577,72588,72593,72600,72602,72604,72609,72614,72616,72667,72672,72681,72683,72693,72695,72719,72721,72723,72728,72733,72753,72762,72770-72771,72773-72776,72778-72783,72786,72832,72837,72844,72846,72848,72858,72878,72887,72895-72896,72898-72901,72903-72908,72911,72925,72930,72941,72946,72953,72955,72957,72962,72967,72987,72996,73004-73005,73007-73010,73012-73017,73020,73034,73039,73050,73055,73062,73064,73066,73071,73076,73078,73105,73114,73122-73124,73126-73132,73189,73194,73201,73203,73205,73213-73321,73324,73326,73361-73423,73425-73426,73429,73431,73433,73436,73438,73441,73443,73463,73472,73480-73482,73484-73490,73537,73542,73549,73551,73553,73563,73583,73592,73600-73602,73604-73610,73624,73629,73640,73645,73652,73654,73656,73664-73666,73677-73686,73688,73694-73698,73701-73720,73727-73732,73743,73748,73755,73757,73759,73762,73764,73769,73771,73798,73852,73857,73864,73866,73868,73878,73915,73920,73931,73936,73943,73945,73947-73948,73951,73953,74004,74009,74018,74020,74030,74032,74056,74058,74060-74061,74064,74084,74128,74133,74140,74142,74144,74154,74174,74186,74191,74202,74207,74214,74216,74218-74219,74222,74242,74254,74259,74270,74275,74282,74284,74286-74287,74290,74292,74328,74367,74394,74399,74406,74408,74410,74420,74432,74453,74478,74483,74494,74499,74506,74508,74510,74513,74515,74520,74522,74573,74578,74587,74589,74599,74601,74625,74627,74629,74634,74639,74668,74698,74724,74729,74736,74738,74740,74750,74779,74803,74808,74819,74824,74831,74833,74835,74840,74845,74874,74898,74903,74914,74919,74926,74928,74930,74935,74940,74942,74969,74976-74999,75047,75052,75059,75061,75063,75073,75075,75126,75131,75140,75142,75152,75154,75174,75181-75204,75242,75247,75254,75256,75258,75268,75288,75296-75298,75300-75301,75303-75317,75324,75329,75340,75345,75352,75354,75356-75363,75366,75368,75395,75470,75475,75482,75484,75486,75496,75554,75559,75570,75575,75582,75584,75586,75591,75596,75598,75622,75624,75626,75631,75636,75656,75721,75726,75733,75735,75737,75747,75767,75800,75805,75816,75821,75828,75830,75832,75837,75842,75862,75895,75900,75911,75916,75923,75925,75927,75932,75937,75939,75966,75975,75983-75985,76041,76046,76053,76055,76057,76065,76067,76078-76080,76082,76085-76096,76099-76103,76106-76118,76125-76130,76137,76141,76146,76153,76155,76157,76160,76162,76167-76205,76207,76227,76236,76244-76246,76292,76297,76304,76306,76308,76318,76338,76347,76355-76357,76371,76376,76387,76392,76399,76401,76403-76498,80955-81422,81429,81434,81441,81457,81464,81466,81471-81473,81498-81536,81545-81652,81659-81664,81671,81675,81680,81687,81689,81691,81694,81696,81701,81703,81727,81729,81731,81741,81761,81770,81800,81826,81831,81838,81840,81842,81852,81872,81881,81905,81910,81921,81926,81933,81935,81937,81947,81967,81976,82000,82005,82016,82021,82028,82030,82032
+schemas/gooddata-automation-client.json
+  s_ba054ecc9dedfc::t_0af511ce652d6a 106,2719-2721
+schemas/gooddata-export-client.json
+  s_ba054ecc9dedfc::t_3a335c9f16b886 106,2032-2034,2988,2990-2994,3012-3013,3026,3436-3638,3986-3987,4045-4046,4148-4149
+schemas/gooddata-metadata-client.json
+  s_ba054ecc9dedfc::t_9921aaee016e04 151,246-297,3520-3521,3735,3939-3952,3981-3987,4430-4435,4868-4872,6095-6109,6137-6197,6584-6719,7195-7201,7639-7653,7681-7741,9165-9167,9457-9458,9615-9616,9882-9883,16043-16047,16276-16280,16531-16535,25543-25544,25552,25554-25561,25566,25569,25572-25574,25580,25585-25591,25594-25600,25603,25605-25609,25612,25617-25620,25625-25643,25646-25665,25668-25669,25672-25673,25675-25678,25680-25687,25690-25736,25744-25761,25773-25776,25781-25783,25796,25798,25809,25812,25820-25821,25829,25831-25838,25843,25846,25849-25851,25857,25862-25868,25871-25877,25880,25882-25886,25889,25894-25897,25902-25920,25923-25942,25945-25946,25949-25950,25952-25955,25957-25964,25967-26013,26037-26054,26066-26069,26074-26076,26142,26144,26155,26158,26190,26195,26233,26236,26243-26244,26252,26258-26266,26273-26280,26283-26290,26293-26294,26297-26305,26308-26309,26314-26323,26326-26335,26338-26339,26342-26349,26351-26377,26379-26381,26397-26401,26406-26407,26420,26422,26433,26436,26444-26445,26453,26459-26467,26474-26481,26484-26491,26494-26495,26498-26506,26509-26510,26515-26524,26527-26536,26539-26540,26543-26550,26552-26578,26580-26582,26614-26618,26623-26624,26690,26692,26703,26706,26738,26743,26781,26784,26791-26792,26800,26806-26814,26821-26828,26831-26838,26841-26842,26845-26853,26856-26857,26862-26871,26874-26883,26886-26887,26890-26897,26899-26925,26927-26929,26945-26949,26963,26965,26976,26979,26987-26988,26996,27002-27010,27017-27024,27027-27034,27037-27038,27041-27049,27052-27053,27058-27067,27070-27079,27082-27083,27086-27093,27095-27121,27123-27125,27141-27145,27150-27151,27164,27166,27176,27179,27187-27188,27196,27198-27205,27210,27213,27216-27218,27224,27229-27235,27238-27244,27247,27249-27253,27256,27261-27264,27269-27287,27290-27309,27312-27313,27316-27317,27319-27322,27324-27331,27334-27380,27388-27405,27417-27420,27434,27436,27447,27450,27458-27459,27467,27469-27476,27481,27484,27487-27489,27495,27500-27506,27509-27515,27518,27520-27524,27527,27532-27535,27540-27558,27561-27580,27583-27584,27587-27588,27590-27593,27595-27602,27605-27651,27659-27676,27688-27691,27696-27698,27711,27713,27723,27726,27734-27735,27743,27745-27768,27771,27776-27782,27785-27791,27794,27796-27800,27803,27808-27811,27816-27834,27837-27856,27859-27860,27863-27864,27866-27869,27871-27878,27881-27927,27944-27948,27953-27954,27967,27969,27980,27983,27991-27992,28000,28002-28025,28028,28033-28039,28042-28068,28073-28091,28094-28113,28116-28117,28120-28121,28123-28125,28128,28131-28133,28135,28138-28184,28217-28221,28226-28227,28293,28295,28306,28309,28341,28346,28384,28387,28394-28395,28403-28911,28913-28930,29120-29122,29175-29186,29196-29201,29204-29209,29221,29223,29234,29237,29245-29246,29254,29256,29258-29279,29463-29465,29514-29521,29526-29545,29555-29560,29565-29566,29577,29579-29597,29603,29605-29613,29616-29625,29633,29635,29646,29649-29657,29661-29673,29681,29686-29694,29706-29713,29724,29727,29734-29735,29742-29869,29871,29887-29888,29901,29903,29914,29917,29925-29926,29933-30107,30133,30136,30144,30147,30161,30163,30174,30177,30182,30209,30214,30222,30252,30255,30262-30263,30270-30397,30399,30425,30427,30438,30441,30449-30450,30457-30582,30586-30592,30594-30598,30601-30604,30607-30612,30616,30618,30628,30631,30639-30640,30644-30930,30933-30938,30952,30954,30959,30965,30968,30976-30977,30979-33700,33703-35614,35619,35625-35637,35641-35645,35651-35654,35663,35665,35667-35677,35681-35682,35692,35694,35699,35705,35708,35719,35724,35746,35749,35756-35757,35761-35765,35779-35831,35834,35837,35851,35853,35863,35866,35874,35882,35893-35894,35898,35902-35903,35906,35919-35960,35964,35966,35976,35979-35987,35991-36003,36011,36016-36024,36036-36043,36054,36057,36064-36065,36069,36073-36074,36077,36080-36139,36141-36147,36162,36165,36179,36181,36191,36194,36202,36210,36221-36222,36226-36227,36230-36234,36236,36243-36274,36277,36280,36294,36296,36306,36309,36314,36341,36346,36354,36384,36387,36394-36395,36399-36400,36403-36407,36409,36424,36427,36441,36443,36453,36456,36464-36488,36492-36527,36530-36532,36534-36562,36565-36567,36579,36581,36586,36592,36595,36603-36604,36608-36643,36646-36824,36826-36830,36832-36860,36874,36876,36881,36887,36890,36898-36899,36901,36903-36973,36976-36978,36980-36993,36997-36998,37002-37005,37008-37011,37013-37014,37018-37020,37022-37023,37025-37028,37030-37031,37033-37035,37041,37046-37047,37050-37055,37057-37058,37060,37063,37066-37072,37074-37075,37087-37102,37106,37108,37118,37121,37129,37137,37148-37149,37153-37155,37157-37158,37160-37163,37165-37166,37168-37170,37176,37181-37182,37185-37188,37192-37193,37195,37198,37201-37211,37213-37214,37228,37230-37243,37248,37250-37253,37257,37261,37263-37266,37270,37274-37303,37306,37320,37322,37332,37335,37340,37367,37372,37380,37410,37413,37420-37421,37425-37427,37429-37430,37432-37435,37437-37438,37440-37442,37448,37453-37454,37457-37462,37464-37465,37467,37470,37473-37479,37481-37482,37494-37509,37513,37515,37525,37528,37536-37537,37542-37543,37546-37607,37622,37624,37629,37634,37637,37645-37646,37650-37652,37655,37657-37715,37728,37730,37732-37742,37746-37747,37757,37759,37769-37772,37774-37775,37777-37781,37783,37788,37810,37813,37820-38038,38067,38069,38080,38083,38091-38092,38147,38149,38160,38163,38174,38179,38201,38204,38211-38212,38237,38239,38250,38253,38261-38278,38281-38282,38287,38289,38291,38301,38303-38322,38326-38328,38332-38333,38335-38344,38348,38352-38357,38359-38360,38364-38376,38378,38380-38381,38385-38397,38399,38401-38404,38408-38414,38416,38421-38422,38426-38429,38431,38433-38434,38439-38468,38471,38475,38477-38518,38520,38522-38535,38537-38573,38575,38577-38589,38591-38594,38596-38606,38610-38611,38615-38619,38621-38625,38627-38633,38635,38637-38730,38732-38748,38753-38756,38758-38759,38761-38766,38772,38774,38778,38780-38789,38793-38794,38798-38799,38801-38830,38835-38836,38838-38844,38846-38851,38857-38858,38860-38861,38865,38867-38876,38880-38881,38885-38887,38889-38890,38892-38893,38895-38900,38906-38907,38911-38912,38914-38929,38931-38944,38947-38948,38950-38956,38958-38962,38965-38969,38971-38983,38985-38986,38989-39005,39007-39008,39010-39028,39033-39034,39038-39042,39044-39054,39056-39057,39059-39072,39076-39077,39081,39083-39084,39086,39088,39090-39091,39093,39095,39097-39100,39102,39106-39108,39112-39113,39115-39122,39124,39128,39132-39143,39145-39146,39148-39149,39153-39154,39156-39164,39166-39172,39174-39175,39177,39179-39180,39182-39185,39188-39193,39197-39198,39204,39208,39210-39261,39265-39286,39290,39292-39294,39296-39306,39308-39310,39313,39315,39321,39326-39328,39330-39335,39337-39339,39343-39344,39348,39350-39353,39357,39361-39364,39366-39367,39369-39370,39372-39379,39381-39384,39388,39390,39396,39401-39403,39405-39406,39409-39415,39417,39422,39428-39438,39440-39442,39446,39450,39455,39461,39465,39467-39471,39475,39479-39480,39482-39483,39485-39494,39498-39499,39503,39506-39507,39509-39522,39524-39544,39547-39562,39564-39581,39583-39584,39589-39590,39594-39596,39598-39601,39603-39606,39608-39611,39613-39616,39620-39622,39626-39639,39641-39642,39644,39646,39648-39650,39654,39658-39659,39661-39662,39665-39666,39671-39672,39676-39677,39679-39698,39703-39704,39706-39709,39711,39713-39715,39718-39720,39725-39726,39730,39732-39749,39753,39757-39762,39764-39765,39769-39781,39783,39785-39786,39790-39803,39805,39807-39809,39815,39819,39821-39843,39845-39849,39853-39854,39858-39859,39861-39872,39874-39890,39892-39908,39910-39918,39921-39924,39929,39933-39934,39936,39939,39941-39942,39944-39945,39947,39949-39950,39952-39958,39960-39963,39966-39969,39971-39985,39987-40000,40003-40023,40028-40035,40039,40041-40048,40052-40054,40058-40059,40061,40063-40064,40066-40086,40088-40100,40103-40107,40109-40120,40122-40128,40131,40133-40135,40138-40221,40225,40229,40231-40236,40240,40244-40245,40247,40249-40250,40252-40284,40286-40291,40295-40297,40303,40307-40308,40310-40317,40321-40322,40326-40327,40329-40330,40332-40333,40336-40342,40344,40346-40348,40354,40358-40359,40361-40362,40364-40365,40369-40370,40374-40375,40377,40379,40381,40385,40389,40391-40392,40396,40402,40407,40409-40418,40423-40440,40442,40445,40447-40452,40455-40483,40485-40495,40498-40501,40505,40509-40510,40512-40513,40515-40516,40518-40559,40564-40565,40567-40568,40570,40573-40596,40600-40601,40605-40607,40609-40626,40629-40632,40635,40637,40641-40645,40647-40723,40725,40727-40734,40737-40745,40748-40753,40756-40781,40783-40785,40788-40794,40797-40808,40810-40811,40813-40819,40821-40831,40833-40880,40882,40884-40915,40917,40919-40927,40929,40931-40939,40941-40942,40944-40970,40973-40978,40981-40985,40987-40989,40991-40993,40995-40997,40999,41002-41008,41010-41023,41025-41040,41042,41045-41054,41056-41186,41190,41192,41196-41200,41202,41206-41215,41217,41220-41222,41224,41228-41229,41231,41234-41238,41240-41244,41246,41248-41249,41253-41254,41256,41258-41259,41261-41301,41304-41305,41308-41318,41320-41325,41329-41330,41336,41340,41342-41345,41347,41352-41356,41358-41359,41361-41372,41375,41377-41378,41381,41384,41387,41390-41393,41398-41422,41424-41454,41456,41459-41495,41497,41503-41504,41506-41507,41509-41526,41528,41531-41538,41541,41547,41552-41553,41555-41556,41558-41885,41890-41928,41933,41935,41937-41941,41944-41946,41951-41954,41956-41957,41959-41973,41975-41977,41980-41982,41985-41989,41992,41994,41998-41999,42002-42005,42010-42011,42013-42043,42047,42051,42053-42054,42056-42059,42064-42065,42069-42070,42072-42073,42075-42077,42081-42082,42086-42087,42089-42090,42092,42095-42128,42132,42136-42137,42139-42140,42142-42149,42151-42157,42159-42355,42360-42453,42455-42468,42471-42481,42483-42485,42489,42493-42494,42497-42498,42504,42507,42512,42514-42541,42545,42549-42550,42552-42558,42560,42563-42565,42567-42572,42574-42579,42581,42583-42586,42588-42591,42593-42601,42603,42607,42612,42616-42617,42619-42624,42627-42650,42656-42657,42659-42660,42662-42663,42665-42669,42671-42672,42679-42680,42682-42692,42694-42716,42719-42730,42732-42737,42742-42743,42747-42748,42750-42753,42755-42760,42762-42826,42831-42836,42838-42867,42869,42871-42872,42876-42880,42882-42958,42960-43263,43265,43268-43269,43271-43291,43293-43296,43298,43304-43305,43309,43311-43312,43317-43318,43320-43321,43323-43339,43344-43345,43347-43352,43354,43358-43359,43363-43364,43366-43367,43369-43442,43444-43445,43447,43449-43454,43456-43500,43502-43541,43543,43545-43553,43555-43556,43558-43565,43567,43569-43592,43595-43596,43599,43603-43613,43615-43651,43654-43659,43662-43690,43693-43700,43702,43706-43709,43711-43743,43745-43747,43751-43752,43756-43757,43759,43762-43772,43774-43775,43777-43780,44314-44375,46122-46139,46782-47057,48821-49015,56254-56757,56761,56766,56773,56775,56777-56795,56797-56807,56809-56810,56812-56819,56825,56838,56843,56850,56852,56854-56855,56858,56860-56867,56873,56885,56890,56901,56906,56913,56915,56917-56918,56921,56923,56935,56979,56984,56991,56993,56995,56999,57014,57019,57030,57035,57042,57044,57046,57050,57052,57071,57073,57075,57079,57094,57107,57112,57119,57121,57123,57125-57127,57137-57194,57197,57204-57223,57235,57244-57247,57265,57270,57277,57279,57281-57288,57291-57292,57295-57300,57302-57337,57344,57349,57360,57365,57372,57374,57376-57383,57386,57388-57389,57392-57424,57430-57472,57476-57489,57492,57494,57496-57503,57505-57507,57514,57520-57539,57542-57556,57562,57567,57574,57576,57578-57585,57588-57589,57596,57602-57621,57628,57633,57644,57649,57656,57658,57660-57667,57670,57672,57676,57682-57696,57699,57706-57729,57739-57747,57750,57759,57777,57782,57789,57791,57793-57803,57805,57809,57814-57837,57844,57848,57852,57856,57861,57868,57870,57872-57879,57882-57884,57888,57896,57904,57910-57964,57972,57977,57984,57986,57988-58000,58004,58012-58013,58015-58021,58027,58036,58044-58056,58074-58082,58085,58095-58096,58114,58119,58126,58128,58130,58140,58142-58149,58152,58160-58172,58183,58193-58194,58210,58215,58226,58231,58238,58240,58242,58247,58252-58331,58333,58336-58349,58357,58359,58361,58366,58371,58374-58387,58391,58400,58408-58420,58429-58437,58440,58450-58451,58468,58473,58480,58482,58484,58494,58497-58510,58514,58523,58531-58543,58557,58562,58573,58578,58585,58587,58589,58594,58599,58602-58615,58619,58628,58636-58648,58662,58667,58678,58683,58690,58692,58694,58699,58704,58706,58733,58742,58750,58752-58753,58809,58814,58821,58823,58825,58833-58933,58936,58938,58989,58994,59003,59005,59015-59053,59055,59075,59084,59092,59094-59095,59141,59146,59153,59155,59157,59165-59167,59178-59180,59196,59205,59215-59228,59230-59264,59266-59271,59274-59279,59282-59285,59287,59291-59292,59295,59300-59303,59308,59313-59327,59333,59338,59345,59347,59349,59352,59354,59357-59361,59371-59394,59397,59406-59409,59418-59435,59438,59449,59462,59466,59471,59478,59480,59482,59485,59487,59492,59494,59545,59550,59559,59561,59571,59573,59593,59602,59611-59614,59634,59661,59666,59673,59675,59677,59687,59707,59716,59725-59728,59742,59747,59758,59763,59770,59772,59774,59779,59782-59786,59798-59799,59801-59807,59812-59813,59816-59818,59825,59829,59837,59842,59849,59851,59853,59856,59858,59863,59865,59892,59901,59909-59910,59912-59915,59917-59922,59925,59981,59986,59993,59995,59997,60007,60019,60027-60028,60030-60033,60035-60040,60043,60079,60084,60095,60100,60107,60109,60111,60116,60121,60123,60174,60179,60188,60190,60200,60202,60226,60228,60230,60235,60240,60260,60269,60277-60278,60280-60283,60285-60290,60293,60339,60344,60351,60353,60355,60365,60385,60394,60402-60403,60405-60408,60410-60415,60418,60432,60437,60448,60453,60460,60462,60464,60469,60474,60494,60503,60511-60512,60514-60517,60519-60524,60527,60541,60546,60557,60562,60569,60571,60573,60578,60583,60585,60612,60621,60629-60631,60633-60639,60696,60701,60708,60710,60712,60720-60828,60831,60833,60868-60930,60932-60933,60936,60938,60940,60943,60945,60948,60950,60970,60979,60987-60989,60991-60997,61044,61049,61056,61058,61060,61070,61090,61099,61107-61109,61111-61117,61131,61136,61147,61152,61159,61161,61163,61171-61173,61184-61193,61195,61201-61205,61208-61227,61234-61239,61250,61255,61262,61264,61266,61269,61271,61276,61278,61305,61359,61364,61371,61373,61375,61385,61422,61427,61438,61443,61450,61452,61454-61455,61458,61460,61511,61516,61525,61527,61537,61539,61563,61565,61567-61568,61571,61591,61635,61640,61647,61649,61651,61661,61681,61693,61698,61709,61714,61721,61723,61725-61726,61729,61749,61761,61766,61777,61782,61789,61791,61793-61794,61797,61799,61835,61874,61901,61906,61913,61915,61917,61927,61939,61960,61985,61990,62001,62006,62013,62015,62017,62020,62022,62027,62029,62080,62085,62094,62096,62106,62108,62132,62134,62136,62141,62146,62175,62205,62231,62236,62243,62245,62247,62257,62286,62310,62315,62326,62331,62338,62340,62342,62347,62352,62381,62405,62410,62421,62426,62433,62435,62437,62442,62447,62449,62476,62483-62506,62554,62559,62566,62568,62570,62580,62582,62633,62638,62647,62649,62659,62661,62681,62688-62711,62749,62754,62761,62763,62765,62775,62795,62803-62805,62807-62808,62810-62824,62831,62836,62847,62852,62859,62861,62863-62870,62873,62875,62902,62977,62982,62989,62991,62993,63003,63061,63066,63077,63082,63089,63091,63093,63098,63103,63105,63129,63131,63133,63138,63143,63163,63228,63233,63240,63242,63244,63254,63274,63307,63312,63323,63328,63335,63337,63339,63344,63349,63369,63402,63407,63418,63423,63430,63432,63434,63439,63444,63446,63473,63482,63490-63492,63548,63553,63560,63562,63564,63572,63574,63585-63587,63589,63592-63603,63606-63610,63613-63625,63632-63637,63644,63648,63653,63660,63662,63664,63667,63669,63674-63712,63714,63734,63743,63751-63753,63799,63804,63811,63813,63815,63825,63845,63854,63862-63864,63878,63883,63894,63899,63906,63908,63910-64005,68462-68929,68936,68941,68948,68964,68971,68973,68978-68980,69005-69043,69052-69159,69166-69171,69178,69182,69187,69194,69196,69198,69201,69203,69208,69210,69234,69236,69238,69248,69268,69277,69307,69333,69338,69345,69347,69349,69359,69379,69388,69412,69417,69428,69433,69440,69442,69444,69454,69474,69483,69507,69512,69523,69528,69535,69537,69539
+schemas/gooddata-result-client.json
+  s_ba054ecc9dedfc::t_9078504e229ce9 143-266,575-576,775-839,1281,1331-1382,1519-1560
+schemas/gooddata-scan-client.json
+  s_ba054ecc9dedfc::t_79258ff1aa45c2 222-227,305-311
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "37309a3a35ef6bfe0ffbfa5e5c18484651a95d63",
+  "prompts": {},
+  "sessions": {
+    "s_ba054ecc9dedfc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "59ace5b1-36c1-4ce8-9893-579309d24fe2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Petr Ješke <petr.jeske@gooddata.com>"
+    }
+  }
+}

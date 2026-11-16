@@ -1,0 +1,19 @@
+docs/superpowers/plans/2026-07-01-lts-patching-old-versions.md
+  s_21215b218089d0::t_a0dcb2369afe9d 1-467
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "91f16adf1eadcb073d7ef82f3f44bdb2ba0b04c2",
+  "prompts": {},
+  "sessions": {
+    "s_21215b218089d0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2db60762-f98d-442b-8201-11178f58ec0c",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

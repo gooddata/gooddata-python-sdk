@@ -1,0 +1,23 @@
+.copyrightignore
+  a85e9853e8f06298 87-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.19",
+  "base_commit_sha": "9f40116ea9c79657cd0d3217fb34046354913715",
+  "prompts": {
+    "a85e9853e8f06298": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f2dc8c3e-9546-469b-ae1a-73ff7f7f41f4",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 2,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}

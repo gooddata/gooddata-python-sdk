@@ -1,0 +1,68 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_1fed2936afd5a3::t_f614349a1bcaa7 468-482,629,634-937,949-955,1130-1174,1292-1350,2059-2090,2117,2121,2123-2124,2127-2128,2131-2132,2135,2137,2139,2143,2150,2152,2181,2183,2189,2191
+  s_6942d73c7f07bc::t_719aadd02b097b 102-105
+  s_6942d73c7f07bc::t_40abbda56c83a1 2048,2053,2055-2057,2091-2092
+  s_1fed2936afd5a3::t_18f08350bd57f2 426
+  s_1fed2936afd5a3::t_abd3130e699b7b 2058
+  s_1fed2936afd5a3::t_409fc5f5e48c82 2093-2116,2118-2120,2122,2125-2126,2129-2130,2133-2134,2136,2138,2140-2142,2144-2149,2151,2153-2180,2182,2184-2188,2190,2192-2194
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_1fed2936afd5a3::t_5946b3c022071f 14,520-522,553,563,739,741-742
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_ba26c1bd500bfe::t_2c100c2233bcd1 309-310,316
+  s_b4ef09eebe7513::t_62b9a0db7803cc 1095
+  s_1fed2936afd5a3::t_769a51c50d2917 92-107,306-308
+  s_750b5b19ab135e::t_13c9c5ce0fabe4 86
+  s_1fed2936afd5a3::t_dccd9140b491d0 19,87-91,336-342,370-373,393-402,430-437,442-460,481-494,502-513,562-563,577-602,622,645,648,672,675,730-731,736-737,788-884,887-888,925-930,940-962,981,984,1043-1044,1061,1068-1074,1077,1091,1093,1125
+  s_1fed2936afd5a3::t_0cb9a809b97980 84-85,1087-1090,1092,1094,1128
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_filters.py
+  s_1fed2936afd5a3::t_3b5d7e0b799d4a 1-22,37
+  s_1fed2936afd5a3::t_602bc2c8d43db0 23-36,38-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2ee2dc0ca38077493236f5907629549b952ba9e6",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_6942d73c7f07bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7d242fef-efad-4ca2-9342-3b7875c48b7a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    },
+    "s_750b5b19ab135e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "39d34a9b-ae5e-4236-96d5-4f4f24a95ace",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    },
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    },
+    "s_ba26c1bd500bfe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-alx3336-impl-7c18bbe737c9c67a",
+        "model": "unknown"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

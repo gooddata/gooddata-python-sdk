@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_workspace.py
+  s_22fd5fea75407c::t_91009435d7198c 163-176
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_22fd5fea75407c::t_f68c5dbb538767 212
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "a43d45b9ec96e807c115339706f4e7179009d8ee",
+  "prompts": {},
+  "sessions": {
+    "s_22fd5fea75407c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d24a9eb5-c031-4c30-a864-ae48fd8fcc20",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

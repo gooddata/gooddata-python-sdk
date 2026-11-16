@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_2bdc7200f34cd9::t_a23f5c1c9fc3c2 98
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_2bdc7200f34cd9::t_a23f5c1c9fc3c2 74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "3cea46d8eff2d26cfbfbdef9455cf9addf913efa",
+  "prompts": {},
+  "sessions": {
+    "s_2bdc7200f34cd9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6cb149b2-0118-4268-9ed7-ecae5a8bac0e",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}

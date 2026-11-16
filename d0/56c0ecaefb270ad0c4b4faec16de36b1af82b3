@@ -1,0 +1,14 @@
+pyproject.toml
+  h_4a925d05b9a6b7 43,46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d056c0ecaefb270ad0c4b4faec16de36b1af82b3",
+  "prompts": {},
+  "humans": {
+    "h_4a925d05b9a6b7": {
+      "author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

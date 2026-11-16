@@ -1,0 +1,34 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_0b97148191cf36::t_2b2ef0d20b3ca1 14,326-329
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_0b97148191cf36::t_2b2ef0d20b3ca1 105,129-133,170
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_0b97148191cf36::t_2b2ef0d20b3ca1 95-98
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_0b97148191cf36::t_2b2ef0d20b3ca1 314-331,368-369
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_0b97148191cf36::t_b8fc2aea01a879 172-243
+  s_0b97148191cf36::t_85b784b1454f1f 11,16-26
+  s_0b97148191cf36::t_e38c71a1bcde6f 27
+packages/gooddata-eval/tests/test_sse_client.py
+  s_0b97148191cf36::t_2a7a731fdf0997 85-122
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_0b97148191cf36::t_1c8de55e2eb4d1 13
+  s_0b97148191cf36::t_2e28c63692caff 294-354
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.18",
+  "base_commit_sha": "e8f35dd19a3c03686f7cbb5049a837b4ddc3d372",
+  "prompts": {},
+  "sessions": {
+    "s_0b97148191cf36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c6354c0-fd12-49b4-849a-e38d81a65b86",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

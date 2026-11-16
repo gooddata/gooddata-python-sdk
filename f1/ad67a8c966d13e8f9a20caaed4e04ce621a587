@@ -1,0 +1,20 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_aac_agg_aware.py
+  s_61f6f3745f96ee::t_4c0930092d85e7 19
+  s_61f6f3745f96ee::t_74606677a047fb 1-18,20-196
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "f1ad67a8c966d13e8f9a20caaed4e04ce621a587",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

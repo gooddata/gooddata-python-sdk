@@ -1,0 +1,54 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_7e53738a17b0e6::t_c387c8233ce1d0 260-279,281-300
+  s_7e53738a17b0e6::t_e544ce02b5df1e 98-118
+  s_7e53738a17b0e6::t_7923de9d3b54af 349-352
+  s_7e53738a17b0e6::t_cb0ecb6648a0be 508-512
+  s_7e53738a17b0e6::t_7fbe80af1f34cd 82-89,93-95
+  s_7e53738a17b0e6::t_8b1f5959b3c8bf 211-219
+  s_7e53738a17b0e6::t_da9d4981b81e5d 357
+  s_7e53738a17b0e6::t_96e8f78f4ce236 280
+  s_7e53738a17b0e6::t_a6a4106c918aaf 26-29
+  s_7e53738a17b0e6::t_89e0d03a0e91d4 66-72,75-77
+  s_7e53738a17b0e6::t_c1ccaba030805f 96-97
+packages/gooddata-eval/tests/test_sse_client.py
+  s_7e53738a17b0e6::t_a5af4ed1ae7439 32-63
+packages/gooddata-eval/tests/test_agentic_kda_skill.py
+  s_7e53738a17b0e6::t_96e8f78f4ce236 183-186,229
+  s_7e53738a17b0e6::t_d681479d1792a8 45,50-53
+  s_7e53738a17b0e6::t_debc0ab5d74622 347-373
+  s_7e53738a17b0e6::t_872a4f30068dd3 172-182,187-225,228,230-235,238-242
+  s_7e53738a17b0e6::t_8577da0693b200 34-36
+  s_7e53738a17b0e6::t_d866cdd2795890 149-171
+  s_7e53738a17b0e6::t_9204a402ae3e13 13
+  s_7e53738a17b0e6::t_4bede92a094d2f 102-110,123-146
+  s_7e53738a17b0e6::t_55fbdbc955f516 10,17
+  s_7e53738a17b0e6::t_4f85247659be23 147-148
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_7e53738a17b0e6::t_3af6a05452585e 103-108
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_7e53738a17b0e6::t_59ccd2530da87f 119
+  s_7e53738a17b0e6::t_e7356a169fdd2f 31-37
+  s_7e53738a17b0e6::t_df5a298eb960de 198,205,208-217
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_7e53738a17b0e6::t_19398c675cef5b 195-201
+  s_7e53738a17b0e6::t_8617dd42209c28 330
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_7e53738a17b0e6::t_f54d9fd9b3e6bc 168-174
+  s_7e53738a17b0e6::t_d892135f527125 206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "55a7486ed7e56264e595809221f5071705b439cf",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

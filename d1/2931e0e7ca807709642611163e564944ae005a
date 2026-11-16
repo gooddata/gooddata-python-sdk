@@ -1,0 +1,63 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_4dadedfa8c0fd3::t_d9adc79ad681b7 1-41,56-106,110,119,122-126,140-147,150,158,161-162,164-165,167,182,184-186,193,195-197,200-221,227-229,231-267,269-270,309-312,318-325,328,330-332,334-342,360-388,390-410,412,423-432,434-443,446-454,459-529,531-559,566-630,636-663,666-705,707,709-713,720-723,725-742
+  s_4dadedfa8c0fd3::t_8007934aad5aad 107,127-130,135-139,433
+  s_4dadedfa8c0fd3::t_00e5f96ac75fd9 274-279,282,288-290
+  s_4dadedfa8c0fd3::t_bf657c6ebf71ad 293-305,307-308,560-565
+  s_4dadedfa8c0fd3::t_05421962ad5319 171-175,327,347-359,456
+  s_4dadedfa8c0fd3::t_e68e45431b7244 280-281,283-287
+  s_4dadedfa8c0fd3::t_9db0e3c5fd335d 306
+  s_4dadedfa8c0fd3::t_4c2d97a14af25a 313-317,326,329,333,343-346
+  s_4dadedfa8c0fd3::t_5713354c21c1c9 444-445,455,457-458
+  s_4dadedfa8c0fd3::t_ba8c1e66217cc8 131-134
+  s_4dadedfa8c0fd3::t_5460cd84c242a8 108-109,111-118,120-121,230,268,389
+  s_4dadedfa8c0fd3::t_99b39722bed461 148,177,664-665,706,708,714-719,724
+  s_4dadedfa8c0fd3::t_f7bc7ce94b7a74 149,151-157,159-160,163,166,168-170,176,178-181,183,187-192,194,198-199
+  s_4dadedfa8c0fd3::t_9bf5589b3d5d2e 222-226
+  s_4dadedfa8c0fd3::t_824e922dfe04d5 271-272
+  s_4dadedfa8c0fd3::t_f14b55b360dbd9 530
+  s_4dadedfa8c0fd3::t_cc13b0ea470e14 631-635
+  s_4dadedfa8c0fd3::t_fe63b61afa3500 291-292
+  s_4dadedfa8c0fd3::t_c71cbaec93d515 273,411,413-422
+  s_4dadedfa8c0fd3::t_e6ab19c1f9c6c6 42-55
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_4dadedfa8c0fd3::t_5ce8b95296b038 19-26,73,86-88,106,115
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_4dadedfa8c0fd3::t_2b70e1b215fbed 10,233-235,246-248,283-285
+  s_4dadedfa8c0fd3::t_b7887b2ad98744 251-275,492-497
+  s_4dadedfa8c0fd3::t_5ce8b95296b038 90-92,340-344
+  s_4dadedfa8c0fd3::t_5ea6127dd772bc 4,17,651,658,671
+  s_4dadedfa8c0fd3::t_84f2e11724c001 365-421
+  s_4dadedfa8c0fd3::t_0e3a6006c1cc19 481,485-491,498-499,508-517,555,560-562,583-596,656-657,666
+  s_4dadedfa8c0fd3::t_24b41930914dc0 483-484
+  s_4dadedfa8c0fd3::t_73536172be539d 500-507
+  s_4dadedfa8c0fd3::t_e000a27d8ac640 556-559,564-582
+  s_4dadedfa8c0fd3::t_c3361f95896857 14,166,179,183,202,312,332,337,346,351,360,424,430,438,478,482
+  s_4dadedfa8c0fd3::t_6097b18b70fa88 563,601-602
+  s_4dadedfa8c0fd3::t_d160c7e9df7478 126-127
+  s_4dadedfa8c0fd3::t_c38a182c302bfe 1-3,5-9,11-13,15-16,18-89,93-125,128-165,167-178,180-182,184-186,188-191,196-201,203,208-209,211,213,222-232,236-245,249-250,276-282,286-290,296-299,311,326-331,333-336,338-339,345,347-350,352-359,361-364,422-423,425-429,431-437,439-477,479-480,518-554,597-600,603-627,629-650,652-655,659-665,667-670,672-679
+  s_4dadedfa8c0fd3::t_3133185cac962b 187,192-195,204-207,210,212,214-221,291-295,300-310,313-325,628
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_4dadedfa8c0fd3::t_29aeb4e7a046fe 117
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_4dadedfa8c0fd3::t_6f6d92471710ae 44,90-93,189-198
+  s_4dadedfa8c0fd3::t_5ce8b95296b038 16
+  s_4dadedfa8c0fd3::t_636074c736aebf 199-200
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_4dadedfa8c0fd3::t_29aeb4e7a046fe 83-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d12931e0e7ca807709642611163e564944ae005a",
+  "prompts": {},
+  "sessions": {
+    "s_4dadedfa8c0fd3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ca11b1b3-dc4f-4f1b-b3a1-0fa412959c1f",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}

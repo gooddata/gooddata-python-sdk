@@ -1,0 +1,26 @@
+packages/gooddata-dbt/src/gooddata_dbt/dbt/metrics.py
+  s_61f6f3745f96ee::t_f71390b17baae9 89-92,94,97,100
+docs/content/en/latest/administration/organization/get_hll_type.md
+  s_61f6f3745f96ee::t_79533b8af8fa47 18
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset.py
+  s_61f6f3745f96ee::t_0d4c5fcc0923cb 4
+  s_61f6f3745f96ee::t_74db3a3c3d0384 71-74
+docs/content/en/latest/data/ai-lake/analyze_statistics.md
+  s_61f6f3745f96ee::t_a2b4bb727ae996 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "47825a5afa28ce2ae2fd282c8f69b637311cb4b0",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_7e53738a17b0e6::t_8876eec9cbaeb8 398,400-414
+  s_7e53738a17b0e6::t_8431c634fde3ce 191-202
+  s_7e53738a17b0e6::t_8bd241a93d15f4 238,240-242
+  s_7e53738a17b0e6::t_a87a557e2c1306 328-337
+packages/gooddata-eval/tests/test_agentic_kda_skill.py
+  s_7e53738a17b0e6::t_eeca70099eb6e2 445-505
+  s_7e53738a17b0e6::t_97ca875bdd4e4b 209-224
+  s_7e53738a17b0e6::t_6d4c80b65dee0f 22
+packages/gooddata-eval/tests/test_sse_client.py
+  s_7e53738a17b0e6::t_7c8436a6d27118 26-44,50-65
+  s_7e53738a17b0e6::t_0d6eae09ce78dd 45-49
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_7e53738a17b0e6::t_38b739a2158f44 242
+  s_7e53738a17b0e6::t_6b9fc5bfb8ae08 253-255
+  s_7e53738a17b0e6::t_db46ae398579bf 256
+  s_7e53738a17b0e6::t_88dcfb27a1b7f9 44-62,66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "1deb4232156a82803fe7efa3af5637854f4c7746",
+  "prompts": {},
+  "sessions": {
+    "s_7e53738a17b0e6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d7605be7-c26c-4dfd-83ba-5b457d0ca5a5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

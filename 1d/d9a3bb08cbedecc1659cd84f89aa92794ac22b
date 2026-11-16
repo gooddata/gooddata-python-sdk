@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-06-04-gooddata-eval-multimodel-design.md
+  s_90905292b36e6b::t_8596c17605f503 1-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "1dd9a3bb08cbedecc1659cd84f89aa92794ac22b",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

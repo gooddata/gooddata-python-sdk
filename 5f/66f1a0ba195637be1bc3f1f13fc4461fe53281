@@ -1,0 +1,289 @@
+gooddata-api-client/docs/AutomationControllerApi.md
+  ai_agent 88-94,100-108,721-727,733-741,1203-1209,1215-1221
+gooddata-api-client/docs/RichTextWidgetDescriptor.md
+  ai_agent 10
+gooddata-api-client/docs/JsonApiItemObjectStorageInfo.md
+  ai_agent 1,3,8-10
+gooddata-api-client/gooddata_api_client/model/get_ai_lake_operation200_response.py
+  ai_agent 76,178,286
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_out_attributes.py
+  ai_agent 92
+gooddata-api-client/docs/LdmObjectPermissionsForAssigneeRule.md
+  ai_agent 1-14
+gooddata-api-client/docs/UserManagementUsersItem.md
+  ai_agent 11
+gooddata-api-client/docs/UsersEntityAPIsApi.md
+  ai_agent 50,385,492
+gooddata-api-client/docs/LlmProviderConfig.md
+  ai_agent 12
+gooddata-api-client/gooddata_api_client/model/json_api_item_data_source_info.py
+  ai_agent 33-35,37-38,74,89,91-93,102-104,114-115,118-120,184-186,207-208,211-213,275-277
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_in_attributes.py
+  ai_agent 92
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_identifier_out_attributes.py
+  ai_agent 88
+gooddata-api-client/gooddata_api_client/model/ldm_object_permissions_assignment.py
+  ai_agent 34,59-62,90,99,109-110,113,177,198-199,202,264
+gooddata-api-client/gooddata_api_client/model/json_api_data_source_patch_attributes.py
+  ai_agent 102
+gooddata-api-client/gooddata_api_client/model/llm_provider_config.py
+  ai_agent 34,39,118,132,179,288,361
+gooddata-api-client/docs/JsonApiIpAllowlistPolicyOutWithLinks.md
+  ai_agent 1-16
+gooddata-api-client/gooddata_api_client/model/platform_usage.py
+  ai_agent 62
+gooddata-api-client/gooddata_api_client/model/permissions_for_assignee.py
+  ai_agent 36,39,330
+gooddata-api-client/gooddata_api_client/model/dashboard_tabular_export_request.py
+  ai_agent 36,39,105,107,121,123,174,176,271,273
+gooddata-api-client/docs/DashboardCompoundRangeCondition.md
+  ai_agent 7
+gooddata-api-client/gooddata_api_client/model/execution_result_metadata.py
+  ai_agent 35,37,94,104,151,241
+gooddata-api-client/docs/DeclarativeAgent.md
+  ai_agent 13
+gooddata-api-client/docs/DashboardTabularExportRequest.md
+  ai_agent 11,13
+gooddata-api-client/docs/LayoutApi.md
+  ai_agent 3170-3176,3182-3190,4675-4681,4687-4695,6038-6044,6050-6056
+gooddata-api-client/gooddata_api_client/api/ai_lake_api.py
+  ai_agent 31-37,39,351,449,553,563-565,575-577,582-590,597-602,606-608,612-614,617,630,639,649-650,656-661,669-670,672,677,682,700,702,709-711,719-721,726-734,739-744,747-749,752-754,757,770,780-782,792-794,799-807,814-819,823-825,829-831,834,847,856,866-867,873-878,886-887,889,894,899,970-1036,1701,1869,1994,2005-2007,2040,2079,2088-2089,2123,2169-2171,2204,2242,2253-2255,2288,2327,2336-2337,2371,2485-2576
+gooddata-api-client/docs/DashboardParameterValue.md
+  ai_agent 1-15
+gooddata-api-client/gooddata_api_client/apis/__init__.py
+  ai_agent 128
+gooddata-api-client/docs/FailedOperation.md
+  ai_agent 10
+gooddata-api-client/gooddata_api_client/model/json_api_ip_allowlist_policy_out_document.py
+  ai_agent 1-290
+gooddata-api-client/gooddata_api_client/model/dashboard_filter.py
+  ai_agent 43,53,113,126,172,280
+gooddata-api-client/docs/JsonApiListDocumentDataSourceInfo.md
+  ai_agent 1,3,8-10
+gooddata-api-client/gooddata_api_client/model/json_api_llm_provider_in_attributes_provider_config.py
+  ai_agent 34-35,39-40,72,83,86,116,119,133,175,177-178,180,284,286-287,289,361
+gooddata-api-client/gooddata_api_client/model/ldm_object_permissions.py
+  ai_agent 1-292
+schemas/gooddata-api-client.json
+  ai_agent 1319-1380,1420-1421,3927-3928,3941-3944,3950-3953,3956,3958,3974-3975,3991-3994,3997-4001,4004,4006,4233,4241-4246,4265-4291,4394-4400,4411-4420,4469-4475,4486-4495,6152-6153,6887,6893,7923,9404-9405,9728-9751,9761-9767,11201-11202,11204-11206,11208,11212,11216,11227-11341,16357-16358,16585-16586,16771-16772,17011-17012,17547-17578,20198-20553,21855-21996,22000-22001,22006-22008,22012-22044,22046,22048,22051-22068,22082,22084,22094,22097,22105-22106,22110-22111,22116-22119,22122-22156,22161-22176,22178,22192,22194,22204,22207,22218,22223,22245,22248,22255,22325,22327-22328,24483,24584,24725,24770-24799,26384-26386,26478-26480,26609-26611,26720,26821,29089,29190,29357,29458,29683,29685-29686,29688-29702,29708-29710,29714-29715,29717,29719-29724,29730-29772,29797-29799,29921-29923,30838,30845-30846,31165,31583-31584,31600-31601,32470-32486,32802,32919-32922,34498-34499,34566-34568,34594-34596,35412-35416,35434,36439,36442-36443,36446,36456,36469-36470,36473,37713-37782,39355,39370-39371,39374,39383,39777-39870,42634-42727,42812-42905,43514,43518,43520,43523-43526,43530,43532,43535-43539,43560,43735,43876,43888-43924,43932,44054,44066-44102,44110,44315,44335-44424,44428-44466,44472,44545,44549,44551,44554-44557,44561,44563,44566-44570,44591,47714,47716,47720,47727-47746,47784,47789,47796,47798,47800-47807,47810-47832,47837,47842,47853,47858,47865,47867,47869,47879,47881,47892,47894,47896,47906,47913,47921-47923,47925-47926,47928-47938,47946,47951,47958,47960,47962,47965,47967,47972,47979,47985-48004,48011,48016,48027,48032,48039,48041,48043,48053,48055-48056,48060,48104,48109,48116,48118,48120-48121,48124-48125,48130,48135,48146,48151,48158,48160,48162,48172,48174-48175,48186,48188,48190,48200-48201,48208,48221,48226,48233,48235,48237-48238,48241-48242,48249,48261,48266,48277,48282,48289,48291,48293,48303-48304,48311,48323,48328,48339,48344,48351,48353,48355,48365-48496
+schemas/gooddata-metadata-client.json
+  ai_agent 587-648,688-689,1778-1779,1792-1795,1801-1804,1807,1809,1825-1826,1842-1845,1848-1852,1855,1857,2063,2071-2076,2095-2121,2229-2235,2246-2255,3662-3663,4397,4403,5433,6516-6517,7304-7318,12460-12461,12688-12689,12874-12875,13114-13115,16269-16270,16274-16277,16279-16280,16283-16285,16294-16320,16324,16326,16331,16337,16340,16348-16349,16353-16356,16358-16359,16362-16364,16373-16399,16403,16405,16410,16416,16419-16427,16438-16448,16453-16609,17794-17795,17799-17800,17805-17807,17811-17843,17845,17847,17850-17867,17881,17883,17893,17896,17904-17905,17909-17910,17915-17918,17921-17955,17960-17975,17977,17991,17993,18003,18006,18017,18022,18044,18047,18054,18124,18126-18127,20282,20383,20524,22153-22155,22247-22249,22378-22380,22489,22590,24858,24959,25126,25227,25311-25403,26212-26213,26229-26230,27033,28036-28040,28058,28723-28792,29732,29734,29743-29750,29757-29768,29779,29781,29786-29826,29828,29854,29861,29863-29898,30164-30257,30342-30435,34021,34023,34027,34034-34053,34091,34096,34103,34105,34107-34114,34117-34139,34144,34149,34160,34165,34172,34174,34176,34186,34188,34199,34201,34203,34213,34220,34228-34230,34232-34233,34235-34245,34253,34258,34265,34267,34269,34272,34274,34279,34286,34292-34311,34318,34323,34334,34339,34346,34348,34350,34360,34362-34363,34367,34411,34416,34423,34425,34427-34428,34431-34432,34437,34442,34453,34458,34465,34467,34469,34479,34481-34482,34493,34495,34497,34507-34508,34515,34528,34533,34540,34542,34544-34545,34548-34549,34556,34568,34573,34584,34589,34596,34598,34600,34610-34611,34618,34630,34635,34646,34651,34658,34660,34662,34672-34803
+gooddata-api-client/gooddata_api_client/model/json_api_list_document_data_source_info.py
+  ai_agent 1-290
+gooddata-api-client/docs/LlmProviderControllerApi.md
+  ai_agent 55,356,452
+gooddata-api-client/docs/TabularExportApi.md
+  ai_agent 46-52,58-64
+gooddata-api-client/gooddata_api_client/api/smart_functions_api.py
+  ai_agent 1272,1319,1655,1665,1688-1689,1695,1735-1736,3396,3398,3441,3481,3977,3979,3983,4020,4056,4058,4101
+gooddata-api-client/docs/OrganizationDeclarativeAPIsApi.md
+  ai_agent 806-812,818-824
+gooddata-api-client/.openapi-generator/FILES
+  ai_agent 71-74,201,204,214-215,389,472-473,719-720,811-825,866-872,960,1130-1134,1149,1284,1542,1666-1669,1773,1776,1786-1787,1941,2007,2252-2253,2344-2358,2399-2405,2493,2655-2659,2673,2789
+gooddata-api-client/docs/LdmObjectPermissions.md
+  ai_agent 1,7-9
+gooddata-api-client/gooddata_api_client/api/ai_lake_services_operations_api.py
+  ai_agent 27,142,151,161-162,168-173,181-182,184,189,194,450,459-460,494
+gooddata-api-client/gooddata_api_client/api/organization_entity_apis_api.py
+  ai_agent 25-28,49-167,220-273,328,330,332-333,340,350,364-369,380-381,393,401,408,422,424,426-427,434-437,439,443,446,451,456-461,466-473,477-480,484-487,490-491,503,505,507-508,578,580,582-583,589-747,949,951,953-955,961,965,982-983,990,996,998,1003,1005,1007-1008,1015,1021,1052-1053,1066,1086-1657,1659,1663,1668,1673-1678,1711,1740,1742,1746,1751,1756-1760,1793,1822,1824,1826,1829,1834,1837-1838,1842,1875,1904-1906,2330-2502
+gooddata-api-client/gooddata_api_client/api/permissions_api.py
+  ai_agent 32-33,50-104,215-269,459,461,463-465,471,475,492,497,501,507,509-510,514,518-519,525-527,530-532,547,549-552,555-556,559-561,574,578-579,585-587,590-592,607-612,615-616,619-621,634,638-639,645-646,649-650,665,667-668,671,674-675,688,692-694,699-701,704-706,721-726,729-730,733-735,748,752-754,759-761,764-766,781,783-786,789-790,793-795,808,812-814,819,822,837-838,843,856,860-1074,1121-1465,1469,1471,1475,1512,1541,1543,1545,1548,1550,1554,1558,1593,1622-1624,1626,1628,1631,1633,1637,1640-1641,1676,1705-1707,1709,1711,1714,1716,1720,1724,1759,1788-1790,1792,1794-1795,1798,1803,1807-1808,1843,1872-1876,1878,1881-1882,1885,1890,1895-1896,1931,1962-1966,2145-2323
+gooddata-api-client/docs/LdmObjectPermissionsForAssignee.md
+  ai_agent 1-14
+schemas/gooddata-automation-client.json
+  ai_agent 1462-1463,1476-1479,1485-1488,1491,1493,1509-1510,1526-1529,1532-1536,1539,1541,1747,1755-1760,1779-1805,1824-1830,1841-1850
+gooddata-api-client/gooddata_api_client/model/declarative_data_source.py
+  ai_agent 94
+gooddata-api-client/gooddata_api_client/model/json_api_list_document_object_storage_info.py
+  ai_agent 1-290
+gooddata-api-client/gooddata_api_client/model/json_api_user_in_attributes.py
+  ai_agent 101,114,162,252
+gooddata-api-client/docs/UserControllerApi.md
+  ai_agent 50,385,492
+gooddata-api-client/README.md
+  ai_agent 166,170,179,188,404-409,458-459,461,463,465,471-472,482,485,490-491,494-495,538,545-546,641,651,682,711,717,720-721,738,741,774-775,871,889,908,926,946,970,994,1019,1043,1105,1123,1182-1186,1423-1426,1530,1533,1543-1544,1698,1764,2009-2010,2101-2115,2156-2162,2250,2412-2416,2430,2546
+gooddata-api-client/docs/ParameterControllerApi.md
+  ai_agent 47,396,594
+gooddata-api-client/docs/JsonApiParameterInAttributesDefinition.md
+  ai_agent 8-9
+gooddata-api-client/docs/DashboardTabularExportRequestV2.md
+  ai_agent 12,14
+gooddata-api-client/docs/WorkspacesDeclarativeAPIsApi.md
+  ai_agent 719-725,731-737
+gooddata-api-client/docs/OrganizationEntityAPIsApi.md
+  ai_agent 7-8,10,12,14,20-21,26-205,281-343,407-488,559-638,1066-1231
+gooddata-api-client/docs/DashboardFilter.md
+  ai_agent 11
+gooddata-api-client/docs/ListLlmProviderModelsRequestProviderConfig.md
+  ai_agent 11
+gooddata-api-client/gooddata_api_client/model/failed_operation.py
+  ai_agent 74,136,243
+gooddata-api-client/gooddata_api_client/model/platform_usage_request.py
+  ai_agent 62
+gooddata-api-client/gooddata_api_client/model/test_definition_request.py
+  ai_agent 92
+gooddata-api-client/gooddata_api_client/api/ai_lake_pipe_tables_api.py
+  ai_agent 27-29,227,282,292-294,304-306,311-319,326-331,335-337,341-343,346,357-423,741,783,794-796,829,862-952
+gooddata-api-client/docs/EntitiesApi.md
+  ai_agent 7,25,44,62,82,106,130,155,179,241,259,281-341,795-801,807-815,2242-2348,2592,3033,3494,4070-4134,5230-5231,5233,5258-5259,5261,5293-5294,5296-5298,5319,5323-5324,5326,5334,5358-5359,5361,5382-5383,5387-5388,5390,5398-5399,6517-6578,6587,6594,8634-8635,8637,8646,8659-8662,8675-8676,8679,8688,8696,8716-8717,8719-8721,8730,8743,8750,8756-8757,8760,8776,8796-8797,8799,8808,8823,8825,8839-8840,8843,8848-8849,8852,8872,8892-8893,8895,8904,8917-8922,8928,8930,8933-8940,8944-8945,8948,8956-8957,8959,8963,8968,10686-10750,12612-12691,12696-12697,12700,12708,12713,12733-12734,12736,12745,12759-12762,12766-12767,12770,12775-12776,12779,12789,12793,14705-14769,15255-15261,15267-15275,17190-17191,17193,17202-17203,17216-17224,17228,17230-17234,17238-17239,17242,17247-17248,17251,17259-17261,17263,17267,17326,17910,18311,21167-21231,21615-21621,21627-21635,23231-23341,23597,24181,24672
+gooddata-api-client/docs/AutomationsApi.md
+  ai_agent 105-111,117-125,1043-1049,1055-1063,1774-1780,1786-1794,2139-2145,2151-2159,3021-3027,3033-3039
+gooddata-api-client/gooddata_api_client/api/entities_api.py
+  ai_agent 118-120,224-263,1484-1548,2888-2934,3857-3910,4018,4022-4023,4072,4076-4077,4083-4084,4087-4088,4103-4105,4109-4110,4113-4114,4125,4129-4130,4985-5024,7406,7408,7410-7411,7418,7428,7442-7447,7458-7459,7471,7479,7486,7500,7502,7504-7505,7517,7581,7583,7585-7586,7631-7634,7702,7704,7706-7707,7713-7714,7716,7720,7723-7725,7729-7730,7744-7755,7758,7765-7768,7771-7772,7779-7780,7785-7786,7788,7792,7796-7797,7799,7803,7807,9729-9775,11748-11822,13696-13742,18320-18394,18396,18398-18399,18468,18470,18472-18474,18479,18482,18497,18501,18504,18510-18511,19841,19843,19845-19846,19853,19855,19859,19864,19880-19885,19890-19891,19894-19895,19900,19904,19906,19909,19924,19926,19928-19929,19935-19936,19940-19941,19948,19953,19955-19957,19960-19961,19963,19965-19966,19971,19975-19976,19994,19996,19998-19999,20005-20007,20009,20012-20014,20019,20028-20035,20038,20040-20043,20046-20047,20050-20051,20053,20056-20058,20060,20063,21439-21516,22970,22972,22975,22980,22984,22987,23020,23049-23051,23053,23055,23058,23060,23064,23068,23103,23132-23134,23136,23138-23139,23142,23147,23151-23152,23155-23156,23189,23218-23222,24595-24677,26114,26119,26124,26194,26196,26198,26201,26203,26207,26211,26275-26277,26279,26281-26282,26285,26290,26294-26295,26359-26363,27799-27876,29872,29876,29881,29887,29924,29953,29955,29959,29961,29965,30007,30036,30038,30043,30048,30095,30126,30128,30130,30133,30138,30141-30142,30145,30147,30151,30185,30214-30216,31925-32007,34096,34101,34106,34114,34147,34178,34180,34182,34185,34187,34191,34195,34231,34260-34262,34264,34270,34275,34319,34352,34354,34356-34357,34360,34365,34369-34370,34374-34376,34409,34438-34442,35998-36088,36090,36094,36096,36100,36105,36138,36167,36169,36171,36174,36176,36180,36183-36184,36248-36250,41696-41778,43304,43307,43310,43315,43320,43324,43357,43388-43390,43392,43394-43395,43398,43400,43404,43408-43409,43445,43474-43478,43480,43482-43484,43487,43492,43496-43498,43502,43535,43564-43570
+gooddata-api-client/gooddata_api_client/model/declarative_ip_allowlist_policy.py
+  ai_agent 127,220
+gooddata-api-client/gooddata_api_client/model/json_api_parameter_in_attributes_definition.py
+  ai_agent 67-69,99-100,110-111,154-155,260-261
+gooddata-api-client/gooddata_api_client/model/notification_channel_destination.py
+  ai_agent 75-77,133,153,208,323
+gooddata-api-client/gooddata_api_client/model/operation.py
+  ai_agent 74,139,232
+gooddata-api-client/gooddata_api_client/model/parameter_definition.py
+  ai_agent 67-69,99-100,110-111,154-155,260-261
+schemas/gooddata-export-client.json
+  ai_agent 915-916,929-932,938-941,944,946,962-963,979-982,985-989,992,994,1200,1208-1213,1232-1258,1272-1278,1289-1296
+gooddata-api-client/docs/JsonApiDocumentPipeTable.md
+  ai_agent 1,3,8-9
+gooddata-api-client/docs/ExecutionResultMetadata.md
+  ai_agent 9
+gooddata-api-client/docs/JsonApiListDocumentPipeTableSummary.md
+  ai_agent 1-15
+gooddata-api-client/docs/ActionsApi.md
+  ai_agent 7,17,48,77,83,86-87,104,107,140-141,146-218,1016-1082,2617-2623,2629-2637,3786-3852,5991-6057,6426-6495,6636-6775,7947-8019,8152,8154,8156,8181-8182,8196,8205,8212,8221,10002-10008,10014-10022,10879,10881,10883,10905,10907-10908,10915,10919,10927-10928,10935,10940,10942,10944,10969-10970,10984,10992-10993,11000
+gooddata-api-client/docs/AnthropicProviderAuth.md
+  ai_agent 1-14
+gooddata-api-client/docs/AnthropicProviderConfig.md
+  ai_agent 1,3,8-10
+gooddata-api-client/docs/IpAllowlistPolicyControllerApi.md
+  ai_agent 1,7-11,14-15,17,25-27,39-45,48-66,68-79,82,84-85,88,96-97,101,121-122,124,132,144,149-150,152,184-185,187,195-196,208-212,225-226,229,238,246,266-267,269,277-278,290,292-295,299-300,303,308-309,312,322,326,346-347,349,357-359,371,373-378,381-397,399,401-405,409-410,413,418-419,422,431,433,437
+gooddata-api-client/docs/AILakeServicesOperationsApi.md
+  ai_agent 148,152,161,174-175,184,195-196,201
+gooddata-api-client/docs/JsonApiDocumentDatabaseInstance.md
+  ai_agent 1-14
+gooddata-api-client/docs/ExecutionResultLimitBreak.md
+  ai_agent 1-15
+gooddata-api-client/docs/JsonApiIpAllowlistPolicyOutIncludes.md
+  ai_agent 1-16
+gooddata-api-client/docs/JsonApiPageInfo.md
+  ai_agent 1-16
+gooddata-api-client/docs/NotificationChannelDestination.md
+  ai_agent 18
+gooddata-api-client/gooddata_api_client/api/llm_endpoints_api.py
+  ai_agent 38,40,43,50,73-74,78,83,125,127,130,160,165,167,170,207,212,214,217,254-255,259,261,264,301-302,307,311,313,317,354,383,385,390,392,396,466,468,472,474,478,515,544,546,551,553,557,596,627,629,634,636,640,679,710,712,717,719,723,762,793
+gooddata-api-client/docs/JsonApiLlmProviderInAttributesProviderConfig.md
+  ai_agent 8,10-11,13
+gooddata-api-client/docs/JsonApiListDocumentDatabaseInstance.md
+  ai_agent 1-15
+gooddata-api-client/gooddata_api_client/model/dashboard_compound_comparison_condition.py
+  ai_agent 34-35,38,91,100,106-107,110,113-115,150,178,180,183,199,202-204,265,267,270
+gooddata-api-client/gooddata_api_client/model/dashboard_measure_value_filter.py
+  ai_agent 34-35,91,100,110,114,178,199,203,265
+gooddata-api-client/docs/DashboardMeasureValueFilter.md
+  ai_agent 7
+gooddata-api-client/gooddata_api_client/model/json_api_item_object_storage_info.py
+  ai_agent 1-288
+gooddata-api-client/gooddata_api_client/model/json_api_list_document_database_instance.py
+  ai_agent 1-290
+gooddata-api-client/gooddata_api_client/model/json_api_list_document_pipe_table_summary.py
+  ai_agent 1-290
+gooddata-api-client/gooddata_api_client/model/json_api_list_document_service_info.py
+  ai_agent 33-39,41-42,78,93,95-97,106-108,118-123,156,188-189,210-215,248,278-279
+gooddata-api-client/gooddata_api_client/model/list_llm_provider_models_request_provider_config.py
+  ai_agent 34,39,118,132,179,288,361
+gooddata-api-client/gooddata_api_client/model/dashboard_tabular_export_request_v2.py
+  ai_agent 36,39,106,108,123,125,177,179,276,278
+gooddata-api-client/gooddata_api_client/model/manage_attribute_permissions_request_inner.py
+  ai_agent 1-340
+gooddata-api-client/docs/ParameterDefinition.md
+  ai_agent 9-10
+gooddata-api-client/gooddata_api_client/model/user_management_users_item.py
+  ai_agent 98,114,128,135,206,229,236,305
+gooddata-api-client/gooddata_api_client/model/resolved_setting.py
+  ai_agent 108
+schemas/gooddata-afm-client.json
+  ai_agent 787-848,3052-3075,3085-3091,3649-3982,4133-4135,4210-4212,4786,4793-4794,4958,5659-5675,5931-5934,6508-6510,6536-6538,6930-6931,6936-6937,6939-6940,6943-6946,6950-6951,7223,7226-7227,7230,7240,7253-7254,7257,7924,7939-7940,7943,7952,9574,9578,9580,9583-9586,9590,9592,9595-9599,9620,9795,9936,9948-9984,9992,10114,10126-10162,10170,10375,10395-10484,10488-10526,10532,10605,10609,10611,10614-10617,10621,10623,10626-10630,10651
+gooddata-api-client/docs/AILakePipeTablesApi.md
+  ai_agent 12,289,302,337,358,362,371,385-389,398-406,415-417,421,441-523
+gooddata-api-client/gooddata_api_client/model/json_api_organization_setting_in_attributes.py
+  ai_agent 104
+gooddata-api-client/gooddata_api_client/model/pending_operation.py
+  ai_agent 70,129,235
+gooddata-api-client/docs/JsonApiUserInAttributes.md
+  ai_agent 11
+gooddata-api-client/gooddata_api_client/model/dashboard_compound_condition_item.py
+  ai_agent 35,37,39,41,97-98,107-108,150-151,255-256
+gooddata-api-client/docs/JsonApiItemPipeTableSummary.md
+  ai_agent 1,3,8-10
+gooddata-api-client/docs/DashboardCompoundConditionItem.md
+  ai_agent 7-8
+gooddata-api-client/docs/GetAiLakeOperation200Response.md
+  ai_agent 10
+gooddata-api-client/gooddata_api_client/model/rich_text_widget_descriptor.py
+  ai_agent 93,105,154,247
+gooddata-api-client/docs/Operation.md
+  ai_agent 9
+gooddata-api-client/docs/JsonApiListDocumentObjectStorageInfo.md
+  ai_agent 1-15
+gooddata-api-client/gooddata_api_client/model/declarative_agent.py
+  ai_agent 127,208,310
+gooddata-api-client/docs/PendingOperation.md
+  ai_agent 9
+gooddata-api-client/gooddata_api_client/model/entitlements_request.py
+  ai_agent 92
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  ai_agent 68-71,175,178,188-189,343,409,654-655,746-760,801-807,895,1057-1061,1075,1191
+gooddata-api-client/docs/DeclarativeIpAllowlistPolicy.md
+  ai_agent 8
+gooddata-api-client/docs/DashboardCompoundComparisonCondition.md
+  ai_agent 7
+gooddata-api-client/gooddata_api_client/model/dashboard_compound_range_condition.py
+  ai_agent 34-35,38,91,100,106-107,110,113-115,150,178,180,183,199,202-204,265,267,270
+gooddata-api-client/docs/SmartFunctionsApi.md
+  ai_agent 26,33-34,1588,1590,1592,1617-1618,1632,1641,1648,1657,2084,2086,2088,2110,2112-2113,2120,2124,2132-2133,2140,2145,2147,2149,2174-2175,2189,2197-2198,2205
+gooddata-api-client/docs/LLMProvidersApi.md
+  ai_agent 55,356,452
+gooddata-api-client/gooddata_api_client/model/declarative_setting.py
+  ai_agent 108
+gooddata-api-client/gooddata_api_client/model/ldm_object_permissions_for_assignee_rule.py
+  ai_agent 33-39,41-42,67-70,83,98,100-101,110-111,119-120,123-124,158,186-199,201,204,208,218-220,224-225,228-229,289-302,304,307,314-334
+gooddata-api-client/docs/ParametersApi.md
+  ai_agent 47,396,594
+schemas/gooddata-scan-client.json
+  ai_agent 773-774
+gooddata-api-client/gooddata_api_client/api/actions_api.py
+  ai_agent 85,89,93,160-213,760-814,2644-2698,4365-4419,4696-4755,4870,4874-4875,4881-4883,4886-4888,4903-4908,4911-4912,4915-4917,4930,4934-4935,4942-4943,4947-4948,4965-4968,4972,4976-4977,4990,4994-5097,5818-5871,5963,6010,7780,7790,7813-7814,7820,7860-7861,7981-8066,8840,8843,8846,8851,8856,8891,8922-8924,8926,8929-9015,11527-11612,13864-14209,14213,14248,14277-14279,14281,14283,14286,14288,14292,14296,14331,14360-14362,14364,14366,14369,14374,14378,14381-14383,14416,14445-14447,14449,14451,14454,14459,14463,14466-14468,14501,14530-14532,14534,14536-14538,14541,14546,14550-14552,14587,14616-14622,14624,14627-14628,14631,14636,14641-14642,14677,14708-14712,14714,14716-14717,14720,14722,14726,14730-14731,14766,14795-14799,14801,14804-14805,14808,14813,14818-14819,14885-14889,14891,14893-14895,14898,14903,14907-14909,14973-14979,16321-16406,16569,16571,16614,16654,19363,19365,19369,19406,19442,19444,19487
+gooddata-api-client/docs/AILakeApi.md
+  ai_agent 18,22,452,465,498,586,599,634,722,726,735,749-753,762-770,779-781,785,806,810,819,832-833,842,853-854,859,880,893,906-910,912-913,916,924-929,933,954,958,967,981-985,994-1002,1011-1013,1017,1038,1042,1051,1064-1065,1074,1085-1086,1091,1188-1257
+gooddata-api-client/gooddata_api_client/api/ai_lake_databases_api.py
+  ai_agent 27-30,160,209,219-221,231-233,238-246,253-258,262-264,268-270,273,286,295,305-306,312-317,325-326,328,333,338,356,358,365-367,375-377,382-390,395-400,403-405,408-410,413,812,852,863-865,898,937,946-947,981,1027-1029,1062
+gooddata-api-client/docs/AILakeDatabasesApi.md
+  ai_agent 12,169,182,215,236,240,249,263-267,276-284,293-295,299,320,324,333,346-347,356,367-368,373,394,407,420-424,426-427,430,438-443,447
+gooddata-api-client/docs/LLMEndpointsApi.md
+  ai_agent 7-12,15-16,18,20,42,44-45,47,52,56,64-65,72,76-77,79,81,102,106-107,109,137,141-142,144,146,168,170-171,173,178,182,191,198,202-203,205,207,228,232-233,235,247,256,263,267-268,270,272,293,297-298,300,312,320-321,328,332-333,335,337,358,362-363,365,377,385-386,393
+gooddata-api-client/docs/AnthropicApiKeyAuthAllOf.md
+  ai_agent 1-13
+gooddata-api-client/gooddata_api_client/model/succeeded_operation.py
+  ai_agent 72,133,240
+gooddata-api-client/gooddata_api_client/model/json_api_ip_allowlist_policy_out_includes.py
+  ai_agent 1-353
+gooddata-api-client/docs/JsonApiItemDatabaseInstance.md
+  ai_agent 1,3,8-10
+gooddata-api-client/docs/SucceededOperation.md
+  ai_agent 9
+gooddata-api-client/docs/PermissionsApi.md
+  ai_agent 7,10,15-16,19-20,29-95,222-288,561-697,838-962
+gooddata-api-client/gooddata_api_client/model/execution_result_limit_break.py
+  ai_agent 34,85-87,96-98,108-109,112-113,146,178-179,200-201,204-205,238,268-269
+gooddata-api-client/gooddata_api_client/model/api_entitlement.py
+  ai_agent 92
+gooddata-api-client/gooddata_api_client/model/json_api_item_pipe_table.py
+  ai_agent 1-288
+gooddata-api-client/docs/RefreshPartitionRequest.md
+  ai_agent 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "5f66f1a0ba195637be1bc3f1f13fc4461fe53281",
+  "prompts": {}
+}

@@ -1,0 +1,21 @@
+packages/gooddata-sdk/src/gooddata_sdk/compute/model/base.py
+  s_ed564d03c96d0e::t_1a9e05987cff15 31
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/content_objects/workspace_setting.py
+  s_ed564d03c96d0e::t_21c27c592bd6e8 8,25,36-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e0dbe3f5bb7fe92ba9927d272734ca5299c3a2f6",
+  "prompts": {},
+  "sessions": {
+    "s_ed564d03c96d0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4e615e63-21a6-45a9-8517-4fffd71e2a88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Vojtěch Tollar <vojtech.tollar@gooddata.com>"
+    }
+  }
+}

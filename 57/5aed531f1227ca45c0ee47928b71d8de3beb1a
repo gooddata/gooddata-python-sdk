@@ -1,0 +1,24 @@
+packages/gooddata-sdk/pyproject.toml
+  s_61f6f3745f96ee::t_fcda8e3095f0f7 37
+uv.lock
+  ai_agent 805,812,1209
+packages/gooddata-sdk/tests/catalog/unit_tests/test_aac_agg_aware.py
+  s_61f6f3745f96ee::t_2b4f6b0aa32d37 148
+  s_61f6f3745f96ee::t_1fb3c36f3f0313 8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "575aed531f1227ca45c0ee47928b71d8de3beb1a",
+  "prompts": {},
+  "sessions": {
+    "s_61f6f3745f96ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8e7346f-ecd6-42b4-950d-02aa766e7181",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

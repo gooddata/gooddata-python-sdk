@@ -1,0 +1,45 @@
+uv.lock
+  s_4dadedfa8c0fd3::t_f70827e78a707e 1061,1088,1732-1752
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_4dadedfa8c0fd3::t_22352ea4fd6c41 77-78,84,96-97,112,117-129
+  s_4dadedfa8c0fd3::t_6a191f16b72c2f 194-197,201-210,212-213,220-221,226-228,232-251
+  s_4dadedfa8c0fd3::t_3679d74cc6ea66 288,313,364
+  s_4dadedfa8c0fd3::t_fd5f45721181ec 6,11-12,61,64-69
+  s_4dadedfa8c0fd3::t_09402a48b1f414 458-468,481-482,487-492,713,718
+  s_4dadedfa8c0fd3::t_e2be3ffc86fa98 500-510
+  s_4dadedfa8c0fd3::t_0423d2908f5625 271-287,289-295,297,299-300,302-303,305-307,309,317,324-363,366-383
+  s_4dadedfa8c0fd3::t_d78b5e49b50aba 592,596,598,600-602,604,607-610,619-621,625,635,637,639-642,651-652,654,659-692,694-699,701-706,708-711,714,728-729
+  s_4dadedfa8c0fd3::t_6b4f8ce44959e3 130-131
+  s_4dadedfa8c0fd3::t_97a1722277e0be 151-165,167,170-174,176,179-191
+  s_4dadedfa8c0fd3::t_ca7246108f70d7 749-751,753,784,790-797,809-814,820,823-824,826
+  s_4dadedfa8c0fd3::t_d9adc79ad681b7 177-178,298,365,384-385,603,693
+  s_4dadedfa8c0fd3::t_0e714112f39301 541-543
+  s_4dadedfa8c0fd3::t_3662701a281674 520-521,536-538,557
+  s_4dadedfa8c0fd3::t_be56d73ea8b9f5 449-457,483-486,518,616,648,700,715-717,725,732
+packages/gooddata-eval/pyproject.toml
+  s_4dadedfa8c0fd3::t_2d1ee33e05ec8f 16
+packages/gooddata-eval/tests/test_agentic_dashboard_skill.py
+  s_4dadedfa8c0fd3::t_cc1e9be99f0c52 227,347,467,473,871-877,893-897
+  s_4dadedfa8c0fd3::t_d9fc62ba09ca1f 12,211,220,224,233,237,241
+  s_4dadedfa8c0fd3::t_8383a5943be16b 520-639,703,720-731
+  s_4dadedfa8c0fd3::t_7283fa7c13e790 10-11,106,117
+  s_4dadedfa8c0fd3::t_c8c1bd2316706e 135-141,147,158,640-702,704-719
+  s_4dadedfa8c0fd3::t_46da1ee47528e6 33-34,196
+  s_4dadedfa8c0fd3::t_7b028e2644fbce 127-134,142-146,148-157,159-195,197-207,515-519
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bd99abe343ec65ee30c794b74119478d455ba766",
+  "prompts": {},
+  "sessions": {
+    "s_4dadedfa8c0fd3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ca11b1b3-dc4f-4f1b-b3a1-0fa412959c1f",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    }
+  }
+}

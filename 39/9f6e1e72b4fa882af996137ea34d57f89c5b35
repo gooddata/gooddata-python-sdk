@@ -1,0 +1,41 @@
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_152f0704157226::t_5beec6313150bb 35-39,41,44-46
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_152f0704157226::t_f9a725e99755a4 142-151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "f332696358d25fa064d49c2778707cbb0a34c680",
+  "prompts": {},
+  "sessions": {
+    "s_152f0704157226": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81049499-0417-40a7-9a8a-3bc2f0738f69",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_432d8c3f88b767::t_0312e6e97a7774 152-159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "909d5c9007292f7635b7234be456d535125d52c8",
+  "prompts": {},
+  "sessions": {
+    "s_432d8c3f88b767": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c72b1a6-1245-4c60-a340-0991813b99f6",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

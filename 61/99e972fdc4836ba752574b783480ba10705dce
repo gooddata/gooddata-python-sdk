@@ -1,0 +1,22 @@
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_b4892b383f0a00::t_fc16b7e9f75618 808,822
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_b4892b383f0a00::t_cf3caf537cf874 122,171-176
+  s_b4892b383f0a00::t_fc16b7e9f75618 183,191
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6199e972fdc4836ba752574b783480ba10705dce",
+  "prompts": {},
+  "sessions": {
+    "s_b4892b383f0a00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65d32045-c8b6-499c-9b97-bf32d1f56066",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

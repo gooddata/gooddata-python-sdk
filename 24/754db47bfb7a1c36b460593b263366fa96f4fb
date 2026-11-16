@@ -1,0 +1,24 @@
+.openapi-generator/custom_templates/model_utils.mustache
+  s_bcf6588db246d3::t_b994f1615e5ab1 136-139,143
+  s_bcf6588db246d3::t_8a8a57cd8d6998 158-159,163
+packages/gooddata-sdk/tests/catalog/unit_tests/test_composed_oneof_unions.py
+  s_bcf6588db246d3::t_903ef3d8cc58a3 158-179
+gooddata-api-client/gooddata_api_client/model_utils.py
+  s_bcf6588db246d3::t_39c86ec2785769 145-148,152,167-168,172
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "24754db47bfb7a1c36b460593b263366fa96f4fb",
+  "prompts": {},
+  "sessions": {
+    "s_bcf6588db246d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5a88e812-8a98-4252-90c6-60c9f1eed485",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

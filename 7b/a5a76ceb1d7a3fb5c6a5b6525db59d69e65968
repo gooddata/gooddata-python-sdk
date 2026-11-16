@@ -1,0 +1,29 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_9be5c935c4199e::t_cf3523bbf6d310 30,175,177-186,195,294,302-308,310-312,336
+packages/gooddata-eval/tests/test_agentic_general_question.py
+  s_1fed2936afd5a3::t_e5384b89efd88f 729-794
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ba5a76ceb1d7a3fb5c6a5b6525db59d69e65968",
+  "prompts": {},
+  "sessions": {
+    "s_1fed2936afd5a3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d42b9dc6-fb71-4a42-a9da-d456943b3ffd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    },
+    "s_9be5c935c4199e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b4854202-f3a9-4a45-9cc8-fc0084369b8b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}

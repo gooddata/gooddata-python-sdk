@@ -1,0 +1,20 @@
+Makefile
+  s_171bb95bfb79f0::t_24c68d314e310d 11,13
+  s_171bb95bfb79f0::t_b27c18725423c8 64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "708fb7f0fed800076bcf2f492d3f618725c20b9a",
+  "prompts": {},
+  "sessions": {
+    "s_171bb95bfb79f0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "46bc1ba2-1329-45ba-bbb1-ef0048e839d5",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Soubusta <jan.soubusta@gooddata.com>"
+    }
+  }
+}

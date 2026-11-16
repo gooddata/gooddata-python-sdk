@@ -1,0 +1,19 @@
+packages/gooddata-sdk/AGENTS.md
+  s_a3a72d936bc79e::t_dbe519bfde34d0 115-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "df359994ec2db6de048147c3e9186ccafbf68d5c",
+  "prompts": {},
+  "sessions": {
+    "s_a3a72d936bc79e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a63996f6-45cd-4842-b400-4f090303bde4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

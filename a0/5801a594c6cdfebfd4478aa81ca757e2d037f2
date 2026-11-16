@@ -1,0 +1,21 @@
+packages/gooddata-eval/README.md
+  s_90905292b36e6b::t_0ac3b40a0534ef 4,14-25,32,35,39-61,63-67,71,73,76,80-81,83,87,89,93,95,99-100,102,106-146,150,180-181,184-185,189,195,204,206
+packages/gooddata-eval/src/gooddata_eval/core/workspace.py
+  s_90905292b36e6b::t_5815139fa06734 100-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "a05801a594c6cdfebfd4478aa81ca757e2d037f2",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}

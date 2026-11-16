@@ -1,0 +1,27 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/obfuscation.py
+  s_8a0420fc190c00::t_a7daecf24b9a1f 79,240,246,458,480
+  s_8a0420fc190c00::t_383288aba39adb 237
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_8a0420fc190c00::t_a7daecf24b9a1f 21
+  s_8a0420fc190c00::t_be8943e30c9301 13,25
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_8a0420fc190c00::t_802b1efb5fa662 519
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_obfuscation_sinks.py
+  s_8a0420fc190c00::t_a7daecf24b9a1f 82,100,116,135
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "22561673de0b952520d56d130729c0c5fbc5abe8",
+  "prompts": {},
+  "sessions": {
+    "s_8a0420fc190c00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f8e4742c-11b1-4e4c-a749-1f9761445232",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

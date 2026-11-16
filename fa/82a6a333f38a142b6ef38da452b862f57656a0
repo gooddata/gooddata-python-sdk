@@ -1,0 +1,39 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_4c6a5493369291::t_c8a3d92851b623 339,369,439,528
+  s_4c6a5493369291::t_b00c4fdd00e2cc 618-633
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_4c6a5493369291::t_ebd838edc54be7 299-300
+  s_4c6a5493369291::t_b00c4fdd00e2cc 454-455
+  s_4c6a5493369291::t_c7688a1097419c 188-189,281-283,340-341
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_4c6a5493369291::t_209920b16d219f 767-849
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_4c6a5493369291::t_a7cecf05ffd6dd 166,257,285,337,473-474
+packages/gooddata-eval/tests/test_agentic_kda_skill.py
+  s_4c6a5493369291::t_a18212a5ab134b 1248-1282
+  s_4c6a5493369291::t_31bbde13d4b9ca 1198-1247
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_4c6a5493369291::t_c9f28999b413f1 999-1062
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_4c6a5493369291::t_d4e72b6df4ccbc 1074-1131
+  s_4c6a5493369291::t_31bbde13d4b9ca 1028-1073
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_4c6a5493369291::t_c7688a1097419c 480-481,681-682,686-687,737-738
+  s_4c6a5493369291::t_b00c4fdd00e2cc 862-863
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "fa82a6a333f38a142b6ef38da452b862f57656a0",
+  "prompts": {},
+  "sessions": {
+    "s_4c6a5493369291": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a56632c0-2db5-4791-acce-5cbe0dffe1b2",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

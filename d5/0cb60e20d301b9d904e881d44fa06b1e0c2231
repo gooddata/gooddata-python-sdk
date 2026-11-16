@@ -1,0 +1,20 @@
+.github/workflows/fossa.yaml
+  s_7da1c4c73270df::t_128c96d2c15f55 41,47
+  s_7da1c4c73270df::t_1631b39742b2f4 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.4",
+  "base_commit_sha": "d50cb60e20d301b9d904e881d44fa06b1e0c2231",
+  "prompts": {},
+  "sessions": {
+    "s_7da1c4c73270df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a924251-41e0-4744-82d5-6fba02cce42b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

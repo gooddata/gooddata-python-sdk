@@ -1,0 +1,44 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_967138971ee7bb::t_74b55b810378d4 271
+  s_967138971ee7bb::t_6857c7fb815fec 270,272
+packages/gooddata-eval/src/gooddata_eval/core/agentic/search_tool.py
+  s_967138971ee7bb::t_74b55b810378d4 149
+  s_967138971ee7bb::t_c006d7f50a8af9 148,150
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_967138971ee7bb::t_105f2e53496724 15
+packages/gooddata-eval/src/gooddata_eval/core/agentic/general_question.py
+  s_967138971ee7bb::t_74b55b810378d4 158
+  s_967138971ee7bb::t_f43c7094011f57 157,159
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_967138971ee7bb::t_105f2e53496724 9,20-27
+packages/gooddata-eval/src/gooddata_eval/core/agentic/conversation.py
+  s_967138971ee7bb::t_74b55b810378d4 390
+  s_967138971ee7bb::t_6dd2dcba8f829c 389,391
+packages/gooddata-eval/tests/test_agentic_conversation.py
+  s_967138971ee7bb::t_105f2e53496724 12
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_967138971ee7bb::t_74b55b810378d4 440
+  s_967138971ee7bb::t_a6f8b2fb9d26c0 13,439,441
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_967138971ee7bb::t_74b55b810378d4 250
+  s_967138971ee7bb::t_dba845d4a2739d 9,249,251
+packages/gooddata-eval/src/gooddata_eval/core/agentic/guardrail.py
+  s_967138971ee7bb::t_74b55b810378d4 155
+  s_967138971ee7bb::t_26ebfe3a5c5432 154,156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "7ddb82da16f419a036606d73eb2e16a865bbc9e8",
+  "prompts": {},
+  "sessions": {
+    "s_967138971ee7bb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c0ba5bc-a1e7-47b0-ba91-7031e39e7afc",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

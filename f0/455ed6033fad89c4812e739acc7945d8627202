@@ -1,0 +1,19 @@
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_b4ef09eebe7513::t_a61b145e8b0d7e 217
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f0455ed6033fad89c4812e739acc7945d8627202",
+  "prompts": {},
+  "sessions": {
+    "s_b4ef09eebe7513": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "268bdd55-d372-4f2e-8232-aec2c184bb9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

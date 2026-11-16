@@ -1,0 +1,29 @@
+packages/gooddata-eval/tests/test_metric_skill_evaluator.py
+  s_90905292b36e6b::t_19e9ed8af065b9 1-52
+packages/gooddata-eval/tests/fixtures/sample_dataset/metric_skill_create.json
+  s_90905292b36e6b::t_6fbdaa8e8b6cfb 1-16
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/metric_skill.py
+  s_90905292b36e6b::t_3d5e25210fbb4a 1-57
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_90905292b36e6b::t_6e3b4996686983 5,10
+packages/gooddata-eval/tests/test_local_loader.py
+  s_90905292b36e6b::t_2323cff10f7984 8-11
+packages/gooddata-eval/tests/test_runner.py
+  s_90905292b36e6b::t_0d5f795ecb64da 58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "916bca451f00a850668fa71a5e996eb7bda02077",
+  "prompts": {},
+  "sessions": {
+    "s_90905292b36e6b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4819d826-2ce0-4f89-89e2-8b5af18493a9",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}

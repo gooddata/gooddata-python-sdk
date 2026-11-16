@@ -1,0 +1,16 @@
+packages/gooddata-eval/README.md
+  h_2f994e9e4910b7 611-613
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  h_2f994e9e4910b7 462-464
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c8ab2a57ed298efedc950e2324cc2a9a447570c",
+  "prompts": {},
+  "humans": {
+    "h_2f994e9e4910b7": {
+      "author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
