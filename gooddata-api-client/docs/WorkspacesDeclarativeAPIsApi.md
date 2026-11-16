@@ -449,8 +449,18 @@ with gooddata_api_client.ApiClient() as api_client:
                             gap=PublisherDocumentAreaStyleGap(None),
                         ),
                     ),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="description_example",
                     id="brand-review",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=[
                         "["brand"]",
                     ],
@@ -677,6 +687,14 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Sales Context",
                 ),
             ],
+            metric_extensions=[
+                DeclarativeMetricExtension(
+                    id="total-sales",
+                    permissions=[
+                        DeclarativeMetricPermissionsInner(None),
+                    ],
+                ),
+            ],
             metrics=[
                 DeclarativeMetric(
                     certification="CERTIFIED",
@@ -765,8 +783,18 @@ with gooddata_api_client.ApiClient() as api_client:
                             vertical_align="top",
                         ),
                     ),
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="description_example",
                     id="brand-cover",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=[
                         "["brand"]",
                     ],
@@ -829,6 +857,14 @@ with gooddata_api_client.ApiClient() as api_client:
                     variable_values={
                         "key": "key_example",
                     },
+                ),
+            ],
+            visualization_object_extensions=[
+                DeclarativeVisualizationObjectExtension(
+                    id="revenue-by-region",
+                    permissions=[
+                        DeclarativeVisualizationObjectPermissionsInner(None),
+                    ],
                 ),
             ],
             visualization_objects=[
@@ -1954,8 +1990,18 @@ with gooddata_api_client.ApiClient() as api_client:
                                         gap=PublisherDocumentAreaStyleGap(None),
                                     ),
                                 ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="description_example",
                                 id="brand-review",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=[
                                     "["brand"]",
                                 ],
@@ -2182,6 +2228,14 @@ with gooddata_api_client.ApiClient() as api_client:
                                 title="Sales Context",
                             ),
                         ],
+                        metric_extensions=[
+                            DeclarativeMetricExtension(
+                                id="total-sales",
+                                permissions=[
+                                    DeclarativeMetricPermissionsInner(None),
+                                ],
+                            ),
+                        ],
                         metrics=[
                             DeclarativeMetric(
                                 certification="CERTIFIED",
@@ -2270,8 +2324,18 @@ with gooddata_api_client.ApiClient() as api_client:
                                         vertical_align="top",
                                     ),
                                 ),
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="description_example",
                                 id="brand-cover",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=[
                                     "["brand"]",
                                 ],
@@ -2334,6 +2398,14 @@ with gooddata_api_client.ApiClient() as api_client:
                                 variable_values={
                                     "key": "key_example",
                                 },
+                            ),
+                        ],
+                        visualization_object_extensions=[
+                            DeclarativeVisualizationObjectExtension(
+                                id="revenue-by-region",
+                                permissions=[
+                                    DeclarativeVisualizationObjectPermissionsInner(None),
+                                ],
                             ),
                         ],
                         visualization_objects=[

@@ -35,11 +35,13 @@ def lazy_import():
     from gooddata_api_client.model.anthropic_provider_config import AnthropicProviderConfig
     from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
     from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
+    from gooddata_api_client.model.good_data_ai_provider_config import GoodDataAiProviderConfig
     from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
     globals()['AnthropicProviderAuth'] = AnthropicProviderAuth
     globals()['AnthropicProviderConfig'] = AnthropicProviderConfig
     globals()['AwsBedrockProviderConfig'] = AwsBedrockProviderConfig
     globals()['AzureFoundryProviderConfig'] = AzureFoundryProviderConfig
+    globals()['GoodDataAiProviderConfig'] = GoodDataAiProviderConfig
     globals()['OpenAIProviderConfig'] = OpenAIProviderConfig
 
 
@@ -69,7 +71,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'ANTHROPIC': "ANTHROPIC",
+            'GOODDATA_AI': "GOODDATA_AI",
         },
     }
 
@@ -175,7 +177,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
             base_url (str): Custom base URL for the Anthropic API. Defaults to the official endpoint; override only for enterprise proxies or compatible gateways.. [optional] if omitted the server will use the default value of "https://api.anthropic.com"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
             auth (AnthropicProviderAuth): [optional]  # noqa: E501
-            type (str): Provider type.. [optional] if omitted the server will use the default value of "ANTHROPIC"  # noqa: E501
+            type (str): Provider type.. [optional] if omitted the server will use the default value of "GOODDATA_AI"  # noqa: E501
             endpoint (str): Azure OpenAI endpoint URL.. [optional]  # noqa: E501
             region (str): AWS region for Bedrock.. [optional]  # noqa: E501
         """
@@ -284,7 +286,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
             base_url (str): Custom base URL for the Anthropic API. Defaults to the official endpoint; override only for enterprise proxies or compatible gateways.. [optional] if omitted the server will use the default value of "https://api.anthropic.com"  # noqa: E501
             organization (str, none_type): OpenAI organization ID.. [optional]  # noqa: E501
             auth (AnthropicProviderAuth): [optional]  # noqa: E501
-            type (str): Provider type.. [optional] if omitted the server will use the default value of "ANTHROPIC"  # noqa: E501
+            type (str): Provider type.. [optional] if omitted the server will use the default value of "GOODDATA_AI"  # noqa: E501
             endpoint (str): Azure OpenAI endpoint URL.. [optional]  # noqa: E501
             region (str): AWS region for Bedrock.. [optional]  # noqa: E501
         """
@@ -361,6 +363,7 @@ class JsonApiLlmProviderInAttributesProviderConfig(ModelComposed):
               AnthropicProviderConfig,
               AwsBedrockProviderConfig,
               AzureFoundryProviderConfig,
+              GoodDataAiProviderConfig,
               OpenAIProviderConfig,
           ],
         }

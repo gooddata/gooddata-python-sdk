@@ -96,6 +96,7 @@ class LocalizationUsageValue(ModelNormal):
             'content': (LocalizationContent,),  # noqa: E501
             'users': (LocalizationCount,),  # noqa: E501
             'workspaces': (LocalizationCount,),  # noqa: E501
+            'child_workspaces': (LocalizationCount,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +109,7 @@ class LocalizationUsageValue(ModelNormal):
         'content': 'content',  # noqa: E501
         'users': 'users',  # noqa: E501
         'workspaces': 'workspaces',  # noqa: E501
+        'child_workspaces': 'childWorkspaces',  # noqa: E501
     }
 
     read_only_vars = {
@@ -157,6 +159,7 @@ class LocalizationUsageValue(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            child_workspaces (LocalizationCount): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -252,6 +255,7 @@ class LocalizationUsageValue(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            child_workspaces (LocalizationCount): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

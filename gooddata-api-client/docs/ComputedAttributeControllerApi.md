@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_computed_attributes**](ComputedAttributeControllerApi.md#get_all_entities_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes | Get all Computed Attributes
 [**get_entity_computed_attributes**](ComputedAttributeControllerApi.md#get_entity_computed_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Get a Computed Attribute
 [**patch_entity_computed_attributes**](ComputedAttributeControllerApi.md#patch_entity_computed_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Patch a Computed Attribute
-[**search_entities_computed_attributes**](ComputedAttributeControllerApi.md#search_entities_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/search | The search endpoint (beta)
+[**search_entities_computed_attributes**](ComputedAttributeControllerApi.md#search_entities_computed_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/search | The search endpoint
 [**update_entity_computed_attributes**](ComputedAttributeControllerApi.md#update_entity_computed_attributes) | **PUT** /api/v1/entities/workspaces/{workspaceId}/computedAttributes/{objectId} | Put a Computed Attribute
 
 
@@ -483,7 +483,7 @@ No authorization required
 # **search_entities_computed_attributes**
 > JsonApiComputedAttributeOutList search_entities_computed_attributes(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -531,7 +531,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_computed_attributes(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -540,7 +540,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_computed_attributes(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

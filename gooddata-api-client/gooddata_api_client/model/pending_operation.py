@@ -68,6 +68,7 @@ class PendingOperation(ModelComposed):
             'DEPROVISION-DATABASE': "deprovision-database",
             'RUN-SERVICE-COMMAND': "run-service-command",
             'ANALYZE-STATISTICS': "analyze-statistics",
+            'REFRESH-DATA-SOURCE': "refresh-data-source",
         },
     }
 
@@ -127,7 +128,7 @@ class PendingOperation(ModelComposed):
         Keyword Args:
             status (str): defaults to "pending", must be one of ["pending", ]  # noqa: E501
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-data-source` — Refresh of an AI Lake data source after a data load. 
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -234,7 +235,7 @@ class PendingOperation(ModelComposed):
         Keyword Args:
             status (str): defaults to "pending", must be one of ["pending", ]  # noqa: E501
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-data-source` — Refresh of an AI Lake data source after a data load. 
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.

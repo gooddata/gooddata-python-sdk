@@ -103,7 +103,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range. When both are provided, 'from' must not be after 'to'.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -2432,6 +2432,9 @@
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
           },
           {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
@@ -2648,6 +2651,9 @@
           },
           {
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
@@ -3286,6 +3292,46 @@
         ],
         "type": "object"
       },
+      "ParameterizedDateFilter": {
+        "description": "A date filter whose period comes from a DATE_RANGE parameter. Each execution uses the parameter's current granularity and range.",
+        "properties": {
+          "parameterizedDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "parameter": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
+              }
+            },
+            "required": [
+              "dataset",
+              "parameter"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "parameterizedDateFilter"
+        ],
+        "type": "object"
+      },
       "PdfTableStyle": {
         "deprecated": true,
         "description": "Custom CSS styles for the table. (PDF, HTML)",
@@ -3782,6 +3828,7 @@
         "properties": {
           "from": {
             "format": "int32",
+            "nullable": true,
             "type": "integer"
           },
           "granularity": {
@@ -3838,6 +3885,7 @@
           },
           "to": {
             "format": "int32",
+            "nullable": true,
             "type": "integer"
           }
         },

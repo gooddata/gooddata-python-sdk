@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.publisher_document_page_template_content import PublisherDocumentPageTemplateContent
+    globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
     globals()['PublisherDocumentPageTemplateContent'] = PublisherDocumentPageTemplateContent
 
 
@@ -71,8 +73,18 @@ class DeclarativePublisherDocumentPageTemplate(ModelNormal):
         ('title',): {
             'max_length': 255,
         },
+        ('created_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
+        },
         ('description',): {
             'max_length': 10000,
+        },
+        ('modified_at',): {
+            'regex': {
+                'pattern': r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}',  # noqa: E501
+            },
         },
         ('tags',): {
         },
@@ -105,7 +117,11 @@ class DeclarativePublisherDocumentPageTemplate(ModelNormal):
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'version': (str,),  # noqa: E501
+            'created_at': (str, none_type,),  # noqa: E501
+            'created_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'modified_at': (str, none_type,),  # noqa: E501
+            'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -119,7 +135,11 @@ class DeclarativePublisherDocumentPageTemplate(ModelNormal):
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
         'version': 'version',  # noqa: E501
+        'created_at': 'createdAt',  # noqa: E501
+        'created_by': 'createdBy',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'modified_at': 'modifiedAt',  # noqa: E501
+        'modified_by': 'modifiedBy',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -170,7 +190,11 @@ class DeclarativePublisherDocumentPageTemplate(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
+            created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Page template description.. [optional]  # noqa: E501
+            modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
+            modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
         """
 
@@ -267,7 +291,11 @@ class DeclarativePublisherDocumentPageTemplate(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            created_at (str, none_type): Time of the entity creation.. [optional]  # noqa: E501
+            created_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             description (str): Page template description.. [optional]  # noqa: E501
+            modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
+            modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
         """
 

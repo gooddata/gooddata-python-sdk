@@ -610,7 +610,7 @@ class DatasetControllerApi(object):
         json_api_dataset_patch_document,
         **kwargs
     ):
-        """Patch a Dataset (beta)  # noqa: E501
+        """Patch a Dataset  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -701,7 +701,7 @@ class DatasetControllerApi(object):
         entity_search_body,
         **kwargs
     ):
-        """The search endpoint (beta)  # noqa: E501
+        """The search endpoint  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

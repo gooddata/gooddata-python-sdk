@@ -168,6 +168,8 @@ docs/ComparisonWrapper.md
 docs/CompoundMeasureValueFilter.md
 docs/CompoundMeasureValueFilterCompoundMeasureValueFilter.md
 docs/ComputationApi.md
+docs/ComputationProfile.md
+docs/ComputationProfileSource.md
 docs/ComputedAttributeControllerApi.md
 docs/ComputedAttributePermissions.md
 docs/ComputedAttributePermissionsAssignment.md
@@ -268,6 +270,8 @@ docs/DatasetReferenceIdentifier.md
 docs/DatasetWorkspaceDataFilterIdentifier.md
 docs/DatasetsApi.md
 docs/DateFilter.md
+docs/DateRangeParameterDefinition.md
+docs/DateRangeParameterValue.md
 docs/DateValue.md
 docs/DeclarativeAgent.md
 docs/DeclarativeAgents.md
@@ -320,6 +324,7 @@ docs/DeclarativeLabelTranslation.md
 docs/DeclarativeLdm.md
 docs/DeclarativeMemoryItem.md
 docs/DeclarativeMetric.md
+docs/DeclarativeMetricExtension.md
 docs/DeclarativeMetricPermissionAssignment.md
 docs/DeclarativeMetricPermissionForAssignee.md
 docs/DeclarativeMetricPermissionForAssigneeRule.md
@@ -361,6 +366,7 @@ docs/DeclarativeUserPermissions.md
 docs/DeclarativeUsers.md
 docs/DeclarativeUsersUserGroups.md
 docs/DeclarativeVisualizationObject.md
+docs/DeclarativeVisualizationObjectExtension.md
 docs/DeclarativeVisualizationObjectPermissionAssignment.md
 docs/DeclarativeVisualizationObjectPermissionForAssignee.md
 docs/DeclarativeVisualizationObjectPermissionForAssigneeRule.md
@@ -485,6 +491,7 @@ docs/GetAiLakeOperation200Response.md
 docs/GetDocumentExport202ResponseInner.md
 docs/GetQualityIssuesResponse.md
 docs/GetServiceStatusResponse.md
+docs/GoodDataAiProviderConfig.md
 docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
@@ -1360,6 +1367,10 @@ docs/LocalizationCount.md
 docs/LocalizationDataStatistics.md
 docs/LocalizationDefault.md
 docs/LocalizationDefaults.md
+docs/LocalizationIssue.md
+docs/LocalizationIssueWorkspace.md
+docs/LocalizationIssueWorkspaces.md
+docs/LocalizationIssues.md
 docs/LocalizationMetadataStatistics.md
 docs/LocalizationResolvedValue.md
 docs/LocalizationResolvedValues.md
@@ -1368,6 +1379,8 @@ docs/LocalizationSettingUsages.md
 docs/LocalizationSourceCounts.md
 docs/LocalizationStatistics.md
 docs/LocalizationStatisticsLocale.md
+docs/LocalizationStatisticsTranslatedLocale.md
+docs/LocalizationStatisticsWorkspace.md
 docs/LocalizationUsage.md
 docs/LocalizationUsageUser.md
 docs/LocalizationUsageUsers.md
@@ -1466,6 +1479,8 @@ docs/ParameterControllerApi.md
 docs/ParameterDefinition.md
 docs/ParameterItem.md
 docs/ParameterValue.md
+docs/ParameterizedDateFilter.md
+docs/ParameterizedDateFilterParameterizedDateFilter.md
 docs/ParametersApi.md
 docs/PdfTableStyle.md
 docs/PdfTableStyleProperty.md
@@ -1722,6 +1737,8 @@ docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
 docs/ValidateByItem.md
+docs/ValidateEmbeddingOriginRequest.md
+docs/ValidateEmbeddingOriginResponse.md
 docs/ValidityPeriodCacheRetention.md
 docs/Value.md
 docs/VisibleFilter.md
@@ -2070,6 +2087,8 @@ gooddata_api_client/model/comparison_measure_value_filter_comparison_measure_val
 gooddata_api_client/model/comparison_wrapper.py
 gooddata_api_client/model/compound_measure_value_filter.py
 gooddata_api_client/model/compound_measure_value_filter_compound_measure_value_filter.py
+gooddata_api_client/model/computation_profile.py
+gooddata_api_client/model/computation_profile_source.py
 gooddata_api_client/model/computed_attribute_permissions.py
 gooddata_api_client/model/computed_attribute_permissions_assignment.py
 gooddata_api_client/model/computed_attribute_permissions_for_assignee.py
@@ -2146,6 +2165,8 @@ gooddata_api_client/model/dataset_grain.py
 gooddata_api_client/model/dataset_reference_identifier.py
 gooddata_api_client/model/dataset_workspace_data_filter_identifier.py
 gooddata_api_client/model/date_filter.py
+gooddata_api_client/model/date_range_parameter_definition.py
+gooddata_api_client/model/date_range_parameter_value.py
 gooddata_api_client/model/date_value.py
 gooddata_api_client/model/declarative_agent.py
 gooddata_api_client/model/declarative_agents.py
@@ -2198,6 +2219,7 @@ gooddata_api_client/model/declarative_label_translation.py
 gooddata_api_client/model/declarative_ldm.py
 gooddata_api_client/model/declarative_memory_item.py
 gooddata_api_client/model/declarative_metric.py
+gooddata_api_client/model/declarative_metric_extension.py
 gooddata_api_client/model/declarative_metric_permission_assignment.py
 gooddata_api_client/model/declarative_metric_permission_for_assignee.py
 gooddata_api_client/model/declarative_metric_permission_for_assignee_rule.py
@@ -2239,6 +2261,7 @@ gooddata_api_client/model/declarative_user_permissions.py
 gooddata_api_client/model/declarative_users.py
 gooddata_api_client/model/declarative_users_user_groups.py
 gooddata_api_client/model/declarative_visualization_object.py
+gooddata_api_client/model/declarative_visualization_object_extension.py
 gooddata_api_client/model/declarative_visualization_object_permission_assignment.py
 gooddata_api_client/model/declarative_visualization_object_permission_for_assignee.py
 gooddata_api_client/model/declarative_visualization_object_permission_for_assignee_rule.py
@@ -2342,6 +2365,7 @@ gooddata_api_client/model/get_ai_lake_operation200_response.py
 gooddata_api_client/model/get_document_export202_response_inner.py
 gooddata_api_client/model/get_quality_issues_response.py
 gooddata_api_client/model/get_service_status_response.py
+gooddata_api_client/model/good_data_ai_provider_config.py
 gooddata_api_client/model/grain_identifier.py
 gooddata_api_client/model/granted_permission.py
 gooddata_api_client/model/granularities_formatting.py
@@ -3199,6 +3223,10 @@ gooddata_api_client/model/localization_count.py
 gooddata_api_client/model/localization_data_statistics.py
 gooddata_api_client/model/localization_default.py
 gooddata_api_client/model/localization_defaults.py
+gooddata_api_client/model/localization_issue.py
+gooddata_api_client/model/localization_issue_workspace.py
+gooddata_api_client/model/localization_issue_workspaces.py
+gooddata_api_client/model/localization_issues.py
 gooddata_api_client/model/localization_metadata_statistics.py
 gooddata_api_client/model/localization_resolved_value.py
 gooddata_api_client/model/localization_resolved_values.py
@@ -3207,6 +3235,8 @@ gooddata_api_client/model/localization_setting_usages.py
 gooddata_api_client/model/localization_source_counts.py
 gooddata_api_client/model/localization_statistics.py
 gooddata_api_client/model/localization_statistics_locale.py
+gooddata_api_client/model/localization_statistics_translated_locale.py
+gooddata_api_client/model/localization_statistics_workspace.py
 gooddata_api_client/model/localization_usage.py
 gooddata_api_client/model/localization_usage_user.py
 gooddata_api_client/model/localization_usage_users.py
@@ -3286,6 +3316,8 @@ gooddata_api_client/model/parameter.py
 gooddata_api_client/model/parameter_definition.py
 gooddata_api_client/model/parameter_item.py
 gooddata_api_client/model/parameter_value.py
+gooddata_api_client/model/parameterized_date_filter.py
+gooddata_api_client/model/parameterized_date_filter_parameterized_date_filter.py
 gooddata_api_client/model/pdf_table_style.py
 gooddata_api_client/model/pdf_table_style_property.py
 gooddata_api_client/model/pdm_ldm_request.py
@@ -3509,6 +3541,8 @@ gooddata_api_client/model/user_management_users_item.py
 gooddata_api_client/model/user_management_workspace_permission_assignment.py
 gooddata_api_client/model/user_permission.py
 gooddata_api_client/model/validate_by_item.py
+gooddata_api_client/model/validate_embedding_origin_request.py
+gooddata_api_client/model/validate_embedding_origin_response.py
 gooddata_api_client/model/validity_period_cache_retention.py
 gooddata_api_client/model/value.py
 gooddata_api_client/model/visible_filter.py

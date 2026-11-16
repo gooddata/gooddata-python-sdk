@@ -8,9 +8,9 @@ Method | HTTP request | Description
 [**get_all_entities_facts**](FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 [**get_entity_aggregated_facts**](FactsApi.md#get_entity_aggregated_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/{objectId} | Get an Aggregated Fact
 [**get_entity_facts**](FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
-[**patch_entity_facts**](FactsApi.md#patch_entity_facts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Patch a Fact (beta)
-[**search_entities_aggregated_facts**](FactsApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint (beta)
-[**search_entities_facts**](FactsApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | The search endpoint (beta)
+[**patch_entity_facts**](FactsApi.md#patch_entity_facts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Patch a Fact
+[**search_entities_aggregated_facts**](FactsApi.md#search_entities_aggregated_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/aggregatedFacts/search | The search endpoint
+[**search_entities_facts**](FactsApi.md#search_entities_facts) | **POST** /api/v1/entities/workspaces/{workspaceId}/facts/search | The search endpoint
 
 
 # **get_all_entities_aggregated_facts**
@@ -384,7 +384,7 @@ No authorization required
 # **patch_entity_facts**
 > JsonApiFactOutDocument patch_entity_facts(workspace_id, object_id, json_api_fact_patch_document)
 
-Patch a Fact (beta)
+Patch a Fact
 
 ### Example
 
@@ -429,7 +429,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch a Fact (beta)
+        # Patch a Fact
         api_response = api_instance.patch_entity_facts(workspace_id, object_id, json_api_fact_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -438,7 +438,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch a Fact (beta)
+        # Patch a Fact
         api_response = api_instance.patch_entity_facts(workspace_id, object_id, json_api_fact_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -481,7 +481,7 @@ No authorization required
 # **search_entities_aggregated_facts**
 > JsonApiAggregatedFactOutList search_entities_aggregated_facts(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -529,7 +529,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_aggregated_facts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -538,7 +538,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_aggregated_facts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -580,7 +580,7 @@ No authorization required
 # **search_entities_facts**
 > JsonApiFactOutList search_entities_facts(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -628,7 +628,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_facts(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -637,7 +637,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_facts(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
