@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_gate.py
+  s_d5a90247078f0f::t_c926de4b2a95f4 13,33-42,58
+packages/gooddata-eval/src/gooddata_eval/core/reporting/console.py
+  s_d5a90247078f0f::t_00303f882bd911 7,102-107
+packages/gooddata-eval/tests/test_reporting.py
+  s_d5a90247078f0f::t_446ddb53adc5f5 650-675
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57cbf24de26a541a6b34037f7d70c4c97649ecde",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

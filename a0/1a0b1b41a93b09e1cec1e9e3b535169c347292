@@ -1,0 +1,32 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_52f6db4922f61b::t_3d897488e174bb 7,2158
+  s_52f6db4922f61b::t_d35753dbbd5a60 1958,1966-1983,1991,1997,2000,2005,2015-2016,2019,2023,2026,2029-2030,2033,2037,2040,2043-2044,2059,2065,2070,2078,2083,2093-2107,2147,2310-2315,2317,2320-2321
+  s_52f6db4922f61b::t_951b04d4cc5ddb 2110-2143,2148-2157,2159-2161
+  s_52f6db4922f61b::t_80d818c7005e06 2144-2146
+  s_52f6db4922f61b::t_5d6b231cd58c34 2108-2109,2162-2163
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_52f6db4922f61b::t_9644fdfcafaa2e 1177,1181-1185,1297
+  s_52f6db4922f61b::t_70f35b1529cc7d 993
+  s_52f6db4922f61b::t_234c1277412328 1044,1264-1268,1382-1390,1402-1410
+  s_52f6db4922f61b::t_d35753dbbd5a60 874-875,877,988,1296,1320
+  s_52f6db4922f61b::t_5f3f1d9cba71e1 895-896,900,955-969,971,974-976,980,982,999,1001,1015,1017,1019-1021,1028-1029,1041-1043,1045-1052,1261-1263,1269,1271,1273-1274,1276-1277
+  s_52f6db4922f61b::t_66557f58982ae7 872-873,876,912-913,915-918,935
+  s_52f6db4922f61b::t_1cf78c63381540 1355-1356,1476-1477
+  s_52f6db4922f61b::t_4b3c2385c4a16e 1053-1054
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a01a0b1b41a93b09e1cec1e9e3b535169c347292",
+  "prompts": {},
+  "sessions": {
+    "s_52f6db4922f61b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2cde3976-5706-449d-90d4-e5751950c28f",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}
