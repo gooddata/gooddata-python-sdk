@@ -45,12 +45,16 @@ DEFAULT_MUST_NOT_INCLUDE: dict[str, str] = {
         "'Key takeaways' or 'Things to watch', or lists several separate findings one after another, "
         "or gives recommendations, an outlook or a closing conclusion."
     ),
-    "chart_walkthrough": "Walks through the charts one by one instead of stating one finding that connects them.",
+    "chart_walkthrough": (
+        "Walks through two or more charts one by one instead of stating one finding that connects them."
+    ),
     "background_opener": "Opens with background or a description of the page instead of the finding itself.",
     "exact_figure": (
         "States a figure in digits: an amount, count, percentage or share, including rounded or hedged ones "
-        "such as 'about $270M', 'roughly 1.2K', 'in the low $100Ks' or '~40%'. A rough size or direction in words, such as "
-        "'roughly doubled', 'about a third' or 'most orders', does not count. Numbers that are part of a "
+        "such as 'about $270M', 'roughly 1.2K', 'in the low $100Ks' or '~40%'. Only digits count: a size, "
+        "range or direction written in words, in any language, does not count, even when hedged, such as "
+        "'roughly doubled', 'about a third', 'nearly nine-tenths', 'roughly a million', 'the low teens', "
+        "'a six- to seven-figure range', 'most orders' or 'etwa eine Million'. Numbers that are part of a "
         "visualization or metric title, such as 'Top 10', do not count."
     ),
     "date_or_period": (
@@ -61,7 +65,7 @@ DEFAULT_MUST_NOT_INCLUDE: dict[str, str] = {
         "Makes an explicit causal claim (such as 'because', 'due to' or 'driven by') that attributes a change "
         "to a factor that is not in the data, such as a campaign, a season or a market event. Comparisons "
         "between segments, and naming the segment in the data that led a change (such as 'led by the "
-        "Nordics'), are not causal claims."
+        "Nordics' or 'driven by new customers'), are not causal claims."
     ),
     "chart_description": "Describes what a chart displays instead of what the data means.",
 }

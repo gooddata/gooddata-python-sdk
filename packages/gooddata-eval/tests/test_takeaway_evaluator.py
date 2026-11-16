@@ -360,6 +360,9 @@ def test_title_number_criterion_text_present() -> None:
     assert "'about $270M'" in criterion
     assert "'about a third'" in criterion
     assert "'roughly doubled'" in criterion
+    assert "'roughly a million'" in criterion
+    assert "Only digits count" in criterion
+    assert "'nearly nine-tenths'" in criterion
 
 
 def test_calibrated_criterion_wording() -> None:
@@ -374,6 +377,8 @@ def test_calibrated_criterion_wording() -> None:
     }
     assert "Things to watch" in DEFAULT_MUST_NOT_INCLUDE["executive_summary"]
     assert "led by" in DEFAULT_MUST_NOT_INCLUDE["unshown_cause"]
+    assert "'driven by new customers'" in DEFAULT_MUST_NOT_INCLUDE["unshown_cause"]
+    assert "two or more charts" in DEFAULT_MUST_NOT_INCLUDE["chart_walkthrough"]
     assert set(DEFAULT_MUST_INCLUDE) == {"one_finding"}
 
 

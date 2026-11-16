@@ -6,7 +6,9 @@ the verdict, because the verdict is an LLM's. This does, against the texts in
 tests/fixtures/takeaway_calibration.json:
 
 - a "pass" text must satisfy every default judge criterion on every run;
-- a "fail" text must violate each criterion it names on every run.
+- a "fail" text must violate each criterion it names on every run;
+- a text's own "question" is the page label the judge reads (default: the fixture's). The label
+  can change the verdict; a text from a real run usually keeps its item's label.
 
 Run it after changing any DEFAULT_MUST_INCLUDE / DEFAULT_MUST_NOT_INCLUDE wording:
 
@@ -47,15 +49,18 @@ def main() -> int:
             id=case["label"],
             dataset_name="takeaway_calibration",
             test_kind="document_takeaway",
-            question=fixture["question"],
+            question=case.get("question", fixture["question"]),
             expected_output={},
             takeaway_input=TakeawayInput(visualizations=["calibration"]),
         )
         chat = ChatResult(text_response=case["text"], raw_response={"takeaway": case["text"], "noData": False})
         satisfied = dict.fromkeys(CRITERIA.values(), 0)
+        # An ungraded criterion has no key in detail; never count it as a verdict.
+        ungraded = dict.fromkeys(CRITERIA.values(), 0)
         for _ in range(RUNS):
             detail = evaluator.evaluate(item, chat).detail
             for key, name in CRITERIA.items():
+                ungraded[name] += key not in detail
                 satisfied[name] += detail.get(key) is True
         want_pass = case["want"] == "pass"
         must = dict.fromkeys(satisfied, RUNS) if want_pass else dict.fromkeys(case["criteria"], 0)
@@ -63,10 +68,11 @@ def main() -> int:
         for name, count in satisfied.items():
             flag = ""
             if name in must:
-                ok = count == must[name]
+                ok = count == must[name] and not ungraded[name]
                 mismatches += not ok
                 flag = "OK" if ok else "MISMATCH"
-            print(f"  {name:20} satisfied {count}/{RUNS}  {flag}")
+            note = f" ({ungraded[name]} ungraded)" if ungraded[name] else ""
+            print(f"  {name:20} satisfied {count}/{RUNS}{note}  {flag}")
     print(f"\n{'all calibration texts on the right side' if not mismatches else f'{mismatches} mismatch(es)'}")
     return 1 if mismatches else 0
 
