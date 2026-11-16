@@ -16,6 +16,7 @@ from gooddata_sdk.catalog.workspace.aac import aac_document_to_declarative
 from gooddata_eval.core.agentic._conversation_context import classify_reply
 from gooddata_eval.core.agentic._editor_takeaways import editor_takeaway_input
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._filters import describe_selection, same_selection, selection_of
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
@@ -80,9 +81,36 @@ _EXPECTATION_KEYS = frozenset(
         "asked_first_required",
         "clarification_reply",
         "rework",
+        "chart_periods",
     }
 )
-_REWORK_KEYS = frozenset({"base_document_id", "keeps_pages", "page_charts", "title", "filters"})
+_REWORK_KEYS = frozenset({"base_document_id", "keeps_pages", "page_charts", "new_page_charts", "title", "filters"})
+# A date filter's range keys, compared even when a rework item leaves them out: an all-time filter
+# spells itself by leaving `from` and `to` out, so a drafted range must not pass it, and an offset
+# means nothing without its granularity, so a range stated without one must not pass any granularity.
+_DATE_FILTER_RANGE_KEYS = ("granularity", "from", "to")
+# What a filter applies to, which a rework item must state: the label and selection of an attribute
+# filter, and the date dataset of a date filter. A type not listed here is rejected, so a misspelt type
+# does not read as a copilot regression and a filter of another kind is not compared on its type alone.
+_REQUIRED_FILTER_KEYS = {"attribute_filter": ("using", "state"), "date_filter": ("date",)}
+# A v2 draft arrives as AaC, where a relative period is `{granularity, from, to}` and an absolute one
+# is `{from, to}`: the granularity is what tells them apart. These are the names the code converter
+# writes; it reads `WEEK` too but writes it as `WEEK_US`, so a fixture stating `WEEK` could never match.
+_AAC_PERIOD_GRANULARITIES = frozenset(
+    {
+        "SECOND",
+        "MINUTE",
+        "HOUR",
+        "DAY",
+        "WEEK_US",
+        "MONTH",
+        "QUARTER",
+        "YEAR",
+        "FISCAL_MONTH",
+        "FISCAL_QUARTER",
+        "FISCAL_YEAR",
+    }
+)
 # Template tokens the document renders at export time ({documentName}, {periodStart}, ...).
 _PLACEHOLDER_RE = re.compile(r"\{\w+\}")
 _SUMMARY_SLOT = "summary"
@@ -279,12 +307,17 @@ def _period(document: dict) -> dict:
     return period if isinstance(period, dict) else {}
 
 
+def _is_relative(period: dict) -> bool:
+    """Whether an AaC period is relative: it states a granularity, which an absolute one never does."""
+    return "granularity" in period
+
+
 def _period_bounds(document: dict) -> tuple[Any, Any] | None:
     """The document's first and last day, or ``None`` for a v2 relative period, which has no fixed dates."""
     period = _period(document)
     if not _is_v2(document):
         return period.get("start"), period.get("end")
-    if period.get("type") == "relative":
+    if _is_relative(period):
         return None
     return period.get("from"), period.get("to")
 
@@ -302,6 +335,13 @@ def _period_text(document: dict) -> str:
         period = _period(document)
         return f"the relative range {period.get('granularity')} {period.get('from')} to {period.get('to')}"
     return f"{bounds[0]} to {bounds[1]}"
+
+
+def _expected_period_text(period: dict) -> str:
+    """A fixture's ``period``: ``start`` and ``end`` dates, or a relative range as AaC writes it."""
+    if _is_relative(period):
+        return f"the relative range {period.get('granularity')} {period.get('from')} to {period.get('to')}"
+    return f"{period.get('start')} to {period.get('end')}"
 
 
 def render_document_text(document: dict) -> str:
@@ -331,6 +371,10 @@ def _has_visualizations(expected_output: dict) -> bool:
     return "visualizations" in expected_output
 
 
+def _has_chart_periods(expected_output: dict) -> bool:
+    return "chart_periods" in expected_output
+
+
 def _expects_clarification(expected_output: dict) -> bool:
     return "expects_clarification" in expected_output
 
@@ -350,9 +394,17 @@ def _validate_rework(rework: Any) -> None:
 
     A rework is scored on aac-v2 documents only. ``keeps_pages`` checks that each page id is still
     visible, not what the page shows. ``page_charts`` maps a kept page to the charts that must stay
-    on it; the page may hold others too. ``visualizations`` checks the charts anywhere in the document.
-    ``filters`` is compared with ``==`` against the drafted document's ``content.filters``, so it
-    must be copied from a real aac-v2 run: the wire form is not the shape a filter is authored in.
+    on it; the page may hold others too. ``new_page_charts`` lists the charts that must sit on a
+    visible page outside ``keeps_pages``, which is what "add a page" asks for; ``visualizations``
+    alone accepts a chart pushed onto an old page. ``filters`` maps each filter id the document must
+    have, and no other, to the keys it is compared on, in the drafted document's ``content.filters``
+    wire form. Each entry states at least the filter's ``type``, an attribute filter also its
+    ``using`` and ``state``, with a ``null`` state for all, and a date filter its ``date``. Other keys
+    an entry leaves out are
+    not compared, so a converter that adds one does not fail the run, except a date filter's
+    ``granularity``, ``from`` and ``to``: leaving out ``from`` and ``to`` states all time, and leaving
+    out ``granularity`` states none. An attribute filter's ``state`` is compared on its selection: no
+    values means all.
     """
     if not isinstance(rework, dict):
         raise ValueError(f"rework must be an object, got {type(rework).__name__}")
@@ -380,12 +432,41 @@ def _validate_rework(rework: Any) -> None:
                 raise ValueError(f"rework.page_charts[{page_id!r}] must list the charts that stay on the page")
             if not all(isinstance(chart, str) and chart.strip() for chart in charts):
                 raise ValueError(f"every rework.page_charts[{page_id!r}] entry must be a chart id, got {charts!r}")
+    if "new_page_charts" in rework:
+        new_page_charts = rework["new_page_charts"]
+        if not isinstance(new_page_charts, list) or not new_page_charts:
+            raise ValueError("rework.new_page_charts is empty; the new page check would pass vacuously")
+        if not all(isinstance(chart, str) and chart.strip() for chart in new_page_charts):
+            raise ValueError(f"every rework.new_page_charts entry must be a chart id, got {new_page_charts!r}")
+        if "keeps_pages" not in rework:
+            raise ValueError("rework.new_page_charts needs rework.keeps_pages to tell the open document's pages apart")
     if "title" in rework:
         title = rework["title"]
         if not isinstance(title, str) or not title.strip():
             raise ValueError(f"rework.title must be the title the edit leaves, got {title!r}")
-    if "filters" in rework and not isinstance(rework["filters"], dict):
-        raise ValueError(f"rework.filters must be the document's filters keyed by id, got {rework['filters']!r}")
+    if "filters" in rework:
+        filters = rework["filters"]
+        if not isinstance(filters, dict):
+            raise ValueError(f"rework.filters must be the document's filters keyed by id, got {filters!r}")
+        for filter_id, entry in filters.items():
+            if not isinstance(entry, dict) or not isinstance(entry.get("type"), str) or not entry["type"].strip():
+                raise ValueError(
+                    f"rework.filters[{filter_id!r}] must state at least the filter's 'type', got {entry!r}"
+                )
+            if entry["type"] not in _REQUIRED_FILTER_KEYS:
+                raise ValueError(
+                    f"rework.filters[{filter_id!r}] has type {entry['type']!r}; known: {sorted(_REQUIRED_FILTER_KEYS)}. "
+                    f"A type needs its required keys decided before an item can state it"
+                )
+            unstated = [key for key in _REQUIRED_FILTER_KEYS[entry["type"]] if key not in entry]
+            if unstated:
+                raise ValueError(
+                    f"rework.filters[{filter_id!r}] of type {entry['type']!r} leaves out {unstated}: an unstated key "
+                    f"is not compared, so what the filter applies to would go unchecked; a null state means all"
+                )
+            problem = _state_problem(entry.get("state"), entry["type"])
+            if problem is not None:
+                raise ValueError(f"rework.filters[{filter_id!r}].state is {entry['state']!r}, {problem}")
 
 
 def _validate_expectation(expected_output: Any) -> None:
@@ -406,8 +487,25 @@ def _validate_expectation(expected_output: Any) -> None:
         raise ValueError(f"unknown expected_output key(s) {unknown}; known: {sorted(_EXPECTATION_KEYS)}")
     if _has_period(expected_output):
         period = expected_output.get("period")
-        if not isinstance(period, dict) or not period.get("start") or not period.get("end"):
-            raise ValueError(f"period needs both 'start' and 'end', got {period!r}")
+        if isinstance(period, dict) and _is_relative(period):
+            extra = sorted(set(period) - {"granularity", "from", "to"})
+            if extra:
+                raise ValueError(f"a relative period states only 'granularity', 'from' and 'to', got {extra} too")
+            granularity = period["granularity"]
+            if not isinstance(granularity, str) or granularity not in _AAC_PERIOD_GRANULARITIES:
+                raise ValueError(
+                    f"a relative period's 'granularity' must be one AaC writes, one of "
+                    f"{sorted(_AAC_PERIOD_GRANULARITIES)}, got {period!r}"
+                )
+            if not all(
+                isinstance(period.get(bound), int) and not isinstance(period.get(bound), bool)
+                for bound in ("from", "to")
+            ):
+                raise ValueError(f"a relative period needs whole numbers 'from' and 'to', got {period!r}")
+        elif not isinstance(period, dict) or not period.get("start") or not period.get("end"):
+            raise ValueError(f"period needs both 'start' and 'end', or a relative 'granularity', got {period!r}")
+        elif extra := sorted(set(period) - {"start", "end"}):
+            raise ValueError(f"an absolute period states only 'start' and 'end', got {extra} too")
     if _has_visualizations(expected_output):
         visualizations = expected_output.get("visualizations")
         if not isinstance(visualizations, list) or not visualizations:
@@ -415,6 +513,18 @@ def _validate_expectation(expected_output: Any) -> None:
         for entry in visualizations:
             if not isinstance(entry, dict) or not entry.get("id"):
                 raise ValueError(f"every visualization needs an 'id', got {entry!r}")
+    if _has_chart_periods(expected_output):
+        chart_periods = expected_output.get("chart_periods")
+        if not isinstance(chart_periods, dict) or not chart_periods:
+            raise ValueError(
+                "chart_periods must map chart ids to the date dataset each applies the period on, "
+                f"or null for a chart that ignores it, got {chart_periods!r}"
+            )
+        for chart, dataset in chart_periods.items():
+            if not isinstance(chart, str) or not chart.strip():
+                raise ValueError(f"every chart_periods key must be a chart id, got {chart!r}")
+            if dataset is not None and (not isinstance(dataset, str) or not dataset.strip()):
+                raise ValueError(f"chart_periods[{chart!r}] must be a date dataset id or null, got {dataset!r}")
     if _has_narrative(expected_output):
         narrative = expected_output.get("narrative")
         if not isinstance(narrative, str) or not narrative.strip():
@@ -463,7 +573,8 @@ def _validate_rework_target(expected_output: dict, user_context: dict | None) ->
 
     Raises:
         ValueError: the item states a rework, and ``user_context.view.document`` is missing,
-            has no id, or has another id.
+            has no id, or has another id; or it states ``new_page_charts`` while the open document
+            sends no pages or has a hidden page, or ``keeps_pages`` leaves out one of its pages.
     """
     rework = _rework(expected_output)
     if rework is None:
@@ -477,6 +588,32 @@ def _validate_rework_target(expected_output: dict, user_context: dict | None) ->
         raise ValueError(f"rework needs the open document's id in user_context.view.document.id, got {open_id!r}")
     if open_id != rework["base_document_id"]:
         raise ValueError(f"rework.base_document_id {rework['base_document_id']!r} is not the open document {open_id!r}")
+    if "new_page_charts" in rework:
+        # A new page is one outside keeps_pages, so an open page left off the list would count as new,
+        # and a chart pushed onto it would pass. A hidden open page cannot be listed, since a kept page
+        # must stay visible, so an item over a document with one cannot state new_page_charts.
+        definition = document.get("definition")
+        open_pages = _pages(definition) if isinstance(definition, dict) else []
+        if not open_pages:
+            raise ValueError(
+                "rework.new_page_charts needs the open document's pages in user_context.view.document.definition"
+            )
+        hidden = [page.get("id") for page in open_pages if isinstance(page, dict) and page.get("visible") is False]
+        if hidden:
+            raise ValueError(
+                f"rework.new_page_charts cannot be scored over an open document with hidden pages {hidden!r}: "
+                "showing one again would count as a new page"
+            )
+        unlisted = [
+            page.get("id")
+            for page in open_pages
+            if isinstance(page, dict) and page.get("id") not in rework["keeps_pages"]
+        ]
+        if unlisted:
+            raise ValueError(
+                f"rework.new_page_charts needs keeps_pages to list every page of the open document; "
+                f"missing {unlisted!r}"
+            )
 
 
 def build_simulated_reply(expected_output: dict, *, asked: bool = True) -> str:
@@ -496,7 +633,7 @@ def build_simulated_reply(expected_output: dict, *, asked: bool = True) -> str:
         segments.append(f"Please use these charts: {titles}.")
     period = expected_output.get("period")
     if isinstance(period, dict):
-        segments.append(f"Period: {period.get('start')} to {period.get('end')}.")
+        segments.append(f"Period: {_expected_period_text(period)}.")
     if _rework(expected_output) is not None:
         segments.append("Anything else is up to you. Please make the change in the open document now.")
     else:
@@ -519,8 +656,10 @@ class _Applies:
     rework: bool = False
     pages_kept: bool = False
     page_charts: bool = False
+    new_page_charts: bool = False
     title: bool = False
     filters: bool = False
+    chart_periods: bool = False
 
 
 @dataclass
@@ -544,8 +683,10 @@ class DocumentEvaluation:
     reworks_open: bool = False
     pages_kept: bool = False
     page_charts_kept: bool = False
+    new_page_charts_placed: bool = False
     title_correct: bool = False
     filters_kept: bool = False
+    chart_periods_correct: bool = False
     judge_reasoning: str = ""
     # Set when the judge returned something unreadable. The run then has no narrative verdict:
     # it is neither published as a 0 nor allowed to pass on the remaining checks.
@@ -600,10 +741,14 @@ class DocumentEvaluation:
             checks["document_pages_kept"] = self.pages_kept
         if self.applies.page_charts:
             checks["document_page_charts_kept"] = self.page_charts_kept
+        if self.applies.new_page_charts:
+            checks["document_new_page_charts_placed"] = self.new_page_charts_placed
         if self.applies.title:
             checks["document_title_correct"] = self.title_correct
         if self.applies.filters:
             checks["document_filters_kept"] = self.filters_kept
+        if self.applies.chart_periods:
+            checks["document_chart_periods_correct"] = self.chart_periods_correct
         return checks
 
 
@@ -654,10 +799,107 @@ def evaluate_document_response(
     return evaluation
 
 
+def _state_problem(state: Any, kind: str) -> str | None:
+    """Why a filter's ``state`` cannot be read as a selection, or nothing.
+
+    A missing or ``null`` state reads as all, as does an empty object; any other falsey value is malformed.
+    """
+    if state is None:
+        return None
+    if not isinstance(state, dict):
+        return "expected an object"
+    for key in ("include", "exclude"):
+        if state.get(key) is not None and not isinstance(state[key], list):
+            return f"expected a list of values under {key!r}"
+    if state.get("include") and state.get("exclude"):
+        return "expected either 'include' or 'exclude', not both"
+    if kind == "attribute_filter" and not set(state) <= {"include", "exclude"}:
+        return "expected only 'include' or 'exclude'"
+    return None
+
+
+def _filter_mismatch(filter_id: str, actual: Any, expected: dict) -> list[str]:
+    """Why one drafted filter differs from the expectation, or nothing.
+
+    The kind must match. An attribute filter's ``state`` is compared on its selection, a date
+    filter on its range with absence significant, and any other key the expectation states as written.
+    """
+    if not isinstance(actual, dict):
+        return [f"filter {filter_id!r} is {actual!r}, expected an object"]
+    kind = expected["type"]
+    if actual.get("type") != kind:
+        return [f"filter {filter_id!r} has type {actual.get('type')!r}, expected {kind!r}"]
+    keys = [key for key in expected if key != "type"]
+    if kind == "date_filter":
+        keys += [key for key in _DATE_FILTER_RANGE_KEYS if key not in expected]
+    reasons: list[str] = []
+    for key in keys:
+        if key == "state" and kind == "attribute_filter":
+            problem = _state_problem(actual.get("state"), kind)
+            if problem is not None:
+                reasons.append(f"filter {filter_id!r} has state {actual.get('state')!r}, {problem}")
+            elif not same_selection(selection_of(actual), selection_of(expected)):
+                reasons.append(
+                    f"filter {filter_id!r} selects {describe_selection(selection_of(actual))}, "
+                    f"expected {describe_selection(selection_of(expected))}"
+                )
+        elif actual.get(key) != expected.get(key):
+            reasons.append(f"filter {filter_id!r} has {key} {actual.get(key)!r}, expected {expected.get(key)!r}")
+    return reasons
+
+
+def _new_page_misses(new_page_charts: list[str], keeps_pages: list[str], pages: list[Any]) -> list[str]:
+    """Why a chart the edit should have put on a new page is not on one."""
+    kept = set(keeps_pages)
+    reasons: list[str] = []
+    for chart in new_page_charts:
+        holders = [page.get("id") for page in pages if isinstance(page, dict) and chart in _page_visualizations(page)]
+        if any(page_id not in kept for page_id in holders):
+            continue
+        if holders:
+            reasons.append(
+                f"chart {chart!r} must be on a new page, but it is only on page(s) {holders!r} of the open document"
+            )
+        else:
+            reasons.append(f"chart {chart!r} must be on a new page, but no visible page has it")
+    return reasons
+
+
+def _chart_period_misses(chart_periods: dict[str, str | None], document: dict) -> list[str]:
+    """Why charts do not apply the document period where the item says, or nothing.
+
+    A chart applies the period on its widget's ``date``; a widget with ``ignore_document_period``
+    applies none, as a dashboard chart the date filter does not reach. A dataset of ``None`` asks
+    for the latter. Every placement of a chart on a page a reader sees must agree.
+    """
+    placements: dict[str, list[dict]] = {}
+    for page in _visible_pages(document):
+        if isinstance(page, dict):
+            for node in _nodes(page.get("layout")):
+                if (chart := _visualization_id(node)) is not None:
+                    placements.setdefault(chart, []).append(node)
+    misses: list[str] = []
+    for chart, expected in chart_periods.items():
+        widgets = placements.get(chart)
+        if not widgets:
+            misses.append(f"chart {chart!r} is not in the document, so where it applies the period is unknown")
+            continue
+        for widget in widgets:
+            ignores = widget.get("ignore_document_period") is True
+            if expected is None and not ignores:
+                misses.append(
+                    f"chart {chart!r} applies the period on {widget.get('date')!r}, expected it to ignore the period"
+                )
+            elif expected is not None and (ignores or widget.get("date") != expected):
+                applied = "ignores the period" if ignores else f"applies the period on {widget.get('date')!r}"
+                misses.append(f"chart {chart!r} {applied}, expected it on {expected!r}")
+    return list(dict.fromkeys(misses))
+
+
 def _score_rework(
     rework: dict, document: dict, document_part: dict, pages: list[Any], failures: list[str]
-) -> tuple[bool, bool, bool, bool, bool]:
-    """``(reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept)`` of a v2 edit.
+) -> tuple[bool, bool, bool, bool, bool, bool]:
+    """``(reworks_open, pages_kept, page_charts_kept, new_page_charts_placed, title_correct, filters_kept)`` of a v2 edit.
 
     A check the item does not state is False.
     """
@@ -694,6 +936,12 @@ def _score_rework(
         )
         page_charts_kept = not moved
 
+    new_page_charts_placed = False
+    if "new_page_charts" in rework:
+        misses = _new_page_misses(rework["new_page_charts"], rework["keeps_pages"], pages)
+        failures.extend(misses)
+        new_page_charts_placed = not misses
+
     title_correct = False
     if "title" in rework:
         title_correct = document.get("title") == rework["title"]
@@ -703,11 +951,29 @@ def _score_rework(
     filters_kept = False
     if "filters" in rework:
         # A document without filters omits the key, which matches an expectation of none.
-        actual_filters = _filters(document) or {}
-        filters_kept = actual_filters == rework["filters"]
-        if not filters_kept:
-            failures.append(f"the document filters are {actual_filters!r}, expected {rework['filters']!r}")
-    return reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept
+        actual_filters = _filters(document)
+        if actual_filters is None:
+            actual_filters = {}
+        expected_filters = rework["filters"]
+        if not isinstance(actual_filters, dict):
+            reasons = [f"the document filters are {actual_filters!r}, expected an object keyed by filter id"]
+        else:
+            reasons = [
+                f"the edit lost filter {filter_id!r}"
+                for filter_id in expected_filters
+                if filter_id not in actual_filters
+            ]
+            reasons += [
+                f"the edit added filter {filter_id!r}"
+                for filter_id in actual_filters
+                if filter_id not in expected_filters
+            ]
+            for filter_id, expected in expected_filters.items():
+                if filter_id in actual_filters:
+                    reasons += _filter_mismatch(filter_id, actual_filters[filter_id], expected)
+        failures.extend(reasons)
+        filters_kept = not reasons
+    return reworks_open, pages_kept, page_charts_kept, new_page_charts_placed, title_correct, filters_kept
 
 
 def _score_response(
@@ -726,8 +992,10 @@ def _score_response(
         rework=rework is not None,
         pages_kept=rework is not None and "keeps_pages" in rework,
         page_charts=rework is not None and "page_charts" in rework,
+        new_page_charts=rework is not None and "new_page_charts" in rework,
         title=rework is not None and "title" in rework,
         filters=rework is not None and "filters" in rework,
+        chart_periods=_has_chart_periods(expected_output),
     )
 
     if tool_result is None:
@@ -786,7 +1054,8 @@ def _score_response(
         failures.append(f"{draft} must not be saved yet, but it reports saved_document_id {saved_document_id!r}")
         not_saved = False
 
-    new_draft = reworks_open = pages_kept = page_charts_kept = title_correct = filters_kept = False
+    new_draft = reworks_open = pages_kept = page_charts_kept = new_page_charts_placed = False
+    title_correct = filters_kept = False
     if rework is None:
         new_draft = True
         base_document_id = document_part.get("base_document_id")
@@ -803,18 +1072,23 @@ def _score_response(
             f"a rework is scored on aac-v2 documents only, but the draft is version {document.get('version')!r}"
         )
     else:
-        reworks_open, pages_kept, page_charts_kept, title_correct, filters_kept = _score_rework(
+        reworks_open, pages_kept, page_charts_kept, new_page_charts_placed, title_correct, filters_kept = _score_rework(
             rework, document, document_part, pages, failures
         )
 
     period_correct = False
     if applies.period:
         expected_period = expected_output["period"]
-        period_correct = _period_bounds(document) == (expected_period.get("start"), expected_period.get("end"))
+        if _is_relative(expected_period):
+            actual = _period(document) if _is_v2(document) else {}
+            period_correct = _is_relative(actual) and all(
+                actual.get(key) == expected_period[key] for key in ("granularity", "from", "to")
+            )
+        else:
+            period_correct = _period_bounds(document) == (expected_period.get("start"), expected_period.get("end"))
         if not period_correct:
             failures.append(
-                f"the document covers {_period_text(document)}, "
-                f"expected {expected_period.get('start')} to {expected_period.get('end')}"
+                f"the document covers {_period_text(document)}, expected {_expected_period_text(expected_period)}"
             )
 
     charts_matched = False
@@ -823,6 +1097,15 @@ def _score_response(
         missing = [v for v in expected_output["visualizations"] if v.get("id") not in placed]
         failures.extend(f"the document does not show chart {v.get('id')!r} ({v.get('title')!r})" for v in missing)
         charts_matched = not missing
+
+    chart_periods_correct = False
+    if applies.chart_periods:
+        if _is_v2(document):
+            misses = _chart_period_misses(expected_output["chart_periods"], document)
+        else:
+            misses = ["where a chart applies the period is scored on aac-v2 documents only"]
+        failures.extend(misses)
+        chart_periods_correct = not misses
 
     summaries_present = False
     if applies.narrative:
@@ -853,8 +1136,10 @@ def _score_response(
         reworks_open=reworks_open,
         pages_kept=pages_kept,
         page_charts_kept=page_charts_kept,
+        new_page_charts_placed=new_page_charts_placed,
         title_correct=title_correct,
         filters_kept=filters_kept,
+        chart_periods_correct=chart_periods_correct,
         failures=failures,
     )
 

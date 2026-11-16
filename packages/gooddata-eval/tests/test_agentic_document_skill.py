@@ -99,10 +99,10 @@ def _document_part(
     }
 
 
-# v2 shapes follow the Publisher content v2 model: a top-level `version`, an absolute or relative
-# `period`, and `content` holding the pages, whose layout nests `row` and `column` containers
-# through `children` down to typed widgets.
-_V2_PERIOD = {"type": "absolute", "granularity": "GDC.time.date", "from": "2026-01-01", "to": "2026-06-30"}
+# v2 shapes follow the AaC form a v2 draft arrives in: a top-level `version`, an absolute `{from, to}`
+# or relative `{granularity, from, to}` `period`, and `content` holding the pages, whose layout nests
+# `row` and `column` containers through `children` down to typed widgets.
+_V2_PERIOD = {"from": "2026-01-01", "to": "2026-06-30"}
 
 
 def _v2_cover_page() -> dict:
@@ -423,7 +423,7 @@ def _rework_part(pages: list[dict] | None = None, **kwargs: Any) -> dict:
     return _v2_document_part(pages, **kwargs)
 
 
-def _with_filters(part: dict, filters: dict) -> dict:
+def _with_filters(part: dict, filters: Any) -> dict:
     part["document"]["content"]["filters"] = filters
     return part
 
@@ -463,6 +463,21 @@ def test_an_edit_of_the_open_document_passes_every_rework_check() -> None:
         "document_title_correct": True,
         "document_filters_kept": True,
     }
+
+
+def test_every_rework_check_is_published_when_the_fixture_states_it() -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY),
+    ]
+    rework = {**_NEW_PAGE_REWORK, "page_charts": {"page2": [_REVENUE_TREND]}, "filters": _US_ONLY}
+    part = _with_filters(_rework_part(pages), _drafted_country_filter())
+    evaluation = _evaluate(part, expected={"rework": rework}, tool=_draft_result(page_count=3))
+    assert evaluation.failures == []
+    assert {"document_new_page_charts_placed", "document_page_charts_kept", "document_filters_kept"} <= set(
+        evaluation.strict_checks
+    )
 
 
 def test_a_rework_of_a_v1_document_fails_once_and_says_why() -> None:
@@ -611,12 +626,328 @@ def test_a_rename_that_left_the_old_title_fails() -> None:
     assert evaluation.failures == ["the document is titled 'Sales overview', expected 'E2 Sales Review'"]
 
 
-def test_an_edit_that_changed_the_document_filters_fails() -> None:
+def test_an_edit_that_dropped_a_document_filter_fails() -> None:
     part = _with_filters(_rework_part(), {})
     expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _OPEN_FILTERS}}
     evaluation = _evaluate(part, expected=expected)
     assert evaluation.strict_checks["document_filters_kept"] is False
-    assert evaluation.failures == [f"the document filters are {{}}, expected {_OPEN_FILTERS!r}"]
+    assert evaluation.failures == ["the edit lost filter 'document_filter_customer_country'"]
+
+
+# What a rework item states: the filter's kind, label and selection, not its display fields.
+_US_ONLY = {
+    "document_filter_customer_country": {
+        "type": "attribute_filter",
+        "using": "label/customer_country",
+        "state": {"include": ["United States"]},
+    }
+}
+
+
+def _drafted_country_filter(**changes: Any) -> dict:
+    drafted = {
+        "type": "attribute_filter",
+        "title": "Customer country",
+        "using": "label/customer_country",
+        "multiselect": False,
+        "state": {"include": ["United States"]},
+    }
+    drafted.update(changes)
+    return {"document_filter_customer_country": {k: v for k, v in drafted.items() if v is not None}}
+
+
+@pytest.mark.parametrize(
+    "drafted",
+    [
+        _drafted_country_filter(),
+        _drafted_country_filter(localIdentifier="f1"),
+        _drafted_country_filter(title=None, multiselect=None),
+        _drafted_country_filter(title="Country"),
+    ],
+    ids=["as-drafted", "extra-key", "display-keys-dropped", "retitled"],
+)
+def test_a_filter_is_compared_only_on_the_keys_the_fixture_states(drafted: dict) -> None:
+    part = _with_filters(_rework_part(), drafted)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _US_ONLY}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_filters_kept"] is True
+
+
+@pytest.mark.parametrize(
+    ("drafted", "failure"),
+    [
+        (
+            _drafted_country_filter(state={}),
+            "filter 'document_filter_customer_country' selects all, expected include ['United States']",
+        ),
+        (
+            _drafted_country_filter(state={"include": []}),
+            "filter 'document_filter_customer_country' selects all, expected include ['United States']",
+        ),
+        (
+            _drafted_country_filter(state={"include": ["Canada"]}),
+            "filter 'document_filter_customer_country' selects include ['Canada'], expected include ['United States']",
+        ),
+        (
+            _drafted_country_filter(state={"exclude": ["United States"]}),
+            "filter 'document_filter_customer_country' selects exclude ['United States'], "
+            "expected include ['United States']",
+        ),
+        (
+            _drafted_country_filter(using="label/customer_state"),
+            "filter 'document_filter_customer_country' has using 'label/customer_state', "
+            "expected 'label/customer_country'",
+        ),
+    ],
+    ids=["selection-dropped", "selection-emptied", "other-value", "inverted", "other-label"],
+)
+def test_a_filter_that_changed_what_it_selects_fails(drafted: dict, failure: str) -> None:
+    part = _with_filters(_rework_part(), drafted)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _US_ONLY}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [failure]
+
+
+def test_an_edit_that_added_a_document_filter_fails() -> None:
+    drafted = {**_drafted_country_filter(), "document_filter_product_category": {"type": "attribute_filter"}}
+    part = _with_filters(_rework_part(), drafted)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _US_ONLY}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == ["the edit added filter 'document_filter_product_category'"]
+
+
+def test_a_filter_of_another_kind_fails() -> None:
+    drafted = _drafted_country_filter(type="text_filter")
+    part = _with_filters(_rework_part(), drafted)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _US_ONLY}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [
+        "filter 'document_filter_customer_country' has type 'text_filter', expected 'attribute_filter'"
+    ]
+
+
+_ALL_TIME = {"document_filter_date": {"type": "date_filter", "granularity": "YEAR", "date": "date"}}
+
+
+@pytest.mark.parametrize(
+    ("drafted", "failure"),
+    [
+        (
+            {"type": "date_filter", "granularity": "YEAR", "date": "date", "from": -1, "to": -1},
+            "filter 'document_filter_date' has from -1, expected None",
+        ),
+        (
+            {"type": "date_filter", "granularity": "MONTH", "date": "date"},
+            "filter 'document_filter_date' has granularity 'MONTH', expected 'YEAR'",
+        ),
+    ],
+    ids=["range-added", "other-granularity"],
+)
+def test_a_date_filter_left_all_time_fails_on_a_drafted_range(drafted: dict, failure: str) -> None:
+    part = _with_filters(_rework_part(), {"document_filter_date": drafted})
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _ALL_TIME}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert failure in evaluation.failures
+
+
+def test_a_date_range_stated_without_granularity_fails_on_a_drafted_granularity() -> None:
+    drafted = {
+        "document_filter_date": {"type": "date_filter", "granularity": "MONTH", "date": "date", "from": -1, "to": -1}
+    }
+    part = _with_filters(_rework_part(), drafted)
+    expected = {
+        "rework": {
+            "base_document_id": _OPEN_DOCUMENT,
+            "filters": {"document_filter_date": {"type": "date_filter", "date": "date", "from": -1, "to": -1}},
+        }
+    }
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == ["filter 'document_filter_date' has granularity 'MONTH', expected None"]
+
+
+def test_a_date_filter_kept_all_time_passes() -> None:
+    part = _with_filters(_rework_part(), {"document_filter_date": dict(_ALL_TIME["document_filter_date"])})
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _ALL_TIME}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_filters_kept"] is True
+
+
+@pytest.mark.parametrize("dataset", ["customer_created_date", None], ids=["other-dataset", "dataset-dropped"])
+def test_a_date_filter_moved_off_its_date_dataset_fails(dataset: str | None) -> None:
+    drafted = {k: v for k, v in _ALL_TIME["document_filter_date"].items() if k != "date"}
+    if dataset is not None:
+        drafted["date"] = dataset
+    part = _with_filters(_rework_part(), {"document_filter_date": drafted})
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _ALL_TIME}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [f"filter 'document_filter_date' has date {dataset!r}, expected 'date'"]
+
+
+@pytest.mark.parametrize(
+    ("drafted", "problem"),
+    [
+        (["United States"], "expected an object"),
+        ("United States", "expected an object"),
+        ({"include": 1}, "expected a list of values under 'include'"),
+        ({"exclude": "Canada"}, "expected a list of values under 'exclude'"),
+        ([], "expected an object"),
+        ("", "expected an object"),
+        (False, "expected an object"),
+        (
+            {"include": ["United States"], "exclude": ["Canada"]},
+            "expected either 'include' or 'exclude', not both",
+        ),
+        ({"values": ["United States"]}, "expected only 'include' or 'exclude'"),
+    ],
+    ids=[
+        "list",
+        "string",
+        "include-not-a-list",
+        "exclude-not-a-list",
+        "empty-list",
+        "empty-string",
+        "false",
+        "both",
+        "unknown-key",
+    ],
+)
+def test_a_drafted_state_that_is_not_a_selection_fails(drafted: Any, problem: str) -> None:
+    part = _with_filters(_rework_part(), _drafted_country_filter(state=drafted))
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": _US_ONLY}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [f"filter 'document_filter_customer_country' has state {drafted!r}, {problem}"]
+
+
+@pytest.mark.parametrize("drafted", [[], "", False], ids=["empty-list", "empty-string", "false"])
+def test_a_falsey_drafted_state_does_not_pass_as_all(drafted: Any) -> None:
+    unrestricted = {"type": "attribute_filter", "using": "label/customer_country", "state": {}}
+    part = _with_filters(_rework_part(), _drafted_country_filter(state=drafted))
+    expected = {
+        "rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {"document_filter_customer_country": unrestricted}}
+    }
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+
+
+@pytest.mark.parametrize(
+    ("drafted", "kept"), [(None, True), ({"include": ["United States"]}, False)], ids=["all", "one-value"]
+)
+def test_a_null_expected_state_means_all(drafted: Any, kept: bool) -> None:
+    unrestricted = {"type": "attribute_filter", "using": "label/customer_country", "state": None}
+    part = _with_filters(_rework_part(), _drafted_country_filter(state=drafted))
+    expected = {
+        "rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {"document_filter_customer_country": unrestricted}}
+    }
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is kept
+
+
+def test_a_selection_is_compared_without_its_order() -> None:
+    both = {
+        "type": "attribute_filter",
+        "using": "label/customer_country",
+        "state": {"include": ["United States", "Canada"]},
+    }
+    reordered = _drafted_country_filter(state={"include": ["Canada", "United States"]})
+    part = _with_filters(_rework_part(), reordered)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {"document_filter_customer_country": both}}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_filters_kept"] is True
+
+
+def test_a_selection_with_a_value_missing_fails() -> None:
+    both = {
+        "type": "attribute_filter",
+        "using": "label/customer_country",
+        "state": {"include": ["United States", "Canada"]},
+    }
+    part = _with_filters(_rework_part(), _drafted_country_filter())
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {"document_filter_customer_country": both}}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [
+        "filter 'document_filter_customer_country' selects include ['United States'], "
+        "expected include ['United States', 'Canada']"
+    ]
+
+
+@pytest.mark.parametrize("drafted", [[{"type": "attribute_filter"}], "none"], ids=["list", "string"])
+def test_drafted_filters_that_are_not_keyed_by_id_fail_an_expectation_of_none(drafted: Any) -> None:
+    part = _with_filters(_rework_part(), drafted)
+    expected = {"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": {}}}
+    evaluation = _evaluate(part, expected=expected)
+    assert evaluation.strict_checks["document_filters_kept"] is False
+    assert evaluation.failures == [f"the document filters are {drafted!r}, expected an object keyed by filter id"]
+
+
+def test_a_text_filter_state_is_compared_as_written() -> None:
+    expected_filter = {"document_filter_city": {"type": "text_filter", "state": {"values": ["Prague"]}}}
+    drafted = {"document_filter_city": {"type": "text_filter", "state": {"values": ["Brno"]}}}
+    evaluation = _evaluate(
+        _with_filters(_rework_part(), drafted),
+        expected={"rework": {"base_document_id": _OPEN_DOCUMENT, "filters": expected_filter}},
+    )
+    assert evaluation.failures == [
+        "filter 'document_filter_city' has state {'values': ['Brno']}, expected {'values': ['Prague']}"
+    ]
+
+
+# ── a chart the edit adds on a new page ─────────────────────────────────────
+
+_NEW_PAGE_REWORK = {
+    "base_document_id": _OPEN_DOCUMENT,
+    "keeps_pages": ["page1", "page2"],
+    "new_page_charts": [_RETURNS_BY_CATEGORY],
+}
+
+
+def test_a_chart_on_a_new_page_passes() -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY),
+    ]
+    evaluation = _evaluate(_rework_part(pages), expected={"rework": _NEW_PAGE_REWORK}, tool=_draft_result(page_count=3))
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_new_page_charts_placed"] is True
+
+
+def test_a_chart_pushed_onto_an_old_page_fails() -> None:
+    pages = [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND, _RETURNS_BY_CATEGORY)]
+    evaluation = _evaluate(_rework_part(pages), expected={"rework": _NEW_PAGE_REWORK})
+    assert evaluation.strict_checks["document_new_page_charts_placed"] is False
+    assert evaluation.failures == [
+        "chart 'returns_by_category' must be on a new page, but it is only on page(s) ['page2'] of the open document"
+    ]
+
+
+def test_a_chart_on_both_an_old_and_a_new_page_passes() -> None:
+    pages = [
+        _v2_cover_page(),
+        _v2_content_page("page2", _REVENUE_TREND, _RETURNS_BY_CATEGORY),
+        _v2_content_page("page3", _RETURNS_BY_CATEGORY),
+    ]
+    evaluation = _evaluate(_rework_part(pages), expected={"rework": _NEW_PAGE_REWORK}, tool=_draft_result(page_count=3))
+    assert evaluation.strict_checks["document_new_page_charts_placed"] is True
+
+
+def test_a_chart_on_a_hidden_new_page_fails() -> None:
+    hidden = _v2_content_page("page3", _RETURNS_BY_CATEGORY)
+    hidden["visible"] = False
+    pages = [_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND), hidden]
+    evaluation = _evaluate(_rework_part(pages), expected={"rework": _NEW_PAGE_REWORK})
+    assert evaluation.strict_checks["document_new_page_charts_placed"] is False
+    assert evaluation.failures == ["chart 'returns_by_category' must be on a new page, but no visible page has it"]
 
 
 def test_a_document_without_filters_keeps_an_expectation_of_none() -> None:
@@ -628,7 +959,13 @@ def test_a_document_without_filters_keeps_an_expectation_of_none() -> None:
 def test_rework_checks_are_published_only_for_what_the_fixture_states() -> None:
     evaluation = _evaluate(_rework_part(), expected={"rework": {"base_document_id": _OPEN_DOCUMENT}})
     assert "document_reworks_open" in evaluation.strict_checks
-    for name in ("document_pages_kept", "document_page_charts_kept", "document_title_correct", "document_filters_kept"):
+    for name in (
+        "document_pages_kept",
+        "document_page_charts_kept",
+        "document_new_page_charts_placed",
+        "document_title_correct",
+        "document_filters_kept",
+    ):
         assert name not in evaluation.strict_checks
     assert evaluation.strict_pass
 
@@ -803,6 +1140,51 @@ def test_a_rework_that_does_not_match_the_open_document_fails_before_any_request
     assert client.sent == []
 
 
+def _open_document_with(pages: list[dict]) -> dict:
+    return {"view": {"document": {"id": _OPEN_DOCUMENT, "definition": _v2_document(pages)}}}
+
+
+def test_a_new_page_rework_must_list_every_open_page(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    user_context = _open_document_with([_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND)])
+    expected = {"rework": {**_NEW_PAGE_REWORK, "keeps_pages": ["page1"]}}
+    with pytest.raises(ValueError, match=r"keeps_pages to list every page of the open document; missing \['page2'\]"):
+        run_agentic_document_skill("https://h", "tok", "ws", "Add a page", expected, user_context=user_context)
+    assert client.sent == []
+
+
+def test_a_new_page_rework_without_the_open_pages_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    user_context = {"view": {"document": {"id": _OPEN_DOCUMENT, "title": "Q3 review"}}}
+    with pytest.raises(ValueError, match="needs the open document's pages"):
+        run_agentic_document_skill(
+            "https://h", "tok", "ws", "Add a page", {"rework": _NEW_PAGE_REWORK}, user_context=user_context
+        )
+    assert client.sent == []
+
+
+def test_a_new_page_rework_over_a_hidden_open_page_fails_before_any_request(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    hidden = {**_v2_content_page("page3", _REVENUE_TREND), "visible": False}
+    user_context = _open_document_with([_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND), hidden])
+    expected = {"rework": _NEW_PAGE_REWORK}
+    with pytest.raises(ValueError, match=r"open document with hidden pages \['page3'\]"):
+        run_agentic_document_skill("https://h", "tok", "ws", "Add a page", expected, user_context=user_context)
+    assert client.sent == []
+
+
+def test_a_new_page_rework_listing_every_open_page_reaches_the_chat(monkeypatch: pytest.MonkeyPatch) -> None:
+    client = _ScriptedChatClient([_drafting_turn()])
+    _install_client(monkeypatch, client)
+    user_context = _open_document_with([_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND)])
+    expected = {"rework": _NEW_PAGE_REWORK}
+    run_agentic_document_skill("https://h", "tok", "ws", "Add a page", expected, user_context=user_context)
+    assert client.sent == ["Add a page"]
+
+
 def test_a_rework_of_the_open_document_reaches_the_chat(monkeypatch: pytest.MonkeyPatch) -> None:
     client = _ScriptedChatClient([_drafting_turn()])
     _install_client(monkeypatch, client)
@@ -920,6 +1302,90 @@ def test_the_document_format_is_recorded_in_the_run_metadata(
         ),
         ({"rework": {"base_document_id": "q3", "title": " "}}, "rework.title must be"),
         ({"rework": {"base_document_id": "q3", "filters": ["customer_country"]}}, "rework.filters must be"),
+        ({"rework": {"base_document_id": "q3", "filters": {"f1": {}}}}, r"rework.filters\['f1'\] must state at least"),
+        (
+            {"rework": {"base_document_id": "q3", "filters": {"f1": {"state": {"include": ["US"]}}}}},
+            r"rework.filters\['f1'\] must state at least the filter's 'type'",
+        ),
+        (
+            {
+                "rework": {
+                    "base_document_id": "q3",
+                    "filters": {"f1": {"type": "attribute_filter", "using": "label/country", "state": ["US"]}},
+                }
+            },
+            r"rework.filters\['f1'\].state is \['US'\], expected an object",
+        ),
+        (
+            {
+                "rework": {
+                    "base_document_id": "q3",
+                    "filters": {
+                        "f1": {"type": "attribute_filter", "using": "label/country", "state": {"include": "US"}}
+                    },
+                }
+            },
+            r"rework.filters\['f1'\].state is \{'include': 'US'\}, expected a list of values under 'include'",
+        ),
+        (
+            {
+                "rework": {
+                    "base_document_id": "q3",
+                    "filters": {
+                        "f1": {"type": "attribute_filter", "using": "label/country", "state": {"values": ["US"]}}
+                    },
+                }
+            },
+            r"rework.filters\['f1'\].state is \{'values': \['US'\]\}, expected only 'include' or 'exclude'",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "filters": {"f1": {"type": "attribute_filter", "state": None}}}},
+            r"rework.filters\['f1'\] of type 'attribute_filter' leaves out \['using'\]",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "filters": {"f1": {"type": "attribute_filter", "using": "label/c"}}}},
+            r"rework.filters\['f1'\] of type 'attribute_filter' leaves out \['state'\]",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "filters": {"d": {"type": "date_filter", "granularity": "YEAR"}}}},
+            r"rework.filters\['d'\] of type 'date_filter' leaves out \['date'\]",
+        ),
+        (
+            {
+                "rework": {
+                    "base_document_id": "q3",
+                    "filters": {"f1": {"type": "atribute_filter", "using": "label/country", "state": None}},
+                }
+            },
+            r"rework.filters\['f1'\] has type 'atribute_filter'; known: \['attribute_filter', 'date_filter'\]",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "filters": {"m": {"type": "measure_value_filter"}}}},
+            r"rework.filters\['m'\] has type 'measure_value_filter'",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "keeps_pages": ["p2"], "new_page_charts": []}},
+            "new_page_charts is empty",
+        ),
+        (
+            {"rework": {"base_document_id": "q3", "keeps_pages": ["p2"], "new_page_charts": [" "]}},
+            "every rework.new_page_charts entry must be a chart id",
+        ),
+        ({"rework": {"base_document_id": "q3", "new_page_charts": ["c1"]}}, "new_page_charts needs rework.keeps_pages"),
+        ({"period": {"from": -6, "to": -1}}, "period needs both 'start' and 'end', or a relative 'granularity'"),
+        ({"period": {"granularity": "GDC.time.month", "from": -6, "to": -1}}, "must be one AaC writes"),
+        ({"period": {"granularity": "WEEK", "from": -2, "to": -1}}, "must be one AaC writes"),
+        ({"period": {"granularity": ["MONTH"], "from": -6, "to": -1}}, "must be one AaC writes"),
+        ({"period": {"granularity": "MONTH", "from": "-6", "to": -1}}, "a relative period needs whole numbers"),
+        ({"period": {"granularity": "MONTH", "from": True, "to": -1}}, "a relative period needs whole numbers"),
+        (
+            {"period": {"granularity": "MONTH", "from": -6, "to": -1, "start": "2026-01-01"}},
+            r"a relative period states only 'granularity', 'from' and 'to', got \['start'\] too",
+        ),
+        (
+            {"period": {"start": "2026-01-01", "end": "2026-06-30", "type": "absolute"}},
+            r"an absolute period states only 'start' and 'end', got \['type'\] too",
+        ),
     ],
 )
 def test_an_unusable_fixture_is_rejected_before_any_request(expected: dict, message: str) -> None:
@@ -1617,16 +2083,153 @@ def test_a_bare_visualization_id_is_matched_as_in_as_code() -> None:
 
 
 def test_a_relative_period_never_matches_the_expected_dates() -> None:
-    relative = {"type": "relative", "granularity": "GDC.time.month", "from": -6, "to": -1}
+    relative = {"granularity": "MONTH", "from": -6, "to": -1}
     part = _v2_document_part(period=relative)
     evaluation = _evaluate(part, expected={"period": _PERIOD})
     assert evaluation.strict_checks["document_period_correct"] is False
     assert evaluation.failures == [
-        "the document covers the relative range GDC.time.month -6 to -1, expected 2026-01-01 to 2026-06-30"
+        "the document covers the relative range MONTH -6 to -1, expected 2026-01-01 to 2026-06-30"
     ]
-    assert render_document_text(part["document"]).splitlines()[1] == (
-        "Period: the relative range GDC.time.month -6 to -1"
-    )
+    assert render_document_text(part["document"]).splitlines()[1] == ("Period: the relative range MONTH -6 to -1")
+
+
+# As gen-ai drafts "the last 6 full months": AaC writes a relative period with its granularity and no type.
+_RELATIVE = {"granularity": "MONTH", "from": -6, "to": -1}
+
+
+def test_a_relative_period_kept_as_stated_passes() -> None:
+    evaluation = _evaluate(_v2_document_part(period=dict(_RELATIVE)), expected={"period": _RELATIVE})
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_period_correct"] is True
+
+
+@pytest.mark.parametrize(
+    ("period", "covers"),
+    [
+        ({**_RELATIVE, "from": -12}, "the relative range MONTH -12 to -1"),
+        ({**_RELATIVE, "granularity": "QUARTER"}, "the relative range QUARTER -6 to -1"),
+        ({"from": "2026-05-01", "to": "2026-10-31"}, "2026-05-01 to 2026-10-31"),
+    ],
+    ids=["shifted", "other-granularity", "made-absolute"],
+)
+def test_a_relative_period_that_changed_fails(period: dict, covers: str) -> None:
+    evaluation = _evaluate(_v2_document_part(period=period), expected={"period": _RELATIVE})
+    assert evaluation.strict_checks["document_period_correct"] is False
+    assert evaluation.failures == [f"the document covers {covers}, expected the relative range MONTH -6 to -1"]
+
+
+def test_a_relative_period_never_matches_a_v1_document() -> None:
+    evaluation = _evaluate(_document_part(), expected={"period": _RELATIVE})
+    assert evaluation.strict_checks["document_period_correct"] is False
+
+
+def test_the_simulated_reply_states_a_relative_period() -> None:
+    reply = build_simulated_reply({"period": _RELATIVE})
+    assert "Period: the relative range MONTH -6 to -1." in reply
+
+
+# As gen-ai drafts a document from a dashboard, in AaC: a chart the dashboard's date filter reaches applies
+# the period on its own date dataset, and one it does not reach keeps a `date` but ignores the period.
+_GOAL, _SEASONALITY = "sales_goal", "seasonality"
+_CHART_PERIODS = {_REVENUE_TREND: "date", _GOAL: "customer_created_date", _SEASONALITY: None}
+
+
+def _with_chart_dates(page: dict, dates: dict[str, Any]) -> dict:
+    """``page`` with each chart's widget given a ``date``, or ``ignore_document_period`` where the value is None."""
+    for node in page["layout"]["children"][1]["children"][0]["children"]:
+        chart = node["visualization"]
+        node["date"] = dates[chart] if dates[chart] is not None else "date"
+        if dates[chart] is None:
+            node["ignore_document_period"] = True
+    return page
+
+
+def _dashboard_document_part(dates: dict[str, Any] | None = None) -> dict:
+    charts = dates if dates is not None else _CHART_PERIODS
+    page = _with_chart_dates(_v2_content_page("page2", *charts, bare_ids=True), charts)
+    return _v2_document_part([_v2_cover_page(), page])
+
+
+def test_charts_that_apply_the_period_as_the_dashboard_does_pass() -> None:
+    evaluation = _evaluate(_dashboard_document_part(), expected={"chart_periods": _CHART_PERIODS})
+    assert evaluation.failures == []
+    assert evaluation.strict_checks["document_chart_periods_correct"] is True
+
+
+@pytest.mark.parametrize(
+    ("dates", "failure"),
+    [
+        (
+            {**_CHART_PERIODS, _SEASONALITY: "date"},
+            "chart 'seasonality' applies the period on 'date', expected it to ignore the period",
+        ),
+        (
+            {**_CHART_PERIODS, _GOAL: "date"},
+            "chart 'sales_goal' applies the period on 'date', expected it on 'customer_created_date'",
+        ),
+        (
+            {**_CHART_PERIODS, _GOAL: None},
+            "chart 'sales_goal' ignores the period, expected it on 'customer_created_date'",
+        ),
+        ({**_CHART_PERIODS, _REVENUE_TREND: None}, "chart 'revenue_trend' ignores the period, expected it on 'date'"),
+    ],
+    ids=["unreached-chart-dated", "other-date", "reached-chart-ignores", "ignores-on-its-own-date"],
+)
+def test_a_chart_that_applies_the_period_elsewhere_fails(dates: dict, failure: str) -> None:
+    evaluation = _evaluate(_dashboard_document_part(dates), expected={"chart_periods": _CHART_PERIODS})
+    assert evaluation.strict_checks["document_chart_periods_correct"] is False
+    assert evaluation.failures == [failure]
+
+
+def test_a_chart_left_out_of_the_document_fails_its_period_check() -> None:
+    dates = {_REVENUE_TREND: "date", _GOAL: "customer_created_date"}
+    evaluation = _evaluate(_dashboard_document_part(dates), expected={"chart_periods": _CHART_PERIODS})
+    assert evaluation.strict_checks["document_chart_periods_correct"] is False
+    assert evaluation.failures == [
+        "chart 'seasonality' is not in the document, so where it applies the period is unknown"
+    ]
+
+
+def test_every_placement_of_a_chart_must_apply_the_period_as_stated() -> None:
+    reached = _with_chart_dates(_v2_content_page("page2", _SEASONALITY, bare_ids=True), {_SEASONALITY: None})
+    again = _with_chart_dates(_v2_content_page("page3", _SEASONALITY, bare_ids=True), {_SEASONALITY: "date"})
+    part = _v2_document_part([_v2_cover_page(), reached, again])
+    evaluation = _evaluate(part, expected={"chart_periods": {_SEASONALITY: None}})
+    assert evaluation.strict_checks["document_chart_periods_correct"] is False
+
+
+def test_a_chart_only_on_a_hidden_page_is_not_in_the_document() -> None:
+    hidden_page = _v2_content_page("page3", _SEASONALITY, bare_ids=True)
+    hidden = {**_with_chart_dates(hidden_page, {_SEASONALITY: None}), "visible": False}
+    part = _v2_document_part([_v2_cover_page(), _v2_content_page("page2", _REVENUE_TREND), hidden])
+    evaluation = _evaluate(part, expected={"chart_periods": {_SEASONALITY: None}})
+    assert evaluation.strict_checks["document_chart_periods_correct"] is False
+
+
+def test_chart_periods_are_not_scored_on_a_v1_document() -> None:
+    evaluation = _evaluate(_document_part(), expected={"chart_periods": {_REVENUE_TREND: "date"}})
+    assert evaluation.strict_checks["document_chart_periods_correct"] is False
+    assert evaluation.failures == ["where a chart applies the period is scored on aac-v2 documents only"]
+
+
+def test_chart_periods_are_published_only_when_stated() -> None:
+    assert "document_chart_periods_correct" not in _evaluate(_dashboard_document_part()).strict_checks
+
+
+@pytest.mark.parametrize(
+    ("chart_periods", "message"),
+    [
+        ({}, "chart_periods must map chart ids"),
+        ([_REVENUE_TREND], "chart_periods must map chart ids"),
+        ({" ": "date"}, "every chart_periods key must be a chart id"),
+        ({_REVENUE_TREND: ""}, r"chart_periods\['revenue_trend'\] must be a date dataset id or null"),
+        ({_REVENUE_TREND: 1}, r"chart_periods\['revenue_trend'\] must be a date dataset id or null"),
+    ],
+    ids=["empty", "list", "blank-chart", "blank-dataset", "not-a-dataset"],
+)
+def test_unusable_chart_periods_are_rejected(chart_periods: Any, message: str) -> None:
+    with pytest.raises(ValueError, match=message):
+        _validate_expectation({"chart_periods": chart_periods})
 
 
 def test_a_period_that_is_not_an_object_fails_instead_of_crashing() -> None:
