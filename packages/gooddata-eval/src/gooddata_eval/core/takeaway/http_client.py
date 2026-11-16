@@ -17,8 +17,10 @@ from typing import Any
 
 import httpx
 
-from gooddata_eval.core._retry import RETRYABLE_STATUS_CODES, retry_transient
+from gooddata_eval.core._retry import is_retryable_request_error, is_transient, retry_transient
 from gooddata_eval.core.models import ChatResult, DatasetItem, TakeawayInput, TakeawayVisualization
+
+__all__ = ["TakeawayClient", "is_transient"]
 
 _PATH = "/api/v1/ai/workspaces/{workspace_id}/takeaway"
 
@@ -27,29 +29,6 @@ def _visualization_body(visualization: str | TakeawayVisualization) -> str | dic
     if isinstance(visualization, str):
         return visualization
     return {"visualizationId": visualization.visualization_id, "filters": visualization.filters}
-
-
-# Failures that say nothing about the request. A read timeout is left out: the page was
-# being computed, and retrying spends the whole timeout again on every attempt.
-_RETRYABLE_TRANSPORT_ERRORS = (httpx.ConnectError, httpx.ConnectTimeout, httpx.RemoteProtocolError, httpx.PoolTimeout)
-
-
-def _is_retryable(exc: Exception) -> bool:
-    if isinstance(exc, httpx.HTTPStatusError):
-        return exc.response.status_code in RETRYABLE_STATUS_CODES
-    return isinstance(exc, _RETRYABLE_TRANSPORT_ERRORS)
-
-
-def is_transient(exc: httpx.HTTPError) -> bool:
-    """Whether a failure left after the client's retries says nothing about the request.
-
-    429, 5xx and transport failures (a read timeout included) are transient; any other 4xx
-    (flag off, no agent, invalid body) and an unsupported URL scheme are setup problems.
-    """
-    if isinstance(exc, httpx.HTTPStatusError):
-        status = exc.response.status_code
-        return status == 429 or status >= 500
-    return isinstance(exc, httpx.TransportError) and not isinstance(exc, httpx.UnsupportedProtocol)
 
 
 def _request_body(ti: TakeawayInput) -> dict[str, Any]:
@@ -116,7 +95,7 @@ class TakeawayClient:
                 )
             return resp
 
-        data = retry_transient(_post, is_retryable=_is_retryable).json()
+        data = retry_transient(_post, is_retryable=is_retryable_request_error).json()
         return ChatResult(text_response=data.get("takeaway") or "", raw_response=data)
 
     def close(self) -> None:

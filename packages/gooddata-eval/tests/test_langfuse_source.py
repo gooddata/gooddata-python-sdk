@@ -323,3 +323,55 @@ def test_a_blank_declaration_does_not_hide_a_real_one_behind_it():
     assert _infer_test_kind({"test_kind": "agentic_search"}, "visualization", {"test_kind": "agentic_guardrail"}) == (
         "agentic_search"
     )
+
+
+def test_langfuse_item_catalog_input_from_metadata_sets_the_kind() -> None:
+    raw = {
+        "id": "lf-cat-1",
+        "datasetName": "ds",
+        "input": "Title for the metric 'ARPU'",
+        "metadata": {"catalog_input": {"object_type": "Metric", "object_id": "arpu", "output": "title"}},
+        "expectedOutput": {"must_include": ["average revenue"]},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "catalog_metadata"
+    assert item.catalog_input is not None
+    assert item.catalog_input.object_id == "arpu"
+
+
+def test_langfuse_item_invalid_catalog_input_raises() -> None:
+    raw = {
+        "id": "lf-cat-2",
+        "datasetName": "ds",
+        "input": "Title",
+        "metadata": {"catalog_input": {"object_type": "Metric", "object_id": "arpu", "output": "summary"}},
+        "expectedOutput": {},
+    }
+    with pytest.raises(ValueError, match="invalid catalog_input"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+def test_langfuse_item_catalog_input_that_is_not_an_object_raises() -> None:
+    raw = {
+        "id": "lf-cat-3",
+        "datasetName": "ds",
+        "input": "Title",
+        "metadata": {"catalog_input": "arpu"},
+        "expectedOutput": {},
+    }
+    with pytest.raises(ValueError, match="must be a JSON object"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+def test_langfuse_item_explicit_test_kind_beats_catalog_input() -> None:
+    raw = {
+        "id": "lf-cat-4",
+        "datasetName": "ds",
+        "input": "Title",
+        "metadata": {
+            "test_kind": "general_question",
+            "catalog_input": {"object_type": "Metric", "object_id": "arpu", "output": "title"},
+        },
+        "expectedOutput": {},
+    }
+    assert _item_from_raw(raw, dataset_name="ds", test_kind="visualization").test_kind == "general_question"

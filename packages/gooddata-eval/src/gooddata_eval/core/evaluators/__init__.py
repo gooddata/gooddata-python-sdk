@@ -21,7 +21,7 @@ _EAGER_EVALUATORS: dict[str, Evaluator] = {
 }
 
 # LLM-judge evaluators (general_question, guardrail, dashboard_summary, knowledge_question,
-# document_takeaway)
+# document_takeaway, catalog_metadata)
 # require the [llm-judge] extra. Their modules are imported lazily on first use so the CLI
 # starts without openai.
 #
@@ -36,6 +36,7 @@ _LAZY_EVALUATOR_MODULES: dict[str, str] = {
     "dashboard_summary": "gooddata_eval.core.evaluators.summary",
     "knowledge_question": "gooddata_eval.core.evaluators.general_question",
     "document_takeaway": "gooddata_eval.core.evaluators.takeaway",
+    "catalog_metadata": "gooddata_eval.core.evaluators.catalog_metadata",
 }
 _LAZY_EVALUATOR_CLASSES: dict[str, str] = {
     "general_question": "GeneralQuestionEvaluator",
@@ -43,6 +44,7 @@ _LAZY_EVALUATOR_CLASSES: dict[str, str] = {
     "dashboard_summary": "DashboardSummaryEvaluator",
     "knowledge_question": "GeneralQuestionEvaluator",
     "document_takeaway": "DocumentTakeawayEvaluator",
+    "catalog_metadata": "CatalogMetadataEvaluator",
 }
 
 
@@ -69,7 +71,7 @@ def supported_test_kinds() -> set[str]:
     """Return all supported test_kind values.
 
     LLM-judge kinds (general_question, guardrail, dashboard_summary,
-    knowledge_question, document_takeaway) are excluded when the [llm-judge] extra (openai) is
+    knowledge_question, document_takeaway, catalog_metadata) are excluded when the [llm-judge] extra (openai) is
     not installed — those items are skipped rather than erroring out mid-run.
     """
     kinds = set(_EAGER_EVALUATORS)

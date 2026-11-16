@@ -132,8 +132,8 @@ gd-eval run \
 | `--runs K` | `2` | Independent runs per item. |
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
-| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
-| `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
+| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway` and `catalog_metadata`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
+| `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary`, `document_takeaway` and `catalog_metadata` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
 (`agentic_metric_skill`, `agentic_alert_skill`, `agentic_conversation`, `agentic_kda_skill`) always run one at a
@@ -708,7 +708,8 @@ A dataset is a folder of `.json` files, one per question:
 ```
 
 Supported `test_kind` values: `visualization`, `metric_skill`, `alert_skill`,
-`search_tool`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway`.
+`search_tool`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway`,
+`catalog_metadata`.
 
 ### `visualization` items
 
@@ -866,6 +867,51 @@ and raises only when no run completed. A read timeout is not retried, and the CI
 point records it as an errored run too. Any other 4xx and an unsupported URL scheme are
 never retried and fail the item in both.
 
+### `catalog_metadata` items
+
+Catalog items call the Analytics Catalog generate endpoints
+(`POST /api/v1/actions/workspaces/{ws}/ai/analyticsCatalog/generateTitle` or
+`/generateDescription`) for one object, named by a `catalog_input` block. In a Langfuse
+dataset the block goes in the item's `metadata` or its `input` object (`input` wins); a
+value that is not an object fails the item. An item carrying
+`catalog_input` is a `catalog_metadata` item unless it declares another `test_kind`. The
+judge reads the item's `question` as the ground truth, so state the object's real metadata
+there in plain words (what a metric computes, which filters a visualization has).
+
+```json
+{
+  "id": "catalog-001",
+  "dataset_name": "analytics_catalog_generate",
+  "test_kind": "catalog_metadata",
+  "question": "Description for the metric '# of Single Orders'. Its MAQL counts customers who placed exactly one order.",
+  "catalog_input": {"object_type": "Metric", "object_id": "of_orders_1", "output": "description"},
+  "expected_output": {
+    "must_include": ["Says that it counts customers who placed exactly one order."],
+    "must_not_include": ["Says the metric counts orders rather than customers."],
+    "rubric": []
+  }
+}
+```
+
+`object_type` is one of `Visualization`, `Dashboard`, `Metric`, `Fact`, `Attribute`;
+`output` is `title` or `description`; unknown keys are rejected. Every `expected_output`
+key is optional:
+
+- `expect_note` — `true` for an object the endpoint must decline: the item passes on no
+  text plus a non-empty `note`, and nothing else is graded.
+- `format` — overrides of the deterministic checks, which gate pass/fail: `max_words`
+  (title 10, description 80), `max_sentences` (title 1, description 4), `no_end_period`
+  (title), `no_markup`, `no_ids`. `false` or `null` switches a check off; unknown keys are
+  rejected. A generated text (`generated`) and an empty `note` (`no_note`) always apply.
+- `must_include`, `must_not_include`, `rubric` — judge criteria, graded like
+  `dashboard_summary`. Criteria may name the object's metadata; the judge sees no data.
+
+A 200 answer with no usable text (a null value without a note, or the placeholder
+`"string"`) is asked again once; `unusable_retries` in the item detail records it, with
+`word_count`. The judge steps are calibrated with `make calibrate-catalog-metadata` (needs
+`OPENAI_API_KEY`); re-run it after changing them. Request errors are handled as for
+`document_takeaway`; the CI entry point is `evaluate_catalog_metadata`.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
@@ -966,6 +1012,7 @@ from that turn on until another turn changes it, as the attached context does in
 | `guardrail` | Refusal/redirect (visualization response auto-fails) | `[llm-judge]` |
 | `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
 | `document_takeaway` | One short takeaway for a page (via `/takeaway` endpoint): deterministic format checks plus a rubric scored by LLM | `[llm-judge]` |
+| `catalog_metadata` | Analytics Catalog title or description for one object (via the `analyticsCatalog/generate*` endpoints): format checks plus a rubric scored by LLM | `[llm-judge]` |
 
 ## Optional extras
 

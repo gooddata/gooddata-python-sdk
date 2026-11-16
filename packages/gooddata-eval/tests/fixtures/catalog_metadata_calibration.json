@@ -1,0 +1,290 @@
+[
+  {
+    "label": "m-single-orders-desc include_0 pass",
+    "question": "Description for the metric '# of Single Orders'. Its MAQL sums Total Customers where # of Orders = 1, so it counts customers who placed exactly one order. No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says that it counts customers (people), namely customers who placed exactly one order.",
+    "text": "Number of customers who placed exactly one order. This metric is useful for measuring single-order customer activity and identifying customers who have not made repeat purchases.",
+    "want": "pass"
+  },
+  {
+    "label": "m-single-orders-desc include_0 fail",
+    "question": "Description for the metric '# of Single Orders'. Its MAQL sums Total Customers where # of Orders = 1, so it counts customers who placed exactly one order. No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says that it counts customers (people), namely customers who placed exactly one order.",
+    "text": "Counts the number of single orders placed, giving a quick view of order volume.",
+    "want": "fail"
+  },
+  {
+    "label": "m-single-orders-desc exclude_0 pass",
+    "question": "Description for the metric '# of Single Orders'. Its MAQL sums Total Customers where # of Orders = 1, so it counts customers who placed exactly one order. No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says the metric counts orders (for example single orders or one-off orders) rather than customers.",
+    "text": "Number of customers who placed exactly one order. This metric is useful for measuring single-order customer activity and identifying customers who have not made repeat purchases.",
+    "want": "pass"
+  },
+  {
+    "label": "m-single-orders-desc exclude_0 fail",
+    "question": "Description for the metric '# of Single Orders'. Its MAQL sums Total Customers where # of Orders = 1, so it counts customers who placed exactly one order. No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says the metric counts orders (for example single orders or one-off orders) rather than customers.",
+    "text": "Counts orders that contain a single item, showing how many one-off orders were placed.",
+    "want": "fail"
+  },
+  {
+    "label": "m-orders-all-time-desc include_0 pass",
+    "question": "Description for the metric 'Orders all time'. Its MAQL is '# of Orders WITHOUT PF', i.e. the order count ignoring the filters applied to the report. No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes it as a count of orders.",
+    "text": "Total number of orders across all time and statuses, unaffected by filters applied to the surrounding report or dashboard.",
+    "want": "pass"
+  },
+  {
+    "label": "m-orders-all-time-desc include_0 fail",
+    "question": "Description for the metric 'Orders all time'. Its MAQL is '# of Orders WITHOUT PF', i.e. the order count ignoring the filters applied to the report. No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes it as a count of orders.",
+    "text": "Total revenue generated across all time.",
+    "want": "fail"
+  },
+  {
+    "label": "m-orders-all-time-desc exclude_0 pass",
+    "question": "Description for the metric 'Orders all time'. Its MAQL is '# of Orders WITHOUT PF', i.e. the order count ignoring the filters applied to the report. No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "States that the count covers only one period, such as the current year, a month or a recent period.",
+    "text": "Total number of orders across all time and statuses, unaffected by filters applied to the surrounding report or dashboard.",
+    "want": "pass"
+  },
+  {
+    "label": "m-orders-all-time-desc exclude_0 fail",
+    "question": "Description for the metric 'Orders all time'. Its MAQL is '# of Orders WITHOUT PF', i.e. the order count ignoring the filters applied to the report. No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "States that the count covers only one period, such as the current year, a month or a recent period.",
+    "text": "Counts orders placed in the current year.",
+    "want": "fail"
+  },
+  {
+    "label": "m-return-customers-desc include_0 pass",
+    "question": "Description for the metric 'Return Customers'. Its MAQL is Active Customers minus New Customers, i.e. active customers who are not new (returning customers). No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes returning (repeat) customers: active customers who are not new.",
+    "text": "Number of returning customers in the selected period: active customers who transacted minus those placing their first order during that period.",
+    "want": "pass"
+  },
+  {
+    "label": "m-return-customers-desc include_0 fail",
+    "question": "Description for the metric 'Return Customers'. Its MAQL is Active Customers minus New Customers, i.e. active customers who are not new (returning customers). No existing description.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes returning (repeat) customers: active customers who are not new.",
+    "text": "Counts customers who returned at least one product.",
+    "want": "fail"
+  },
+  {
+    "label": "m-return-customers-desc exclude_0 pass",
+    "question": "Description for the metric 'Return Customers'. Its MAQL is Active Customers minus New Customers, i.e. active customers who are not new (returning customers). No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Describes it as customers who returned products or as product returns.",
+    "text": "Number of returning customers in the selected period: active customers who transacted minus those placing their first order during that period.",
+    "want": "pass"
+  },
+  {
+    "label": "m-return-customers-desc exclude_0 fail",
+    "question": "Description for the metric 'Return Customers'. Its MAQL is Active Customers minus New Customers, i.e. active customers who are not new (returning customers). No existing description.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Describes it as customers who returned products or as product returns.",
+    "text": "Counts customers who sent back purchased products for a refund.",
+    "want": "fail"
+  },
+  {
+    "label": "v-order-details-processed-desc include_0 pass",
+    "question": "Description for the visualization 'Order Details - Processed' (table of units and unit price by order id, order line, order status and product name). Its filter EXCLUDES order status 'Processed' and 'Canceled', so despite the title it shows no processed orders.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says that processed and canceled orders are excluded.",
+    "text": "A table of order-line details showing total unit quantity and unit price by order, order line, status, and product. It excludes orders with Processed or Canceled status to focus on other order statuses.",
+    "want": "pass"
+  },
+  {
+    "label": "v-order-details-processed-desc include_0 fail",
+    "question": "Description for the visualization 'Order Details - Processed' (table of units and unit price by order id, order line, order status and product name). Its filter EXCLUDES order status 'Processed' and 'Canceled', so despite the title it shows no processed orders.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says that processed and canceled orders are excluded.",
+    "text": "Table of order lines with units and unit price by order, status and product.",
+    "want": "fail"
+  },
+  {
+    "label": "v-order-details-processed-desc exclude_0 pass",
+    "question": "Description for the visualization 'Order Details - Processed' (table of units and unit price by order id, order line, order status and product name). Its filter EXCLUDES order status 'Processed' and 'Canceled', so despite the title it shows no processed orders.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says the table shows only processed orders or is limited to processed orders.",
+    "text": "A table of order-line details showing total unit quantity and unit price by order, order line, status, and product. It excludes orders with Processed or Canceled status to focus on other order statuses.",
+    "want": "pass"
+  },
+  {
+    "label": "v-order-details-processed-desc exclude_0 fail",
+    "question": "Description for the visualization 'Order Details - Processed' (table of units and unit price by order id, order line, order status and product name). Its filter EXCLUDES order status 'Processed' and 'Canceled', so despite the title it shows no processed orders.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says the table shows only processed orders or is limited to processed orders.",
+    "text": "Table of processed orders only, showing units and unit price per order line.",
+    "want": "fail"
+  },
+  {
+    "label": "f-order-unit-price-desc include_0 pass",
+    "question": "Description for the fact 'Order unit price' (dataset 'Order lines'; existing description 'Order unit price'). The metadata names no currency.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes the price of one unit on an order line.",
+    "text": "The price charged for each individual item on an order line in the Order lines dataset. Use it to analyze product pricing, typically with averages or other price comparisons across products, customers, or time periods.",
+    "want": "pass"
+  },
+  {
+    "label": "f-order-unit-price-desc include_0 fail",
+    "question": "Description for the fact 'Order unit price' (dataset 'Order lines'; existing description 'Order unit price'). The metadata names no currency.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes the price of one unit on an order line.",
+    "text": "The total revenue of an order after discounts.",
+    "want": "fail"
+  },
+  {
+    "label": "f-order-unit-price-desc exclude_0 pass",
+    "question": "Description for the fact 'Order unit price' (dataset 'Order lines'; existing description 'Order unit price'). The metadata names no currency.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Names a specific currency such as USD, dollars, EUR or euros.",
+    "text": "The price charged for each individual item on an order line in the Order lines dataset. Use it to analyze product pricing, typically with averages or other price comparisons across products, customers, or time periods.",
+    "want": "pass"
+  },
+  {
+    "label": "f-order-unit-price-desc exclude_0 fail",
+    "question": "Description for the fact 'Order unit price' (dataset 'Order lines'; existing description 'Order unit price'). The metadata names no currency.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Names a specific currency such as USD, dollars, EUR or euros.",
+    "text": "The price of one unit on an order line, in US dollars.",
+    "want": "fail"
+  },
+  {
+    "label": "v-seasonality-desc include_0 pass",
+    "question": "Description for the visualization 'Net Sales by Product Category Seasonality' (heatmap of Net Sales by Product category and month of year; filtered to last year).",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says it covers last year (the previous year).",
+    "text": "A heatmap showing net sales by product category and month of year for last year. Net sales reflect transaction amounts after discounts and returns, helping identify seasonal sales patterns across categories.",
+    "want": "pass"
+  },
+  {
+    "label": "v-seasonality-desc include_0 fail",
+    "question": "Description for the visualization 'Net Sales by Product Category Seasonality' (heatmap of Net Sales by Product category and month of year; filtered to last year).",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Says it covers last year (the previous year).",
+    "text": "Heatmap of net sales by product category and month of year.",
+    "want": "fail"
+  },
+  {
+    "label": "v-seasonality-desc exclude_0 pass",
+    "question": "Description for the visualization 'Net Sales by Product Category Seasonality' (heatmap of Net Sales by Product category and month of year; filtered to last year).",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says it covers this year, the current year or all time.",
+    "text": "A heatmap showing net sales by product category and month of year for last year. Net sales reflect transaction amounts after discounts and returns, helping identify seasonal sales patterns across categories.",
+    "want": "pass"
+  },
+  {
+    "label": "v-seasonality-desc exclude_0 fail",
+    "question": "Description for the visualization 'Net Sales by Product Category Seasonality' (heatmap of Net Sales by Product category and month of year; filtered to last year).",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says it covers this year, the current year or all time.",
+    "text": "Heatmap of net sales by product category and month for the current year.",
+    "want": "fail"
+  },
+  {
+    "label": "a-quarter-of-year-desc include_0 pass",
+    "question": "Description for the attribute 'Order date - Quarter of Year' (dataset 'Order date'; existing description 'Generic Quarter (Q1-Q4)'): the quarter Q1-Q4 regardless of year.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes the quarter of the order date (Q1-Q4).",
+    "text": "Represents the quarter of the year in which an order date falls (Q1–Q4), enabling order analysis and filtering by seasonal quarter.",
+    "want": "pass"
+  },
+  {
+    "label": "a-quarter-of-year-desc include_0 fail",
+    "question": "Description for the attribute 'Order date - Quarter of Year' (dataset 'Order date'; existing description 'Generic Quarter (Q1-Q4)'): the quarter Q1-Q4 regardless of year.",
+    "output": "description",
+    "kind": "include",
+    "criterion": "Describes the quarter of the order date (Q1-Q4).",
+    "text": "The month of the year in which the order was placed.",
+    "want": "fail"
+  },
+  {
+    "label": "a-quarter-of-year-desc exclude_0 pass",
+    "question": "Description for the attribute 'Order date - Quarter of Year' (dataset 'Order date'; existing description 'Generic Quarter (Q1-Q4)'): the quarter Q1-Q4 regardless of year.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says it identifies a specific quarter of a specific year (such as Q1 2024) rather than the quarter regardless of year.",
+    "text": "Represents the quarter of the year in which an order date falls (Q1–Q4), enabling order analysis and filtering by seasonal quarter.",
+    "want": "pass"
+  },
+  {
+    "label": "a-quarter-of-year-desc exclude_0 fail",
+    "question": "Description for the attribute 'Order date - Quarter of Year' (dataset 'Order date'; existing description 'Generic Quarter (Q1-Q4)'): the quarter Q1-Q4 regardless of year.",
+    "output": "description",
+    "kind": "exclude",
+    "criterion": "Says it identifies a specific quarter of a specific year (such as Q1 2024) rather than the quarter regardless of year.",
+    "text": "The quarter and year of the order date, such as Q1 2024.",
+    "want": "fail"
+  },
+  {
+    "label": "f-return-unit-paid-amount-title include_0 pass",
+    "question": "Title for the fact 'Return unit paid amount' (dataset 'Returns'; existing description 'Return unit paid amount'): the amount paid per unit for a returned item.",
+    "output": "title",
+    "kind": "include",
+    "criterion": "The title refers to returns (returned items).",
+    "text": "Return Paid Amount per Unit",
+    "want": "pass"
+  },
+  {
+    "label": "f-return-unit-paid-amount-title include_0 fail",
+    "question": "Title for the fact 'Return unit paid amount' (dataset 'Returns'; existing description 'Return unit paid amount'): the amount paid per unit for a returned item.",
+    "output": "title",
+    "kind": "include",
+    "criterion": "The title refers to returns (returned items).",
+    "text": "Unit Paid Amount",
+    "want": "fail"
+  },
+  {
+    "label": "f-return-unit-paid-amount-title exclude_0 pass",
+    "question": "Title for the fact 'Return unit paid amount' (dataset 'Returns'; existing description 'Return unit paid amount'): the amount paid per unit for a returned item.",
+    "output": "title",
+    "kind": "exclude",
+    "criterion": "The title reads as an order or sales price rather than an amount related to returns.",
+    "text": "Return Paid Amount per Unit",
+    "want": "pass"
+  },
+  {
+    "label": "f-return-unit-paid-amount-title exclude_0 fail",
+    "question": "Title for the fact 'Return unit paid amount' (dataset 'Returns'; existing description 'Return unit paid amount'): the amount paid per unit for a returned item.",
+    "output": "title",
+    "kind": "exclude",
+    "criterion": "The title reads as an order or sales price rather than an amount related to returns.",
+    "text": "Order Unit Selling Price",
+    "want": "fail"
+  }
+]

@@ -13,6 +13,8 @@ import time
 from collections.abc import Callable
 from typing import TypeVar
 
+import httpx
+
 _log = logging.getLogger(__name__)
 
 T = TypeVar("T")
@@ -22,6 +24,31 @@ T = TypeVar("T")
 # same question/model ran again the next day -- i.e. transient gen-ai faults, not deterministic
 # server bugs. A genuinely deterministic 500 still terminates, just after the bounded backoff.
 RETRYABLE_STATUS_CODES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
+
+
+# Failures of the single-shot endpoint clients (takeaway, catalog) that say nothing about the
+# request. A read timeout is left out: the server was computing, and retrying spends the whole
+# timeout again on every attempt.
+RETRYABLE_TRANSPORT_ERRORS = (httpx.ConnectError, httpx.ConnectTimeout, httpx.RemoteProtocolError, httpx.PoolTimeout)
+
+
+def is_retryable_request_error(exc: Exception) -> bool:
+    """Whether a single-shot endpoint client retries this failure: a retryable status or transport error."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code in RETRYABLE_STATUS_CODES
+    return isinstance(exc, RETRYABLE_TRANSPORT_ERRORS)
+
+
+def is_transient(exc: httpx.HTTPError) -> bool:
+    """Whether a failure left after the client's retries says nothing about the request.
+
+    429, 5xx and transport failures (a read timeout included) are transient; any other 4xx
+    (flag off, no agent, invalid body) and an unsupported URL scheme are setup problems.
+    """
+    if isinstance(exc, httpx.HTTPStatusError):
+        status = exc.response.status_code
+        return status == 429 or status >= 500
+    return isinstance(exc, httpx.TransportError) and not isinstance(exc, httpx.UnsupportedProtocol)
 
 
 def int_env(name: str, default: int) -> int:
