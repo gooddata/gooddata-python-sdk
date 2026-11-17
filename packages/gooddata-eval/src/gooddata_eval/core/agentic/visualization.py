@@ -213,7 +213,6 @@ def _execute_single_run(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     requires_execution: bool = False,
     options: ExpectationOptions | None = None,
-    user_context: dict | None = None,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
     options = _effective_options(options, requires_execution)
@@ -315,9 +314,7 @@ def _execute_single_run(
     if current_result.created_visualizations and current_result.created_visualizations.objects:
         actual_output = current_result.created_visualizations.objects[0]
 
-    eval_result, best_expected = _evaluate_against_candidates(
-        expected_outputs, actual_output, skill_activated, user_context=user_context
-    )
+    eval_result, best_expected = _evaluate_against_candidates(expected_outputs, actual_output, skill_activated)
     eval_result = with_execution(
         eval_result, all_tool_call_events, current_result.text_response, options.requires_execution
     )
@@ -404,14 +401,7 @@ def run_agentic_visualization(
         try:
             run_results.append(
                 _execute_single_run(
-                    client,
-                    conv_id_0,
-                    question,
-                    expected_outputs,
-                    max_iterations,
-                    requires_execution,
-                    options,
-                    user_context=user_context,
+                    client, conv_id_0, question, expected_outputs, max_iterations, requires_execution, options
                 )
             )
         finally:
@@ -423,14 +413,7 @@ def run_agentic_visualization(
             try:
                 run_results.append(
                     _execute_single_run(
-                        client,
-                        conv_id,
-                        question,
-                        expected_outputs,
-                        max_iterations,
-                        requires_execution,
-                        options,
-                        user_context=user_context,
+                        client, conv_id, question, expected_outputs, max_iterations, requires_execution, options
                     )
                 )
             finally:
@@ -514,8 +497,6 @@ def _failed_checks(run: RunResult) -> list[dict]:
             )
             for category in sorted(set(ev.expected_filters) | set(ev.actual_filters))
             if ev.expected_filters.get(category, []) != ev.actual_filters.get(category, [])
-            # An inherited date filter was accepted, so it is not why the filters failed.
-            and not (category == "date" and ev.filter_date_inherited)
         ]
         checks.extend(differing or [FailedCheck("filters_correct")])
     if not ev.sorts_correct:
@@ -801,9 +782,8 @@ def evaluate_agentic_visualization(
             f"    expected : {sorted(ev.expected_dim_uris)}\n"
             f"    actual   : {sorted(ev.actual_dim_uris)}\n"
             f"  Filters Correct       : {ev.filters_correct}\n"
-            f"    date      : {ev.filter_date_score}"
-            f"{' (inherited from dashboard context)' if ev.filter_date_inherited else ''}\n"
-            f"{'' if ev.filter_date_inherited else _filter_diff('date', ev)}"
+            f"    date      : {ev.filter_date_score}\n"
+            f"{_filter_diff('date', ev)}"
             f"    ranking   : {ev.filter_ranking_score}\n"
             f"{_filter_diff('ranking', ev)}"
             f"    attribute : {ev.filter_attribute_score}\n"

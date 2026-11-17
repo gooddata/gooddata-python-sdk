@@ -133,7 +133,6 @@ gd-eval run \
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
 | `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary` and `document_takeaway`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
-| `--accept-context-date-filter` | off | Visualization scoring also accepts a date filter the agent carried over from the dashboard in the item's `user_context` when the expected output has none. Changes verdicts, so it is opt-in; also settable via `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`. See *Date filter carried over from the dashboard* below. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary` and `document_takeaway` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
@@ -958,31 +957,6 @@ In a Langfuse dataset, put it in the item `metadata` (or in the `input` object) 
 `user_context`. An object in `input` wins and `metadata` is then not read; a missing or
 `null` value in `input` falls back to `metadata`. The value used must be an object or `null`;
 anything else fails the dataset load.
-
-#### Date filter carried over from the dashboard (opt-in)
-
-A user who asks for a new chart from an open dashboard without naming a period may get
-the dashboard's date filter on the chart, and the product accepts that. By default the
-visualization scoring still requires the chart's date filters to equal the expected ones.
-Pass `--accept-context-date-filter` to `gd-eval run`, set `GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER=1`
-(`0`, `false`, `no`, `off` and empty mean off), or pass `accept_context_date_filter=True` to
-`check_filters` to also accept, for the date filter only, a chart that:
-
-- has exactly one date filter, whose period equals a `date_filter` in
-  `user_context.view.dashboard.filters` (resolved against the same day), and
-- belongs to an item whose expected output has no date filter.
-
-The dashboard's common date filter (no `using`) accepts any date dataset, one that names a
-dataset accepts only that one; the one the chart used is reported in the run detail as
-`filter_date_context: {"inherited": true, "dataset": ...}`, and a failure summary shows
-`date : True (inherited from dashboard context)`. A chart with no date filter passes as
-before; an expected date filter, a different period, ranking and attribute filters stay
-strict. Applies to `visualization`, `vis_agentic` and `agentic_visualization` items; with the
-variable unset the scores and the detail are exactly as without it.
-
-With the flag on, an expected output cannot say "all time, on purpose": an expected output
-with no date filter then also accepts a chart that copied the dashboard's period. An item
-that must reject the dashboard's period needs to run without the flag.
 
 `agentic_conversation` items take the item's `user_context` as the context of the first
 turn. A turn in `expected_output.turns` can set its own `user_context`, which applies
