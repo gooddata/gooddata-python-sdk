@@ -11,15 +11,23 @@ from dataclasses import dataclass, field
 import httpx
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import failed_checks_from
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    failure_message_head,
+    label_runs,
+    log_eval_error_score,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -177,8 +185,18 @@ class KdaEvaluation:
     disambiguated: bool = False
 
     @property
+    def strict_checks(self) -> dict[str, bool]:
+        """Every check strict_pass requires, by name."""
+        return {
+            "triggered": self.triggered,
+            "executed": self.executed,
+            "success": self.success,
+            "turn_completed": self.turn_completed,
+        }
+
+    @property
     def strict_pass(self) -> bool:
-        return all([self.triggered, self.executed, self.success, self.turn_completed])
+        return all(self.strict_checks.values())
 
 
 @dataclass
@@ -329,7 +347,7 @@ def run_agentic_kda_skill(
                     if create_args is not None:
                         turn_wall_clock_sec = partial.turn_wall_clock_sec
                 turn_completed = False
-                exit_reason = LoopExit.CHAT_ERROR
+                exit_reason = chat_failure_exit(exc)
                 break
             turns += 1
             steps += chat_result.reasoning_step_count
@@ -446,6 +464,11 @@ def _run_detail(run: KdaRunResult) -> dict:
     }
 
 
+def _failed_checks(run: KdaRunResult) -> list[dict]:
+    """The checks this run failed, by name. What the agent sent is in the run's detail."""
+    return failed_checks_from(run.evaluation.strict_checks)
+
+
 def evaluate_agentic_kda_skill(
     host: str,
     token: str,
@@ -499,6 +522,9 @@ def evaluate_agentic_kda_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so an ERROR run gets its marker beside its usual scores.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -525,6 +551,8 @@ def evaluate_agentic_kda_skill(
                     "[kda-report] %s: strict_pass=%s latency_sec=%s", run_name, ev.strict_pass, turn_wall_clock_sec
                 )
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    if (run_error := run_labels.error_label(run_idx)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     ctx.score(tid, name="kda_disambiguated", value=float(ev.disambiguated), data_type="BOOLEAN")
@@ -585,12 +613,13 @@ def evaluate_agentic_kda_skill(
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
         summary.run_results,
-        passed=lambda r: r.evaluation.strict_pass,
+        labels=run_labels,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs)
         message = (
             f"KDA skill assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
@@ -601,6 +630,8 @@ def evaluate_agentic_kda_skill(
         raise_agentic_failure(
             KdaSkillAssertionError,
             message,
+            harness_error=run_labels.harness_error_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
@@ -612,6 +643,7 @@ def evaluate_agentic_kda_skill(
             best_run_latency_s=best.run_latency_s,
         )
     return agentic_success(
+        shadow=run_labels.shadow(gate),
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,

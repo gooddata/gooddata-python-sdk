@@ -22,7 +22,8 @@ from gooddata_eval.cli.agentic_runner import (
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, current_scope
-from gooddata_eval.core.models import AgenticEvalOutcome, CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, CreatedVisualization, DatasetItem
+from gooddata_eval.core.reporting.json_report import build_json_report
 from gooddata_eval.core.timing import PhaseTimings, note_trace_latency
 
 
@@ -1020,6 +1021,37 @@ def test_a_kind_that_records_no_failed_runs_keeps_the_empty_default():
     ):
         report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
     assert report.items[0].failed_runs == []
+
+
+_HARNESS_ERROR = {"status": "error", "reason": "simulated_user_failed"}
+_SHADOW = {"verdict": "error", "runs_scored": 0, "runs_total": 3}
+
+
+def _labelled_failure(exc: AgenticAssertionError | JudgeResponseError) -> Exception:
+    exc.harness_error = _HARNESS_ERROR
+    exc.shadow = _SHADOW
+    return exc
+
+
+@pytest.mark.parametrize(
+    "result",
+    [
+        pytest.param(AgenticEvalOutcome(reasoning_steps=[], detail={}, shadow=_SHADOW), id="passed"),
+        pytest.param(_labelled_failure(AlertSkillAssertionError("failed")), id="failed"),
+        pytest.param(_labelled_failure(JudgeResponseError("no verdict")), id="ungraded"),
+    ],
+)
+def test_the_item_labels_reach_the_report(result: Any):
+    """A label nobody reads labels nothing: the outcome and the shadow verdict travel from
+    whichever object the kind returned or raised onto the item report and into the JSON."""
+    kwargs = {"return_value": result} if isinstance(result, AgenticEvalOutcome) else {"side_effect": result}
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_alert_skill", **kwargs):
+        report = run_agentic_items([_item()], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
+    item = report.items[0]
+    assert item.shadow == _SHADOW
+    assert item.harness_error == (None if isinstance(result, AgenticEvalOutcome) else _HARNESS_ERROR)
+    record = build_json_report(report)["items"][item.id]
+    assert (record["harness_error"], record["shadow"]) == (item.harness_error, item.shadow)
 
 
 def test_an_all_ungraded_item_is_errored_but_still_carries_its_failed_runs():

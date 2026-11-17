@@ -1724,15 +1724,22 @@ def test_the_last_document_part_of_a_turn_is_the_one_scored() -> None:
 
 
 class _FakeCtx:
-    """Records what the deferred Langfuse block writes, without a Langfuse."""
+    """Records what the deferred Langfuse block writes, without a Langfuse.
+
+    ``scores`` and ``comments`` hold every score whatever its run; ``run_scores`` and
+    ``run_comments`` hold them per conversation, for a test that cares which run got a score.
+    """
 
     def __init__(self) -> None:
         self.run_metadata: dict[str, Any] = {}
         self.scores: dict[str, float] = {}
+        self.run_scores: dict[str, dict[str, float]] = {}
+        self.run_comments: dict[str, dict[str, str]] = {}
         self.score_types: dict[str, str] = {}
         self.quality_checks: dict[str, bool] = {}
         self.observed: list[str] = []
         self.unscored: list[str] = []
+        self.comments: dict[str, str] = {}
 
     def export_unscored(self, _run_idx: int, conversation_id: str) -> None:
         self.unscored.append(conversation_id)
@@ -1741,13 +1748,19 @@ class _FakeCtx:
         return None
 
     @contextmanager
-    def observe(self, _trace: None, _run_idx: int, *, conversation_id: str, output: dict) -> Iterator[str]:
+    def observe(
+        self, _trace: None, _run_idx: int, *, conversation_id: str, output: dict | None = None
+    ) -> Iterator[str]:
         self.observed.append(conversation_id)
-        yield "trace-id"
+        yield conversation_id
 
-    def score(self, _tid: str, *, name: str, value: float, data_type: str) -> None:
+    def score(self, tid: str, *, name: str, value: float, data_type: str, comment: str | None = None) -> None:
         self.scores[name] = value
+        self.run_scores.setdefault(tid, {})[name] = value
         self.score_types[name] = data_type
+        if comment is not None:
+            self.comments[name] = comment
+            self.run_comments.setdefault(tid, {})[name] = comment
 
     def quality(
         self, _tid: str, *, strict_checks: dict[str, bool], latency_sec: float | None, cost_usd: float | None
@@ -1991,12 +2004,16 @@ def test_an_ungraded_run_keeps_pass_at_k_but_not_pass_power_k(monkeypatch: pytes
     assert summary.best.judge_error is None
 
 
-def test_an_ungraded_run_writes_no_scores(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_run_the_judge_could_not_grade_gets_only_the_harness_marker(monkeypatch: pytest.MonkeyPatch) -> None:
     ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, _narrative_turns(), k=2, judge=_SequenceJudge())
-    assert ctx.observed == ["conv-2"]
-    assert ctx.unscored == ["conv-1"]
-    assert ctx.scores["document_narrative_judged"] == 1.0
-    assert ctx.scores["document_summaries_present"] == 1.0
+    # conv-1 has no verdict: its root carries eval_error alone; conv-2 gets its usual scores.
+    assert ctx.observed == ["conv-1", "conv-2"]
+    assert ctx.unscored == []
+    assert ctx.run_scores["conv-1"] == {"eval_error": 1}
+    assert ctx.run_comments["conv-1"] == {"eval_error": "judge_failed"}
+    assert "eval_error" not in ctx.run_scores["conv-2"]
+    assert ctx.run_scores["conv-2"]["document_narrative_judged"] == 1.0
+    assert ctx.run_scores["conv-2"]["document_summaries_present"] == 1.0
 
 
 def _failing_narrative_turn() -> ChatResult:
@@ -2009,8 +2026,13 @@ def test_a_run_that_failed_a_fixed_check_is_a_failure_even_when_the_judge_errors
     expected = {"narrative": _NARRATIVE, "visualizations": [{"id": _RETURNS_BY_CATEGORY, "title": "Returns"}]}
     _install_client(monkeypatch, _ScriptedChatClient([_failing_narrative_turn()]))
     judge = _FakeJudge(error=JudgeResponseError("empty body"))
-    with pytest.raises(DocumentSkillAssertionError, match="does not show chart 'returns_by_category'"):
+    with pytest.raises(DocumentSkillAssertionError, match="does not show chart 'returns_by_category'") as exc_info:
         evaluate_agentic_document_skill("https://h", "tok", "ws", "q", expected, judge=judge)
+    # Labelled a FAIL too: the judge breaking did not decide this run, the missing chart did.
+    exc = exc_info.value
+    assert [r["outcome"]["status"] for r in exc.failed_runs] == ["fail"]
+    assert not hasattr(exc, "harness_error")
+    assert "Harness error" not in str(exc)
 
 
 def test_a_failed_run_with_a_judge_error_is_published(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -2019,6 +2041,8 @@ def test_a_failed_run_with_a_judge_error_is_published(monkeypatch: pytest.Monkey
     assert ctx.observed == ["conv-1"]
     assert ctx.scores["document_charts_matched"] == 0.0
     assert "document_narrative_judged" not in ctx.scores
+    # A FAIL, not a harness error: no marker.
+    assert "eval_error" not in ctx.run_scores["conv-1"]
 
 
 def test_only_content_pages_count_for_summaries() -> None:

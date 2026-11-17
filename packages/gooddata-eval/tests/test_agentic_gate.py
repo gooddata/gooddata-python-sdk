@@ -99,6 +99,22 @@ def test_failure_note_blames_the_judge_not_the_agent_for_an_ungraded_run():
     assert "unstable" not in note
 
 
+def test_failure_note_names_harness_errors_without_calling_them_instability():
+    note = gate_failure_note("power", 2, 3, runs_errored=1)
+    assert note == "Gate pass^3 failed: 2/3 runs passed, 1 harness error(s)."
+
+
+def test_failure_note_keeps_an_agent_failure_unstable_beside_a_harness_error():
+    """Pass, fail, error: the errored run is named, but the run the agent failed beside a
+    passing one is still instability."""
+    note = gate_failure_note("power", 1, 3, runs_errored=1)
+    assert note == "Gate pass^3 failed: 1/3 runs passed, 1 harness error(s) — unstable, not a clean failure."
+
+
+def test_failure_note_does_not_call_errored_runs_alone_unstable_under_pass_at_k():
+    assert gate_failure_note("any", 0, 3, runs_errored=1) == "Gate pass@3 failed: 0/3 runs passed, 1 harness error(s)."
+
+
 def test_gate_scores_use_K_stable_names():
     """`pass_at_2` becomes `pass_at_3` the moment K changes, splitting every view on it."""
     ctx = MagicMock()

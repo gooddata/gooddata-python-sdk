@@ -27,15 +27,23 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import failed_checks_from
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    failure_message_head,
+    label_runs,
+    log_eval_error_score,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -185,19 +193,22 @@ class WhatIfEvaluation:
     disambiguated: bool = False
 
     @property
+    def strict_checks(self) -> dict[str, bool]:
+        """Every check strict_pass requires, by name."""
+        return {
+            "triggered": self.triggered,
+            "executed": self.executed,
+            "success": self.success,
+            "turn_completed": self.turn_completed,
+            "metric_correct": self.metric_correct,
+            "maql_correct": self.maql_correct,
+            "scenario_count_correct": self.scenario_count_correct,
+            "baseline_correct": self.baseline_correct,
+        }
+
+    @property
     def strict_pass(self) -> bool:
-        return all(
-            [
-                self.triggered,
-                self.executed,
-                self.success,
-                self.turn_completed,
-                self.metric_correct,
-                self.maql_correct,
-                self.scenario_count_correct,
-                self.baseline_correct,
-            ]
-        )
+        return all(self.strict_checks.values())
 
 
 @dataclass
@@ -378,7 +389,7 @@ def run_agentic_what_if(
                     _accumulate(partial)
                     create_args, execute_result = _extract_what_if_calls(all_tool_call_events)
                 turn_completed = False
-                exit_reason = LoopExit.CHAT_ERROR
+                exit_reason = chat_failure_exit(exc)
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -496,6 +507,11 @@ def _detail(best: WhatIfRunResult) -> dict[str, Any]:
     )
 
 
+def _failed_checks(run: WhatIfRunResult) -> list[dict]:
+    """The checks this run failed, by name. What the agent sent is in the run's detail."""
+    return failed_checks_from(run.evaluation.strict_checks)
+
+
 def evaluate_agentic_what_if(
     host: str,
     token: str,
@@ -544,6 +560,9 @@ def evaluate_agentic_what_if(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so an ERROR run gets its marker beside its usual scores.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -576,6 +595,8 @@ def evaluate_agentic_what_if(
                     }
                 )
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id) as tid:
+                    if (run_error := run_labels.error_label(run_idx)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
@@ -618,13 +639,14 @@ def evaluate_agentic_what_if(
     # run is reported with exactly the keys the winning one is.
     failed_runs = build_failed_runs(
         summary.run_results,
-        passed=lambda r: r.evaluation.strict_pass,
+        labels=run_labels,
         detail=_detail,
+        failed_checks=_failed_checks,
     )
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, len(summary.run_results))
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs)
         message = (
             f"What-if assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, success={ev.success}, "
@@ -637,6 +659,8 @@ def evaluate_agentic_what_if(
         raise_agentic_failure(
             WhatIfAssertionError,
             message,
+            harness_error=run_labels.harness_error_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
@@ -649,6 +673,7 @@ def evaluate_agentic_what_if(
         )
 
     return agentic_success(
+        shadow=run_labels.shadow(gate),
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,

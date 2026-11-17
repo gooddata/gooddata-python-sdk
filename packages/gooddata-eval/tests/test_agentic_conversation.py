@@ -53,7 +53,7 @@ from gooddata_eval.core.agentic.conversation import (
     run_agentic_conversation,
 )
 from gooddata_eval.core.chat.render import render_answer_text
-from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.chat.sse_client import ChatError as ChatError_
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.models import ChatResult, LoopExit, ToolCallEvent
@@ -1207,6 +1207,32 @@ def test_a_partial_result_joins_the_shared_timeline_like_any_other_turn():
     assert [tc.index for tc in shifted] == [2]
     # The steps were taken, so they count.
     assert result.total_steps == 5
+
+
+def test_an_agent_timeout_ends_its_turn_with_its_own_exit_and_still_reads_as_an_error():
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = [
+        _metric_turn_result([_skills_tc("metric"), _create_metric_tc("m1")]),
+        TurnTimeoutError("agent exceeded the 60s turn budget"),
+    ]
+
+    with (
+        patch("gooddata_eval.core.agentic.conversation.ChatClient", return_value=mock_client),
+        patch("gooddata_eval.core.agentic.conversation.GoodDataSdk"),
+    ):
+        result = run_agentic_conversation(
+            host="http://host/api/v1/actions/workspaces/ws1/ai",
+            token="tok",
+            workspace_id="ws1",
+            fixture=_two_metric_turn_fixture(),
+        )
+
+    assert result.turn_results[0].exit_reason is LoopExit.SUCCESS
+    assert result.turn_results[1].exit_reason is LoopExit.AGENT_TIMEOUT
+    # The turn's no_error reads exactly as it did when a timeout was recorded as CHAT_ERROR.
+    assert result.turn_results[1].no_error is False
+    assert result.turn_results[1].output_present is False
 
 
 def test_a_non_chat_exception_still_propagates():

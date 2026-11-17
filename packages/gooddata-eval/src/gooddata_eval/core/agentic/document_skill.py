@@ -20,11 +20,11 @@ from gooddata_eval.core.agentic._filters import describe_selection, same_selecti
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import attach_labels, failure_message_head, label_runs, mark_unscored_run
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1716,6 +1716,16 @@ class DocumentSkillAssertionError(AgenticAssertionError):
     """Raised when a document-skill evaluation fails."""
 
 
+def _judge_error_of(run: DocumentRunResult) -> str | None:
+    """The judge's own failure, for the harness label, when it is what left the run without a verdict.
+
+    A run that already failed a fixed check is a FAIL whatever the judge would have said, so its
+    judge error does not make it a harness error. ``run.judge_error`` also reports a failed
+    takeaway request (``fill_error``), which is on the product path and stays a FAIL.
+    """
+    return run.evaluation.judge_error if run.evaluation.ungraded else None
+
+
 def evaluate_agentic_document_skill(
     host: str,
     token: str,
@@ -1795,6 +1805,9 @@ def evaluate_agentic_document_skill(
             document_format=document_format,
         )
 
+    # Before the Langfuse scores, so a run the harness failed gets its marker there too.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, judge_error=_judge_error_of)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -1806,7 +1819,7 @@ def evaluate_agentic_document_skill(
                 if run.ungraded:
                     # No verdict decided this run: its other scores would publish a pass the gate
                     # never counted.
-                    ctx.export_unscored(run_idx, run.conversation_id)
+                    mark_unscored_run(ctx, run_idx, run.conversation_id, run_labels.error_label(run_idx))
                     continue
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.evaluation.strict_checks
@@ -1866,6 +1879,7 @@ def evaluate_agentic_document_skill(
         )
         exc_judge.timings = item_timings
         exc_judge.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        attach_labels(exc_judge, run_labels, gate)
         raise exc_judge
 
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
@@ -1896,10 +1910,14 @@ def evaluate_agentic_document_skill(
     }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
-    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail)
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        labels=run_labels,
+        detail=_run_detail,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs, len(unscored))
         skill_note = ""
         if not best.evaluation.wire_names_current:
             skill_note = " gen-ai still sends the Report names, so it predates the Document rename."
@@ -1923,9 +1941,11 @@ def evaluate_agentic_document_skill(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        attach_labels(exc, run_labels, gate)
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,
+        shadow=run_labels.shadow(gate),
         runs_effective=runs_effective,
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,

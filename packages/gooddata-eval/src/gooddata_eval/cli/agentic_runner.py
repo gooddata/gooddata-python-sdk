@@ -404,6 +404,16 @@ def _apply_run_counts(item_report: ItemReport, source: Any) -> None:
         item_report.runs_ungraded = unscored
 
 
+def _apply_labels(item_report: ItemReport, source: Any) -> None:
+    """Copy the item's harness label and shadow verdict off an outcome or a failure, if set."""
+    harness_error = getattr(source, "harness_error", None)
+    if isinstance(harness_error, dict):
+        item_report.harness_error = harness_error
+    shadow = getattr(source, "shadow", None)
+    if isinstance(shadow, dict):
+        item_report.shadow = shadow
+
+
 def _apply_failed_runs(item_report: ItemReport, source: Any) -> None:
     """Copy the per-run failure records off an outcome or a failure, if the kind built any.
 
@@ -555,6 +565,7 @@ def run_agentic_items(
             _apply_best_run_latency(item_report, outcome)
             _apply_run_counts(item_report, outcome)
             _apply_failed_runs(item_report, outcome)
+            _apply_labels(item_report, outcome)
             _apply_run_latencies(item_report, outcome)
         except AssertionError as exc:
             item_report.gate_passed = False if gated else None
@@ -567,6 +578,7 @@ def run_agentic_items(
             _apply_best_run_latency(item_report, exc)
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
+            _apply_labels(item_report, exc)
             _apply_run_latencies(item_report, exc)
             # Read off the counts, not off the gate: pass^K fails items where runs did pass,
             # and reporting those as pass_at_k False would contradict the Langfuse score of
@@ -588,6 +600,7 @@ def run_agentic_items(
             _apply_timings(item_report, getattr(exc, "timings", None))
             _apply_run_counts(item_report, exc)
             _apply_failed_runs(item_report, exc)
+            _apply_labels(item_report, exc)
             _apply_run_latencies(item_report, exc)
             # Every run ungraded, by definition of this error -- said explicitly rather than
             # left to _apply_run_counts, whose source is detail["unscored_runs"] and which a

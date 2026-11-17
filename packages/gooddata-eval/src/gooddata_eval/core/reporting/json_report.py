@@ -72,6 +72,9 @@ def _build_run_dict(report: EvalReport) -> dict:
                 "runs_passed": item.runs_passed,
                 "runs_ungraded": item.runs_ungraded,
                 "pass_power_k": item.pass_power_k,
+                # Labels only (core/outcome.py): neither changes gate_passed.
+                "harness_error": item.harness_error,
+                "shadow": item.shadow,
                 "best_run_latency_s": (
                     round(item.best_run_latency_s, 3) if item.best_run_latency_s is not None else None
                 ),

@@ -63,6 +63,10 @@ class JudgeResponseError(RuntimeError):
     failed_runs: list[dict]
     run_latencies_s: list[float]
     best_run_latency_s: float | None
+    # The item's harness label and the phase-2 candidate verdict (``core/outcome.py``), as on
+    # AgenticAssertionError.
+    harness_error: dict
+    shadow: dict
 
 
 def _message_content(response: Any) -> str | None:
