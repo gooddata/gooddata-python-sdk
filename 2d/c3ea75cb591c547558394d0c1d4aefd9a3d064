@@ -1,35 +1,51 @@
+packages/gooddata-eval/src/gooddata_eval/core/catalog/http_client.py
+  s_dc2c82805837c9::t_de41ed33e5201a 1-94,96-98
+  s_dc2c82805837c9::t_9bcb5cf51e1245 95
 packages/gooddata-eval/src/gooddata_eval/cli/main.py
   s_dc2c82805837c9::t_0be26093b96bee 626-627
   s_dc2c82805837c9::t_9bcb5cf51e1245 18
   s_dc2c82805837c9::t_2446c0970a84b1 52-53,625
-packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
-  s_dc2c82805837c9::t_743934d8994232 21,63-77,158,160-161,171
-packages/gooddata-eval/tests/test_catalog_metadata_evaluator.py
-  s_dc2c82805837c9::t_663e38e4e0cec0 1-20,22-122
-  s_dc2c82805837c9::t_b9025c07be57e8 21
-packages/gooddata-eval/tests/test_catalog_metadata_client.py
-  s_dc2c82805837c9::t_663e38e4e0cec0 1-116
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_dc2c82805837c9::t_36588db9dd5c1e 326-351
+packages/gooddata-eval/AGENTS.md
+  s_dc2c82805837c9::t_66d372a96b43b6 31,65
 packages/gooddata-eval/src/gooddata_eval/core/catalog/__init__.py
   s_dc2c82805837c9::t_de41ed33e5201a 1
-packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_dc2c82805837c9::t_743934d8994232 10,541-555,570-571
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
+  s_dc2c82805837c9::t_2446c0970a84b1 24,39,47,74
+packages/gooddata-eval/README.md
+  s_dc2c82805837c9::t_66d372a96b43b6 135-136,711-712,866-909,972
 packages/gooddata-eval/tests/test_runner.py
   s_dc2c82805837c9::t_dc946f0b84242a 138
+packages/gooddata-eval/Makefile
+  s_dc2c82805837c9::t_27fc9ce8a8b459 7-10
+packages/gooddata-eval/tests/test_catalog_metadata_evaluate.py
+  s_dc2c82805837c9::t_5f0bffc58a5520 1-212
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_dc2c82805837c9::t_743934d8994232 10,541-555,570-571
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_dc2c82805837c9::t_743934d8994232 21,63-77,158,160-161,171
+packages/gooddata-eval/scripts/calibrate_catalog_metadata_judge.py
+  s_dc2c82805837c9::t_27fc9ce8a8b459 1-62
+packages/gooddata-eval/src/gooddata_eval/core/catalog/evaluate.py
+  s_dc2c82805837c9::t_2360600166721f 44
+  s_dc2c82805837c9::t_e4903802a55ad2 1-43,45-268
+packages/gooddata-eval/tests/test_catalog_metadata_evaluator.py
+  s_dc2c82805837c9::t_b9025c07be57e8 21
+  s_dc2c82805837c9::t_41629295766870 29-32,34,86,90,104,107
+  s_dc2c82805837c9::t_663e38e4e0cec0 1-20,22-28,33,35-85,87-89,91-103,105-106,108-125
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/catalog_metadata.py
   s_dc2c82805837c9::t_2446c0970a84b1 1-91,95-106,112-125,129-160
   s_dc2c82805837c9::t_9bcb5cf51e1245 92-94,107-111,126-128
-packages/gooddata-eval/tests/test_langfuse_source.py
-  s_dc2c82805837c9::t_36588db9dd5c1e 326-351
-packages/gooddata-eval/src/gooddata_eval/core/evaluators/__init__.py
-  s_dc2c82805837c9::t_2446c0970a84b1 24,39,47,74
-packages/gooddata-eval/src/gooddata_eval/core/catalog/http_client.py
-  s_dc2c82805837c9::t_de41ed33e5201a 1-94,96-98
-  s_dc2c82805837c9::t_9bcb5cf51e1245 95
+packages/gooddata-eval/tests/test_catalog_metadata_client.py
+  s_dc2c82805837c9::t_663e38e4e0cec0 1-116
+packages/gooddata-eval/tests/fixtures/catalog_metadata_calibration.json
+  s_dc2c82805837c9::t_27fc9ce8a8b459 1-290
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "5c64c583340295f0fd2a180a78187ee666eb66f8",
+  "base_commit_sha": "2dc3ea75cb591c547558394d0c1d4aefd9a3d064",
   "prompts": {},
   "sessions": {
     "s_dc2c82805837c9": {
@@ -38,7 +54,7 @@ packages/gooddata-eval/src/gooddata_eval/core/catalog/http_client.py
         "id": "47504938-0276-46f4-8132-e2aaec4f41dd",
         "model": "claude-opus-5-5"
       },
-      "human_author": "duongthimy <my.duong@gooddata.com>"
+      "human_author": null
     }
   }
 }
