@@ -142,7 +142,7 @@ _USUAL_SCORES = {"pass_at_k", "pass_power_k", "gate_passed"}
 
 
 @pytest.mark.parametrize("name", sorted(_KINDS))
-def test_an_errored_run_gets_eval_error_beside_its_usual_scores(name) -> None:
+def test_an_errored_run_gets_eval_error_beside_its_usual_scores(name: str) -> None:
     labels = RunLabels((Outcome.error("simulated_user_failed"), Outcome.failed("agent_silent")))
     ctx = _scores(_KINDS[name], labels)
 
@@ -153,7 +153,7 @@ def test_an_errored_run_gets_eval_error_beside_its_usual_scores(name) -> None:
 
 
 @pytest.mark.parametrize("name", sorted(_KINDS))
-def test_a_chat_error_run_is_scored_as_before_with_no_marker(name) -> None:
+def test_a_chat_error_run_is_scored_as_before_with_no_marker(name: str) -> None:
     ctx = _scores(_KINDS[name])
 
     for run_idx in (0, 1):

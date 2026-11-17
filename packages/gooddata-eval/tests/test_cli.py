@@ -1206,7 +1206,9 @@ def test_routing_backend_closes_every_client() -> None:
         client.close.assert_called_once_with()
 
 
-def test_accept_context_date_filter_flag_is_off_by_default_and_publishes_the_env_var(monkeypatch):
+def test_accept_context_date_filter_flag_is_off_by_default_and_publishes_the_env_var(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     base = ["run", "--host", "h", "--workspace", "w", "--dataset", "d"]
     assert cli_main.parse_args(base).accept_context_date_filter is False
     assert cli_main.parse_args([*base, "--accept-context-date-filter"]).accept_context_date_filter is True
@@ -1219,13 +1221,13 @@ def test_accept_context_date_filter_flag_is_off_by_default_and_publishes_the_env
     assert accept_context_date_filter() is True
 
 
-def test_accept_context_date_filter_flag_never_clears_an_exported_env_var(monkeypatch):
+def test_accept_context_date_filter_flag_never_clears_an_exported_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(ACCEPT_CONTEXT_DATE_FILTER_ENV_VAR, "1")
     cli_main._apply_accept_context_date_filter_flag(False)
     assert accept_context_date_filter() is True
 
 
-def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch):
+def test_accept_context_date_filter_flag_reaches_check_filters(monkeypatch: pytest.MonkeyPatch) -> None:
     def viz(filter_by: dict) -> CreatedVisualization:
         return CreatedVisualization.model_validate(
             {

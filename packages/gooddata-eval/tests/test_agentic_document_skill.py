@@ -1733,6 +1733,7 @@ class _FakeCtx:
         self.quality_checks: dict[str, bool] = {}
         self.observed: list[str] = []
         self.unscored: list[str] = []
+        self.comments: dict[str, str] = {}
 
     def export_unscored(self, _run_idx: int, conversation_id: str) -> None:
         self.unscored.append(conversation_id)
@@ -1741,13 +1742,17 @@ class _FakeCtx:
         return None
 
     @contextmanager
-    def observe(self, _trace: None, _run_idx: int, *, conversation_id: str, output: dict) -> Iterator[str]:
+    def observe(
+        self, _trace: None, _run_idx: int, *, conversation_id: str, output: dict | None = None
+    ) -> Iterator[str]:
         self.observed.append(conversation_id)
         yield "trace-id"
 
-    def score(self, _tid: str, *, name: str, value: float, data_type: str) -> None:
+    def score(self, _tid: str, *, name: str, value: float, data_type: str, comment: str | None = None) -> None:
         self.scores[name] = value
         self.score_types[name] = data_type
+        if comment is not None:
+            self.comments[name] = comment
 
     def quality(
         self, _tid: str, *, strict_checks: dict[str, bool], latency_sec: float | None, cost_usd: float | None
@@ -1991,10 +1996,12 @@ def test_an_ungraded_run_keeps_pass_at_k_but_not_pass_power_k(monkeypatch: pytes
     assert summary.best.judge_error is None
 
 
-def test_an_ungraded_run_writes_no_scores(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_run_the_judge_could_not_grade_gets_only_the_harness_marker(monkeypatch: pytest.MonkeyPatch) -> None:
     ctx = _scored(monkeypatch, {"narrative": _NARRATIVE}, _narrative_turns(), k=2, judge=_SequenceJudge())
-    assert ctx.observed == ["conv-2"]
-    assert ctx.unscored == ["conv-1"]
+    # conv-1 has no verdict: its root carries eval_error alone; conv-2 is scored as before.
+    assert ctx.observed == ["conv-1", "conv-2"]
+    assert ctx.unscored == []
+    assert (ctx.scores["eval_error"], ctx.comments["eval_error"]) == (1, "judge_failed")
     assert ctx.scores["document_narrative_judged"] == 1.0
     assert ctx.scores["document_summaries_present"] == 1.0
 

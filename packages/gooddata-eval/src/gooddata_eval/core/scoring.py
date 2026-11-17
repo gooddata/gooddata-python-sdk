@@ -551,14 +551,17 @@ def _inherited_date_filter_dataset(
     actual_filters = [f for f in actual.query.filter_by.values() if f.get("type") == "date_filter"]
     if len(actual_filters) != 1:
         return None
-    dataset = actual_filters[0].get("using", "")
+    dataset = actual_filters[0].get("using")
+    if not isinstance(dataset, str) or not dataset:
+        # A date filter that names no dataset says nothing about where it came from.
+        return None
     fields = actual.query.fields
     for dashboard_filter in dashboard_filters:
         candidate = _normalize_date_filter(
             {**dashboard_filter, "using": dashboard_filter.get("using") or dataset}, fields, today
         )
         if json.dumps(candidate, sort_keys=True) in act_date:
-            return dataset if isinstance(dataset, str) else ""
+            return dataset
     return None
 
 

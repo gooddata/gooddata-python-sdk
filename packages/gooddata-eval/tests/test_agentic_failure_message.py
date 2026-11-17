@@ -146,7 +146,7 @@ def test_a_string_exit_reason_gets_the_same_outcome_as_its_enum() -> None:
 @pytest.mark.parametrize(
     "exit_reason", [LoopExit.CHAT_ERROR, "chat_error", "budget_exhausted"], ids=["member", "value", "agent_exit"]
 )
-def test_a_chat_error_or_agent_exit_is_recorded_and_rendered_as_a_failure(exit_reason) -> None:
+def test_a_chat_error_or_agent_exit_is_recorded_and_rendered_as_a_failure(exit_reason: LoopExit | str) -> None:
     records = build_failed_runs(
         [_StrRun(exit_reason)], passed=lambda r: False, detail=lambda r: {}, failed_checks=lambda r: []
     )

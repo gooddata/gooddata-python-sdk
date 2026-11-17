@@ -49,6 +49,7 @@ __all__ = [
     "gate_head",
     "label_runs",
     "log_eval_error_score",
+    "mark_unscored_run",
     "raise_agentic_failure",
     "run_exit_reason",
     "run_outcome",
@@ -83,12 +84,20 @@ def run_exit_reason(run: Any) -> str | None:
     return value if isinstance(value, str) else None
 
 
-def run_outcome(run: Any, *, passed: bool) -> Outcome:
-    """One run's label: ``classify_run`` over the run's exit and its judge error, if any."""
-    judge_error = getattr(run, "judge_error", None)
-    return classify_run(
-        run_exit_reason(run), passed=passed, judge_error=judge_error if isinstance(judge_error, str) else None
-    )
+JudgeErrorOf = Callable[[Any], str | None]
+"""How a kind reads a run's judge failure. The default reads ``run.judge_error``; a kind whose
+``judge_error`` also reports a product-path failure passes the judge's own error instead."""
+
+
+def _default_judge_error(run: Any) -> str | None:
+    value = getattr(run, "judge_error", None)
+    return value if isinstance(value, str) else None
+
+
+def run_outcome(run: Any, *, passed: bool, judge_error: JudgeErrorOf | None = None) -> Outcome:
+    """One run's label: ``classify_run`` over the run's exit and its judge failure, if any."""
+    error = (judge_error or _default_judge_error)(run)
+    return classify_run(run_exit_reason(run), passed=passed, judge_error=error if isinstance(error, str) else None)
 
 
 @dataclass(frozen=True)
@@ -123,9 +132,11 @@ class RunLabels:
         return shadow_verdict(self.outcomes, gate)
 
 
-def label_runs(run_results: Sequence[Any], *, passed: Callable[[Any], bool]) -> RunLabels:
+def label_runs(
+    run_results: Sequence[Any], *, passed: Callable[[Any], bool], judge_error: JudgeErrorOf | None = None
+) -> RunLabels:
     """The ``RunLabels`` of an item's runs; ``passed`` is the kind's own per-run verdict."""
-    return RunLabels(tuple(run_outcome(r, passed=passed(r)) for r in run_results))
+    return RunLabels(tuple(run_outcome(r, passed=passed(r), judge_error=judge_error) for r in run_results))
 
 
 def attach_labels(exc: BaseException, labels: RunLabels, gate: str | None) -> None:
@@ -160,6 +171,19 @@ def log_eval_error_score(ctx: Any, trace_id: Any, outcome: Outcome) -> None:
     always, so nothing read from Langfuse changes; the marker says why the run failed.
     """
     ctx.score(trace_id, name=EVAL_ERROR_SCORE, value=1, data_type="NUMERIC", comment=outcome.reason)
+
+
+def mark_unscored_run(ctx: Any, run_idx: int, conversation_id: str, error: Outcome | None) -> None:
+    """Langfuse for a run that gets no verdict scores (its judge or its request failed).
+
+    A harness ERROR (``error``, from ``RunLabels.errored_run``) gets its run root with the
+    ``eval_error`` marker; any other unscored run only keeps its root, as before.
+    """
+    if error is None:
+        ctx.export_unscored(run_idx, conversation_id)
+        return
+    with ctx.observe(ctx.trace(conversation_id), run_idx, conversation_id=conversation_id) as tid:
+        log_eval_error_score(ctx, tid, error)
 
 
 def agentic_detail(

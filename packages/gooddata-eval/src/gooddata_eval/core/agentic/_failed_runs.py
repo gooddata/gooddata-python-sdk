@@ -26,7 +26,7 @@ from collections.abc import Callable, Sequence
 from typing import Any
 
 from gooddata_eval.core.agentic._failure_message import cap_failed_checks
-from gooddata_eval.core.agentic._outcome import run_exit_reason, run_outcome
+from gooddata_eval.core.agentic._outcome import JudgeErrorOf, run_exit_reason, run_outcome
 from gooddata_eval.core.models import build_tool_calls
 
 
@@ -36,6 +36,7 @@ def build_failed_runs(
     passed: Callable[[Any], bool],
     detail: Callable[[Any], dict],
     failed_checks: Callable[[Any], list[dict]] | None = None,
+    judge_error: JudgeErrorOf | None = None,
 ) -> list[dict]:
     """One record per run that did not pass, in the order the runs happened.
 
@@ -54,7 +55,7 @@ def build_failed_runs(
     ``exit_reason`` is the run's ``LoopExit`` value, or null for a kind whose loop records
     none, and ``outcome`` its ``core.outcome.Outcome`` record: ERROR when the harness failed
     (its simulated user or its judge), FAIL otherwise. The label decides nothing; the run
-    counts as not passed either way. ``failed_checks`` is written only when the caller supplies it: a missing
+    counts as not passed either way; ``judge_error`` is passed on to ``run_outcome``. ``failed_checks`` is written only when the caller supplies it: a missing
     key means the kind does not name its failing checks, while an empty list would claim the
     run failed none. Its expected/actual values are capped in size; the run's ``detail``
     keeps them whole.
@@ -78,7 +79,7 @@ def build_failed_runs(
             "tool_names": [getattr(e, "function_name", None) for e in tool_calls],
             "tool_calls": build_tool_calls(tool_calls),
             "exit_reason": run_exit_reason(run),
-            "outcome": run_outcome(run, passed=False).as_record(),
+            "outcome": run_outcome(run, passed=False, judge_error=judge_error).as_record(),
         }
         if failed_checks is not None:
             record["failed_checks"] = cap_failed_checks(failed_checks(run))

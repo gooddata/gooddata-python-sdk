@@ -24,7 +24,7 @@ from gooddata_eval.core.agentic._gate import (
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import attach_labels, gate_head, label_runs
+from gooddata_eval.core.agentic._outcome import attach_labels, gate_head, label_runs, mark_unscored_run
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1716,6 +1716,12 @@ class DocumentSkillAssertionError(AgenticAssertionError):
     """Raised when a document-skill evaluation fails."""
 
 
+def _judge_error_of(run: DocumentRunResult) -> str | None:
+    """The judge's own failure, for the harness label. ``run.judge_error`` also reports a failed
+    takeaway request (``fill_error``), which is on the product path and stays a FAIL."""
+    return run.evaluation.judge_error
+
+
 def evaluate_agentic_document_skill(
     host: str,
     token: str,
@@ -1795,6 +1801,9 @@ def evaluate_agentic_document_skill(
             document_format=document_format,
         )
 
+    # Before the Langfuse scores, so a run the harness failed gets its marker there too.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, judge_error=_judge_error_of)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -1806,7 +1815,7 @@ def evaluate_agentic_document_skill(
                 if run.ungraded:
                     # No verdict decided this run: its other scores would publish a pass the gate
                     # never counted.
-                    ctx.export_unscored(run_idx, run.conversation_id)
+                    mark_unscored_run(ctx, run_idx, run.conversation_id, run_labels.errored_run(run_idx))
                     continue
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.evaluation.strict_checks
@@ -1856,9 +1865,6 @@ def evaluate_agentic_document_skill(
     unscored = summary.unscored_errors
     judge_errors = summary.judge_errors
     request_errors = summary.request_errors
-    # A run the judge or scorer could not grade is labelled ERROR (judge_failed); a run whose
-    # request failed is on the product path and stays FAIL. The gate is unchanged.
-    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
     if not summary.scored_run_results:
         causes = [
             *([f"judge returned no readable verdict for {len(judge_errors)} run(s)"] if judge_errors else []),
@@ -1900,7 +1906,12 @@ def evaluate_agentic_document_skill(
     }
     # Same predicate runs_passed is taken over, so an item's failed_runs and its counts
     # cannot disagree about which runs failed.
-    failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail)
+    failed_runs = build_failed_runs(
+        summary.run_results,
+        passed=lambda r: r.evaluation.strict_pass,
+        detail=_run_detail,
+        judge_error=_judge_error_of,
+    )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
         gate_note = gate_head(gate, run_labels, runs_passed, failed_runs, len(unscored))

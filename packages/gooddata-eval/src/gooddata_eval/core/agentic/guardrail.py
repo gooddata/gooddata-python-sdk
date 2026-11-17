@@ -20,6 +20,7 @@ from gooddata_eval.core.agentic._outcome import (
     attach_labels,
     gate_head,
     label_runs,
+    mark_unscored_run,
     raise_agentic_failure,
 )
 from gooddata_eval.core.agentic._trace_linker import (
@@ -305,6 +306,9 @@ def evaluate_agentic_guardrail(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so a run the harness failed gets its marker there too.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.judge_error is None and r.passed)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -316,7 +320,7 @@ def evaluate_agentic_guardrail(
                 if run.judge_error is not None:
                     # No verdict, so nothing truthful to publish: float(run.passed) would
                     # write a 0 the judge never returned.
-                    ctx.export_unscored(run_idx, run.conversation_id)
+                    mark_unscored_run(ctx, run_idx, run.conversation_id, run_labels.errored_run(run_idx))
                     continue
                 pt = ctx.trace(run.conversation_id)
                 with ctx.observe(
@@ -381,8 +385,6 @@ def evaluate_agentic_guardrail(
         passed=lambda r: r.judge_error is None and r.passed,
         detail=_run_detail,
     )
-    # A run the judge could not grade is labelled ERROR (judge_failed); the gate is unchanged.
-    run_labels = label_runs(summary.run_results, passed=lambda r: r.judge_error is None and r.passed)
 
     if not summary.scored_run_results:
         # No readable verdict for any run: an error, not K failures. Raised after the

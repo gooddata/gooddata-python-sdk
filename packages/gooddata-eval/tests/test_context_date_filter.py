@@ -63,7 +63,7 @@ def _date(frm: int, to: int, granularity: str = "MONTH", using: str = "dataset/t
 # ── the five acceptance-criteria cases (flag on) ─────────────────────────────
 
 
-def test_inherited_dashboard_range_passes_and_is_marked_inherited():
+def test_inherited_dashboard_range_passes_and_is_marked_inherited() -> None:
     scores = check_filters(
         _viz(),
         _viz({"f_transaction_date": _INHERITED}),
@@ -77,13 +77,13 @@ def test_inherited_dashboard_range_passes_and_is_marked_inherited():
     assert scores.all_ok is True
 
 
-def test_no_actual_date_filter_still_passes_without_being_inherited():
+def test_no_actual_date_filter_still_passes_without_being_inherited() -> None:
     scores = check_filters(_viz(), _viz(), _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=True)
     assert scores.date_ok is True
     assert scores.date_inherited is False
 
 
-def test_a_range_other_than_the_dashboards_fails():
+def test_a_range_other_than_the_dashboards_fails() -> None:
     scores = check_filters(
         _viz(), _viz({"f": _date(-5, 0)}), _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=True
     )
@@ -102,7 +102,9 @@ def test_a_range_other_than_the_dashboards_fails():
         (_INHERITED, _INHERITED, True),
     ],
 )
-def test_an_expected_date_filter_keeps_the_strict_comparison(expected_filter, actual_filter, date_ok):
+def test_an_expected_date_filter_keeps_the_strict_comparison(
+    expected_filter: dict, actual_filter: dict, date_ok: bool
+) -> None:
     expected, actual = _viz({"f": expected_filter}), _viz({"f": actual_filter})
     scores = check_filters(expected, actual, _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=True)
     assert scores.date_ok is date_ok
@@ -111,7 +113,7 @@ def test_an_expected_date_filter_keeps_the_strict_comparison(expected_filter, ac
 
 
 @pytest.mark.parametrize("user_context", [None, {}, {"view": {}}, {"view": {"dashboard": {"id": "d"}}}])
-def test_without_a_dashboard_date_filter_in_context_the_comparison_is_strict(user_context):
+def test_without_a_dashboard_date_filter_in_context_the_comparison_is_strict(user_context: dict | None) -> None:
     scores = check_filters(
         _viz(), _viz({"f": _INHERITED}), _TODAY, user_context=user_context, accept_context_date_filter=True
     )
@@ -122,7 +124,7 @@ def test_without_a_dashboard_date_filter_in_context_the_comparison_is_strict(use
 # ── further edges of the rule ────────────────────────────────────────────────
 
 
-def test_any_date_dataset_is_accepted_and_recorded():
+def test_any_date_dataset_is_accepted_and_recorded() -> None:
     scores = check_filters(
         _viz(),
         _viz({"f": _date(-11, 0, using="dataset/order_date")}),
@@ -134,8 +136,17 @@ def test_any_date_dataset_is_accepted_and_recorded():
     assert scores.date_inherited_dataset == "dataset/order_date"
 
 
+def test_a_date_filter_that_names_no_dataset_is_never_inherited() -> None:
+    nameless = {k: v for k, v in _date(-11, 0).items() if k != "using"}
+    scores = check_filters(
+        _viz(), _viz({"f": nameless}), _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=True
+    )
+    assert scores.date_ok is False
+    assert scores.date_inherited is False
+
+
 @pytest.mark.parametrize(("actual_dataset", "date_ok"), [("dataset/order_date", True), ("dataset/ship_date", False)])
-def test_a_dashboard_filter_naming_a_dataset_accepts_only_that_one(actual_dataset, date_ok):
+def test_a_dashboard_filter_naming_a_dataset_accepts_only_that_one(actual_dataset: str, date_ok: bool) -> None:
     context = {
         "view": {
             "dashboard": {
@@ -156,7 +167,7 @@ def test_a_dashboard_filter_naming_a_dataset_accepts_only_that_one(actual_datase
     assert scores.date_inherited is date_ok
 
 
-def test_the_same_span_written_absolutely_is_accepted():
+def test_the_same_span_written_absolutely_is_accepted() -> None:
     # MONTH -11..0 on 2026-11-12 is 2025-12-01..2026-11-30.
     absolute = {"type": "date_filter", "using": "dataset/transaction_date", "from": "2025-12-01", "to": "2026-11-30"}
     scores = check_filters(
@@ -166,13 +177,13 @@ def test_the_same_span_written_absolutely_is_accepted():
     assert scores.date_inherited is True
 
 
-def test_two_actual_date_filters_fail_even_if_one_is_the_dashboards():
+def test_two_actual_date_filters_fail_even_if_one_is_the_dashboards() -> None:
     actual = _viz({"a": _INHERITED, "b": _date(-1, -1, "YEAR", using="dataset/order_date")})
     scores = check_filters(_viz(), actual, _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=True)
     assert scores.date_ok is False
 
 
-def test_any_of_several_dashboard_date_filters_matches():
+def test_any_of_several_dashboard_date_filters_matches() -> None:
     context = {
         "view": {
             "dashboard": {
@@ -191,7 +202,7 @@ def test_any_of_several_dashboard_date_filters_matches():
     assert scores.date_ok is True
 
 
-def test_ranking_and_attribute_filters_are_not_relaxed():
+def test_ranking_and_attribute_filters_are_not_relaxed() -> None:
     attribute = {"type": "attribute_filter", "using": "label/region", "state": {"include": ["EMEA"]}}
     scores = check_filters(
         _viz(),
@@ -206,7 +217,7 @@ def test_ranking_and_attribute_filters_are_not_relaxed():
 
 
 @pytest.mark.parametrize("malformed", ["text", {"view": "x"}, {"view": {"dashboard": {"filters": "x"}}}])
-def test_a_malformed_context_is_ignored_not_raised(malformed):
+def test_a_malformed_context_is_ignored_not_raised(malformed: object) -> None:
     assert dashboard_date_filters(malformed) == []
 
 
@@ -214,7 +225,7 @@ def test_a_malformed_context_is_ignored_not_raised(malformed):
 
 
 @pytest.mark.parametrize("value", [None, "", "0", "false", "no", "off"])
-def test_flag_off_scores_strictly(monkeypatch, value):
+def test_flag_off_scores_strictly(monkeypatch: pytest.MonkeyPatch, value: str | None) -> None:
     if value is not None:
         monkeypatch.setenv(_ENV, value)
     expected, actual = _viz(), _viz({"f": _INHERITED})
@@ -224,14 +235,14 @@ def test_flag_off_scores_strictly(monkeypatch, value):
 
 
 @pytest.mark.parametrize("value", ["1", "true", "yes", "on"])
-def test_flag_on_from_the_environment(monkeypatch, value):
+def test_flag_on_from_the_environment(monkeypatch: pytest.MonkeyPatch, value: str | None) -> None:
     monkeypatch.setenv(_ENV, value)
     scores = check_filters(_viz(), _viz({"f": _INHERITED}), _TODAY, user_context=_USER_CONTEXT)
     assert scores.date_ok is True
     assert scores.date_inherited is True
 
 
-def test_the_keyword_overrides_the_environment(monkeypatch):
+def test_the_keyword_overrides_the_environment(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(_ENV, "1")
     scores = check_filters(
         _viz(), _viz({"f": _INHERITED}), _TODAY, user_context=_USER_CONTEXT, accept_context_date_filter=False
@@ -244,7 +255,9 @@ def test_the_keyword_overrides_the_environment(monkeypatch):
     [{}, {"f": _INHERITED}, {"f": _date(-5, 0)}, {"a": _INHERITED, "b": _date(0, 0, "YEAR")}],
 )
 @pytest.mark.parametrize("expected_filter_by", [{}, {"f": _date(-1, -1, "YEAR")}])
-def test_flag_off_detail_is_byte_identical_with_and_without_user_context(expected_filter_by, actual_filter_by):
+def test_flag_off_detail_is_byte_identical_with_and_without_user_context(
+    expected_filter_by: dict, actual_filter_by: dict
+) -> None:
     expected, actual = [_viz(expected_filter_by)], _viz(actual_filter_by)
     before, _ = _evaluate_against_candidates(expected, actual, True, _TODAY)
     after, _ = _evaluate_against_candidates(expected, actual, True, _TODAY, user_context=_USER_CONTEXT)
@@ -280,14 +293,14 @@ def _ticket_chat(metric: str = "metric/gross_margin_percent") -> ChatResult:
     )
 
 
-def test_ticket_item_single_shot_fails_with_the_flag_off():
+def test_ticket_item_single_shot_fails_with_the_flag_off() -> None:
     result = get_evaluator("visualization").evaluate(_ticket_item(), _ticket_chat())
     assert result.passed is False
     assert result.detail["filter_date_score"] is False
     assert "filter_date_context" not in result.detail
 
 
-def test_ticket_item_single_shot_passes_with_the_flag_on(monkeypatch):
+def test_ticket_item_single_shot_passes_with_the_flag_on(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(_ENV, "1")
     result = get_evaluator("visualization").evaluate(_ticket_item(), _ticket_chat())
     assert result.passed is True
@@ -303,7 +316,7 @@ def _agentic_client(chat: ChatResult) -> MagicMock:
 
 
 @pytest.mark.parametrize(("flag", "passes"), [(None, False), ("1", True)])
-def test_ticket_item_agentic_run(monkeypatch, flag, passes):
+def test_ticket_item_agentic_run(monkeypatch: pytest.MonkeyPatch, flag: str | None, passes: bool) -> None:
     if flag is not None:
         monkeypatch.setenv(_ENV, flag)
     with patch.object(agentic_visualization, "ChatClient", return_value=_agentic_client(_ticket_chat())):
@@ -322,7 +335,7 @@ def test_ticket_item_agentic_run(monkeypatch, flag, passes):
     assert ev.filter_date_inherited is passes
 
 
-def test_strict_check_summary_shows_the_inherited_date(monkeypatch):
+def test_strict_check_summary_shows_the_inherited_date(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(_ENV, "1")
     # A wrong metric keeps the item failing, so the summary is printed.
     chat = _ticket_chat(metric="metric/revenue")
@@ -344,7 +357,7 @@ def test_strict_check_summary_shows_the_inherited_date(monkeypatch):
     assert "Metrics Correct       : False" in message
 
 
-def test_strict_check_summary_is_unchanged_with_the_flag_off():
+def test_strict_check_summary_is_unchanged_with_the_flag_off() -> None:
     with (
         patch.object(agentic_visualization, "ChatClient", return_value=_agentic_client(_ticket_chat())),
         pytest.raises(VisualizationAssertionError) as exc_info,
@@ -363,7 +376,7 @@ def test_strict_check_summary_is_unchanged_with_the_flag_off():
     assert "inherited" not in message
 
 
-def test_failed_checks_leave_out_an_accepted_inherited_date(monkeypatch):
+def test_failed_checks_leave_out_an_accepted_inherited_date(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(_ENV, "1")
     # An extra attribute filter fails the filters; the inherited date filter must not be blamed.
     chat = ChatResult.model_validate(

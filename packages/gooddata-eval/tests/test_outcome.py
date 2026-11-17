@@ -16,7 +16,8 @@ import httpx
 import pytest
 from gooddata_eval.core.agentic import visualization as agentic_visualization
 from gooddata_eval.core.agentic._gate import gate_failure_note
-from gooddata_eval.core.agentic._outcome import chat_failure_exit, label_runs
+from gooddata_eval.core.agentic._outcome import chat_failure_exit, label_runs, mark_unscored_run
+from gooddata_eval.core.agentic.document_skill import _judge_error_of
 from gooddata_eval.core.agentic.visualization import VisualizationAssertionError, evaluate_agentic_visualization
 from gooddata_eval.core.chat.sse_client import ChatError, TransientChatError, TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.models import AgenticAssertionError, ChatResult, CreatedVisualization, LoopExit
@@ -129,7 +130,7 @@ def test_an_errored_item_names_its_most_frequent_reason() -> None:
         ([PASS, PASS, PASS], "power", "pass", 3),
     ],
 )
-def test_the_shadow_verdict(outcomes, gate, verdict, scored) -> None:
+def test_the_shadow_verdict(outcomes: list[Outcome], gate: str, verdict: str, scored: int) -> None:
     assert shadow_verdict(outcomes, gate) == {"verdict": verdict, "runs_scored": scored, "runs_total": len(outcomes)}
 
 
@@ -155,6 +156,50 @@ def test_label_runs_reads_each_runs_exit_and_judge() -> None:
     assert labels.errored_run(9) is None
     assert labels.item_outcome is None
     assert labels.shadow("power") == {"verdict": "fail", "runs_scored": 2, "runs_total": 4}
+
+
+def test_a_kind_can_name_its_own_judge_error() -> None:
+    run = _Run(False, LoopExit.SUCCESS, judge_error="takeaway request failed")
+    assert label_runs([run], passed=lambda r: r.ok).outcomes == (JUDGE,)
+    labels = label_runs([run], passed=lambda r: r.ok, judge_error=lambda r: None)
+    assert labels.outcomes == (Outcome.failed("success"),)
+
+
+class _Evaluation:
+    def __init__(self, judge_error: str | None, fill_error: str | None) -> None:
+        self.judge_error = judge_error
+        self.fill_error = fill_error
+
+
+class _DocRun:
+    def __init__(self, judge_error: str | None, fill_error: str | None) -> None:
+        self.evaluation = _Evaluation(judge_error, fill_error)
+        self.exit_reason = None
+
+
+def test_a_document_run_whose_takeaway_request_failed_is_a_failure_not_a_judge_error() -> None:
+    request_failed = _DocRun(judge_error=None, fill_error="503 from the takeaway endpoint")
+    judge_failed = _DocRun(judge_error="empty body twice", fill_error=None)
+    labels = label_runs([request_failed, judge_failed], passed=lambda r: False, judge_error=_judge_error_of)
+    assert labels.outcomes == (Outcome.failed(None), JUDGE)
+
+
+def test_an_unscored_run_gets_the_marker_only_when_the_harness_failed() -> None:
+    ctx = MagicMock()
+    mark_unscored_run(ctx, 0, "conv-1", JUDGE)
+    ctx.export_unscored.assert_not_called()
+    ctx.score.assert_called_once()
+    assert ctx.score.call_args.kwargs == {
+        "name": "eval_error",
+        "value": 1,
+        "data_type": "NUMERIC",
+        "comment": "judge_failed",
+    }
+
+    ctx = MagicMock()
+    mark_unscored_run(ctx, 1, "conv-2", None)
+    ctx.export_unscored.assert_called_once_with(1, "conv-2")
+    ctx.score.assert_not_called()
 
 
 # ── end to end through the visualization kind: labels, never a new verdict ───
@@ -256,7 +301,7 @@ def test_an_item_whose_every_run_errored_is_labelled_and_still_fails() -> None:
         (ChatError("SSE stream error"), "chat_error"),
     ],
 )
-def test_a_chat_failure_is_a_plain_failure(exc, exit_value) -> None:
+def test_a_chat_failure_is_a_plain_failure(exc: BaseException, exit_value: str) -> None:
     with pytest.raises(VisualizationAssertionError) as exc_info:
         _evaluate([exc, _viz_turn(), _viz_turn()])
 
