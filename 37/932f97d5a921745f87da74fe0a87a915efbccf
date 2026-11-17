@@ -1,0 +1,32 @@
+uv.lock
+  s_0b97148191cf36::t_02f7b0d9b33821 1202
+  s_0a515c66b30699::t_8390c3f7709ffe 3124-3145
+Dockerfile
+  s_0a515c66b30699::t_2f0f3292ac95f4 3
+pyproject.toml
+  s_0a515c66b30699::t_0d8964b5da5b52 85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "37932f97d5a921745f87da74fe0a87a915efbccf",
+  "prompts": {},
+  "sessions": {
+    "s_0a515c66b30699": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69290896-5e7e-46ff-89c1-242e16a27455",
+        "model": "claude-opus-5"
+      },
+      "human_author": null
+    },
+    "s_0b97148191cf36": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c6354c0-fd12-49b4-849a-e38d81a65b86",
+        "model": "claude-opus-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

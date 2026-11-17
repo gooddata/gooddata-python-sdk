@@ -1,0 +1,25 @@
+packages/gooddata-pipelines/README.md
+  s_ff2589ec1b117a::t_90395b535e6985 40-43,56-61
+CONTRIBUTING.md
+  s_ff2589ec1b117a::t_1f9b16cb0bd165 312-324,328,331,334,337,340-354
+AGENTS.md
+  s_ff2589ec1b117a::t_6fb5c887778817 165-169
+packages/gooddata-pipelines/AGENTS.md
+  s_ff2589ec1b117a::t_9be5c869fdf10d 87-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "351c564f86421f2fb054b4fd6a4260de99adfe71",
+  "prompts": {},
+  "sessions": {
+    "s_ff2589ec1b117a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b53ed987-b22e-400c-93eb-3d8c29f94a2d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

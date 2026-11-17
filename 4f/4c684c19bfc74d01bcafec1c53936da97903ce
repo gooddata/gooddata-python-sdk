@@ -1,0 +1,23 @@
+packages/gooddata-eval/tests/test_from_insights.py
+  s_9581792d57de34::t_dcfa8a55f98777 484
+  s_9581792d57de34::t_148e5395e40e82 10,31,462-483,485-489
+  s_9581792d57de34::t_ccd77603a42e9d 490-491
+packages/gooddata-eval/src/gooddata_eval/core/dataset/from_insights.py
+  s_9581792d57de34::t_e40d50edd0e5d1 170,416,474-478,501
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4f4c684c19bfc74d01bcafec1c53936da97903ce",
+  "prompts": {},
+  "sessions": {
+    "s_9581792d57de34": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4fa57ff-9ade-42a8-a203-efd5eb66e000",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

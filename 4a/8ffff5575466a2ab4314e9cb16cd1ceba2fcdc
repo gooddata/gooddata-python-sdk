@@ -1,0 +1,16 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  h_71b19eb851a635 478,525-526,690,692,698,701,753
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  h_71b19eb851a635 316,379,387-388,396-397,1148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a8ffff5575466a2ab4314e9cb16cd1ceba2fcdc",
+  "prompts": {},
+  "humans": {
+    "h_71b19eb851a635": {
+      "author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}

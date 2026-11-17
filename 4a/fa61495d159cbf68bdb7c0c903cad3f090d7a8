@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_agentic_metric_skill.py
+  s_732b0ecf528d18::t_11af740c86ec73 108-118
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_732b0ecf528d18::t_0bfcf74921d068 107-110,112-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "4afa61495d159cbf68bdb7c0c903cad3f090d7a8",
+  "prompts": {},
+  "sessions": {
+    "s_732b0ecf528d18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03501712-58cc-4278-ac9a-527c4366c8bb",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Frank Huynh <duy.huynh@gooddata.com>"
+    }
+  }
+}

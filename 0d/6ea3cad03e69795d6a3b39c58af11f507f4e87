@@ -1,0 +1,19 @@
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_documents_store_load_and_put.yaml
+  s_d8835365a289bc::t_c1c4b907dff27c 933-936,939-942,994-997,1000-1003,1069,1073-1076,1134,1138-1141,1160,1278,1282-1285,1343,1347-1350,1369,1471-1474,1477-1480,1536-1539,1542-1545,1613,1617-1620,1678,1682-1685,1704,1743,1747-1750,1808,1812-1815,1834
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d6ea3cad03e69795d6a3b39c58af11f507f4e87",
+  "prompts": {},
+  "sessions": {
+    "s_d8835365a289bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7fbcc7cd-ee49-4dd5-a467-6a186e14ff84",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

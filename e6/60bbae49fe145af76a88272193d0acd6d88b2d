@@ -1,0 +1,31 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_7a7aacffd04f2e::t_fe443a06ed8601 72-75
+  s_7a7aacffd04f2e::t_4b423d606abc88 97-98
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_7a7aacffd04f2e::t_1bfd33d4b0bc39 13,17,895-896,944-945
+  s_7a7aacffd04f2e::t_c06426786056ed 1331-1413
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_7a7aacffd04f2e::t_2fce96b4fead80 628-629,645-646,1038-1039,1093-1094,1128-1129,1217-1218,1274-1275
+  s_7a7aacffd04f2e::t_f183b0a9bfbbdb 835-836
+  s_7a7aacffd04f2e::t_dba38b5985711e 850-851
+  s_7a7aacffd04f2e::t_ca3671ad6b98d0 583-586
+  s_7a7aacffd04f2e::t_e0a2bb1743ddcb 554-562
+  s_7a7aacffd04f2e::t_9be0a2fb63d85b 279-298
+  s_7a7aacffd04f2e::t_2c580ba79324c7 778-803
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e660bbae49fe145af76a88272193d0acd6d88b2d",
+  "prompts": {},
+  "sessions": {
+    "s_7a7aacffd04f2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62b190bc-a23d-4cb7-9e5c-b84a0d1f482f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

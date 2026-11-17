@@ -1,0 +1,24 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/anomaly_detection.py
+  s_b4892b383f0a00::t_16695b28c61760 360-363
+  s_b4892b383f0a00::t_55914fb17e8e7d 347,364-365,529,544
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_b4892b383f0a00::t_55914fb17e8e7d 301
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_b4892b383f0a00::t_55914fb17e8e7d 769,827
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "93b4b885cfaca53bd765ab56fde2985ef9d169a2",
+  "prompts": {},
+  "sessions": {
+    "s_b4892b383f0a00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65d32045-c8b6-499c-9b97-bf32d1f56066",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

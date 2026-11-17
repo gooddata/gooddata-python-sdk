@@ -1,0 +1,61 @@
+packages/gooddata-eval/src/gooddata_eval/core/outcome.py
+  s_d5a90247078f0f::t_153b2ba76d64eb 1-190
+packages/gooddata-eval/tests/test_outcome.py
+  s_d5a90247078f0f::t_5948c9a43005e6 1-363
+packages/gooddata-eval/src/gooddata_eval/__init__.py
+  s_d5a90247078f0f::t_826b863b1940bc 5-11,13-20
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_d5a90247078f0f::t_c87767e90ca017 32,597-612
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_d5a90247078f0f::t_51d2bc4a24a0b5 22,140-148,322-330,744
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_failed_runs.py
+  s_d5a90247078f0f::t_24fe52bf342b04 24-26,55-56,78-81
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_outcome.py
+  s_d5a90247078f0f::t_c742e3b48784ed 22-24,27-29,33-34,39-45,48-167,184,197,202-203,227-228
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_d5a90247078f0f::t_5ff31a567c83d7 10,18,26-32,1234-1243,1282-1283,1290-1291,1317-1318,1320,1329
+packages/gooddata-eval/src/gooddata_eval/core/agentic/anomaly_detection.py
+  s_d5a90247078f0f::t_f776a73aeb0b32 32,43-49,591-600,667-668,676,678-679,689,691,697,709
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_d5a90247078f0f::t_013fcf3b7b5356 8,14,22-28,2320-2329,2371-2372,2378-2379,2397-2398,2417,2422
+packages/gooddata-eval/src/gooddata_eval/core/agentic/kda_skill.py
+  s_d5a90247078f0f::t_ba344981169662 9,21-27,507-516,579-580,587-588,609-610,619,621
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_d5a90247078f0f::t_6d452a6134c8d6 9,16,24-30,571-580,625-626,668-669,689-690,693,698
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_d5a90247078f0f::t_f57c7101c41545 15,23-29,652-661,723-724,732-733,752-753,764,797
+packages/gooddata-eval/src/gooddata_eval/core/agentic/what_if.py
+  s_d5a90247078f0f::t_4dc3acc6c2778d 26,37-43,552-561,630-631,640,642-643,654,656,662,674
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_d5a90247078f0f::t_994146cbe0512a 20-31
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_d5a90247078f0f::t_48431523ed37bd 135,156-158,180-183
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_d5a90247078f0f::t_3408712bfad85d 440-462
+packages/gooddata-eval/src/gooddata_eval/core/runner.py
+  s_d5a90247078f0f::t_1b3c367238a377 12,325-328,388,411-418
+packages/gooddata-eval/tests/conftest.py
+  s_d5a90247078f0f::t_0fc2f18940bf23 29
+packages/gooddata-eval/tests/test_agentic_failure_message.py
+  s_d5a90247078f0f::t_f11560366510d3 257
+packages/gooddata-eval/tests/test_cli.py
+  s_d5a90247078f0f::t_81f55126247947 12-18,1206-1218
+packages/gooddata-eval/tests/test_langfuse_sink.py
+  s_d5a90247078f0f::t_04b29dd0f8ef10 280-305
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8124b9d96a38823918065688f05a033c819d4017",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_66039599a549dc::t_4cfb6777edc469 92-96
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_66039599a549dc::t_130bcd642427fc 6
+.github/workflows/rw-python-tests.yaml
+  s_66039599a549dc::t_8586f029d79386 47-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "b839f9376e7463573e2d268c46de102b495338cc",
+  "prompts": {},
+  "sessions": {
+    "s_66039599a549dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3a86f1bd-6a08-45db-a3b2-daadeaacb44c",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

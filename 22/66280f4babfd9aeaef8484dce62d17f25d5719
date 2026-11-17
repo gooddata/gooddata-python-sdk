@@ -1,0 +1,21 @@
+packages/gooddata-eval/tests/test_agentic_obfuscation.py
+  s_8a0420fc190c00::t_bcba8418c3a891 65,70,236,239-247
+packages/gooddata-eval/src/gooddata_eval/core/agentic/obfuscation.py
+  s_8a0420fc190c00::t_bcba8418c3a891 15,19-20,43,70,74,91,107-109,122,265-280,386,393,405-406,430-431,483,486-494,512-513,572,576
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2266280f4babfd9aeaef8484dce62d17f25d5719",
+  "prompts": {},
+  "sessions": {
+    "s_8a0420fc190c00": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f8e4742c-11b1-4e4c-a749-1f9761445232",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}
