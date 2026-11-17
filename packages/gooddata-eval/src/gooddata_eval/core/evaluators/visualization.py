@@ -83,6 +83,15 @@ class EvaluationResult:
     format_correct: bool | None = None
     format_problems: list[str] = field(default_factory=list)
     part_present: bool | None = None
+    # Set only when `filter_date_score` holds because the actual date filter is the one the
+    # dashboard in the item's `user_context` applies (opt-in, see `check_filters`): the date
+    # dataset that filter used. Reported in the detail only when set.
+    filter_date_inherited_dataset: str | None = None
+
+    @property
+    def filter_date_inherited(self) -> bool:
+        """Whether `filter_date_score` holds only through the dashboard-context rule."""
+        return self.filter_date_inherited_dataset is not None
 
     @property
     def scored_without_chart(self) -> bool:
@@ -453,6 +462,9 @@ def _evaluate_visualization(
     actual: CreatedVisualization | None,
     skill_activated: bool = False,
     today: date | None = None,
+    *,
+    user_context: Mapping | None = None,
+    accept_context_date_filter: bool | None = None,
 ) -> EvaluationResult:
     # One anchor for the scoring and for the filters reported beside it. check_filters
     # already shares an anchor across its two sides, but resolving the reported filters
@@ -489,7 +501,13 @@ def _evaluate_visualization(
     cross_ref_valid, cross_ref_errors = validate_cross_references(actual)
     act_metric_uris = get_metric_uri_set(actual)
     act_dim_uris = get_dimension_uri_set(actual)
-    filter_scores = check_filters(expected, actual, today)
+    filter_scores = check_filters(
+        expected,
+        actual,
+        today,
+        user_context=user_context,
+        accept_context_date_filter=accept_context_date_filter,
+    )
     metric_layout_problems = check_metric_layout(expected, actual)
     return EvaluationResult(
         visualization_created=True,
@@ -516,6 +534,7 @@ def _evaluate_visualization(
         expected_buckets=bucket_layout(expected) if expected.buckets_strict else None,
         actual_buckets=bucket_layout(actual) if expected.buckets_strict else None,
         metric_layout_problems=metric_layout_problems,
+        filter_date_inherited_dataset=filter_scores.date_inherited_dataset,
     )
 
 
@@ -551,13 +570,29 @@ def _evaluate_against_candidates(
     actual: CreatedVisualization | None,
     skill_activated: bool = False,
     today: date | None = None,
+    *,
+    user_context: Mapping | None = None,
+    accept_context_date_filter: bool | None = None,
 ) -> tuple[EvaluationResult, CreatedVisualization | None]:
     if not expected_outputs:
         return _no_candidate_result(actual, skill_activated), None
     # Anchored once here too: the candidates are ranked against each other, so letting
     # each resolve its own today could rank them on spans from different days.
     today = today or date.today()
-    pairs = [(_evaluate_visualization(exp, actual, skill_activated, today), exp) for exp in expected_outputs]
+    pairs = [
+        (
+            _evaluate_visualization(
+                exp,
+                actual,
+                skill_activated,
+                today,
+                user_context=user_context,
+                accept_context_date_filter=accept_context_date_filter,
+            ),
+            exp,
+        )
+        for exp in expected_outputs
+    ]
     best_result, best_expected = max(pairs, key=lambda p: (p[0].strict_pass, p[0].strict_checks_passed_count))
     return best_result, best_expected
 
@@ -624,6 +659,13 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "actual_dim_uris": sorted(ev.actual_dim_uris),
         "expected_filters": ev.expected_filters,
         "actual_filters": ev.actual_filters,
+        # Nested and only when it applies: `quality_score` counts every top-level boolean, and
+        # a run scored without the opt-in rule must not carry the key at all.
+        **(
+            {"filter_date_context": {"inherited": True, "dataset": ev.filter_date_inherited_dataset}}
+            if ev.filter_date_inherited
+            else {}
+        ),
         "expected_sorts": ev.expected_sorts,
         "actual_sorts": ev.actual_sorts,
         **({"metric_layout_problems": ev.metric_layout_problems} if ev.metric_layout_problems else {}),
@@ -658,7 +700,9 @@ class VisualizationEvaluator:
         candidates = _parse_expected(item.expected_output)
         actual = _extract_actual(chat_result)
         skill_activated = _check_visualization_skill_activated(chat_result.tool_call_events)
-        ev, _best_expected = _evaluate_against_candidates(candidates, actual, skill_activated)
+        ev, _best_expected = _evaluate_against_candidates(
+            candidates, actual, skill_activated, user_context=item.user_context
+        )
         ev = with_execution(ev, chat_result.tool_call_events, chat_result.text_response, options.requires_execution)
         ev = with_options(ev, options, actual, chat_result.tool_call_events, render_answer_text(chat_result))
         return ItemEvaluation(

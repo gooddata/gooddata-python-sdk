@@ -20,11 +20,11 @@ from gooddata_eval.core.agentic._filters import describe_selection, same_selecti
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
+from gooddata_eval.core.agentic._outcome import attach_labels, gate_head, label_runs
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1856,6 +1856,9 @@ def evaluate_agentic_document_skill(
     unscored = summary.unscored_errors
     judge_errors = summary.judge_errors
     request_errors = summary.request_errors
+    # A run the judge or scorer could not grade is labelled ERROR (judge_failed); a run whose
+    # request failed is on the product path and stays FAIL. The gate is unchanged.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
     if not summary.scored_run_results:
         causes = [
             *([f"judge returned no readable verdict for {len(judge_errors)} run(s)"] if judge_errors else []),
@@ -1866,6 +1869,7 @@ def evaluate_agentic_document_skill(
         )
         exc_judge.timings = item_timings
         exc_judge.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        attach_labels(exc_judge, run_labels, gate)
         raise exc_judge
 
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
@@ -1899,7 +1903,7 @@ def evaluate_agentic_document_skill(
     failed_runs = build_failed_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass, detail=_run_detail)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
+        gate_note = gate_head(gate, run_labels, runs_passed, failed_runs, len(unscored))
         skill_note = ""
         if not best.evaluation.wire_names_current:
             skill_note = " gen-ai still sends the Report names, so it predates the Document rename."
@@ -1923,6 +1927,7 @@ def evaluate_agentic_document_skill(
         exc.runs_effective = runs_effective
         exc.failed_runs = failed_runs
         exc.run_latencies_s = [r.run_latency_s for r in summary.run_results]
+        attach_labels(exc, run_labels, gate)
         raise exc
     return AgenticEvalOutcome(
         runs_passed=runs_passed,

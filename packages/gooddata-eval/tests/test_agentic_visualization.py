@@ -18,7 +18,7 @@ from gooddata_eval.core.agentic.visualization import (
     evaluate_agentic_visualization,
     run_agentic_visualization,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.evaluators.visualization import ExpectationOptions
 from gooddata_eval.core.models import ChatResult, CreatedVisualization, LoopExit
 
@@ -822,3 +822,35 @@ def test_a_failed_request_with_a_cut_off_answer_fails_an_item_without_a_chart() 
     assert result.exit_reason is LoopExit.CHAT_ERROR
     assert result.eval_result.strict_pass is False
     assert result.eval_result.answer_problems == ["the chat request failed before the answer ended"]
+
+
+_AGENT_CHAT_FAILURES = [
+    (TurnTimeoutError("agent exceeded the 60s turn budget"), LoopExit.AGENT_TIMEOUT),
+    (TurnIncompleteError("no final answer", reason="max iterations"), LoopExit.TURN_INCOMPLETE),
+]
+
+
+@pytest.mark.parametrize(("exc", "loop_exit"), _AGENT_CHAT_FAILURES)
+def test_execute_single_run_records_the_agents_own_failure_on_the_opening_request(exc, loop_exit):
+    client = MagicMock()
+    client.send_message.side_effect = exc
+
+    result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
+
+    assert result.exit_reason is loop_exit
+    assert result.eval_result.visualization_created is False
+    # Like a chat error, the loop does not run after the opening failure.
+    assert client.send_message.call_count == 1
+
+
+@pytest.mark.parametrize(("exc", "loop_exit"), _AGENT_CHAT_FAILURES)
+def test_execute_single_run_records_the_agents_own_failure_on_a_follow_up(monkeypatch, exc, loop_exit):
+    monkeypatch.setattr(
+        "gooddata_eval.core.agentic.visualization.generate_simulated_response", lambda *a, **k: "the revenue one"
+    )
+    client = MagicMock()
+    client.send_message.side_effect = [_chat_clarification(), exc]
+
+    result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
+
+    assert result.exit_reason is loop_exit

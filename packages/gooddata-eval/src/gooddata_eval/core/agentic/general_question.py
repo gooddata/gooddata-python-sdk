@@ -10,12 +10,18 @@ from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    attach_labels,
+    gate_head,
+    label_runs,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -417,6 +423,8 @@ def evaluate_agentic_general_question(
         passed=lambda r: r.judge_error is None and r.passed,
         detail=_run_detail,
     )
+    # A run the judge could not grade is labelled ERROR (judge_failed); the gate is unchanged.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.judge_error is None and r.passed)
 
     if not summary.scored_run_results:
         # Not one run produced a readable verdict, so this item has no result -- an error,
@@ -431,13 +439,16 @@ def evaluate_agentic_general_question(
             error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, run_latency_s(best.timings)
         )
         error.timings = item_timings
+        attach_labels(error, run_labels, gate)
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
+        gate_note = gate_head(gate, run_labels, runs_passed, failed_runs, len(unscored))
         raise_agentic_failure(
             GeneralQuestionAssertionError,
             f"General question assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            outcome=run_labels.outcome_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,

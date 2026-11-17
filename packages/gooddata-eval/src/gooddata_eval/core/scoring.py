@@ -7,6 +7,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import date, timedelta
 
+from gooddata_eval.core.config import accept_context_date_filter as _accept_context_date_filter_from_env
 from gooddata_eval.core.granularity import canonical_date_uri
 from gooddata_eval.core.models import AacBucketRef, AacQueryField, CreatedVisualization
 
@@ -56,6 +57,16 @@ class FilterScores:
     date_ok: bool
     ranking_ok: bool
     attribute_ok: bool
+    # Set only when `date_ok` holds because the actual date filter is the one the dashboard
+    # in the item's `user_context` applies (see `check_filters`), not because it matched the
+    # expected output: the date dataset (`using`) of that filter. The dashboard filter may name
+    # none, so any date dataset is accepted and the one the agent picked is recorded here.
+    date_inherited_dataset: str | None = None
+
+    @property
+    def date_inherited(self) -> bool:
+        """Whether `date_ok` holds only through the dashboard-context rule."""
+        return self.date_inherited_dataset is not None
 
     @property
     def all_ok(self) -> bool:
@@ -503,18 +514,93 @@ def normalized_filters(viz: CreatedVisualization, today: date | None = None) -> 
     return {"date": sorted(date_set), "ranking": sorted(ranking_set), "attribute": sorted(attr_set)}
 
 
+def dashboard_date_filters(user_context: object) -> list[dict]:
+    """The date filters of the dashboard open in ``user_context`` (``view.dashboard.filters``).
+
+    Anything that is not shaped like that -- no context, no dashboard, a non-list ``filters``,
+    an entry that is not a ``date_filter`` object -- contributes nothing rather than raising:
+    the context is the chat API's schema and is not validated by the dataset loader.
+    """
+    if not isinstance(user_context, Mapping):
+        return []
+    view = user_context.get("view")
+    dashboard = view.get("dashboard") if isinstance(view, Mapping) else None
+    filters = dashboard.get("filters") if isinstance(dashboard, Mapping) else None
+    if not isinstance(filters, list):
+        return []
+    return [f for f in filters if isinstance(f, dict) and f.get("type") == "date_filter"]
+
+
+def _inherited_date_filter_dataset(
+    exp_date: set[str],
+    act_date: set[str],
+    actual: CreatedVisualization,
+    dashboard_filters: list[dict],
+    today: date,
+) -> str | None:
+    """The dataset of the actual date filter when it is the dashboard's own, else None.
+
+    Holds only when the expected output states no date filter and the actual chart has
+    exactly one, whose span equals that of one of the dashboard's date filters resolved
+    against the same ``today``. The dashboard's common date filter names no dataset (it
+    resolves per widget), so it is compared on the actual filter's dataset and accepts any
+    date dataset. A dashboard date filter that names one in ``using`` accepts only that one.
+    """
+    if exp_date or not dashboard_filters:
+        return None
+    actual_filters = [f for f in actual.query.filter_by.values() if f.get("type") == "date_filter"]
+    if len(actual_filters) != 1:
+        return None
+    dataset = actual_filters[0].get("using", "")
+    fields = actual.query.fields
+    for dashboard_filter in dashboard_filters:
+        candidate = _normalize_date_filter(
+            {**dashboard_filter, "using": dashboard_filter.get("using") or dataset}, fields, today
+        )
+        if json.dumps(candidate, sort_keys=True) in act_date:
+            return dataset if isinstance(dataset, str) else ""
+    return None
+
+
 def check_filters(
-    expected: CreatedVisualization, actual: CreatedVisualization, today: date | None = None
+    expected: CreatedVisualization,
+    actual: CreatedVisualization,
+    today: date | None = None,
+    *,
+    user_context: Mapping | None = None,
+    accept_context_date_filter: bool | None = None,
 ) -> FilterScores:
+    """Compare the filters of two visualizations, per category.
+
+    Every category compares exactly. One opt-in exception, for the date category only:
+    with ``accept_context_date_filter`` (None reads ``GD_EVAL_ACCEPT_CONTEXT_DATE_FILTER``,
+    off by default), an actual date filter equal to a date filter of the dashboard in
+    ``user_context`` is accepted when the expected output has none -- the agent carried the
+    open dashboard's period into the new chart, which the product accepts. The result then
+    has ``date_inherited`` set. Without the flag, or without a dashboard date filter in
+    ``user_context``, scoring is exactly the strict comparison.
+    """
     # One anchor for both sides: resolving each against its own date.today() would
     # score inconsistently for a run that straddles midnight.
     today = today or date.today()
     exp_date, exp_rank, exp_attr = _split_and_normalize_filters(expected, today)
     act_date, act_rank, act_attr = _split_and_normalize_filters(actual, today)
+    date_ok = act_date == exp_date
+    inherited_dataset: str | None = None
+    if not date_ok and user_context is not None:
+        enabled = (
+            _accept_context_date_filter_from_env() if accept_context_date_filter is None else accept_context_date_filter
+        )
+        if enabled:
+            inherited_dataset = _inherited_date_filter_dataset(
+                exp_date, act_date, actual, dashboard_date_filters(user_context), today
+            )
+            date_ok = inherited_dataset is not None
     return FilterScores(
-        date_ok=act_date == exp_date,
+        date_ok=date_ok,
         ranking_ok=act_rank == exp_rank,
         attribute_ok=act_attr == exp_attr,
+        date_inherited_dataset=inherited_dataset,
     )
 
 

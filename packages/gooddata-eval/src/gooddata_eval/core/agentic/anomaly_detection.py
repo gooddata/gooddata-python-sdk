@@ -36,12 +36,19 @@ from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    gate_head,
+    label_runs,
+    log_eval_error_score,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -421,7 +428,7 @@ def run_agentic_anomaly_detection(
                     _accumulate(partial)
                     viz_args, execute_result = _extract_anomaly_calls(all_tool_call_events)
                 turn_completed = False
-                exit_reason = LoopExit.CHAT_ERROR
+                exit_reason = chat_failure_exit(exc)
                 break
             reasoning_steps.extend(chat_result.reasoning_steps or [])
             response_id = chat_result.response_id or response_id
@@ -583,6 +590,9 @@ def evaluate_agentic_anomaly_detection(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so an ERROR run gets its marker beside its usual scores.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -613,6 +623,8 @@ def evaluate_agentic_anomaly_detection(
                     }
                 )
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id) as tid:
+                    if (run_error := run_labels.errored_run(run_idx)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
@@ -660,7 +672,7 @@ def evaluate_agentic_anomaly_detection(
     runs_passed = sum(1 for r in summary.run_results if r.evaluation.strict_pass)
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, len(summary.run_results))
+        gate_note = gate_head(gate, run_labels, runs_passed, failed_runs)
         message = (
             f"Anomaly detection assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, success={ev.success}, "
@@ -672,6 +684,8 @@ def evaluate_agentic_anomaly_detection(
         raise_agentic_failure(
             AnomalyDetectionAssertionError,
             message,
+            outcome=run_labels.outcome_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
