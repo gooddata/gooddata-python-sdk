@@ -55,7 +55,12 @@ _VIOLATION_STEPS = [
     "Score 0 if it does not exhibit it.",
 ]
 
-_MARKUP = re.compile(r"\*\*|`|^\s*#{1,6}\s|^\s*(?:[-*•]|\d+[.)])\s", re.MULTILINE)
+# Bold, single emphasis (*x*, _x_), code, a heading or a list item.
+_MARKUP = re.compile(
+    r"\*\*|`|(?<![\w*])[*_](?=\S)[^*_\n]+(?<=\S)[*_](?![\w*])|^\s*#{1,6}\s|^\s*(?:[-*•]|\d+[.)])\s",
+    re.MULTILINE,
+)
+_LIMITS = ("max_words", "max_sentences")
 # A UUID, a MAQL reference such as {metric/net_sales}, or a snake_case identifier.
 _IDS = re.compile(
     r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\{\w+/[^}]*\}|\b[a-z0-9]+(?:_[a-z0-9]+)+\b",
@@ -94,6 +99,11 @@ class CatalogMetadataEvaluator:
             raise ValueError(
                 f"catalog_metadata item '{item.id}': unknown format key(s) {unknown}; known: {sorted(known)}"
             )
+        for key, value in overrides.items():
+            is_limit = isinstance(value, int) and not isinstance(value, bool) and value > 0
+            if not (value is None or value is False or (is_limit if key in _LIMITS else value is True)):
+                kind = "a positive integer" if key in _LIMITS else "true"
+                raise ValueError(f"catalog_metadata item '{item.id}': format.{key} must be {kind}, false or null")
         for key in ("must_include", "must_not_include", "rubric"):
             if not isinstance(expected.get(key, []), list):
                 raise ValueError(f"catalog_metadata item '{item.id}': {key} must be a JSON array")

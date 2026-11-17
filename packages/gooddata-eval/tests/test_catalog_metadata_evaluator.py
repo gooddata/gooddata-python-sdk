@@ -53,6 +53,8 @@ def test_description_passes_format_and_criteria() -> None:
         ("Uses {metric/net_sales} divided by customers.", "no_ids"),
         ("Divides net_sales by active_customers.", "no_ids"),
         ("**Average** revenue per customer.", "no_markup"),
+        ("The *average* revenue per customer.", "no_markup"),
+        ("The _average_ revenue per customer.", "no_markup"),
         ("A. B. C. D. E.", "max_sentences"),
     ],
 )
@@ -117,9 +119,24 @@ def test_violation_fails_the_item() -> None:
 
 @pytest.mark.parametrize(
     "expected",
-    [{"format": {"bold_headline": True}}, {"format": "x"}, {"must_include": "a"}],
+    [
+        {"format": {"bold_headline": True}},
+        {"format": "x"},
+        {"must_include": "a"},
+        {"format": {"max_words": "10"}},
+        {"format": {"max_words": True}},
+        {"format": {"no_markup": "yes"}},
+    ],
 )
 def test_validate_rejects_bad_expected_output(expected: dict) -> None:
     ev = _make_evaluator()
     with pytest.raises(ValueError):
         ev.evaluate(_item(expected), _chat("x"))
+
+
+def test_snake_case_is_an_id_not_emphasis() -> None:
+    ev = _make_evaluator()
+    _judges(ev)
+    res = ev.evaluate(_item({}), _chat("Uses net_sales over 2 * 3 periods."))
+    assert res.detail["no_markup"] is True
+    assert res.detail["no_ids"] is False

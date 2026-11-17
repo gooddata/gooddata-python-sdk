@@ -29,13 +29,15 @@ _ACTIONS = {"title": "generateTitle", "description": "generateDescription"}
 _PLACEHOLDER = "string"
 
 
+def _text(value: Any) -> str:
+    """A field's text for the usable check: blank and the schema placeholder count as none."""
+    text = value.strip() if isinstance(value, str) else ""
+    return "" if text == _PLACEHOLDER else text
+
+
 def is_unusable(data: dict[str, Any], output: str) -> bool:
     """Whether a 200 answer carries neither a generated text nor a reason for its absence."""
-    value = data.get(output)
-    note = data.get("note")
-    if value == _PLACEHOLDER:
-        return True
-    return not value and not note
+    return not _text(data.get(output)) and not _text(data.get("note"))
 
 
 class CatalogMetadataClient:
@@ -84,10 +86,9 @@ class CatalogMetadataClient:
         while is_unusable(data, ci.output) and retries < self._unusable_retries:
             retries += 1
             data = retry_transient(_post, is_retryable=is_retryable_request_error).json()
-        value = data.get(ci.output)
-        text = value if isinstance(value, str) and value != _PLACEHOLDER else ""
+        text = _text(data.get(ci.output))
         # The placeholder is no reason either: a declined answer must carry a real note.
-        note = data.get("note") if data.get("note") != _PLACEHOLDER else None
+        note = _text(data.get("note")) or None
         return ChatResult(
             text_response=text,
             raw_response={**data, "note": note, "output": ci.output, "unusable_retries": retries},

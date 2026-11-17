@@ -49,11 +49,16 @@ def main() -> int:
         )
         chat = ChatResult(text_response=case["text"], raw_response={"note": None})
         key = f"{case['kind']}_0"
-        satisfied = sum(evaluator.evaluate(item, chat).detail.get(key) is True for _ in range(RUNS))
+        verdicts = [evaluator.evaluate(item, chat).detail.get(key) for _ in range(RUNS)]
+        ungraded = sum(not isinstance(v, bool) for v in verdicts)
+        satisfied = sum(v is True for v in verdicts)
         want = RUNS if case["want"] == "pass" else 0
-        ok = satisfied == want
+        # An ungraded run proves nothing, on either side.
+        ok = satisfied == want and not ungraded
         mismatches += not ok
-        print(f"{case['label']:48} want {case['want']:4}  satisfied {satisfied}/{RUNS}  {'OK' if ok else 'MISMATCH'}")
+        print(
+            f"{case['label']:48} want {case['want']:4}  satisfied {satisfied}/{RUNS}{f'  ungraded {ungraded}' if ungraded else ''}  {'OK' if ok else 'MISMATCH'}"
+        )
     print(f"\n{'all calibration texts on the right side' if not mismatches else f'{mismatches} mismatch(es)'}")
     return 1 if mismatches else 0
 

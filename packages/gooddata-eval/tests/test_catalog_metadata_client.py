@@ -56,7 +56,10 @@ def test_posts_object_to_the_action_of_the_output(output: str, action: str) -> N
     }
 
 
-@pytest.mark.parametrize("unusable", [{"title": None, "note": None}, {"title": "string", "note": "string"}])
+@pytest.mark.parametrize(
+    "unusable",
+    [{"title": None, "note": None}, {"title": "string", "note": "string"}, {"title": "  ", "note": " "}],
+)
 def test_asks_again_once_after_an_unusable_answer(unusable: dict) -> None:
     captured: list = []
     client = _client(_sequence(captured, [unusable, {"title": "Average Revenue", "note": None}]))
@@ -108,6 +111,7 @@ def test_is_unusable() -> None:
     assert is_unusable({"title": "string", "note": None}, "title")
     assert not is_unusable({"title": None, "note": "Not found"}, "title")
     assert not is_unusable({"title": "Revenue", "note": None}, "title")
+    assert is_unusable({"title": "   ", "note": "  "}, "title")
 
 
 def test_a_placeholder_note_is_dropped() -> None:
