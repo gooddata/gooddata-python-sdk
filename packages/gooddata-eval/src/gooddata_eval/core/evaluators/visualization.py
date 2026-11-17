@@ -83,6 +83,15 @@ class EvaluationResult:
     format_correct: bool | None = None
     format_problems: list[str] = field(default_factory=list)
     part_present: bool | None = None
+    # Set only when the best candidate is one `date_filter_from_context` derived from the
+    # dashboard in the item's `user_context` and its date filter matched: the date dataset
+    # that filter used. Reported in the detail only when set.
+    filter_date_inherited_dataset: str | None = None
+
+    @property
+    def filter_date_inherited(self) -> bool:
+        """Whether the date filter matched one taken from the dashboard in `user_context`."""
+        return self.filter_date_inherited_dataset is not None
 
     @property
     def scored_without_chart(self) -> bool:
@@ -249,6 +258,19 @@ def requires_execution_of(expected_output: object) -> bool:
 
 
 @dataclass(frozen=True)
+class ContextDateFilter:
+    """The item-level ``date_filter_from_context`` key.
+
+    Every candidate without a date filter also accepts the chart carrying one of the date
+    filters of the dashboard in the item's ``user_context``. ``dataset`` is the date dataset
+    that filter must use; None takes the one the dashboard filter names, and for the
+    dashboard's common date filter, which names none, the one the chart used.
+    """
+
+    dataset: str | None = None
+
+
+@dataclass(frozen=True)
 class ExpectationOptions:
     """The item-level keys of a visualization expectation, beside its candidate charts.
 
@@ -266,6 +288,10 @@ class ExpectationOptions:
     - ``format_intents``: per metric uri, how its numbers must read (see ``number_format``).
     - ``requires_visualization_part``: the chart must come back as a part of the answer. Without
       it, a chart that exists only in the tool arguments is scored like one the user saw.
+    - ``date_filter_from_context``: the chart may carry the date filter of the dashboard in the
+      item's ``user_context`` instead of none (see ``ContextDateFilter``). For a question that
+      names no period asked from an open dashboard, where carrying the dashboard's period over
+      and leaving the chart unfiltered are both correct.
     """
 
     requires_execution: bool = False
@@ -275,6 +301,69 @@ class ExpectationOptions:
     answer_must_not_match: tuple[str, ...] = ()
     format_intents: Mapping[str, Mapping[str, Any] | None] | None = None
     requires_visualization_part: bool = False
+    date_filter_from_context: ContextDateFilter | None = None
+
+
+_DATASET_PREFIX = "dataset/"
+
+
+def date_dataset_uri(dataset: object) -> str | None:
+    """``dataset`` as a ``dataset/`` URI; a bare id, as dashboard filters name it, gets the prefix.
+
+    None for anything else: not a non-empty string, or a URI of another type such as
+    ``label/region`` or a misspelled ``datset/order_date``.
+    """
+    if not isinstance(dataset, str) or not dataset:
+        return None
+    if dataset.startswith(_DATASET_PREFIX):
+        return dataset if len(dataset) > len(_DATASET_PREFIX) else None
+    return None if "/" in dataset else f"{_DATASET_PREFIX}{dataset}"
+
+
+def _context_date_filter(expected_output: dict) -> ContextDateFilter | None:
+    raw = expected_output.get("date_filter_from_context", False)
+    if raw is False:
+        return None
+    if raw is True:
+        return ContextDateFilter()
+    if isinstance(raw, dict) and set(raw) == {"dataset"}:
+        dataset = date_dataset_uri(raw["dataset"])
+        if dataset is not None:
+            return ContextDateFilter(dataset=dataset)
+    raise ValueError(
+        'date_filter_from_context must be true, false or {"dataset": "<id>"} with a bare date dataset id '
+        f"or a dataset/ URI, got {raw!r}"
+    )
+
+
+def dashboard_date_filters(user_context: object) -> list[dict]:
+    """The date filters of the dashboard open in ``user_context`` (``view.dashboard.filters``).
+
+    Anything not shaped like that -- no context, no dashboard, a non-list ``filters``, an
+    entry that is not a ``date_filter`` object -- contributes nothing rather than raising:
+    the context is the chat API's schema and the dataset loader does not validate it.
+    """
+    if not isinstance(user_context, Mapping):
+        return []
+    view = user_context.get("view")
+    dashboard = view.get("dashboard") if isinstance(view, Mapping) else None
+    filters = dashboard.get("filters") if isinstance(dashboard, Mapping) else None
+    if not isinstance(filters, list):
+        return []
+    return [f for f in filters if isinstance(f, dict) and f.get("type") == "date_filter"]
+
+
+def check_context_date_filter(options: ExpectationOptions, user_context: object) -> None:
+    """Refuse ``date_filter_from_context`` on an item whose context has no dashboard date filter.
+
+    Raises:
+        ValueError: the key is set and ``user_context`` offers nothing to take a date filter
+            from, so the key would silently accept nothing.
+    """
+    if options.date_filter_from_context is not None and not dashboard_date_filters(user_context):
+        raise ValueError(
+            "date_filter_from_context is set, but the item's user_context has no date filter in view.dashboard.filters"
+        )
 
 
 def _regex_error(pattern: str) -> str | None:
@@ -308,6 +397,7 @@ _EXPECTATION_KEYS = frozenset(
         "answer_must_not_match",
         "format_intents",
         "requires_visualization_part",
+        "date_filter_from_context",
     }
 )
 
@@ -367,6 +457,9 @@ def expectation_options(expected_output: object) -> ExpectationOptions:
         validate_format_intents(intents)
     if not expects and (intents is not None or part):
         raise ValueError("an expectation without a chart cannot state format_intents or requires_visualization_part")
+    context_date = _context_date_filter(expected_output)
+    if not expects and context_date is not None:
+        raise ValueError("an expectation without a chart cannot state date_filter_from_context")
     return ExpectationOptions(
         requires_execution=requires_execution_of(expected_output),
         expects_visualization=expects,
@@ -375,6 +468,7 @@ def expectation_options(expected_output: object) -> ExpectationOptions:
         answer_must_not_match=_patterns(expected_output, "answer_must_not_match"),
         format_intents=intents,
         requires_visualization_part=part,
+        date_filter_from_context=context_date,
     )
 
 
@@ -551,15 +645,91 @@ def _evaluate_against_candidates(
     actual: CreatedVisualization | None,
     skill_activated: bool = False,
     today: date | None = None,
+    *,
+    user_context: object = None,
+    context_date_filter: ContextDateFilter | None = None,
 ) -> tuple[EvaluationResult, CreatedVisualization | None]:
+    """Score ``actual`` against every candidate and return the best result with its candidate.
+
+    The returned candidate is always one the item states. With ``context_date_filter``, the
+    candidates ``context_date_candidates`` derives are scored after the stated ones and can
+    replace the best stated result only when they rank higher, or when they tie with it and
+    match the date it misses. Among stated candidates that tie, one that matched the date is
+    that best result -- so a chart failing on something else is not also blamed for
+    the dashboard's period, and a stated candidate that matched the date keeps winning. The
+    result is then marked with the date dataset, and the candidate returned is the stated one
+    the winner was derived from.
+    """
     if not expected_outputs:
         return _no_candidate_result(actual, skill_activated), None
     # Anchored once here too: the candidates are ranked against each other, so letting
     # each resolve its own today could rank them on spans from different days.
     today = today or date.today()
-    pairs = [(_evaluate_visualization(exp, actual, skill_activated, today), exp) for exp in expected_outputs]
-    best_result, best_expected = max(pairs, key=lambda p: (p[0].strict_pass, p[0].strict_checks_passed_count))
+    stated = [(_evaluate_visualization(exp, actual, skill_activated, today), exp) for exp in expected_outputs]
+    if context_date_filter is None:
+        return max(stated, key=lambda pair: _rank(pair[0]))
+    # With the key, a stated candidate that matched the date wins the stated ones it ties
+    # with, so the derived candidates below are measured against it.
+    best_result, best_expected = max(stated, key=lambda pair: (*_rank(pair[0]), pair[0].filter_date_score))
+    for derived, origin, dataset in context_date_candidates(
+        expected_outputs, actual, user_context, context_date_filter
+    ):
+        result = _evaluate_visualization(derived, actual, skill_activated, today)
+        if not result.filter_date_score:
+            continue
+        ranks_higher = _rank(result) > _rank(best_result)
+        fixes_the_date = _rank(result) == _rank(best_result) and not best_result.filter_date_score
+        if ranks_higher or fixes_the_date:
+            best_result = replace(result, filter_date_inherited_dataset=dataset)
+            best_expected = origin
     return best_result, best_expected
+
+
+def _rank(result: EvaluationResult) -> tuple[bool, int]:
+    return result.strict_pass, result.strict_checks_passed_count
+
+
+def _date_filters(viz: CreatedVisualization) -> list[dict]:
+    return [f for f in viz.query.filter_by.values() if f.get("type") == "date_filter"]
+
+
+def context_date_candidates(
+    expected_outputs: list[CreatedVisualization],
+    actual: CreatedVisualization | None,
+    user_context: object,
+    context_date_filter: ContextDateFilter,
+) -> list[tuple[CreatedVisualization, CreatedVisualization, str]]:
+    """Each candidate without a date filter, once per dashboard date filter in ``user_context``.
+
+    Every copy carries that dashboard filter, on the date dataset ``ContextDateFilter`` picks,
+    and is returned with the candidate it was copied from and that dataset. A dashboard
+    filter naming no dataset, with no dataset stated on the item, takes the dataset of the
+    chart's only date filter; with no such filter, or one whose ``using`` is not a ``dataset/``
+    URI, there is nothing for it to match, and it yields no copy. A dashboard filter whose
+    ``using`` is not a date dataset yields none either.
+    """
+    actual_dates = _date_filters(actual) if actual is not None else []
+    actual_using = actual_dates[0].get("using") if len(actual_dates) == 1 else None
+    actual_dataset = actual_using if date_dataset_uri(actual_using) == actual_using else None
+    derived: list[tuple[CreatedVisualization, CreatedVisualization, str]] = []
+    for expected in expected_outputs:
+        if _date_filters(expected):
+            continue
+        for dashboard_filter in dashboard_date_filters(user_context):
+            dashboard_using = dashboard_filter.get("using")
+            dashboard_dataset = date_dataset_uri(dashboard_using)
+            if dashboard_using and dashboard_dataset is None:
+                continue
+            dataset = context_date_filter.dataset or dashboard_dataset or actual_dataset
+            if dataset is None:
+                continue
+            key = "context_date_filter"
+            while key in expected.query.filter_by:
+                key = f"_{key}"
+            filter_by = {**expected.query.filter_by, key: {**dashboard_filter, "using": dataset}}
+            query = expected.query.model_copy(update={"filter_by": filter_by})
+            derived.append((expected.model_copy(update={"query": query}), expected, dataset))
+    return derived
 
 
 def _parse_expected(expected_output: dict) -> list[CreatedVisualization]:
@@ -624,6 +794,13 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
         "actual_dim_uris": sorted(ev.actual_dim_uris),
         "expected_filters": ev.expected_filters,
         "actual_filters": ev.actual_filters,
+        # Nested and only when it applies: `quality_score` counts every top-level boolean, and
+        # an item without `date_filter_from_context` must not carry the key at all.
+        **(
+            {"filter_date_context": {"inherited": True, "dataset": ev.filter_date_inherited_dataset}}
+            if ev.filter_date_inherited
+            else {}
+        ),
         "expected_sorts": ev.expected_sorts,
         "actual_sorts": ev.actual_sorts,
         **({"metric_layout_problems": ev.metric_layout_problems} if ev.metric_layout_problems else {}),
@@ -653,12 +830,29 @@ def evaluation_result_detail(ev: EvaluationResult) -> dict:
 class VisualizationEvaluator:
     test_kind = "visualization"
 
+    def validate(self, item: DatasetItem) -> None:
+        """Refuse a malformed expectation before the runner sends the item's question.
+
+        Raises:
+            ValueError: an item-level key or a candidate chart is malformed, or
+                ``date_filter_from_context`` has no dashboard date filter to take a filter from.
+        """
+        check_context_date_filter(expectation_options(item.expected_output), item.user_context)
+        _parse_expected(item.expected_output)
+
     def evaluate(self, item: DatasetItem, chat_result: ChatResult) -> ItemEvaluation:
         options = expectation_options(item.expected_output)
+        check_context_date_filter(options, item.user_context)
         candidates = _parse_expected(item.expected_output)
         actual = _extract_actual(chat_result)
         skill_activated = _check_visualization_skill_activated(chat_result.tool_call_events)
-        ev, _best_expected = _evaluate_against_candidates(candidates, actual, skill_activated)
+        ev, _best_expected = _evaluate_against_candidates(
+            candidates,
+            actual,
+            skill_activated,
+            user_context=item.user_context,
+            context_date_filter=options.date_filter_from_context,
+        )
         ev = with_execution(ev, chat_result.tool_call_events, chat_result.text_response, options.requires_execution)
         ev = with_options(ev, options, actual, chat_result.tool_call_events, render_answer_text(chat_result))
         return ItemEvaluation(

@@ -752,6 +752,9 @@ Item-level keys, all optional except the candidates:
   `{"metric/net_sales": {"divide_by": 1000000, "decimals": 1, "suffix": "M"}}`.
 - `requires_visualization_part` — the chart must come back as a part of the answer, not only as
   the arguments of the chart tool call.
+- `date_filter_from_context` — `true` or `{"dataset": "<date dataset>"}`: a candidate without a
+  date filter also accepts the chart carrying a date filter of the dashboard in the item's
+  `user_context`. See *Date filter carried over from the dashboard* below.
 
 Switches on a candidate chart:
 
@@ -901,6 +904,44 @@ In a Langfuse dataset, put it in the item `metadata` (or in the `input` object) 
 `user_context`. An object in `input` wins and `metadata` is then not read; a missing or
 `null` value in `input` falls back to `metadata`. The value used must be an object or `null`;
 anything else fails the dataset load.
+
+#### Date filter carried over from the dashboard
+
+A user who asks for a new chart from an open dashboard without naming a period may get the
+dashboard's date filter on the chart, and the product accepts that as well as a chart with no
+date filter. An item says so with `date_filter_from_context`:
+
+```json
+"expected_output": {
+  "visualization": {"type": "headline_chart", "query": {"fields": {"m": {"using": "metric/gross_margin_pct"}}}, "metrics": ["m"]},
+  "date_filter_from_context": {"dataset": "dataset/transaction_date"}
+}
+```
+
+Each candidate without a date filter then also counts once more per date filter in
+`user_context.view.dashboard.filters`, with that filter added. Both sides resolve against the
+same day, so a relative and an absolute period that cover the same days match. The date dataset
+of the added filter is, in order: the `dataset` the key states; the one the dashboard filter
+names in `using` (a bare id such as `order_date` reads as `dataset/order_date`); for the
+dashboard's common date filter, which names none, the one the chart's only date filter uses.
+`true` therefore accepts any date dataset for the common date filter. The key's `dataset` must
+be a bare id or a `dataset/` URI; anything else, such as `label/region` or a misspelled
+`datset/order_date`, is an error. A dashboard filter whose `using` is not a date dataset adds
+no candidate.
+
+A candidate that states a date filter is not extended: a question that names a period is scored
+on that period only. A chart with two date filters matches no added candidate. Ranking and
+attribute filters are unaffected.
+
+When the chart matches an added candidate, the run detail carries
+`filter_date_context: {"inherited": true, "dataset": ...}` and a failure summary shows
+`date : True (matches the dashboard date filter in user_context)`. The expected output reported
+is still the candidate the item states; `expected_filters` shows the dashboard filter it was
+scored with. A stated candidate that matched the date wins over an added one it ties with. Without the key an item is
+scored exactly as before, so an item that must reject the dashboard's period ("all time")
+simply leaves it out. The key on an item whose `user_context` has no dashboard date filter is
+an error, raised before any request. Applies to `visualization`, `vis_agentic` and
+`agentic_visualization` items; `agentic_conversation` turns do not read it.
 
 `agentic_conversation` items take the item's `user_context` as the context of the first
 turn. A turn in `expected_output.turns` can set its own `user_context`, which applies

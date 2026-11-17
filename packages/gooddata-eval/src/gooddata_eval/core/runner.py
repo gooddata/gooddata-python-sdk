@@ -295,7 +295,12 @@ def _run_one_item(
     best_chat_result: ChatResult | None = None
     best_run_latency: float | None = None
     judge_errors: list[str] = []
+    # Optional on the Evaluator protocol: an evaluator that can tell a malformed item from its
+    # expectation alone refuses it here, before the item's question is sent to the agent.
+    validate = getattr(evaluator, "validate", None)
     try:
+        if validate is not None:
+            validate(item)
         for run_index in range(1, runs + 1):
             t0 = time.perf_counter()
             chat_result = backend.ask(item)
