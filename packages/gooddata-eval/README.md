@@ -265,62 +265,6 @@ the same reason. When some runs were ungraded the note says so instead of callin
 `agentic_conversation` has no K gate, so `--gate power` is refused for a dataset containing one rather than
 labelling a report `power` that only part of the dataset was decided under.
 
-**Which runs failed, and why.** A failure message names every failing run right after the gate note, with the
-reason its loop stopped and only the checks it failed (expected/actual where the kind knows them), then the best
-run's summary as before:
-
-```
-Gate pass^3 failed: 2/3 runs passed — unstable, not a clean failure. Failing runs: run 2/3 FAIL (loop exit: success): filters_correct[date: expected none, actual ...].
-```
-
-The same data is in each `failed_runs[]` record: `exit_reason` (the run's `LoopExit`, `null` for a kind without
-one), `outcome` (see below) and, for the visualization, alert, metric and dashboard skills, `failed_checks`
-(`[{"name", "label"?, "expected"?, "actual"?}]`, each `expected`/`actual` longer than 160 characters stored cut to
-that length; the run's `detail` keeps the whole value).
-
-None of this changes a verdict, a score or an exception type; it only says more about each failure.
-
-### Harness errors are labelled, not rescored
-
-A run can fail because the test harness failed, not the agent: the simulated user's own model call fails, or the
-judge cannot grade the answer. Each failing run is labelled in `failed_runs[].outcome`
-(`{"status": "fail" | "error", "reason": ...}`) by one rule (`core/outcome.py`, `classify_run`). The rule is
-fail-closed -- only these causes are `error`, anything else, an unknown cause included, is `fail`:
-
-| Cause | Label |
-|---|---|
-| `simulated_user_failed` | `error` |
-| the judge or scorer could not grade the run (`judge_failed`) | `error` |
-| `chat_error` (a gen-ai error event, a broken stream, a 5xx after its retries) | `fail` -- on the product path, a customer sees it too |
-| `agent_timeout`, `turn_incomplete` (the agent was too slow, or ended its turn without an answer) | `fail` |
-| `success`, `budget_exhausted`, `agent_silent`, `not_run`, anything else | `fail` |
-
-The label decides nothing: an `error` run counts as a run that did not pass, so every gate, pass rate and score is
-what it was before labels existed. It shows up in four places:
-
-- the "Failing runs" part of the message: `run 1/3 ERROR (simulated_user_failed)`, without the run's checks, which
-  failed because the harness did;
-- `failed_runs[].outcome`;
-- on the raised exception, `outcome` = `{"status": "error", "reason": ...}` when **every** run of the item errored
-  (the item says nothing about the agent; its message starts `Harness error, no run was scored (<reason>).`), and
-  `shadow` -- what a candidate rule that leaves `error` runs out of the gate (at least ceil(K/2) scored runs, else
-  `error`) would have given: `{"verdict": "pass" | "fail" | "error", "runs_scored", "runs_total"}`. Recorded so the
-  rule can be judged on real runs; nothing uses it;
-- in Langfuse, an `error` run gets an extra score `eval_error` = 1, commented with the reason. Its other scores are
-  written as always.
-
-A runner turns these into its own report. The gdc-nas Tavern harness, for example, adds them to the JUnit testcase
-as properties and keeps the failure a failure.
-
-Applies to the agentic visualization, alert, metric, dashboard, KDA, anomaly detection and what-if kinds, and to
-judge failures of the general question, guardrail and document skill kinds. `agentic_conversation` records its
-turns' exits but does not label them yet.
-
-**Changed exit value:** a run whose turn timed out or ended without a final answer used to record `exit_reason`
-`chat_error`; it now records `agent_timeout` or `turn_incomplete`, in the run detail and in `failed_runs[]`. Filters
-on `exit_reason == "chat_error"` see fewer runs. The item budget (`--item-timeout`) runs from conversation creation,
-so an `agent_timeout` from it can include the simulated user's replies and the chat retries' backoff.
-
 Each item additionally carries a per-phase breakdown:
 
 ```json
