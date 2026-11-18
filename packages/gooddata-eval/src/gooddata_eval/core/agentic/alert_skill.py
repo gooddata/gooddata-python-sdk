@@ -592,6 +592,21 @@ def generate_simulated_alert_response(
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
 
+    # The agent may offer several metrics and describe one as ignoring filters or counting all
+    # time. That reads like rule 5's "no filters ... all time", which made the simulated user
+    # pick it. The pick follows the goal's metric whatever its description says, matched by id
+    # or by title, and repeats the option as the agent wrote it, so the reply adds no reference
+    # the agent did not offer. A fixture names a bare metric id: `_check_metric` compares it as
+    # written.
+    metric_choice_rule = (
+        f"   If the agent offers several metrics to choose from, choose the option for your goal metric "
+        f"({expected.metric_id}; the agent may show it by this id or only by its title) and repeat that option "
+        "as the agent wrote it. How the agent describes a metric, for example as ignoring filters or counting all "
+        "time, never changes which metric you want: rule 5 is about filters on the alert.\n"
+        if expected.metric_id
+        else ""
+    )
+
     # Only a stated title is enforced: an unstated one is the agent's to choose, and telling the
     # sim-user nothing keeps it from objecting to a generated name.
     title_rule = (
@@ -607,8 +622,11 @@ def generate_simulated_alert_response(
         + original_request
         + "Rules you MUST follow:\n"
         f"1. Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
-        f"recipients={recipients}, trigger={trigger_key}" + (f", filters={filters}" if filters else "") + ".\n"
-        "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
+        f"recipients={recipients}, trigger={trigger_key}"
+        + (f", filters={filters}" if filters else "")
+        + ".\n"
+        + metric_choice_rule
+        + "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
         "3. If the agent shows a final summary, an alert proposal or asks for confirmation, check "
         "   ALL of these against your goal: recipients, trigger (how often you are alerted), "
         "   filters / time window, threshold and operator. If ANY of them differs — for example the "
