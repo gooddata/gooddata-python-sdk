@@ -47,6 +47,7 @@ from gooddata_eval.core.evaluators.visualization import (
     ExpectationOptions,
     _check_visualization_skill_activated,
     _evaluate_against_candidates,
+    check_context_date_filter,
     evaluation_result_detail,
     with_execution,
     with_options,
@@ -213,6 +214,7 @@ def _execute_single_run(
     max_iterations: int = _DEFAULT_MAX_ITERATIONS,
     requires_execution: bool = False,
     options: ExpectationOptions | None = None,
+    user_context: dict | None = None,
 ) -> RunResult:
     """Drive one full multi-turn conversation and evaluate the result."""
     options = _effective_options(options, requires_execution)
@@ -314,7 +316,13 @@ def _execute_single_run(
     if current_result.created_visualizations and current_result.created_visualizations.objects:
         actual_output = current_result.created_visualizations.objects[0]
 
-    eval_result, best_expected = _evaluate_against_candidates(expected_outputs, actual_output, skill_activated)
+    eval_result, best_expected = _evaluate_against_candidates(
+        expected_outputs,
+        actual_output,
+        skill_activated,
+        user_context=user_context,
+        context_date_filter=options.date_filter_from_context,
+    )
     eval_result = with_execution(
         eval_result, all_tool_call_events, current_result.text_response, options.requires_execution
     )
@@ -379,6 +387,8 @@ def run_agentic_visualization(
         ValueError: ``expected_outputs`` and ``options.expects_visualization`` disagree. An
             empty candidate list is only right for an item that expects no chart, and the
             scorer would otherwise read the default ``expects_visualization`` and fail it.
+            Also raised, before any request, for ``date_filter_from_context`` on an item whose
+            ``user_context`` has no dashboard date filter (``check_context_date_filter``).
     """
     expects_visualization = (options or ExpectationOptions()).expects_visualization
     if expects_visualization != bool(expected_outputs):
@@ -386,6 +396,7 @@ def run_agentic_visualization(
             "expected_outputs must list the candidate charts unless options.expects_visualization is false, "
             f"got {len(expected_outputs)} candidate(s) with expects_visualization={expects_visualization}"
         )
+    check_context_date_filter(options or ExpectationOptions(), user_context)
     client = ChatClient(
         host=host,
         token=token,
@@ -401,7 +412,14 @@ def run_agentic_visualization(
         try:
             run_results.append(
                 _execute_single_run(
-                    client, conv_id_0, question, expected_outputs, max_iterations, requires_execution, options
+                    client,
+                    conv_id_0,
+                    question,
+                    expected_outputs,
+                    max_iterations,
+                    requires_execution,
+                    options,
+                    user_context=user_context,
                 )
             )
         finally:
@@ -413,7 +431,14 @@ def run_agentic_visualization(
             try:
                 run_results.append(
                     _execute_single_run(
-                        client, conv_id, question, expected_outputs, max_iterations, requires_execution, options
+                        client,
+                        conv_id,
+                        question,
+                        expected_outputs,
+                        max_iterations,
+                        requires_execution,
+                        options,
+                        user_context=user_context,
                     )
                 )
             finally:
@@ -789,7 +814,8 @@ def evaluate_agentic_visualization(
             f"    expected : {sorted(ev.expected_dim_uris)}\n"
             f"    actual   : {sorted(ev.actual_dim_uris)}\n"
             f"  Filters Correct       : {ev.filters_correct}\n"
-            f"    date      : {ev.filter_date_score}\n"
+            f"    date      : {ev.filter_date_score}"
+            f"{' (matches the dashboard date filter in user_context)' if ev.filter_date_inherited else ''}\n"
             f"{_filter_diff('date', ev)}"
             f"    ranking   : {ev.filter_ranking_score}\n"
             f"{_filter_diff('ranking', ev)}"
