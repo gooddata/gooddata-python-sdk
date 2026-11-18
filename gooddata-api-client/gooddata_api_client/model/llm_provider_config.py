@@ -34,11 +34,13 @@ def lazy_import():
     from gooddata_api_client.model.anthropic_provider_config import AnthropicProviderConfig
     from gooddata_api_client.model.aws_bedrock_provider_config import AwsBedrockProviderConfig
     from gooddata_api_client.model.azure_foundry_provider_config import AzureFoundryProviderConfig
+    from gooddata_api_client.model.good_data_ai_provider_config import GoodDataAiProviderConfig
     from gooddata_api_client.model.open_ai_provider_auth import OpenAiProviderAuth
     from gooddata_api_client.model.open_ai_provider_config import OpenAIProviderConfig
     globals()['AnthropicProviderConfig'] = AnthropicProviderConfig
     globals()['AwsBedrockProviderConfig'] = AwsBedrockProviderConfig
     globals()['AzureFoundryProviderConfig'] = AzureFoundryProviderConfig
+    globals()['GoodDataAiProviderConfig'] = GoodDataAiProviderConfig
     globals()['OpenAIProviderConfig'] = OpenAIProviderConfig
     globals()['OpenAiProviderAuth'] = OpenAiProviderAuth
 
@@ -361,6 +363,7 @@ class LlmProviderConfig(ModelComposed):
               AnthropicProviderConfig,
               AwsBedrockProviderConfig,
               AzureFoundryProviderConfig,
+              GoodDataAiProviderConfig,
               OpenAIProviderConfig,
           ],
         }

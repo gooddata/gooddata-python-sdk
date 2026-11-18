@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**resolve_all_settings_without_workspace**](ReportingSettingsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_settings_without_workspace**](ReportingSettingsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
+[**validate_embedding_origin**](ReportingSettingsApi.md#validate_embedding_origin) | **POST** /api/v1/actions/validateEmbeddingOrigin | Validate an embedding origin.
 
 
 # **resolve_all_settings_without_workspace**
@@ -154,6 +155,76 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Values for selected settings. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **validate_embedding_origin**
+> ValidateEmbeddingOriginResponse validate_embedding_origin(validate_embedding_origin_request)
+
+Validate an embedding origin.
+
+Checks one origin against the embedding origins of the organization. The literal `*` is valid only when the embedding origins contain `*`.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import reporting_settings_api
+from gooddata_api_client.model.validate_embedding_origin_request import ValidateEmbeddingOriginRequest
+from gooddata_api_client.model.validate_embedding_origin_response import ValidateEmbeddingOriginResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = reporting_settings_api.ReportingSettingsApi(api_client)
+    validate_embedding_origin_request = ValidateEmbeddingOriginRequest(
+        origin="https://app.example.com",
+    ) # ValidateEmbeddingOriginRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Validate an embedding origin.
+        api_response = api_instance.validate_embedding_origin(validate_embedding_origin_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ReportingSettingsApi->validate_embedding_origin: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **validate_embedding_origin_request** | [**ValidateEmbeddingOriginRequest**](ValidateEmbeddingOriginRequest.md)|  |
+
+### Return type
+
+[**ValidateEmbeddingOriginResponse**](ValidateEmbeddingOriginResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Whether the origin may embed the application. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -6,8 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_all_entities_datasets**](DatasetsApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_entity_datasets**](DatasetsApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
-[**patch_entity_datasets**](DatasetsApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset (beta)
-[**search_entities_datasets**](DatasetsApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | The search endpoint (beta)
+[**patch_entity_datasets**](DatasetsApi.md#patch_entity_datasets) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Patch a Dataset
+[**search_entities_datasets**](DatasetsApi.md#search_entities_datasets) | **POST** /api/v1/entities/workspaces/{workspaceId}/datasets/search | The search endpoint
 
 
 # **get_all_entities_datasets**
@@ -197,7 +197,7 @@ No authorization required
 # **patch_entity_datasets**
 > JsonApiDatasetOutDocument patch_entity_datasets(workspace_id, object_id, json_api_dataset_patch_document)
 
-Patch a Dataset (beta)
+Patch a Dataset
 
 ### Example
 
@@ -242,7 +242,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch a Dataset (beta)
+        # Patch a Dataset
         api_response = api_instance.patch_entity_datasets(workspace_id, object_id, json_api_dataset_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -251,7 +251,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch a Dataset (beta)
+        # Patch a Dataset
         api_response = api_instance.patch_entity_datasets(workspace_id, object_id, json_api_dataset_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -294,7 +294,7 @@ No authorization required
 # **search_entities_datasets**
 > JsonApiDatasetOutList search_entities_datasets(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -342,7 +342,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -351,7 +351,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_datasets(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

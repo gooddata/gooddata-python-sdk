@@ -40,6 +40,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
     from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
     from gooddata_api_client.model.declarative_metric import DeclarativeMetric
+    from gooddata_api_client.model.declarative_metric_extension import DeclarativeMetricExtension
     from gooddata_api_client.model.declarative_parameter import DeclarativeParameter
     from gooddata_api_client.model.declarative_publisher_document import DeclarativePublisherDocument
     from gooddata_api_client.model.declarative_publisher_document_page_template import DeclarativePublisherDocumentPageTemplate
@@ -48,6 +49,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_report_page_layout import DeclarativeReportPageLayout
     from gooddata_api_client.model.declarative_report_template import DeclarativeReportTemplate
     from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+    from gooddata_api_client.model.declarative_visualization_object_extension import DeclarativeVisualizationObjectExtension
     globals()['DeclarativeAnalyticalDashboard'] = DeclarativeAnalyticalDashboard
     globals()['DeclarativeAnalyticalDashboardExtension'] = DeclarativeAnalyticalDashboardExtension
     globals()['DeclarativeAttributeHierarchy'] = DeclarativeAttributeHierarchy
@@ -57,6 +59,7 @@ def lazy_import():
     globals()['DeclarativeFilterContext'] = DeclarativeFilterContext
     globals()['DeclarativeMemoryItem'] = DeclarativeMemoryItem
     globals()['DeclarativeMetric'] = DeclarativeMetric
+    globals()['DeclarativeMetricExtension'] = DeclarativeMetricExtension
     globals()['DeclarativeParameter'] = DeclarativeParameter
     globals()['DeclarativePublisherDocument'] = DeclarativePublisherDocument
     globals()['DeclarativePublisherDocumentPageTemplate'] = DeclarativePublisherDocumentPageTemplate
@@ -65,6 +68,7 @@ def lazy_import():
     globals()['DeclarativeReportPageLayout'] = DeclarativeReportPageLayout
     globals()['DeclarativeReportTemplate'] = DeclarativeReportTemplate
     globals()['DeclarativeVisualizationObject'] = DeclarativeVisualizationObject
+    globals()['DeclarativeVisualizationObjectExtension'] = DeclarativeVisualizationObjectExtension
 
 
 class DeclarativeAnalyticsLayer(ModelNormal):
@@ -130,12 +134,14 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             'export_definitions': ([DeclarativeExportDefinition],),  # noqa: E501
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
             'memory_items': ([DeclarativeMemoryItem],),  # noqa: E501
+            'metric_extensions': ([DeclarativeMetricExtension],),  # noqa: E501
             'metrics': ([DeclarativeMetric],),  # noqa: E501
             'page_templates': ([DeclarativePublisherDocumentPageTemplate],),  # noqa: E501
             'parameters': ([DeclarativeParameter],),  # noqa: E501
             'report_page_layouts': ([DeclarativeReportPageLayout],),  # noqa: E501
             'report_templates': ([DeclarativeReportTemplate],),  # noqa: E501
             'reports': ([DeclarativeReport],),  # noqa: E501
+            'visualization_object_extensions': ([DeclarativeVisualizationObjectExtension],),  # noqa: E501
             'visualization_objects': ([DeclarativeVisualizationObject],),  # noqa: E501
         }
 
@@ -155,12 +161,14 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         'export_definitions': 'exportDefinitions',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
         'memory_items': 'memoryItems',  # noqa: E501
+        'metric_extensions': 'metricExtensions',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
         'page_templates': 'pageTemplates',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'report_page_layouts': 'reportPageLayouts',  # noqa: E501
         'report_templates': 'reportTemplates',  # noqa: E501
         'reports': 'reports',  # noqa: E501
+        'visualization_object_extensions': 'visualizationObjectExtensions',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
@@ -215,12 +223,14 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             memory_items ([DeclarativeMemoryItem]): A list of AI memory items available in the workspace.. [optional]  # noqa: E501
+            metric_extensions ([DeclarativeMetricExtension]): A list of metric permissions assigned to a related metric.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             page_templates ([DeclarativePublisherDocumentPageTemplate]): A list of page templates available in the model.. [optional]  # noqa: E501
             parameters ([DeclarativeParameter]): A list of parameters available in the model.. [optional]  # noqa: E501
             report_page_layouts ([DeclarativeReportPageLayout]): A list of report page layouts available in the model.. [optional]  # noqa: E501
             report_templates ([DeclarativeReportTemplate]): A list of report templates available in the model.. [optional]  # noqa: E501
             reports ([DeclarativeReport]): A list of reports available in the model.. [optional]  # noqa: E501
+            visualization_object_extensions ([DeclarativeVisualizationObjectExtension]): A list of visualization object permissions assigned to a related visualization object.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
         """
 
@@ -317,12 +327,14 @@ class DeclarativeAnalyticsLayer(ModelNormal):
             export_definitions ([DeclarativeExportDefinition]): A list of export definitions.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             memory_items ([DeclarativeMemoryItem]): A list of AI memory items available in the workspace.. [optional]  # noqa: E501
+            metric_extensions ([DeclarativeMetricExtension]): A list of metric permissions assigned to a related metric.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             page_templates ([DeclarativePublisherDocumentPageTemplate]): A list of page templates available in the model.. [optional]  # noqa: E501
             parameters ([DeclarativeParameter]): A list of parameters available in the model.. [optional]  # noqa: E501
             report_page_layouts ([DeclarativeReportPageLayout]): A list of report page layouts available in the model.. [optional]  # noqa: E501
             report_templates ([DeclarativeReportTemplate]): A list of report templates available in the model.. [optional]  # noqa: E501
             reports ([DeclarativeReport]): A list of reports available in the model.. [optional]  # noqa: E501
+            visualization_object_extensions ([DeclarativeVisualizationObjectExtension]): A list of visualization object permissions assigned to a related visualization object.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
         """
 

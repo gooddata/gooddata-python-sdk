@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_analytical_dashboards**](AnalyticalDashboardControllerApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
 [**get_entity_analytical_dashboards**](AnalyticalDashboardControllerApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
 [**patch_entity_analytical_dashboards**](AnalyticalDashboardControllerApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Patch a Dashboard
-[**search_entities_analytical_dashboards**](AnalyticalDashboardControllerApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint (beta)
+[**search_entities_analytical_dashboards**](AnalyticalDashboardControllerApi.md#search_entities_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/search | The search endpoint
 [**update_entity_analytical_dashboards**](AnalyticalDashboardControllerApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
 
 
@@ -465,7 +465,7 @@ No authorization required
 # **search_entities_analytical_dashboards**
 > JsonApiAnalyticalDashboardOutList search_entities_analytical_dashboards(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -513,7 +513,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -522,7 +522,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_analytical_dashboards(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -22,6 +22,8 @@ from gooddata_api_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
+from gooddata_api_client.model.localization_issue_workspaces import LocalizationIssueWorkspaces
+from gooddata_api_client.model.localization_issues import LocalizationIssues
 from gooddata_api_client.model.localization_statistics import LocalizationStatistics
 from gooddata_api_client.model.localization_usage import LocalizationUsage
 from gooddata_api_client.model.localization_usage_users import LocalizationUsageUsers
@@ -40,6 +42,125 @@ class LocalizationApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+        self.organization_localization_issue_workspaces_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationIssueWorkspaces,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/issues/workspaces',
+                'operation_id': 'organization_localization_issue_workspaces',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'type',
+                    'locale',
+                    'name',
+                    'page',
+                    'size',
+                ],
+                'required': [
+                    'type',
+                    'locale',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'type',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('type',): {
+
+                        "MISSING_TRANSLATION": "METADATA_MISSING_TRANSLATION",
+                        "LANGUAGE_MISMATCH": "METADATA_LANGUAGE_MISMATCH",
+                        "UNUSED_TRANSLATION": "METADATA_UNUSED_TRANSLATION"
+                    },
+                },
+                'openapi_types': {
+                    'type':
+                        (str,),
+                    'locale':
+                        (str,),
+                    'name':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                },
+                'attribute_map': {
+                    'type': 'type',
+                    'locale': 'locale',
+                    'name': 'name',
+                    'page': 'page',
+                    'size': 'size',
+                },
+                'location_map': {
+                    'type': 'query',
+                    'locale': 'query',
+                    'name': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.organization_localization_issues_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationIssues,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/organization/localization/issues',
+                'operation_id': 'organization_localization_issues',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.organization_localization_statistics_endpoint = _Endpoint(
             settings={
                 'response_type': (LocalizationStatistics,),
@@ -302,12 +423,12 @@ class LocalizationApi(object):
             },
             api_client=api_client
         )
-        self.workspace_localization_statistics_endpoint = _Endpoint(
+        self.workspace_localization_issues_endpoint = _Endpoint(
             settings={
-                'response_type': (LocalizationStatistics,),
+                'response_type': (LocalizationIssues,),
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/statistics',
-                'operation_id': 'workspace_localization_statistics',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/issues',
+                'operation_id': 'workspace_localization_issues',
                 'http_method': 'GET',
                 'servers': None,
             },
@@ -339,6 +460,60 @@ class LocalizationApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.workspace_localization_statistics_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationStatistics,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/statistics',
+                'operation_id': 'workspace_localization_statistics',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'include_coverage',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'include_coverage':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'include_coverage': 'includeCoverage',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'include_coverage': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -388,6 +563,102 @@ class LocalizationApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.workspace_localization_usage_child_workspaces_endpoint = _Endpoint(
+            settings={
+                'response_type': (LocalizationUsageWorkspaces,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/localization/usage/childWorkspaces',
+                'operation_id': 'workspace_localization_usage_child_workspaces',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'value',
+                    'name',
+                    'setting',
+                    'source',
+                    'page',
+                    'size',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'setting',
+                    'source',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('setting',): {
+
+                        "LOCALE": "LOCALE",
+                        "METADATA_LOCALE": "METADATA_LOCALE",
+                        "DATA_LOCALE": "DATA_LOCALE"
+                    },
+                    ('source',): {
+
+                        "USER": "USER",
+                        "WORKSPACE": "WORKSPACE",
+                        "PARENT": "PARENT",
+                        "ORGANIZATION": "ORGANIZATION",
+                        "ENVIRONMENT": "ENVIRONMENT",
+                        "DEFAULT": "DEFAULT"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'value':
+                        (str,),
+                    'name':
+                        (str,),
+                    'setting':
+                        (str,),
+                    'source':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'value': 'value',
+                    'name': 'name',
+                    'setting': 'setting',
+                    'source': 'source',
+                    'page': 'page',
+                    'size': 'size',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'value': 'query',
+                    'name': 'query',
+                    'setting': 'query',
+                    'source': 'query',
+                    'page': 'query',
+                    'size': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -497,13 +768,181 @@ class LocalizationApi(object):
             api_client=api_client
         )
 
+    def organization_localization_issue_workspaces(
+        self,
+        type,
+        locale,
+        **kwargs
+    ):
+        """(BETA) Workspaces with a localization issue.  # noqa: E501
+
+        (BETA) Lists the workspaces behind one entry of the organization localization issues, sorted by name.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_issue_workspaces(type, locale, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            type (str): The type of the issue.
+            locale (str): The language of the issue.
+
+        Keyword Args:
+            name (str): Filter by workspace name. Note that the filter is case insensitive.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationIssueWorkspaces
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['type'] = \
+            type
+        kwargs['locale'] = \
+            locale
+        return self.organization_localization_issue_workspaces_endpoint.call_with_http_info(**kwargs)
+
+    def organization_localization_issues(
+        self,
+        **kwargs
+    ):
+        """(BETA) Localization issues of the organization.  # noqa: E501
+
+        (BETA) Counts the workspaces with each localization issue. The rules are the same as in the workspace localization issues.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.organization_localization_issues(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationIssues
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.organization_localization_issues_endpoint.call_with_http_info(**kwargs)
+
     def organization_localization_statistics(
         self,
         **kwargs
     ):
-        """(BETA) Languages with translations in the organization.  # noqa: E501
+        """Languages with translations in the organization.  # noqa: E501
 
-        (BETA) Lists the languages that have at least one translation, separately for each kind of translation.  # noqa: E501
+        Lists the languages that have at least one translation, separately for each kind of translation.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -579,9 +1018,9 @@ class LocalizationApi(object):
         self,
         **kwargs
     ):
-        """(BETA) Languages used in the organization.  # noqa: E501
+        """Languages used in the organization.  # noqa: E501
 
-        (BETA) Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.  # noqa: E501
+        Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -657,9 +1096,9 @@ class LocalizationApi(object):
         self,
         **kwargs
     ):
-        """(BETA) Users who set a language themselves.  # noqa: E501
+        """Users who set a language themselves.  # noqa: E501
 
-        (BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. No value selects the usage entry without a language.  # noqa: E501
+        Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. The list leaves out the users that the usage counts without a language.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -741,9 +1180,9 @@ class LocalizationApi(object):
         self,
         **kwargs
     ):
-        """(BETA) Workspaces that use a language.  # noqa: E501
+        """Workspaces that use a language.  # noqa: E501
 
-        (BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. No value selects the usage entry without a language.  # noqa: E501
+        Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -821,14 +1260,97 @@ class LocalizationApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.organization_localization_usage_workspaces_endpoint.call_with_http_info(**kwargs)
 
+    def workspace_localization_issues(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """(BETA) Localization issues of the workspace.  # noqa: E501
+
+        (BETA) Checks the display and metadata language of the workspace against the metadata translations of the workspace and its parents. It also reports translations the workspace owns that nobody uses. It checks this only when the workspace has no workspaces below it or the user can see all of them.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.workspace_localization_issues(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationIssues
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.workspace_localization_issues_endpoint.call_with_http_info(**kwargs)
+
     def workspace_localization_statistics(
         self,
         workspace_id,
         **kwargs
     ):
-        """(BETA) Languages with translations in the workspace.  # noqa: E501
+        """Languages with translations in the workspace.  # noqa: E501
 
-        (BETA) Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list.  # noqa: E501
+        Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list. With includeCoverage=true, it also counts the translated metadata texts of the workspace and each parent.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -839,6 +1361,7 @@ class LocalizationApi(object):
             workspace_id (str):
 
         Keyword Args:
+            include_coverage (bool): (BETA) Adds translation counts for the workspace and each parent, root first.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -909,9 +1432,9 @@ class LocalizationApi(object):
         workspace_id,
         **kwargs
     ):
-        """(BETA) Languages used in the workspace.  # noqa: E501
+        """Languages used in the workspace.  # noqa: E501
 
-        (BETA) Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. Child workspaces are not included.  # noqa: E501
+        Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. `childWorkspaces` counts the workspaces below it that the user can see, the same way.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -987,14 +1510,103 @@ class LocalizationApi(object):
             workspace_id
         return self.workspace_localization_usage_endpoint.call_with_http_info(**kwargs)
 
+    def workspace_localization_usage_child_workspaces(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """(BETA) Workspaces below the workspace that use a language.  # noqa: E501
+
+        (BETA) Lists the workspaces behind the `childWorkspaces` counts of the workspace localization usage. The list has the workspaces below the workspace that the user can see, sorted by name. Without the setting filter, a workspace matches when one of its three language settings matches. Its source is then the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.workspace_localization_usage_child_workspaces(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            value (str): Language tag that the workspace gets.. [optional]
+            name (str): Filter by workspace name. Note that the filter is case insensitive.. [optional]
+            setting (str): One of LOCALE, METADATA_LOCALE and DATA_LOCALE.. [optional]
+            source (str): Where the value comes from.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned.. [optional] if omitted the server will use the default value of 20
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            LocalizationUsageWorkspaces
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.workspace_localization_usage_child_workspaces_endpoint.call_with_http_info(**kwargs)
+
     def workspace_localization_usage_users(
         self,
         workspace_id,
         **kwargs
     ):
-        """(BETA) Workspace members who get a language.  # noqa: E501
+        """Workspace members who get a language.  # noqa: E501
 
-        (BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. No value selects the usage entry without a language.  # noqa: E501
+        Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. The list leaves out the members that the usage counts without a language.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

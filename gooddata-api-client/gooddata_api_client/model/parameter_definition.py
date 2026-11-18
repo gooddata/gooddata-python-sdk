@@ -31,9 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.date_range_parameter_definition import DateRangeParameterDefinition
+    from gooddata_api_client.model.date_range_parameter_value import DateRangeParameterValue
     from gooddata_api_client.model.number_parameter_definition import NumberParameterDefinition
     from gooddata_api_client.model.string_constraints import StringConstraints
     from gooddata_api_client.model.string_parameter_definition import StringParameterDefinition
+    globals()['DateRangeParameterDefinition'] = DateRangeParameterDefinition
+    globals()['DateRangeParameterValue'] = DateRangeParameterValue
     globals()['NumberParameterDefinition'] = NumberParameterDefinition
     globals()['StringConstraints'] = StringConstraints
     globals()['StringParameterDefinition'] = StringParameterDefinition
@@ -65,7 +69,7 @@ class ParameterDefinition(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'STRING': "STRING",
+            'DATE_RANGE': "DATE_RANGE",
         },
     }
 
@@ -97,13 +101,15 @@ class ParameterDefinition(ModelComposed):
         return {
             'type': (str,),  # noqa: E501
             'constraints': (StringConstraints,),  # noqa: E501
-            'default_value': (str,),  # noqa: E501
+            'default_value': (DateRangeParameterValue,),  # noqa: E501
         }
 
     @cached_property
     def discriminator():
         lazy_import()
         val = {
+            'DATE_RANGE': DateRangeParameterDefinition,
+            'DateRangeParameterDefinition': DateRangeParameterDefinition,
             'NUMBER': NumberParameterDefinition,
             'NumberParameterDefinition': NumberParameterDefinition,
             'STRING': StringParameterDefinition,
@@ -128,7 +134,7 @@ class ParameterDefinition(ModelComposed):
         """ParameterDefinition - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): The parameter type.. defaults to "STRING", must be one of ["STRING", ]  # noqa: E501
+            type (str): The parameter type.. defaults to "DATE_RANGE", must be one of ["DATE_RANGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -160,10 +166,10 @@ class ParameterDefinition(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
-            default_value (str): [optional]  # noqa: E501
+            default_value (DateRangeParameterValue): [optional]  # noqa: E501
         """
 
-        type = kwargs.get('type', "STRING")
+        type = kwargs.get('type', "DATE_RANGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -235,7 +241,7 @@ class ParameterDefinition(ModelComposed):
         """ParameterDefinition - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): The parameter type.. defaults to "STRING", must be one of ["STRING", ]  # noqa: E501
+            type (str): The parameter type.. defaults to "DATE_RANGE", must be one of ["DATE_RANGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -267,10 +273,10 @@ class ParameterDefinition(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             constraints (StringConstraints): [optional]  # noqa: E501
-            default_value (str): [optional]  # noqa: E501
+            default_value (DateRangeParameterValue): [optional]  # noqa: E501
         """
 
-        type = kwargs.get('type', "STRING")
+        type = kwargs.get('type', "DATE_RANGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -340,6 +346,7 @@ class ParameterDefinition(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
+              DateRangeParameterDefinition,
               NumberParameterDefinition,
               StringParameterDefinition,
           ],

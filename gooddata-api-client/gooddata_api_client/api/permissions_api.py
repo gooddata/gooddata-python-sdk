@@ -1651,7 +1651,7 @@ class PermissionsApi(object):
         computed_attribute_id,
         **kwargs
     ):
-        """(BETA) Get Computed Attribute Permissions  # noqa: E501
+        """Get Computed Attribute Permissions  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2413,7 +2413,7 @@ class PermissionsApi(object):
         manage_computed_attribute_permissions_request_inner,
         **kwargs
     ):
-        """(BETA) Manage Permissions for a Computed Attribute  # noqa: E501
+        """Manage Permissions for a Computed Attribute  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2860,7 +2860,7 @@ class PermissionsApi(object):
         manage_metric_permissions_request_inner,
         **kwargs
     ):
-        """(BETA) Manage Permissions for a Metric  # noqa: E501
+        """Manage Permissions for a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3033,7 +3033,7 @@ class PermissionsApi(object):
         manage_visualization_permissions_request_inner,
         **kwargs
     ):
-        """(BETA) Manage Permissions for a Visualization  # noqa: E501
+        """Manage Permissions for a Visualization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3209,7 +3209,7 @@ class PermissionsApi(object):
         metric_id,
         **kwargs
     ):
-        """(BETA) Get Metric Permissions  # noqa: E501
+        """Get Metric Permissions  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -3639,7 +3639,7 @@ class PermissionsApi(object):
         visualization_object_id,
         **kwargs
     ):
-        """(BETA) Get Visualization Permissions  # noqa: E501
+        """Get Visualization Permissions  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

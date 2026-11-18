@@ -148,7 +148,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range. When both are provided, 'from' must not be after 'to'.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -3432,11 +3432,66 @@
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
           },
           {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
             "$ref": "#/components/schemas/AllTimeDateFilter"
           }
+        ],
+        "type": "object"
+      },
+      "DateRangeParameterDefinition": {
+        "properties": {
+          "defaultValue": {
+            "$ref": "#/components/schemas/DateRangeParameterValue"
+          },
+          "type": {
+            "description": "The parameter type.",
+            "enum": [
+              "DATE_RANGE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "defaultValue",
+          "type"
+        ],
+        "type": "object"
+      },
+      "DateRangeParameterValue": {
+        "properties": {
+          "from": {
+            "description": "Start of the period (inclusive) in the format matching 'granularity'. If omitted, the period is unbounded at the start.",
+            "example": "2025-08",
+            "type": "string"
+          },
+          "granularity": {
+            "description": "Granularity of the period; determines the format of 'from' and 'to'.",
+            "enum": [
+              "YEAR",
+              "QUARTER",
+              "MONTH",
+              "WEEK",
+              "DAY",
+              "HOUR",
+              "MINUTE",
+              "SECOND"
+            ],
+            "example": "MONTH",
+            "type": "string"
+          },
+          "to": {
+            "description": "End of the period (inclusive) in the format matching 'granularity'. If omitted, the period is unbounded at the end.",
+            "example": "2026-08",
+            "type": "string"
+          }
+        },
+        "required": [
+          "granularity"
         ],
         "type": "object"
       },
@@ -3944,6 +3999,13 @@
             },
             "type": "array"
           },
+          "metricExtensions": {
+            "description": "A list of metric permissions assigned to a related metric.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeMetricExtension"
+            },
+            "type": "array"
+          },
           "metrics": {
             "description": "A list of metrics available in the model.",
             "items": {
@@ -3983,6 +4045,13 @@
             "description": "A list of reports available in the model.",
             "items": {
               "$ref": "#/components/schemas/DeclarativeReport"
+            },
+            "type": "array"
+          },
+          "visualizationObjectExtensions": {
+            "description": "A list of visualization object permissions assigned to a related visualization object.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeVisualizationObjectExtension"
             },
             "type": "array"
           },
@@ -6107,9 +6176,37 @@
         ],
         "type": "object"
       },
+      "DeclarativeMetricExtension": {
+        "properties": {
+          "id": {
+            "description": "Metric ID.",
+            "example": "total-sales",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "permissions": {
+            "description": "A list of permissions.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DeclarativeMetricPermissionForAssignee"
+                },
+                {
+                  "$ref": "#/components/schemas/DeclarativeMetricPermissionForAssigneeRule"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "permissions"
+        ],
+        "type": "object"
+      },
       "DeclarativeMetricPermissionAssignment": {
         "description": "Metric permission.",
-        "nullable": true,
         "properties": {
           "name": {
             "description": "Permission name.",
@@ -6627,6 +6724,16 @@
           "content": {
             "$ref": "#/components/schemas/PublisherDocumentPageTemplateContent"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Page template description.",
             "maxLength": 10000,
@@ -6637,6 +6744,16 @@
             "example": "brand-cover",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "tags": {
             "items": {
@@ -6671,6 +6788,16 @@
           "content": {
             "$ref": "#/components/schemas/PublisherDocumentContent"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Document template description.",
             "maxLength": 10000,
@@ -6681,6 +6808,16 @@
             "example": "brand-review",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "tags": {
             "items": {
@@ -7071,6 +7208,8 @@
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "ENABLE_AI_DATA_OBFUSCATION",
+              "ENABLE_AI_TRACE_OBFUSCATION",
+              "ENABLE_AI_PERSISTENCE_OBFUSCATION",
               "ENABLE_PARTIAL_DATA_RESULTS",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
@@ -7084,7 +7223,9 @@
               "DEFAULT_VISUALIZATION_VISIBILITY",
               "DEFAULT_METRIC_VISIBILITY",
               "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
-              "QUERY_ENGINE"
+              "QUERY_ENGINE",
+              "EMBEDDING_ORIGINS",
+              "AI_LAKE_CREDENTIAL_VENDING"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -7673,9 +7814,37 @@
         ],
         "type": "object"
       },
+      "DeclarativeVisualizationObjectExtension": {
+        "properties": {
+          "id": {
+            "description": "Visualization object ID.",
+            "example": "revenue-by-region",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "permissions": {
+            "description": "A list of permissions.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DeclarativeVisualizationObjectPermissionForAssignee"
+                },
+                {
+                  "$ref": "#/components/schemas/DeclarativeVisualizationObjectPermissionForAssigneeRule"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "permissions"
+        ],
+        "type": "object"
+      },
       "DeclarativeVisualizationObjectPermissionAssignment": {
         "description": "Visualization object permission.",
-        "nullable": true,
         "properties": {
           "name": {
             "description": "Permission name.",
@@ -8794,6 +8963,9 @@
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
           },
           {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
@@ -8988,6 +9160,22 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "GoodDataAiProviderConfig": {
+        "description": "Configuration for GoodData AI provider. Inference is served by GoodData; no credentials are needed.",
+        "properties": {
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "GOODDATA_AI"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
         ],
         "type": "object"
       },
@@ -21841,6 +22029,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/AnthropicProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/GoodDataAiProviderConfig"
                   }
                 ],
                 "type": "object"
@@ -21951,6 +22142,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/AnthropicProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/GoodDataAiProviderConfig"
                   }
                 ],
                 "type": "object"
@@ -22101,6 +22295,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/AnthropicProviderConfig"
+                  },
+                  {
+                    "$ref": "#/components/schemas/GoodDataAiProviderConfig"
                   }
                 ],
                 "type": "object"
@@ -24756,6 +24953,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -24769,7 +24968,9 @@
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
                   "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
-                  "QUERY_ENGINE"
+                  "QUERY_ENGINE",
+                  "EMBEDDING_ORIGINS",
+                  "AI_LAKE_CREDENTIAL_VENDING"
                 ],
                 "type": "string"
               }
@@ -24867,6 +25068,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -24880,7 +25083,9 @@
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
                   "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
-                  "QUERY_ENGINE"
+                  "QUERY_ENGINE",
+                  "EMBEDDING_ORIGINS",
+                  "AI_LAKE_CREDENTIAL_VENDING"
                 ],
                 "type": "string"
               }
@@ -25018,6 +25223,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -25031,7 +25238,9 @@
                   "DEFAULT_VISUALIZATION_VISIBILITY",
                   "DEFAULT_METRIC_VISIBILITY",
                   "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
-                  "QUERY_ENGINE"
+                  "QUERY_ENGINE",
+                  "EMBEDDING_ORIGINS",
+                  "AI_LAKE_CREDENTIAL_VENDING"
                 ],
                 "type": "string"
               }
@@ -25081,6 +25290,7 @@
               "definition": {
                 "discriminator": {
                   "mapping": {
+                    "DATE_RANGE": "#/components/schemas/DateRangeParameterDefinition",
                     "NUMBER": "#/components/schemas/NumberParameterDefinition",
                     "STRING": "#/components/schemas/StringParameterDefinition"
                   },
@@ -25092,6 +25302,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DateRangeParameterDefinition"
                   }
                 ],
                 "type": "object"
@@ -25187,6 +25400,7 @@
               "definition": {
                 "discriminator": {
                   "mapping": {
+                    "DATE_RANGE": "#/components/schemas/DateRangeParameterDefinition",
                     "NUMBER": "#/components/schemas/NumberParameterDefinition",
                     "STRING": "#/components/schemas/StringParameterDefinition"
                   },
@@ -25198,6 +25412,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DateRangeParameterDefinition"
                   }
                 ],
                 "type": "object"
@@ -25404,6 +25621,7 @@
               "definition": {
                 "discriminator": {
                   "mapping": {
+                    "DATE_RANGE": "#/components/schemas/DateRangeParameterDefinition",
                     "NUMBER": "#/components/schemas/NumberParameterDefinition",
                     "STRING": "#/components/schemas/StringParameterDefinition"
                   },
@@ -25415,6 +25633,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DateRangeParameterDefinition"
                   }
                 ],
                 "type": "object"
@@ -25480,6 +25701,7 @@
               "definition": {
                 "discriminator": {
                   "mapping": {
+                    "DATE_RANGE": "#/components/schemas/DateRangeParameterDefinition",
                     "NUMBER": "#/components/schemas/NumberParameterDefinition",
                     "STRING": "#/components/schemas/StringParameterDefinition"
                   },
@@ -25491,6 +25713,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/StringParameterDefinition"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DateRangeParameterDefinition"
                   }
                 ],
                 "type": "object"
@@ -34326,6 +34551,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -34436,6 +34663,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -37678,6 +37907,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -37788,6 +38019,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -37964,6 +38197,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -38074,6 +38309,8 @@
                   "METRIC_FORMAT_OVERRIDE",
                   "ENABLE_AI_ON_DATA",
                   "ENABLE_AI_DATA_OBFUSCATION",
+                  "ENABLE_AI_TRACE_OBFUSCATION",
+                  "ENABLE_AI_PERSISTENCE_OBFUSCATION",
                   "ENABLE_PARTIAL_DATA_RESULTS",
                   "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
                   "ENABLE_NULL_JOINS",
@@ -38657,12 +38894,113 @@
         },
         "type": "object"
       },
+      "LocalizationIssue": {
+        "description": "One localization issue in one language.",
+        "properties": {
+          "locale": {
+            "description": "The problem language.",
+            "example": "fr-FR",
+            "type": "string"
+          },
+          "type": {
+            "description": "The kind of localization issue. The prefix names the area of the problem. METADATA_MISSING_TRANSLATION - the metadata language has no translation under exactly its code. When the metadata language is the default, the display language is checked instead. METADATA_LANGUAGE_MISMATCH - the display language has a translation, but the metadata language is not set to it. METADATA_UNUSED_TRANSLATION - the workspace owns a translation that nobody uses. No workspace in its subtree gets that language. No user has it as their own language. System accounts and the bootstrap user are not counted, as in the usage endpoints. New types may be added.",
+            "enum": [
+              "METADATA_MISSING_TRANSLATION",
+              "METADATA_LANGUAGE_MISMATCH",
+              "METADATA_UNUSED_TRANSLATION"
+            ],
+            "type": "string"
+          },
+          "workspaces": {
+            "description": "Organization issues only. The number of workspaces with this issue.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "locale",
+          "type"
+        ],
+        "type": "object"
+      },
+      "LocalizationIssueWorkspace": {
+        "properties": {
+          "bySetting": {
+            "$ref": "#/components/schemas/LocalizationResolvedValues"
+          },
+          "childrenCount": {
+            "description": "Number of direct child workspaces.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "description": "The parent workspace, or null for a root workspace.",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "bySetting",
+          "childrenCount",
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "LocalizationIssueWorkspaces": {
+        "properties": {
+          "totalCount": {
+            "description": "The total number of workspaces with this issue that match the name filter.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/LocalizationIssueWorkspace"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "totalCount",
+          "workspaces"
+        ],
+        "type": "object"
+      },
+      "LocalizationIssues": {
+        "properties": {
+          "issues": {
+            "description": "Sorted by type in the order of the enum, then by locale. Empty when nothing is wrong.",
+            "items": {
+              "$ref": "#/components/schemas/LocalizationIssue"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "issues"
+        ],
+        "type": "object"
+      },
       "LocalizationMetadataStatistics": {
         "description": "Translations of titles, descriptions, tags and free-form texts of workspace objects. `locales` lists the languages that have stored translations, sorted. A language counts once translations for it are uploaded, even when they are empty.",
         "properties": {
           "locales": {
             "items": {
               "$ref": "#/components/schemas/LocalizationStatisticsLocale"
+            },
+            "type": "array"
+          },
+          "workspaces": {
+            "description": "(BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.",
+            "items": {
+              "$ref": "#/components/schemas/LocalizationStatisticsWorkspace"
             },
             "type": "array"
           }
@@ -38723,7 +39061,11 @@
         "type": "object"
       },
       "LocalizationSettingUsage": {
+        "description": "(BETA) `childWorkspaces` has the same counts for the workspaces below this workspace that the user can see. It does not count this workspace. Only the workspace usage has it.",
         "properties": {
+          "childWorkspaces": {
+            "$ref": "#/components/schemas/LocalizationCount"
+          },
           "users": {
             "$ref": "#/components/schemas/LocalizationCount"
           },
@@ -38810,6 +39152,68 @@
         ],
         "type": "object"
       },
+      "LocalizationStatisticsTranslatedLocale": {
+        "description": "Translated texts of one workspace in one language.",
+        "properties": {
+          "locale": {
+            "description": "Language tag.",
+            "example": "de-DE",
+            "type": "string"
+          },
+          "translated": {
+            "description": "Texts of the workspace with a translation. A title, description or tag edited after its translation still counts.",
+            "example": 640,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "locale",
+          "translated"
+        ],
+        "type": "object"
+      },
+      "LocalizationStatisticsWorkspace": {
+        "description": "Metadata texts of one workspace. A row counts only the texts that the workspace owns. A child workspace sums its row and the rows of its parents.",
+        "properties": {
+          "id": {
+            "description": "Workspace ID.",
+            "example": "retail-bergmann",
+            "type": "string"
+          },
+          "locales": {
+            "description": "Every language of `metadata.locales`, sorted, with 0 where nothing is translated.",
+            "items": {
+              "$ref": "#/components/schemas/LocalizationStatisticsTranslatedLocale"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "Workspace name.",
+            "example": "Bergmann",
+            "type": "string"
+          },
+          "parentId": {
+            "description": "Parent workspace ID, null for a root workspace.",
+            "example": "retail",
+            "nullable": true,
+            "type": "string"
+          },
+          "total": {
+            "description": "Titles, descriptions, tags and free-form texts the workspace owns. Blank texts are not counted.",
+            "example": 1000,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "locales",
+          "name",
+          "total"
+        ],
+        "type": "object"
+      },
       "LocalizationUsage": {
         "properties": {
           "defaults": {
@@ -38886,10 +39290,13 @@
         "type": "object"
       },
       "LocalizationUsageValue": {
-        "description": "One language. `workspaces` counts the workspaces that get it in any of the settings, once each. `users` counts the users who get it in any of the settings, once each. In the entry with a null value, `users` counts the users who get no language in any setting.",
+        "description": "One language. `workspaces` counts the workspaces that get it in any of the settings, once each. `users` counts the users who get it in any of the settings, once each. In the entry with a null value, `users` counts the users who get no language in any setting. (BETA) `childWorkspaces` has the same counts for the workspaces below this workspace that the user can see. It does not count this workspace. Only the workspace usage has it.",
         "properties": {
           "bySetting": {
             "$ref": "#/components/schemas/LocalizationSettingUsages"
+          },
+          "childWorkspaces": {
+            "$ref": "#/components/schemas/LocalizationCount"
           },
           "content": {
             "$ref": "#/components/schemas/LocalizationContent"
@@ -39648,6 +40055,7 @@
         "description": "Parameter content (type-discriminated).",
         "discriminator": {
           "mapping": {
+            "DATE_RANGE": "#/components/schemas/DateRangeParameterDefinition",
             "NUMBER": "#/components/schemas/NumberParameterDefinition",
             "STRING": "#/components/schemas/StringParameterDefinition"
           },
@@ -39659,6 +40067,9 @@
           },
           {
             "$ref": "#/components/schemas/StringParameterDefinition"
+          },
+          {
+            "$ref": "#/components/schemas/DateRangeParameterDefinition"
           }
         ],
         "type": "object"
@@ -39710,6 +40121,46 @@
           "id",
           "title",
           "value"
+        ],
+        "type": "object"
+      },
+      "ParameterizedDateFilter": {
+        "description": "A date filter whose period comes from a DATE_RANGE parameter. Each execution uses the parameter's current granularity and range.",
+        "properties": {
+          "parameterizedDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "parameter": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
+              }
+            },
+            "required": [
+              "dataset",
+              "parameter"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "parameterizedDateFilter"
         ],
         "type": "object"
       },
@@ -43873,7 +44324,7 @@
             "type": "string"
           },
           "visible": {
-            "description": "Default `true`.",
+            "description": "When left out, a visualization's title is hidden and a takeaway's is shown.",
             "type": "boolean"
           }
         },
@@ -44243,6 +44694,7 @@
         "properties": {
           "from": {
             "format": "int32",
+            "nullable": true,
             "type": "integer"
           },
           "granularity": {
@@ -44299,6 +44751,7 @@
           },
           "to": {
             "format": "int32",
+            "nullable": true,
             "type": "integer"
           }
         },
@@ -44561,6 +45014,8 @@
               "METRIC_FORMAT_OVERRIDE",
               "ENABLE_AI_ON_DATA",
               "ENABLE_AI_DATA_OBFUSCATION",
+              "ENABLE_AI_TRACE_OBFUSCATION",
+              "ENABLE_AI_PERSISTENCE_OBFUSCATION",
               "ENABLE_PARTIAL_DATA_RESULTS",
               "API_ENTITIES_DEFAULT_CONTENT_MEDIA_TYPE",
               "ENABLE_NULL_JOINS",
@@ -44574,7 +45029,8 @@
               "DEFAULT_VISUALIZATION_VISIBILITY",
               "DEFAULT_METRIC_VISIBILITY",
               "GRANT_MANAGE_VISUALIZATIONS_WITH_ANALYZE",
-              "QUERY_ENGINE"
+              "QUERY_ENGINE",
+              "AI_LAKE_CREDENTIAL_VENDING"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -45842,6 +46298,33 @@
         ],
         "type": "object"
       },
+      "ValidateEmbeddingOriginRequest": {
+        "description": "An origin to check against the embedding origins of the organization.",
+        "properties": {
+          "origin": {
+            "description": "The origin of the embedding application, or `*` when it hides its origin.",
+            "example": "https://app.example.com",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin"
+        ],
+        "type": "object"
+      },
+      "ValidateEmbeddingOriginResponse": {
+        "description": "Whether the origin may embed the application.",
+        "properties": {
+          "valid": {
+            "description": "True when the embedding origins of the organization allow the origin.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "valid"
+        ],
+        "type": "object"
+      },
       "ValidityPeriodCacheRetention": {
         "description": "The cache expires once a fixed period elapses since the results were computed.",
         "properties": {
@@ -46878,9 +47361,129 @@
         ]
       }
     },
+    "/api/v1/actions/organization/localization/issues": {
+      "get": {
+        "description": "(BETA) Counts the workspaces with each localization issue. The rules are the same as in the workspace localization issues.",
+        "operationId": "organizationLocalizationIssues",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationIssues"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Localization issues of the organization.",
+        "tags": [
+          "Localization",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/organization/localization/issues/workspaces": {
+      "get": {
+        "description": "(BETA) Lists the workspaces behind one entry of the organization localization issues, sorted by name.",
+        "operationId": "organizationLocalizationIssueWorkspaces",
+        "parameters": [
+          {
+            "description": "The type of the issue.",
+            "example": "METADATA_MISSING_TRANSLATION",
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "description": "The kind of localization issue. The prefix names the area of the problem. METADATA_MISSING_TRANSLATION - the metadata language has no translation under exactly its code. When the metadata language is the default, the display language is checked instead. METADATA_LANGUAGE_MISMATCH - the display language has a translation, but the metadata language is not set to it. METADATA_UNUSED_TRANSLATION - the workspace owns a translation that nobody uses. No workspace in its subtree gets that language. No user has it as their own language. System accounts and the bootstrap user are not counted, as in the usage endpoints. New types may be added.",
+              "enum": [
+                "METADATA_MISSING_TRANSLATION",
+                "METADATA_LANGUAGE_MISMATCH",
+                "METADATA_UNUSED_TRANSLATION"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The language of the issue.",
+            "example": "de-DE",
+            "in": "query",
+            "name": "locale",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by workspace name. Note that the filter is case insensitive.",
+            "example": "berg",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": 0,
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": 20,
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationIssueWorkspaces"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Workspaces with a localization issue.",
+        "tags": [
+          "Localization",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/organization/localization/statistics": {
       "get": {
-        "description": "(BETA) Lists the languages that have at least one translation, separately for each kind of translation.",
+        "description": "Lists the languages that have at least one translation, separately for each kind of translation.",
         "operationId": "organizationLocalizationStatistics",
         "responses": {
           "200": {
@@ -46894,7 +47497,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Languages with translations in the organization.",
+        "summary": "Languages with translations in the organization.",
         "tags": [
           "Localization",
           "actions"
@@ -46909,7 +47512,7 @@
     },
     "/api/v1/actions/organization/localization/usage": {
       "get": {
-        "description": "(BETA) Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.",
+        "description": "Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.",
         "operationId": "organizationLocalizationUsage",
         "responses": {
           "200": {
@@ -46923,7 +47526,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Languages used in the organization.",
+        "summary": "Languages used in the organization.",
         "tags": [
           "Localization",
           "actions"
@@ -46938,7 +47541,7 @@
     },
     "/api/v1/actions/organization/localization/usage/users": {
       "get": {
-        "description": "(BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. No value selects the usage entry without a language.",
+        "description": "Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. The list leaves out the users that the usage counts without a language.",
         "operationId": "organizationLocalizationUsageUsers",
         "parameters": [
           {
@@ -47032,7 +47635,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Users who set a language themselves.",
+        "summary": "Users who set a language themselves.",
         "tags": [
           "Localization",
           "actions"
@@ -47047,7 +47650,7 @@
     },
     "/api/v1/actions/organization/localization/usage/workspaces": {
       "get": {
-        "description": "(BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. No value selects the usage entry without a language.",
+        "description": "Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.",
         "operationId": "organizationLocalizationUsageWorkspaces",
         "parameters": [
           {
@@ -47141,7 +47744,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Workspaces that use a language.",
+        "summary": "Workspaces that use a language.",
         "tags": [
           "Localization",
           "actions"
@@ -47908,6 +48511,39 @@
         ]
       }
     },
+    "/api/v1/actions/validateEmbeddingOrigin": {
+      "post": {
+        "description": "Checks one origin against the embedding origins of the organization. The literal `*` is valid only when the embedding origins contain `*`.",
+        "operationId": "validateEmbeddingOrigin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateEmbeddingOriginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateEmbeddingOriginResponse"
+                }
+              }
+            },
+            "description": "Whether the origin may embed the application."
+          }
+        },
+        "summary": "Validate an embedding origin.",
+        "tags": [
+          "Reporting - Settings",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/createdBy": {
       "get": {
         "description": "Returns a list of Users who created any object for this workspace",
@@ -48510,7 +49146,7 @@
             "description": "No Content"
           }
         },
-        "summary": "(BETA) Manage Permissions for a Computed Attribute",
+        "summary": "Manage Permissions for a Computed Attribute",
         "tags": [
           "Permissions",
           "actions"
@@ -48550,7 +49186,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Get Computed Attribute Permissions",
+        "summary": "Get Computed Attribute Permissions",
         "tags": [
           "Permissions",
           "actions"
@@ -48917,10 +49553,10 @@
         ]
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/localization/statistics": {
+    "/api/v1/actions/workspaces/{workspaceId}/localization/issues": {
       "get": {
-        "description": "(BETA) Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list.",
-        "operationId": "workspaceLocalizationStatistics",
+        "description": "(BETA) Checks the display and metadata language of the workspace against the metadata translations of the workspace and its parents. It also reports translations the workspace owns that nobody uses. It checks this only when the workspace has no workspaces below it or the user can see all of them.",
+        "operationId": "workspaceLocalizationIssues",
         "parameters": [
           {
             "in": "path",
@@ -48936,6 +49572,54 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/LocalizationIssues"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Localization issues of the workspace.",
+        "tags": [
+          "Localization",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/localization/statistics": {
+      "get": {
+        "description": "Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list. With includeCoverage=true, it also counts the translated metadata texts of the workspace and each parent.",
+        "operationId": "workspaceLocalizationStatistics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "(BETA) Adds translation counts for the workspace and each parent, root first.",
+            "in": "query",
+            "name": "includeCoverage",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
                   "$ref": "#/components/schemas/LocalizationStatistics"
                 }
               }
@@ -48943,7 +49627,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Languages with translations in the workspace.",
+        "summary": "Languages with translations in the workspace.",
         "tags": [
           "Localization",
           "actions"
@@ -48958,7 +49642,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/localization/usage": {
       "get": {
-        "description": "(BETA) Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. Child workspaces are not included.",
+        "description": "Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. `childWorkspaces` counts the workspaces below it that the user can see, the same way.",
         "operationId": "workspaceLocalizationUsage",
         "parameters": [
           {
@@ -48982,7 +49666,124 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Languages used in the workspace.",
+        "summary": "Languages used in the workspace.",
+        "tags": [
+          "Localization",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/localization/usage/childWorkspaces": {
+      "get": {
+        "description": "(BETA) Lists the workspaces behind the `childWorkspaces` counts of the workspace localization usage. The list has the workspaces below the workspace that the user can see, sorted by name. Without the setting filter, a workspace matches when one of its three language settings matches. Its source is then the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.",
+        "operationId": "workspaceLocalizationUsageChildWorkspaces",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Language tag that the workspace gets.",
+            "example": "de-DE",
+            "in": "query",
+            "name": "value",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by workspace name. Note that the filter is case insensitive.",
+            "example": "berg",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "One of LOCALE, METADATA_LOCALE and DATA_LOCALE.",
+            "example": "LOCALE",
+            "in": "query",
+            "name": "setting",
+            "required": false,
+            "schema": {
+              "enum": [
+                "LOCALE",
+                "METADATA_LOCALE",
+                "DATA_LOCALE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Where the value comes from.",
+            "example": "PARENT",
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "description": "Where the value comes from, from the strongest source to the weakest: USER - the user set it. WORKSPACE - the workspace sets it. PARENT - the workspace inherits it from a parent workspace. ORGANIZATION - the organization default. ENVIRONMENT - the default set for the whole deployment. DEFAULT - the built-in default.",
+              "enum": [
+                "USER",
+                "WORKSPACE",
+                "PARENT",
+                "ORGANIZATION",
+                "ENVIRONMENT",
+                "DEFAULT"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": 0,
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": 20,
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationUsageWorkspaces"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(BETA) Workspaces below the workspace that use a language.",
         "tags": [
           "Localization",
           "actions"
@@ -48997,7 +49798,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/localization/usage/users": {
       "get": {
-        "description": "(BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. No value selects the usage entry without a language.",
+        "description": "Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. The list leaves out the members that the usage counts without a language.",
         "operationId": "workspaceLocalizationUsageUsers",
         "parameters": [
           {
@@ -49099,7 +49900,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Workspace members who get a language.",
+        "summary": "Workspace members who get a language.",
         "tags": [
           "Localization",
           "actions"
@@ -49201,7 +50002,7 @@
             "description": "No Content"
           }
         },
-        "summary": "(BETA) Manage Permissions for a Metric",
+        "summary": "Manage Permissions for a Metric",
         "tags": [
           "Permissions",
           "actions"
@@ -49241,7 +50042,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Get Metric Permissions",
+        "summary": "Get Metric Permissions",
         "tags": [
           "Permissions",
           "actions"
@@ -49839,7 +50640,7 @@
             "description": "No Content"
           }
         },
-        "summary": "(BETA) Manage Permissions for a Visualization",
+        "summary": "Manage Permissions for a Visualization",
         "tags": [
           "Permissions",
           "actions"
@@ -49879,7 +50680,7 @@
             "description": "OK"
           }
         },
-        "summary": "(BETA) Get Visualization Permissions",
+        "summary": "Get Visualization Permissions",
         "tags": [
           "Permissions",
           "actions"
@@ -57964,7 +58765,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Facts",
           "entities",
@@ -58413,7 +59214,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Dashboards",
           "entities",
@@ -59097,7 +59898,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Attribute Hierarchies",
           "entities",
@@ -59653,7 +60454,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Attributes",
           "entities",
@@ -59866,7 +60667,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Patch an Attribute (beta)",
+        "summary": "Patch an Attribute",
         "tags": [
           "Attributes",
           "entities",
@@ -59945,7 +60746,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Automations",
           "entities",
@@ -60282,7 +61083,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Automations",
           "entities",
@@ -60992,7 +61793,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Computed Attributes",
           "entities",
@@ -61619,7 +62420,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -62188,7 +62989,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Plugins",
           "entities",
@@ -62741,7 +63542,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Datasets",
           "entities",
@@ -62955,7 +63756,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Patch a Dataset (beta)",
+        "summary": "Patch a Dataset",
         "tags": [
           "Datasets",
           "entities",
@@ -63778,6 +64579,85 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/documents/search": {
+      "post": {
+        "operationId": "searchEntities@Documents",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchBody"
+              }
+            }
+          },
+          "description": "Search request body with filter, pagination, and sorting options",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiPublisherDocumentOutList"
+                }
+              },
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiPublisherDocumentOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "The search endpoint",
+        "tags": [
+          "Publisher Documents",
+          "entities",
+          "document-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/documents/{objectId}": {
       "delete": {
         "operationId": "deleteEntity@Documents",
@@ -64438,7 +65318,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Export Definitions",
           "entities",
@@ -65006,7 +65886,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Facts",
           "entities",
@@ -65213,7 +66093,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Patch a Fact (beta)",
+        "summary": "Patch a Fact",
         "tags": [
           "Facts",
           "entities",
@@ -65528,7 +66408,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Filter Context",
           "entities",
@@ -66166,7 +67046,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Filter Views",
           "entities",
@@ -66977,7 +67857,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Knowledge Recommendations",
           "entities",
@@ -67530,7 +68410,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Labels",
           "entities",
@@ -67737,7 +68617,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Patch a Label (beta)",
+        "summary": "Patch a Label",
         "tags": [
           "Labels",
           "entities",
@@ -68046,7 +68926,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Memory Items",
           "entities",
@@ -68714,7 +69594,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Metrics",
           "entities",
@@ -69961,7 +70841,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Parameters",
           "entities",
@@ -72340,7 +73220,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Data Filters",
           "entities",
@@ -73032,7 +73912,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Visualization Object",
           "entities",
@@ -74147,7 +75027,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Data Filters",
           "entities",
@@ -74792,7 +75672,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Data Filters",
           "entities",
@@ -75833,7 +76713,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "The search endpoint (beta)",
+        "summary": "The search endpoint",
         "tags": [
           "Workspaces - Settings",
           "entities",

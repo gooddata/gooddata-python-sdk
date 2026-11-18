@@ -609,7 +609,7 @@ class AttributesApi(object):
         json_api_attribute_patch_document,
         **kwargs
     ):
-        """Patch an Attribute (beta)  # noqa: E501
+        """Patch an Attribute  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -700,7 +700,7 @@ class AttributesApi(object):
         entity_search_body,
         **kwargs
     ):
-        """The search endpoint (beta)  # noqa: E501
+        """The search endpoint  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

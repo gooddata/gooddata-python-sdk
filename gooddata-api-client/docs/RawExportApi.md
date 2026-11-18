@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_raw_export**](RawExportApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
-[**get_raw_export**](RawExportApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**create_raw_export**](RawExportApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | Create raw export request
+[**get_raw_export**](RawExportApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | Retrieve exported files
 
 
 # **create_raw_export**
 > ExportResponse create_raw_export(workspace_id, raw_export_request)
 
-(EXPERIMENTAL) Create raw export request
+Create raw export request
 
-Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+A raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
 
 ### Example
 
@@ -109,7 +109,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Create raw export request
+        # Create raw export request
         api_response = api_instance.create_raw_export(workspace_id, raw_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -149,9 +149,9 @@ No authorization required
 # **get_raw_export**
 > file_type get_raw_export(workspace_id, export_id)
 
-(EXPERIMENTAL) Retrieve exported files
+Retrieve exported files
 
-Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
+After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
 
 ### Example
 
@@ -177,7 +177,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Retrieve exported files
+        # Retrieve exported files
         api_response = api_instance.get_raw_export(workspace_id, export_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

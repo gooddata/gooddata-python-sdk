@@ -32,9 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.afm import AFM
+    from gooddata_api_client.model.computation_profile import ComputationProfile
     from gooddata_api_client.model.execution_response import ExecutionResponse
     from gooddata_api_client.model.result_spec import ResultSpec
     globals()['AFM'] = AFM
+    globals()['ComputationProfile'] = ComputationProfile
     globals()['ExecutionResponse'] = ExecutionResponse
     globals()['ResultSpec'] = ResultSpec
 
@@ -96,6 +98,7 @@ class ResultCacheMetadata(ModelNormal):
             'execution_response': (ExecutionResponse,),  # noqa: E501
             'result_size': (int,),  # noqa: E501
             'result_spec': (ResultSpec,),  # noqa: E501
+            'computation_profile': (ComputationProfile,),  # noqa: E501
         }
 
     @cached_property
@@ -108,6 +111,7 @@ class ResultCacheMetadata(ModelNormal):
         'execution_response': 'executionResponse',  # noqa: E501
         'result_size': 'resultSize',  # noqa: E501
         'result_spec': 'resultSpec',  # noqa: E501
+        'computation_profile': 'computationProfile',  # noqa: E501
     }
 
     read_only_vars = {
@@ -157,6 +161,7 @@ class ResultCacheMetadata(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            computation_profile (ComputationProfile): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -252,6 +257,7 @@ class ResultCacheMetadata(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            computation_profile (ComputationProfile): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
