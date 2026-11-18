@@ -98,6 +98,11 @@ class ItemReport:
     # a failure: excluded from runs_passed and from pass@K, and pass^K is False while any
     # exist. Counted in `runs`, because they cost real agent time.
     runs_ungraded: int = 0
+    # The agentic kinds' labels (``core/outcome.py``): ``harness_error`` is set only when every
+    # run was a harness error, ``shadow`` is the phase-2 candidate verdict. Neither decides
+    # anything here; they are reported for reading.
+    harness_error: dict | None = None
+    shadow: dict | None = None
     # What the item actually ran, when the kind knows better than the requested K.
     # agentic_conversation drives its fixture exactly once whatever --runs says, so
     # trusting K there reports four runs that never happened.

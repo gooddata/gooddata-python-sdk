@@ -26,7 +26,7 @@ from gooddata_eval.core.agentic.alert_skill import (
     render_turn_for_simulated_user,
     run_agentic_alert_skill,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
 from gooddata_eval.core.models import ChatResult, LoopExit
 
 _DATE_FILTER = {
@@ -1932,3 +1932,21 @@ def test_an_alert_created_before_the_stream_broke_is_still_cleaned_up():
 
     assert mock_delete.call_count == 1
     assert mock_delete.call_args.args[-1] == "alert-1"
+
+
+@pytest.mark.parametrize(
+    ("exc", "exit_value"),
+    [
+        (TurnTimeoutError("agent exceeded the 60s turn budget"), "agent_timeout"),
+        (TurnIncompleteError("no final answer", reason="max iterations"), "turn_incomplete"),
+    ],
+)
+def test_exit_reason_names_the_agents_own_chat_failure(exc, exit_value):
+    mock_client = MagicMock()
+    mock_client.create_conversation.return_value = "conv-1"
+    mock_client.send_message.side_effect = exc
+
+    detail = _run_alert(mock_client, max_iterations=3)
+
+    assert detail["exit_reason"] == exit_value
+    assert detail["alert_created"] is False

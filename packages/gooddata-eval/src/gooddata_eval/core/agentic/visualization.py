@@ -12,15 +12,24 @@ import time
 from dataclasses import dataclass, field, replace
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    CHAT_FAILURE_EXITS,
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    failure_message_head,
+    label_runs,
+    log_eval_error_score,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -232,21 +241,21 @@ def _execute_single_run(
         current_result = client.send_message(conversation_id, question)
     except ChatError as exc:
         # The opening request, so there is no partial conversation to evaluate: fall through
-        # to the empty-result path with CHAT_ERROR recorded. Raising here would discard every
+        # to the empty-result path with its exit recorded. Raising here would discard every
         # K-run already completed along with any exit_reason.
         print(f"[CHAT] send_message failed for conversation {conversation_id}: {exc}")
         current_result = getattr(exc, "partial_result", None) or ChatResult()
-        # The loop that collects events does not run after CHAT_ERROR, so a partial result's
+        # The loop that collects events does not run after a failed opening request, so a partial result's
         # chart executions are added here.
         all_tool_call_events.extend(current_result.tool_call_events)
-        exit_reason = LoopExit.CHAT_ERROR
+        exit_reason = chat_failure_exit(exc)
     # Counted here, not at the top of the loop: this request is sent unconditionally, so
     # with max_iterations=0 the loop body never runs and total_turns would report 0 turns
     # for a conversation the agent did receive. The loop's own increment is skipped on its
     # first pass to compensate, keeping total_turns == number of send_message calls.
     total_turns += 1
 
-    for iteration in range(max_iterations if exit_reason is not LoopExit.CHAT_ERROR else 0):
+    for iteration in range(max_iterations if exit_reason not in CHAT_FAILURE_EXITS else 0):
         if iteration:
             total_turns += 1
         total_steps += current_result.reasoning_step_count
@@ -297,7 +306,7 @@ def _execute_single_run(
                 # The loop adds a turn's events at its next pass, which a break skips. The
                 # partial result is scored, so its chart executions count too.
                 all_tool_call_events.extend(partial.tool_call_events)
-            exit_reason = LoopExit.CHAT_ERROR
+            exit_reason = chat_failure_exit(exc)
             break
 
     skill_activated = _check_visualization_skill_activated(all_tool_call_events)
@@ -316,7 +325,7 @@ def _execute_single_run(
         actual_output,
         all_tool_call_events,
         answer_text,
-        interrupted=exit_reason is LoopExit.CHAT_ERROR,
+        interrupted=exit_reason in CHAT_FAILURE_EXITS,
     )
 
     return RunResult(
@@ -443,6 +452,81 @@ def _run_detail(run: RunResult) -> dict:
         "turns_used": int(run.total_turns),
         **timeline_detail(run.tool_call_events, run.reasoning_step_events),
     }
+
+
+def _failed_checks(run: RunResult) -> list[dict]:
+    """The checks this run failed, by their ``detail`` names, with expected/actual where known.
+
+    Follows ``EvaluationResult.strict_pass`` term by term, so the list is empty exactly when
+    the run passed.
+    """
+    ev = run.eval_result
+    checks: list[FailedCheck] = []
+    if ev.scored_without_chart:
+        if ev.visualization_created:
+            actual_type = run.actual_output.type if run.actual_output else None
+            checks.append(FailedCheck("no_chart", expected="no chart", actual=actual_type))
+        if ev.answer_correct is False:
+            checks.append(FailedCheck("answer_correct", actual=ev.answer_problems))
+        return failed_check_records(checks)
+    if not ev.visualization_created:
+        # Every chart check reads False without a chart; listing them would name content
+        # failures for work the agent never did. The answer checks still read the text.
+        checks.append(FailedCheck("visualization_created", expected=True, actual=False))
+        if ev.answer_correct is False:
+            checks.append(FailedCheck("answer_correct", actual=ev.answer_problems))
+        if ev.format_correct is False:
+            checks.append(FailedCheck("format_correct", actual=ev.format_problems))
+        return failed_check_records(checks)
+    if not ev.cross_ref_valid:
+        checks.append(FailedCheck("cross_ref_valid", actual=ev.cross_ref_errors))
+    if not ev.metrics_correct:
+        if ev.expected_metric_uris == ev.actual_metric_uris and ev.metric_layout_problems:
+            # The metric set matched; the order or axis did not, and only these say which.
+            checks.append(FailedCheck("metrics_correct", part="layout", actual=ev.metric_layout_problems))
+        else:
+            checks.append(
+                FailedCheck(
+                    "metrics_correct", expected=sorted(ev.expected_metric_uris), actual=sorted(ev.actual_metric_uris)
+                )
+            )
+    if not ev.dimensions_correct:
+        checks.append(
+            FailedCheck("dimensions_correct", expected=sorted(ev.expected_dim_uris), actual=sorted(ev.actual_dim_uris))
+        )
+    if not ev.filters_correct:
+        differing = [
+            FailedCheck(
+                "filters_correct",
+                part=category,
+                expected=ev.expected_filters.get(category, []),
+                actual=ev.actual_filters.get(category, []),
+            )
+            for category in sorted(set(ev.expected_filters) | set(ev.actual_filters))
+            if ev.expected_filters.get(category, []) != ev.actual_filters.get(category, [])
+        ]
+        checks.extend(differing or [FailedCheck("filters_correct")])
+    if not ev.sorts_correct:
+        checks.append(FailedCheck("sorts_correct", expected=ev.expected_sorts, actual=ev.actual_sorts))
+    if not ev.viz_type_hard:
+        checks.append(
+            FailedCheck(
+                "viz_type_hard",
+                expected=run.best_expected.type if run.best_expected else None,
+                actual=run.actual_output.type if run.actual_output else None,
+            )
+        )
+    if ev.requires_execution and not ev.executed:
+        checks.append(FailedCheck("executed", expected=True, actual=False))
+    if ev.buckets_correct is False:
+        checks.append(FailedCheck("buckets_correct", expected=ev.expected_buckets, actual=ev.actual_buckets))
+    if ev.answer_correct is False:
+        checks.append(FailedCheck("answer_correct", actual=ev.answer_problems))
+    if ev.format_correct is False:
+        checks.append(FailedCheck("format_correct", actual=ev.format_problems))
+    if ev.part_present is False:
+        checks.append(FailedCheck("part_present", expected=True, actual=False))
+    return failed_check_records(checks)
 
 
 def _strict_checks(ev: EvaluationResult) -> dict[str, bool]:
@@ -579,6 +663,9 @@ def evaluate_agentic_visualization(
             options=options,
         )
 
+    # Before the Langfuse scores, so an ERROR run gets its marker beside its usual scores.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.eval_result.strict_pass)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -592,6 +679,8 @@ def evaluate_agentic_visualization(
                 ev = run.eval_result
                 strict_checks = _strict_checks(ev)
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    if (run_error := run_labels.error_label(run_idx)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
                     for score_name, value in strict_checks.items():
                         # Scored below on every item, gating or not.
                         if score_name != "assertion-vis-executed":
@@ -662,12 +751,13 @@ def evaluate_agentic_visualization(
     # until now only the winning run's survived.
     failed_runs = build_failed_runs(
         summary.run_results,
-        passed=lambda r: r.eval_result.strict_pass,
+        labels=run_labels,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs)
         n = len(expected_outputs)
         candidate_note = f" (closest of {n} candidates)" if n > 1 else ""
         cross_ref_detail = (" → " + "; ".join(ev.cross_ref_errors)) if ev.cross_ref_errors else ""
@@ -711,6 +801,8 @@ def evaluate_agentic_visualization(
             f"{_options_lines(ev, best.answer_text)}"
             f"  Stated Value Matches  : {ev.stated_value_matches} (reported only)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n",
+            harness_error=run_labels.harness_error_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
@@ -722,6 +814,7 @@ def evaluate_agentic_visualization(
             best_run_latency_s=best.run_latency_s,
         )
     return agentic_success(
+        shadow=run_labels.shadow(gate),
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,

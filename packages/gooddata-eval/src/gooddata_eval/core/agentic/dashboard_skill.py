@@ -13,16 +13,24 @@ import jsonpatch
 from gooddata_eval.core.agentic._clarification import all_questions
 from gooddata_eval.core.agentic._conversation_context import CONFIRMATION_REPLY, asks_in_text, classify_reply, clip
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import failed_checks_from
 from gooddata_eval.core.agentic._filters import describe_selection, same_unordered_values, selection_of
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    chat_failure_exit,
+    failure_message_head,
+    label_runs,
+    log_eval_error_score,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -1903,7 +1911,8 @@ class DashboardRunResult:
     run_latency_s: float = 0.0
     # Why the loop stopped -- see LoopExit. A dashboard not produced alone cannot tell a
     # refusal from a run that hit max_iterations while still on track (matches
-    # kda_skill.py/alert_skill.py). CHAT_ERROR is reachable; SIMULATED_USER_FAILED is not --
+    # kda_skill.py/alert_skill.py). The chat failure exits are reachable (see
+    # chat_failure_exit); SIMULATED_USER_FAILED is not --
     # this loop's follow-up is built from the expectation by build_simulated_reply, with no
     # judge call that could fail.
     exit_reason: LoopExit = LoopExit.BUDGET_EXHAUSTED
@@ -2302,7 +2311,7 @@ def _execute_single_dashboard_run(
                 all_tool_call_events.extend(partial.tool_call_events or [])
                 all_reasoning_step_events.extend(partial.reasoning_step_events or [])
                 steps += partial.reasoning_step_count
-            exit_reason = LoopExit.CHAT_ERROR
+            exit_reason = chat_failure_exit(exc)
             break
         agent_elapsed = time.monotonic() - agent_started
         timings.agent_s += agent_elapsed
@@ -2454,8 +2463,15 @@ def _run_detail(run: DashboardRunResult) -> dict[str, Any]:
         **run.evaluation.diagnostics,
         "failures": run.evaluation.failures,
         "notes": run.evaluation.notes,
+        # Why the loop stopped -- see LoopExit.
+        "exit_reason": run.exit_reason.value,
         "latency_breakdown": build_latency_breakdown(run.tool_call_events, run.reasoning_step_events),
     }
+
+
+def _failed_checks(run: DashboardRunResult) -> list[dict]:
+    """The checks this run failed, by name. What each one found is in the run's ``failures``."""
+    return failed_checks_from(run.evaluation.strict_checks)
 
 
 def run_agentic_dashboard_skill(
@@ -2580,6 +2596,9 @@ def evaluate_agentic_dashboard_skill(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so an ERROR run gets its marker beside its usual scores.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.evaluation.strict_pass)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -2591,6 +2610,8 @@ def evaluate_agentic_dashboard_skill(
                 pt = ctx.trace(run.conversation_id)
                 strict_checks = run.evaluation.strict_checks
                 with ctx.observe(pt, run_idx, conversation_id=run.conversation_id, output=strict_checks) as tid:
+                    if (run_error := run_labels.error_label(run_idx)) is not None:
+                        log_eval_error_score(ctx, tid, run_error)
                     for score_name, value in strict_checks.items():
                         ctx.score(tid, name=score_name, value=float(value), data_type="BOOLEAN")
                     for name, value in run.evaluation.diagnostics.items():
@@ -2640,12 +2661,13 @@ def evaluate_agentic_dashboard_skill(
     # cannot disagree about which runs failed.
     failed_runs = build_failed_runs(
         summary.run_results,
-        passed=lambda r: r.evaluation.strict_pass,
+        labels=run_labels,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective)
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs)
         # Two failures wear the same missing skill, and the advice differs. If the other
         # dashboard skill was activated, the flag that registers both is plainly on and the
         # model simply routed the wrong way. If neither was, the flag is off or the agent has
@@ -2669,6 +2691,8 @@ def evaluate_agentic_dashboard_skill(
             f"Checks: {best.evaluation.strict_checks}. "
             f"Failures: {'; '.join(best.evaluation.failures) or 'none reported'}."
             + (f" Notes (not scored): {notes}." if notes else ""),
+            harness_error=run_labels.harness_error_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
@@ -2681,6 +2705,7 @@ def evaluate_agentic_dashboard_skill(
             run_latencies_s=[r.run_latency_s for r in summary.run_results],
         )
     return agentic_success(
+        shadow=run_labels.shadow(gate),
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,

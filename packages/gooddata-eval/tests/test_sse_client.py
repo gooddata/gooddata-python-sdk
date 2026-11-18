@@ -1091,6 +1091,73 @@ def test_turn_timeout_aborts_a_streaming_turn_and_is_not_retried(monkeypatch):
     assert sse_mod._is_retryable_exc(sse_mod.TurnTimeoutError("x")) is False
 
 
+def _silent_after_one_line(now: list[float], silent_until: float):
+    """One event, then a read timeout that ends with the clock at ``silent_until``."""
+    yield 'data: {"role":"assistant","content":{"type":"reasoning","text":"thinking"}}'
+    now[0] = silent_until
+    raise httpx.ReadTimeout("timed out")
+
+
+def test_a_silent_agent_past_its_budget_is_a_turn_timeout(monkeypatch):
+    """The read timeout is lowered to the budget, so a silent agent ends in a read timeout,
+    not at the deadline check -- it is the same timeout all the same."""
+    now = [0.0]
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: now[0])
+    lines = sse_mod._until_deadline(_silent_after_one_line(now, 61.0), deadline=60.0, budget=60.0)
+    with pytest.raises(sse_mod.TurnTimeoutError, match="exceeded the 60s turn budget") as exc_info:
+        sse_mod.parse_sse_lines(lines)
+    assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)
+
+
+def test_a_read_timeout_before_the_deadline_stays_a_stream_error(monkeypatch):
+    now = [0.0]
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: now[0])
+    lines = sse_mod._until_deadline(_silent_after_one_line(now, 10.0), deadline=60.0, budget=60.0)
+    with pytest.raises(sse_mod.ChatError) as exc_info:
+        sse_mod.parse_sse_lines(lines)
+    assert not isinstance(exc_info.value, sse_mod.TurnTimeoutError)
+    assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)
+
+
+def _headers_never_came(now: list[float], silent_until: float):
+    def handler(request):
+        now[0] = silent_until
+        raise httpx.ReadTimeout("timed out", request=request)
+
+    return handler
+
+
+def test_a_read_timeout_awaiting_the_headers_past_the_budget_is_a_turn_timeout(monkeypatch):
+    """A server that holds the headers back until the first event times out before the body."""
+    now = [0.0]
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: now[0])
+    client = _client_with_handler(_headers_never_came(now, 61.0), turn_timeout_s=60)
+    with pytest.raises(sse_mod.TurnTimeoutError, match="exceeded the 60s turn budget") as exc_info:
+        client.send_message("conv", "q")
+    assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)
+
+
+def test_a_read_timeout_awaiting_the_headers_past_the_budget_records_the_turn(monkeypatch):
+    """The turn carries no partial result, but it is one of the slowest: the tail needs it."""
+    now = [0.0]
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: now[0])
+    client = _client_with_handler(_headers_never_came(now, 61.0), turn_timeout_s=60)
+    recorder = TraceRecorder()
+    with pytest.raises(sse_mod.TurnTimeoutError):
+        client.send_message("conv", "q")
+    assert recorder.stop() == [pytest.approx(61.0)]
+
+
+def test_a_read_timeout_awaiting_the_headers_before_the_budget_is_left_as_it_is(monkeypatch):
+    now = [0.0]
+    monkeypatch.setattr(sse_mod.time, "monotonic", lambda: now[0])
+    client = _client_with_handler(_headers_never_came(now, 10.0), turn_timeout_s=60)
+    recorder = TraceRecorder()
+    with pytest.raises(httpx.ReadTimeout):
+        client.send_message("conv", "q")
+    assert recorder.stop() == []
+
+
 def test_no_turn_timeout_leaves_the_stream_untouched():
     lines = ['data: {"role":"assistant","content":{"type":"text","text":"hi"}}']
     assert list(sse_mod._until_deadline(iter(lines), deadline=None)) == lines

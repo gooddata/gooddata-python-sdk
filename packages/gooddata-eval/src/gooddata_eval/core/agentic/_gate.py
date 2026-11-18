@@ -29,20 +29,27 @@ def gate_label(gate: str | None, k: int) -> str:
     return f"pass^{k}" if normalize_gate(gate) == "power" else f"pass@{k}"
 
 
-def gate_failure_note(gate: str | None, runs_passed: int, runs_total: int, runs_ungraded: int = 0) -> str:
+def gate_failure_note(
+    gate: str | None, runs_passed: int, runs_total: int, runs_ungraded: int = 0, *, runs_errored: int = 0
+) -> str:
     """Gate and how many runs met it, for the assertion message.
 
     Needed because the message body describes the BEST run, which under pass^K can be a run
     that passed — so the reported detail on its own looks like a pass.
 
     An ungraded run counts in runs_total but can never count in runs_passed, so the remainder
-    is not evidence of instability — saying so would blame the agent for a judge outage.
+    is not evidence of instability — saying so would blame the agent for a judge outage. A run
+    the harness failed (``runs_errored``, labelled ERROR in ``core/outcome.py``) is no evidence
+    of instability either, so it is named rather than called one. A pass^K item with a passing
+    run and a run the agent itself failed is unstable all the same, whatever else errored.
     """
     label = gate_label(gate, runs_total)
     note = f"Gate {label} failed: {runs_passed}/{runs_total} runs passed"
     if runs_ungraded:
         return f"{note}, {runs_ungraded} ungraded."
-    if normalize_gate(gate) == "power" and runs_passed:
+    if runs_errored:
+        note = f"{note}, {runs_errored} harness error(s)"
+    if normalize_gate(gate) == "power" and runs_passed and runs_passed + runs_errored < runs_total:
         return f"{note} — unstable, not a clean failure."
     return f"{note}."
 
