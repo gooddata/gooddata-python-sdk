@@ -1950,3 +1950,16 @@ def test_exit_reason_names_the_agents_own_chat_failure(exc, exit_value):
 
     assert detail["exit_reason"] == exit_value
     assert detail["alert_created"] is False
+
+
+# The agent offers metrics as {type/id} and may describe one as ignoring filters, which read
+# like rule 5's "no filters"; the simulated user named that metric instead of the fixture's.
+@pytest.mark.parametrize("metric_id", ["of_orders", "metric/of_orders"])
+def test_sim_user_is_told_which_offered_metric_to_choose(metric_id: str) -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Threshold": 1000, "metric_id": metric_id})
+    assert "choose exactly {metric/of_orders}" in prompt
+    assert "rule 5 is about filters on the alert" in prompt
+
+
+def test_sim_user_without_a_metric_gets_no_metric_choice_rule() -> None:
+    assert "choose exactly" not in _sim_user_prompt({"Operator": "LESS_THAN", "Threshold": 1000})

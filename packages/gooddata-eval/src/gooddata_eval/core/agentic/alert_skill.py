@@ -592,6 +592,18 @@ def generate_simulated_alert_response(
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
 
+    # The agent may offer several metrics and describe one as ignoring filters or counting all
+    # time. That reads like rule 5's "no filters ... all time", which made the simulated user
+    # pick it; the metric to name is the goal's, by its reference.
+    metric_ref = expected.metric_id if "/" in (expected.metric_id or "") else f"metric/{expected.metric_id}"
+    metric_choice_rule = (
+        f"   If the agent offers several metrics to choose from, choose exactly {{{metric_ref}}} "
+        "and write it that way. A metric described as ignoring filters or counting all time is a different "
+        "metric: rule 5 is about filters on the alert, never a reason to choose another metric.\n"
+        if expected.metric_id
+        else ""
+    )
+
     # Only a stated title is enforced: an unstated one is the agent's to choose, and telling the
     # sim-user nothing keeps it from objecting to a generated name.
     title_rule = (
@@ -607,8 +619,11 @@ def generate_simulated_alert_response(
         + original_request
         + "Rules you MUST follow:\n"
         f"1. Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
-        f"recipients={recipients}, trigger={trigger_key}" + (f", filters={filters}" if filters else "") + ".\n"
-        "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
+        f"recipients={recipients}, trigger={trigger_key}"
+        + (f", filters={filters}" if filters else "")
+        + ".\n"
+        + metric_choice_rule
+        + "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
         "3. If the agent shows a final summary, an alert proposal or asks for confirmation, check "
         "   ALL of these against your goal: recipients, trigger (how often you are alerted), "
         "   filters / time window, threshold and operator. If ANY of them differs — for example the "

@@ -108,8 +108,11 @@ class AgenticRunSummary:
 def generate_simulated_response(agent_message: str, expected_output: CreatedVisualization) -> str:
     """Generate a simulated user reply to an agent clarification question.
 
-    Uses OpenAI gpt-5.2 to produce a realistic reply that guides the agent
-    toward the expected visualization without revealing the answer directly.
+    Uses OpenAI gpt-5.2 to produce a realistic reply that guides the agent toward the
+    expected visualization without revealing the answer directly. Objects are named as a user
+    knows them, never by reference: a goal of references makes the simulated user volunteer
+    them, handing the agent objects it should resolve itself. A date filter names its date
+    dataset, without which the simulated user cannot say which date "2024" means.
     Requires the [llm-judge] extra: pip install gooddata-eval[llm-judge]
     """
     try:
@@ -138,10 +141,12 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
             granularity = filter_dict.get("granularity", "")
             from_val = filter_dict.get("from", "")
             to_val = filter_dict.get("to", "")
+            dataset = filter_dict.get("using")
+            on_dataset = f" on the {uri_to_display_name(dataset)}" if isinstance(dataset, str) and dataset else ""
             filter_parts.append(
-                f"date filter: {granularity} from {from_val} to {to_val}"
+                f"date filter{on_dataset}: {granularity} from {from_val} to {to_val}"
                 if granularity
-                else f"date filter: {from_val} to {to_val}"
+                else f"date filter{on_dataset}: {from_val} to {to_val}"
             )
         elif ft == "ranking_filter":
             n = filter_dict.get("top") or filter_dict.get("bottom")
@@ -196,7 +201,9 @@ def generate_simulated_response(agent_message: str, expected_output: CreatedVisu
                     f"Respond naturally to the agent's question. Be helpful and answer what they're asking about.\n"
                     f"If the agent asks specifically about items from your goal (like which metrics or dimensions "
                     f"you want), you should mention them. Keep your response concise and natural, as a real user would."
-                    f"{no_filter_hint}"
+                    f"{no_filter_hint}\n"
+                    f"If the agent offers alternatives, choose the one that matches your goal and repeat it as the "
+                    f"agent wrote it. A date attribute such as order_date.year belongs to the order date."
                 ),
             },
         ],
