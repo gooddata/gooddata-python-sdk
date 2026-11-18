@@ -1,13 +1,19 @@
 {{/* (C) 2023 GoodData Corporation */}}
 
+{{ $whitelabeled := .Site.Params.whitelabeled }}
 {{ $cover := .HasShortcode "blocks/cover" }}
+
+{{ if not $whitelabeled }}
 <div class="gd-docs-header-nav gd-docs-header-nav__first">
   <nav class="gd-docs-header-nav__left" aria-label="Homepage">
-    <a tabindex="1" class="gd-docs-header-nav__logo gd-header-nav__logo" href="{{ (printf "%s%s/" .Site.Home.Permalink "latest" ) | safeURL }}" aria-label="Go to documentation homepage">
+    <a class="gd-docs-header-nav__logo gd-header-nav__logo" href="{{ (printf "%s%s/" .Site.Home.Permalink "latest" ) | safeURL }}" aria-label="Go to documentation homepage">
       {{ with resources.Get "icons/GoodDataLearn.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
     </a>
     <span class="gd-header-nav__logo-text">Learn</span>
   </nav>
+  {{/* Skip links render right after the logo so keyboard focus order is
+       logo → skip links → menu without using positive tabindex. */}}
+  {{ partial "skip-links.html" . }}
   {{ partial "header-menu.html" . }}
   {{ partial "header-right.html" . }}
 </div>
@@ -15,26 +21,45 @@
   <div class="gd-docs-header-nav__desktop">
     {{ partial "navbar-breadcrumb.html" . }}
   </div>
+  {{ if not .Params.no_search }}
   <div class="gd-docs-header-nav__center">
     <div id="adds-container" class="gd-docs-header-nav__search"></div>
   </div>
+  {{ end }}
   {{ partial "ask-ai-button.html" . }}
-  {{ if  .Site.Params.versions }}
+  {{ if .Site.Params.versions }}
   <div class="gd-docs-header-nav__right">
     {{ partial "navbar-version-selector.html" . }}
-      <a href="https://github.com/gooddata/gooddata-python-sdk" class="gd-docs-header-nav__cta gd-docs-header-nav__github">
-        {{ with resources.Get "icons/github.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
-        GitHub
-      </a>
-  </div>
-  {{ else }}
-  <div class="gd-docs-header-nav__right">
-    {{ with .Site.GetPage "docs" }}
     <a href="https://github.com/gooddata/gooddata-python-sdk" class="gd-docs-header-nav__cta gd-docs-header-nav__github">
       {{ with resources.Get "icons/github.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
       GitHub
     </a>
-    {{ end }}
+    {{ partial "theme-switcher.html" . }}
+  </div>
+  {{ else }}
+  <div class="gd-docs-header-nav__right">
+    <a href="https://github.com/gooddata/gooddata-python-sdk" class="gd-docs-header-nav__cta gd-docs-header-nav__github">
+      {{ with resources.Get "icons/github.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
+      GitHub
+    </a>
+    {{ partial "theme-switcher.html" . }}
   </div>
   {{ end }}
+
+  {{ partial "edition-switch.html" . }}
+  {{ partial "lang-switch.html" . }}
 </div>
+{{ else }}
+
+{{/* Whitelabeled header has no logo — keep skip links first here. */}}
+{{ partial "skip-links.html" . }}
+<div class="gd-docs-header-nav gd-docs-header-nav__first whitelabeled-header__first">
+  <div class="gd-docs-header-nav__left"></div>
+</div>
+<div class="gd-docs-header-nav gd-docs-header-nav__second whitelabeled-header__second">
+  <div class="gd-docs-header-nav__left"></div>
+  <div class="gd-docs-header-nav__center"></div>
+  <div class="gd-docs-header-nav__right"></div>
+</div>
+
+{{ end }}
