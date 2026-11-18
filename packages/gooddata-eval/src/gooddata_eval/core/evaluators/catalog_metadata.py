@@ -27,8 +27,8 @@ from typing import Any
 
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
 from gooddata_eval.core.evaluators._rubric import Criterion, grade_rubric
+from gooddata_eval.core.evaluators._text_utils import count_sentences, count_words
 from gooddata_eval.core.evaluators.base import ItemEvaluation
-from gooddata_eval.core.evaluators.takeaway import _sentences, _words
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
 _DEFAULT_FORMAT: dict[str, dict[str, Any]] = {
@@ -55,12 +55,40 @@ _VIOLATION_STEPS = [
     "Score 0 if it does not exhibit it.",
 ]
 
-# Bold, single emphasis (*x*, _x_), code, a heading or a list item.
+# Bold, single emphasis (*x*, _x_), code, a heading or a list item. A leading "# of" is a metric
+# name ("# of Orders"), not a heading.
 _MARKUP = re.compile(
-    r"\*\*|`|(?<![\w*])[*_](?=\S)[^*_\n]+(?<=\S)[*_](?![\w*])|^\s*#{1,6}\s|^\s*(?:[-*•]|\d+[.)])\s",
+    r"\*\*|`|(?<![\w*])[*_](?=\S)[^*_\n]+(?<=\S)[*_](?![\w*])|^\s*#{1,6}\s(?!of\b)|^\s*(?:[-*•]|\d+[.)])\s",
     re.MULTILINE,
 )
 _LIMITS = ("max_words", "max_sentences")
+# Label abbreviations a title or description may keep: "Avg. Order Value", "U.K. Sales".
+_ABBREVIATIONS = frozenset(
+    {
+        "vs",
+        "e.g",
+        "i.e",
+        "etc",
+        "incl",
+        "excl",
+        "approx",
+        "avg",
+        "est",
+        "no",
+        "nr",
+        "qty",
+        "pct",
+        "yr",
+        "yrs",
+        "mo",
+        "min",
+        "max",
+        "dept",
+        "u.s",
+        "u.k",
+        "e.u",
+    }
+)
 # A UUID, a MAQL reference such as {metric/net_sales}, or a snake_case identifier.
 _IDS = re.compile(
     r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\{\w+/[^}]*\}|\b[a-z0-9]+(?:_[a-z0-9]+)+\b",
@@ -158,11 +186,11 @@ class CatalogMetadataEvaluator:
     def _format_checks(output: str, expected: dict[str, Any], text: str) -> dict[str, Any]:
         """Deterministic checks keyed by name, plus `word_count`."""
         fmt = {**_DEFAULT_FORMAT[output], **(expected.get("format") or {})}
-        checks: dict[str, Any] = {"word_count": _words(text)}
+        checks: dict[str, Any] = {"word_count": count_words(text)}
         if _limit_on(fmt["max_words"]):
             checks["max_words"] = checks["word_count"] <= fmt["max_words"]
         if _limit_on(fmt["max_sentences"]):
-            checks["max_sentences"] = _sentences(text) <= fmt["max_sentences"]
+            checks["max_sentences"] = count_sentences(text, _ABBREVIATIONS) <= fmt["max_sentences"]
         if fmt["no_end_period"]:
             checks["no_end_period"] = not text.endswith(".")
         if fmt["no_markup"]:

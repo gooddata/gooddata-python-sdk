@@ -30,6 +30,7 @@ from typing import Any
 
 from gooddata_eval.core.evaluators._llm_judge import LLMJudge
 from gooddata_eval.core.evaluators._rubric import Criterion, grade_rubric
+from gooddata_eval.core.evaluators._text_utils import count_sentences, count_words
 from gooddata_eval.core.evaluators.base import ItemEvaluation
 from gooddata_eval.core.models import ChatResult, DatasetItem
 
@@ -97,9 +98,6 @@ _VIOLATION_STEPS = [
 ]
 
 _HEADLINE = re.compile(r"^\s*\*\*(.+?)\*\*", re.DOTALL)
-# A terminator, any closing quotes or brackets, then whitespace before the next sentence.
-_SENTENCE_BREAK = re.compile(r"[.!?]+[\"'”’»)\]]*\s+(?=\S)")
-_SENTENCE_OPENERS = "\"'“‘„«(["
 _ABBREVIATIONS = frozenset({"vs", "e.g", "i.e", "u.s", "cca", "např", "tj", "tzn", "apod", "resp", "atd"})
 _BLANK_LINE = re.compile(r"\n\s*\n")
 _HEADING_LINE = re.compile(r"^\s*#{1,6}\s", re.MULTILINE)
@@ -115,7 +113,7 @@ _META_OPENER = re.compile(
 
 
 def _words(text: str) -> int:
-    return sum(1 for token in text.replace("**", " ").split() if any(ch.isalnum() for ch in token))
+    return count_words(text)
 
 
 def _limit_on(value: Any) -> bool:
@@ -123,22 +121,8 @@ def _limit_on(value: Any) -> bool:
 
 
 def _sentences(text: str) -> int:
-    """Sentences in `text`; a break needs the next sentence to open with a capital, digit or quote.
-
-    That keeps "vs. last", "U.S. sales" or "např. v" from splitting one sentence in two; a
-    terminator right after a known abbreviation ("vs. Europe", "e.g. Nordics") is no break.
-    """
-    plain = text.replace("**", "").strip()
-    if not plain:
-        return 0
-    breaks = 0
-    for match in _SENTENCE_BREAK.finditer(plain):
-        nxt = plain[match.end()]
-        token = (plain[: match.start()].rsplit(maxsplit=1) or [""])[-1].lstrip("\"'“‘„«([").lower()
-        if token in _ABBREVIATIONS:
-            continue
-        breaks += nxt.isupper() or nxt.isdigit() or nxt in _SENTENCE_OPENERS
-    return breaks + 1
+    """Sentences in `text`, with the takeaway's abbreviations ("vs. Europe", "e.g. Nordics")."""
+    return count_sentences(text, _ABBREVIATIONS)
 
 
 def _has_meta_opener(text: str, headline: str | None, body: str) -> bool:

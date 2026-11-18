@@ -140,3 +140,20 @@ def test_snake_case_is_an_id_not_emphasis() -> None:
     res = ev.evaluate(_item({}), _chat("Uses net_sales over 2 * 3 periods."))
     assert res.detail["no_markup"] is True
     assert res.detail["no_ids"] is False
+
+
+@pytest.mark.parametrize("title", ["# of Orders", "Avg. Order Value by Region", "Est. Revenue", "U.K. Sales"])
+def test_title_keeps_metric_names_and_label_abbreviations(title: str) -> None:
+    ev = _make_evaluator()
+    _judges(ev)
+    res = ev.evaluate(_item({}, output="title"), _chat(title))
+    assert res.detail["no_markup"] is True
+    assert res.detail["max_sentences"] is True
+    assert res.passed is True
+
+
+def test_a_real_heading_is_still_markup() -> None:
+    ev = _make_evaluator()
+    _judges(ev)
+    res = ev.evaluate(_item({}), _chat("# Revenue\nShows revenue by region."))
+    assert res.detail["no_markup"] is False
