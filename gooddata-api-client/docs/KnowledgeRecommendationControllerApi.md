@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#get_all_entities_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations | Get all Knowledge Recommendations
 [**get_entity_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#get_entity_knowledge_recommendations) | **GET** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Get a Knowledge Recommendation
 [**patch_entity_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#patch_entity_knowledge_recommendations) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Patch a Knowledge Recommendation
-[**search_entities_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint (beta)
+[**search_entities_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#search_entities_knowledge_recommendations) | **POST** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/search | The search endpoint
 [**update_entity_knowledge_recommendations**](KnowledgeRecommendationControllerApi.md#update_entity_knowledge_recommendations) | **PUT** /api/v1/entities/workspaces/{workspaceId}/knowledgeRecommendations/{objectId} | Put a Knowledge Recommendation
 
 
@@ -503,7 +503,7 @@ No authorization required
 # **search_entities_knowledge_recommendations**
 > JsonApiKnowledgeRecommendationOutList search_entities_knowledge_recommendations(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -551,7 +551,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -560,7 +560,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_knowledge_recommendations(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

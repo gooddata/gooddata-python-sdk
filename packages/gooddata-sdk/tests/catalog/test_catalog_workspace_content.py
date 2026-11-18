@@ -253,6 +253,8 @@ def test_documents_survive_store_load_and_put(test_config):
     with open(_current_dir / "expected" / "declarative_analytics_model_documents.json") as f:
         seed = json.load(f)
     seed_document = seed["analytics"]["documents"][0]
+    seed_document_template = seed["analytics"]["documentTemplates"][0]
+    seed_page_template = seed["analytics"]["pageTemplates"][0]
 
     try:
         _set_up_workspace_ldm(sdk, test_config["workspace"], identifier)
@@ -276,6 +278,14 @@ def test_documents_survive_store_load_and_put(test_config):
         assert document.created_at == seed_document["createdAt"]
         assert document.modified_by.id == seed_document["modifiedBy"]["id"]
         assert document.modified_at == seed_document["modifiedAt"]
+        for template, seed_template in (
+            (analytics_model_o.analytics.document_templates[0], seed_document_template),
+            (analytics_model_o.analytics.page_templates[0], seed_page_template),
+        ):
+            assert template.created_by.id == seed_template["createdBy"]["id"]
+            assert template.created_at == seed_template["createdAt"]
+            assert template.modified_by.id == seed_template["modifiedBy"]["id"]
+            assert template.modified_at == seed_template["modifiedAt"]
         page = document.to_api().to_dict(camel_case=True)["content"]["pages"][0]
         assert page["style"]["gap"] == 20
         assert type(page["style"]["gap"]) is int

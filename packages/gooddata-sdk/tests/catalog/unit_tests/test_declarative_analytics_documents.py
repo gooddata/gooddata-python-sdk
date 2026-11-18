@@ -66,12 +66,14 @@ _DOCUMENT_TEMPLATE = {
     "title": "Tpl 1",
     "version": "1",
     "content": {"locale": "en-US", "style": {"gap": 20}},
+    **_AUTHOR,
 }
 _PAGE_TEMPLATE = {
     "id": "pt_1",
     "title": "Page 1",
     "version": "1",
     "content": {"style": {"gap": 20, "padding": _THEME_PADDING}, "layout": _STYLED_ROW},
+    **_AUTHOR,
 }
 _LAYER = {"documents": [_DOCUMENT], "documentTemplates": [_DOCUMENT_TEMPLATE], "pageTemplates": [_PAGE_TEMPLATE]}
 _METRIC = {"id": "bmk_w_fraud_charged_back", "title": "BMK", "content": {"format": "#,##0", "maql": "SELECT 1"}}
@@ -147,25 +149,58 @@ def test_document_author_fields_are_typed() -> None:
     assert document.modified_at == "2026-11-02 11:00"
 
 
-@pytest.mark.parametrize(
-    ("layer_key", "attribute", "item_class", "item"),
+_TEMPLATES = pytest.mark.parametrize(
+    ("layer_key", "attribute", "item_class", "item", "folder"),
     [
-        ("documentTemplates", "document_templates", CatalogDeclarativePublisherDocumentTemplate, _DOCUMENT_TEMPLATE),
-        ("pageTemplates", "page_templates", CatalogDeclarativePublisherDocumentPageTemplate, _PAGE_TEMPLATE),
+        (
+            "documentTemplates",
+            "document_templates",
+            CatalogDeclarativePublisherDocumentTemplate,
+            _DOCUMENT_TEMPLATE,
+            "document_templates",
+        ),
+        (
+            "pageTemplates",
+            "page_templates",
+            CatalogDeclarativePublisherDocumentPageTemplate,
+            _PAGE_TEMPLATE,
+            "page_templates",
+        ),
     ],
     ids=["document_template", "page_template"],
 )
-def test_templates_have_no_author_attributes(
-    layer_key: str, attribute: str, item_class: type, item: dict[str, Any]
+
+
+@_TEMPLATES
+def test_template_author_fields_are_typed(
+    layer_key: str, attribute: str, item_class: type, item: dict[str, Any], folder: str
 ) -> None:
     layer = CatalogDeclarativeAnalyticsLayer.from_dict({layer_key: [item]})
 
     template = getattr(layer, attribute)[0]
 
     assert isinstance(template, item_class)
-    assert not hasattr(template, "created_by")
+    assert template.created_by == CatalogUserIdentifier(id="admin", type="user")
+    assert template.created_at == "2026-11-02 10:00"
+    assert template.modified_by == CatalogUserIdentifier(id="admin", type="user")
+    assert template.modified_at == "2026-11-02 11:00"
+
+
+@_TEMPLATES
+def test_template_without_author_fields(
+    layer_key: str, attribute: str, item_class: type, item: dict[str, Any], folder: str
+) -> None:
+    template_without_authors = {key: value for key, value in item.items() if key not in _AUTHOR}
+    layer = CatalogDeclarativeAnalyticsLayer.from_dict({layer_key: [template_without_authors]})
+
+    loaded = getattr(layer, attribute)[0]
+
+    assert loaded.created_by is None
+    assert loaded.created_at is None
+    assert loaded.modified_by is None
+    assert loaded.modified_at is None
     round_tripped = _round_trip(layer)[layer_key]
-    _assert_same(round_tripped, [item])
+    _assert_same(round_tripped, [template_without_authors])
     assert not set(_AUTHOR) & set(round_tripped[0])
 
 
@@ -315,3 +350,22 @@ def test_load_document_yaml_without_author_fields(tmp_path: Path) -> None:
     assert loaded.created_at is None
     assert loaded.modified_by is None
     assert loaded.modified_at is None
+
+
+@_TEMPLATES
+def test_load_template_yaml_without_author_fields(
+    tmp_path: Path, layer_key: str, attribute: str, item_class: type, item: dict[str, Any], folder: str
+) -> None:
+    template = {key: value for key, value in item.items() if key not in _AUTHOR}
+    template_folder = tmp_path / "analytics_model" / folder
+    template_folder.mkdir(parents=True)
+    write_layout_to_file(template_folder / f"{item['id']}.yaml", template)
+
+    reloaded = CatalogDeclarativeAnalyticsLayer.load_from_disk(tmp_path)
+
+    loaded = getattr(reloaded, attribute)
+    assert len(loaded) == 1
+    assert loaded[0].created_by is None
+    assert loaded[0].created_at is None
+    assert loaded[0].modified_by is None
+    assert loaded[0].modified_at is None

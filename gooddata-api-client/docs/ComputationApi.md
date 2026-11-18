@@ -21,6 +21,7 @@ Method | HTTP request | Description
 [**retrieve_execution_metadata**](ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 [**retrieve_result_binary**](ComputationApi.md#retrieve_result_binary) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/binary | (BETA) Get a single execution result in Apache Arrow File or Stream format
+[**stream_execution_progress**](ComputationApi.md#stream_execution_progress) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/progress/{executionId} | (EXPERIMENTAL) Stream the live progress of an AFM execution
 
 
 # **cancel_executions**
@@ -1684,6 +1685,74 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Execution result was found and returned. |  * X-GDC-RESULT-TOTAL-ROWS - Total number of data rows in the full result. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **stream_execution_progress**
+> [dict] stream_execution_progress(workspace_id, execution_id)
+
+(EXPERIMENTAL) Stream the live progress of an AFM execution
+
+Server-Sent Events with the computation steps of the execution identified by the X-GDC-CANCEL-TOKEN of the execute request. Ends with a `done` event.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    execution_id = "executionId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Stream the live progress of an AFM execution
+        api_response = api_instance.stream_execution_progress(workspace_id, execution_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->stream_execution_progress: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **execution_id** | **str**|  |
+
+### Return type
+
+**[dict]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/event-stream
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -930,8 +930,16 @@ interactions:
                           markdown: Hello
                           type: text
                       type: row
+              createdAt: 2000-01-01 00:00
+              createdBy:
+                id: demo
+                type: user
               description: Brand review
               id: tpl_1
+              modifiedAt: 2026-11-03 09:30
+              modifiedBy:
+                id: demo
+                type: user
               tags:
                 - brand
               title: Tpl 1
@@ -983,8 +991,16 @@ interactions:
                   id: t1
                   markdown: Hello
                   type: text
+              createdAt: 2000-01-01 00:00
+              createdBy:
+                id: demo
+                type: user
               description: Cover
               id: pt_1
+              modifiedAt: 2026-11-03 09:30
+              modifiedBy:
+                id: demo
+                type: user
               tags:
                 - brand
               title: Page 1
@@ -1050,10 +1066,14 @@ interactions:
                         type: row
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Brand review
                 id: tpl_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Tpl 1
@@ -1111,10 +1131,14 @@ interactions:
                     type: text
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Cover
                 id: pt_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Page 1
@@ -1133,7 +1157,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1479'
+          - '1623'
       status:
         code: 200
         message: OK
@@ -1251,10 +1275,14 @@ interactions:
                         type: row
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Brand review
                 id: tpl_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Tpl 1
@@ -1312,10 +1340,14 @@ interactions:
                     type: text
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Cover
                 id: pt_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Page 1
@@ -1334,7 +1366,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1479'
+          - '1623'
       status:
         code: 200
         message: OK
@@ -1436,8 +1468,16 @@ interactions:
                           markdown: Hello
                           type: text
                       type: row
+              createdAt: 2000-01-01 00:00
+              createdBy:
+                id: demo
+                type: user
               description: Brand review
               id: tpl_1
+              modifiedAt: 2026-11-03 09:30
+              modifiedBy:
+                id: demo
+                type: user
               tags:
                 - brand
               title: Tpl 1
@@ -1493,8 +1533,16 @@ interactions:
                   id: t1
                   markdown: Hello
                   type: text
+              createdAt: 2000-01-01 00:00
+              createdBy:
+                id: demo
+                type: user
               description: Cover
               id: pt_1
+              modifiedAt: 2026-11-03 09:30
+              modifiedBy:
+                id: demo
+                type: user
               tags:
                 - brand
               title: Page 1
@@ -1562,10 +1610,14 @@ interactions:
                         type: row
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Brand review
                 id: tpl_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Tpl 1
@@ -1623,10 +1675,14 @@ interactions:
                     type: text
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Cover
                 id: pt_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Page 1
@@ -1645,7 +1701,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1479'
+          - '1623'
       status:
         code: 200
         message: OK
@@ -1684,10 +1740,14 @@ interactions:
                         type: row
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Brand review
                 id: tpl_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Tpl 1
@@ -1745,10 +1805,14 @@ interactions:
                     type: text
                 createdAt: 2000-01-01 00:00
                 createdBy:
-                  id: admin
+                  id: demo
                   type: user
                 description: Cover
                 id: pt_1
+                modifiedAt: 2026-11-03 09:30
+                modifiedBy:
+                  id: demo
+                  type: user
                 tags:
                   - brand
                 title: Page 1
@@ -1767,7 +1831,7 @@ interactions:
           - nosniff
         X-GDC-TRACE-ID: *id001
         content-length:
-          - '1479'
+          - '1623'
       status:
         code: 200
         message: OK

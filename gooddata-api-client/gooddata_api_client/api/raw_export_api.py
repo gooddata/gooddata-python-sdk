@@ -157,9 +157,9 @@ class RawExportApi(object):
         raw_export_request,
         **kwargs
     ):
-        """(EXPERIMENTAL) Create raw export request  # noqa: E501
+        """Create raw export request  # noqa: E501
 
-        Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.  # noqa: E501
+        A raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -244,9 +244,9 @@ class RawExportApi(object):
         export_id,
         **kwargs
     ):
-        """(EXPERIMENTAL) Retrieve exported files  # noqa: E501
+        """Retrieve exported files  # noqa: E501
 
-        Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.  # noqa: E501
+        After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

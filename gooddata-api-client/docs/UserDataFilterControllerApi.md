@@ -9,7 +9,7 @@ Method | HTTP request | Description
 [**get_all_entities_user_data_filters**](UserDataFilterControllerApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
 [**get_entity_user_data_filters**](UserDataFilterControllerApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Get a User Data Filter
 [**patch_entity_user_data_filters**](UserDataFilterControllerApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Patch a User Data Filter
-[**search_entities_user_data_filters**](UserDataFilterControllerApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint (beta)
+[**search_entities_user_data_filters**](UserDataFilterControllerApi.md#search_entities_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/search | The search endpoint
 [**update_entity_user_data_filters**](UserDataFilterControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Put a User Data Filter
 
 
@@ -479,7 +479,7 @@ No authorization required
 # **search_entities_user_data_filters**
 > JsonApiUserDataFilterOutList search_entities_user_data_filters(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -527,7 +527,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -536,7 +536,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_user_data_filters(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

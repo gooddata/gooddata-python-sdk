@@ -504,7 +504,7 @@ global_converter.register_structure_hook(
 
 
 @define(kw_only=True)
-class CatalogDeclarativePublisherDocumentTemplate(CatalogAnalyticsObjectBase):
+class CatalogDeclarativePublisherDocumentTemplate(CatalogAnalyticsBaseMeta):
     title: str
     content: dict[str, Any]
     version: str
@@ -517,7 +517,7 @@ class CatalogDeclarativePublisherDocumentTemplate(CatalogAnalyticsObjectBase):
 
 
 @define(kw_only=True)
-class CatalogDeclarativePublisherDocumentPageTemplate(CatalogAnalyticsObjectBase):
+class CatalogDeclarativePublisherDocumentPageTemplate(CatalogAnalyticsBaseMeta):
     title: str
     content: dict[str, Any]
     version: str

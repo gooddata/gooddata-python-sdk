@@ -14,7 +14,7 @@ Method | HTTP request | Description
 [**get_entity_org_memory_items**](MemoryItemsApi.md#get_entity_org_memory_items) | **GET** /api/v1/entities/orgMemoryItems/{id} | Get an organization Memory Item entity
 [**patch_entity_memory_items**](MemoryItemsApi.md#patch_entity_memory_items) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Patch a Memory Item
 [**patch_entity_org_memory_items**](MemoryItemsApi.md#patch_entity_org_memory_items) | **PATCH** /api/v1/entities/orgMemoryItems/{id} | Patch an organization Memory Item entity
-[**search_entities_memory_items**](MemoryItemsApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint (beta)
+[**search_entities_memory_items**](MemoryItemsApi.md#search_entities_memory_items) | **POST** /api/v1/entities/workspaces/{workspaceId}/memoryItems/search | The search endpoint
 [**update_entity_memory_items**](MemoryItemsApi.md#update_entity_memory_items) | **PUT** /api/v1/entities/workspaces/{workspaceId}/memoryItems/{objectId} | Put a Memory Item
 [**update_entity_org_memory_items**](MemoryItemsApi.md#update_entity_org_memory_items) | **PUT** /api/v1/entities/orgMemoryItems/{id} | Put an organization Memory Item entity
 
@@ -898,7 +898,7 @@ No authorization required
 # **search_entities_memory_items**
 > JsonApiMemoryItemOutList search_entities_memory_items(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -946,7 +946,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -955,7 +955,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_memory_items(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

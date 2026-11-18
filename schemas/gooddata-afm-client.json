@@ -103,7 +103,7 @@
         "type": "object"
       },
       "AbsoluteGranularityDateFilter": {
-        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range.",
+        "description": "An absolute date range filter defined at a specific granularity. The 'from'/'to' literals must match the format of the chosen granularity (e.g. '2020' for YEAR, '2012-05' for MONTH, '2012-3' for QUARTER, '1996-01' for WEEK, '2010-10-30' for DAY, '2010-10-30 13' for HOUR, '2010-10-30 13:30' for MINUTE, '2010-10-30 13:30:45' for SECOND, or a plain ordinal like '6' for periodical granularities such as MONTH_OF_YEAR). At least one of 'from'/'to' must be provided; specifying only one yields an open-ended range. When both are provided, 'from' must not be after 'to'.",
         "properties": {
           "absoluteGranularityDateFilter": {
             "properties": {
@@ -1600,6 +1600,96 @@
         ],
         "type": "object"
       },
+      "ComputationProfile": {
+        "description": "(EXPERIMENTAL) How the result was originally computed. Missing when unknown.",
+        "properties": {
+          "computedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "finishedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "finishedAtApprox": {
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/ComputationProfileSource"
+            },
+            "type": "array"
+          },
+          "startedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "totalDurationMs": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "v": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "computedAt",
+          "sources",
+          "v"
+        ],
+        "type": "object"
+      },
+      "ComputationProfileSource": {
+        "properties": {
+          "dataSourceId": {
+            "type": "string"
+          },
+          "dataSourceName": {
+            "type": "string"
+          },
+          "dbDurationMs": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "finishedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "queryDurationMs": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "queryFinishedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "queryRequestedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "queryStartedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "resultId": {
+            "type": "string"
+          },
+          "rows": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "streamingStartedAt": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "totalDurationMs": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "DataColumnLocator": {
         "description": "Mapping from dimension items (either 'localIdentifier' from 'AttributeItem', or \"measureGroup\") to their respective values. This effectively specifies the path (location) of the data column used for sorting. Therefore values for all dimension items must be specified.",
         "example": {
@@ -1722,6 +1812,9 @@
           },
           {
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
+          },
+          {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
           },
           {
             "$ref": "#/components/schemas/RelativeDateFilter"
@@ -2464,6 +2557,9 @@
             "$ref": "#/components/schemas/AbsoluteGranularityDateFilter"
           },
           {
+            "$ref": "#/components/schemas/ParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/RelativeDateFilter"
           },
           {
@@ -3021,6 +3117,22 @@
         ],
         "type": "object"
       },
+      "GoodDataAiProviderConfig": {
+        "description": "Configuration for GoodData AI provider. Inference is served by GoodData; no credentials are needed.",
+        "properties": {
+          "type": {
+            "description": "Provider type.",
+            "enum": [
+              "GOODDATA_AI"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -3560,6 +3672,9 @@
             "$ref": "#/components/schemas/AzureFoundryProviderConfig"
           },
           {
+            "$ref": "#/components/schemas/GoodDataAiProviderConfig"
+          },
+          {
             "$ref": "#/components/schemas/OpenAIProviderConfig"
           }
         ]
@@ -4067,12 +4182,13 @@
             "type": "string"
           },
           "kind": {
-            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n* `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection.\n",
+            "description": "Type of the long-running operation.\n* `provision-database` — Provisioning of an AI Lake database.\n* `deprovision-database` — Deprovisioning (deletion) of an AI Lake database.\n* `run-service-command` — Running a command in a particular AI Lake service.\n* `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection.\n* `refresh-data-source` — Refresh of an AI Lake data source after a data load.\n",
             "enum": [
               "provision-database",
               "deprovision-database",
               "run-service-command",
-              "analyze-statistics"
+              "analyze-statistics",
+              "refresh-data-source"
             ],
             "type": "string"
           },
@@ -4263,6 +4379,46 @@
         "required": [
           "parameter",
           "value"
+        ],
+        "type": "object"
+      },
+      "ParameterizedDateFilter": {
+        "description": "A date filter whose period comes from a DATE_RANGE parameter. Each execution uses the parameter's current granularity and range.",
+        "properties": {
+          "parameterizedDateFilter": {
+            "properties": {
+              "applyOnResult": {
+                "type": "boolean"
+              },
+              "dataset": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
+              },
+              "emptyValueHandling": {
+                "default": "EXCLUDE",
+                "description": "Specifies how rows with empty (null/missing) date values should be handled. INCLUDE includes empty dates in addition to the date range restriction, EXCLUDE removes rows with empty dates (default), ONLY keeps only rows with empty dates.",
+                "enum": [
+                  "INCLUDE",
+                  "EXCLUDE",
+                  "ONLY"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "parameter": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
+              }
+            },
+            "required": [
+              "dataset",
+              "parameter"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "parameterizedDateFilter"
         ],
         "type": "object"
       },
@@ -4855,6 +5011,9 @@
           "afm": {
             "$ref": "#/components/schemas/AFM"
           },
+          "computationProfile": {
+            "$ref": "#/components/schemas/ComputationProfile"
+          },
           "executionResponse": {
             "$ref": "#/components/schemas/ExecutionResponse"
           },
@@ -4944,6 +5103,9 @@
             "$ref": "#/components/schemas/JsonNode"
           }
         },
+        "type": "object"
+      },
+      "ServerSentEventString": {
         "type": "object"
       },
       "ServiceInfo": {
@@ -6418,6 +6580,52 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/progress/{executionId}": {
+      "get": {
+        "description": "Server-Sent Events with the computation steps of the execution identified by the X-GDC-CANCEL-TOKEN of the execute request. Ends with a `done` event.",
+        "operationId": "streamExecutionProgress",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "executionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ServerSentEventString"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "(EXPERIMENTAL) Stream the live progress of an AFM execution",
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}": {
@@ -8552,6 +8760,79 @@
         }
       }
     },
+    "/api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId}/refresh": {
+      "post": {
+        "description": "(BETA) Brings the data source up to date after a load and drops its cached results. The request starts an operation. Poll the operation to see its progress. When the operation succeeds, queries return the new data after the usual cache propagation. A failed operation carries the reason in its error.",
+        "operationId": "refreshAiLakeDataSource",
+        "parameters": [
+          {
+            "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "schema": {
+              "description": "Database instance identifier. Accepts the database name (preferred) or UUID.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Data source identifier.",
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "description": "Data source identifier.",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "operation-id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {},
+            "description": "Refresh scheduled.",
+            "headers": {
+              "operation-id": {
+                "description": "Operation ID to use for polling.",
+                "example": "e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              },
+              "operation-location": {
+                "description": "Operation location URL that can be used for polling.",
+                "example": "/api/v1/ailake/operations/e9fd5d74-8a1b-46bd-ac60-bd91e9206897",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          }
+        },
+        "summary": "(BETA) Refresh an AI Lake data source",
+        "tags": [
+          "AI Lake - Databases",
+          "AI Lake"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to refresh a data source.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/ailake/objectStorages": {
       "get": {
         "description": "(BETA) Lists ObjectStorages registered for the organization. Pass the returned `storageId` to the ProvisionDatabase `storageIds` list. Provider credentials are stripped — only safe descriptors (id, name, type, bucket, region, endpoint, …) are returned.",
@@ -8666,7 +8947,7 @@
           "AI Lake"
         ],
         "x-gdc-security-info": {
-          "description": "Permissions required to get details of a Long Running Operation.",
+          "description": "Permissions required to get details of a Long Running Operation. MANAGE on the organization gives access to all operations. MANAGE on a data source gives access to the refresh operations of that data source.",
           "permissions": [
             "MANAGE"
           ]

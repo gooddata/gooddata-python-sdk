@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**attribute_permissions**](PermissionsApi.md#attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/permissions | Get Attribute Permissions
 [**available_assignees**](PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
-[**computed_attribute_permissions**](PermissionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | (BETA) Get Computed Attribute Permissions
+[**computed_attribute_permissions**](PermissionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | Get Computed Attribute Permissions
 [**dashboard_permissions**](PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**fact_permissions**](PermissionsApi.md#fact_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/permissions | Get Fact Permissions
 [**get_organization_permissions**](PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
@@ -15,21 +15,21 @@ Method | HTTP request | Description
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**label_permissions**](PermissionsApi.md#label_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/permissions | Get Label Permissions
 [**manage_attribute_permissions**](PermissionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
-[**manage_computed_attribute_permissions**](PermissionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | (BETA) Manage Permissions for a Computed Attribute
+[**manage_computed_attribute_permissions**](PermissionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | Manage Permissions for a Computed Attribute
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](PermissionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](PermissionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
-[**manage_metric_permissions**](PermissionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
+[**manage_metric_permissions**](PermissionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | Manage Permissions for a Metric
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
-[**manage_visualization_permissions**](PermissionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | (BETA) Manage Permissions for a Visualization
+[**manage_visualization_permissions**](PermissionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | Manage Permissions for a Visualization
 [**manage_workspace_permissions**](PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
-[**metric_permissions**](PermissionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
+[**metric_permissions**](PermissionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | Get Metric Permissions
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_user_group_permissions**](PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 [**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_permissions**](PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
-[**visualization_permissions**](PermissionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | (BETA) Get Visualization Permissions
+[**visualization_permissions**](PermissionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | Get Visualization Permissions
 
 
 # **attribute_permissions**
@@ -169,7 +169,7 @@ No authorization required
 # **computed_attribute_permissions**
 > ComputedAttributePermissions computed_attribute_permissions(workspace_id, computed_attribute_id)
 
-(BETA) Get Computed Attribute Permissions
+Get Computed Attribute Permissions
 
 ### Example
 
@@ -196,7 +196,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Computed Attribute Permissions
+        # Get Computed Attribute Permissions
         api_response = api_instance.computed_attribute_permissions(workspace_id, computed_attribute_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -771,7 +771,7 @@ No authorization required
 # **manage_computed_attribute_permissions**
 > manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
 
-(BETA) Manage Permissions for a Computed Attribute
+Manage Permissions for a Computed Attribute
 
 ### Example
 
@@ -801,7 +801,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Computed Attribute
+        # Manage Permissions for a Computed Attribute
         api_instance.manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling PermissionsApi->manage_computed_attribute_permissions: %s\n" % e)
@@ -1129,7 +1129,7 @@ No authorization required
 # **manage_metric_permissions**
 > manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
 
-(BETA) Manage Permissions for a Metric
+Manage Permissions for a Metric
 
 ### Example
 
@@ -1159,7 +1159,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Metric
+        # Manage Permissions for a Metric
         api_instance.manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling PermissionsApi->manage_metric_permissions: %s\n" % e)
@@ -1275,7 +1275,7 @@ No authorization required
 # **manage_visualization_permissions**
 > manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
 
-(BETA) Manage Permissions for a Visualization
+Manage Permissions for a Visualization
 
 ### Example
 
@@ -1305,7 +1305,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Visualization
+        # Manage Permissions for a Visualization
         api_instance.manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling PermissionsApi->manage_visualization_permissions: %s\n" % e)
@@ -1426,7 +1426,7 @@ No authorization required
 # **metric_permissions**
 > MetricPermissions metric_permissions(workspace_id, metric_id)
 
-(BETA) Get Metric Permissions
+Get Metric Permissions
 
 ### Example
 
@@ -1453,7 +1453,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Metric Permissions
+        # Get Metric Permissions
         api_response = api_instance.metric_permissions(workspace_id, metric_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1810,7 +1810,7 @@ No authorization required
 # **visualization_permissions**
 > VisualizationPermissions visualization_permissions(workspace_id, visualization_object_id)
 
-(BETA) Get Visualization Permissions
+Get Visualization Permissions
 
 ### Example
 
@@ -1837,7 +1837,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Visualization Permissions
+        # Get Visualization Permissions
         api_response = api_instance.visualization_permissions(workspace_id, visualization_object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

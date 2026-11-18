@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**list_ai_lake_database_instances**](AILakeDatabasesApi.md#list_ai_lake_database_instances) | **GET** /api/v1/ailake/database/instances | (BETA) List AI Lake Database instances
 [**list_ai_lake_object_storages**](AILakeDatabasesApi.md#list_ai_lake_object_storages) | **GET** /api/v1/ailake/objectStorages | (BETA) List registered AI Lake ObjectStorages
 [**provision_ai_lake_database_instance**](AILakeDatabasesApi.md#provision_ai_lake_database_instance) | **POST** /api/v1/ailake/database/instances | (BETA) Create a new AILake Database instance
+[**refresh_ai_lake_data_source**](AILakeDatabasesApi.md#refresh_ai_lake_data_source) | **POST** /api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId}/refresh | (BETA) Refresh an AI Lake data source
 [**remove_ai_lake_database_data_source**](AILakeDatabasesApi.md#remove_ai_lake_database_data_source) | **DELETE** /api/v1/ailake/database/instances/{instanceId}/dataSources/{dataSourceId} | (BETA) Remove a data source from an AILake Database instance
 [**update_ai_lake_database_data_source**](AILakeDatabasesApi.md#update_ai_lake_database_data_source) | **PATCH** /api/v1/ailake/database/instances/{instanceId}/dataSource | (BETA) Update the data source of an AILake Database instance
 
@@ -627,6 +628,83 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **202** | Accepted |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **refresh_ai_lake_data_source**
+> refresh_ai_lake_data_source(instance_id, data_source_id)
+
+(BETA) Refresh an AI Lake data source
+
+(BETA) Brings the data source up to date after a load and drops its cached results. The request starts an operation. Poll the operation to see its progress. When the operation succeeds, queries return the new data after the usual cache propagation. A failed operation carries the reason in its error.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import ai_lake_databases_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = ai_lake_databases_api.AILakeDatabasesApi(api_client)
+    instance_id = "instanceId_example" # str | Database instance identifier. Accepts the database name (preferred) or UUID.
+    data_source_id = "dataSourceId_example" # str | Data source identifier.
+    operation_id = "operation-id_example" # str |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Refresh an AI Lake data source
+        api_instance.refresh_ai_lake_data_source(instance_id, data_source_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeDatabasesApi->refresh_ai_lake_data_source: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Refresh an AI Lake data source
+        api_instance.refresh_ai_lake_data_source(instance_id, data_source_id, operation_id=operation_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling AILakeDatabasesApi->refresh_ai_lake_data_source: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance_id** | **str**| Database instance identifier. Accepts the database name (preferred) or UUID. |
+ **data_source_id** | **str**| Data source identifier. |
+ **operation_id** | **str**|  | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**202** | Refresh scheduled. |  * operation-id - Operation ID to use for polling. <br>  * operation-location - Operation location URL that can be used for polling. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

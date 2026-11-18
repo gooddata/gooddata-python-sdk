@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.localization_statistics_locale import LocalizationStatisticsLocale
+    from gooddata_api_client.model.localization_statistics_workspace import LocalizationStatisticsWorkspace
     globals()['LocalizationStatisticsLocale'] = LocalizationStatisticsLocale
+    globals()['LocalizationStatisticsWorkspace'] = LocalizationStatisticsWorkspace
 
 
 class LocalizationMetadataStatistics(ModelNormal):
@@ -89,6 +91,7 @@ class LocalizationMetadataStatistics(ModelNormal):
         lazy_import()
         return {
             'locales': ([LocalizationStatisticsLocale],),  # noqa: E501
+            'workspaces': ([LocalizationStatisticsWorkspace],),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +101,7 @@ class LocalizationMetadataStatistics(ModelNormal):
 
     attribute_map = {
         'locales': 'locales',  # noqa: E501
+        'workspaces': 'workspaces',  # noqa: E501
     }
 
     read_only_vars = {
@@ -144,6 +148,7 @@ class LocalizationMetadataStatistics(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -233,6 +238,7 @@ class LocalizationMetadataStatistics(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

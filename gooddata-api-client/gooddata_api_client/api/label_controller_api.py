@@ -600,7 +600,7 @@ class LabelControllerApi(object):
         json_api_label_patch_document,
         **kwargs
     ):
-        """Patch a Label (beta)  # noqa: E501
+        """Patch a Label  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -691,7 +691,7 @@ class LabelControllerApi(object):
         entity_search_body,
         **kwargs
     ):
-        """The search endpoint (beta)  # noqa: E501
+        """The search endpoint  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

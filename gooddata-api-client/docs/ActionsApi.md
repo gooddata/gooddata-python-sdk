@@ -31,13 +31,13 @@ Method | HTTP request | Description
 [**compute_report_for_visualization_object**](ActionsApi.md#compute_report_for_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/visualization/{visualizationObjectId}/execute | (BETA) Executes a visualization object and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
-[**computed_attribute_permissions**](ActionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | (BETA) Get Computed Attribute Permissions
+[**computed_attribute_permissions**](ActionsApi.md#computed_attribute_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/permissions | Get Computed Attribute Permissions
 [**convert_geo_file**](ActionsApi.md#convert_geo_file) | **POST** /api/v1/actions/customGeoCollection/convert | Convert a geo file to GeoParquet format
 [**create_dashboard_export_request**](ActionsApi.md#create_dashboard_export_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/export/tabular | (EXPERIMENTAL) Create dashboard tabular export request
 [**create_document_export**](ActionsApi.md#create_document_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/document | (EXPERIMENTAL) Create document export request
 [**create_image_export**](ActionsApi.md#create_image_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/image | (EXPERIMENTAL) Create image export request
 [**create_pdf_export**](ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
-[**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | (EXPERIMENTAL) Create raw export request
+[**create_raw_export**](ActionsApi.md#create_raw_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/raw | Create raw export request
 [**create_report_export**](ActionsApi.md#create_report_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/report | (EXPERIMENTAL) Create report export request
 [**create_slides_export**](ActionsApi.md#create_slides_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/slides | (EXPERIMENTAL) Create slides export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
@@ -67,7 +67,7 @@ Method | HTTP request | Description
 [**get_notifications**](ActionsApi.md#get_notifications) | **GET** /api/v1/actions/notifications | Get latest notifications.
 [**get_quality_issues**](ActionsApi.md#get_quality_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues | Get Quality Issues
 [**get_quality_issues_calculation_status**](ActionsApi.md#get_quality_issues_calculation_status) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/issues/status/{processId} | Get Quality Issues Calculation Status
-[**get_raw_export**](ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | (EXPERIMENTAL) Retrieve exported files
+[**get_raw_export**](ActionsApi.md#get_raw_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/raw/{exportId} | Retrieve exported files
 [**get_report_export**](ActionsApi.md#get_report_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/report/{exportId} | (EXPERIMENTAL) Retrieve exported files
 [**get_report_export_metadata**](ActionsApi.md#get_report_export_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/report/{exportId}/metadata | (EXPERIMENTAL) Retrieve metadata context
 [**get_slides_export**](ActionsApi.md#get_slides_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/slides/{exportId} | (EXPERIMENTAL) Retrieve exported files
@@ -89,23 +89,25 @@ Method | HTTP request | Description
 [**list_workspace_user_groups**](ActionsApi.md#list_workspace_user_groups) | **GET** /api/v1/actions/workspaces/{workspaceId}/userGroups | 
 [**list_workspace_users**](ActionsApi.md#list_workspace_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/users | 
 [**manage_attribute_permissions**](ActionsApi.md#manage_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/attributes/{attributeId}/managePermissions | Manage Permissions for an Attribute
-[**manage_computed_attribute_permissions**](ActionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | (BETA) Manage Permissions for a Computed Attribute
+[**manage_computed_attribute_permissions**](ActionsApi.md#manage_computed_attribute_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/computedAttributes/{computedAttributeId}/managePermissions | Manage Permissions for a Computed Attribute
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_fact_permissions**](ActionsApi.md#manage_fact_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/facts/{factId}/managePermissions | Manage Permissions for a Fact
 [**manage_label_permissions**](ActionsApi.md#manage_label_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/labels/{labelId}/managePermissions | Manage Permissions for a Label
-[**manage_metric_permissions**](ActionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | (BETA) Manage Permissions for a Metric
+[**manage_metric_permissions**](ActionsApi.md#manage_metric_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/managePermissions | Manage Permissions for a Metric
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
-[**manage_visualization_permissions**](ActionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | (BETA) Manage Permissions for a Visualization
+[**manage_visualization_permissions**](ActionsApi.md#manage_visualization_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/managePermissions | Manage Permissions for a Visualization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**mark_as_read_notification**](ActionsApi.md#mark_as_read_notification) | **POST** /api/v1/actions/notifications/{notificationId}/markAsRead | Mark notification as read.
 [**mark_as_read_notification_all**](ActionsApi.md#mark_as_read_notification_all) | **POST** /api/v1/actions/notifications/markAsRead | Mark all notifications as read.
 [**memory_created_by_users**](ActionsApi.md#memory_created_by_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/memory/createdBy | Get AI Memory CreatedBy Users
-[**metric_permissions**](ActionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | (BETA) Get Metric Permissions
-[**organization_localization_statistics**](ActionsApi.md#organization_localization_statistics) | **GET** /api/v1/actions/organization/localization/statistics | (BETA) Languages with translations in the organization.
-[**organization_localization_usage**](ActionsApi.md#organization_localization_usage) | **GET** /api/v1/actions/organization/localization/usage | (BETA) Languages used in the organization.
-[**organization_localization_usage_users**](ActionsApi.md#organization_localization_usage_users) | **GET** /api/v1/actions/organization/localization/usage/users | (BETA) Users who set a language themselves.
-[**organization_localization_usage_workspaces**](ActionsApi.md#organization_localization_usage_workspaces) | **GET** /api/v1/actions/organization/localization/usage/workspaces | (BETA) Workspaces that use a language.
+[**metric_permissions**](ActionsApi.md#metric_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/metrics/{metricId}/permissions | Get Metric Permissions
+[**organization_localization_issue_workspaces**](ActionsApi.md#organization_localization_issue_workspaces) | **GET** /api/v1/actions/organization/localization/issues/workspaces | (BETA) Workspaces with a localization issue.
+[**organization_localization_issues**](ActionsApi.md#organization_localization_issues) | **GET** /api/v1/actions/organization/localization/issues | (BETA) Localization issues of the organization.
+[**organization_localization_statistics**](ActionsApi.md#organization_localization_statistics) | **GET** /api/v1/actions/organization/localization/statistics | Languages with translations in the organization.
+[**organization_localization_usage**](ActionsApi.md#organization_localization_usage) | **GET** /api/v1/actions/organization/localization/usage | Languages used in the organization.
+[**organization_localization_usage_users**](ActionsApi.md#organization_localization_usage_users) | **GET** /api/v1/actions/organization/localization/usage/users | Users who set a language themselves.
+[**organization_localization_usage_workspaces**](ActionsApi.md#organization_localization_usage_workspaces) | **GET** /api/v1/actions/organization/localization/usage/workspaces | Workspaces that use a language.
 [**outlier_detection**](ActionsApi.md#outlier_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers | (BETA) Outlier Detection
 [**outlier_detection_result**](ActionsApi.md#outlier_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/detectOutliers/result/{resultId} | (BETA) Outlier Detection Result
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -136,6 +138,7 @@ Method | HTTP request | Description
 [**set_certification**](ActionsApi.md#set_certification) | **POST** /api/v1/actions/workspaces/{workspaceId}/setCertification | Set Certification
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 [**staging_upload**](ActionsApi.md#staging_upload) | **POST** /api/v1/actions/fileStorage/staging/upload | Upload a file to the staging area
+[**stream_execution_progress**](ActionsApi.md#stream_execution_progress) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/progress/{executionId} | (EXPERIMENTAL) Stream the live progress of an AFM execution
 [**switch_active_identity_provider**](ActionsApi.md#switch_active_identity_provider) | **POST** /api/v1/actions/organization/switchActiveIdentityProvider | Switch Active Identity Provider
 [**sync_metadata**](ActionsApi.md#sync_metadata) | **POST** /api/v1/actions/organization/syncMetadata | Trigger metadata synchronization
 [**tags**](ActionsApi.md#tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/ai/analyticsCatalog/tags | Get Analytics Catalog Tags
@@ -156,12 +159,15 @@ Method | HTTP request | Description
 [**unsubscribe_organization_automations**](ActionsApi.md#unsubscribe_organization_automations) | **POST** /api/v1/actions/organization/automations/unsubscribe | Unsubscribe from selected automations across all workspaces
 [**unsubscribe_selected_workspace_automations**](ActionsApi.md#unsubscribe_selected_workspace_automations) | **POST** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from selected automations in the workspace
 [**unsubscribe_workspace_automations**](ActionsApi.md#unsubscribe_workspace_automations) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/automations/unsubscribe | Unsubscribe from all automations in the workspace
+[**validate_embedding_origin**](ActionsApi.md#validate_embedding_origin) | **POST** /api/v1/actions/validateEmbeddingOrigin | Validate an embedding origin.
 [**validate_llm_endpoint**](ActionsApi.md#validate_llm_endpoint) | **POST** /api/v1/actions/ai/llmEndpoint/test | Validate LLM Endpoint (Removed)
 [**validate_llm_endpoint_by_id**](ActionsApi.md#validate_llm_endpoint_by_id) | **POST** /api/v1/actions/ai/llmEndpoint/{llmEndpointId}/test | Validate LLM Endpoint By Id (Removed)
-[**visualization_permissions**](ActionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | (BETA) Get Visualization Permissions
-[**workspace_localization_statistics**](ActionsApi.md#workspace_localization_statistics) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/statistics | (BETA) Languages with translations in the workspace.
-[**workspace_localization_usage**](ActionsApi.md#workspace_localization_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage | (BETA) Languages used in the workspace.
-[**workspace_localization_usage_users**](ActionsApi.md#workspace_localization_usage_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage/users | (BETA) Workspace members who get a language.
+[**visualization_permissions**](ActionsApi.md#visualization_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{visualizationObjectId}/permissions | Get Visualization Permissions
+[**workspace_localization_issues**](ActionsApi.md#workspace_localization_issues) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/issues | (BETA) Localization issues of the workspace.
+[**workspace_localization_statistics**](ActionsApi.md#workspace_localization_statistics) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/statistics | Languages with translations in the workspace.
+[**workspace_localization_usage**](ActionsApi.md#workspace_localization_usage) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage | Languages used in the workspace.
+[**workspace_localization_usage_child_workspaces**](ActionsApi.md#workspace_localization_usage_child_workspaces) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage/childWorkspaces | (BETA) Workspaces below the workspace that use a language.
+[**workspace_localization_usage_users**](ActionsApi.md#workspace_localization_usage_users) | **GET** /api/v1/actions/workspaces/{workspaceId}/localization/usage/users | Workspace members who get a language.
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -2375,7 +2381,7 @@ No authorization required
 # **computed_attribute_permissions**
 > ComputedAttributePermissions computed_attribute_permissions(workspace_id, computed_attribute_id)
 
-(BETA) Get Computed Attribute Permissions
+Get Computed Attribute Permissions
 
 ### Example
 
@@ -2402,7 +2408,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Computed Attribute Permissions
+        # Get Computed Attribute Permissions
         api_response = api_instance.computed_attribute_permissions(workspace_id, computed_attribute_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -2882,9 +2888,9 @@ No authorization required
 # **create_raw_export**
 > ExportResponse create_raw_export(workspace_id, raw_export_request)
 
-(EXPERIMENTAL) Create raw export request
+Create raw export request
 
-Note: This API is an experimental and is going to change. Please, use it accordingly.An raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
+A raw export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.
 
 ### Example
 
@@ -2980,7 +2986,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Create raw export request
+        # Create raw export request
         api_response = api_instance.create_raw_export(workspace_id, raw_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -5382,9 +5388,9 @@ No authorization required
 # **get_raw_export**
 > file_type get_raw_export(workspace_id, export_id)
 
-(EXPERIMENTAL) Retrieve exported files
+Retrieve exported files
 
-Note: This API is an experimental and is going to change. Please, use it accordingly.After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
+After clients creates a POST export request, the processing of it will start shortly asynchronously. To retrieve the result, client has to check periodically for the result on this endpoint. In case the result isn't ready yet, the service returns 202. If the result is ready, it returns 200 and octet stream of the result file with provided filename.
 
 ### Example
 
@@ -5410,7 +5416,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (EXPERIMENTAL) Retrieve exported files
+        # Retrieve exported files
         api_response = api_instance.get_raw_export(workspace_id, export_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7017,7 +7023,7 @@ No authorization required
 # **manage_computed_attribute_permissions**
 > manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
 
-(BETA) Manage Permissions for a Computed Attribute
+Manage Permissions for a Computed Attribute
 
 ### Example
 
@@ -7047,7 +7053,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Computed Attribute
+        # Manage Permissions for a Computed Attribute
         api_instance.manage_computed_attribute_permissions(workspace_id, computed_attribute_id, manage_computed_attribute_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_computed_attribute_permissions: %s\n" % e)
@@ -7375,7 +7381,7 @@ No authorization required
 # **manage_metric_permissions**
 > manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
 
-(BETA) Manage Permissions for a Metric
+Manage Permissions for a Metric
 
 ### Example
 
@@ -7405,7 +7411,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Metric
+        # Manage Permissions for a Metric
         api_instance.manage_metric_permissions(workspace_id, metric_id, manage_metric_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_metric_permissions: %s\n" % e)
@@ -7521,7 +7527,7 @@ No authorization required
 # **manage_visualization_permissions**
 > manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
 
-(BETA) Manage Permissions for a Visualization
+Manage Permissions for a Visualization
 
 ### Example
 
@@ -7551,7 +7557,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Manage Permissions for a Visualization
+        # Manage Permissions for a Visualization
         api_instance.manage_visualization_permissions(workspace_id, visualization_object_id, manage_visualization_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_visualization_permissions: %s\n" % e)
@@ -7870,7 +7876,7 @@ No authorization required
 # **metric_permissions**
 > MetricPermissions metric_permissions(workspace_id, metric_id)
 
-(BETA) Get Metric Permissions
+Get Metric Permissions
 
 ### Example
 
@@ -7897,7 +7903,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Metric Permissions
+        # Get Metric Permissions
         api_response = api_instance.metric_permissions(workspace_id, metric_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -7934,12 +7940,159 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **organization_localization_issue_workspaces**
+> LocalizationIssueWorkspaces organization_localization_issue_workspaces(type, locale)
+
+(BETA) Workspaces with a localization issue.
+
+(BETA) Lists the workspaces behind one entry of the organization localization issues, sorted by name.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_issue_workspaces import LocalizationIssueWorkspaces
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    type = "METADATA_MISSING_TRANSLATION" # str | The type of the issue.
+    locale = "de-DE" # str | The language of the issue.
+    name = "berg" # str | Filter by workspace name. Note that the filter is case insensitive. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Workspaces with a localization issue.
+        api_response = api_instance.organization_localization_issue_workspaces(type, locale)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_issue_workspaces: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Workspaces with a localization issue.
+        api_response = api_instance.organization_localization_issue_workspaces(type, locale, name=name, page=page, size=size)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_issue_workspaces: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **type** | **str**| The type of the issue. |
+ **locale** | **str**| The language of the issue. |
+ **name** | **str**| Filter by workspace name. Note that the filter is case insensitive. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+
+### Return type
+
+[**LocalizationIssueWorkspaces**](LocalizationIssueWorkspaces.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **organization_localization_issues**
+> LocalizationIssues organization_localization_issues()
+
+(BETA) Localization issues of the organization.
+
+(BETA) Counts the workspaces with each localization issue. The rules are the same as in the workspace localization issues.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_issues import LocalizationIssues
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # (BETA) Localization issues of the organization.
+        api_response = api_instance.organization_localization_issues()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->organization_localization_issues: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**LocalizationIssues**](LocalizationIssues.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **organization_localization_statistics**
 > LocalizationStatistics organization_localization_statistics()
 
-(BETA) Languages with translations in the organization.
+Languages with translations in the organization.
 
-(BETA) Lists the languages that have at least one translation, separately for each kind of translation.
+Lists the languages that have at least one translation, separately for each kind of translation.
 
 ### Example
 
@@ -7964,7 +8117,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example, this endpoint has no required or optional parameters
     try:
-        # (BETA) Languages with translations in the organization.
+        # Languages with translations in the organization.
         api_response = api_instance.organization_localization_statistics()
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8000,9 +8153,9 @@ No authorization required
 # **organization_localization_usage**
 > LocalizationUsage organization_localization_usage()
 
-(BETA) Languages used in the organization.
+Languages used in the organization.
 
-(BETA) Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.
+Counts workspaces and users per language of the display, metadata and data language settings. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves count. `defaults` holds the value a workspace gets when it and its parents set nothing.
 
 ### Example
 
@@ -8027,7 +8180,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example, this endpoint has no required or optional parameters
     try:
-        # (BETA) Languages used in the organization.
+        # Languages used in the organization.
         api_response = api_instance.organization_localization_usage()
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8063,9 +8216,9 @@ No authorization required
 # **organization_localization_usage_users**
 > LocalizationUsageUsers organization_localization_usage_users()
 
-(BETA) Users who set a language themselves.
+Users who set a language themselves.
 
-(BETA) Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. No value selects the usage entry without a language.
+Lists the users behind the counts of the organization localization usage, sorted by name. Users without a name come last. Users count under the value they get in the organization. That value depends on the workspace, so only the settings that users set themselves match. Only the source USER returns users. Without the setting filter, a user matches when any of the display, metadata and data language settings matches. An empty `value=` means no filter. The list leaves out the users that the usage counts without a language.
 
 ### Example
 
@@ -8097,7 +8250,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Users who set a language themselves.
+        # Users who set a language themselves.
         api_response = api_instance.organization_localization_usage_users(value=value, name=name, setting=setting, source=source, page=page, size=size)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -8141,9 +8294,9 @@ No authorization required
 # **organization_localization_usage_workspaces**
 > LocalizationUsageWorkspaces organization_localization_usage_workspaces()
 
-(BETA) Workspaces that use a language.
+Workspaces that use a language.
 
-(BETA) Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. No value selects the usage entry without a language.
+Lists the workspaces behind the counts of the organization localization usage, sorted by name. Without the setting filter, a workspace matches when any of the display, metadata and data language settings matches, and its source is the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.
 
 ### Example
 
@@ -8175,7 +8328,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Workspaces that use a language.
+        # Workspaces that use a language.
         api_response = api_instance.organization_localization_usage_workspaces(value=value, name=name, setting=setting, source=source, page=page, size=size)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -10487,6 +10640,74 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **stream_execution_progress**
+> [dict] stream_execution_progress(workspace_id, execution_id)
+
+(EXPERIMENTAL) Stream the live progress of an AFM execution
+
+Server-Sent Events with the computation steps of the execution identified by the X-GDC-CANCEL-TOKEN of the execute request. Ends with a `done` event.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    execution_id = "executionId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (EXPERIMENTAL) Stream the live progress of an AFM execution
+        api_response = api_instance.stream_execution_progress(workspace_id, execution_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->stream_execution_progress: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **execution_id** | **str**|  |
+
+### Return type
+
+**[dict]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/event-stream
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **switch_active_identity_provider**
 > switch_active_identity_provider(switch_identity_provider_request)
 
@@ -12247,6 +12468,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **validate_embedding_origin**
+> ValidateEmbeddingOriginResponse validate_embedding_origin(validate_embedding_origin_request)
+
+Validate an embedding origin.
+
+Checks one origin against the embedding origins of the organization. The literal `*` is valid only when the embedding origins contain `*`.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.validate_embedding_origin_request import ValidateEmbeddingOriginRequest
+from gooddata_api_client.model.validate_embedding_origin_response import ValidateEmbeddingOriginResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    validate_embedding_origin_request = ValidateEmbeddingOriginRequest(
+        origin="https://app.example.com",
+    ) # ValidateEmbeddingOriginRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Validate an embedding origin.
+        api_response = api_instance.validate_embedding_origin(validate_embedding_origin_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->validate_embedding_origin: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **validate_embedding_origin_request** | [**ValidateEmbeddingOriginRequest**](ValidateEmbeddingOriginRequest.md)|  |
+
+### Return type
+
+[**ValidateEmbeddingOriginResponse**](ValidateEmbeddingOriginResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Whether the origin may embed the application. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **validate_llm_endpoint**
 > validate_llm_endpoint()
 
@@ -12376,7 +12667,7 @@ No authorization required
 # **visualization_permissions**
 > VisualizationPermissions visualization_permissions(workspace_id, visualization_object_id)
 
-(BETA) Get Visualization Permissions
+Get Visualization Permissions
 
 ### Example
 
@@ -12403,7 +12694,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Get Visualization Permissions
+        # Get Visualization Permissions
         api_response = api_instance.visualization_permissions(workspace_id, visualization_object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12440,12 +12731,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **workspace_localization_issues**
+> LocalizationIssues workspace_localization_issues(workspace_id)
+
+(BETA) Localization issues of the workspace.
+
+(BETA) Checks the display and metadata language of the workspace against the metadata translations of the workspace and its parents. It also reports translations the workspace owns that nobody uses. It checks this only when the workspace has no workspaces below it or the user can see all of them.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_issues import LocalizationIssues
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Localization issues of the workspace.
+        api_response = api_instance.workspace_localization_issues(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_issues: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**LocalizationIssues**](LocalizationIssues.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **workspace_localization_statistics**
 > LocalizationStatistics workspace_localization_statistics(workspace_id)
 
-(BETA) Languages with translations in the workspace.
+Languages with translations in the workspace.
 
-(BETA) Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list.
+Lists the languages that have at least one translation in the workspace or its parent workspaces. Each kind of translation has its own list. With includeCoverage=true, it also counts the translated metadata texts of the workspace and each parent.
 
 ### Example
 
@@ -12468,11 +12826,21 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    include_coverage = True # bool | (BETA) Adds translation counts for the workspace and each parent, root first. (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Languages with translations in the workspace.
+        # Languages with translations in the workspace.
         api_response = api_instance.workspace_localization_statistics(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_statistics: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Languages with translations in the workspace.
+        api_response = api_instance.workspace_localization_statistics(workspace_id, include_coverage=include_coverage)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->workspace_localization_statistics: %s\n" % e)
@@ -12484,6 +12852,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **include_coverage** | **bool**| (BETA) Adds translation counts for the workspace and each parent, root first. | [optional]
 
 ### Return type
 
@@ -12510,9 +12879,9 @@ No authorization required
 # **workspace_localization_usage**
 > WorkspaceLocalizationUsage workspace_localization_usage(workspace_id)
 
-(BETA) Languages used in the workspace.
+Languages used in the workspace.
 
-(BETA) Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. Child workspaces are not included.
+Returns the value the workspace gets for each of the display, metadata and data language settings. It also counts the workspace members per language. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. `childWorkspaces` counts the workspaces below it that the user can see, the same way.
 
 ### Example
 
@@ -12538,7 +12907,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Languages used in the workspace.
+        # Languages used in the workspace.
         api_response = api_instance.workspace_localization_usage(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12574,12 +12943,100 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **workspace_localization_usage_child_workspaces**
+> LocalizationUsageWorkspaces workspace_localization_usage_child_workspaces(workspace_id)
+
+(BETA) Workspaces below the workspace that use a language.
+
+(BETA) Lists the workspaces behind the `childWorkspaces` counts of the workspace localization usage. The list has the workspaces below the workspace that the user can see, sorted by name. Without the setting filter, a workspace matches when one of its three language settings matches. Its source is then the strongest one. Without the value filter, a setting without a language matches too. An empty `value=` means no filter. The `value` parameter cannot filter for a missing language.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.localization_usage_workspaces import LocalizationUsageWorkspaces
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    value = "de-DE" # str | Language tag that the workspace gets. (optional)
+    name = "berg" # str | Filter by workspace name. Note that the filter is case insensitive. (optional)
+    setting = "LOCALE" # str | One of LOCALE, METADATA_LOCALE and DATA_LOCALE. (optional)
+    source = "PARENT" # str | Where the value comes from. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned. (optional) if omitted the server will use the default value of 20
+
+    # example passing only required values which don't have defaults set
+    try:
+        # (BETA) Workspaces below the workspace that use a language.
+        api_response = api_instance.workspace_localization_usage_child_workspaces(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_usage_child_workspaces: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # (BETA) Workspaces below the workspace that use a language.
+        api_response = api_instance.workspace_localization_usage_child_workspaces(workspace_id, value=value, name=name, setting=setting, source=source, page=page, size=size)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->workspace_localization_usage_child_workspaces: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **value** | **str**| Language tag that the workspace gets. | [optional]
+ **name** | **str**| Filter by workspace name. Note that the filter is case insensitive. | [optional]
+ **setting** | **str**| One of LOCALE, METADATA_LOCALE and DATA_LOCALE. | [optional]
+ **source** | **str**| Where the value comes from. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned. | [optional] if omitted the server will use the default value of 20
+
+### Return type
+
+[**LocalizationUsageWorkspaces**](LocalizationUsageWorkspaces.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **workspace_localization_usage_users**
 > LocalizationUsageUsers workspace_localization_usage_users(workspace_id)
 
-(BETA) Workspace members who get a language.
+Workspace members who get a language.
 
-(BETA) Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. No value selects the usage entry without a language.
+Lists the workspace members behind the counts of the workspace localization usage, sorted by name. Users without a name come last. Members count under the value they get in the workspace: their own setting, otherwise the value of the workspace. So every source can match. Without the setting filter, a member matches when any of the display, metadata and data language settings matches. Its source is then the strongest one. An empty `value=` means no filter. The list leaves out the members that the usage counts without a language.
 
 ### Example
 
@@ -12611,7 +13068,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # (BETA) Workspace members who get a language.
+        # Workspace members who get a language.
         api_response = api_instance.workspace_localization_usage_users(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -12620,7 +13077,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # (BETA) Workspace members who get a language.
+        # Workspace members who get a language.
         api_response = api_instance.workspace_localization_usage_users(workspace_id, value=value, name=name, setting=setting, source=source, page=page, size=size)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

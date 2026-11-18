@@ -147,7 +147,7 @@ class PublisherDocumentWidgetTitle(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             style (PublisherDocumentTextStyle): [optional]  # noqa: E501
             text (str): Overrides the default title; may contain text variables.. [optional]  # noqa: E501
-            visible (bool): Default `true`.. [optional]  # noqa: E501
+            visible (bool): When left out, a visualization's title is hidden and a takeaway's is shown.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -235,7 +235,7 @@ class PublisherDocumentWidgetTitle(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             style (PublisherDocumentTextStyle): [optional]  # noqa: E501
             text (str): Overrides the default title; may contain text variables.. [optional]  # noqa: E501
-            visible (bool): Default `true`.. [optional]  # noqa: E501
+            visible (bool): When left out, a visualization's title is hidden and a takeaway's is shown.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

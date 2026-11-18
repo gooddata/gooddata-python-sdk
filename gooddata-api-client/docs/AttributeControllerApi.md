@@ -6,8 +6,8 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_all_entities_attributes**](AttributeControllerApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | Get all Attributes
 [**get_entity_attributes**](AttributeControllerApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Get an Attribute
-[**patch_entity_attributes**](AttributeControllerApi.md#patch_entity_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Patch an Attribute (beta)
-[**search_entities_attributes**](AttributeControllerApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint (beta)
+[**patch_entity_attributes**](AttributeControllerApi.md#patch_entity_attributes) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Patch an Attribute
+[**search_entities_attributes**](AttributeControllerApi.md#search_entities_attributes) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributes/search | The search endpoint
 
 
 # **get_all_entities_attributes**
@@ -197,7 +197,7 @@ No authorization required
 # **patch_entity_attributes**
 > JsonApiAttributeOutDocument patch_entity_attributes(workspace_id, object_id, json_api_attribute_patch_document)
 
-Patch an Attribute (beta)
+Patch an Attribute
 
 ### Example
 
@@ -262,7 +262,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Patch an Attribute (beta)
+        # Patch an Attribute
         api_response = api_instance.patch_entity_attributes(workspace_id, object_id, json_api_attribute_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -271,7 +271,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Patch an Attribute (beta)
+        # Patch an Attribute
         api_response = api_instance.patch_entity_attributes(workspace_id, object_id, json_api_attribute_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -314,7 +314,7 @@ No authorization required
 # **search_entities_attributes**
 > JsonApiAttributeOutList search_entities_attributes(workspace_id, entity_search_body)
 
-The search endpoint (beta)
+The search endpoint
 
 ### Example
 
@@ -362,7 +362,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -371,7 +371,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # The search endpoint (beta)
+        # The search endpoint
         api_response = api_instance.search_entities_attributes(workspace_id, entity_search_body, origin=origin, x_gdc_validate_relations=x_gdc_validate_relations)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -69,6 +69,7 @@ class Operation(ModelNormal):
             'DEPROVISION-DATABASE': "deprovision-database",
             'RUN-SERVICE-COMMAND': "run-service-command",
             'ANALYZE-STATISTICS': "analyze-statistics",
+            'REFRESH-DATA-SOURCE': "refresh-data-source",
         },
     }
 
@@ -133,7 +134,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-data-source` — Refresh of an AI Lake data source after a data load. 
             status (str):
 
         Keyword Args:
@@ -226,7 +227,7 @@ class Operation(ModelNormal):
 
         Args:
             id (str): Id of the operation
-            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. 
+            kind (str): Type of the long-running operation. * `provision-database` — Provisioning of an AI Lake database. * `deprovision-database` — Deprovisioning (deletion) of an AI Lake database. * `run-service-command` — Running a command in a particular AI Lake service. * `analyze-statistics` — Running ANALYZE TABLE for CBO statistics collection. * `refresh-data-source` — Refresh of an AI Lake data source after a data load. 
             status (str):
 
         Keyword Args:
