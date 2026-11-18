@@ -1,0 +1,62 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_sim_user_choice.py
+  s_77b557d92ffe2e::t_972ce77ba577e7 241
+  s_33f618333acd95::t_50058aecd07f2f 118-132,136-138,141-143,149
+  s_33f618333acd95::t_8590cbe2ad6fc8 8-10,22-30
+  s_77b557d92ffe2e::t_31effd86196a2b 1-7,11-21,31-53,56-61,63-82,84-117,133-135,139-140,144-148,150-156,162,190-240,242-246
+  s_33f618333acd95::t_7538f0a8cf8b73 54-55,62
+  s_33f618333acd95::t_4608a063def847 83
+  s_33f618333acd95::t_d4d07d6edd4a29 157-161,163-189
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_77b557d92ffe2e::t_e59191ce47d279 109-117,120-121,141,144,146,176-180,182-184,191-239,241-250
+  s_77b557d92ffe2e::t_972ce77ba577e7 24-26,28-30
+  s_33f618333acd95::t_dc412d2197a01d 123-126,142,185-190,240,251
+  s_ee5cc41b994920::t_9e8a99bb8c28dc 127
+  s_77b557d92ffe2e::t_3f088e48d5e5af 522,527-531,742
+  s_33f618333acd95::t_071d88124246cc 27,278-279,282-284,343-361,363-366
+  s_77b557d92ffe2e::t_7972281c61ef34 68-69,95-96,281,285,413
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_77b557d92ffe2e::t_4ffeab15f972fb 108,142,289
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_33f618333acd95::t_89851e8b442599 27-33,496,656-664,1039-1041,1053-1058,1110-1134
+  s_77b557d92ffe2e::t_fa196a6043d650 1355
+  s_77b557d92ffe2e::t_928716fba04fa6 65-66,467-468,470,478-481,495,639-655,665-672,747-748,1037,1173,1228,1233-1235
+  s_77b557d92ffe2e::t_a8ea3acb5a24b8 1236-1237
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_clarification.py
+  s_33f618333acd95::t_844d2d0b4f7adc 390-394
+packages/gooddata-eval/tests/test_sim_user_choice.py
+  s_33f618333acd95::t_08bf61328f20bc 268
+  s_33f618333acd95::t_2a84892c84ed20 15,25,258,264-267,269-286,297-298,301-316,344-345,360-531
+  s_77b557d92ffe2e::t_6888115dd066f1 1-14,16-24,26-257,259-263,287-296,299-300,317-343,346-359
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f83ec8881bd7fef14359eb0f3bff2464e3530695",
+  "prompts": {},
+  "sessions": {
+    "s_33f618333acd95": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "184906c5-dbb9-4479-be80-abd5f7b93589",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    },
+    "s_77b557d92ffe2e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "045442a1-9e16-47f9-8e3e-9fa3b95aeb7e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    },
+    "s_ee5cc41b994920": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2a4aa36d-5864-4014-bd73-a9160c2f8d78",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "zdenekmusil-gd <zdenek.musil@gooddata.com>"
+    }
+  }
+}
