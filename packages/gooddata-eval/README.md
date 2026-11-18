@@ -855,7 +855,8 @@ an item carrying `takeaway_input` is a `document_takeaway` item unless it declar
 
 `word_count` and `headline_word_count` are reported in the item detail. The default judge
 criteria are calibrated with `make calibrate-takeaway` (needs `OPENAI_API_KEY`); re-run it
-after changing their wording.
+after changing their wording. The judge reads the item's `input` as the page label, and the
+label can change a verdict, so describe the page and the request in plain words.
 
 The client retries 429/5xx answers and connection failures. A request error that survives
 the retries is handled differently by the two entry points: `gd-eval run` aborts the item
