@@ -1,6 +1,7 @@
 # (C) 2026 GoodData Corporation
 import pytest
 from gooddata_eval.core.models import (
+    CatalogInput,
     ChatResult,
     CreatedVisualization,
     DatasetItem,
@@ -221,3 +222,10 @@ def test_dataset_item_takeaway_input_defaults_to_none() -> None:
         {"id": "q1", "dataset_name": "d1", "test_kind": "dashboard_summary", "question": "q", "expected_output": {}}
     )
     assert item.takeaway_input is None
+
+
+def test_catalog_input_rejects_unknown_keys_and_types() -> None:
+    with pytest.raises(ValueError):
+        CatalogInput.model_validate({"object_type": "Metric", "object_id": "a", "output": "title", "x": 1})
+    with pytest.raises(ValueError):
+        CatalogInput.model_validate({"object_type": "Parameter", "object_id": "a", "output": "title"})

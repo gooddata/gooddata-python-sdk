@@ -7,7 +7,7 @@ Ported from gdc-nas tavern-e2e app/llm_as_judge/schemas/chat.py.
 import json
 import re
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, SerializerFunctionWrapHandler, field_validator, model_serializer
 
@@ -564,6 +564,21 @@ class TakeawayInput(BaseModel):
     agent_id: str | None = None
 
 
+class CatalogInput(BaseModel):
+    """Structured input for the `catalog_metadata` test kind.
+
+    Names one Analytics Catalog object and which text to generate for it: `title` calls
+    `generateTitle`, `description` calls `generateDescription`. Unknown keys are rejected
+    so a typo in a dataset item fails loudly.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    object_type: Literal["Visualization", "Dashboard", "Metric", "Fact", "Attribute"]
+    object_id: str = Field(min_length=1)
+    output: Literal["title", "description"]
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -578,6 +593,8 @@ class DatasetItem(BaseModel):
     summary_input: SummaryInput | None = None
     # Only used by the `document_takeaway` test kind; ignored by all others.
     takeaway_input: TakeawayInput | None = None
+    # Only used by the `catalog_metadata` test kind; ignored by all others.
+    catalog_input: CatalogInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

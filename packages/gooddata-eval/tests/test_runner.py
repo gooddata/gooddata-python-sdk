@@ -135,6 +135,7 @@ def test_run_items_routes_all_supported_kinds():
         "dashboard_summary",
         "knowledge_question",
         "document_takeaway",
+        "catalog_metadata",
     }
     assert expected_kinds == supported_test_kinds()
 
