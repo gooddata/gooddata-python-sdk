@@ -1175,6 +1175,25 @@ def test_cli_routes_takeaway_items_to_takeaway_client() -> None:
     summary.ask.assert_not_called()
 
 
+def test_cli_routes_catalog_items_to_the_catalog_client() -> None:
+    chat, catalog = MagicMock(), MagicMock()
+    backend = cli_main._RoutingBackend(chat, {"catalog_metadata": catalog})
+    raw = {
+        "id": "lf-cat-1",
+        "datasetName": "analytics_catalog_generate",
+        "input": "Title for the metric 'ARPU'",
+        "metadata": {"catalog_input": {"object_type": "Metric", "object_id": "arpu", "output": "title"}},
+        "expectedOutput": {"must_include": ["Average revenue per customer"]},
+    }
+    item = _item_from_raw(raw, dataset_name="analytics_catalog_generate", test_kind="visualization")
+
+    result = backend.ask(item)
+
+    catalog.ask.assert_called_once_with(item)
+    assert result is catalog.ask.return_value
+    chat.ask.assert_not_called()
+
+
 def test_cli_routes_other_kinds_by_test_kind() -> None:
     backend, chat, summary, takeaway = _routing_backend()
     summary_item = DatasetItem(

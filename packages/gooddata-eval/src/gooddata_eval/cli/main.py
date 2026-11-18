@@ -15,6 +15,7 @@ from rich.console import Console
 from rich.table import Table
 
 from gooddata_eval.cli.agentic_runner import AGENTIC_TEST_KINDS, UNGATED_AGENTIC_TEST_KINDS, run_agentic_items
+from gooddata_eval.core.catalog.http_client import CatalogMetadataClient
 from gooddata_eval.core.chat.sse_client import ChatClient, set_default_item_timeout, set_default_turn_timeout
 from gooddata_eval.core.config import (
     DEFAULT_GATE,
@@ -48,7 +49,8 @@ class _RoutingBackend:
     """Dispatch each item to the right backend by test_kind.
 
     Kinds in `by_kind` go to their dedicated endpoint client (`dashboard_summary` to the
-    summary endpoint, `document_takeaway` to the takeaway endpoint); everything else uses
+    summary endpoint, `document_takeaway` to the takeaway endpoint, `catalog_metadata` to the
+    Analytics Catalog generate endpoints); everything else uses
     the conversational chat endpoint.
     """
 
@@ -618,6 +620,9 @@ def _run(config: RunConfig) -> int:
                         host=config.host, token=config.token, workspace_id=config.workspace_id
                     ),
                     "document_takeaway": TakeawayClient(
+                        host=config.host, token=config.token, workspace_id=config.workspace_id
+                    ),
+                    "catalog_metadata": CatalogMetadataClient(
                         host=config.host, token=config.token, workspace_id=config.workspace_id
                     ),
                 },
