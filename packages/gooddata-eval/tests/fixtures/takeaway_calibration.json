@@ -27,6 +27,53 @@
       "text": "**Audio and video now carry the store.** They bring in about a third of sales, and their sales roughly doubled compared with last period."
     },
     {
+      "label": "number words: roughly a million (real output)",
+      "want": "pass",
+      "question": "Customers page, slot asks for English, document instruction asks for German",
+      "text": "**New customers lead the period**\nNew customer activity is substantially higher than returning activity in the active-customer breakdown, while the top spenders each contribute roughly a million in net sales."
+    },
+    {
+      "label": "number words: in the low teens",
+      "want": "pass",
+      "question": "Customers page, slot asks to focus on returning customers",
+      "text": "**Returning customers stay a small group**\nReturning customers stay in the low teens on most days, while new customers make up nearly all of the activity."
+    },
+    {
+      "label": "number words in German",
+      "want": "pass",
+      "question": "Customers page, document instruction asks for German",
+      "text": "**Neukunden tragen das Wachstum**\nFast alle aktiven Kunden sind neu, und die Top-Kunden bringen jeweils Umsätze im Millionenbereich."
+    },
+    {
+      "label": "number words in German (real output)",
+      "want": "pass",
+      "question": "Customers page, document instruction asks for German",
+      "text": "**Neukunden prägen die Aktivität**\nDie aktiven Kunden sind ausschließlich Neukunden. Die zehn umsatzstärksten Kunden liegen jeweils im Bereich von etwa einer Million Net Sales."
+    },
+    {
+      "label": "fraction in words",
+      "want": "pass",
+      "text": "**Three categories carry the store**\nAudio & Video, Computers and Furniture bring in nearly nine-tenths of sales, leaving little for the rest."
+    },
+    {
+      "label": "magnitude range in German words (real output)",
+      "want": "pass",
+      "question": "Customers page, document instruction asks for German",
+      "text": "**Neukunden tragen die Aktivität**\nIm ausgewählten Zeitraum bestehen die aktiven Kunden vollständig aus Neukunden; Rückkehrer sind nicht erfasst. Die umsatzstärksten Kunden liegen jeweils im hohen sechs- bis niedrigen siebenstelligen Bereich."
+    },
+    {
+      "label": "one chart, one finding",
+      "want": "pass",
+      "question": "Single Revenue Trend chart, no instructions",
+      "text": "**Net sales climb steadily**\nNet sales rise through most of the period, with only short dips along the way."
+    },
+    {
+      "label": "segment in the data named as the driver",
+      "want": "pass",
+      "question": "Customers page with a trend, a top-10 list and a breakdown, no instructions",
+      "text": "**New customers carry the growth**\nActive customer growth is driven entirely by new customers, while returning customers stay flat."
+    },
+    {
       "label": "executive summary",
       "want": "fail",
       "criteria": ["executive_summary", "exact_figure", "date_or_period"],
@@ -63,6 +110,48 @@
       "want": "fail",
       "criteria": ["unshown_cause"],
       "text": "**Sales jumped in the West.** The rise came because the summer campaign drew in new buyers."
+    },
+    {
+      "label": "hedged figure in digits (real output)",
+      "want": "fail",
+      "question": "Customers page, slot asks for English, document instruction asks for German",
+      "criteria": ["exact_figure"],
+      "text": "**Growth is acquisition-led**\nNew Customers make up the active base, while the leading spenders contribute roughly $1M each. Return Customers are absent from the breakdown, pointing to limited repeat engagement in this view."
+    },
+    {
+      "label": "percentage change in digits",
+      "want": "fail",
+      "question": "Customers page, slot asks to focus on returning customers",
+      "criteria": ["exact_figure"],
+      "text": "**Returning customers spend more**\nReturning customers spend roughly 25% higher per order than new customers, though they place fewer orders."
+    },
+    {
+      "label": "walk-through under a finding headline",
+      "want": "fail",
+      "question": "Sales page with three charts, no instructions",
+      "criteria": ["chart_walkthrough"],
+      "text": "**Growth comes from new customers.** The trend chart has sales rising, the category chart has Audio & Video in front, and the order breakdown has most orders processed."
+    },
+    {
+      "label": "outside cause after 'driven by'",
+      "want": "fail",
+      "question": "Sales page with three charts, no instructions",
+      "criteria": ["unshown_cause"],
+      "text": "**Sales peaked late in the period**\nThe late rise was driven by the holiday season, while the other months stayed flat."
+    },
+    {
+      "label": "figure in digits in German",
+      "want": "fail",
+      "question": "Customers page, document instruction asks for German",
+      "criteria": ["exact_figure"],
+      "text": "**Neukunden tragen das Wachstum**\nNeukunden machen rund 40 % der aktiven Kunden aus, und die Top-Kunden bringen jeweils etwa 1 Mio. € Umsatz."
+    },
+    {
+      "label": "outside cause after 'driven by' (marketing)",
+      "want": "fail",
+      "question": "Customers page with a trend, a top-10 list and a breakdown, no instructions",
+      "criteria": ["unshown_cause"],
+      "text": "**Growth is driven by marketing**\nNew customers rose because of stronger marketing, while returning customers stayed flat."
     }
   ]
 }
