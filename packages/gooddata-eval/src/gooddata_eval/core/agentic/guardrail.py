@@ -7,15 +7,23 @@ import time
 from dataclasses import dataclass, field
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
+from gooddata_eval.core.agentic._failure_message import judge_failed_checks
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
-    gate_failure_note,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
 )
-from gooddata_eval.core.agentic._outcome import agentic_detail, agentic_success, raise_agentic_failure
+from gooddata_eval.core.agentic._outcome import (
+    agentic_detail,
+    agentic_success,
+    attach_labels,
+    failure_message_head,
+    label_runs,
+    mark_unscored_run,
+    raise_agentic_failure,
+)
 from gooddata_eval.core.agentic._trace_linker import (
     RunIdentity,
     RunTraceContext,
@@ -247,6 +255,13 @@ def _run_detail(run: GuardrailResult) -> dict:
     }
 
 
+def _failed_checks(run: GuardrailResult) -> list[dict]:
+    """The judge's verdict on a run it failed, with its reasoning. A run it could not grade has no verdict."""
+    return judge_failed_checks(
+        "guardrail_pass", passed=run.passed, judge_error=run.judge_error, reasoning=run.reasoning
+    )
+
+
 def evaluate_agentic_guardrail(
     host: str,
     token: str,
@@ -299,6 +314,9 @@ def evaluate_agentic_guardrail(
             user_context=user_context,
         )
 
+    # Before the Langfuse scores, so a run the harness failed gets its marker there too.
+    run_labels = label_runs(summary.run_results, passed=lambda r: r.judge_error is None and r.passed)
+
     if langfuse is not None and dataset_item_id:
         # Pinned on the calling thread: a deferred poll must not widen its query window.
         window_end = utc_now()
@@ -310,7 +328,7 @@ def evaluate_agentic_guardrail(
                 if run.judge_error is not None:
                     # No verdict, so nothing truthful to publish: float(run.passed) would
                     # write a 0 the judge never returned.
-                    ctx.export_unscored(run_idx, run.conversation_id)
+                    mark_unscored_run(ctx, run_idx, run.conversation_id, run_labels.error_label(run_idx))
                     continue
                 pt = ctx.trace(run.conversation_id)
                 with ctx.observe(
@@ -368,12 +386,13 @@ def evaluate_agentic_guardrail(
         # pass@K over fewer runs than --runs asked for is a weaker result.
         **({"unscored_runs": len(unscored), "judge_errors": unscored} if unscored else {}),
     )
-    # An ungraded run has no verdict, so `r.passed` is not a claim about it -- treat it as
-    # non-passing here so it is recorded with its judge_error rather than silently dropped.
+    # An ungraded run has no verdict, so `r.passed` is not a claim about it: its label is not
+    # PASS, so it is recorded with its judge_error rather than silently dropped.
     failed_runs = build_failed_runs(
         summary.run_results,
-        passed=lambda r: r.judge_error is None and r.passed,
+        labels=run_labels,
         detail=_run_detail,
+        failed_checks=_failed_checks,
     )
 
     if not summary.scored_run_results:
@@ -386,13 +405,16 @@ def evaluate_agentic_guardrail(
         _attach_diagnostics(
             error, best, detail, failed_runs, runs_passed, runs_effective, run_latencies_s, best.run_latency_s
         )
+        attach_labels(error, run_labels, gate)
         raise error
 
     if not gate_passed(gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k):
-        gate_note = gate_failure_note(gate, runs_passed, runs_effective, len(unscored))
+        gate_note = failure_message_head(gate, run_labels, runs_passed, failed_runs, len(unscored))
         raise_agentic_failure(
             GuardrailAssertionError,
             f"Guardrail assertion failed. {gate_note} passed={best.passed}. Reasoning: {best.reasoning}",
+            harness_error=run_labels.harness_error_record,
+            shadow=run_labels.shadow(gate),
             reasoning_steps=best.reasoning_steps,
             conversation_id=best.conversation_id,
             response_id=best.response_id,
@@ -404,6 +426,7 @@ def evaluate_agentic_guardrail(
             best_run_latency_s=best.run_latency_s,
         )
     return agentic_success(
+        shadow=run_labels.shadow(gate),
         reasoning_steps=best.reasoning_steps,
         conversation_id=best.conversation_id,
         response_id=best.response_id,

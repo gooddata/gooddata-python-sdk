@@ -25,9 +25,14 @@ class LoopExit(str, Enum):
     per-field check as False: specific-sounding content failures for work the agent was
     never given the chance to do.
 
-    This does not change any verdict -- an exhausted run still fails. It makes the three
+    This does not change any verdict -- an exhausted run still fails. It makes these
     cases countable, so "is the turn budget too tight" becomes a question the data can
     answer rather than one that has to be argued.
+
+    Which members label a run ERROR (the harness failed) rather than FAIL is decided in one
+    place, ``core/outcome.py``. The label decides no verdict. Only SIMULATED_USER_FAILED is an
+    ERROR: CHAT_ERROR, AGENT_TIMEOUT and TURN_INCOMPLETE are on the product path, and a
+    customer hits them too.
     """
 
     SUCCESS = "success"
@@ -48,16 +53,27 @@ class LoopExit(str, Enum):
 
     SIMULATED_USER_FAILED = "simulated_user_failed"
     """The harness's own simulated-user model failed to produce a follow-up. A harness-side
-    fault, not an agent one -- reporting should treat it as an error, not a scored failure."""
+    fault, not an agent one, so the run is labelled ERROR (``core/outcome.py``)."""
 
     CHAT_ERROR = "chat_error"
-    """The chat call itself raised mid-conversation. Like SIMULATED_USER_FAILED this is
-    infrastructure rather than agent capability, but it comes from the GoodData side."""
+    """The chat call itself raised mid-conversation and was not one of the agent's own
+    failures below: a gen-ai error event, a broken stream, or a 5xx still failing after its
+    retries. It is on the product path -- a customer would see it too -- so the run is a
+    FAIL, not a harness ERROR."""
+
+    AGENT_TIMEOUT = "agent_timeout"
+    """The agent exceeded the per-turn or per-item wall-clock budget (``TurnTimeoutError``).
+    The agent's own failure to answer in time, so the run is a FAIL."""
+
+    TURN_INCOMPLETE = "turn_incomplete"
+    """The agent ended its turn without a final answer, e.g. at its own iteration limit
+    (``TurnIncompleteError``). The agent's own failure, so the run is a FAIL."""
 
     NOT_RUN = "not_run"
     """The loop never started -- e.g. an agentic_conversation turn whose $ref to an earlier
     turn's output could not be resolved, so the turn was skipped before any message was
-    sent. Distinct from every other member, which all imply at least one turn happened."""
+    sent. Distinct from every other member, which all imply at least one turn happened. A
+    FAIL: its cause is usually the earlier turn's failure, which the item already reports."""
 
 
 class AacQueryField(BaseModel):
@@ -441,6 +457,12 @@ class AgenticAssertionError(AssertionError):
     failed_runs: list[dict]
     run_latencies_s: list[float]
     best_run_latency_s: float | None
+    harness_error: dict
+    """``{"status": "error", "reason": ...}``, set only when every run of the item errored
+    (``core/outcome.py``): the item is a harness error, not an agent failure. A runner labels
+    it; it stays a failure."""
+    shadow: dict
+    """The phase-2 candidate verdict (``core.outcome.shadow_verdict``). Recorded, never used."""
 
 
 class AgenticEvalOutcome(BaseModel):
@@ -483,6 +505,10 @@ class AgenticEvalOutcome(BaseModel):
     # not in a loop the runner itself can time. None for a kind that has not yet been
     # wired to measure it (see AgenticAssertionError.best_run_latency_s, same default).
     best_run_latency_s: float | None = None
+    # The phase-2 candidate verdict (``core.outcome.shadow_verdict``), as on
+    # AgenticAssertionError. Recorded on a passing item too: under pass@K an item can pass with
+    # most of its runs errored, which the candidate rule would not call a pass. Never used.
+    shadow: dict | None = None
 
 
 class SummaryInput(BaseModel):

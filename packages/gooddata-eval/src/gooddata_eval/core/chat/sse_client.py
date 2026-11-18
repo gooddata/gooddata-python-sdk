@@ -340,6 +340,10 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
     return result
 
 
+def _budget_exceeded(budget: float, scope: str) -> TurnTimeoutError:
+    return TurnTimeoutError(f"agent exceeded the {budget:.0f}s {scope} budget")
+
+
 def _until_deadline(
     lines: Iterable[str], deadline: float | None, budget: float = 0.0, scope: str = "turn"
 ) -> Iterable[str]:
@@ -351,9 +355,21 @@ def _until_deadline(
     if deadline is None:
         yield from lines
         return
-    for line in lines:
+    it = iter(lines)
+    while True:
+        try:
+            line = next(it)
+        except StopIteration:
+            return
+        except httpx.ReadTimeout as exc:
+            # The read timeout is lowered to the caps, so an agent that goes silent past its
+            # budget ends here rather than at the check below. Past the deadline it is the same
+            # timeout; before it, a plain read timeout stays a transport failure.
+            if time.monotonic() > deadline:
+                raise _budget_exceeded(budget, scope) from exc
+            raise
         if time.monotonic() > deadline:
-            raise TurnTimeoutError(f"agent exceeded the {budget:.0f}s {scope} budget")
+            raise _budget_exceeded(budget, scope)
         yield line
 
 
@@ -591,16 +607,27 @@ class ChatClient:
             # attempts, but the entire duration of any earlier failed attempt.
             t0 = time.monotonic()
             deadline, budget, scope = self._deadline(t0)
-            with self._client.stream("POST", url, json=body, headers=headers) as resp:
-                resp.raise_for_status()
-                try:
-                    result = parse_sse_lines(_until_deadline(resp.iter_lines(), deadline, budget, scope))
-                except ChatError as exc:
-                    if exc.partial_result is not None:
-                        exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
-                    raise
-                result.turn_wall_clock_sec = time.monotonic() - t0
-                return result
+            try:
+                with self._client.stream("POST", url, json=body, headers=headers) as resp:
+                    resp.raise_for_status()
+                    try:
+                        result = parse_sse_lines(_until_deadline(resp.iter_lines(), deadline, budget, scope))
+                    except ChatError as exc:
+                        if exc.partial_result is not None:
+                            exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
+                        raise
+                    result.turn_wall_clock_sec = time.monotonic() - t0
+                    return result
+            except httpx.ReadTimeout as exc:
+                # A read timeout in the stream body is a ChatError by now, so this one came while
+                # the response headers were awaited. An agent silent past its budget can end here
+                # too when the headers are held back until the first event. Such a turn has no
+                # partial result to carry its time, so it is recorded here: it is one of the slowest.
+                now = time.monotonic()
+                if deadline is not None and now > deadline:
+                    note_trace_latency(now - t0)
+                    raise _budget_exceeded(budget, scope) from exc
+                raise
 
         try:
             result = retry_transient(_do, is_retryable=_is_retryable_exc)

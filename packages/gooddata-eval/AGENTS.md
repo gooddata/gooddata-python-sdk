@@ -34,6 +34,7 @@ experiment. The newest and most actively developed package in the repo.
 | `core/reporting/` | console and JSON output rendering |
 | `core/scoring.py`, `core/runner.py` | scoring and orchestration |
 | `core/models.py` | `DatasetItem`, `ChatResult`, `ItemReport` and friends |
+| `core/outcome.py` | `Outcome` (PASS / FAIL / ERROR): the one fail-closed rule that labels a failing run ERROR when the harness failed (simulated user, judge), plus the item label and the recorded-only shadow verdict. Labels decide no verdict; the agentic kinds reach it through `core/agentic/_outcome.py`'s `label_runs` |
 
 **Depends on**: `gooddata-sdk`, `httpx`, `pydantic`, `orjson`, `rich`. The LLM-judge
 evaluator is an optional extra (`llm-judge`, pulling `openai>=1.45,<2.0`); every `openai`
