@@ -63,7 +63,8 @@ implementation, sometimes under different `test_kind` strings (`search_tool` vs
 its own shape. `test_kind` on the item is what labels the result, not the evaluator class,
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
-`takeaway_input`, `catalog_metadata` items `catalog_input`.
+`takeaway_input`, `catalog_metadata` items `catalog_input`, `agentic_agent_switcher` items
+`agent_switcher_input`.
 
 ## Running the pipeline
 

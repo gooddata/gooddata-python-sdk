@@ -810,6 +810,56 @@ def test_create_conversation_sends_agent_id_when_given():
     assert seen["body"] == {"agentId": "agent-123"}
 
 
+def test_switch_agent_posts_the_agent_and_returns_the_conversation():
+    seen = {}
+
+    def handler(request):
+        seen["url"] = str(request.url)
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"conversationId": "c1", "agentId": "builder"})
+
+    client = _client_with_handler(handler)
+    assert client.switch_agent("c1", "builder") == {"conversationId": "c1", "agentId": "builder"}
+    assert seen["url"].endswith("/chat/conversations/c1/switchAgent")
+    assert seen["body"] == {"agentId": "builder"}
+
+
+def test_switch_agent_retries_5xx_but_not_404(monkeypatch):
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    statuses = iter([503, 200])
+    client = _client_with_handler(lambda request: httpx.Response(next(statuses), json={"agentId": "b"}))
+    assert client.switch_agent("c1", "b") == {"agentId": "b"}
+
+    calls = {"n": 0}
+
+    def not_found(request):
+        calls["n"] += 1
+        return httpx.Response(404)
+
+    with pytest.raises(httpx.HTTPStatusError):
+        _client_with_handler(not_found).switch_agent("c1", "b")
+    assert calls["n"] == 1
+
+
+def test_list_items_returns_the_items_list():
+    items = [{"role": "user", "agentId": "a"}, {"role": "assistant", "agentId": "a"}]
+    seen = {}
+
+    def handler(request):
+        seen["url"] = str(request.url)
+        return httpx.Response(200, json={"items": items})
+
+    client = _client_with_handler(handler)
+    assert client.list_items("c1") == items
+    assert seen["url"].endswith("/chat/conversations/c1/items")
+
+
+def test_list_items_rejects_a_body_without_items():
+    client = _client_with_handler(lambda request: httpx.Response(200, json={"data": []}))
+    with pytest.raises(ValueError, match="items"):
+        client.list_items("c1")
+
+
 def test_int_env_uses_default_when_unset(monkeypatch):
     monkeypatch.delenv("GD_TEST_INT", raising=False)
     assert sse_mod._int_env("GD_TEST_INT", 5) == 5

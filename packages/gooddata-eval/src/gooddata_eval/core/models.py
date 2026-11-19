@@ -579,6 +579,55 @@ class CatalogInput(BaseModel):
     output: Literal["title", "description"]
 
 
+class AgentSwitcherVisualization(BaseModel):
+    """Fields a turn's created visualization must use; a subset match, ids with or without type prefix."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    metrics: list[str] = Field(default_factory=list)
+    attributes: list[str] = Field(default_factory=list)
+
+
+class AgentSwitcherChecks(BaseModel):
+    """What one turn of an `agentic_agent_switcher` item must show. Every key is optional."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    must_include: list[str] = Field(default_factory=list)
+    must_not_include: list[str] = Field(default_factory=list)
+    skills_used: list[str] = Field(default_factory=list)
+    skills_not_used: list[str] = Field(default_factory=list)
+    alert_metric: str | None = Field(default=None, min_length=1)
+    visualization: AgentSwitcherVisualization | None = None
+
+    @property
+    def judged(self) -> bool:
+        return bool(self.must_include or self.must_not_include)
+
+
+class AgentSwitcherTurn(BaseModel):
+    """One user message; `switch_to` switches the agent before it is sent."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    message: str = Field(min_length=1)
+    switch_to: str | None = Field(default=None, min_length=1)
+    checks: AgentSwitcherChecks = Field(default_factory=AgentSwitcherChecks)
+
+
+class AgentSwitcherInput(BaseModel):
+    """Structured input for the `agentic_agent_switcher` test kind.
+
+    `agent_id` is the agent the conversation is created with. Unknown keys are rejected at
+    every level so a typo in a dataset item fails loudly.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    agent_id: str = Field(min_length=1)
+    turns: list[AgentSwitcherTurn] = Field(min_length=1)
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -595,6 +644,8 @@ class DatasetItem(BaseModel):
     takeaway_input: TakeawayInput | None = None
     # Only used by the `catalog_metadata` test kind; ignored by all others.
     catalog_input: CatalogInput | None = None
+    # Only used by the `agentic_agent_switcher` test kind; ignored by all others.
+    agent_switcher_input: AgentSwitcherInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

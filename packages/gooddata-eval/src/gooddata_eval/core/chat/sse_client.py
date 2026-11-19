@@ -554,6 +554,38 @@ class ChatClient:
         self._conversation_started = time.monotonic()
         return conversation_id
 
+    def switch_agent(self, conversation_id: str, agent_id: str) -> dict[str, Any]:
+        """Bind the conversation to another agent and return the conversation.
+
+        gen-ai answers a switch to the agent already bound as a no-op, so a retry is safe.
+        A 404 means the agent-switching flag is off or the agent is unknown; 403, no access.
+        """
+
+        def _do() -> dict[str, Any]:
+            resp = self._client.post(
+                f"{self._base}/{conversation_id}/switchAgent",
+                headers={**self._auth, "Content-Type": "application/json"},
+                json={"agentId": agent_id},
+            )
+            resp.raise_for_status()
+            return resp.json()
+
+        return retry_transient(_do, is_retryable=_is_retryable_exc)
+
+    def list_items(self, conversation_id: str) -> list[dict[str, Any]]:
+        """Every stored item of the conversation, in order, as gen-ai returns them (camelCase)."""
+
+        def _do() -> list[dict[str, Any]]:
+            resp = self._client.get(f"{self._base}/{conversation_id}/items", headers=self._auth)
+            resp.raise_for_status()
+            body = resp.json()
+            items = body.get("items") if isinstance(body, dict) else None
+            if not isinstance(items, list):
+                raise ValueError(f"GoodData /items response missing 'items' list: {body}")
+            return items
+
+        return retry_transient(_do, is_retryable=_is_retryable_exc)
+
     def delete_conversation(self, conversation_id: str) -> None:
         try:
             self._client.delete(f"{self._base}/{conversation_id}", headers=self._auth)
