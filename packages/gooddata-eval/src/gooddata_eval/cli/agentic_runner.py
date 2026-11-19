@@ -11,6 +11,7 @@ from typing import Any, TypedDict
 
 from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
 from gooddata_eval.core.agentic._langfuse import make_langfuse_client
+from gooddata_eval.core.agentic._search_expectation import SEARCH_ARGUMENT_KEYS
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
@@ -81,7 +82,8 @@ UNGATED_AGENTIC_TEST_KINDS = frozenset({"agentic_conversation"})
 # reads like a model regression.
 #
 #   agentic_general_question, agentic_guardrail  answer questions only, no tool writes
-#   agentic_search                               search_objects, read-only by definition
+#   agentic_search                               search_objects, read-only by definition; an item
+#                                                with setup_turns runs serially (item_runs_in_parallel)
 #   vis_agentic, agentic_visualization           visualizations come back as AAC proposals
 #                                                in the chat response; nothing is persisted
 #                                                and neither module has cleanup code
@@ -113,6 +115,18 @@ WORKSPACE_MUTATING_TEST_KINDS = frozenset(AGENTIC_TEST_KINDS) - PARALLEL_SAFE_TE
 def runs_in_parallel(test_kind: str) -> bool:
     """True only for kinds explicitly cleared for concurrent execution."""
     return test_kind in PARALLEL_SAFE_TEST_KINDS
+
+
+def item_runs_in_parallel(item: DatasetItem) -> bool:
+    """True for an item of a cleared kind that sends nothing the clearance does not cover.
+
+    ``agentic_search`` is cleared for its search. An item's ``setup_turns`` are free text sent before the question,
+    and nothing stops one from asking the agent to save something, so such an item runs serially.
+    """
+    if not runs_in_parallel(item.test_kind):
+        return False
+    eo = item.expected_output
+    return not (item.test_kind == "agentic_search" and isinstance(eo, dict) and "setup_turns" in eo)
 
 
 def _parse_visualization_expected(expected_output: Any) -> list[CreatedVisualization]:
@@ -253,15 +267,18 @@ def _dispatch_agentic(
             **lf_kw,
         )
     elif kind == "agentic_search":
-        eo_dict = eo if isinstance(eo, dict) else {}
-        tool_call = eo_dict.get("tool_call", {})
-        expected_args = tool_call.get("function_arguments", eo_dict)
+        if not isinstance(eo, dict):
+            raise ValueError(f"agentic_search expected_output must be an object, got {eo!r}")
+        eo_dict = eo
+        # Anything but bare search_objects arguments is parsed as an item, so an unknown key fails it.
+        is_item_shape = "tool_call" in eo_dict or not eo_dict.keys() <= SEARCH_ARGUMENT_KEYS
         return evaluate_agentic_search_tool(
             host=host,
             token=token,
             workspace_id=workspace_id,
             question=item.question,
-            expected_tool_call=expected_args,
+            expected_tool_call=None if is_item_shape else eo_dict,
+            expected_output=eo_dict if is_item_shape else None,
             k=k,
             gate=gate,
             agent_id=agent_id,
@@ -485,7 +502,8 @@ def run_agentic_items(
 ) -> EvalReport:
     """Run agentic items through evaluate_agentic_* and return an EvalReport.
 
-    ``concurrency`` > 1 runs PARALLEL_SAFE_TEST_KINDS items simultaneously.
+    ``concurrency`` > 1 runs PARALLEL_SAFE_TEST_KINDS items simultaneously, except those
+    ``item_runs_in_parallel`` holds back.
     WORKSPACE_MUTATING_TEST_KINDS items always run one at a time, and in a separate phase
     from the parallel ones -- a metric being created and dropped mid-run would otherwise be
     visible to a catalog-reading item running alongside it.
@@ -637,13 +655,13 @@ def run_agentic_items(
     concurrency = max(1, concurrency)
     indexed = list(enumerate(items, start=1))
     if concurrency > 1:
-        parallel = [(i, it) for i, it in indexed if runs_in_parallel(it.test_kind)]
-        serial = [(i, it) for i, it in indexed if not runs_in_parallel(it.test_kind)]
+        parallel = [(i, it) for i, it in indexed if item_runs_in_parallel(it)]
+        serial = [(i, it) for i, it in indexed if not item_runs_in_parallel(it)]
         if not parallel and serial:
             blocked = ", ".join(sorted({it.test_kind for _, it in serial}))
             print(
-                f"warning: --concurrency {concurrency} has no effect here; every item is a "
-                f"workspace-mutating kind ({blocked}) and those always run one at a time.",
+                f"warning: --concurrency {concurrency} has no effect here; every item ({blocked}) is a "
+                "workspace-mutating kind or a search item with setup turns, and those always run one at a time.",
                 file=sys.stderr,
             )
     else:
