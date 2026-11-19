@@ -1,0 +1,19 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_documents.py
+  s_961d783551d510::t_b0e12c858b409b 44,49,74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78d4ce1935aa7fb42ae8257f18b570072bba8bfd",
+  "prompts": {},
+  "sessions": {
+    "s_961d783551d510": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "62520ac8-1e34-4540-8d66-b0f2390a7690",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

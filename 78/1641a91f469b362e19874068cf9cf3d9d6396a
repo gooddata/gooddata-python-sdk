@@ -1,0 +1,24 @@
+packages/gooddata-eval/tests/fixtures/takeaway_calibration.json
+  s_c9e6b31f85e827::t_028923e0160f87 48-52
+  s_c9e6b31f85e827::t_345370d8452a9f 47
+packages/gooddata-eval/tests/test_takeaway_evaluator.py
+  s_c9e6b31f85e827::t_028923e0160f87 364
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/takeaway.py
+  s_c9e6b31f85e827::t_028923e0160f87 54-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "781641a91f469b362e19874068cf9cf3d9d6396a",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

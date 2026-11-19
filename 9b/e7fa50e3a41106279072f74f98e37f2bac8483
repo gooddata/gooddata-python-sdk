@@ -1,0 +1,35 @@
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_33f618333acd95::t_dd479476abbc6e 1953-1956,1964-1965,1973
+  s_33f618333acd95::t_cdf0c4feb5c050 1957-1962,1966-1972,1974
+  s_33f618333acd95::t_54372a622348e1 1963,1975-1976
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_33f618333acd95::t_39a9f2bae3eaed 625-627
+  s_33f618333acd95::t_800deff3a20c38 597,602
+  s_33f618333acd95::t_3977cce470e0d9 595-596,601,606-609,628-629
+  s_33f618333acd95::t_21c5b0e2ae633c 598-600,603-605
+packages/gooddata-eval/tests/test_agentic_visualization.py
+  s_33f618333acd95::t_62c88b6efc66b8 893-895,899-903
+  s_33f618333acd95::t_dd479476abbc6e 857-858,860-865,867-892,896-898,904-908
+  s_33f618333acd95::t_8b527cb06cf59f 859,866
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_33f618333acd95::t_8b527cb06cf59f 111
+  s_33f618333acd95::t_3abde3366990c8 112-117,208
+  s_33f618333acd95::t_62c88b6efc66b8 147,207
+  s_33f618333acd95::t_c0ec702d063ce3 146,149,151,206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9be7fa50e3a41106279072f74f98e37f2bac8483",
+  "prompts": {},
+  "sessions": {
+    "s_33f618333acd95": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "184906c5-dbb9-4479-be80-abd5f7b93589",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}

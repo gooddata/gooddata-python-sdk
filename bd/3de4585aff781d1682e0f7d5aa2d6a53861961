@@ -1,0 +1,26 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_e05416bc60f5cb::t_9d582966c3c63d 381
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_e05416bc60f5cb::t_95219f2f6d6026 1043
+  s_e05416bc60f5cb::t_a2275d7f3965b4 42
+  s_e05416bc60f5cb::t_a02553ba43dc32 932-943
+packages/gooddata-eval/tests/test_agentic_alert_skill.py
+  s_e05416bc60f5cb::t_c7ce1d60f1dcab 825-852
+  s_e05416bc60f5cb::t_39e286796e86de 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bd3de4585aff781d1682e0f7d5aa2d6a53861961",
+  "prompts": {},
+  "sessions": {
+    "s_e05416bc60f5cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "438ec5da-b500-423e-850f-6592a3592c55",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}

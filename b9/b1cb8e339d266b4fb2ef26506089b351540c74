@@ -1,0 +1,22 @@
+packages/gooddata-eval/tests/test_takeaway_client.py
+  s_26352a90edbfcb::t_1c8656bf2c88ee 7,155-215
+  s_26352a90edbfcb::t_3cf7d260316799 126
+packages/gooddata-eval/src/gooddata_eval/core/takeaway/http_client.py
+  s_26352a90edbfcb::t_4c4f16278c76bd 20,32-37,76-77,83-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b9b1cb8e339d266b4fb2ef26506089b351540c74",
+  "prompts": {},
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

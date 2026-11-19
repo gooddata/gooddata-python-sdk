@@ -1,0 +1,19 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_8a1464293a1bf2::t_d151a2e96efd62 319-322
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d28cfa4e5cec2a3668ec5c60e679954f176812c8",
+  "prompts": {},
+  "sessions": {
+    "s_8a1464293a1bf2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b79d79d-490b-4217-b524-56aea3e31804",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Oanh Nguyen <oanhca1367@gmail.com>"
+    }
+  }
+}

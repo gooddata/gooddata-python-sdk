@@ -1,0 +1,41 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_documents.py
+  s_a3a72d936bc79e::t_9121c863d0500a 243
+  s_a3a72d936bc79e::t_e3dc4673d2e8fb 178-182,186-191,195-196,198-201,203-217,221-228,230-239,241-242,244-250
+  s_a3a72d936bc79e::t_62a8ae8958bd4e 59,61,63-72
+  s_a3a72d936bc79e::t_0824e1649ff3f5 192-194,197,202
+  s_a3a72d936bc79e::t_0751b78b667e77 12
+  s_a3a72d936bc79e::t_6564b8ced832ae 218-220
+  s_a3a72d936bc79e::t_387b524ce3ba01 229
+  s_a3a72d936bc79e::t_ed26588a06e1a7 17,19-20,24-25
+  s_a3a72d936bc79e::t_1a789a4dfd2169 57-58,60,62,73-75
+  s_a3a72d936bc79e::t_d8aa5bb6362ddc 183-185
+  s_a3a72d936bc79e::t_eb585bdd123c8b 240
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_a3a72d936bc79e::t_0fc9f3b4add9e2 451
+  s_a3a72d936bc79e::t_42281d1436c7ec 10
+  s_a3a72d936bc79e::t_34d1dba01cdfd8 465
+  s_a3a72d936bc79e::t_fa198c683f921e 441-450,452-464,466-471,476,485-502
+  s_a3a72d936bc79e::t_2eba0920ddf5b7 4
+  s_a3a72d936bc79e::t_34e899750302ce 27
+  s_a3a72d936bc79e::t_464807b0420b6e 503
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_a3a72d936bc79e::t_ca21487b90b626 398,535-536,671,808-809
+  s_a3a72d936bc79e::t_ebff34123ce700 243-244
+  s_a3a72d936bc79e::t_ef3e55f3ffe9c9 235
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2ef64eac26bc8b4b80c3cd59e17831e8209b7916",
+  "prompts": {},
+  "sessions": {
+    "s_a3a72d936bc79e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a63996f6-45cd-4842-b400-4f090303bde4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

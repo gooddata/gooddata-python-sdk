@@ -1,0 +1,33 @@
+packages/gooddata-eval/tests/test_agentic_failure_message.py
+  s_d5a90247078f0f::t_cbb42ec658438a 55-56,67,79,91,276,336
+  s_d5a90247078f0f::t_23877779ba31d6 21,23,136-139,141-143,151-152,155-199
+  s_d5a90247078f0f::t_edf47253a6b0d6 153-154,200-201
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_failed_runs.py
+  s_d5a90247078f0f::t_4d6b3f61136c42 24-25,55-60,80,83
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_failure_message.py
+  s_d5a90247078f0f::t_4d6b3f61136c42 23,67-71,75,79-96,121
+packages/gooddata-eval/src/gooddata_eval/core/outcome.py
+  s_d5a90247078f0f::t_4d6b3f61136c42 125
+packages/gooddata-eval/tests/test_outcome.py
+  s_d5a90247078f0f::t_cbb42ec658438a 287
+  s_d5a90247078f0f::t_38b84af6ece75d 251-255
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_outcome.py
+  s_d5a90247078f0f::t_4d6b3f61136c42 57,102-113
+  s_d5a90247078f0f::t_b58d09e3442cb8 114-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "88fc0ff134707b91a5fe2464151104f2698dc570",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

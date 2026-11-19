@@ -1,0 +1,19 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_composed_oneof_unions.py
+  s_97101252f35000::t_9febed6491a8fa 264,268,282,318
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "675baea06580adf0fe1921dcaf24d850695715a0",
+  "prompts": {},
+  "sessions": {
+    "s_97101252f35000": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "11b218ee-a070-43ac-a5cc-43bd84b6b52f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
