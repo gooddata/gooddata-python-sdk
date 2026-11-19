@@ -13,14 +13,17 @@ module is the single place to swap — the runner only depends on the ChatBacken
 protocol, not on this class.
 """
 
+import contextlib
+import contextvars
 import functools
 import json
 import logging
 import os
 import re
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Iterable
+from typing import Any, Iterable, Iterator, ParamSpec, TypeVar
 from urllib.parse import quote
 
 import httpx
@@ -37,6 +40,9 @@ from gooddata_eval.core.models import ChatResult, DatasetItem
 from gooddata_eval.core.timing import note_trace_latency
 
 _log = logging.getLogger(__name__)
+
+_P = ParamSpec("_P")
+_R = TypeVar("_R")
 
 # The retry helpers live in core/_retry.py, shared with the takeaway client. The private
 # names stay importable from here: gdc-nas tavern-e2e imports them from this module.
@@ -120,6 +126,16 @@ class TurnTimeoutError(ChatError):
     retrying it spends the budget again."""
 
 
+def _bool_env(name: str, default: bool) -> bool:
+    """Read a flag from the environment, falling back to ``default`` when unset or blank.
+
+    ``0``/``false``/``no``/``off`` are false, anything else present is true -- so the usual
+    ``VAR=0`` turns a flag off rather than reading as a non-empty, therefore true, string.
+    """
+    raw = os.getenv(name)
+    return raw.strip().lower() not in ("0", "false", "no", "off") if raw and raw.strip() else default
+
+
 # Wall-clock cap on a single agent turn, 0 = uncapped. httpx's `timeout` is per-read,
 # so an agent that keeps emitting reasoning events can stream for many minutes without
 # ever tripping it -- this is what bounds a runaway item and lets the run move on.
@@ -139,6 +155,46 @@ _ITEM_TIMEOUT_S = _float_env("GOODDATA_EVAL_CHAT_ITEM_TIMEOUT_S", 0.0)
 # refuses a non-ASCII header and gen-ai's OTel propagator drops or rewrites the rest.
 _TRACE_LABELS_ENV = "GOODDATA_EVAL_TRACE_LABELS"
 _TRACE_LABEL_KEY = re.compile(r"[A-Za-z0-9_-]+")
+
+# When set, no conversation is deleted -- pass or fail, single-turn or agentic. The
+# server-side record is what the Interaction Intelligence endpoints read, so a run meant to
+# be inspected afterwards has to leave it behind. Enforced inside delete_conversation rather
+# than at each call site: thirteen agentic evaluators call it twenty times between them, and
+# a fourteenth kind would have been one more place to remember.
+_KEEP_CONVERSATIONS = _bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False)
+
+# A run's --keep-conversations, kept apart from the process default above. A ContextVar so
+# that runs overlapping in one process cannot see or undo each other's override. It reaches a
+# pool worker only through the context the runner copies into each task it submits.
+_RUN_KEEP_CONVERSATIONS: contextvars.ContextVar[bool] = contextvars.ContextVar(
+    "gd_eval_run_keep_conversations", default=False
+)
+
+
+def _retention_on() -> bool:
+    """Whether a conversation ending now should be kept: the run asked to, or the process does."""
+    return _RUN_KEEP_CONVERSATIONS.get() or _KEEP_CONVERSATIONS
+
+
+def bind_run_retention(fn: Callable[_P, _R]) -> Callable[_P, _R]:
+    """Wrap ``fn`` so it runs under the calling run's ``keep_conversations`` in any thread.
+
+    A pool worker does not inherit the submitting thread's ContextVars. Only this one is
+    carried, not the whole context: the runners' other per-item ContextVars rely on each
+    worker starting from its own defaults. Set and reset per call, so a pooled thread that
+    later serves another run does not keep this one's override.
+    """
+    keep = _RUN_KEEP_CONVERSATIONS.get()
+
+    @functools.wraps(fn)
+    def _bound(*args: _P.args, **kwargs: _P.kwargs) -> _R:
+        token = _RUN_KEEP_CONVERSATIONS.set(keep)
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            _RUN_KEEP_CONVERSATIONS.reset(token)
+
+    return _bound
 
 
 @functools.cache
@@ -184,6 +240,65 @@ def set_default_item_timeout(seconds: float | None) -> None:
     """Set the per-item budget every ChatClient built afterwards inherits."""
     global _ITEM_TIMEOUT_S
     _ITEM_TIMEOUT_S = seconds or 0.0
+
+
+def set_keep_conversations(keep: bool) -> None:
+    """Keep every conversation this process creates, whatever its outcome.
+
+    Lands here for the same reason the timeout defaults do -- the agentic evaluators build
+    their own clients deep in the call tree. A client keeps its conversations if retention
+    was on when it was built or is on when it deletes, so turning retention on reaches a
+    client already built, and turning it off does not reach one built while it was on.
+
+    This is the process-wide default, shared by every run in the process. For a single run
+    use ``keep_conversations``, which leaves the default alone: a bare set leaks into
+    whatever the process does next, and the direction of the leak is the costly one -- a
+    later run that asked for nothing would silently leave server-side state behind.
+
+    Args:
+        keep: The new process default. ``False`` turns retention off for clients built from
+            now on, whatever ``GOODDATA_EVAL_KEEP_CONVERSATIONS`` says, unless their run
+            asked for retention through ``keep_conversations``.
+    """
+    global _KEEP_CONVERSATIONS
+    _KEEP_CONVERSATIONS = keep
+
+
+@contextlib.contextmanager
+def keep_conversations(keep: bool) -> Iterator[None]:
+    """Turn conversation retention on for one run, without touching the process default.
+
+    The override lives in a ContextVar, so it applies to this context and to the contexts
+    the runners copy into their pool workers, and to nothing else. Runs overlapping in one
+    process each see only their own override, and leaving the scope resets this context
+    alone -- there is no shared setting to restore, so the last run to exit cannot leave
+    retention on for the runs after it.
+
+    A worker still running when the run exits -- one left behind by a Ctrl-C that cancelled
+    only the queued items -- runs in its own copied context, and its client also holds the
+    policy it was built under, so it cannot delete a conversation the run asked to keep.
+
+    Args:
+        keep: ``True`` turns retention on for the run. ``False`` is not "delete": it supplies
+            no override, so an operator who exported ``GOODDATA_EVAL_KEEP_CONVERSATIONS``
+            still gets retention on a run that passes no flag.
+    """
+    if not keep:
+        yield
+        return
+    token = _RUN_KEEP_CONVERSATIONS.set(True)
+    try:
+        yield
+    finally:
+        _RUN_KEEP_CONVERSATIONS.reset(token)
+
+
+def _attach_conversation_id(exc: BaseException, conversation_id: str) -> None:
+    """Hang ``conversation_id`` on a raised exception, where the runner reads it for the report."""
+    try:
+        object.__setattr__(exc, "conversation_id", conversation_id)
+    except TypeError:
+        pass  # C-extension exception that rejects __setattr__
 
 
 def _is_retryable_exc(exc: Exception) -> bool:
@@ -528,6 +643,9 @@ class ChatClient:
             http_timeout = httpx.Timeout(timeout, read=min(timeout, *caps))
         self._client = httpx.Client(timeout=http_timeout)
         self._preserve_failed = preserve_failed
+        # Captured so the policy of the run that built this client outlives that run's scope;
+        # see keep_conversations.
+        self._keep_conversations = _retention_on()
         self._reasoning_effort = normalize_reasoning_effort(reasoning_effort)
         self._document_format = normalize_document_format(document_format)
         self._agent_id = agent_id
@@ -555,6 +673,8 @@ class ChatClient:
         return conversation_id
 
     def delete_conversation(self, conversation_id: str) -> None:
+        if self._keep_conversations or _retention_on():
+            return
         try:
             self._client.delete(f"{self._base}/{conversation_id}", headers=self._auth)
         except httpx.HTTPError:
@@ -631,7 +751,14 @@ class ChatClient:
 
         try:
             result = retry_transient(_do, is_retryable=_is_retryable_exc)
-        except ChatError as exc:
+        except Exception as exc:
+            # The runner reads it off the exception to fill the report's conversation_id: a
+            # conversation kept by --keep-conversations or --preserve-failed is otherwise
+            # unfindable once its turn has raised. An evaluator that set its own keeps it.
+            if getattr(exc, "conversation_id", None) is None:
+                _attach_conversation_id(exc, conversation_id)
+            if not isinstance(exc, ChatError):
+                raise
             if joined is not None and exc.partial_result is not None:
                 self._record_join(conversation_id, exc.partial_result.trace_id, joined)
             # Only a turn the agent itself ran long or left unanswered has a response time worth
@@ -704,10 +831,7 @@ class ChatClient:
             success = True
             return result
         except Exception as exc:
-            try:
-                object.__setattr__(exc, "conversation_id", conversation_id)
-            except TypeError:
-                pass  # C-extension exception that rejects __setattr__
+            _attach_conversation_id(exc, conversation_id)
             raise
         finally:
             if success or not self._preserve_failed:
