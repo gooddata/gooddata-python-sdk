@@ -854,3 +854,55 @@ def test_execute_single_run_records_the_agents_own_failure_on_a_follow_up(monkey
     result = _execute_single_run(client, "conv-1", "Show revenue", [_expected()])
 
     assert result.exit_reason is loop_exit
+
+
+def _sim_user_call(agent_message: str, viz: CreatedVisualization) -> Any:
+    """Run the visualization sim-user against a stub OpenAI client and return the call it made."""
+    fake_openai = MagicMock()
+    fake_openai.return_value.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="ok"))]
+    )
+    with patch("openai.OpenAI", fake_openai), patch.dict("os.environ", {"OPENAI_API_KEY": "test-key"}):
+        agentic_visualization.generate_simulated_response(agent_message, viz)
+    return fake_openai.return_value.chat.completions.create.call_args
+
+
+def _returns_by_category_in_2024() -> CreatedVisualization:
+    return CreatedVisualization.model_validate(
+        {
+            "id": "v1",
+            "type": "table",
+            "query": {
+                "fields": {"m": {"using": "metric/total_returns"}, "d": {"using": "label/product_category"}},
+                "filter_by": {
+                    "f": {
+                        "type": "date_filter",
+                        "using": "dataset/return_date",
+                        "granularity": "YEAR",
+                        "from": "2024-01-01",
+                        "to": "2024-12-31",
+                    }
+                },
+            },
+            "metrics": ["m"],
+            "view_by": ["d"],
+        }
+    )
+
+
+# A date filter without its dataset cannot say whether "2024" is the order or the return date;
+# objects given by reference made the simulated user volunteer them to the agent.
+def test_sim_user_goal_names_the_date_dataset_and_no_reference() -> None:
+    prompt = _sim_user_call("Which date should define 2024?", _returns_by_category_in_2024()).kwargs["messages"][1][
+        "content"
+    ]
+    goal = prompt.split("Your goal")[1]
+    assert "Metrics: total returns\n" in goal
+    assert "date filter on the return date: YEAR from 2024-01-01 to 2024-12-31" in goal
+    assert "{" not in goal
+    assert "choose the one that matches your goal" in goal
+
+
+def test_sim_user_goal_keeps_dimensions_by_name() -> None:
+    prompt = _sim_user_call("Which chart?", _returns_by_category_in_2024()).kwargs["messages"][1]["content"]
+    assert "Dimensions: product category\n" in prompt
