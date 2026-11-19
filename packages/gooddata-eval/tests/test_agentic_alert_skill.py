@@ -1950,3 +1950,27 @@ def test_exit_reason_names_the_agents_own_chat_failure(exc, exit_value):
 
     assert detail["exit_reason"] == exit_value
     assert detail["alert_created"] is False
+
+
+# The agent offers metrics as {type/id} and may describe one as ignoring filters, which read
+# like rule 5's "no filters"; the simulated user named that metric instead of the fixture's.
+def test_sim_user_is_told_which_offered_metric_to_choose() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Threshold": 1000, "metric_id": "of_orders"})
+    assert "choose the option for your goal metric (of_orders;" in prompt
+    assert "repeat that option as the agent wrote it" in prompt
+    assert "never changes which metric you want: rule 5 is about filters on the alert" in prompt
+    # The reply repeats the agent's option; the prompt hands it no reference to volunteer.
+    assert "metric/of_orders" not in prompt
+
+
+# When the fixture's metric is the all-time one, nothing in the rule may steer away from it.
+def test_sim_user_choice_rule_does_not_argue_against_an_all_time_goal() -> None:
+    prompt = _sim_user_prompt({"Operator": "LESS_THAN", "Threshold": 1000, "metric_id": "orders_all_time"})
+    assert "choose the option for your goal metric (orders_all_time;" in prompt
+    assert "different metric" not in prompt
+
+
+def test_sim_user_without_a_metric_gets_no_metric_choice_rule() -> None:
+    assert "choose the option for your goal metric" not in _sim_user_prompt(
+        {"Operator": "LESS_THAN", "Threshold": 1000}
+    )
