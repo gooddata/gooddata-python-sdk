@@ -91,6 +91,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -273,6 +277,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -532,6 +540,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -776,6 +788,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -887,6 +903,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -1085,6 +1105,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -1177,6 +1201,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -1347,6 +1375,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -1504,6 +1536,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -1674,6 +1710,10 @@ class PublisherDocumentsApi(object):
                     ('include',): {
 
                         "USERIDENTIFIERS": "userIdentifiers",
+                        "VISUALIZATIONOBJECTS": "visualizationObjects",
+                        "LABELS": "labels",
+                        "DATASETS": "datasets",
+                        "METRICS": "metrics",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"

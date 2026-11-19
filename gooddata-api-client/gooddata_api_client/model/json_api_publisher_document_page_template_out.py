@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_aggregated_fact_out_meta import JsonApiAggregatedFactOutMeta
-    from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
+    from gooddata_api_client.model.json_api_publisher_document_out_relationships import JsonApiPublisherDocumentOutRelationships
     from gooddata_api_client.model.json_api_publisher_document_page_template_out_attributes import JsonApiPublisherDocumentPageTemplateOutAttributes
     globals()['JsonApiAggregatedFactOutMeta'] = JsonApiAggregatedFactOutMeta
-    globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
+    globals()['JsonApiPublisherDocumentOutRelationships'] = JsonApiPublisherDocumentOutRelationships
     globals()['JsonApiPublisherDocumentPageTemplateOutAttributes'] = JsonApiPublisherDocumentPageTemplateOutAttributes
 
 
@@ -104,7 +104,7 @@ class JsonApiPublisherDocumentPageTemplateOut(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAggregatedFactOutMeta,),  # noqa: E501
-            'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiPublisherDocumentOutRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -167,7 +167,7 @@ class JsonApiPublisherDocumentPageTemplateOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiPublisherDocumentOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "pageTemplate")
@@ -263,7 +263,7 @@ class JsonApiPublisherDocumentPageTemplateOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             meta (JsonApiAggregatedFactOutMeta): [optional]  # noqa: E501
-            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiPublisherDocumentOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "pageTemplate")

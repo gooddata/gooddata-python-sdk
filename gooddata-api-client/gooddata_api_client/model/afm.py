@@ -166,7 +166,7 @@ class AFM(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
             measure_definition_overrides ([MetricDefinitionOverride]): (EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.. [optional]  # noqa: E501
-            parameters ([ParameterItem]): (EXPERIMENTAL) Parameter values to use for this execution.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): Parameter values to use for this execution.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,7 +262,7 @@ class AFM(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             aux_measures ([MeasureItem]): Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.. [optional]  # noqa: E501
             measure_definition_overrides ([MetricDefinitionOverride]): (EXPERIMENTAL) Override definitions of catalog metrics for this request. Allows substituting a catalog metric's MAQL definition without modifying the stored definition.. [optional]  # noqa: E501
-            parameters ([ParameterItem]): (EXPERIMENTAL) Parameter values to use for this execution.. [optional]  # noqa: E501
+            parameters ([ParameterItem]): Parameter values to use for this execution.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

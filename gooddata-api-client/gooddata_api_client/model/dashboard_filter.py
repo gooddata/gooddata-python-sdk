@@ -41,6 +41,8 @@ def lazy_import():
     from gooddata_api_client.model.dashboard_match_attribute_filter_match_attribute_filter import DashboardMatchAttributeFilterMatchAttributeFilter
     from gooddata_api_client.model.dashboard_measure_value_filter import DashboardMeasureValueFilter
     from gooddata_api_client.model.dashboard_measure_value_filter_dashboard_measure_value_filter import DashboardMeasureValueFilterDashboardMeasureValueFilter
+    from gooddata_api_client.model.dashboard_parameterized_date_filter import DashboardParameterizedDateFilter
+    from gooddata_api_client.model.dashboard_parameterized_date_filter_dashboard_parameterized_date_filter import DashboardParameterizedDateFilterDashboardParameterizedDateFilter
     globals()['DashboardArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilter
     globals()['DashboardArbitraryAttributeFilterArbitraryAttributeFilter'] = DashboardArbitraryAttributeFilterArbitraryAttributeFilter
     globals()['DashboardAttributeFilter'] = DashboardAttributeFilter
@@ -51,6 +53,8 @@ def lazy_import():
     globals()['DashboardMatchAttributeFilterMatchAttributeFilter'] = DashboardMatchAttributeFilterMatchAttributeFilter
     globals()['DashboardMeasureValueFilter'] = DashboardMeasureValueFilter
     globals()['DashboardMeasureValueFilterDashboardMeasureValueFilter'] = DashboardMeasureValueFilterDashboardMeasureValueFilter
+    globals()['DashboardParameterizedDateFilter'] = DashboardParameterizedDateFilter
+    globals()['DashboardParameterizedDateFilterDashboardParameterizedDateFilter'] = DashboardParameterizedDateFilterDashboardParameterizedDateFilter
 
 
 class DashboardFilter(ModelComposed):
@@ -108,6 +112,7 @@ class DashboardFilter(ModelComposed):
         return {
             'attribute_filter': (DashboardAttributeFilterAttributeFilter,),  # noqa: E501
             'date_filter': (DashboardDateFilterDateFilter,),  # noqa: E501
+            'dashboard_parameterized_date_filter': (DashboardParameterizedDateFilterDashboardParameterizedDateFilter,),  # noqa: E501
             'arbitrary_attribute_filter': (DashboardArbitraryAttributeFilterArbitraryAttributeFilter,),  # noqa: E501
             'match_attribute_filter': (DashboardMatchAttributeFilterMatchAttributeFilter,),  # noqa: E501
             'dashboard_measure_value_filter': (DashboardMeasureValueFilterDashboardMeasureValueFilter,),  # noqa: E501
@@ -121,6 +126,7 @@ class DashboardFilter(ModelComposed):
     attribute_map = {
         'attribute_filter': 'attributeFilter',  # noqa: E501
         'date_filter': 'dateFilter',  # noqa: E501
+        'dashboard_parameterized_date_filter': 'dashboardParameterizedDateFilter',  # noqa: E501
         'arbitrary_attribute_filter': 'arbitraryAttributeFilter',  # noqa: E501
         'match_attribute_filter': 'matchAttributeFilter',  # noqa: E501
         'dashboard_measure_value_filter': 'dashboardMeasureValueFilter',  # noqa: E501
@@ -167,6 +173,7 @@ class DashboardFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_filter (DashboardAttributeFilterAttributeFilter): [optional]  # noqa: E501
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
+            dashboard_parameterized_date_filter (DashboardParameterizedDateFilterDashboardParameterizedDateFilter): [optional]  # noqa: E501
             arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
             match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
             dashboard_measure_value_filter (DashboardMeasureValueFilterDashboardMeasureValueFilter): [optional]  # noqa: E501
@@ -275,6 +282,7 @@ class DashboardFilter(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_filter (DashboardAttributeFilterAttributeFilter): [optional]  # noqa: E501
             date_filter (DashboardDateFilterDateFilter): [optional]  # noqa: E501
+            dashboard_parameterized_date_filter (DashboardParameterizedDateFilterDashboardParameterizedDateFilter): [optional]  # noqa: E501
             arbitrary_attribute_filter (DashboardArbitraryAttributeFilterArbitraryAttributeFilter): [optional]  # noqa: E501
             match_attribute_filter (DashboardMatchAttributeFilterMatchAttributeFilter): [optional]  # noqa: E501
             dashboard_measure_value_filter (DashboardMeasureValueFilterDashboardMeasureValueFilter): [optional]  # noqa: E501
@@ -354,5 +362,6 @@ class DashboardFilter(ModelComposed):
               DashboardDateFilter,
               DashboardMatchAttributeFilter,
               DashboardMeasureValueFilter,
+              DashboardParameterizedDateFilter,
           ],
         }

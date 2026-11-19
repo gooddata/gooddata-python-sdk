@@ -40,7 +40,7 @@
             "type": "array"
           },
           "parameters": {
-            "description": "(EXPERIMENTAL) Parameter values to use for this execution.",
+            "description": "Parameter values to use for this execution.",
             "items": {
               "$ref": "#/components/schemas/ParameterItem"
             },
@@ -2249,6 +2249,9 @@
             "$ref": "#/components/schemas/DashboardDateFilter"
           },
           {
+            "$ref": "#/components/schemas/DashboardParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/DashboardArbitraryAttributeFilter"
           },
           {
@@ -2340,6 +2343,39 @@
         },
         "required": [
           "dashboardMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardParameterizedDateFilter": {
+        "properties": {
+          "dashboardParameterizedDateFilter": {
+            "properties": {
+              "dataSet": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "emptyValueHandling": {
+                "enum": [
+                  "include",
+                  "exclude",
+                  "only"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "parameter": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              }
+            },
+            "required": [
+              "parameter"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "dashboardParameterizedDateFilter"
         ],
         "type": "object"
       },
@@ -3244,7 +3280,7 @@
       },
       "ParameterItem": {
         "additionalProperties": true,
-        "description": "(EXPERIMENTAL) Parameter value for this execution.",
+        "description": "Parameter value for this execution.",
         "properties": {
           "parameter": {
             "$ref": "#/components/schemas/AfmObjectIdentifierParameter"

@@ -1792,6 +1792,8 @@ Class | Method | HTTP request | Description
  - [DashboardMatchAttributeFilterMatchAttributeFilter](docs/DashboardMatchAttributeFilterMatchAttributeFilter.md)
  - [DashboardMeasureValueFilter](docs/DashboardMeasureValueFilter.md)
  - [DashboardMeasureValueFilterDashboardMeasureValueFilter](docs/DashboardMeasureValueFilterDashboardMeasureValueFilter.md)
+ - [DashboardParameterizedDateFilter](docs/DashboardParameterizedDateFilter.md)
+ - [DashboardParameterizedDateFilterDashboardParameterizedDateFilter](docs/DashboardParameterizedDateFilterDashboardParameterizedDateFilter.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DashboardSlidesTemplate](docs/DashboardSlidesTemplate.md)
