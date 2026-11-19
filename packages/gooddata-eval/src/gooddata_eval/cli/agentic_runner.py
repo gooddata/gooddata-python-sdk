@@ -26,6 +26,7 @@ from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skil
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
 from gooddata_eval.core.agentic.what_if import evaluate_agentic_what_if
+from gooddata_eval.core.chat.sse_client import bind_run_retention
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.evaluators.visualization import expectation_options
@@ -662,7 +663,10 @@ def run_agentic_items(
             # regardless), so this bounds the wait at one wave rather than the dataset.
             pool = ThreadPoolExecutor(max_workers=concurrency, thread_name_prefix="agentic")
             try:
-                futures = {pool.submit(_process_item, i, it): i for i, it in parallel}
+                # Each evaluator builds its ChatClient inside the worker, so the run's
+                # --keep-conversations has to be carried into the thread explicitly.
+                process_item = bind_run_retention(_process_item)
+                futures = {pool.submit(process_item, i, it): i for i, it in parallel}
                 for future in as_completed(futures):
                     results[futures[future]] = future.result()
             except BaseException:
