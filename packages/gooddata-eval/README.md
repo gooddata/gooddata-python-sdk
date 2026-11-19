@@ -323,8 +323,8 @@ their eval kind, and states latency for each:
   `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
 - **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
   `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
-  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if` and
-  `agentic_conversation`.
+  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if`,
+  `agentic_agent_switcher` and `agentic_conversation`.
 
 ```json
 "summary": {
@@ -912,6 +912,66 @@ A 200 answer with no usable text (a null value without a note, or the placeholde
 `OPENAI_API_KEY`); re-run it after changing them. Request errors are handled as for
 `document_takeaway`; the CI entry point is `evaluate_catalog_metadata`.
 
+### `agentic_agent_switcher` items
+
+Agent-switcher items drive one conversation through several agents. The conversation is created
+with `agent_id`; a turn with `switch_to` calls
+`POST /api/v1/ai/workspaces/{ws}/chat/conversations/{id}/switchAgent` before its message is sent.
+Each of the `--runs` replays every turn on a new conversation. Switching needs the agent-switching
+feature flag; a 404 on the switch fails the run and says so. In a Langfuse dataset the block goes in
+the item's `metadata` or its `input` object; an item carrying it is an `agentic_agent_switcher`
+item unless it declares another `test_kind`. `question` only labels the item.
+
+```json
+{
+  "id": "switch-001",
+  "dataset_name": "agent_switcher",
+  "test_kind": "agentic_agent_switcher",
+  "question": "Plan with the planner agent, build the alert with the builder agent",
+  "agent_switcher_input": {
+    "agent_id": "planner",
+    "turns": [
+      {"message": "I want to watch revenue every week and hear when it drops below 1000."},
+      {
+        "message": "Set that up now.",
+        "switch_to": "builder",
+        "checks": {
+          "must_include": ["Restates the plan the user gave earlier: weekly revenue, below 1000."],
+          "must_not_include": ["Asks the user to repeat the plan."],
+          "skills_used": ["alert"],
+          "skills_not_used": ["visualization"],
+          "alert_metric": "revenue"
+        }
+      },
+      {"message": "Also chart revenue by region.", "checks": {"visualization": {"metrics": ["revenue"], "attributes": ["region"]}}}
+    ]
+  }
+}
+```
+
+`agent_id` and at least one turn are required; unknown keys are rejected at every level. Every
+`checks` key is optional:
+
+- `must_include`, `must_not_include` — LLM judge criteria for this turn's answer. The judge sees the
+  transcript so far, each earlier answer labelled with the agent that gave it.
+- `skills_used`, `skills_not_used` — skills whose tools this turn must (not) run: the `skillsInUse`
+  names on the turn's `toolCall` items, read from the conversation items after the last turn. A skill
+  still active from an earlier turn counts as soon as one of its tools runs, with no new `set_skills`
+  call; a skill that was requested but whose tools never ran does not count. When the items cannot be
+  read, every skills check fails.
+- `alert_metric` — the primary (first) measure of the turn's alert proposal is this metric id, with or
+  without the `metric/` prefix; the comparison measure of a metric-to-metric alert does not count.
+- `visualization` — a chart created in this turn uses these `metrics` and `attributes` (label ids),
+  with or without the `metric/` / `label/` prefix; extra fields are allowed.
+
+Two checks run on every run, from the conversation items read back after the last turn:
+`agent_stamped` (every assistant item of a turn carries the agent active at that turn) and
+`switch_marker` (one system marker with `trigger` `agent_switched` per switch, carrying the new
+agent). A turn is a user item and the items after it up to the next user item. A switch to the
+agent already bound changes nothing and expects no marker. Per-turn checks are reported as
+`turn<N>_<check>`, e.g. `turn2_skills_used`, `turn2_include_0`. The CI entry point is
+`evaluate_agentic_agent_switcher`, which takes the whole item; `--agent-id` does not apply.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
@@ -1013,6 +1073,7 @@ from that turn on until another turn changes it, as the attached context does in
 | `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
 | `document_takeaway` | One short takeaway for a page (via `/takeaway` endpoint): deterministic format checks plus a rubric scored by LLM | `[llm-judge]` |
 | `catalog_metadata` | Analytics Catalog title or description for one object (via the `analyticsCatalog/generate*` endpoints): format checks plus a rubric scored by LLM | `[llm-judge]` |
+| `agentic_agent_switcher` | One conversation switched between agents: each answer stamped with the active agent, one switch marker per switch, and per-turn judge, skill, alert and chart checks | `agent_switcher_input`; `[llm-judge]` for judge criteria |
 
 ## Optional extras
 

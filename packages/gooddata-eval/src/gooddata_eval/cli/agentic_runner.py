@@ -12,6 +12,7 @@ from typing import Any, TypedDict
 from gooddata_eval.core.agentic._gate import DEFAULT_GATE, EvalGate, normalize_gate
 from gooddata_eval.core.agentic._langfuse import make_langfuse_client
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
+from gooddata_eval.core.agentic.agent_switcher import evaluate_agentic_agent_switcher
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
@@ -62,6 +63,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
+        "agentic_agent_switcher",
     }
 )
 
@@ -366,6 +368,17 @@ def _dispatch_agentic(
             gate=gate,
             agent_id=agent_id,
             user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_agent_switcher":
+        # The item names its own agents and carries its own user_context.
+        return evaluate_agentic_agent_switcher(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            dataset_item=item,
+            k=k,
+            gate=gate,
             **lf_kw,
         )
     elif kind == "agentic_conversation":

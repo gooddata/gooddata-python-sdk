@@ -107,7 +107,11 @@ _ALL_AGENTIC_KIND_CASES = [
     ),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
+    ("agentic_agent_switcher", {}, "evaluate_agentic_agent_switcher"),
 ]
+
+# Kinds whose item names its own agents, so the CLI's --agent-id does not reach them.
+_KINDS_WITH_OWN_AGENT = {"agentic_agent_switcher"}
 
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
 # summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
@@ -144,6 +148,9 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
             model_version_override=None,
             agent_id="agent-1",
         )
+    if kind in _KINDS_WITH_OWN_AGENT:
+        assert "agent_id" not in mock_eval.call_args.kwargs
+        return
     assert mock_eval.call_args.kwargs["agent_id"] == "agent-1"
 
 
@@ -895,6 +902,7 @@ _KIND_EVALUATORS = [
     ("agentic_forecasting", "evaluate_agentic_forecasting", {}),
     ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
+    ("agentic_agent_switcher", "evaluate_agentic_agent_switcher", {}),
 ]
 
 
@@ -938,7 +946,8 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
 # agentic_dashboard_summary builds its own context from the dashboard it summarises and
 # takes its scope from summary_input, so relaying the item's context would override the
 # thing under test rather than add to it. Excluded on purpose, not by omission.
-_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary"}
+# agentic_agent_switcher gets the whole item and reads user_context off it.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary", "agentic_agent_switcher"}
 
 
 class _Stop(Exception):
