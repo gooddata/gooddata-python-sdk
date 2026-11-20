@@ -185,6 +185,16 @@ def test_the_scope_reads_kpis_and_empty_results_from_the_referenced_widgets() ->
     context = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "k"}]}]}
     assert kind.summary_scope(inp, context, with_data={"k"}) == cs.SummaryScope("widget", True, False)
     assert kind.summary_scope(inp, context, with_data={"c"}).all_empty
+    # a chart of measures only (donut, waterfall) puts the measures on a second dimension: not a KPI
+    breakdown = {
+        "afm": {"attributes": [], "measures": [{"localIdentifier": "m"}, {"localIdentifier": "n"}], "filters": []},
+        "result_spec": {"dimensions": [{"itemIdentifiers": []}, {"itemIdentifiers": ["measureGroup"]}]},
+    }
+    headline = {"afm": kpi_afm, "result_spec": {"dimensions": [{"itemIdentifiers": ["measureGroup"]}]}}
+    shapes = AgenticSummaryInput.model_validate({"scope": "widget", "executions": {"k": headline, "b": breakdown}})
+    assert kind.summary_scope(shapes, context, with_data={"k"}).kpi_only
+    donut = {"referencedObjects": [{"objects": [{"type": "WIDGET", "id": "b"}]}]}
+    assert not kind.summary_scope(shapes, donut, with_data={"b"}).kpi_only
     dashboard = inp.model_copy(update={"scope": "dashboard"})
     assert kind.summary_scope(dashboard, {}, with_data={"c"}) == cs.SummaryScope("dashboard", False, False)
 

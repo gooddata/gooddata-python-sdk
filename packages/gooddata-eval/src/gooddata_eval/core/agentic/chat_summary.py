@@ -129,17 +129,28 @@ def referenced_widget_ids(user_context: dict[str, Any]) -> list[str]:
     ]
 
 
+def is_kpi(execution: WidgetExecution) -> bool:
+    """A KPI (headline): no attributes and one result dimension holding only the measures.
+
+    A chart of measures only (donut, waterfall, bullet) has no attributes either, but lays the
+    measures out on a second dimension. Without a result spec, no attributes is all there is.
+    """
+    if execution.afm.get("attributes"):
+        return False
+    dims = execution.result_spec.get("dimensions")
+    if not isinstance(dims, list) or not dims:
+        return True
+    return len(dims) == 1 and isinstance(dims[0], dict) and dims[0].get("itemIdentifiers") == ["measureGroup"]
+
+
 def summary_scope(
     summary_input: AgenticSummaryInput, user_context: dict[str, Any], with_data: set[str]
 ) -> SummaryScope:
-    """What the summarized widgets are: the referenced ones for a widget summary, all for a dashboard.
-
-    A KPI is an execution without attributes: one value, no breakdown.
-    """
+    """What the summarized widgets are: the referenced ones for a widget summary, all for a dashboard."""
     executions = summary_input.executions
     in_scope = referenced_widget_ids(user_context) if summary_input.scope == "widget" else list(executions)
     in_scope = [w for w in in_scope if w in executions]
-    kpi_only = bool(in_scope) and all(not executions[w].afm.get("attributes") for w in in_scope)
+    kpi_only = bool(in_scope) and all(is_kpi(executions[w]) for w in in_scope)
     return SummaryScope(
         scope=summary_input.scope,
         kpi_only=kpi_only,
