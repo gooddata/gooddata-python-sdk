@@ -18,7 +18,7 @@ import httpx
 from pydantic import ValidationError
 
 from gooddata_eval.core.langfuse._env import make_http_client
-from gooddata_eval.core.models import CatalogInput, DatasetItem, SummaryInput, TakeawayInput
+from gooddata_eval.core.models import AgenticSummaryInput, CatalogInput, DatasetItem, SummaryInput, TakeawayInput
 
 _PAGE_SIZE = 100
 
@@ -58,6 +58,21 @@ def _summary_input_from_raw(raw: dict, expected_output: Any) -> SummaryInput | N
     """Locate a dashboard_summary item's `summary_input`."""
     candidate = _first_of(dict, "summary_input", raw.get("input"), raw.get("metadata"), expected_output)
     return SummaryInput.model_validate(candidate) if candidate is not None else None
+
+
+def _agentic_summary_input_from_raw(raw: dict) -> AgenticSummaryInput | None:
+    """Locate an agentic_summary item's `agentic_summary_input`, from the item input or its metadata.
+
+    Raises:
+        ValueError: The value found is not a valid `agentic_summary_input` object.
+    """
+    candidate = _first_of(dict, "agentic_summary_input", raw.get("input"), raw.get("metadata"))
+    if candidate is None:
+        return None
+    try:
+        return AgenticSummaryInput.model_validate(candidate)
+    except ValidationError as exc:
+        raise ValueError(f"Item {raw.get('id')!r} has an invalid `agentic_summary_input`: {exc}") from exc
 
 
 def _catalog_input_from_raw(raw: dict, expected_output: Any) -> CatalogInput | None:
@@ -177,6 +192,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         summary_input=_summary_input_from_raw(raw, expected_output),
         takeaway_input=takeaway_input,
         catalog_input=catalog_input,
+        agentic_summary_input=_agentic_summary_input_from_raw(raw),
         user_context=_user_context_from_raw(raw),
     )
 

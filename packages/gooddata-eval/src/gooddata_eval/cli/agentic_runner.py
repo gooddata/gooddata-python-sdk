@@ -15,9 +15,11 @@ from gooddata_eval.core.agentic._search_expectation import SEARCH_ARGUMENT_KEYS
 from gooddata_eval.core.agentic._trace_linker import BackgroundTraceLinker, SubmitTraceLink, run_trace_link_inline
 from gooddata_eval.core.agentic.alert_skill import evaluate_agentic_alert_skill
 from gooddata_eval.core.agentic.anomaly_detection import evaluate_agentic_anomaly_detection
+from gooddata_eval.core.agentic.chat_summary import evaluate_agentic_summary
 from gooddata_eval.core.agentic.conversation import ConversationFixture, evaluate_agentic_conversation
 from gooddata_eval.core.agentic.dashboard_skill import evaluate_agentic_dashboard_skill
 from gooddata_eval.core.agentic.dashboard_summary import evaluate_agentic_dashboard_summary
+from gooddata_eval.core.agentic.describe_object import evaluate_agentic_describe_object
 from gooddata_eval.core.agentic.document_skill import evaluate_agentic_document_skill
 from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
@@ -63,6 +65,8 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
+        "agentic_summary",
+        "agentic_describe_object",
     }
 )
 
@@ -87,6 +91,9 @@ UNGATED_AGENTIC_TEST_KINDS = frozenset({"agentic_conversation"})
 #   vis_agentic, agentic_visualization           visualizations come back as AAC proposals
 #                                                in the chat response; nothing is persisted
 #                                                and neither module has cleanup code
+#   agentic_summary                              executes stored AFMs (a read) and asks for a
+#                                                summary and follow-ups about the data shown
+#   agentic_describe_object                      one question answered from workspace lookups
 PARALLEL_SAFE_TEST_KINDS = frozenset(
     {
         "agentic_general_question",
@@ -94,6 +101,8 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
         "agentic_search",
         "vis_agentic",
         "agentic_visualization",
+        "agentic_summary",
+        "agentic_describe_object",
     }
 )
 
@@ -354,6 +363,37 @@ def _dispatch_agentic(
             # can name them instead of paying for the whole dashboard. Same field and meaning
             # the headless /summary endpoint gives it; None summarizes everything.
             only_visualizations=summary_input.visualizations,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_summary":
+        agentic_summary_input = item.agentic_summary_input
+        if agentic_summary_input is None or item.user_context is None:
+            raise ValueError(f"agentic_summary item '{item.id}' needs both 'agentic_summary_input' and 'user_context'.")
+        return evaluate_agentic_summary(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            # The item's question is its readable scenario line, read by the judge; the text
+            # sent to the agent is agentic_summary_input.question or the UI's pre-filled one.
+            scenario=item.question,
+            summary_input=agentic_summary_input,
+            user_context=item.user_context,
+            expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            **lf_kw,
+        )
+    elif kind == "agentic_describe_object":
+        return evaluate_agentic_describe_object(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo if isinstance(eo, dict) else {},
             k=k,
             gate=gate,
             agent_id=agent_id,

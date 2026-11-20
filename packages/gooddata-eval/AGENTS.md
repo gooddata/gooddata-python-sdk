@@ -64,6 +64,10 @@ its own shape. `test_kind` on the item is what labels the result, not the evalua
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
 `takeaway_input`, `catalog_metadata` items `catalog_input`.
+`agentic_summary` items need `agentic_summary_input` (scope, one stored execution per widget,
+follow-ups) plus `user_context`: the UI's context without result ids, which expire, so the kind
+re-executes the stored executions on every run. Their `question` is a readable scenario line the
+judge reads; the text sent to the agent is `agentic_summary_input.question` or the UI's own.
 
 ## Running the pipeline
 
