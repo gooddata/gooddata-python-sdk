@@ -920,7 +920,9 @@ with `agent_id`; a turn with `switch_to` calls
 Each of the `--runs` replays every turn on a new conversation. Switching needs the agent-switching
 feature flag; a 404 on the switch fails the run and says so. In a Langfuse dataset the block goes in
 the item's `metadata` or its `input` object; an item carrying it is an `agentic_agent_switcher`
-item unless it declares another `test_kind`. `question` only labels the item.
+item unless it declares another `test_kind` or its `expectedOutput` has a `visualization` key (that
+infers `vis_agentic`); `metadata.test_kind: "agentic_agent_switcher"` forces the switcher kind.
+`question` only labels the item.
 
 ```json
 {
@@ -928,6 +930,7 @@ item unless it declares another `test_kind`. `question` only labels the item.
   "dataset_name": "agent_switcher",
   "test_kind": "agentic_agent_switcher",
   "question": "Plan with the planner agent, build the alert with the builder agent",
+  "expected_output": {},
   "agent_switcher_input": {
     "agent_id": "planner",
     "turns": [

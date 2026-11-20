@@ -58,8 +58,8 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
-from gooddata_eval.core.agentic.alert_skill import render_turn_for_simulated_user
-from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
+from gooddata_eval.core.chat.render import render_answer_text
+from gooddata_eval.core.chat.sse_client import ADHOC_VIZ_ID, ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge
 from gooddata_eval.core.evaluators._rubric import Criterion, grade_rubric
@@ -202,37 +202,52 @@ def _strip_type(ref: str) -> str:
     return ref.split("/", 1)[1] if "/" in ref else ref
 
 
-def _proposal_metric_ids(chat_result: ChatResult) -> list[str]:
-    """Primary measure id of each of the turn's alert proposals.
+def _primary_metric_id(proposal: Any) -> str | None:
+    """Metric id of an alert proposal's primary measure.
 
     - primary = first of `alert.execution.measures` (gen-ai puts the alerted metric first);
     - a second measure is only the comparison side, so it is not read.
     """
-    ids: list[str] = []
-    for proposal in chat_result.alert_proposals:
-        alert = proposal.get("alert") if isinstance(proposal, dict) else None
-        execution = alert.get("execution") if isinstance(alert, dict) else None
-        measures = execution.get("measures") if isinstance(execution, dict) else None
-        if not isinstance(measures, list) or not measures:
-            continue
-        node: Any = measures[0]
-        for key in ("definition", "measure", "item", "identifier", "id"):
-            node = node.get(key) if isinstance(node, dict) else None
-        if isinstance(node, str):
-            ids.append(node)
-    return ids
+    alert = proposal.get("alert") if isinstance(proposal, dict) else None
+    execution = alert.get("execution") if isinstance(alert, dict) else None
+    measures = execution.get("measures") if isinstance(execution, dict) else None
+    if not isinstance(measures, list) or not measures:
+        return None
+    node: Any = measures[0]
+    for key in ("definition", "measure", "item", "identifier", "id"):
+        node = node.get(key) if isinstance(node, dict) else None
+    return node if isinstance(node, str) else None
+
+
+def _proposal_metric_ids(chat_result: ChatResult) -> list[str]:
+    """Primary metric id of each of the turn's alert proposals."""
+    return [i for i in (_primary_metric_id(p) for p in chat_result.alert_proposals) if i is not None]
+
+
+def _render_turn(chat_result: ChatResult) -> str:
+    """The answer text, plus one line naming the last alert proposal (no payload dump)."""
+    chunks = [render_answer_text(chat_result)]
+    if chat_result.alert_proposals:
+        proposal = chat_result.alert_proposals[-1]
+        cta = proposal.get("cta") if isinstance(proposal, dict) else None
+        metric = _primary_metric_id(proposal)
+        chunks.append(f"[Alert proposal: {cta or 'no prompt'}; metric {metric or 'unknown'}]")
+    return "\n\n".join(chunk for chunk in chunks if chunk)
 
 
 def _visualization_problem(expected: AgentSwitcherVisualization, chat_result: ChatResult) -> str | None:
     """None when a created chart uses every expected metric and attribute, else what was created."""
     objects = chat_result.created_visualizations.objects if chat_result.created_visualizations else []
+    # ADHOC_VIZ_ID: tool args of a call that produced no chart part, so not a created chart
+    objects = [viz for viz in objects if viz.id != ADHOC_VIZ_ID]
     if not objects:
         return "no visualization was created"
-    want_metrics = {_strip_type(m) for m in expected.metrics}
+    # Metrics keep their type: a bare id means `metric/<id>`, so a fact of that id never matches.
+    want_metrics = {m if "/" in m else f"metric/{m}" for m in expected.metrics}
     want_attributes = {_strip_type(a) for a in expected.attributes}
     seen: list[dict[str, list[str]]] = []
     for viz in objects:
-        metrics = {_strip_type(u) for u in get_metric_uri_set(viz)}
+        metrics = get_metric_uri_set(viz)
         attributes = {_strip_type(u) for u in get_dimension_uri_set(viz)}
         if want_metrics <= metrics and want_attributes <= attributes:
             return None
@@ -290,7 +305,7 @@ def _skills_in_use(item: dict[str, Any]) -> list[str]:
     return [n for n in names if isinstance(n, str)]
 
 
-def _switch_error(turn: int, agent_id: str, exc: httpx.HTTPError) -> str:
+def _switch_error(turn: int, agent_id: str, exc: Exception) -> str:
     head = f"switchAgent to {agent_id!r} before turn {turn} failed"
     if not isinstance(exc, httpx.HTTPStatusError):
         return f"{head}: {type(exc).__name__}: {exc}"
@@ -389,16 +404,23 @@ def _judge_turns(run: AgentSwitcherRunResult, spec: AgentSwitcherInput, judges: 
         must_include: list[Criterion] = [(f"include_{i}", c) for i, c in enumerate(turn.checks.must_include)]
         must_not_include: list[Criterion] = [(f"exclude_{i}", c) for i, c in enumerate(turn.checks.must_not_include)]
         detail: dict[str, Any] = {}
-        grade_rubric(
-            judges.positive,
-            judges.violation,
-            question=_transcript(run.turns[:index], record),
-            actual=record.answer,
-            must_include=must_include,
-            must_not_include=must_not_include,
-            rubric=[],
-            detail=detail,
-        )
+        try:
+            grade_rubric(
+                judges.positive,
+                judges.violation,
+                question=_transcript(run.turns[:index], record),
+                actual=record.answer,
+                must_include=must_include,
+                must_not_include=must_not_include,
+                rubric=[],
+                detail=detail,
+            )
+        except Exception as exc:
+            # A judge request failure (timeout, provider error): the turn's criteria not yet
+            # graded stay ungraded, as for an unreadable verdict; the other runs still count.
+            for key, _ in [*must_include, *must_not_include]:
+                if key not in detail:
+                    detail[f"{key}_reason"] = f"UNGRADED: {type(exc).__name__}: {exc}"
         for key, criterion in [*must_include, *must_not_include]:
             reason = str(detail.get(f"{key}_reason", ""))
             record.reasons[key] = reason
@@ -431,7 +453,8 @@ def _run_once(
         if turn.switch_to is not None:
             try:
                 conversation = client.switch_agent(conversation_id, turn.switch_to)
-            except httpx.HTTPError as exc:
+            # ValueError: a 200 whose body is not JSON
+            except (httpx.HTTPError, ValueError) as exc:
                 run.error = _switch_error(number, turn.switch_to, exc)
                 run.exit_reason = LoopExit.CHAT_ERROR
                 run.fail(FailedCheck(f"turn{number}_switched", expected=turn.switch_to, actual=run.error))
@@ -450,9 +473,10 @@ def _run_once(
         sent = time.monotonic()
         try:
             result = client.send_message(conversation_id, turn.message)
-        except ChatError as exc:
+        # httpx.HTTPError: a status or transport error that outlasted the retries
+        except (ChatError, httpx.HTTPError) as exc:
             agent_s += time.monotonic() - sent
-            partial = exc.partial_result
+            partial = exc.partial_result if isinstance(exc, ChatError) else None
             if partial is not None:
                 run.reasoning_steps.extend(partial.reasoning_steps or [])
                 run.response_id = partial.response_id or run.response_id
@@ -462,7 +486,7 @@ def _run_once(
             run.turns.append(record)
             break
         agent_s += time.monotonic() - sent
-        record.answer = render_turn_for_simulated_user(result)
+        record.answer = _render_turn(result)
         run.reasoning_steps.extend(result.reasoning_steps or [])
         run.response_id = result.response_id or run.response_id
         offsets = shift_and_index_events(

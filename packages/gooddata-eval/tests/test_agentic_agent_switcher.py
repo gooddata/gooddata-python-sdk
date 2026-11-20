@@ -13,7 +13,7 @@ from gooddata_eval.core.agentic.agent_switcher import (
     evaluate_agentic_agent_switcher,
     run_agentic_agent_switcher,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ADHOC_VIZ_ID, ChatError
 from gooddata_eval.core.dataset.langfuse_source import _item_from_raw
 from gooddata_eval.core.interaction import MULTI_TURN_KINDS
 from gooddata_eval.core.models import AgentSwitcherInput, ChatResult, DatasetItem
@@ -134,8 +134,11 @@ def _failed_check_names(exc: AgentSwitcherAssertionError) -> list[str]:
     ],
 )
 def test_an_invalid_input_is_rejected_when_the_item_loads(spec):
-    with pytest.raises(ValidationError):
-        DatasetItem.model_validate({"id": "i", "dataset_name": "d", "test_kind": "t", "question": "q", **_item(spec)})
+    envelope = {"id": "i", "dataset_name": "d", "test_kind": "t", "question": "q", "expected_output": {}}
+    DatasetItem.model_validate({**envelope, **_item(_TWO_TURNS)})
+    with pytest.raises(ValidationError) as exc:
+        DatasetItem.model_validate({**envelope, **_item(spec)})
+    assert all(e["loc"][0] == "agent_switcher_input" for e in exc.value.errors())
 
 
 def test_an_item_without_input_fails_before_any_request():
@@ -254,6 +257,23 @@ def test_a_404_on_switch_fails_the_run_and_names_the_flag():
     client.list_items.assert_not_called()
 
 
+def test_a_switch_answering_a_non_json_body_fails_the_run():
+    client = _client([_chat()], [])
+    client.switch_agent.side_effect = ValueError("Expecting value: line 1 column 1")
+    with pytest.raises(AgentSwitcherAssertionError) as exc:
+        _evaluate(client)
+    assert _failed_check_names(exc.value) == ["turn2_switched"]
+
+
+def test_an_http_error_on_send_fails_that_run_and_keeps_the_others():
+    request = httpx.Request("POST", "https://h/messages")
+    http_503 = httpx.HTTPStatusError("503", request=request, response=httpx.Response(503, request=request))
+    client = _client([_chat(), _chat(), http_503], _items((None, "planner"), ("builder", "builder")), conversations=2)
+    outcome = _evaluate(client, k=2, gate="any")
+    assert (outcome.runs_passed, outcome.runs_effective) == (1, 2)
+    assert [c["name"] for c in outcome.failed_runs[0]["failed_checks"]] == ["turn1_answered"]
+
+
 def test_a_chat_error_stops_the_run():
     client = _client([ChatError("gen-ai fell over")], [])
     with pytest.raises(AgentSwitcherAssertionError) as exc:
@@ -295,10 +315,9 @@ def test_a_carried_over_skill_used_without_set_skills_passes_skills_used():
         "turns": [{"message": "a"}, {"message": "b", "switch_to": "builder", "checks": {"skills_used": ["alert"]}}],
     }
     # set_skills only in turn 1; turn 2 runs an alert tool with no set_skills call
-    client = _client(
-        [_chat(skills=["alert"]), _chat()],
-        _items((None, "planner", ["alert"]), ("builder", "builder", ["alert"])),
-    )
+    items = _items((None, "planner", ["alert"]), ("builder", "builder", ["alert"]))
+    items = [i for i in items if not (i["agentId"] == "builder" and i.get("content", {}).get("name") == "set_skills")]
+    client = _client([_chat(skills=["alert"]), _chat()], items)
     outcome = _evaluate(client, _item(spec))
     assert outcome.runs_passed == 1
     assert [t["skills"] for t in outcome.detail["turns"]] == [["alert"], ["alert"]]
@@ -381,6 +400,10 @@ _VIZ = {
         ({"metrics": ["metric/revenue"], "attributes": ["label/region"]}, _VIZ, True),
         ({"metrics": ["revenue"], "attributes": ["country"]}, _VIZ, False),
         ({"metrics": ["revenue"]}, None, False),
+        # a fact of the same id is not the metric
+        ({"metrics": ["revenue"]}, {**_VIZ, "query": {"fields": {"m": {"using": "fact/revenue"}}}}, False),
+        # tool args of a call that produced no chart
+        ({"metrics": ["revenue"], "attributes": ["region"]}, {**_VIZ, "id": ADHOC_VIZ_ID}, False),
     ],
 )
 def test_visualization_is_a_subset_match(expected, viz, ok):
@@ -439,6 +462,25 @@ def test_a_failed_criterion_is_named_with_the_judge_reason():
     checks = exc.value.failed_runs[0]["failed_checks"]
     assert [c["name"] for c in checks] == ["turn2_include_0"]
     assert checks[0]["part"] == "judge"
+
+
+def test_a_judge_request_failure_leaves_that_run_ungraded():
+    client = _client([_chat()] * 4, _items((None, "planner"), ("builder", "builder")), conversations=2)
+    positive = _judge()
+    positive.score.side_effect = [(True, "ok"), TimeoutError("judge timed out")]
+    outcome = _evaluate(client, _item(_judged_spec()), positive, k=2, gate="any")
+    assert outcome.runs_passed == 1
+    assert "TimeoutError" in outcome.detail["judge_errors"][0]
+
+
+def test_an_alert_proposal_is_judged_as_one_line():
+    client = _client(
+        [_chat("Here is the plan"), _chat("Set up", proposals=[_proposal("revenue")])],
+        _items((None, "planner"), ("builder", "builder")),
+    )
+    positive = _judge()
+    _evaluate(client, _item(_judged_spec()), positive)
+    assert positive.score.call_args.kwargs["actual_output"] == "Set up\n\n[Alert proposal: Create?; metric revenue]"
 
 
 def test_no_judge_is_built_for_an_item_without_criteria():

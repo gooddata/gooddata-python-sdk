@@ -810,10 +810,10 @@ def test_create_conversation_sends_agent_id_when_given():
     assert seen["body"] == {"agentId": "agent-123"}
 
 
-def test_switch_agent_posts_the_agent_and_returns_the_conversation():
-    seen = {}
+def test_switch_agent_posts_the_agent_and_returns_the_conversation() -> None:
+    seen: dict[str, Any] = {}
 
-    def handler(request):
+    def handler(request: httpx.Request) -> httpx.Response:
         seen["url"] = str(request.url)
         seen["body"] = json.loads(request.content)
         return httpx.Response(200, json={"conversationId": "c1", "agentId": "builder"})
@@ -824,15 +824,15 @@ def test_switch_agent_posts_the_agent_and_returns_the_conversation():
     assert seen["body"] == {"agentId": "builder"}
 
 
-def test_switch_agent_retries_5xx_but_not_404(monkeypatch):
+def test_switch_agent_retries_5xx_but_not_404(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
     statuses = iter([503, 200])
     client = _client_with_handler(lambda request: httpx.Response(next(statuses), json={"agentId": "b"}))
     assert client.switch_agent("c1", "b") == {"agentId": "b"}
 
-    calls = {"n": 0}
+    calls: dict[str, int] = {"n": 0}
 
-    def not_found(request):
+    def not_found(request: httpx.Request) -> httpx.Response:
         calls["n"] += 1
         return httpx.Response(404)
 
@@ -841,11 +841,11 @@ def test_switch_agent_retries_5xx_but_not_404(monkeypatch):
     assert calls["n"] == 1
 
 
-def test_list_items_returns_the_items_list():
+def test_list_items_returns_the_items_list() -> None:
     items = [{"role": "user", "agentId": "a"}, {"role": "assistant", "agentId": "a"}]
-    seen = {}
+    seen: dict[str, str] = {}
 
-    def handler(request):
+    def handler(request: httpx.Request) -> httpx.Response:
         seen["url"] = str(request.url)
         return httpx.Response(200, json={"items": items})
 
@@ -854,8 +854,9 @@ def test_list_items_returns_the_items_list():
     assert seen["url"].endswith("/chat/conversations/c1/items")
 
 
-def test_list_items_rejects_a_body_without_items():
-    client = _client_with_handler(lambda request: httpx.Response(200, json={"data": []}))
+@pytest.mark.parametrize("body", [{"data": []}, {"items": [None]}, {"items": [{"role": "user"}, "x"]}])
+def test_list_items_rejects_a_malformed_body(body: dict[str, Any]) -> None:
+    client = _client_with_handler(lambda request: httpx.Response(200, json=body))
     with pytest.raises(ValueError, match="items"):
         client.list_items("c1")
 

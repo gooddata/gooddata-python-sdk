@@ -582,6 +582,9 @@ class ChatClient:
             items = body.get("items") if isinstance(body, dict) else None
             if not isinstance(items, list):
                 raise ValueError(f"GoodData /items response missing 'items' list: {body}")
+            bad = [i for i, item in enumerate(items) if not isinstance(item, dict)]
+            if bad:
+                raise ValueError(f"GoodData /items entries {bad} are not objects")
             return items
 
         return retry_transient(_do, is_retryable=_is_retryable_exc)
