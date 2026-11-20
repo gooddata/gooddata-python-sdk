@@ -85,7 +85,7 @@
             "type": "array"
           },
           "parameters": {
-            "description": "(EXPERIMENTAL) Parameter values to use for this execution.",
+            "description": "Parameter values to use for this execution.",
             "items": {
               "$ref": "#/components/schemas/ParameterItem"
             },
@@ -2999,6 +2999,9 @@
             "$ref": "#/components/schemas/DashboardDateFilter"
           },
           {
+            "$ref": "#/components/schemas/DashboardParameterizedDateFilter"
+          },
+          {
             "$ref": "#/components/schemas/DashboardArbitraryAttributeFilter"
           },
           {
@@ -3090,6 +3093,39 @@
         },
         "required": [
           "dashboardMeasureValueFilter"
+        ],
+        "type": "object"
+      },
+      "DashboardParameterizedDateFilter": {
+        "properties": {
+          "dashboardParameterizedDateFilter": {
+            "properties": {
+              "dataSet": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              },
+              "emptyValueHandling": {
+                "enum": [
+                  "include",
+                  "exclude",
+                  "only"
+                ],
+                "type": "string"
+              },
+              "localIdentifier": {
+                "type": "string"
+              },
+              "parameter": {
+                "$ref": "#/components/schemas/IdentifierRef"
+              }
+            },
+            "required": [
+              "parameter"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "dashboardParameterizedDateFilter"
         ],
         "type": "object"
       },
@@ -8447,7 +8483,9 @@
               "visualizationObject",
               "filterContext",
               "filterView",
-              "document"
+              "pageTemplate",
+              "document",
+              "documentTemplate"
             ],
             "example": "metric",
             "type": "string"
@@ -8571,7 +8609,9 @@
               "visualizationObject",
               "filterContext",
               "filterView",
-              "document"
+              "pageTemplate",
+              "document",
+              "documentTemplate"
             ],
             "example": "metric",
             "type": "string"
@@ -20780,7 +20820,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -20832,7 +20872,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -20954,7 +20994,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21010,7 +21050,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -21241,7 +21281,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21293,7 +21333,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -21407,7 +21447,7 @@
               },
               "analyzedValue": {
                 "description": "Metric value in the analyzed period (the observed value that triggered the anomaly)",
-                "example": 2.6E+9
+                "example": 2600000000
               },
               "areRelationsValid": {
                 "type": "boolean"
@@ -21459,7 +21499,7 @@
               },
               "referenceValue": {
                 "description": "Metric value in the reference period",
-                "example": 2.4E+9
+                "example": 2400000000
               },
               "sourceCount": {
                 "description": "Number of source documents used for generation",
@@ -26978,10 +27018,54 @@
                 ],
                 "type": "object"
               },
+              "datasets": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "labels": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "modifiedBy": {
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObjects": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToManyLinkage"
                   }
                 },
                 "required": [
@@ -27016,7 +27100,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -27056,7 +27140,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -28581,10 +28665,54 @@
                 ],
                 "type": "object"
               },
+              "datasets": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "labels": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "modifiedBy": {
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObjects": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToManyLinkage"
                   }
                 },
                 "required": [
@@ -28619,7 +28747,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -28659,7 +28787,7 @@
           "included": {
             "description": "Included resources",
             "items": {
-              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+              "$ref": "#/components/schemas/JsonApiPublisherDocumentOutIncludes"
             },
             "type": "array",
             "uniqueItems": true
@@ -38998,7 +39126,7 @@
             "type": "array"
           },
           "workspaces": {
-            "description": "(BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.",
+            "description": "(BETA) Translation counts of the workspace and each parent workspace, root first. Present only with `includeCoverage=true` on the workspace endpoint.",
             "items": {
               "$ref": "#/components/schemas/LocalizationStatisticsWorkspace"
             },
@@ -39174,7 +39302,7 @@
         "type": "object"
       },
       "LocalizationStatisticsWorkspace": {
-        "description": "Metadata texts of one workspace. A row counts only the texts that the workspace owns. A child workspace sums its row and the rows of its parents.",
+        "description": "Metadata texts of one workspace. A row counts only the texts that the workspace owns. A parent's row counts only the texts that the workspaces below it inherit. A child workspace sums its row and the rows of its parents.",
         "properties": {
           "id": {
             "description": "Workspace ID.",
@@ -39189,8 +39317,9 @@
             "type": "array"
           },
           "name": {
-            "description": "Workspace name.",
+            "description": "Workspace name. Null for a parent that the user has no permission on. The name stays when the user can see the workspace right below it.",
             "example": "Bergmann",
+            "nullable": true,
             "type": "string"
           },
           "parentId": {
@@ -39209,7 +39338,6 @@
         "required": [
           "id",
           "locales",
-          "name",
           "total"
         ],
         "type": "object"
@@ -40076,7 +40204,7 @@
       },
       "ParameterItem": {
         "additionalProperties": true,
-        "description": "(EXPERIMENTAL) Parameter value for this execution.",
+        "description": "Parameter value for this execution.",
         "properties": {
           "parameter": {
             "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
@@ -63808,7 +63936,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63817,6 +63945,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -63912,7 +64044,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -63921,6 +64053,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -64069,7 +64205,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -64078,6 +64214,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -64180,7 +64320,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -64189,6 +64329,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -64275,7 +64419,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -64284,6 +64428,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -70013,7 +70161,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -70022,6 +70170,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -70117,7 +70269,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -70126,6 +70278,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -70274,7 +70430,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -70283,6 +70439,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -70385,7 +70545,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -70394,6 +70554,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -70480,7 +70644,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "createdBy,modifiedBy",
+            "example": "createdBy,modifiedBy,visualizationObjects,labels,datasets,metrics",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -70489,6 +70653,10 @@
               "items": {
                 "enum": [
                   "userIdentifiers",
+                  "visualizationObjects",
+                  "labels",
+                  "datasets",
+                  "metrics",
                   "createdBy",
                   "modifiedBy",
                   "ALL"

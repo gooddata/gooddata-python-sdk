@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **attribute_filter** | [**DashboardAttributeFilterAttributeFilter**](DashboardAttributeFilterAttributeFilter.md) |  | [optional] 
 **date_filter** | [**DashboardDateFilterDateFilter**](DashboardDateFilterDateFilter.md) |  | [optional] 
+**dashboard_parameterized_date_filter** | [**DashboardParameterizedDateFilterDashboardParameterizedDateFilter**](DashboardParameterizedDateFilterDashboardParameterizedDateFilter.md) |  | [optional] 
 **arbitrary_attribute_filter** | [**DashboardArbitraryAttributeFilterArbitraryAttributeFilter**](DashboardArbitraryAttributeFilterArbitraryAttributeFilter.md) |  | [optional] 
 **match_attribute_filter** | [**DashboardMatchAttributeFilterMatchAttributeFilter**](DashboardMatchAttributeFilterMatchAttributeFilter.md) |  | [optional] 
 **dashboard_measure_value_filter** | [**DashboardMeasureValueFilterDashboardMeasureValueFilter**](DashboardMeasureValueFilterDashboardMeasureValueFilter.md) |  | [optional] 
