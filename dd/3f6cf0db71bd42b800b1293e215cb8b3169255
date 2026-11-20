@@ -1,10 +1,10 @@
 packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_parameters.py
-  s_86936af446ea68::t_82e03a1de36526 14,16,18-21,26,31-38,41-43,49-51,55,58-60,65-93
+  s_86936af446ea68::t_82e03a1de36526 14,16,18-20,26,31-38,41-43,49-51,55,58-60,65-92
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "1df6ff3648ed0839049d010d645fdb162702bf46",
+  "base_commit_sha": "dd3f6cf0db71bd42b800b1293e215cb8b3169255",
   "prompts": {},
   "sessions": {
     "s_86936af446ea68": {
