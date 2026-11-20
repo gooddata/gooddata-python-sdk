@@ -341,24 +341,31 @@ def run_passed(run: SummaryConversation) -> bool:
     return run.chat_error is None and bool(run.evaluations) and all(e.passed for e in run.evaluations)
 
 
+def _turn_detail(run: SummaryConversation, index: int) -> dict[str, Any]:
+    turn = run.turns[index]
+    entry: dict[str, Any] = {"question": turn.question}
+    if index < len(run.evaluations):
+        evaluation = run.evaluations[index]
+        entry.update(evaluation.detail)
+        if evaluation.error:
+            entry["error"] = evaluation.error
+    elif turn.error:
+        entry["error"] = turn.error
+    return entry
+
+
 def _run_detail(run: SummaryConversation) -> dict[str, Any]:
-    """One run's diagnosis: each turn's checks, plus how much of the dashboard was executed."""
-    turns: list[dict[str, Any]] = []
-    for index, turn in enumerate(run.turns):
-        entry: dict[str, Any] = {"question": turn.question}
-        if index < len(run.evaluations):
-            evaluation = run.evaluations[index]
-            entry.update(evaluation.detail)
-            if evaluation.error:
-                entry["error"] = evaluation.error
-        elif turn.error:
-            entry["error"] = turn.error
-        turns.append(entry)
-    detail: dict[str, Any] = {
-        "widgets_total": run.widgets_total,
-        "widgets_executed": run.widgets_executed,
-        "turns": turns,
-    }
+    """One run's diagnosis, flat like the other kinds' detail.
+
+    - summary turn: its keys at the top level (`actual_output`, `shape_ok`, `must_include_0`, ...)
+    - follow-up i (from 1): the same keys prefixed `followup_<i>_`
+    """
+    detail: dict[str, Any] = {}
+    for index in range(len(run.turns)):
+        prefix = f"followup_{index}_" if index else ""
+        detail.update({f"{prefix}{key}": value for key, value in _turn_detail(run, index).items()})
+    detail["widgets_total"] = run.widgets_total
+    detail["widgets_executed"] = run.widgets_executed
     if run.scope is not None:
         detail["scope"] = {"scope": run.scope.scope, "kpi_only": run.scope.kpi_only, "all_empty": run.scope.all_empty}
     if run.chat_error is not None:

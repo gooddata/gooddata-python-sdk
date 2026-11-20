@@ -167,6 +167,13 @@ def test_each_turn_is_graded_with_its_own_expectation(monkeypatch: pytest.Monkey
     assert [c for _, c in judges[0].seen] == ["summary criterion", "follow-up"]
     # the follow-up keeps no default shape: only the summary turn is shape-checked
     assert "shape_ok" not in run.evaluations[1].detail
+    # the run detail is flat: the summary turn at the top, follow-ups prefixed
+    detail = kind._run_detail(run)
+    assert detail["actual_output"] == CHART
+    assert detail["must_include_0"] is True
+    assert detail["followup_1_actual_output"] == "Tracy Carter leads."
+    assert detail["followup_1_no_tool_calls"] is True
+    assert "followup_1_shape_ok" not in detail
 
 
 def test_the_scope_reads_kpis_and_empty_results_from_the_referenced_widgets() -> None:
