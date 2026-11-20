@@ -183,7 +183,9 @@ follows the capability, but naming a test file correctly registers nothing.
 so a newly added kind defaults to workspace-mutating and runs serially in its own phase.
 That default is correct: agent tool calls create real server-side objects (metrics, alerts).
 Adding a kind to `PARALLEL_SAFE_TEST_KINDS` is a deliberate assertion that it is read-only,
-which nothing in the package can prove for you.
+which nothing in the package can prove for you. An item can still be held back:
+`item_runs_in_parallel` runs an `agentic_search` item with `setup_turns` serially, because
+the clearance covers the search and not free-text turns sent before it.
 
 **The SSE client's retry predicate is load-bearing.** The backoff loop and the retryable
 status set (429/500/502/503/504) live in `core/_retry.py`, shared by the chat, takeaway and
