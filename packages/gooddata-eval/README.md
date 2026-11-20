@@ -918,9 +918,14 @@ Agent-switcher items drive one conversation through several agents. The conversa
 with `agent_id`; a turn with `switch_to` calls
 `POST /api/v1/ai/workspaces/{ws}/chat/conversations/{id}/switchAgent` before its message is sent.
 Each of the `--runs` replays every turn on a new conversation. Switching needs the agent-switching
-feature flag; a 404 on the switch fails the run and says so. In a Langfuse dataset the block goes in
+feature flag. With it off, gen-ai binds the new conversation to another agent, and the run fails
+before its first message, naming the flag; a 404 on a switch fails the run too. In a Langfuse dataset the block goes in
 the item's `metadata` or its `input` object; an item carrying it is an `agentic_agent_switcher`
-item unless it declares another `test_kind`. `question` only labels the item.
+item unless it declares another `test_kind` or its `expectedOutput` has a `visualization` key (that
+infers `vis_agentic`); `metadata.test_kind: "agentic_agent_switcher"` forces the switcher kind.
+`question` only labels the item. Stop an item's turns at the alert proposal: the kind never confirms
+a proposal and deletes no alerts, so a turn that confirms one ("Yes, create it") creates a real alert
+that stays in the workspace.
 
 ```json
 {
@@ -928,6 +933,7 @@ item unless it declares another `test_kind`. `question` only labels the item.
   "dataset_name": "agent_switcher",
   "test_kind": "agentic_agent_switcher",
   "question": "Plan with the planner agent, build the alert with the builder agent",
+  "expected_output": {},
   "agent_switcher_input": {
     "agent_id": "planner",
     "turns": [
@@ -964,11 +970,14 @@ item unless it declares another `test_kind`. `question` only labels the item.
 - `visualization` — a chart created in this turn uses these `metrics` and `attributes` (label ids),
   with or without the `metric/` / `label/` prefix; extra fields are allowed.
 
-Two checks run on every run, from the conversation items read back after the last turn:
+Two diagnostics run on every run, from the conversation items read back after the last turn:
 `agent_stamped` (every assistant item of a turn carries the agent active at that turn) and
 `switch_marker` (one system marker with `trigger` `agent_switched` per switch, carrying the new
-agent). A turn is a user item and the items after it up to the next user item. A switch to the
-agent already bound changes nothing and expects no marker. Per-turn checks are reported as
+agent). They are API contracts: the run detail (`diagnostics`, `diagnostic_failures`) and Langfuse
+scores record them, but they never fail a run. Items belong to the turn whose `responseId` they
+carry, so a send the client retried does not shift the later turns. A switch to the agent already
+bound changes nothing and expects no marker. A run fails before its first message when the new
+conversation is bound to another agent (`agent_bound`). Per-turn checks are reported as
 `turn<N>_<check>`, e.g. `turn2_skills_used`, `turn2_include_0`. The CI entry point is
 `evaluate_agentic_agent_switcher`, which takes the whole item; `--agent-id` does not apply.
 

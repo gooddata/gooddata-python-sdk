@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
 import contextlib
 import json
+from collections.abc import Iterator, Sequence
 from typing import Any
 from unittest.mock import MagicMock, call, patch
 
@@ -13,10 +14,10 @@ from gooddata_eval.core.agentic.agent_switcher import (
     evaluate_agentic_agent_switcher,
     run_agentic_agent_switcher,
 )
-from gooddata_eval.core.chat.sse_client import ChatError
+from gooddata_eval.core.chat.sse_client import ADHOC_VIZ_ID, ChatError
 from gooddata_eval.core.dataset.langfuse_source import _item_from_raw
 from gooddata_eval.core.interaction import MULTI_TURN_KINDS
-from gooddata_eval.core.models import AgentSwitcherInput, ChatResult, DatasetItem
+from gooddata_eval.core.models import AgenticEvalOutcome, AgentSwitcherInput, ChatResult, DatasetItem
 from pydantic import ValidationError
 
 _MODULE = "gooddata_eval.core.agentic.agent_switcher"
@@ -66,26 +67,55 @@ def _tool_call(agent: str, name: str, skills: list[str]) -> dict[str, Any]:
     return {"role": "assistant", "agentId": agent, "content": {"type": "toolCall", "name": name}, "skillsInUse": refs}
 
 
+def _turn_items(agent: str, response_id: str, skills: list[str] | None = None) -> list[dict[str, Any]]:
+    """The items one send stores: the user message, the tool calls and the answer."""
+    items: list[dict[str, Any]] = [{"role": "user", "agentId": agent, "skillsInUse": None}]
+    items.append(_tool_call(agent, "set_skills", []))
+    for skill in skills or []:
+        items.append(_tool_call(agent, f"{skill}_tool", [skill]))
+        items.append({"role": "tool", "agentId": agent, "content": {"type": "toolResult"}})
+    items.append({"role": "assistant", "agentId": agent, "content": {"type": "text"}, "skillsInUse": None})
+    return [{**item, "responseId": response_id} for item in items]
+
+
 def _items(*turns: tuple[Any, ...]) -> list[dict[str, Any]]:
-    """Stored items for turns given as (marker agent or None, answering agent[, skills whose tools ran])."""
+    """Stored items for turns given as (marker agent or None, answering agent[, skills whose tools ran]).
+
+    Turn N answers with response id `rN`, the id `_client` gives the N-th send.
+    """
     items: list[dict[str, Any]] = []
-    for marker, agent, *rest in turns:
+    for number, (marker, agent, *rest) in enumerate(turns, start=1):
         if marker is not None:
             items.append({"role": "system", "agentId": marker, "newAgentId": marker, "trigger": "agent_switched"})
-        items.append({"role": "user", "agentId": agent, "skillsInUse": None})
-        items.append(_tool_call(agent, "set_skills", []))
-        for skill in rest[0] if rest else []:
-            items.append(_tool_call(agent, f"{skill}_tool", [skill]))
-            items.append({"role": "tool", "agentId": agent, "content": {"type": "toolResult"}})
-        items.append({"role": "assistant", "agentId": agent, "content": {"type": "text"}, "skillsInUse": None})
+        items.extend(_turn_items(agent, f"r{number}", rest[0] if rest else None))
     return items
 
 
-def _client(answers: list[ChatResult], items: list[dict[str, Any]], *, conversations: int = 1) -> MagicMock:
+def _client(
+    answers: Sequence[ChatResult | Exception],
+    items: list[dict[str, Any]],
+    *,
+    conversations: int = 1,
+    bound: str | None = None,
+) -> MagicMock:
+    """A chat client; the new conversation is bound to `bound`, else to the agent the client was built with."""
     client = MagicMock()
     client.create_conversation.side_effect = [f"conv-{i}" for i in range(1, conversations + 1)]
-    client.send_message.side_effect = answers
+    queued = iter(answers)
+    sends: dict[str, int] = {}
+
+    def _send(conversation_id: str, _message: str) -> ChatResult:
+        # The N-th send of a conversation answers with response id `rN`, matching `_items`.
+        sends[conversation_id] = sends.get(conversation_id, 0) + 1
+        answer = next(queued)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer.model_copy(update={"response_id": answer.response_id or f"r{sends[conversation_id]}"})
+
+    client.send_message.side_effect = _send
     client.switch_agent.side_effect = lambda _conv, agent: {"conversationId": _conv, "agentId": agent}
+    client.built_for = "planner"
+    client.get_conversation.side_effect = lambda _conv: {"conversationId": _conv, "agentId": bound or client.built_for}
     client.list_items.return_value = items
     return client
 
@@ -98,17 +128,24 @@ def _judge(verdict: bool = True) -> MagicMock:
 
 
 @contextlib.contextmanager
-def _patched(client: MagicMock, positive: MagicMock | None = None):
+def _patched(client: MagicMock, positive: MagicMock | None = None) -> Iterator[MagicMock]:
     """The positive judge passes unless given; the violation judge finds nothing."""
     judges = [positive or _judge(), _judge(verdict=False)]
+
+    def _build(**kwargs: Any) -> MagicMock:
+        client.built_for = kwargs["agent_id"]
+        return client
+
     with (
-        patch(f"{_MODULE}.ChatClient", return_value=client),
+        patch(f"{_MODULE}.ChatClient", side_effect=_build),
         patch(f"{_MODULE}.LLMJudge", side_effect=judges) as mock_judge,
     ):
         yield mock_judge
 
 
-def _evaluate(client: MagicMock, item: dict[str, Any] | None = None, positive: MagicMock | None = None, **kwargs: Any):
+def _evaluate(
+    client: MagicMock, item: dict[str, Any] | None = None, positive: MagicMock | None = None, **kwargs: Any
+) -> AgenticEvalOutcome:
     with _patched(client, positive):
         return evaluate_agentic_agent_switcher("https://h", "tok", "ws1", item or _item(), **kwargs)
 
@@ -133,31 +170,34 @@ def _failed_check_names(exc: AgentSwitcherAssertionError) -> list[str]:
         {"agent_id": "a", "extra": 1, "turns": [{"message": "hi"}]},
     ],
 )
-def test_an_invalid_input_is_rejected_when_the_item_loads(spec):
-    with pytest.raises(ValidationError):
-        DatasetItem.model_validate({"id": "i", "dataset_name": "d", "test_kind": "t", "question": "q", **_item(spec)})
+def test_an_invalid_input_is_rejected_when_the_item_loads(spec: dict[str, Any]) -> None:
+    envelope = {"id": "i", "dataset_name": "d", "test_kind": "t", "question": "q", "expected_output": {}}
+    DatasetItem.model_validate({**envelope, **_item(_TWO_TURNS)})
+    with pytest.raises(ValidationError) as exc:
+        DatasetItem.model_validate({**envelope, **_item(spec)})
+    assert all(e["loc"][0] == "agent_switcher_input" for e in exc.value.errors())
 
 
-def test_an_item_without_input_fails_before_any_request():
+def test_an_item_without_input_fails_before_any_request() -> None:
     client = _client([], [])
     with pytest.raises(ValueError, match="agent_switcher_input"), _patched(client):
         evaluate_agentic_agent_switcher("https://h", "tok", "ws1", {"id": "i", "question": "q"})
     client.create_conversation.assert_not_called()
 
 
-def test_the_langfuse_loader_reads_the_input_and_infers_the_kind():
+def test_the_langfuse_loader_reads_the_input_and_infers_the_kind() -> None:
     raw = {"id": "lf-1", "input": {"question": "q"}, "metadata": {"agent_switcher_input": _TWO_TURNS}}
     item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
     assert item.test_kind == "agentic_agent_switcher"
     assert item.agent_switcher_input == AgentSwitcherInput.model_validate(_TWO_TURNS)
 
 
-def test_the_kind_is_registered_and_multi_turn():
+def test_the_kind_is_registered_and_multi_turn() -> None:
     assert "agentic_agent_switcher" in AGENTIC_TEST_KINDS
     assert "agentic_agent_switcher" in MULTI_TURN_KINDS
 
 
-def test_dispatch_hands_the_whole_item_over():
+def test_dispatch_hands_the_whole_item_over() -> None:
     item = DatasetItem.model_validate(
         {"dataset_name": "d", "test_kind": "agentic_agent_switcher", "expected_output": {}, **_item()}
     )
@@ -171,7 +211,7 @@ def test_dispatch_hands_the_whole_item_over():
 # --------------------------------------------------------------------------- #
 # switching and the item checks
 # --------------------------------------------------------------------------- #
-def test_switches_before_the_turn_that_asks_for_it():
+def test_switches_before_the_turn_that_asks_for_it() -> None:
     client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "builder")))
     outcome = _evaluate(client)
 
@@ -185,12 +225,11 @@ def test_switches_before_the_turn_that_asks_for_it():
     client.list_items.assert_called_once_with("conv-1")
     client.delete_conversation.assert_called_once_with("conv-1")
     assert outcome.runs_passed == 1
-    assert outcome.detail["agent_stamped"] is True
-    assert outcome.detail["switch_marker"] is True
+    assert outcome.detail["diagnostics"] == {"agent_stamped": True, "switch_marker": True}
     assert [t["answering_agents"] for t in outcome.detail["turns"]] == [["planner"], ["builder"]]
 
 
-def test_the_client_starts_on_the_item_agent_with_its_context():
+def test_the_client_starts_on_the_item_agent_with_its_context() -> None:
     client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "builder")))
     with patch(f"{_MODULE}.ChatClient", return_value=client) as mock_client:
         evaluate_agentic_agent_switcher("https://h", "tok", "ws1", _item(user_context={"view": {}}))
@@ -198,49 +237,88 @@ def test_the_client_starts_on_the_item_agent_with_its_context():
     assert mock_client.call_args.kwargs["user_context"] == {"view": {}}
 
 
-def test_an_answer_stamped_with_the_previous_agent_fails_agent_stamped():
-    client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "planner")))
-    with pytest.raises(AgentSwitcherAssertionError) as exc:
-        _evaluate(client)
-    assert _failed_check_names(exc.value) == ["agent_stamped"]
-    assert "turn 2" in str(exc.value)
+def _diagnosed(client: MagicMock, item: dict[str, Any] | None = None) -> dict[str, Any]:
+    """The run detail of an item whose answers pass: a failed diagnostic never fails the run."""
+    outcome = _evaluate(client, item)
+    assert outcome.runs_passed == 1
+    return outcome.detail
 
 
-def test_a_missing_marker_fails_switch_marker():
-    client = _client([_chat(), _chat()], _items((None, "planner"), (None, "builder")))
-    with pytest.raises(AgentSwitcherAssertionError) as exc:
-        _evaluate(client)
-    assert _failed_check_names(exc.value) == ["switch_marker"]
+def test_an_answer_stamped_with_the_previous_agent_is_recorded_not_failed() -> None:
+    detail = _diagnosed(_client([_chat(), _chat()], _items((None, "planner"), ("builder", "planner"))))
+    assert detail["diagnostics"] == {"agent_stamped": False, "switch_marker": True}
+    assert detail["diagnostic_failures"]["agent_stamped"]["actual"] == ["turn 2: ['planner'], active 'builder'"]
 
 
-def test_a_marker_carrying_the_old_agent_fails_switch_marker():
-    client = _client([_chat(), _chat()], _items((None, "planner"), ("planner", "builder")))
-    with pytest.raises(AgentSwitcherAssertionError) as exc:
-        _evaluate(client)
-    assert _failed_check_names(exc.value) == ["switch_marker"]
+def test_a_missing_marker_is_recorded_not_failed() -> None:
+    detail = _diagnosed(_client([_chat(), _chat()], _items((None, "planner"), (None, "builder"))))
+    assert detail["diagnostics"] == {"agent_stamped": True, "switch_marker": False}
+    assert detail["diagnostic_failures"]["switch_marker"]["actual"] == []
 
 
-def test_a_system_item_without_the_switch_trigger_is_not_a_marker():
+def test_a_marker_carrying_the_old_agent_is_recorded_not_failed() -> None:
+    detail = _diagnosed(_client([_chat(), _chat()], _items((None, "planner"), ("planner", "builder"))))
+    assert detail["diagnostics"]["switch_marker"] is False
+
+
+def test_a_retried_send_does_not_shift_the_later_turns() -> None:
+    """A send retried after a mid-stream disconnect leaves the failed attempt's user item stored."""
+    spec = {
+        "agent_id": "planner",
+        "turns": [{"message": "a"}, {"message": "b"}, {"message": "c", "switch_to": "builder"}],
+    }
+    items = _items((None, "planner"), (None, "planner"), ("builder", "builder"))
+    failed_attempt = [{"role": "user", "agentId": "planner", "skillsInUse": None, "responseId": "r2-failed"}]
+    at_turn_2 = next(i for i, item in enumerate(items) if item.get("responseId") == "r2")
+    items[at_turn_2:at_turn_2] = failed_attempt
+    client = _client([_chat(), _chat(), _chat()], items)
+
+    outcome = _evaluate(client, _item(spec))
+
+    assert outcome.runs_passed == 1
+    assert [t["answering_agents"] for t in outcome.detail["turns"]] == [["planner"], ["planner"], ["builder"]]
+    assert outcome.detail["diagnostics"] == {"agent_stamped": True, "switch_marker": True}
+
+
+def test_a_turn_with_two_stored_user_items_of_its_own_is_recorded_in_agent_stamped() -> None:
+    items = _items((None, "planner"), ("builder", "builder"))
+    items.insert(1, {"role": "user", "agentId": "planner", "responseId": "r1"})
+    detail = _diagnosed(_client([_chat(), _chat()], items))
+    assert detail["diagnostic_failures"]["agent_stamped"]["actual"] == ["turn 1: 2 user item(s)"]
+
+
+def test_a_system_item_without_the_switch_trigger_is_not_a_marker() -> None:
     items = _items((None, "planner"), ("builder", "builder"))
     items.insert(1, {"role": "system", "agentId": "planner"})
     client = _client([_chat(), _chat()], items)
     assert _evaluate(client).runs_passed == 1
 
 
-def test_a_drift_marker_is_not_counted_as_a_switch():
+def test_a_drift_marker_is_not_counted_as_a_switch() -> None:
     items = _items((None, "planner"), ("builder", "builder"))
     items.insert(0, {"role": "system", "agentId": "planner", "trigger": "agent_updated"})
     client = _client([_chat(), _chat()], items)
     assert _evaluate(client).runs_passed == 1
 
 
-def test_a_switch_to_the_bound_agent_expects_no_marker():
+def test_a_switch_to_the_bound_agent_expects_no_marker() -> None:
     spec = {"agent_id": "planner", "turns": [{"message": "a"}, {"message": "b", "switch_to": "planner"}]}
     client = _client([_chat(), _chat()], _items((None, "planner"), (None, "planner")))
     assert _evaluate(client, _item(spec)).runs_passed == 1
 
 
-def test_a_404_on_switch_fails_the_run_and_names_the_flag():
+def test_a_conversation_bound_to_another_agent_fails_before_any_message() -> None:
+    """With the switching flag off, gen-ai ignores `agentId` on create and binds another agent."""
+    client = _client([_chat(), _chat()], [], bound="default-agent")
+    with pytest.raises(AgentSwitcherAssertionError) as exc:
+        _evaluate(client)
+    assert _failed_check_names(exc.value) == ["agent_bound"]
+    assert "enableGenAiAgentSwitching" in str(exc.value)
+    client.send_message.assert_not_called()
+    client.list_items.assert_not_called()
+
+
+def test_a_404_on_switch_fails_the_run_and_names_the_flag() -> None:
     client = _client([_chat()], [])
     request = httpx.Request("POST", "https://h/switchAgent")
     client.switch_agent.side_effect = httpx.HTTPStatusError(
@@ -254,7 +332,24 @@ def test_a_404_on_switch_fails_the_run_and_names_the_flag():
     client.list_items.assert_not_called()
 
 
-def test_a_chat_error_stops_the_run():
+def test_a_switch_answering_a_non_json_body_fails_the_run() -> None:
+    client = _client([_chat()], [])
+    client.switch_agent.side_effect = ValueError("Expecting value: line 1 column 1")
+    with pytest.raises(AgentSwitcherAssertionError) as exc:
+        _evaluate(client)
+    assert _failed_check_names(exc.value) == ["turn2_switched"]
+
+
+def test_an_http_error_on_send_fails_that_run_and_keeps_the_others() -> None:
+    request = httpx.Request("POST", "https://h/messages")
+    http_503 = httpx.HTTPStatusError("503", request=request, response=httpx.Response(503, request=request))
+    client = _client([_chat(), _chat(), http_503], _items((None, "planner"), ("builder", "builder")), conversations=2)
+    outcome = _evaluate(client, k=2, gate="any")
+    assert (outcome.runs_passed, outcome.runs_effective) == (1, 2)
+    assert [c["name"] for c in outcome.failed_runs[0]["failed_checks"]] == ["turn1_answered"]
+
+
+def test_a_chat_error_stops_the_run() -> None:
     client = _client([ChatError("gen-ai fell over")], [])
     with pytest.raises(AgentSwitcherAssertionError) as exc:
         _evaluate(client)
@@ -279,7 +374,7 @@ def _one_turn(checks: dict[str, Any]) -> dict[str, Any]:
         ({"skills_not_used": ["visualization"]}, ["visualization"], ["turn1_skills_not_used"]),
     ],
 )
-def test_skills_checks_read_the_turn_s_tool_calls(checks, used, failed):
+def test_skills_checks_read_the_turn_s_tool_calls(checks: dict[str, Any], used: list[str], failed: list[str]) -> None:
     client = _client([_chat()], _items((None, "a", used)))
     if not failed:
         assert _evaluate(client, _one_turn(checks)).runs_passed == 1
@@ -289,33 +384,32 @@ def test_skills_checks_read_the_turn_s_tool_calls(checks, used, failed):
     assert _failed_check_names(exc.value) == failed
 
 
-def test_a_carried_over_skill_used_without_set_skills_passes_skills_used():
+def test_a_carried_over_skill_used_without_set_skills_passes_skills_used() -> None:
     spec = {
         "agent_id": "planner",
         "turns": [{"message": "a"}, {"message": "b", "switch_to": "builder", "checks": {"skills_used": ["alert"]}}],
     }
     # set_skills only in turn 1; turn 2 runs an alert tool with no set_skills call
-    client = _client(
-        [_chat(skills=["alert"]), _chat()],
-        _items((None, "planner", ["alert"]), ("builder", "builder", ["alert"])),
-    )
+    items = _items((None, "planner", ["alert"]), ("builder", "builder", ["alert"]))
+    items = [i for i in items if not (i["agentId"] == "builder" and i.get("content", {}).get("name") == "set_skills")]
+    client = _client([_chat(skills=["alert"]), _chat()], items)
     outcome = _evaluate(client, _item(spec))
     assert outcome.runs_passed == 1
     assert [t["skills"] for t in outcome.detail["turns"]] == [["alert"], ["alert"]]
 
 
-def test_a_requested_skill_whose_tools_never_ran_passes_skills_not_used():
+def test_a_requested_skill_whose_tools_never_ran_passes_skills_not_used() -> None:
     client = _client([_chat(skills=["key_driver_analysis"])], _items((None, "a", [])))
     assert _evaluate(client, _one_turn({"skills_not_used": ["key_driver_analysis"]})).runs_passed == 1
 
 
-def test_skills_of_one_turn_do_not_leak_into_the_next():
+def test_skills_of_one_turn_do_not_leak_into_the_next() -> None:
     spec = {"agent_id": "a", "turns": [{"message": "a"}, {"message": "b", "checks": {"skills_not_used": ["alert"]}}]}
     client = _client([_chat(), _chat()], _items((None, "a", ["alert"]), (None, "a", ["visualization"])))
     assert _evaluate(client, _item(spec)).runs_passed == 1
 
 
-def test_unreadable_items_fail_every_skills_check():
+def test_unreadable_items_fail_every_skills_check() -> None:
     spec = {
         "agent_id": "a",
         "turns": [
@@ -355,7 +449,7 @@ def _proposal(*metric_ids: str) -> dict[str, Any]:
         ("revenue", [], False),
     ],
 )
-def test_alert_metric_reads_the_proposal_measure(expected, proposals, ok):
+def test_alert_metric_reads_the_proposal_measure(expected: str, proposals: list[dict[str, Any]], ok: bool) -> None:
     client = _client([_chat(proposals=proposals)], _items((None, "a")))
     item = _one_turn({"alert_metric": expected})
     if ok:
@@ -381,9 +475,13 @@ _VIZ = {
         ({"metrics": ["metric/revenue"], "attributes": ["label/region"]}, _VIZ, True),
         ({"metrics": ["revenue"], "attributes": ["country"]}, _VIZ, False),
         ({"metrics": ["revenue"]}, None, False),
+        # a fact of the same id is not the metric
+        ({"metrics": ["revenue"]}, {**_VIZ, "query": {"fields": {"m": {"using": "fact/revenue"}}}}, False),
+        # tool args of a call that produced no chart
+        ({"metrics": ["revenue"], "attributes": ["region"]}, {**_VIZ, "id": ADHOC_VIZ_ID}, False),
     ],
 )
-def test_visualization_is_a_subset_match(expected, viz, ok):
+def test_visualization_is_a_subset_match(expected: dict[str, list[str]], viz: dict[str, Any] | None, ok: bool) -> None:
     client = _client([_chat(viz=viz)], _items((None, "a")))
     item = _one_turn({"visualization": expected})
     if ok:
@@ -411,7 +509,7 @@ def _judged_spec() -> dict[str, Any]:
     }
 
 
-def test_the_judge_sees_the_transcript_labelled_by_agent():
+def test_the_judge_sees_the_transcript_labelled_by_agent() -> None:
     client = _client(
         [_chat("Here is the plan"), _chat("Setting up")], _items((None, "planner"), ("builder", "builder"))
     )
@@ -432,7 +530,7 @@ def test_the_judge_sees_the_transcript_labelled_by_agent():
     assert outcome.detail["turn2_exclude_0"] is True
 
 
-def test_a_failed_criterion_is_named_with_the_judge_reason():
+def test_a_failed_criterion_is_named_with_the_judge_reason() -> None:
     client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "builder")))
     with pytest.raises(AgentSwitcherAssertionError) as exc:
         _evaluate(client, _item(_judged_spec()), positive=_judge(verdict=False))
@@ -441,7 +539,26 @@ def test_a_failed_criterion_is_named_with_the_judge_reason():
     assert checks[0]["part"] == "judge"
 
 
-def test_no_judge_is_built_for_an_item_without_criteria():
+def test_a_judge_request_failure_leaves_that_run_ungraded() -> None:
+    client = _client([_chat()] * 4, _items((None, "planner"), ("builder", "builder")), conversations=2)
+    positive = _judge()
+    positive.score.side_effect = [(True, "ok"), TimeoutError("judge timed out")]
+    outcome = _evaluate(client, _item(_judged_spec()), positive, k=2, gate="any")
+    assert outcome.runs_passed == 1
+    assert "TimeoutError" in outcome.detail["judge_errors"][0]
+
+
+def test_an_alert_proposal_is_judged_as_one_line() -> None:
+    client = _client(
+        [_chat("Here is the plan"), _chat("Set up", proposals=[_proposal("revenue")])],
+        _items((None, "planner"), ("builder", "builder")),
+    )
+    positive = _judge()
+    _evaluate(client, _item(_judged_spec()), positive)
+    assert positive.score.call_args.kwargs["actual_output"] == "Set up\n\n[Alert proposal: Create?; metric revenue]"
+
+
+def test_no_judge_is_built_for_an_item_without_criteria() -> None:
     client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "builder")))
     with _patched(client) as mock_judge:
         evaluate_agentic_agent_switcher("https://h", "tok", "ws1", _item())
@@ -451,7 +568,7 @@ def test_no_judge_is_built_for_an_item_without_criteria():
 # --------------------------------------------------------------------------- #
 # K runs
 # --------------------------------------------------------------------------- #
-def test_each_run_replays_on_a_new_conversation():
+def test_each_run_replays_on_a_new_conversation() -> None:
     answers = [_chat(), _chat(), _chat(), _chat()]
     client = _client(answers, _items((None, "planner"), ("builder", "builder")), conversations=2)
     outcome = _evaluate(client, k=2, gate="power")
@@ -463,18 +580,22 @@ def test_each_run_replays_on_a_new_conversation():
     assert (outcome.runs_passed, outcome.runs_effective) == (2, 2)
 
 
-def test_pass_power_k_fails_when_one_run_fails():
-    good = _items((None, "planner"), ("builder", "builder"))
-    bad = _items((None, "planner"), ("builder", "planner"))
+def test_pass_power_k_fails_when_one_run_fails() -> None:
+    spec = {
+        "agent_id": "planner",
+        "turns": [{"message": "a"}, {"message": "b", "switch_to": "builder", "checks": {"skills_used": ["alert"]}}],
+    }
+    good = _items((None, "planner"), ("builder", "builder", ["alert"]))
+    bad = _items((None, "planner"), ("builder", "builder"))
     client = _client([_chat()] * 4, good, conversations=2)
     client.list_items.side_effect = [good, bad]
     with pytest.raises(AgentSwitcherAssertionError) as exc:
-        _evaluate(client, k=2, gate="power")
+        _evaluate(client, _item(spec), k=2, gate="power")
     assert exc.value.runs_passed == 1
     assert [r["run_index"] for r in exc.value.failed_runs] == [2]
 
 
-def test_k_below_one_is_refused():
+def test_k_below_one_is_refused() -> None:
     with pytest.raises(ValueError, match="k must be at least 1"):
         run_agentic_agent_switcher("https://h", "tok", "ws1", AgentSwitcherInput.model_validate(_TWO_TURNS), k=0)
 
@@ -491,7 +612,7 @@ class _ScoreCtx:
         return None
 
     @contextlib.contextmanager
-    def observe(self, _trace: object, run_idx: int, **_kwargs: Any):
+    def observe(self, _trace: object, run_idx: int, **_kwargs: Any) -> Iterator[int]:
         yield run_idx
 
     def score(self, trace_id: int, *, name: str, value: Any, data_type: str, comment: str | None = None) -> None:
@@ -501,7 +622,7 @@ class _ScoreCtx:
         self.scores.append((trace_id, "quality_score", None))
 
 
-def test_each_run_is_scored_with_the_switch_checks():
+def test_each_run_is_scored_with_the_switch_checks() -> None:
     captured: dict[str, Any] = {}
 
     def _capture(_submit: object, _identity: object, **kwargs: Any) -> None:

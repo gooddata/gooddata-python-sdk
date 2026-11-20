@@ -572,6 +572,19 @@ class ChatClient:
 
         return retry_transient(_do, is_retryable=_is_retryable_exc)
 
+    def get_conversation(self, conversation_id: str) -> dict[str, Any]:
+        """The conversation as gen-ai returns it (camelCase), including the bound `agentId`."""
+
+        def _do() -> dict[str, Any]:
+            resp = self._client.get(f"{self._base}/{conversation_id}", headers=self._auth)
+            resp.raise_for_status()
+            body = resp.json()
+            if not isinstance(body, dict):
+                raise ValueError(f"GoodData conversation response is not an object: {body}")
+            return body
+
+        return retry_transient(_do, is_retryable=_is_retryable_exc)
+
     def list_items(self, conversation_id: str) -> list[dict[str, Any]]:
         """Every stored item of the conversation, in order, as gen-ai returns them (camelCase)."""
 
@@ -582,6 +595,9 @@ class ChatClient:
             items = body.get("items") if isinstance(body, dict) else None
             if not isinstance(items, list):
                 raise ValueError(f"GoodData /items response missing 'items' list: {body}")
+            bad = [i for i, item in enumerate(items) if not isinstance(item, dict)]
+            if bad:
+                raise ValueError(f"GoodData /items entries {bad} are not objects")
             return items
 
         return retry_transient(_do, is_retryable=_is_retryable_exc)

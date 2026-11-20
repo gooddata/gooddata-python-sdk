@@ -14,11 +14,16 @@ from the item:
 - ``alert_metric``: the primary measure of the turn's alert proposal is that metric.
 - ``visualization``: the turn's created chart uses these metrics and attributes.
 
-The skills checks and two run checks are read from the stored items after the last turn:
+The skills checks and two run diagnostics are read from the stored items after the last turn.
+The diagnostics are API contracts that the platform's API tests gate; here they are recorded
+(run detail, Langfuse scores) and never fail a run:
 
 - ``agent_stamped``: every assistant item of a turn carries the agent active at that turn.
 - ``switch_marker``: one system marker per real switch, carrying the new agent, before the
   turn it was made for. A switch to the agent already bound is a no-op and has no marker.
+
+Items are matched to turns by ``responseId``: a send that the client retried leaves the
+failed attempt's items under another response id, and they are skipped.
 """
 
 from __future__ import annotations
@@ -58,8 +63,8 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
-from gooddata_eval.core.agentic.alert_skill import render_turn_for_simulated_user
-from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
+from gooddata_eval.core.chat.render import render_answer_text
+from gooddata_eval.core.chat.sse_client import ADHOC_VIZ_ID, ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError, LLMJudge
 from gooddata_eval.core.evaluators._rubric import Criterion, grade_rubric
@@ -122,6 +127,8 @@ class TurnRecord:
     message: str
     agent_id: str
     switch_to: str | None = None
+    # The response id of the send that answered the turn; keys the turn's stored items.
+    response_id: str | None = None
     answer: str = ""
     answering_agents: list[str] = field(default_factory=list)
     # Skills whose tools ran in the turn (`skillsInUse` of its toolCall items).
@@ -149,8 +156,11 @@ class AgentSwitcherRunResult:
 
     conversation_id: str
     turns: list[TurnRecord] = field(default_factory=list)
-    # Every check that ran, by name: per turn `turn<N>_<check>`, per run `agent_stamped`, `switch_marker`.
+    # Every check that ran, by name: per turn `turn<N>_<check>`, per run `agent_bound`.
     checks: dict[str, bool] = field(default_factory=dict)
+    # Recorded, never gating: `agent_stamped`, `switch_marker`, and what a failed one found.
+    diagnostics: dict[str, bool] = field(default_factory=dict)
+    diagnostic_failures: dict[str, dict[str, Any]] = field(default_factory=dict)
     failed: list[FailedCheck] = field(default_factory=list)
     # A switch, chat or items call that failed; the run stopped there.
     error: str | None = None
@@ -171,6 +181,11 @@ class AgentSwitcherRunResult:
     def fail(self, check: FailedCheck) -> None:
         self.checks[check.name] = False
         self.failed.append(check)
+
+    def diagnose(self, name: str, ok: bool, expected: Any, actual: Any) -> None:
+        self.diagnostics[name] = ok
+        if not ok:
+            self.diagnostic_failures[name] = {"expected": expected, "actual": actual}
 
 
 @dataclass
@@ -202,37 +217,52 @@ def _strip_type(ref: str) -> str:
     return ref.split("/", 1)[1] if "/" in ref else ref
 
 
-def _proposal_metric_ids(chat_result: ChatResult) -> list[str]:
-    """Primary measure id of each of the turn's alert proposals.
+def _primary_metric_id(proposal: Any) -> str | None:
+    """Metric id of an alert proposal's primary measure.
 
     - primary = first of `alert.execution.measures` (gen-ai puts the alerted metric first);
     - a second measure is only the comparison side, so it is not read.
     """
-    ids: list[str] = []
-    for proposal in chat_result.alert_proposals:
-        alert = proposal.get("alert") if isinstance(proposal, dict) else None
-        execution = alert.get("execution") if isinstance(alert, dict) else None
-        measures = execution.get("measures") if isinstance(execution, dict) else None
-        if not isinstance(measures, list) or not measures:
-            continue
-        node: Any = measures[0]
-        for key in ("definition", "measure", "item", "identifier", "id"):
-            node = node.get(key) if isinstance(node, dict) else None
-        if isinstance(node, str):
-            ids.append(node)
-    return ids
+    alert = proposal.get("alert") if isinstance(proposal, dict) else None
+    execution = alert.get("execution") if isinstance(alert, dict) else None
+    measures = execution.get("measures") if isinstance(execution, dict) else None
+    if not isinstance(measures, list) or not measures:
+        return None
+    node: Any = measures[0]
+    for key in ("definition", "measure", "item", "identifier", "id"):
+        node = node.get(key) if isinstance(node, dict) else None
+    return node if isinstance(node, str) else None
+
+
+def _proposal_metric_ids(chat_result: ChatResult) -> list[str]:
+    """Primary metric id of each of the turn's alert proposals."""
+    return [i for i in (_primary_metric_id(p) for p in chat_result.alert_proposals) if i is not None]
+
+
+def _render_turn(chat_result: ChatResult) -> str:
+    """The answer text, plus one line naming the last alert proposal (no payload dump)."""
+    chunks = [render_answer_text(chat_result)]
+    if chat_result.alert_proposals:
+        proposal = chat_result.alert_proposals[-1]
+        cta = proposal.get("cta") if isinstance(proposal, dict) else None
+        metric = _primary_metric_id(proposal)
+        chunks.append(f"[Alert proposal: {cta or 'no prompt'}; metric {metric or 'unknown'}]")
+    return "\n\n".join(chunk for chunk in chunks if chunk)
 
 
 def _visualization_problem(expected: AgentSwitcherVisualization, chat_result: ChatResult) -> str | None:
     """None when a created chart uses every expected metric and attribute, else what was created."""
     objects = chat_result.created_visualizations.objects if chat_result.created_visualizations else []
+    # ADHOC_VIZ_ID: tool args of a call that produced no chart part, so not a created chart
+    objects = [viz for viz in objects if viz.id != ADHOC_VIZ_ID]
     if not objects:
         return "no visualization was created"
-    want_metrics = {_strip_type(m) for m in expected.metrics}
+    # Metrics keep their type: a bare id means `metric/<id>`, so a fact of that id never matches.
+    want_metrics = {m if "/" in m else f"metric/{m}" for m in expected.metrics}
     want_attributes = {_strip_type(a) for a in expected.attributes}
     seen: list[dict[str, list[str]]] = []
     for viz in objects:
-        metrics = {_strip_type(u) for u in get_metric_uri_set(viz)}
+        metrics = get_metric_uri_set(viz)
         attributes = {_strip_type(u) for u in get_dimension_uri_set(viz)}
         if want_metrics <= metrics and want_attributes <= attributes:
             return None
@@ -290,7 +320,7 @@ def _skills_in_use(item: dict[str, Any]) -> list[str]:
     return [n for n in names if isinstance(n, str)]
 
 
-def _switch_error(turn: int, agent_id: str, exc: httpx.HTTPError) -> str:
+def _switch_error(turn: int, agent_id: str, exc: Exception) -> str:
     head = f"switchAgent to {agent_id!r} before turn {turn} failed"
     if not isinstance(exc, httpx.HTTPStatusError):
         return f"{head}: {type(exc).__name__}: {exc}"
@@ -302,6 +332,25 @@ def _switch_error(turn: int, agent_id: str, exc: httpx.HTTPError) -> str:
     return f"{head} with {status}: {exc.response.text[:200]}"
 
 
+def _bound_agent_error(client: ChatClient, conversation_id: str, agent_id: str) -> str | None:
+    """Why the new conversation is not bound to the item's agent, or None when it is.
+
+    With the agent-switching flag off, gen-ai ignores `agentId` on create and binds another agent.
+    """
+    try:
+        conversation = client.get_conversation(conversation_id)
+    # ValueError: a 200 whose body is not a JSON object
+    except (httpx.HTTPError, ValueError) as exc:
+        return f"reading the new conversation failed: {type(exc).__name__}: {exc}"
+    bound = conversation.get("agentId")
+    if bound == agent_id:
+        return None
+    return (
+        f"the conversation is bound to agent {bound!r}, not {agent_id!r}: the agent-switching feature flag "
+        "(enableGenAiAgentSwitching) may be off, or the user cannot use the agent"
+    )
+
+
 def _check_items(
     run: AgentSwitcherRunResult,
     spec: AgentSwitcherInput,
@@ -310,58 +359,55 @@ def _check_items(
 ) -> None:
     """Skills checks, `agent_stamped` and `switch_marker` from the stored items.
 
-    - a user item opens a turn; the turn runs up to the next user item;
-    - a switch marker (`trigger` `agent_switched`) counts by the user items before it, so the
-      marker for the switch before turn N comes after N-1 user items;
+    - an item belongs to the turn whose response id it carries; items of any other response
+      id (a failed send attempt) are skipped;
+    - a switch marker (`trigger` `agent_switched`) counts by the last turn before it, so the
+      marker for the switch before turn N comes after turn N-1;
     - fills each turn's answering agents and used skills.
     """
-    user_items = 0
+    turn_of = {r.response_id: r.turn for r in run.turns if r.response_id}
+    current = 0
+    user_items: dict[int, int] = {}
     answering: dict[int, list[str]] = {}
     skills: dict[int, list[str]] = {}
     markers: list[tuple[int, str]] = []
     for item in items:
         role = item.get("role")
+        if role == "system" and item.get("trigger") == "agent_switched":
+            markers.append((current, str(item.get("agentId") or item.get("newAgentId"))))
+            continue
+        turn = turn_of.get(item.get("responseId"))
+        if turn is None:
+            continue
+        current = turn
         if role == "user":
-            user_items += 1
+            user_items[turn] = user_items.get(turn, 0) + 1
         elif role == "assistant":
-            answering.setdefault(user_items, []).append(str(item.get("agentId")))
-            turn_skills = skills.setdefault(user_items, [])
+            answering.setdefault(turn, []).append(str(item.get("agentId")))
+            turn_skills = skills.setdefault(turn, [])
             turn_skills.extend(n for n in _skills_in_use(item) if n not in turn_skills)
-        elif role == "system" and item.get("trigger") == "agent_switched":
-            markers.append((user_items, str(item.get("agentId") or item.get("newAgentId"))))
 
     for record, turn in zip(run.turns, spec.turns, strict=False):
         record.skills = skills.get(record.turn, [])
         _skills_checks(record, run, turn, unreadable=None)
 
     stamping: list[str] = []
-    if user_items != len(run.turns):
-        stamping.append(f"{user_items} user item(s) for {len(run.turns)} turn(s)")
-    if answering.get(0):
-        stamping.append(f"assistant item(s) before the first user item: {answering[0]}")
     for record in run.turns:
+        if user_items.get(record.turn, 0) != 1:
+            stamping.append(f"turn {record.turn}: {user_items.get(record.turn, 0)} user item(s)")
         agents = answering.get(record.turn, [])
         record.answering_agents = list(dict.fromkeys(agents))
         if not agents:
             stamping.append(f"turn {record.turn}: no assistant item")
         elif record.answering_agents != [record.agent_id]:
             stamping.append(f"turn {record.turn}: {record.answering_agents}, active {record.agent_id!r}")
-    if stamping:
-        expected = "every assistant item stamped with the active agent"
-        run.fail(FailedCheck("agent_stamped", expected=expected, actual=stamping))
-    else:
-        run.checks["agent_stamped"] = True
-
-    if markers == expected_markers:
-        run.checks["switch_marker"] = True
-    else:
-        run.fail(
-            FailedCheck(
-                "switch_marker",
-                expected=[{"after_user_items": n, "agent_id": a} for n, a in expected_markers],
-                actual=[{"after_user_items": n, "agent_id": a} for n, a in markers],
-            )
-        )
+    run.diagnose("agent_stamped", not stamping, "every assistant item stamped with the active agent", stamping)
+    run.diagnose(
+        "switch_marker",
+        markers == expected_markers,
+        [{"after_turn": n, "agent_id": a} for n, a in expected_markers],
+        [{"after_turn": n, "agent_id": a} for n, a in markers],
+    )
 
 
 def _transcript(turns: list[TurnRecord], current: TurnRecord) -> str:
@@ -389,16 +435,23 @@ def _judge_turns(run: AgentSwitcherRunResult, spec: AgentSwitcherInput, judges: 
         must_include: list[Criterion] = [(f"include_{i}", c) for i, c in enumerate(turn.checks.must_include)]
         must_not_include: list[Criterion] = [(f"exclude_{i}", c) for i, c in enumerate(turn.checks.must_not_include)]
         detail: dict[str, Any] = {}
-        grade_rubric(
-            judges.positive,
-            judges.violation,
-            question=_transcript(run.turns[:index], record),
-            actual=record.answer,
-            must_include=must_include,
-            must_not_include=must_not_include,
-            rubric=[],
-            detail=detail,
-        )
+        try:
+            grade_rubric(
+                judges.positive,
+                judges.violation,
+                question=_transcript(run.turns[:index], record),
+                actual=record.answer,
+                must_include=must_include,
+                must_not_include=must_not_include,
+                rubric=[],
+                detail=detail,
+            )
+        except Exception as exc:
+            # A judge request failure (timeout, provider error): the turn's criteria not yet
+            # graded stay ungraded, as for an unreadable verdict; the other runs still count.
+            for key, _ in [*must_include, *must_not_include]:
+                if key not in detail:
+                    detail[f"{key}_reason"] = f"UNGRADED: {type(exc).__name__}: {exc}"
         for key, criterion in [*must_include, *must_not_include]:
             reason = str(detail.get(f"{key}_reason", ""))
             record.reasons[key] = reason
@@ -422,16 +475,25 @@ def _run_once(
     started = time.monotonic()
     run = AgentSwitcherRunResult(conversation_id=conversation_id)
     active = spec.agent_id
-    # (user items before the marker, new agent) for every switch that changes the agent.
+    # (turn before the marker, new agent) for every switch that changes the agent.
     expected_markers: list[tuple[int, str]] = []
     agent_s = 0.0
     offsets = (0.0, 0, 0)
+
+    bound_error = _bound_agent_error(client, conversation_id, spec.agent_id)
+    if bound_error is not None:
+        run.error = bound_error
+        run.exit_reason = LoopExit.CHAT_ERROR
+        run.fail(FailedCheck("agent_bound", expected=spec.agent_id, actual=bound_error))
+        run.run_latency_s = time.monotonic() - started
+        return run
 
     for number, turn in enumerate(spec.turns, start=1):
         if turn.switch_to is not None:
             try:
                 conversation = client.switch_agent(conversation_id, turn.switch_to)
-            except httpx.HTTPError as exc:
+            # ValueError: a 200 whose body is not JSON
+            except (httpx.HTTPError, ValueError) as exc:
                 run.error = _switch_error(number, turn.switch_to, exc)
                 run.exit_reason = LoopExit.CHAT_ERROR
                 run.fail(FailedCheck(f"turn{number}_switched", expected=turn.switch_to, actual=run.error))
@@ -450,9 +512,10 @@ def _run_once(
         sent = time.monotonic()
         try:
             result = client.send_message(conversation_id, turn.message)
-        except ChatError as exc:
+        # httpx.HTTPError: a status or transport error that outlasted the retries
+        except (ChatError, httpx.HTTPError) as exc:
             agent_s += time.monotonic() - sent
-            partial = exc.partial_result
+            partial = exc.partial_result if isinstance(exc, ChatError) else None
             if partial is not None:
                 run.reasoning_steps.extend(partial.reasoning_steps or [])
                 run.response_id = partial.response_id or run.response_id
@@ -462,7 +525,8 @@ def _run_once(
             run.turns.append(record)
             break
         agent_s += time.monotonic() - sent
-        record.answer = render_turn_for_simulated_user(result)
+        record.response_id = result.response_id
+        record.answer = _render_turn(result)
         run.reasoning_steps.extend(result.reasoning_steps or [])
         run.response_id = result.response_id or run.response_id
         offsets = shift_and_index_events(
@@ -547,6 +611,8 @@ def run_agentic_agent_switcher(
 def _kind_fields(run: AgentSwitcherRunResult) -> dict[str, Any]:
     return {
         **run.checks,
+        "diagnostics": run.diagnostics,
+        **({"diagnostic_failures": run.diagnostic_failures} if run.diagnostic_failures else {}),
         "turns": [t.as_record() for t in run.turns],
         **({"error": run.error} if run.error is not None else {}),
     }
@@ -675,9 +741,8 @@ def evaluate_agentic_agent_switcher(
                     pt, run_idx, conversation_id=run.conversation_id, output={"agent_switcher_pass": run.passed}
                 ) as tid:
                     ctx.score(tid, name="agent_switcher_pass", value=float(run.passed), data_type="BOOLEAN")
-                    for name in ("agent_stamped", "switch_marker"):
-                        if name in run.checks:
-                            ctx.score(tid, name=name, value=float(run.checks[name]), data_type="BOOLEAN")
+                    for name, ok in run.diagnostics.items():
+                        ctx.score(tid, name=name, value=float(ok), data_type="BOOLEAN")
                     if turn_checks:
                         ctx.score(tid, name="turn_checks_pass", value=float(all(turn_checks)), data_type="BOOLEAN")
                     log_gate_scores(ctx, tid, gate=gate, pass_at_k=summary.pass_at_k, pass_power_k=summary.pass_power_k)
