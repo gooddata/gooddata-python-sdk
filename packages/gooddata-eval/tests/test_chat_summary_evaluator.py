@@ -124,6 +124,8 @@ def test_ids_never_reach_the_answer(leak: str) -> None:
 def test_a_follow_up_without_tool_calls_has_no_default_shape() -> None:
     answer = "Tracy Carter leads, about $15.7 K ahead of the second place."
     assert _grade(answer, {"no_tool_calls": True}, None, tools=["set_skills"]).passed
+    # a follow-up may link objects: the UI renders its reference tags
+    assert _grade("Driven by {metric/active_customers}.", {}, None).detail.get("no_ids") is None
     ran = _grade(answer, {"no_tool_calls": True}, None, tools=["execute_existing_visualizations"])
     assert not ran.passed
     assert ran.detail["tools_run"] == ["execute_existing_visualizations"]

@@ -19,7 +19,8 @@ Every key is optional. The code checks gate the verdict and need no judge:
   dashboard whose widgets all returned no data one paragraph without headings; an empty
   widget has no fixed shape. A `format`
   object replaces the default: `max_sentences`, `no_headings`, `no_bullets`, `headings`.
-- no ids: no `{visualization/...}` reference tag and no raw object id in the answer.
+- no ids (summary turn only): no `{visualization/...}` reference tag and no raw object id. A
+  follow-up is answered as an ordinary chat message, whose reference tags the UI renders as links.
 - no figures on no data: when every widget in scope returned no data, the answer quotes no
   amount, share or count.
 - `no_tool_calls`: the turn answers from the conversation, without running a tool.
@@ -164,7 +165,7 @@ def evaluate_turn(
     positive_judge: LLMJudge,
     violation_judge: LLMJudge,
 ) -> ItemEvaluation:
-    """Grade one turn. `scope` is None for a follow-up: only the summary turn has a default shape."""
+    """Grade one turn. `scope` is None for a follow-up: only the summary turn has a shape and the no-ids rule."""
     detail: dict[str, Any] = {"actual_output": answer}
     passed = True
     if not answer.strip():
@@ -179,11 +180,12 @@ def evaluate_turn(
             detail["shape_problem"] = problem
             passed = False
 
-    problem = id_problem(answer)
-    detail["no_ids"] = problem is None
-    if problem:
-        detail["id_problem"] = problem
-        passed = False
+    if scope is not None:
+        problem = id_problem(answer)
+        detail["no_ids"] = problem is None
+        if problem:
+            detail["id_problem"] = problem
+            passed = False
 
     if scope is not None and scope.all_empty:
         quoted = figures(answer)
