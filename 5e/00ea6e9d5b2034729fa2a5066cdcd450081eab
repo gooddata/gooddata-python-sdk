@@ -1,0 +1,23 @@
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_bf7263da2341ea::t_073d373ec300f7 942-949
+  s_bf7263da2341ea::t_0583cbfdd2d9ea 110-111,118-130,148,913-914,937,939-941,950-951,971-973
+  s_bf7263da2341ea::t_bde490cd9e49e1 290,1155,1304,1375
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_bf7263da2341ea::t_0583cbfdd2d9ea 127-128
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e00ea6e9d5b2034729fa2a5066cdcd450081eab",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
