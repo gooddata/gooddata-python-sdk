@@ -148,7 +148,7 @@ class LocalizationMetadataStatistics(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
+            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -238,7 +238,7 @@ class LocalizationMetadataStatistics(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace that the user can see, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
+            workspaces ([LocalizationStatisticsWorkspace]): (BETA) Translation counts of the workspace and each parent workspace, root first. Present only with `includeCoverage=true` on the workspace endpoint.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

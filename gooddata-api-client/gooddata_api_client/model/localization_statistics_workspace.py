@@ -90,8 +90,8 @@ class LocalizationStatisticsWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'locales': ([LocalizationStatisticsTranslatedLocale],),  # noqa: E501
-            'name': (str,),  # noqa: E501
             'total': (int,),  # noqa: E501
+            'name': (str, none_type,),  # noqa: E501
             'parent_id': (str, none_type,),  # noqa: E501
         }
 
@@ -103,8 +103,8 @@ class LocalizationStatisticsWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'locales': 'locales',  # noqa: E501
-        'name': 'name',  # noqa: E501
         'total': 'total',  # noqa: E501
+        'name': 'name',  # noqa: E501
         'parent_id': 'parentId',  # noqa: E501
     }
 
@@ -115,13 +115,12 @@ class LocalizationStatisticsWorkspace(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, locales, name, total, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, locales, total, *args, **kwargs):  # noqa: E501
         """LocalizationStatisticsWorkspace - a model defined in OpenAPI
 
         Args:
             id (str): Workspace ID.
             locales ([LocalizationStatisticsTranslatedLocale]): Every language of `metadata.locales`, sorted, with 0 where nothing is translated.
-            name (str): Workspace name.
             total (int): Titles, descriptions, tags and free-form texts the workspace owns. Blank texts are not counted.
 
         Keyword Args:
@@ -155,6 +154,7 @@ class LocalizationStatisticsWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name (str, none_type): Workspace name. Null for a parent that the user has no permission on. The name stays when the user can see the workspace right below it.. [optional]  # noqa: E501
             parent_id (str, none_type): Parent workspace ID, null for a root workspace.. [optional]  # noqa: E501
         """
 
@@ -189,7 +189,6 @@ class LocalizationStatisticsWorkspace(ModelNormal):
 
         self.id = id
         self.locales = locales
-        self.name = name
         self.total = total
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -211,13 +210,12 @@ class LocalizationStatisticsWorkspace(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, locales, name, total, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, locales, total, *args, **kwargs):  # noqa: E501
         """LocalizationStatisticsWorkspace - a model defined in OpenAPI
 
         Args:
             id (str): Workspace ID.
             locales ([LocalizationStatisticsTranslatedLocale]): Every language of `metadata.locales`, sorted, with 0 where nothing is translated.
-            name (str): Workspace name.
             total (int): Titles, descriptions, tags and free-form texts the workspace owns. Blank texts are not counted.
 
         Keyword Args:
@@ -251,6 +249,7 @@ class LocalizationStatisticsWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name (str, none_type): Workspace name. Null for a parent that the user has no permission on. The name stays when the user can see the workspace right below it.. [optional]  # noqa: E501
             parent_id (str, none_type): Parent workspace ID, null for a root workspace.. [optional]  # noqa: E501
         """
 
@@ -283,7 +282,6 @@ class LocalizationStatisticsWorkspace(ModelNormal):
 
         self.id = id
         self.locales = locales
-        self.name = name
         self.total = total
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

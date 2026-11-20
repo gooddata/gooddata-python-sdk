@@ -1,6 +1,6 @@
 # ParameterItem
 
-(EXPERIMENTAL) Parameter value for this execution.
+Parameter value for this execution.
 
 ## Properties
 Name | Type | Description | Notes

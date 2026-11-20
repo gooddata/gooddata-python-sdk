@@ -40,7 +40,7 @@
             "type": "array"
           },
           "parameters": {
-            "description": "(EXPERIMENTAL) Parameter values to use for this execution.",
+            "description": "Parameter values to use for this execution.",
             "items": {
               "$ref": "#/components/schemas/ParameterItem"
             },
@@ -1991,7 +1991,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -2209,7 +2209,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -2285,7 +2285,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -2898,8 +2898,8 @@
             "exclusiveMaximum": true,
             "exclusiveMinimum": true,
             "format": "float",
-            "maximum": 1.0,
-            "minimum": 0.0,
+            "maximum": 1,
+            "minimum": 0,
             "type": "number"
           },
           "forecastPeriod": {
@@ -4366,7 +4366,7 @@
       },
       "ParameterItem": {
         "additionalProperties": true,
-        "description": "(EXPERIMENTAL) Parameter value for this execution.",
+        "description": "Parameter value for this execution.",
         "properties": {
           "parameter": {
             "$ref": "#/components/schemas/AfmObjectIdentifierParameter"
