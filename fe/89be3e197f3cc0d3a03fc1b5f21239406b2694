@@ -1,0 +1,26 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_d8835365a289bc::t_bccacfd52c8dd2 507,520
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_documents.py
+  s_d8835365a289bc::t_06a29610f5e8dd 69,76,152,160-162,166,171-177,179-187,189,339-345,349-359
+  s_d8835365a289bc::t_9cafa5f7c47a81 163,178,346-348
+packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py
+  s_d8835365a289bc::t_ef3e42f91a96cf 256-257,281-288
+packages/gooddata-sdk/tests/catalog/expected/declarative_analytics_model_documents.json
+  s_d8835365a289bc::t_ef3e42f91a96cf 42-45,65-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4124b7edf8e678d14212838743fbb3185107b911",
+  "prompts": {},
+  "sessions": {
+    "s_d8835365a289bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7fbcc7cd-ee49-4dd5-a467-6a186e14ff84",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}
