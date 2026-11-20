@@ -1,55 +1,66 @@
-packages/gooddata-eval/scripts/calibrate_knowledge_judge.py
-  s_dc2c82805837c9::t_ac78366d982fd2 1-62
-packages/gooddata-eval/AGENTS.md
-  s_dc2c82805837c9::t_0f7c42d45454b2 66-68
-packages/gooddata-eval/README.md
-  s_dc2c82805837c9::t_0f7c42d45454b2 135,326-327,915-963,1065
-packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_dc2c82805837c9::t_c6545194faa4fb 582-609,626-627
-packages/gooddata-eval/tests/test_langfuse_source.py
-  s_dc2c82805837c9::t_c98a8bdbbc32c1 2
-  s_dc2c82805837c9::t_02f435db681eb1 379-439
-packages/gooddata-eval/src/gooddata_eval/core/interaction.py
-  s_dc2c82805837c9::t_e4e32d3c3af6d1 49
-packages/gooddata-eval/tests/test_trace_linker.py
-  s_dc2c82805837c9::t_ac157f095d00e5 125
-packages/gooddata-eval/src/gooddata_eval/core/evaluators/knowledge.py
-  s_dc2c82805837c9::t_b8fd86a9ebf7e4 1-243
-packages/gooddata-eval/tests/test_models.py
-  s_dc2c82805837c9::t_c98a8bdbbc32c1 8,233-247
-packages/gooddata-eval/tests/fixtures/knowledge_calibration.json
-  s_dc2c82805837c9::t_fc897cbdfc3b83 1-98
-packages/gooddata-eval/src/gooddata_eval/core/agentic/knowledge.py
-  s_dc2c82805837c9::t_17ba55ba622293 87-89
-  s_dc2c82805837c9::t_609009ca9922e4 1-26,28-35,37-86,90-189,199-201,203-270,280,298-308,310-322,324-328,330,332-369
-  s_dc2c82805837c9::t_b343ef6adb6e20 190-198,202
-  s_dc2c82805837c9::t_bc26165a5a7b5e 27,36,271-279,281-297,309,323,329,331
-packages/gooddata-eval/tests/test_cli.py
-  s_dc2c82805837c9::t_17ba55ba622293 1255-1257
-  s_dc2c82805837c9::t_9e394af4160668 1219-1254,1258-1261
-packages/gooddata-eval/tests/test_knowledge_evaluator.py
-  s_dc2c82805837c9::t_ac5c6d5bf863d5 1-172,176-194,198-257,259-260,263-326
-  s_dc2c82805837c9::t_17ba55ba622293 173-175,195-197
-  s_dc2c82805837c9::t_f16fb478bae381 258,261-262
-packages/gooddata-eval/Makefile
-  s_dc2c82805837c9::t_ac78366d982fd2 11-14
 packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
   s_dc2c82805837c9::t_320e770f8cdb77 21,84-106,186-189,191-192,207
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_dc2c82805837c9::t_c13d6926323549 110,898,977
-packages/gooddata-eval/tests/test_agentic_knowledge.py
-  s_dc2c82805837c9::t_110f25f156c082 152
-  s_dc2c82805837c9::t_f3cac8be72f924 1-151,153-228
+  s_dc2c82805837c9::t_c13d6926323549 116,904,983
+  s_42005dbe0e2bc1::t_e8f96ba8026de2 25-29
+  s_dc2c82805837c9::t_bdcfa9e3c99779 10,30-31,1422-1458
+packages/gooddata-eval/README.md
+  s_dc2c82805837c9::t_0f7c42d45454b2 135,326-327,915-967,1069
+packages/gooddata-eval/tests/test_cli.py
+  s_dc2c82805837c9::t_9e394af4160668 1219-1254,1258-1261
+  s_dc2c82805837c9::t_17ba55ba622293 1255-1257
+packages/gooddata-eval/AGENTS.md
+  s_dc2c82805837c9::t_0f7c42d45454b2 66-68
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
-  s_dc2c82805837c9::t_e4e32d3c3af6d1 25,66,90-91,99,376-383
-  s_dc2c82805837c9::t_1c1cce3fe2a744 384-389
+  s_dc2c82805837c9::t_1c1cce3fe2a744 393-398
+  s_dc2c82805837c9::t_e4e32d3c3af6d1 25,66,90-91,99,376-392
+packages/gooddata-eval/src/gooddata_eval/core/interaction.py
+  s_dc2c82805837c9::t_e4e32d3c3af6d1 49
+packages/gooddata-eval/tests/test_agentic_knowledge.py
+  s_dc2c82805837c9::t_f3cac8be72f924 1-158,160-280
+  s_dc2c82805837c9::t_110f25f156c082 159
+packages/gooddata-eval/Makefile
+  s_dc2c82805837c9::t_ac78366d982fd2 11-14
+packages/gooddata-eval/tests/fixtures/knowledge_calibration.json
+  s_dc2c82805837c9::t_fc897cbdfc3b83 1-98
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_dc2c82805837c9::t_c6545194faa4fb 582-609,626-627
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_dc2c82805837c9::t_ac157f095d00e5 125
+packages/gooddata-eval/tests/test_knowledge_evaluator.py
+  s_dc2c82805837c9::t_17ba55ba622293 217-219,239-241
+  s_dc2c82805837c9::t_f16fb478bae381 303,306-307
+  s_dc2c82805837c9::t_ac5c6d5bf863d5 1-216,220-238,242-302,304-305,308-378
+packages/gooddata-eval/tests/test_models.py
+  s_dc2c82805837c9::t_c98a8bdbbc32c1 8,233-247
+packages/gooddata-eval/tests/test_langfuse_source.py
+  s_dc2c82805837c9::t_c98a8bdbbc32c1 2
+  s_dc2c82805837c9::t_02f435db681eb1 379-439
+packages/gooddata-eval/scripts/calibrate_knowledge_judge.py
+  s_dc2c82805837c9::t_ac78366d982fd2 1-62
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/knowledge.py
+  s_dc2c82805837c9::t_b8fd86a9ebf7e4 1-248
+packages/gooddata-eval/src/gooddata_eval/core/agentic/knowledge.py
+  s_dc2c82805837c9::t_17ba55ba622293 114-116
+  s_dc2c82805837c9::t_bc26165a5a7b5e 36,46,309-317,319-335,354,368,377,379
+  s_dc2c82805837c9::t_609009ca9922e4 1-34,37-45,47-113,117-218,229-231,233-308,318,336-353,355-367,369-376,378,380-443
+  s_dc2c82805837c9::t_b343ef6adb6e20 219-228,232
+  s_dc2c82805837c9::t_1724317fbb49b7 35
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "9905d8e20e7ef0b1d9fbb03c9b1bfbc91e482960",
+  "base_commit_sha": "14097499fd2e22745507e7dc1cfe0c1eff8092a7",
   "prompts": {},
   "sessions": {
+    "s_42005dbe0e2bc1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2454e815-e4fa-4200-9cc4-6f8a73154a6e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    },
     "s_dc2c82805837c9": {
       "agent_id": {
         "tool": "claude",
