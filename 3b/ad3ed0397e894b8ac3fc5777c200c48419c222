@@ -12,8 +12,8 @@ packages/gooddata-eval/tests/test_cli.py
 packages/gooddata-eval/AGENTS.md
   s_dc2c82805837c9::t_0f7c42d45454b2 66-68
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
-  s_dc2c82805837c9::t_1c1cce3fe2a744 393-398
-  s_dc2c82805837c9::t_e4e32d3c3af6d1 25,66,90-91,99,376-392
+  s_dc2c82805837c9::t_1c1cce3fe2a744 393-398,410-415
+  s_dc2c82805837c9::t_e4e32d3c3af6d1 25,26,66,67,90-91,92-93,99,101,376-392,393-409
 packages/gooddata-eval/src/gooddata_eval/core/interaction.py
   s_dc2c82805837c9::t_e4e32d3c3af6d1 49
 packages/gooddata-eval/tests/test_agentic_knowledge.py
