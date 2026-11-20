@@ -1,4 +1,5 @@
 # (C) 2026 GoodData Corporation
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -375,3 +376,64 @@ def test_langfuse_item_explicit_test_kind_beats_catalog_input() -> None:
         "expectedOutput": {},
     }
     assert _item_from_raw(raw, dataset_name="ds", test_kind="visualization").test_kind == "general_question"
+
+
+def _knowledge_raw(**overrides: Any) -> dict:
+    return {
+        "id": "lf-kn-1",
+        "datasetName": "agent_knowledge",
+        "input": "Who must approve a 30 % discount?",
+        "metadata": {
+            "knowledge_input": {
+                "turns": ["Who must approve a 30 % discount?", "And 45 %?"],
+                "workspace": "parent",
+            }
+        },
+        "expectedOutput": {"expected_documents": ["Discount Policy"]},
+        **overrides,
+    }
+
+
+def test_langfuse_item_knowledge_input_from_metadata_sets_the_kind() -> None:
+    item = _item_from_raw(_knowledge_raw(), dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "agentic_knowledge"
+    assert item.knowledge_input is not None
+    assert item.knowledge_input.turns == ["Who must approve a 30 % discount?", "And 45 %?"]
+    assert item.knowledge_input.workspace == "parent"
+
+
+def test_langfuse_item_knowledge_input_that_is_not_an_object_raises() -> None:
+    with pytest.raises(ValueError, match="knowledge_input must be a JSON object"):
+        _item_from_raw(_knowledge_raw(metadata={"knowledge_input": ["q"]}), dataset_name="ds", test_kind="x")
+
+
+@pytest.mark.parametrize(
+    "knowledge_input",
+    [{"turns": []}, {"turns": ["q", "  "]}, {"turns": "q"}, {"workspace": ""}, {"turn": ["q"]}],
+)
+def test_langfuse_item_invalid_knowledge_input_raises(knowledge_input: dict) -> None:
+    raw = _knowledge_raw(metadata={"knowledge_input": knowledge_input})
+    with pytest.raises(ValueError, match="invalid knowledge_input"):
+        _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+
+
+def test_langfuse_item_explicit_test_kind_beats_knowledge_input() -> None:
+    raw = _knowledge_raw(metadata={"test_kind": "agentic_general_question", "knowledge_input": {"turns": ["q"]}})
+    assert _item_from_raw(raw, dataset_name="ds", test_kind="visualization").test_kind == "agentic_general_question"
+
+
+def test_langfuse_item_catalog_input_beats_knowledge_input() -> None:
+    raw = _knowledge_raw(
+        metadata={
+            "knowledge_input": {"turns": ["q"]},
+            "catalog_input": {"object_type": "Metric", "object_id": "arpu", "output": "title"},
+        }
+    )
+    assert _item_from_raw(raw, dataset_name="ds", test_kind="visualization").test_kind == "catalog_metadata"
+
+
+def test_langfuse_item_without_knowledge_input_keeps_the_default_kind() -> None:
+    raw = _knowledge_raw(metadata={})
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="agentic_general_question")
+    assert item.knowledge_input is None
+    assert item.test_kind == "agentic_general_question"

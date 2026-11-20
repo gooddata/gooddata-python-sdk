@@ -63,7 +63,9 @@ implementation, sometimes under different `test_kind` strings (`search_tool` vs
 its own shape. `test_kind` on the item is what labels the result, not the evaluator class,
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
-`takeaway_input`, `catalog_metadata` items `catalog_input`.
+`takeaway_input`, `catalog_metadata` items `catalog_input`. `agentic_knowledge` items may
+carry `knowledge_input` (fixed turns, workspace role); their evaluator lives in
+`core/evaluators/knowledge.py` but is agentic-only, so it is not in the single-shot registry.
 
 ## Running the pipeline
 
