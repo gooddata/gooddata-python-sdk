@@ -922,7 +922,9 @@ feature flag; a 404 on the switch fails the run and says so. In a Langfuse datas
 the item's `metadata` or its `input` object; an item carrying it is an `agentic_agent_switcher`
 item unless it declares another `test_kind` or its `expectedOutput` has a `visualization` key (that
 infers `vis_agentic`); `metadata.test_kind: "agentic_agent_switcher"` forces the switcher kind.
-`question` only labels the item.
+`question` only labels the item. Stop an item's turns at the alert proposal: the kind never confirms
+a proposal and deletes no alerts, so a turn that confirms one ("Yes, create it") creates a real alert
+that stays in the workspace.
 
 ```json
 {
