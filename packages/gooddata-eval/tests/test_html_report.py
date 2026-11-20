@@ -175,6 +175,18 @@ def test_redact_drops_the_transcript_but_keeps_the_turn_count():
     assert detail["turns"] == 2
 
 
+def test_redact_drops_the_text_of_each_turn_record():
+    doc = _doc("gpt-5", False)
+    turn = {"turn": 1, "agent_id": "a", "message": "secret ask", "answer": "secret rows", "reasons": {"x": "why"}}
+    doc["runs"]["gpt-5"]["items"]["item-1"]["detail"]["turns"] = [turn]
+    html = build_html(doc, redact=True)
+
+    assert "secret ask" not in html
+    assert "secret rows" not in html
+    detail = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["detail"]
+    assert detail["turns"] == [{"turn": 1, "agent_id": "a"}]
+
+
 def test_redact_reaches_inside_failed_runs():
     """Per-run records carry their own ids and their own raw reasoning.
 

@@ -34,6 +34,10 @@ _REDACTED_ITEM_FIELDS = frozenset({"conversation_id", "response_id", "reasoning"
 # for how long, just not what it was handed or what came back.
 _REDACTED_DETAIL_FIELDS = frozenset({"transcript", "tool_calls"})
 
+# Same, inside each record of a `detail.turns` list (agent switcher): the raw user message,
+# the agent's answer and the judge's reasons. The turn number, agents and checks stay.
+_REDACTED_TURN_FIELDS = frozenset({"message", "answer", "reasons"})
+
 # Same again, one level down inside each `failed_runs` entry. The per-run records carry
 # their *own* ids and their own raw reasoning (`reasoning_steps`), so redacting only the
 # item's top level left the identical content exposed one level deeper -- the top-level
@@ -50,7 +54,13 @@ _REDACTED_RUN_FIELDS = frozenset({"conversation_id", "response_id", "reasoning_s
 
 
 def _redact_detail(detail: dict) -> dict:
-    return {k: v for k, v in detail.items() if k not in _REDACTED_DETAIL_FIELDS}
+    out = {k: v for k, v in detail.items() if k not in _REDACTED_DETAIL_FIELDS}
+    turns = out.get("turns")
+    if isinstance(turns, list):
+        out["turns"] = [
+            {k: v for k, v in t.items() if k not in _REDACTED_TURN_FIELDS} if isinstance(t, dict) else t for t in turns
+        ]
+    return out
 
 
 def _redact_failed_run(run: dict) -> dict:
