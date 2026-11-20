@@ -1,7 +1,9 @@
 # (C) 2026 GoodData Corporation
 import json
 import logging
+import threading
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 from urllib.parse import unquote
 
@@ -866,6 +868,8 @@ def test_parse_sse_lines_first_response_id_wins():
 def test_ask_attaches_conversation_id_to_result(monkeypatch):
     """ChatClient.ask() sets conversation_id on the returned ChatResult."""
     calls = []
+    # Set rather than inherited: GOODDATA_EVAL_KEEP_CONVERSATIONS=1 would skip the DELETE.
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
 
     def handler(request):
         if request.method == "POST" and request.url.path.endswith("/conversations"):
@@ -908,6 +912,214 @@ def test_ask_preserve_failed_keeps_conversation_on_error(monkeypatch):
     assert "delete" not in calls  # conversation preserved
 
 
+@pytest.fixture
+def keep_conversations(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Turn the process-wide keep flag on for one test, and off again afterwards."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", True)
+
+
+def _delete_recording_handler(
+    calls: list[str], conversation_id: str, sse_body: bytes
+) -> Callable[[httpx.Request], httpx.Response]:
+    """A transport handler that appends to `calls` on DELETE, so a test can assert on it."""
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.method == "POST" and request.url.path.endswith("/conversations"):
+            return httpx.Response(200, json={"conversationId": conversation_id})
+        if request.method == "POST" and "messages" in str(request.url):
+            return httpx.Response(200, content=sse_body)
+        if request.method == "DELETE":
+            calls.append("delete")
+            return httpx.Response(204)
+        return httpx.Response(404)
+
+    return handler
+
+
+def test_keep_conversations_keeps_the_conversation_on_success(keep_conversations: None) -> None:
+    """A passing run is kept too -- that is the whole difference from preserve_failed."""
+    calls: list[str] = []
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-keep-ok", _OK_SSE))
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    result = client.ask(item)
+
+    assert result.conversation_id == "conv-keep-ok"
+    assert "delete" not in calls
+
+
+def test_keep_conversations_keeps_the_conversation_on_failure(
+    monkeypatch: pytest.MonkeyPatch, keep_conversations: None
+) -> None:
+    """Set on its own, with preserve_failed left off, it still keeps a failed conversation."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-keep-fail", _NONRETRY_SSE))
+
+    item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
+    with pytest.raises(ChatError):
+        client.ask(item)
+
+    assert "delete" not in calls
+
+
+def test_keep_conversations_blocks_a_direct_delete_conversation_call(keep_conversations: None) -> None:
+    """The gate is in delete_conversation itself, which is what the agentic evaluators call.
+
+    Each of them creates its own ChatClient deep in the call tree and deletes by hand in a
+    finally block -- twenty call sites that never pass through ``ask``. If this stops holding,
+    --keep-conversations silently covers the single-turn kinds only, which is the gap
+    --preserve-failed already had.
+    """
+    calls: list[str] = []
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-direct", _OK_SSE))
+
+    client.delete_conversation("conv-direct")
+
+    assert calls == []
+
+
+def test_set_keep_conversations_affects_an_already_built_client(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The agentic clients may already exist when the CLI applies the flag."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-late", _OK_SSE))
+
+    sse_mod.set_keep_conversations(True)
+    client.delete_conversation("conv-late")
+    assert calls == []
+
+    sse_mod.set_keep_conversations(False)
+    client.delete_conversation("conv-late")
+    assert calls == ["delete"]
+
+
+def test_a_client_built_under_retention_keeps_after_the_run_scope_exits(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A worker left running past a Ctrl-C finishes after the CLI restored the default. Its
+    client was built under the run's retention, so its cleanup must still skip the DELETE."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+
+    with sse_mod.keep_conversations(True):
+        client = _client_with_handler(_delete_recording_handler(calls, "conv-straggler", _OK_SSE))
+    assert sse_mod._KEEP_CONVERSATIONS is False
+
+    client.delete_conversation("conv-straggler")
+    assert calls == []
+
+    # A client built after the scope exited is back on the default and deletes.
+    later = _client_with_handler(_delete_recording_handler(calls, "conv-next", _OK_SSE))
+    later.delete_conversation("conv-next")
+    assert calls == ["delete"]
+
+
+def test_send_message_attaches_conversation_id_to_the_exception(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The agentic evaluators call send_message directly, not ask(); the runner reads the id
+    off the exception, so without it a kept conversation is unfindable from the report."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-send-fail", _NONRETRY_SSE))
+
+    with pytest.raises(ChatError) as excinfo:
+        client.send_message("conv-send-fail", "q")
+
+    assert getattr(excinfo.value, "conversation_id", None) == "conv-send-fail"
+
+
+def test_keep_conversations_restores_the_previous_setting(monkeypatch: pytest.MonkeyPatch) -> None:
+    """One run asking to keep must not leave the next run keeping too."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+
+    with sse_mod.keep_conversations(True):
+        assert sse_mod._retention_on() is True
+        # The run override never touches the process default.
+        assert sse_mod._KEEP_CONVERSATIONS is False
+    assert sse_mod._retention_on() is False
+
+    with pytest.raises(RuntimeError), sse_mod.keep_conversations(True):
+        raise RuntimeError("run blew up")
+    assert sse_mod._retention_on() is False
+
+
+def test_keep_conversations_false_does_not_clear_an_env_set_flag(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``keep=False`` means "did not ask", not "delete" -- an exported env var survives a
+    run that passes no flag."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", True)
+
+    with sse_mod.keep_conversations(False):
+        assert sse_mod._retention_on() is True
+    assert sse_mod._retention_on() is True
+    assert sse_mod._KEEP_CONVERSATIONS is True
+
+
+def test_overlapping_runs_each_keep_only_their_own_retention(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A flagged run and a bare run in one process, the bare one starting inside the flagged
+    one's scope and exiting after it. The bare run must still delete, and once both have
+    exited nothing may be left on: neither run can see or restore the other's override."""
+    calls: list[str] = []
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    flagged_entered = threading.Event()
+    flagged_may_exit = threading.Event()
+    seen_by_flagged: list[bool] = []
+
+    def flagged_run() -> None:
+        with sse_mod.keep_conversations(True):
+            seen_by_flagged.append(sse_mod._retention_on())
+            flagged_entered.set()
+            flagged_may_exit.wait(timeout=5)
+
+    flagged = threading.Thread(target=flagged_run)
+    flagged.start()
+    assert flagged_entered.wait(timeout=5)
+
+    with sse_mod.keep_conversations(False):
+        assert sse_mod._retention_on() is False
+        bare_client = _client_with_handler(_delete_recording_handler(calls, "conv-bare", _OK_SSE))
+        flagged_may_exit.set()
+        flagged.join(timeout=5)
+        bare_client.delete_conversation("conv-bare")
+
+    assert seen_by_flagged == [True]
+    assert calls == ["delete"]
+    assert sse_mod._retention_on() is False
+
+
+def test_bind_run_retention_carries_the_override_into_a_pool_thread(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A pool worker starts without the submitting thread's ContextVars, and a pooled thread
+    reused afterwards must not keep the override it was given for an earlier task."""
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        with sse_mod.keep_conversations(True):
+            unbound = pool.submit(sse_mod._retention_on).result()
+            bound = pool.submit(sse_mod.bind_run_retention(sse_mod._retention_on)).result()
+        afterwards = pool.submit(sse_mod._retention_on).result()
+
+    assert (unbound, bound, afterwards) == (False, True, False)
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [("1", True), ("true", True), ("yes", True), ("0", False), ("false", False), ("off", False), ("", False)],
+)
+def test_keep_conversations_env_var(monkeypatch: pytest.MonkeyPatch, raw: str, expected: bool) -> None:
+    """``GOODDATA_EVAL_KEEP_CONVERSATIONS=0`` turns it off rather than reading as truthy."""
+    monkeypatch.setenv("GOODDATA_EVAL_KEEP_CONVERSATIONS", raw)
+    assert sse_mod._bool_env("GOODDATA_EVAL_KEEP_CONVERSATIONS", False) is expected
+
+
+def test_conversations_are_deleted_when_the_flag_is_off(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The default is unchanged: a run that does not ask to keep state leaves none behind."""
+    calls: list[str] = []
+    # Set explicitly rather than assumed: with GOODDATA_EVAL_KEEP_CONVERSATIONS exported, the
+    # module initialises to True and this test would fail when run on its own.
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
+    client = _client_with_handler(_delete_recording_handler(calls, "conv-default", _OK_SSE))
+
+    client.delete_conversation("conv-default")
+
+    assert calls == ["delete"]
+
+
 def test_ask_without_preserve_failed_deletes_on_error(monkeypatch):
     """Without preserve_failed, conversations are deleted even on error."""
     calls = []
@@ -923,6 +1135,8 @@ def test_ask_without_preserve_failed_deletes_on_error(monkeypatch):
         return httpx.Response(404)
 
     monkeypatch.setattr(sse_mod.time, "sleep", lambda s: None)
+    # Set rather than inherited: GOODDATA_EVAL_KEEP_CONVERSATIONS=1 would skip the DELETE.
+    monkeypatch.setattr(sse_mod, "_KEEP_CONVERSATIONS", False)
     client = _client_with_handler(handler)
 
     item = DatasetItem(id="t1", dataset_name="d", test_kind="visualization", question="q", expected_output={})
