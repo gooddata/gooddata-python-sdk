@@ -1,0 +1,98 @@
+[
+  {
+    "label": "How do we define an active customer?",
+    "question": "How do we define an active customer?",
+    "kind": "include",
+    "criterion": "Gives the company definition: a customer with at least one order in the last 12 months",
+    "text": "An active customer is defined as a customer with at least one order in the last 12 months.",
+    "want": "pass"
+  },
+  {
+    "label": "How do we define an active customer?",
+    "question": "How do we define an active customer?",
+    "kind": "include",
+    "criterion": "Gives the company definition: a customer with at least one order in the last 12 months",
+    "text": "An active customer is defined as a customer who has transacted. The count follows the current filters and time range.",
+    "want": "fail"
+  },
+  {
+    "label": "Who must approve a 30 % discount?",
+    "question": "Who must approve a 30 % discount?",
+    "kind": "exclude",
+    "criterion": "Says that the CFO must approve the discount",
+    "text": "A 30% discount must be approved by the regional sales manager. Discounts above 40% are not allowed.",
+    "want": "pass"
+  },
+  {
+    "label": "Who must approve a 30 % discount?",
+    "question": "Who must approve a 30 % discount?",
+    "kind": "exclude",
+    "criterion": "Says that the CFO must approve the discount",
+    "text": "Discounts above 25 % need approval of the CFO, so a 30 % discount must be approved by the CFO.",
+    "want": "fail"
+  },
+  {
+    "label": "Who is the category manager for Clothing?",
+    "question": "Who is the category manager for Clothing?",
+    "kind": "exclude",
+    "criterion": "Names a person as the Clothing category manager",
+    "text": "I couldn’t find a category manager for Clothing in the available data or knowledge sources.",
+    "want": "pass"
+  },
+  {
+    "label": "Who is the category manager for Clothing?",
+    "question": "Who is the category manager for Clothing?",
+    "kind": "exclude",
+    "criterion": "Names a person as the Clothing category manager",
+    "text": "The Clothing category manager is Eva Dvořák.",
+    "want": "fail"
+  },
+  {
+    "label": "Kdo musí schválit slevu 20 %?",
+    "question": "Kdo musí schválit slevu 20 %?",
+    "kind": "include",
+    "criterion": "Answers in Czech",
+    "text": "Slevu 20 % musí schválit regionální obchodní manažer.",
+    "want": "pass"
+  },
+  {
+    "label": "Kdo musí schválit slevu 20 %?",
+    "question": "Kdo musí schválit slevu 20 %?",
+    "kind": "include",
+    "criterion": "Answers in Czech",
+    "text": "A 20 % discount must be approved by the regional sales manager.",
+    "want": "fail"
+  },
+  {
+    "label": "What is the Furniture team's discount rule?",
+    "question": "What is the Furniture team's discount rule?",
+    "kind": "include",
+    "criterion": "Says that a discount above 15 % needs the approval of the regional sales manager.",
+    "text": "The Furniture team follows the general discount policy:\n\n- **Up to 15%:** the sales representative can approve it.\n- **Above 15% and up to 40%:** regional sales manager approval is required.\n- **Above 40%:** not allowed.\n\nThe policy is valid from **1 January 2024** and applies to all sales teams.",
+    "want": "pass"
+  },
+  {
+    "label": "What is the Furniture team's discount rule?",
+    "question": "What is the Furniture team's discount rule?",
+    "kind": "include",
+    "criterion": "Says that a discount above 15 % needs the approval of the regional sales manager.",
+    "text": "The Furniture team needs approval of the Furniture category manager for discounts above 10 %.",
+    "want": "fail"
+  },
+  {
+    "label": "What is our approval rule for free shipping?",
+    "question": "What is our approval rule for free shipping?",
+    "kind": "include",
+    "criterion": "Says the documents do not mention free shipping (even if it then applies another rule).",
+    "text": "I found a discount approval rule, but it does not explicitly mention free shipping. If free shipping is treated as a discount, the rule is:\n\n- Up to **15%**: the sales representative can approve it.\n- Above **15%**: approval from the regional sales manager is required.\n- Above **40%**: not allowed.\n\nThe policy is valid from **1 January 2024** for all sales teams.",
+    "want": "pass"
+  },
+  {
+    "label": "What is our approval rule for free shipping?",
+    "question": "What is our approval rule for free shipping?",
+    "kind": "include",
+    "criterion": "Says the documents do not mention free shipping (even if it then applies another rule).",
+    "text": "Free shipping must be approved by the regional sales manager when the order is below 50 USD.",
+    "want": "fail"
+  }
+]

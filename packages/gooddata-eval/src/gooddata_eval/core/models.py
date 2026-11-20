@@ -579,6 +579,34 @@ class CatalogInput(BaseModel):
     output: Literal["title", "description"]
 
 
+class KnowledgeInput(BaseModel):
+    """Structured input for the `agentic_knowledge` test kind.
+
+    - `turns`: every user turn, in order, sent in one conversation; None means the item's
+      question is the only turn.
+    - `workspace`: a caller-defined workspace role (e.g. "parent"); carried, not used here.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    turns: list[str] | None = Field(default=None, min_length=1)
+    workspace: str | None = None
+
+    @field_validator("turns")
+    @classmethod
+    def _turns_not_blank(cls, value: list[str] | None) -> list[str] | None:
+        if value is not None and any(not turn.strip() for turn in value):
+            raise ValueError("every turn must be a non-empty string")
+        return value
+
+    @field_validator("workspace")
+    @classmethod
+    def _workspace_not_blank(cls, value: str | None) -> str | None:
+        if value is not None and not value.strip():
+            raise ValueError("workspace must be a non-empty string")
+        return value
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -595,6 +623,8 @@ class DatasetItem(BaseModel):
     takeaway_input: TakeawayInput | None = None
     # Only used by the `catalog_metadata` test kind; ignored by all others.
     catalog_input: CatalogInput | None = None
+    # Only used by the `agentic_knowledge` test kind; ignored by all others.
+    knowledge_input: KnowledgeInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

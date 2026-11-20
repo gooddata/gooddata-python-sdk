@@ -18,7 +18,7 @@ import httpx
 from pydantic import ValidationError
 
 from gooddata_eval.core.langfuse._env import make_http_client
-from gooddata_eval.core.models import CatalogInput, DatasetItem, SummaryInput, TakeawayInput
+from gooddata_eval.core.models import CatalogInput, DatasetItem, KnowledgeInput, SummaryInput, TakeawayInput
 
 _PAGE_SIZE = 100
 
@@ -78,6 +78,29 @@ def _catalog_input_from_raw(raw: dict, expected_output: Any) -> CatalogInput | N
             return CatalogInput.model_validate(found)
         except ValidationError as e:
             raise ValueError(f"Langfuse item {raw.get('id')!r}: invalid catalog_input: {e}") from e
+    return None
+
+
+def _knowledge_input_from_raw(raw: dict) -> KnowledgeInput | None:
+    """Locate an agentic_knowledge item's `knowledge_input`, in `input` or `metadata`.
+
+    Not read from expected_output: the knowledge evaluator rejects unknown keys there.
+
+    Raises:
+        ValueError: The value found is not a valid `knowledge_input` object.
+    """
+    for source in (raw.get("input"), raw.get("metadata")):
+        if not isinstance(source, dict) or source.get("knowledge_input") is None:
+            continue
+        found = source["knowledge_input"]
+        if not isinstance(found, dict):
+            raise ValueError(
+                f"Langfuse item {raw.get('id')!r}: knowledge_input must be a JSON object, got {type(found).__name__}"
+            )
+        try:
+            return KnowledgeInput.model_validate(found)
+        except ValidationError as e:
+            raise ValueError(f"Langfuse item {raw.get('id')!r}: invalid knowledge_input: {e}") from e
     return None
 
 
@@ -160,9 +183,13 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
     expected_output = raw.get("expectedOutput") or raw.get("expected_output")
     takeaway_input = _takeaway_input_from_raw(raw, expected_output)
     catalog_input = _catalog_input_from_raw(raw, expected_output)
-    # An item carrying `takeaway_input` or `catalog_input` can only be of that kind, so it stands
-    # in for the CLI default; an explicit test_kind or a structural match still wins.
+    knowledge_input = _knowledge_input_from_raw(raw)
+    # An item carrying `takeaway_input`, `catalog_input` or `knowledge_input` can only be of that
+    # kind, so it stands in for the CLI default; an explicit test_kind or a structural match still
+    # wins. When several are set: takeaway, then catalog, then knowledge.
     default_kind = test_kind
+    if knowledge_input is not None:
+        default_kind = "agentic_knowledge"
     if catalog_input is not None:
         default_kind = "catalog_metadata"
     if takeaway_input is not None:
@@ -177,6 +204,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         summary_input=_summary_input_from_raw(raw, expected_output),
         takeaway_input=takeaway_input,
         catalog_input=catalog_input,
+        knowledge_input=knowledge_input,
         user_context=_user_context_from_raw(raw),
     )
 

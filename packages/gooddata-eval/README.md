@@ -132,7 +132,7 @@ gd-eval run \
 | `--runs K` | `2` | Independent runs per item. |
 | `--gate` | `any` | Which verdict decides an item: `any` = pass@K (a run passing is enough), `power` = pass^K (every run must pass, so the verdict measures stability). Identical at `--runs 1`. Kinds that repeat K runs only — `power` is refused when the dataset also has non-agentic items or `agentic_conversation`, which are always decided on pass@K. |
 | `--concurrency K` | `1` | Number of items evaluated concurrently. `1` = sequential (default). Increase to load-test the agent under simultaneous requests — see *Concurrency and workspace safety* below. |
-| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway` and `catalog_metadata`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
+| `--judge-model MODEL` | `gpt-4o` | Model used for LLM-as-judge scoring — `agentic_general_question`, `agentic_guardrail`, `general_question`, `guardrail`, `dashboard_summary`, `document_takeaway`, `catalog_metadata` and `agentic_knowledge`. Also settable via `GD_EVAL_JUDGE_MODEL`. Two things to weigh before changing it: the gpt-5 family rejects `temperature=0`, so verdicts stop being reproducible (the run warns when this happens); and choosing the same model the agent runs means the judge grades its own family's output. |
 | `--reasoning-effort LEVEL` | server default | `LOW`, `MEDIUM` or `HIGH`, sent as `options.reasoningEffort` on every chat message. Requires the `enableGenAiReasoningEffort` feature flag on the target organization — without it the server ignores the value. Applies to chat items only; `dashboard_summary`, `document_takeaway` and `catalog_metadata` items go through their own endpoints, which have no such option. |
 
 **Concurrency and workspace safety.** Agentic kinds that create workspace objects
@@ -323,8 +323,8 @@ their eval kind, and states latency for each:
   `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
 - **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
   `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
-  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if` and
-  `agentic_conversation`.
+  `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if`,
+  `agentic_knowledge` and `agentic_conversation`.
 
 ```json
 "summary": {
@@ -912,6 +912,59 @@ A 200 answer with no usable text (a null value without a note, or the placeholde
 `OPENAI_API_KEY`); re-run it after changing them. Request errors are handled as for
 `document_takeaway`; the CI entry point is `evaluate_catalog_metadata`.
 
+### `agentic_knowledge` items
+
+Knowledge items ask the AI chat questions it answers from knowledge documents (tools
+`search_knowledge` and `get_knowledge_chunks`). Each run is a fresh conversation that sends
+fixed user turns in order (no simulated user) and grades the last answer. `question` is the
+first turn; `knowledge_input.turns` lists every turn when there are several (`turns[0]` must
+equal `question`). `knowledge_input.workspace` is an optional caller-defined workspace role
+(e.g. `parent`, `child`), carried for the caller to map to a workspace id. `gd-eval run`
+cannot map it: it runs an item with no role or `parent` in `--workspace` and refuses any
+other role. In a Langfuse dataset `knowledge_input` goes in the item `metadata` (or the `input`
+object); an item carrying it is an `agentic_knowledge` item unless it declares another
+`test_kind`. Unknown keys are rejected.
+
+```json
+{
+  "id": "kn-001",
+  "dataset_name": "agent_knowledge",
+  "test_kind": "agentic_knowledge",
+  "question": "Who must approve a 30 % discount?",
+  "knowledge_input": {"turns": ["Who must approve a 30 % discount?", "And for 45 %?"], "workspace": "child"},
+  "expected_output": {
+    "expected_documents": ["Discount Policy"],
+    "forbidden_documents": ["Discount Policy 2023"],
+    "expected_source": "the parent workspace",
+    "must_include": ["Says that discounts above 40 % are not allowed."],
+    "must_not_include": ["Says that the CFO must approve the discount."]
+  }
+}
+```
+
+Every `expected_output` key is optional; unknown keys and wrong types are rejected before
+any request. Code checks over the knowledge tool results of all turns gate the verdict, so a
+failed item shows whether retrieval (document never found) or reasoning (found, answered
+wrong) failed:
+
+- `expect_search` (default `true`) — at least one `search_knowledge` call (`knowledge_searched`).
+- `expected_documents` — each title is in some knowledge tool result (`expected_documents_found`).
+- `forbidden_documents` — no title is in any knowledge tool result (`forbidden_documents_absent`).
+- `expected_source` — an expected document's result carries this `source` label
+  (`expected_source_found`); needs `expected_documents`. One of gen-ai's labels: `this
+  workspace`, `the parent workspace`, `an ancestor workspace`, `AI Hub`.
+- `must_include`, `must_not_include`, `rubric` — judge criteria on the last answer, graded
+  like `dashboard_summary`; the judge reads the earlier turns and answers as INPUT.
+
+Titles match case-insensitively on a result's `title` or `filename`. A last turn without
+text fails (`answered`). Diagnostics that never gate: `documents_retrieved`,
+`sources_cited` (titles in the answer's trailing "Sources" list) and `turn_count`. Langfuse
+gets `knowledge_pass` plus each code check as its own score per run; `quality_score` counts the
+code checks and judge verdicts. A run the judge could not grade is an ERROR (`eval_error`), not
+a fail. The judge steps are calibrated with
+`make calibrate-knowledge` (needs `OPENAI_API_KEY`); the CI entry point is
+`evaluate_agentic_knowledge`.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
@@ -1013,6 +1066,7 @@ from that turn on until another turn changes it, as the attached context does in
 | `dashboard_summary` | Dashboard summary (via `/summary` endpoint) scored against a rubric by LLM | `[llm-judge]` |
 | `document_takeaway` | One short takeaway for a page (via `/takeaway` endpoint): deterministic format checks plus a rubric scored by LLM | `[llm-judge]` |
 | `catalog_metadata` | Analytics Catalog title or description for one object (via the `analyticsCatalog/generate*` endpoints): format checks plus a rubric scored by LLM | `[llm-judge]` |
+| `agentic_knowledge` | Answer from knowledge documents over fixed chat turns: retrieval checks on the knowledge tool results plus a rubric on the last answer scored by LLM | `[llm-judge]` |
 
 ## Optional extras
 

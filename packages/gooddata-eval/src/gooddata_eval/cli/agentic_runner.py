@@ -23,6 +23,7 @@ from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
+from gooddata_eval.core.agentic.knowledge import evaluate_agentic_knowledge
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
@@ -63,6 +64,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_dashboard_summary",
         "agentic_anomaly_detection",
         "agentic_what_if",
+        "agentic_knowledge",
     }
 )
 
@@ -379,6 +381,29 @@ def _dispatch_agentic(
             workspace_id=workspace_id,
             question=item.question,
             expected_output=eo if isinstance(eo, dict) else {},
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
+            **lf_kw,
+        )
+    elif kind == "agentic_knowledge":
+        knowledge_input = item.knowledge_input
+        role = knowledge_input.workspace if knowledge_input is not None else None
+        # Only "parent" is the --workspace itself; any other role names a workspace the CLI cannot resolve.
+        if role is not None and role.strip().lower() != "parent":
+            raise ValueError(
+                f"agentic_knowledge item '{item.id}' sets knowledge_input.workspace={role!r}: the workspace role "
+                "needs a caller that maps it to a workspace id (e.g. the gdc-nas shim); the CLI would run it in "
+                "--workspace instead."
+            )
+        return evaluate_agentic_knowledge(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo,
+            turns=knowledge_input.turns if knowledge_input is not None else None,
             k=k,
             gate=gate,
             agent_id=agent_id,

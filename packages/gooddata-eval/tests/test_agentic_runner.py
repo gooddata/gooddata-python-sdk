@@ -7,7 +7,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from gooddata_eval.cli import agentic_runner
@@ -22,7 +22,13 @@ from gooddata_eval.cli.agentic_runner import (
 from gooddata_eval.core.agentic.alert_skill import AlertSkillAssertionError
 from gooddata_eval.core.evaluators._llm_judge import JudgeResponseError
 from gooddata_eval.core.langfuse.item_scope import ItemTraceScope, current_scope
-from gooddata_eval.core.models import AgenticAssertionError, AgenticEvalOutcome, CreatedVisualization, DatasetItem
+from gooddata_eval.core.models import (
+    AgenticAssertionError,
+    AgenticEvalOutcome,
+    CreatedVisualization,
+    DatasetItem,
+    KnowledgeInput,
+)
 from gooddata_eval.core.reporting.json_report import build_json_report
 from gooddata_eval.core.timing import PhaseTimings, note_trace_latency
 
@@ -107,6 +113,7 @@ _ALL_AGENTIC_KIND_CASES = [
     ),
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
+    ("agentic_knowledge", {"expected_documents": ["Discount Policy"]}, "evaluate_agentic_knowledge"),
 ]
 
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
@@ -894,6 +901,7 @@ _KIND_EVALUATORS = [
     ("agentic_document_skill", "evaluate_agentic_document_skill", {}),
     ("agentic_forecasting", "evaluate_agentic_forecasting", {}),
     ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
+    ("agentic_knowledge", "evaluate_agentic_knowledge", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
 ]
 
@@ -972,6 +980,7 @@ _CLIENT_CONTEXT_KINDS = [
     ("what_if", "run_agentic_what_if", "evaluate_agentic_what_if", {}),
     ("anomaly_detection", "run_agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("document_skill", "run_agentic_document_skill", "evaluate_agentic_document_skill", {}),
+    ("knowledge", "run_agentic_knowledge", "evaluate_agentic_knowledge", {}),
 ]
 
 
@@ -1410,3 +1419,45 @@ def test_concurrent_items_each_keep_only_their_own_trace_latencies():
     assert {i.id: i.trace_latencies_s for i in report.items} == {
         f"g{n}": [n * 100.0, n * 100.0 + 1, n * 100.0 + 2] for n in range(1, 5)
     }
+
+
+def _dispatch_knowledge(workspace: str | None) -> MagicMock:
+    item = DatasetItem(
+        id="kn-1",
+        dataset_name="ds",
+        test_kind="agentic_knowledge",
+        question="q",
+        expected_output={},
+        knowledge_input=KnowledgeInput(turns=["q", "q2"], workspace=workspace),
+    )
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_knowledge") as mock_eval:
+        _dispatch_agentic(
+            item,
+            host="https://h",
+            token="tok",
+            workspace_id="ws1",
+            k=1,
+            langfuse=None,
+            run_ts="2026-01-01",
+            model_version_override=None,
+        )
+    return mock_eval
+
+
+@pytest.mark.parametrize("workspace", [None, "parent", "Parent"])
+def test_dispatch_runs_a_knowledge_item_in_the_cli_workspace(workspace: str | None) -> None:
+    mock_eval = _dispatch_knowledge(workspace)
+    assert mock_eval.call_args.kwargs["workspace_id"] == "ws1"
+    assert mock_eval.call_args.kwargs["turns"] == ["q", "q2"]
+
+
+@pytest.mark.parametrize("workspace", ["child", "sibling"])
+def test_dispatch_refuses_a_knowledge_item_whose_workspace_role_it_cannot_map(workspace: str) -> None:
+    """Running a child-workspace item in --workspace would grade the wrong knowledge sources."""
+    with pytest.raises(ValueError, match="maps it to a workspace id"):
+        _dispatch_knowledge(workspace)
+
+
+def test_agentic_knowledge_runs_serially_in_the_cli() -> None:
+    # Fixed turns are not proof of read-only behavior: an item could confirm an object creation.
+    assert not runs_in_parallel("agentic_knowledge")

@@ -46,6 +46,7 @@ MULTI_TURN_KINDS = frozenset(
         "agentic_anomaly_detection",
         "agentic_what_if",
         "agentic_forecasting",
+        "agentic_knowledge",
     }
 )
 

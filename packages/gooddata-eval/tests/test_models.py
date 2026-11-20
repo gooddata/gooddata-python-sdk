@@ -5,6 +5,7 @@ from gooddata_eval.core.models import (
     ChatResult,
     CreatedVisualization,
     DatasetItem,
+    KnowledgeInput,
     ReasoningStepEvent,
     TakeawayInput,
     TakeawayVisualization,
@@ -229,3 +230,18 @@ def test_catalog_input_rejects_unknown_keys_and_types() -> None:
         CatalogInput.model_validate({"object_type": "Metric", "object_id": "a", "output": "title", "x": 1})
     with pytest.raises(ValueError):
         CatalogInput.model_validate({"object_type": "Parameter", "object_id": "a", "output": "title"})
+
+
+def test_knowledge_input_defaults_and_rejects_bad_values() -> None:
+    assert KnowledgeInput.model_validate({}).turns is None
+    assert KnowledgeInput.model_validate({"workspace": "child"}).workspace == "child"
+    for bad in ({"turns": []}, {"turns": [" "]}, {"turns": [1]}, {"workspace": " "}, {"x": 1}):
+        with pytest.raises(ValueError):
+            KnowledgeInput.model_validate(bad)
+
+
+def test_dataset_item_knowledge_input_defaults_to_none() -> None:
+    item = DatasetItem.model_validate(
+        {"id": "q1", "dataset_name": "d1", "test_kind": "agentic_knowledge", "question": "q", "expected_output": {}}
+    )
+    assert item.knowledge_input is None
