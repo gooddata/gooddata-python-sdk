@@ -65,6 +65,7 @@ class LangfuseSink:
         reasoning_effort: ReasoningEffort | None = None,
         *,
         tags: tuple[str, ...] = (),
+        run_metadata: dict[str, Any] | None = None,
         transport: httpx.BaseTransport | None = None,
     ):
         self._dataset_name = dataset_name
@@ -73,6 +74,7 @@ class LangfuseSink:
         self._provider_type = provider_type
         self._reasoning_effort = reasoning_effort
         self._tags = tags
+        self._run_metadata = dict(run_metadata) if run_metadata else {}
         self._client = HttpxLangfuseClient(timeout=10.0, transport=transport)
         self._warned_unlinkable = False
 
@@ -103,14 +105,20 @@ class LangfuseSink:
             if self._provider_type and self._model_id
             else self._model_id or None
         )
-        return ExperimentRun(
-            self._run_name,
-            dataset_id,
+        # User-supplied run_metadata first, then the automatic fields -- so an automatic
+        # field cannot be overwritten by --run-metadata-json, matching the agentic path.
+        metadata: dict[str, Any] = dict(self._run_metadata)
+        metadata.update(
             {
                 "model": self._model_id,
                 "provider_type": self._provider_type,
                 "reasoning_effort": self._reasoning_effort,
-            },
+            }
+        )
+        return ExperimentRun(
+            self._run_name,
+            dataset_id,
+            metadata,
             description=description,
         )
 
