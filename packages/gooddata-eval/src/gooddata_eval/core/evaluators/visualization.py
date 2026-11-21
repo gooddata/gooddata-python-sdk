@@ -287,7 +287,9 @@ class ExpectationOptions:
       to match and no ``must_not_match`` pattern may.
     - ``format_intents``: per metric uri, how its numbers must read (see ``number_format``).
     - ``requires_visualization_part``: the chart must come back as a part of the answer. Without
-      it, a chart that exists only in the tool arguments is scored like one the user saw.
+      it, a chart that exists only in the tool arguments is scored like one the user saw -- the
+      last call's arguments, unless the backend rejected that definition as unbuildable or the
+      call was a lookup (``show_to_user: false``), in which case the answer has no chart.
     - ``date_filter_from_context``: the chart may carry the date filter of the dashboard in the
       item's ``user_context`` instead of none (see ``ContextDateFilter``). For a question that
       names no period asked from an open dashboard, where carrying the dashboard's period over

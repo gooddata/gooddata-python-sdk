@@ -4,6 +4,7 @@
 All tests mock ChatClient so no network is needed.
 """
 
+import json
 from collections.abc import Callable
 from dataclasses import replace
 from typing import Any
@@ -18,7 +19,7 @@ from gooddata_eval.core.agentic.visualization import (
     evaluate_agentic_visualization,
     run_agentic_visualization,
 )
-from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError
+from gooddata_eval.core.chat.sse_client import ChatError, TurnIncompleteError, TurnTimeoutError, parse_sse_lines
 from gooddata_eval.core.evaluators.visualization import ExpectationOptions
 from gooddata_eval.core.models import ChatResult, CreatedVisualization, LoopExit
 
@@ -114,6 +115,75 @@ def test_execute_single_run_clarification_then_viz(monkeypatch):
     assert result.total_turns == 2
     assert client.send_message.call_count == 2
     assert client.send_message.call_args_list[1] == call("conv-1", "Revenue please")
+
+
+def test_execute_single_run_continues_after_a_turn_whose_chart_the_backend_rejected(monkeypatch):
+    """A turn whose only chart the backend rejected as unbuildable produced no chart, so the run
+    goes on to a simulated reply instead of ending as if one was built."""
+    rejected = {
+        "type": "column_chart",
+        "query": {"fields": {"m": {"using": "metric/revenue_preagg"}, "d": {"using": "label/merchant"}}},
+        "metrics": ["m"],
+        "view_by": ["d"],
+    }
+    first_turn = parse_sse_lines(
+        [
+            "data: "
+            + json.dumps(
+                {
+                    "item": {
+                        "role": "assistant",
+                        "content": {
+                            "type": "toolCall",
+                            "callId": "c1",
+                            "name": "create_adhoc_visualization",
+                            "arguments": {"visualization": rejected},
+                        },
+                    }
+                }
+            ),
+            "data: "
+            + json.dumps(
+                {
+                    "item": {
+                        "role": "tool",
+                        "content": {
+                            "type": "toolResult",
+                            "callId": "c1",
+                            "result": json.dumps(
+                                {"status": "error", "message": "... is not comparable to the dimensionality ..."}
+                            ),
+                        },
+                    }
+                }
+            ),
+            "data: "
+            + json.dumps(
+                {
+                    "item": {
+                        "role": "assistant",
+                        "content": {
+                            "type": "multipart",
+                            "parts": [{"type": "text", "text": "I could not chart that."}],
+                        },
+                    }
+                }
+            ),
+        ]
+    )
+    client = MagicMock()
+    client.send_message.side_effect = [first_turn, _chat_with_viz()]
+    monkeypatch.setattr(
+        "gooddata_eval.core.agentic.visualization.generate_simulated_response",
+        lambda msg, exp: "Use the transaction-level metric",
+    )
+
+    result = _execute_single_run(client, "conv-1", "Revenue by merchant", [_expected()])
+
+    assert client.send_message.call_count == 2
+    assert client.send_message.call_args_list[1] == call("conv-1", "Use the transaction-level metric")
+    assert result.total_turns == 2
+    assert result.eval_result.visualization_created is True
 
 
 def test_execute_single_run_no_viz_no_text():
