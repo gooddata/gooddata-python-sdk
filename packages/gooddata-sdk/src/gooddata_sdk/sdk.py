@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from gooddata_sdk.catalog.ai_knowledge.service import CatalogAIKnowledgeService
 from gooddata_sdk.catalog.ai_lake.service import CatalogAILakeService
 from gooddata_sdk.catalog.appearance.service import CatalogAppearanceService
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
@@ -96,6 +97,7 @@ class GoodDataSdk:
         self._support = SupportService(self._client)
         self._catalog_permission = CatalogPermissionService(self._client)
         self._catalog_ai_lake = CatalogAILakeService(self._client)
+        self._catalog_ai_knowledge = CatalogAIKnowledgeService(self._client)
         self._export = ExportService(self._client)
 
     @property
@@ -149,6 +151,10 @@ class GoodDataSdk:
     @property
     def catalog_ai_lake(self) -> CatalogAILakeService:
         return self._catalog_ai_lake
+
+    @property
+    def catalog_ai_knowledge(self) -> CatalogAIKnowledgeService:
+        return self._catalog_ai_knowledge
 
     @property
     def client(self) -> GoodDataApiClient:

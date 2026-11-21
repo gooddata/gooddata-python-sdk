@@ -7,6 +7,7 @@ import logging
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import gooddata_api_client as api_client
 import requests
@@ -247,6 +248,46 @@ class GoodDataApiClient:
             return self._do_post_request(data, endpoint, content_type)
         else:
             raise NotImplementedError("Currently only supports the POST method.")
+
+    def request(
+        self,
+        method: str,
+        endpoint: str,
+        *,
+        json: Any = None,
+        data: bytes | None = None,
+        params: dict[str, Any] | None = None,
+        files: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        timeout: float = 300.0,
+    ) -> requests.Response:
+        """Send an authenticated request to an endpoint the generated client does not cover, e.g. AI Knowledge.
+
+        Args:
+            method (str): HTTP method, e.g. "GET" or "PUT".
+            endpoint (str): Path below the host, e.g. "/api/v1/ai/organization/knowledge/folders".
+            json (Any): JSON body.
+            data (bytes | None): Raw body, sent as application/octet-stream unless headers say otherwise.
+            params (dict[str, Any] | None): Query parameters.
+            files (dict[str, Any] | None): Multipart files, as for `requests`.
+            headers (dict[str, str] | None): Extra headers.
+            timeout (float): Seconds to wait for the server.
+
+        Returns:
+            requests.Response: The response; the caller checks its status.
+        """
+        url = f"{self._hostname.rstrip('/')}/{endpoint.lstrip('/')}"
+        all_headers = {
+            "Authorization": f"Bearer {self._token}",
+            "X-Requested-With": "XMLHttpRequest",
+            **self._custom_headers,
+            **(headers or {}),
+        }
+        if data is not None and "Content-Type" not in all_headers:
+            all_headers["Content-Type"] = "application/octet-stream"
+        return self._session.request(
+            method, url, json=json, data=data, params=params, files=files, headers=all_headers, timeout=timeout
+        )
 
     @staticmethod
     def _set_default_headers(headers: dict) -> None:
