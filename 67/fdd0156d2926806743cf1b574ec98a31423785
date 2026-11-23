@@ -1,5 +1,5 @@
 packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_dc2c82805837c9::t_c6545194faa4fb 582-609,626-627
+  s_dc2c82805837c9::t_c6545194faa4fb 582-609,626-627,631-658,677-678
 packages/gooddata-eval/src/gooddata_eval/core/agentic/knowledge.py
   s_dc2c82805837c9::t_1724317fbb49b7 35
   s_dc2c82805837c9::t_bc26165a5a7b5e 36,46,309-317,319-335,354,368,377,379
@@ -23,11 +23,11 @@ packages/gooddata-eval/tests/test_cli.py
 packages/gooddata-eval/Makefile
   s_dc2c82805837c9::t_ac78366d982fd2 11-14
 packages/gooddata-eval/src/gooddata_eval/core/interaction.py
-  s_dc2c82805837c9::t_e4e32d3c3af6d1 49
+  s_dc2c82805837c9::t_e4e32d3c3af6d1 49,50
 packages/gooddata-eval/tests/test_models.py
   s_dc2c82805837c9::t_c98a8bdbbc32c1 8,233-247
 packages/gooddata-eval/README.md
-  s_dc2c82805837c9::t_0f7c42d45454b2 135,326-327,915-967,1069
+  s_dc2c82805837c9::t_0f7c42d45454b2 135,326-327,326,915-967,986-1038,1069,1141
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/knowledge.py
   s_dc2c82805837c9::t_b8fd86a9ebf7e4 1-58,61-135,140-145,147-174,177-252
   s_dc2c82805837c9::t_347d19adc92bc3 59-60,136-139,146,175-176
@@ -35,20 +35,20 @@ packages/gooddata-eval/tests/test_langfuse_source.py
   s_dc2c82805837c9::t_02f435db681eb1 379-439
   s_dc2c82805837c9::t_c98a8bdbbc32c1 2
 packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
-  s_dc2c82805837c9::t_320e770f8cdb77 21,84-106,186-189,191-192,207
+  s_dc2c82805837c9::t_320e770f8cdb77 21,84-106,91-113,186-189,191-192,207,219,222-223,241
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
-  s_dc2c82805837c9::t_1c1cce3fe2a744 407-412
-  s_dc2c82805837c9::t_e4e32d3c3af6d1 26,67,390-406
+  s_dc2c82805837c9::t_1c1cce3fe2a744 407-412,420-425
+  s_dc2c82805837c9::t_e4e32d3c3af6d1 26,27,67,69,390-406,403-419
 packages/gooddata-eval/scripts/calibrate_knowledge_judge.py
   s_dc2c82805837c9::t_ac78366d982fd2 1-30,32-62
   s_dc2c82805837c9::t_347d19adc92bc3 31
 packages/gooddata-eval/AGENTS.md
   s_dc2c82805837c9::t_0f7c42d45454b2 66-68
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_dc2c82805837c9::t_bdcfa9e3c99779 10,30-31,1422-1458
-  s_dc2c82805837c9::t_76a1c7d4345cc9 1459-1463
+  s_dc2c82805837c9::t_bdcfa9e3c99779 10,30-31,1422-1458,1431-1467
+  s_dc2c82805837c9::t_76a1c7d4345cc9 1459-1463,1468-1472
   s_42005dbe0e2bc1::t_e8f96ba8026de2 25-29
-  s_dc2c82805837c9::t_c13d6926323549 116,904,983
+  s_dc2c82805837c9::t_c13d6926323549 116,117,904,911,983,992
 packages/gooddata-eval/tests/test_knowledge_evaluator.py
   s_dc2c82805837c9::t_f16fb478bae381 309-310
   s_dc2c82805837c9::t_17ba55ba622293 217-219,239-241
