@@ -31,3 +31,108 @@ packages/gooddata-eval/tests/test_agentic_agent_switcher.py
     }
   }
 }
+
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_5fd303758288d1 925-927
+packages/gooddata-eval/tests/test_agentic_agent_switcher.py
+  s_c9e6b31f85e827::t_6392a744baa5b3 5,20,85-87,104,114-116,141,149,156,163,168,182,201,209,217,224,231,238,245,251,265,273,282,307,317,331,336,342,382,414,442,463,472,481,491,501,513,524,541,551
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a9364f191526536ead2124468e2e310b88ee981f",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_c9e6b31f85e827::t_950c80a4ace885 575-587
+packages/gooddata-eval/tests/test_agentic_agent_switcher.py
+  s_c9e6b31f85e827::t_d3e0980f87da4c 104-115
+  s_c9e6b31f85e827::t_cc3a97c51519d9 99,101,117-118,135-138,140
+  s_c9e6b31f85e827::t_3fec30b369fe8d 134
+  s_c9e6b31f85e827::t_5455db6409f5d9 70-80,82-85,87,90,263-288
+  s_c9e6b31f85e827::t_950c80a4ace885 95-98,311-319
+  s_c9e6b31f85e827::t_b19eb27c36f178 289-290,320-321
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_84e8fcd021b4c8 921-922
+packages/gooddata-eval/tests/test_sse_client.py
+  s_c9e6b31f85e827::t_84e8fcd021b4c8 844-861
+packages/gooddata-eval/src/gooddata_eval/core/agentic/agent_switcher.py
+  s_c9e6b31f85e827::t_950c80a4ace885 325-343,482-488
+  s_c9e6b31f85e827::t_92fe7af1795ccb 22-24,128-129,352-355,358-360,366-372,374,376-377,386-387,406-407,477,527
+  s_c9e6b31f85e827::t_317cb8638cf550 489
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ab114f52e5dfe91f3dbd4de89bd718181333d99",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/tests/test_html_report.py
+  s_c9e6b31f85e827::t_459df03b3f5da7 231-251
+packages/gooddata-eval/src/gooddata_eval/core/reporting/html_report.py
+  s_c9e6b31f85e827::t_459df03b3f5da7 19
+  s_c9e6b31f85e827::t_87c3f30a494ff7 56-65,82-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2d7640f8aa165f160732eb5240e521fe76268e85",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
+
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_cd9e8b08f06b0f 973,976-980
+packages/gooddata-eval/src/gooddata_eval/core/agentic/agent_switcher.py
+  s_c9e6b31f85e827::t_cd9e8b08f06b0f 17-19,159,161-163,185-189,404-410,614-615,744-745
+packages/gooddata-eval/tests/test_agentic_agent_switcher.py
+  s_c9e6b31f85e827::t_bdf445674294bc 228,240-244,247-250,253-261,280,283,286-287
+  s_c9e6b31f85e827::t_9102c65a4f07a7 584-589,593
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dada25ffef5601182258c0099dc8b06ca5532a28",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
