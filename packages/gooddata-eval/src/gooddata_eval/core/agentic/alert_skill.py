@@ -919,20 +919,70 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     )
 
 
-def _extract_alert_call(tool_call_events: list[ToolCallEvent]) -> tuple[str | None, dict, bool]:
-    """Return (alert_id, args, tool_called). tool_called=True whenever create_metric_alert appears."""
+def _alert_call_failed(result: dict | None) -> bool:
+    """Whether a ``create_metric_alert`` result reports an error, so the call created nothing.
+
+    An MCP error carries ``isError``. gen-ai's tool registry reports rejected arguments and a
+    failed execution as ``{"success": false, "error": ...}`` instead, with no ``isError``.
+    """
+    if not isinstance(result, dict):
+        return False
+    data = result.get("data")
+    payloads = [result, data] if isinstance(data, dict) else [result]
+    return any(p.get("isError") or p.get("success") is False for p in payloads)
+
+
+def _created_alert_id(result: dict | None) -> str | None:
+    """Server-assigned id of the automation a call created: it lives in the result, not the arguments."""
+    if not isinstance(result, dict):
+        return None
+    data = result.get("data")
+    alert_id = result.get("id") or (data.get("id") if isinstance(data, dict) else None)
+    return alert_id if isinstance(alert_id, str) and alert_id else None
+
+
+@dataclass
+class _AlertCalls:
+    """Every ``create_metric_alert`` call of a turn, read for scoring and for cleanup."""
+
+    called: bool = False
+    """The agent called the tool at least once."""
+    created: bool = False
+    """At least one call did not report an error."""
+    created_ids: list[str] = field(default_factory=list)
+    """Ids of every alert the calls created; each one is deleted after the run."""
+    args: dict = field(default_factory=dict)
+    """Arguments of the first call that did not fail, else of the last call."""
+    alert_id: str | None = None
+    """Id of the alert the call in ``args`` created, None when that call failed or its result has no id."""
+
+
+def _extract_alert_calls(tool_call_events: list[ToolCallEvent]) -> _AlertCalls:
+    """Read every ``create_metric_alert`` call, not only the first.
+
+    The agent may retry after an error. Reading only the first call scored the arguments of a
+    call that failed and missed the id of the retry that succeeded, so that alert leaked into
+    the workspace (QA-29886). The run is scored on the first call that did not fail, which is
+    the first call whenever none failed, as before.
+    """
+    calls = _AlertCalls()
     for tc in tool_call_events:
-        if tc.function_name == "create_metric_alert":
-            args = tc.parsed_arguments() or {}
-            alert_id: str | None = None
-            if tc.result:
-                try:
-                    result_data = json.loads(tc.result)
-                    alert_id = result_data.get("id") or (result_data.get("data") or {}).get("id")
-                except Exception:
-                    pass
-            return alert_id, args, True
-    return None, {}, False
+        if tc.function_name != "create_metric_alert":
+            continue
+        calls.called = True
+        args = tc.parsed_arguments() or {}
+        result = tc.parsed_result()
+        if _alert_call_failed(result):
+            if not calls.created:
+                calls.args = args
+            continue
+        alert_id = _created_alert_id(result)
+        if alert_id is not None:
+            calls.created_ids.append(alert_id)
+        if not calls.created:
+            calls.created = True
+            calls.args, calls.alert_id = args, alert_id
+    return calls
 
 
 def render_alert_proposal(proposal: dict) -> str:
@@ -940,16 +990,20 @@ def render_alert_proposal(proposal: dict) -> str:
 
     The alert skill's confirmation step deliberately emits no text part (GDAI-2032) — the
     prompt and the CTA live only in the proposal payload, which the frontend renders as a
-    widget. Dumping the payload (rather than prose) keeps recipients, condition, trigger and
-    dashboard visible so the simulated user can still verify them against its goal, and does
-    not need updating whenever ``AlertProposal`` grows a field.
+    widget. Dumping the payload (rather than prose) keeps recipients, condition, trigger,
+    filters and dashboard visible so the simulated user can still verify them against its
+    goal, and does not need updating whenever ``AlertProposal`` grows a field.
     """
     cta = proposal.get("cta") or "Should I create this alert?"
     summary = {k: v for k, v in proposal.items() if k != "cta"}
     alert = dict(summary.get("alert") or {})
-    # The AFM execution block is opaque wire dicts — noise that would crowd out the fields
-    # the simulated user actually has to check.
-    alert.pop("execution", None)
+    # `execution` is the only place a proposal carries its filters, which rule 3 of the simulated
+    # user checks. Hoisting them keeps them visible (QA-29886). The rest stays out: the measures
+    # repeat `condition`, and the simulated user is told nothing about group-bys, so a date
+    # group-by would only read as a time window rule 5 tells it to refuse.
+    execution = alert.pop("execution", None)
+    if isinstance(execution, dict):
+        alert["filters"] = execution.get("filters") or []
     if "alert" in summary:
         # Key off presence, not truthiness: an alert whose only key was `execution` must
         # still be replaced, otherwise the original (execution-bearing) dict survives.
@@ -1002,12 +1056,12 @@ def run_agentic_alert_skill(
     sdk = GoodDataSdk.create(host, token)
 
     def _run_once(conv_id: str) -> AlertRunResult:
-        alert_id_to_delete: str | None = None
+        alert_ids_to_delete: list[str] = []
         run_started = time.monotonic()
         try:
             alert_id: str | None = None
             actual_args: dict = {}
-            tool_called = False
+            alert_created = False
             reasoning_steps: list[str] = []
             response_id: str | None = None
             all_tool_call_events: list[ToolCallEvent] = []
@@ -1036,7 +1090,7 @@ def run_agentic_alert_skill(
                     # discarding every K-run already completed along with any exit_reason.
                     print(f"[CHAT] send_message failed for conversation {conv_id}: {exc}")
                     # The stream can break AFTER create_metric_alert already succeeded
-                    # server-side. That id only ever reached alert_id_to_delete from the
+                    # server-side. That id only ever reached alert_ids_to_delete from the
                     # normal path below, so breaking here left the alert in the workspace for
                     # the `finally` cleanup to miss -- a real object leaking out of a failed
                     # run, not a reporting gap.
@@ -1044,9 +1098,7 @@ def run_agentic_alert_skill(
                     if partial is not None:
                         reasoning_steps.extend(partial.reasoning_steps or [])
                         response_id = partial.response_id or response_id
-                        partial_alert_id, _, partial_tool_called = _extract_alert_call(partial.tool_call_events or [])
-                        if partial_tool_called:
-                            alert_id_to_delete = partial_alert_id
+                        alert_ids_to_delete.extend(_extract_alert_calls(partial.tool_call_events or []).created_ids)
                     exit_reason = chat_failure_exit(exc)
                     break
                 # `turns_used` counts attempts (set above, so a failed send still shows the
@@ -1064,14 +1116,24 @@ def run_agentic_alert_skill(
                 )
                 all_tool_call_events.extend(chat_result.tool_call_events or [])
                 all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-                alert_id, actual_args, tool_called = _extract_alert_call(chat_result.tool_call_events or [])
-                if tool_called:
-                    alert_id_to_delete = alert_id
+                calls = _extract_alert_calls(chat_result.tool_call_events or [])
+                alert_ids_to_delete.extend(calls.created_ids)
+                if calls.created:
+                    alert_id, actual_args = calls.alert_id, calls.args
+                    alert_created = True
                     exit_reason = LoopExit.SUCCESS
                     break
+                if calls.called:
+                    # Every call reported an error, so nothing was created. Scoring their arguments
+                    # would pass a run whose creation failed, and ending here would label it a
+                    # success. The agent gets the next turn to recover, as with a user, and the
+                    # failed arguments are kept for triage.
+                    actual_args = calls.args
                 response_text = render_turn_for_simulated_user(chat_result)
-                # Stop if agent gave a completely empty response (stuck)
-                if not response_text and not chat_result.tool_call_events:
+                # Stop if the agent gave a completely empty response (stuck), or wrote nothing after
+                # every create call failed: the rendered turn holds no tool results, so the simulated
+                # user would be asked to answer an empty message.
+                if not response_text and (calls.called or not chat_result.tool_call_events):
                     exit_reason = LoopExit.AGENT_SILENT
                     break
                 # Stop before generating a follow-up for the last iteration
@@ -1100,23 +1162,23 @@ def run_agentic_alert_skill(
                 current_question = follow_up
 
             ev = AlertEvaluation(
-                alert_created=tool_called,
-                operator_correct=tool_called and expected.operator == actual_args.get("operator"),
-                threshold_correct=tool_called and _check_threshold(expected, actual_args),
-                trigger_correct=tool_called and _check_trigger(expected, actual_args),
-                filters_correct=tool_called and _check_filters(expected, actual_args),
-                metric_correct=tool_called and _check_metric(expected, actual_args),
-                recipients_correct=tool_called
+                alert_created=alert_created,
+                operator_correct=alert_created and expected.operator == actual_args.get("operator"),
+                threshold_correct=alert_created and _check_threshold(expected, actual_args),
+                trigger_correct=alert_created and _check_trigger(expected, actual_args),
+                filters_correct=alert_created and _check_filters(expected, actual_args),
+                metric_correct=alert_created and _check_metric(expected, actual_args),
+                recipients_correct=alert_created
                 and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
-                attributes_correct=tool_called and _check_attributes(expected, actual_args),
-                granularity_correct=tool_called and _check_granularity(expected, actual_args),
+                attributes_correct=alert_created and _check_attributes(expected, actual_args),
+                granularity_correct=alert_created and _check_granularity(expected, actual_args),
                 comparison_correct=None
                 if expected.comparison is None
-                else tool_called and _check_comparison(expected, actual_args),
-                title_correct=None if expected.title is None else tool_called and _check_title(expected, actual_args),
+                else alert_created and _check_comparison(expected, actual_args),
+                title_correct=None if expected.title is None else alert_created and _check_title(expected, actual_args),
                 dashboard_correct=None
                 if expected.dashboard_id is None
-                else tool_called and _check_dashboard(expected, actual_args),
+                else alert_created and _check_dashboard(expected, actual_args),
             )
             return AlertRunResult(
                 conversation_id=conv_id,
@@ -1134,8 +1196,8 @@ def run_agentic_alert_skill(
                 run_latency_s=time.monotonic() - run_started,
             )
         finally:
-            if alert_id_to_delete:
-                _delete_alert(sdk, workspace_id, alert_id_to_delete)
+            for created_id in dict.fromkeys(alert_ids_to_delete):
+                _delete_alert(sdk, workspace_id, created_id)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
