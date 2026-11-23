@@ -970,16 +970,18 @@ that stays in the workspace.
 - `visualization` — a chart created in this turn uses these `metrics` and `attributes` (label ids),
   with or without the `metric/` / `label/` prefix; extra fields are allowed.
 
-Two diagnostics run on every run, from the conversation items read back after the last turn:
-`agent_stamped` (every assistant item of a turn carries the agent active at that turn) and
+Two diagnostics are read from the conversation items after the last turn of a run that sent every
+turn: `agent_stamped` (every assistant item of a turn carries the agent active at that turn) and
 `switch_marker` (one system marker with `trigger` `agent_switched` per switch, carrying the new
 agent). They are API contracts: the run detail (`diagnostics`, `diagnostic_failures`) and Langfuse
-scores record them, but they never fail a run. Items belong to the turn whose `responseId` they
-carry, so a send the client retried does not shift the later turns. A switch to the agent already
-bound changes nothing and expects no marker. A run fails before its first message when the new
-conversation is bound to another agent (`agent_bound`). Per-turn checks are reported as
-`turn<N>_<check>`, e.g. `turn2_skills_used`, `turn2_include_0`. The CI entry point is
-`evaluate_agentic_agent_switcher`, which takes the whole item; `--agent-id` does not apply.
+scores record them, but they never fail a run. A run stopped earlier (another bound agent, a failed
+switch or send) records neither. When the items cannot be read, a run with a skills check fails, and
+any other run records `items_read` under `diagnostic_failures` and is still graded. Items belong to
+the turn whose `responseId` they carry, so a send the client retried does not shift the later turns.
+A switch to the agent already bound changes nothing and expects no marker. A run fails before its
+first message when the new conversation is bound to another agent (`agent_bound`). Per-turn checks
+are reported as `turn<N>_<check>`, e.g. `turn2_skills_used`, `turn2_include_0`. The CI entry point
+is `evaluate_agentic_agent_switcher`, which takes the whole item; `--agent-id` does not apply.
 
 ### Items asked in a dashboard context (`user_context`)
 

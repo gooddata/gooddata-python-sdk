@@ -814,14 +814,22 @@ def test_switch_agent_posts_the_agent_and_returns_the_conversation() -> None:
     seen: dict[str, Any] = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
+        seen["method"] = request.method
         seen["url"] = str(request.url)
         seen["body"] = json.loads(request.content)
         return httpx.Response(200, json={"conversationId": "c1", "agentId": "builder"})
 
     client = _client_with_handler(handler)
     assert client.switch_agent("c1", "builder") == {"conversationId": "c1", "agentId": "builder"}
+    assert seen["method"] == "POST"
     assert seen["url"].endswith("/chat/conversations/c1/switchAgent")
     assert seen["body"] == {"agentId": "builder"}
+
+
+def test_switch_agent_rejects_a_body_that_is_not_an_object() -> None:
+    client = _client_with_handler(lambda request: httpx.Response(200, json=[]))
+    with pytest.raises(ValueError, match="not an object"):
+        client.switch_agent("c1", "b")
 
 
 def test_switch_agent_retries_5xx_but_not_404(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -845,11 +853,13 @@ def test_get_conversation_returns_the_conversation() -> None:
     seen: dict[str, str] = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
+        seen["method"] = request.method
         seen["url"] = str(request.url)
         return httpx.Response(200, json={"conversationId": "c1", "agentId": "planner"})
 
     client = _client_with_handler(handler)
     assert client.get_conversation("c1") == {"conversationId": "c1", "agentId": "planner"}
+    assert seen["method"] == "GET"
     assert seen["url"].endswith("/chat/conversations/c1")
 
 
@@ -864,11 +874,13 @@ def test_list_items_returns_the_items_list() -> None:
     seen: dict[str, str] = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
+        seen["method"] = request.method
         seen["url"] = str(request.url)
         return httpx.Response(200, json={"items": items})
 
     client = _client_with_handler(handler)
     assert client.list_items("c1") == items
+    assert seen["method"] == "GET"
     assert seen["url"].endswith("/chat/conversations/c1/items")
 
 

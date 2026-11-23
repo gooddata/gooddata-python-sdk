@@ -110,7 +110,9 @@ def _client(
         answer = next(queued)
         if isinstance(answer, Exception):
             raise answer
-        return answer.model_copy(update={"response_id": answer.response_id or f"r{sends[conversation_id]}"})
+        if answer.response_id is not None:
+            return answer
+        return answer.model_copy(update={"response_id": f"r{sends[conversation_id]}"})
 
     client.send_message.side_effect = _send
     client.switch_agent.side_effect = lambda _conv, agent: {"conversationId": _conv, "agentId": agent}
@@ -291,20 +293,59 @@ def test_a_system_item_without_the_switch_trigger_is_not_a_marker() -> None:
     items = _items((None, "planner"), ("builder", "builder"))
     items.insert(1, {"role": "system", "agentId": "planner"})
     client = _client([_chat(), _chat()], items)
-    assert _evaluate(client).runs_passed == 1
+    assert _diagnosed(client)["diagnostics"]["switch_marker"] is True
 
 
 def test_a_drift_marker_is_not_counted_as_a_switch() -> None:
     items = _items((None, "planner"), ("builder", "builder"))
     items.insert(0, {"role": "system", "agentId": "planner", "trigger": "agent_updated"})
     client = _client([_chat(), _chat()], items)
-    assert _evaluate(client).runs_passed == 1
+    assert _diagnosed(client)["diagnostics"]["switch_marker"] is True
 
 
 def test_a_switch_to_the_bound_agent_expects_no_marker() -> None:
     spec = {"agent_id": "planner", "turns": [{"message": "a"}, {"message": "b", "switch_to": "planner"}]}
     client = _client([_chat(), _chat()], _items((None, "planner"), (None, "planner")))
-    assert _evaluate(client, _item(spec)).runs_passed == 1
+    assert _diagnosed(client, _item(spec))["diagnostics"]["switch_marker"] is True
+
+
+def test_an_item_with_a_response_id_that_is_not_a_string_is_skipped() -> None:
+    items = _items((None, "planner"), ("builder", "builder"))
+    items.insert(1, {"role": "assistant", "agentId": "intruder", "responseId": []})
+    detail = _diagnosed(_client([_chat(), _chat()], items))
+    assert [t["answering_agents"] for t in detail["turns"]] == [["planner"], ["builder"]]
+
+
+def test_a_turn_whose_send_returned_no_response_id_fails_its_skills_checks() -> None:
+    spec = {"agent_id": "a", "turns": [{"message": "m", "checks": {"skills_not_used": ["alert"]}}]}
+    client = _client([_chat().model_copy(update={"response_id": ""})], _items((None, "a")))
+    with pytest.raises(AgentSwitcherAssertionError) as exc:
+        _evaluate(client, _item(spec))
+    assert _failed_check_names(exc.value) == ["turn1_skills_not_used"]
+    assert "no response id" in str(exc.value)
+
+
+def test_unreadable_items_leave_an_item_without_skills_checks_graded() -> None:
+    """Only the diagnostics read the items there: the answers are still judged."""
+    client = _client([_chat(), _chat()], [])
+    request = httpx.Request("GET", "https://h/items")
+    client.list_items.side_effect = httpx.HTTPStatusError(
+        "503", request=request, response=httpx.Response(503, request=request)
+    )
+    detail = _diagnosed(client)
+    assert detail["diagnostics"] == {}
+    assert "503" in detail["diagnostic_failures"]["items_read"]["actual"]
+
+
+def test_a_conversation_that_cannot_be_created_fails_that_run_and_keeps_the_others() -> None:
+    request = httpx.Request("POST", "https://h/conversations")
+    http_503 = httpx.HTTPStatusError("503", request=request, response=httpx.Response(503, request=request))
+    client = _client([_chat(), _chat()], _items((None, "planner"), ("builder", "builder")), conversations=1)
+    client.create_conversation.side_effect = ["conv-1", http_503]
+    outcome = _evaluate(client, k=2, gate="any")
+    assert (outcome.runs_passed, outcome.runs_effective) == (1, 2)
+    assert [c["name"] for c in outcome.failed_runs[0]["failed_checks"]] == ["conversation_created"]
+    assert [c.args[0] for c in client.delete_conversation.call_args_list] == ["conv-1"]
 
 
 def test_a_conversation_bound_to_another_agent_fails_before_any_message() -> None:

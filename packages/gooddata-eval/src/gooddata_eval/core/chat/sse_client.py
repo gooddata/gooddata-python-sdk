@@ -568,7 +568,10 @@ class ChatClient:
                 json={"agentId": agent_id},
             )
             resp.raise_for_status()
-            return resp.json()
+            body = resp.json()
+            if not isinstance(body, dict):
+                raise ValueError(f"GoodData switchAgent response is not an object: {body}")
+            return body
 
         return retry_transient(_do, is_retryable=_is_retryable_exc)
 

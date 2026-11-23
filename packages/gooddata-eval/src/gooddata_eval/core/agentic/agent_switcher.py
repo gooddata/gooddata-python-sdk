@@ -376,7 +376,8 @@ def _check_items(
         if role == "system" and item.get("trigger") == "agent_switched":
             markers.append((current, str(item.get("agentId") or item.get("newAgentId"))))
             continue
-        turn = turn_of.get(item.get("responseId"))
+        response_id = item.get("responseId")
+        turn = turn_of.get(response_id) if isinstance(response_id, str) else None
         if turn is None:
             continue
         current = turn
@@ -389,7 +390,9 @@ def _check_items(
 
     for record, turn in zip(run.turns, spec.turns, strict=False):
         record.skills = skills.get(record.turn, [])
-        _skills_checks(record, run, turn, unreadable=None)
+        # No response id: no stored item can be tied to the turn, so neither skills check can pass.
+        unreadable = None if record.response_id else "the send returned no response id"
+        _skills_checks(record, run, turn, unreadable=unreadable)
 
     stamping: list[str] = []
     for record in run.turns:
@@ -542,20 +545,35 @@ def _run_once(
         try:
             items = client.list_items(conversation_id)
         except (httpx.HTTPError, ValueError) as exc:
-            run.error = f"reading the conversation items failed: {type(exc).__name__}: {exc}"
-            run.exit_reason = LoopExit.CHAT_ERROR
-            run.fail(FailedCheck("items_read", actual=run.error))
-            for record, turn in zip(run.turns, spec.turns, strict=False):
-                _skills_checks(record, run, turn, unreadable="items unreadable")
+            reason = f"reading the conversation items failed: {type(exc).__name__}: {exc}"
+            if any(t.checks.skills_used or t.checks.skills_not_used for t in spec.turns):
+                # The skills checks read the stored items: without them the run cannot be graded.
+                run.error = reason
+                run.exit_reason = LoopExit.CHAT_ERROR
+                run.fail(FailedCheck("items_read", actual=run.error))
+                for record, turn in zip(run.turns, spec.turns, strict=False):
+                    _skills_checks(record, run, turn, unreadable="items unreadable")
+            else:
+                # Only the diagnostics read them: record that they are missing and grade the answers.
+                run.diagnostic_failures["items_read"] = {"expected": "the stored items", "actual": reason}
         else:
             _check_items(run, spec, items, expected_markers)
-            if judges is not None:
-                judged = time.monotonic()
-                _judge_turns(run, spec, judges)
-                judge_s = time.monotonic() - judged
+        if run.error is None and judges is not None:
+            judged = time.monotonic()
+            _judge_turns(run, spec, judges)
+            judge_s = time.monotonic() - judged
 
     run.timings = PhaseTimings(agent_s=agent_s, judge_s=judge_s)
     run.run_latency_s = time.monotonic() - started
+    return run
+
+
+def _not_created(exc: Exception) -> AgentSwitcherRunResult:
+    """A replay whose conversation could not be created: failed, with nothing to delete or trace."""
+    run = AgentSwitcherRunResult(conversation_id="")
+    run.error = f"creating the conversation failed: {type(exc).__name__}: {exc}"
+    run.exit_reason = LoopExit.CHAT_ERROR
+    run.fail(FailedCheck("conversation_created", actual=run.error))
     return run
 
 
@@ -569,6 +587,15 @@ def run_agentic_agent_switcher(
     user_context: dict | None = None,
 ) -> AgenticAgentSwitcherSummary:
     """Replay the item K times, each run on a conversation of its own, and return a summary.
+
+    Args:
+        host: GoodData host.
+        token: API token of the user the item runs as.
+        workspace_id: Workspace the conversations are created in.
+        spec: The item's agent and turns.
+        k: Number of replays.
+        reasoning_effort: Sent on every message of every replay.
+        user_context: Sent unchanged on every message of every replay.
 
     Raises:
         ValueError: ``k`` is below 1.
@@ -592,7 +619,12 @@ def run_agentic_agent_switcher(
     run_results: list[AgentSwitcherRunResult] = []
     try:
         for _ in range(k):
-            conversation_id = client.create_conversation()
+            try:
+                conversation_id = client.create_conversation()
+            # ValueError: a 200 without a conversation id
+            except (httpx.HTTPError, ValueError) as exc:
+                run_results.append(_not_created(exc))
+                continue
             try:
                 run_results.append(_run_once(client, spec, judges, conversation_id))
             finally:
@@ -732,6 +764,8 @@ def evaluate_agentic_agent_switcher(
         def _write_scores(ctx: RunTraceContext) -> None:
             stamp_gate_metadata(ctx.run_metadata, k=len(summary.run_results), gate=gate)
             for run_idx, run in enumerate(summary.run_results):
+                if not run.conversation_id:
+                    continue  # never created: no trace to score
                 if run.judge_error is not None:
                     mark_unscored_run(ctx, run_idx, run.conversation_id, run_labels.error_label(run_idx))
                     continue
@@ -759,8 +793,8 @@ def evaluate_agentic_agent_switcher(
             langfuse=langfuse,
             dataset_item_id=item_id,
             conversation_ids=conversations_to_link(
-                [r.conversation_id for r in summary.scored_run_results],
-                [r.conversation_id for r in summary.run_results if r.judge_error is not None],
+                [r.conversation_id for r in summary.scored_run_results if r.conversation_id],
+                [r.conversation_id for r in summary.run_results if r.judge_error is not None and r.conversation_id],
             ),
             window_start=window_start,
             window_end=window_end,
