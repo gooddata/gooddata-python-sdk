@@ -8,3 +8,7 @@ calibrate-takeaway:
 .PHONY: calibrate-catalog-metadata
 calibrate-catalog-metadata:
 	uv run --package gooddata-eval --extra llm-judge python scripts/calibrate_catalog_metadata_judge.py
+
+.PHONY: calibrate-knowledge
+calibrate-knowledge:
+	uv run --package gooddata-eval --extra llm-judge python scripts/calibrate_knowledge_judge.py
