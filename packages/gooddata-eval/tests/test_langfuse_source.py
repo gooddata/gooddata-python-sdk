@@ -375,3 +375,18 @@ def test_langfuse_item_explicit_test_kind_beats_catalog_input() -> None:
         "expectedOutput": {},
     }
     assert _item_from_raw(raw, dataset_name="ds", test_kind="visualization").test_kind == "general_question"
+
+
+def test_langfuse_item_metadata_test_kind_routes_to_agentic_knowledge() -> None:
+    """No other marker: metadata.test_kind alone beats the CLI default."""
+    raw = {
+        "id": "lf-kn-1",
+        "datasetName": "agent_knowledge",
+        "input": "And 45 %?",
+        "metadata": {"test_kind": "agentic_knowledge"},
+        "expectedOutput": {"setup_turns": ["Who must approve a 30 % discount?"], "expected_documents": ["x"]},
+    }
+    item = _item_from_raw(raw, dataset_name="ds", test_kind="visualization")
+    assert item.test_kind == "agentic_knowledge"
+    assert item.question == "And 45 %?"
+    assert item.expected_output == raw["expectedOutput"]

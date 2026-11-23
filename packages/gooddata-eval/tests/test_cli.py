@@ -1216,3 +1216,50 @@ def test_routing_backend_closes_every_client() -> None:
 
     for client in (chat, summary, takeaway):
         client.close.assert_called_once_with()
+
+
+def test_cli_runs_knowledge_items_on_the_agentic_path(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(cli_main, "resolve_connection", lambda host, token, profile: ("https://h", "tok"))
+
+    class _FakeController:
+        def __init__(self, *a, **k): ...
+        def get_active(self):
+            return ActiveLlmProvider(provider_id="prov", default_model_id="gpt-5.2")
+
+        def resolve_and_activate(self, requested, provider=None):
+            return ResolvedModel(provider_id="prov", model_id="gpt-5.2", switched=False, provider_name="P")
+
+        def restore(self, original): ...
+        def close(self): ...
+
+    raw = {
+        "id": "lf-kn-1",
+        "datasetName": "agent_knowledge",
+        "input": "And 45 %?",
+        "metadata": {"test_kind": "agentic_knowledge"},
+        "expectedOutput": {
+            "setup_turns": ["Who must approve a 30 % discount?"],
+            "expected_documents": ["Discount Policy"],
+        },
+    }
+    item = _item_from_raw(raw, dataset_name="agent_knowledge", test_kind="visualization")
+    assert item.test_kind == "agentic_knowledge"
+    monkeypatch.setattr(cli_main, "WorkspaceModelController", _FakeController)
+    monkeypatch.setattr(cli_main, "ChatClient", lambda **k: object())
+    monkeypatch.setattr(cli_main, "load_local_dataset", lambda folder: [item])
+    single_shot: list = []
+    agentic: list = []
+    monkeypatch.setattr(
+        cli_main, "run_items", lambda items, backend, **kw: single_shot.extend(items) or EvalReport(model="m")
+    )
+    monkeypatch.setattr(
+        cli_main, "run_agentic_items", lambda items, **kw: agentic.extend(items) or EvalReport(model="m")
+    )
+
+    exit_code = cli_main.main(
+        ["run", "--host", "https://h", "--token", "tok", "--workspace", "ws1", "--dataset", str(tmp_path)]
+    )
+
+    assert exit_code == 0
+    assert agentic == [item]
+    assert single_shot == []

@@ -47,6 +47,7 @@ MULTI_TURN_KINDS = frozenset(
         "agentic_what_if",
         "agentic_forecasting",
         "agentic_agent_switcher",
+        "agentic_knowledge",
     }
 )
 
