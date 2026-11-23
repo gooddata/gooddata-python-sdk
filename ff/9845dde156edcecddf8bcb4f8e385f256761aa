@@ -22,7 +22,7 @@ packages/gooddata-eval/tests/test_langfuse_source.py
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "1d72cf164b123cb71cb4730e52c1d4ac9ff6b868",
+  "base_commit_sha": "ff9845dde156edcecddf8bcb4f8e385f256761aa",
   "prompts": {},
   "sessions": {
     "s_dc2c82805837c9": {
