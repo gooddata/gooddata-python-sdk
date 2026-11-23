@@ -1,4 +1,11 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
+from gooddata_eval.core.agentic.agent_switcher import (
+    AgenticAgentSwitcherSummary,
+    AgentSwitcherAssertionError,
+    AgentSwitcherRunResult,
+    evaluate_agentic_agent_switcher,
+    run_agentic_agent_switcher,
+)
 from gooddata_eval.core.agentic.alert_skill import (
     AgenticAlertSummary,
     AlertEvaluation,
@@ -85,6 +92,9 @@ evaluate_agentic_report_skill = evaluate_agentic_document_skill
 run_agentic_report_skill = run_agentic_document_skill
 
 __all__ = [
+    "AgentSwitcherAssertionError",
+    "AgentSwitcherRunResult",
+    "AgenticAgentSwitcherSummary",
     "AgenticAlertSummary",
     "AgenticDashboardSummary",
     "AgenticGeneralQuestionSummary",
@@ -125,6 +135,7 @@ __all__ = [
     "TurnDefinition",
     "TurnResult",
     "VisualizationAssertionError",
+    "evaluate_agentic_agent_switcher",
     "evaluate_agentic_alert_skill",
     "evaluate_agentic_conversation",
     "evaluate_agentic_dashboard_skill",
@@ -136,6 +147,7 @@ __all__ = [
     "evaluate_agentic_report_skill",
     "evaluate_agentic_search_tool",
     "evaluate_agentic_visualization",
+    "run_agentic_agent_switcher",
     "run_agentic_alert_skill",
     "run_agentic_conversation",
     "run_agentic_dashboard_skill",

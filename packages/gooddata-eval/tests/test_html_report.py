@@ -175,6 +175,18 @@ def test_redact_drops_the_transcript_but_keeps_the_turn_count():
     assert detail["turns"] == 2
 
 
+def test_redact_drops_the_text_of_each_turn_record():
+    doc = _doc("gpt-5", False)
+    turn = {"turn": 1, "agent_id": "a", "message": "secret ask", "answer": "secret rows", "reasons": {"x": "why"}}
+    doc["runs"]["gpt-5"]["items"]["item-1"]["detail"]["turns"] = [turn]
+    html = build_html(doc, redact=True)
+
+    assert "secret ask" not in html
+    assert "secret rows" not in html
+    detail = _embedded(html)["runs"]["Model A"]["items"]["item-1"]["detail"]
+    assert detail["turns"] == [{"turn": 1, "agent_id": "a"}]
+
+
 def test_redact_reaches_inside_failed_runs():
     """Per-run records carry their own ids and their own raw reasoning.
 
@@ -214,6 +226,27 @@ def test_redact_reaches_inside_a_failed_run_s_own_detail():
     assert "tool_calls" not in detail
     assert detail["turns"] == 1
     assert detail["metrics_correct"] is False
+
+
+def test_redact_drops_the_criterion_and_reason_of_a_failed_judge_check() -> None:
+    """A judge check's expected is the criterion and its actual the judge's reason, which quotes the answer."""
+    doc = _doc("gpt-5", False)
+    doc["runs"]["gpt-5"]["items"]["item-1"]["failed_runs"][0]["failed_checks"] = [
+        {"name": "turn1_must_include_1", "part": "judge", "expected": "names the metric", "actual": "says secret rows"},
+        {"name": "agent_stamped", "expected": "stamped", "actual": ["turn 2: ['a']"]},
+    ]
+
+    redacted = build_html(doc, redact=True)
+    checks = _embedded(redacted)["runs"]["Model A"]["items"]["item-1"]["failed_runs"][0]["failed_checks"]
+
+    assert "names the metric" not in redacted
+    assert "says secret rows" not in redacted
+    assert checks == [
+        {"name": "turn1_must_include_1", "part": "judge"},
+        {"name": "agent_stamped", "expected": "stamped", "actual": ["turn 2: ['a']"]},
+    ]
+    unredacted = _embedded(build_html(doc))["runs"]["gpt-5"]["items"]["item-1"]["failed_runs"][0]["failed_checks"]
+    assert unredacted[0]["actual"] == "says secret rows"
 
 
 def test_failed_runs_survive_an_unredacted_report():
