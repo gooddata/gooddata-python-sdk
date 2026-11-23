@@ -122,6 +122,7 @@ _EVALUATE_FUNCS = [
     ("conversation", "evaluate_agentic_conversation"),
     ("forecasting", "evaluate_agentic_forecasting"),
     ("dashboard_summary", "evaluate_agentic_dashboard_summary"),
+    ("knowledge", "evaluate_agentic_knowledge"),
     ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
     ("what_if", "evaluate_agentic_what_if"),
     ("agent_switcher", "evaluate_agentic_agent_switcher"),

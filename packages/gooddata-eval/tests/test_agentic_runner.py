@@ -108,6 +108,7 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_anomaly_detection", {"metric": "metric/spend"}, "evaluate_agentic_anomaly_detection"),
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
     ("agentic_agent_switcher", {}, "evaluate_agentic_agent_switcher"),
+    ("agentic_knowledge", {"expected_documents": ["Discount Policy"]}, "evaluate_agentic_knowledge"),
 ]
 
 # Kinds whose item names its own agents, so the CLI's --agent-id does not reach them.
@@ -901,6 +902,7 @@ _KIND_EVALUATORS = [
     ("agentic_document_skill", "evaluate_agentic_document_skill", {}),
     ("agentic_forecasting", "evaluate_agentic_forecasting", {}),
     ("agentic_dashboard_summary", "evaluate_agentic_dashboard_summary", {}),
+    ("agentic_knowledge", "evaluate_agentic_knowledge", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
     ("agentic_agent_switcher", "evaluate_agentic_agent_switcher", {}),
 ]
@@ -981,6 +983,7 @@ _CLIENT_CONTEXT_KINDS = [
     ("what_if", "run_agentic_what_if", "evaluate_agentic_what_if", {}),
     ("anomaly_detection", "run_agentic_anomaly_detection", "evaluate_agentic_anomaly_detection", {}),
     ("document_skill", "run_agentic_document_skill", "evaluate_agentic_document_skill", {}),
+    ("knowledge", "run_agentic_knowledge", "evaluate_agentic_knowledge", {}),
 ]
 
 
@@ -1419,3 +1422,30 @@ def test_concurrent_items_each_keep_only_their_own_trace_latencies():
     assert {i.id: i.trace_latencies_s for i in report.items} == {
         f"g{n}": [n * 100.0, n * 100.0 + 1, n * 100.0 + 2] for n in range(1, 5)
     }
+
+
+def test_dispatch_passes_a_knowledge_item_through_unchanged() -> None:
+    """Setup turns travel inside expected_output; the question is the graded turn."""
+    expected = {"setup_turns": ["q1"], "expected_documents": ["Discount Policy"]}
+    item = DatasetItem(
+        id="kn-1", dataset_name="ds", test_kind="agentic_knowledge", question="q2", expected_output=expected
+    )
+    with patch("gooddata_eval.cli.agentic_runner.evaluate_agentic_knowledge") as mock_eval:
+        _dispatch_agentic(
+            item,
+            host="https://h",
+            token="tok",
+            workspace_id="ws1",
+            k=1,
+            langfuse=None,
+            run_ts="2026-01-01",
+            model_version_override=None,
+        )
+    kwargs = mock_eval.call_args.kwargs
+    assert (kwargs["workspace_id"], kwargs["question"], kwargs["expected_output"]) == ("ws1", "q2", expected)
+    assert "turns" not in kwargs
+
+
+def test_agentic_knowledge_runs_serially_in_the_cli() -> None:
+    # Setup turns are free text: one could ask the agent to save something.
+    assert not runs_in_parallel("agentic_knowledge")

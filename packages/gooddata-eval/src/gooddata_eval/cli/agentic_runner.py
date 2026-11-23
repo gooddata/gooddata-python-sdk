@@ -24,6 +24,7 @@ from gooddata_eval.core.agentic.forecasting import evaluate_agentic_forecasting
 from gooddata_eval.core.agentic.general_question import evaluate_agentic_general_question
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
+from gooddata_eval.core.agentic.knowledge import evaluate_agentic_knowledge
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
@@ -65,6 +66,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_anomaly_detection",
         "agentic_what_if",
         "agentic_agent_switcher",
+        "agentic_knowledge",
     }
 )
 
@@ -396,6 +398,19 @@ def _dispatch_agentic(
             dataset_item=item,
             k=k,
             gate=gate,
+            **lf_kw,
+        )
+    elif kind == "agentic_knowledge":
+        return evaluate_agentic_knowledge(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=item.question,
+            expected_output=eo,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
+            user_context=item.user_context,
             **lf_kw,
         )
     elif kind == "agentic_conversation":
