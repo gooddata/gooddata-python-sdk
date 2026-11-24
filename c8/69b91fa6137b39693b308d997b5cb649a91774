@@ -1,0 +1,19 @@
+packages/gooddata-sdk/tests/catalog/test_catalog_permission.py
+  s_41fc5517c56c3f::t_1cd72d15eff7a1 136-137,139-140,145-146,148-149
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c869b91fa6137b39693b308d997b5cb649a91774",
+  "prompts": {},
+  "sessions": {
+    "s_41fc5517c56c3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9ebcc92b-9160-41c1-a962-5afcd3cdfaaf",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

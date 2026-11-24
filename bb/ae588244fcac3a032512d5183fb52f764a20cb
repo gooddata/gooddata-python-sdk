@@ -1,0 +1,171 @@
+schemas/gooddata-automation-client.json
+  s_8c48a6d16ff724::t_49da1e002ccfce 4505
+schemas/gooddata-metadata-client.json
+  s_8c48a6d16ff724::t_49da1e002ccfce 6195,6562-6571,6583-6592,7086-7087,7120,8110,8280-8281,8404-8405,8637-8642,8652-8654,8658-8659,8661-8662,23509,23631,23673,23785,23888,24771-24772,24882-24883,25033-25034,26139-26171,26182-26192,26221,26248-26266,26280,26674-26678,26705,34340-34341,34450-34451,37377,37692-37693,37802-37803,37978-37979,38088-38089,42166-42173,44576-44577,45770,45801,46065,46260,46284,46941,47050,49000,63581,63590-63593,63689,63698-63701,63774,63776,63814,63850,63859-63862,63965,63974-63977,64028,64064,64073-64076,64127,69099,77795,77890,77931
+schemas/gooddata-api-client.json
+  s_8c48a6d16ff724::t_0ad0a5b8f6708b 1942,2833-2837,2841-2842,5213,5215,5220-5226,5233-5234,8069,8436-8445,8457-8466,8960-8961,8994,10000,10207-10208,10581,10675-10676,11261-11266,11276-11278,11282-11283,11285-11286,27292,27414,27456,27568,27671,28554-28555,28665-28666,28816-28817,29952-29984,29995-30005,30034,30061-30079,30093,30487-30491,30518,38153-38154,38263-38264,41190,41505-41506,41615-41616,41791-41792,41901-41902,43878-43896,44884,44886,46917-46924,49591-49592,51994,52025,52323,52373,52779,52803,54890,54999,57628,57636,57670,60671,76108,76117-76120,76216,76225-76228,76301,76303,76341,76377,76386-76389,76492,76501-76504,76555,76591,76600-76603,76654,81626,90322,90417,90458
+schemas/gooddata-afm-client.json
+  s_8c48a6d16ff724::t_49da1e002ccfce 1014,1394-1398,1402-1403,1692,1694,1699-1705,1712-1713,2062,3967-3985,4446,4448,6675,6683,6717
+gooddata-api-client/.openapi-generator/FILES
+  s_8c48a6d16ff724::t_c2088995856227 1079,1081,1436,2929,2931,3265
+gooddata-api-client/README.md
+  s_8c48a6d16ff724::t_44fa4f87428263 2575,2577,2911
+gooddata-api-client/docs/ActionsApi.md
+  s_8c48a6d16ff724::t_9c501cc0395a8d 3972,3997,8068,8146,12582
+gooddata-api-client/docs/AnalyticsModelApi.md
+  s_8c48a6d16ff724::t_012a0d26dde5fe 240,396,536-540,543-547
+gooddata-api-client/docs/AttributeHeaderAttributeHeader.md
+  s_8c48a6d16ff724::t_b5057b48259a70 17
+gooddata-api-client/docs/ChangeAnalysisResult.md
+  s_8c48a6d16ff724::t_632ab2a6198911 9
+gooddata-api-client/docs/ComputationApi.md
+  s_8c48a6d16ff724::t_5fbf60e271f213 1033,1058
+gooddata-api-client/docs/DatabaseInstance.md
+  s_8c48a6d16ff724::t_715cd9c7180e18 11-12
+gooddata-api-client/docs/DeclarativePublisherDocument.md
+  s_8c48a6d16ff724::t_2e35bfb3da1063 12-13,15-16
+gooddata-api-client/docs/DocumentControllerApi.md
+  s_8c48a6d16ff724::t_d6ad6c6701d1f4 51,204,354,450,546,700,791,945
+gooddata-api-client/docs/DocumentTemplateControllerApi.md
+  s_8c48a6d16ff724::t_17293f153bfd3b 51,545,789
+gooddata-api-client/docs/ElementsResponse.md
+  s_8c48a6d16ff724::t_e1569a4f731824 15
+gooddata-api-client/docs/EntitiesApi.md
+  s_8c48a6d16ff724::t_5f266c7fe65c60 1984,2228,2381,10583,12307-12308,15832,21036,21280,21434,29072,29316,29470
+gooddata-api-client/docs/FeatureFlagsContext.md
+  s_8c48a6d16ff724::t_3f83e406f6a19b 7-8,11
+gooddata-api-client/docs/JsonApiNotificationChannelOutAttributes.md
+  s_8c48a6d16ff724::t_b8088eeae6078b 12
+gooddata-api-client/docs/JsonApiPublisherDocumentOut.md
+  s_8c48a6d16ff724::t_13444583de64d0 12
+gooddata-api-client/docs/JsonApiPublisherDocumentOutDocument.md
+  s_8c48a6d16ff724::t_3235b78af5e1ed 8
+gooddata-api-client/docs/JsonApiPublisherDocumentOutIncludes.md
+  s_8c48a6d16ff724::t_c9a218acc64b63 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentOutList.md
+  s_8c48a6d16ff724::t_22710ed01c92df 9
+gooddata-api-client/docs/JsonApiPublisherDocumentOutRelationships.md
+  s_8c48a6d16ff724::t_d1a821f127ed23 1-17
+gooddata-api-client/docs/JsonApiPublisherDocumentOutWithLinks.md
+  s_8c48a6d16ff724::t_b0e65d4617a091 11
+gooddata-api-client/docs/JsonApiPublisherDocumentPageTemplateOutAttributes.md
+  s_8c48a6d16ff724::t_65dea2860ff37c 8
+gooddata-api-client/docs/LayoutApi.md
+  s_8c48a6d16ff724::t_c03b3576ed066e 2423,2579,2719-2723,2726-2730,3527,3683,3823-3827,3830-3834,6395,6551,6691-6695,6698-6702,8442,8598,8738-8742,8745-8749
+gooddata-api-client/docs/LocalizationApi.md
+  s_8c48a6d16ff724::t_b75b98ddd8c701 147,225,437
+gooddata-api-client/docs/ObjectStorageRef.md
+  s_8c48a6d16ff724::t_c8e2ee698adde6 1,3,8-9
+gooddata-api-client/docs/OrganizationDeclarativeAPIsApi.md
+  s_8c48a6d16ff724::t_2257876512200e 1376,1532,1672-1676,1679-1683
+gooddata-api-client/docs/PageTemplateControllerApi.md
+  s_8c48a6d16ff724::t_4bdc81b08a4136 224-225
+gooddata-api-client/docs/ProvisionDatabaseInstanceRequest.md
+  s_8c48a6d16ff724::t_1f1455429873f3 9
+gooddata-api-client/docs/PublisherDocumentObjRef.md
+  s_8c48a6d16ff724::t_095b4c6a8c153d 9
+gooddata-api-client/docs/PublisherDocumentsApi.md
+  s_8c48a6d16ff724::t_3349f2ca3dc104 63,307,460,975,1047-1048,1257,1441,1685,1839,2069,2313,2467
+gooddata-api-client/docs/WorkspacesDeclarativeAPIsApi.md
+  s_8c48a6d16ff724::t_67fd64b82a3946 312,468,608-612,615-619,1817,1973,2113-2117,2120-2124
+gooddata-api-client/gooddata_api_client/api/actions_api.py
+  s_8c48a6d16ff724::t_efbd904f90ebe3 2810,13165,17966,18050,22775
+gooddata-api-client/gooddata_api_client/api/computation_api.py
+  s_8c48a6d16ff724::t_c8b5d0c3ee3ef4 709,2062
+gooddata-api-client/gooddata_api_client/api/document_controller_api.py
+  s_8c48a6d16ff724::t_3c8b15acffe4c4 83-86,240-243,355-358,451-454,538-541
+gooddata-api-client/gooddata_api_client/api/entities_api.py
+  s_8c48a6d16ff724::t_bc4022d287eb88 1411-1414,8566-8569,14407-14410,19056-19059,24704-24707,39016
+gooddata-api-client/gooddata_api_client/api/localization_api.py
+  s_8c48a6d16ff724::t_b857a35f3e4c43 662,746,997
+gooddata-api-client/gooddata_api_client/api/page_template_controller_api.py
+  s_8c48a6d16ff724::t_cc1ee62f3fb208 750
+gooddata-api-client/gooddata_api_client/api/publisher_documents_api.py
+  s_8c48a6d16ff724::t_1ee743384cff8b 182-185,654-657,986-989,1262-1265,1515-1518,2358
+gooddata-api-client/gooddata_api_client/model/attribute_header_attribute_header.py
+  s_8c48a6d16ff724::t_9bf660ba07fdd0 250,355
+gooddata-api-client/gooddata_api_client/model/change_analysis_result.py
+  s_8c48a6d16ff724::t_eddd04b7e33280 92,102,112,117,182,203,208,271
+gooddata-api-client/gooddata_api_client/model/database_instance.py
+  s_8c48a6d16ff724::t_b89d936892d83c 35,37,99,112,122,129-130,198,219,226-227,293
+gooddata-api-client/gooddata_api_client/model/declarative_notification_channel.py
+  s_8c48a6d16ff724::t_b100fcd49fbdc7 93
+gooddata-api-client/gooddata_api_client/model/declarative_publisher_document.py
+  s_8c48a6d16ff724::t_aaaa2bf5d075cb 34,37,78-82,86-90,123-124,126-127,142-143,145-146,198-199,201-202,301-302,304-305
+gooddata-api-client/gooddata_api_client/model/declarative_setting.py
+  s_8c48a6d16ff724::t_e831c613fb2883 124
+gooddata-api-client/gooddata_api_client/model/declarative_single_workspace_permission.py
+  s_8c48a6d16ff724::t_3069ab9f9b670f 78
+gooddata-api-client/gooddata_api_client/model/declarative_workspace_hierarchy_permission.py
+  s_8c48a6d16ff724::t_0e23cc1e47d879 78
+gooddata-api-client/gooddata_api_client/model/dependent_entities_node.py
+  s_8c48a6d16ff724::t_e5b796f148cda5 77
+gooddata-api-client/gooddata_api_client/model/elements_response.py
+  s_8c48a6d16ff724::t_fb69da82779e9c 225,323
+gooddata-api-client/gooddata_api_client/model/entity_identifier.py
+  s_8c48a6d16ff724::t_fb907ae405e75b 77
+gooddata-api-client/gooddata_api_client/model/feature_flags_context.py
+  s_8c48a6d16ff724::t_800d7c54c6dd33 87-88,91,100-101,104,114,118-119,122,186-187,190,211,215-216,219,281-282,285
+gooddata-api-client/gooddata_api_client/model/json_api_notification_channel_in_attributes.py
+  s_8c48a6d16ff724::t_2163fd5c51e5fd 81
+gooddata-api-client/gooddata_api_client/model/json_api_notification_channel_in_attributes_destination.py
+  s_8c48a6d16ff724::t_f9106f205abb81 92
+gooddata-api-client/gooddata_api_client/model/json_api_notification_channel_out_attributes.py
+  s_8c48a6d16ff724::t_305c921d32b194 88,153
+gooddata-api-client/gooddata_api_client/model/json_api_organization_setting_in_attributes.py
+  s_8c48a6d16ff724::t_7d93ec65a3f589 120
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out.py
+  s_8c48a6d16ff724::t_36b92176ef6129 36,39,107,170,266
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_document.py
+  s_8c48a6d16ff724::t_90e5b543d8fa7f 36,40,100,161,253
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_includes.py
+  s_8c48a6d16ff724::t_cf6c8e9ddb53ff 1-368
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_list.py
+  s_8c48a6d16ff724::t_f069dff91e3388 35,39,102,163,255
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_relationships.py
+  s_8c48a6d16ff724::t_d1c441f6571dd4 1-298
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_out_with_links.py
+  s_8c48a6d16ff724::t_81f131e743b061 37,43,113,174,284
+gooddata-api-client/gooddata_api_client/model/json_api_publisher_document_page_template_out_attributes.py
+  s_8c48a6d16ff724::t_86fb7fea41df33 108,125,136,143,148,220
+gooddata-api-client/gooddata_api_client/model/json_api_user_setting_in_attributes.py
+  s_8c48a6d16ff724::t_230673f8e3a625 119
+gooddata-api-client/gooddata_api_client/model/json_api_workspace_out_meta.py
+  s_8c48a6d16ff724::t_86b04110a917d0 82
+gooddata-api-client/gooddata_api_client/model/notification_channel_destination.py
+  s_8c48a6d16ff724::t_9f099134ac9cec 92
+gooddata-api-client/gooddata_api_client/model/object_storage_ref.py
+  s_8c48a6d16ff724::t_aa53b698d0ccfc 34,85-86,95-96,106-107,110-111,175-176,197-198,201-202,264-265
+gooddata-api-client/gooddata_api_client/model/provision_database_instance_request.py
+  s_8c48a6d16ff724::t_c5e281b9798f80 117,210
+gooddata-api-client/gooddata_api_client/model/publisher_document_obj_ref.py
+  s_8c48a6d16ff724::t_49115b5cdcc550 59-65,118,209
+gooddata-api-client/gooddata_api_client/model/resolved_setting.py
+  s_8c48a6d16ff724::t_dea2d93604e9c5 124
+gooddata-api-client/gooddata_api_client/model/user_management_workspace_permission_assignment.py
+  s_8c48a6d16ff724::t_2dfab80966d15c 74,92
+gooddata-api-client/gooddata_api_client/model/webhook.py
+  s_8c48a6d16ff724::t_e98ef19f931fc4 80
+gooddata-api-client/gooddata_api_client/model/webhook_all_of.py
+  s_8c48a6d16ff724::t_52df9bc561985f 76
+gooddata-api-client/gooddata_api_client/model/workspace_permission_assignment.py
+  s_8c48a6d16ff724::t_c4149753f728d0 78,96
+gooddata-api-client/gooddata_api_client/models/__init__.py
+  s_8c48a6d16ff724::t_264941007a9157 1009,1011,1345
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1da40085832a420ca7b60aba6329b81e18dbe529",
+  "prompts": {},
+  "sessions": {
+    "s_8c48a6d16ff724": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d38c6991-22f3-4fa4-9ff3-0e2f6ab2918c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AdamPenaz <adam.penaz@gooddata.com>"
+    }
+  }
+}

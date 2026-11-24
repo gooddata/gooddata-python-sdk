@@ -1,0 +1,19 @@
+packages/gooddata-eval/tests/test_takeaway_evaluate.py
+  s_26352a90edbfcb::t_1f05188cafdd6f 23-30,190,220,258,283
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76382631aec4c3d1d29198d675ffd3c6400894b8",
+  "prompts": {},
+  "sessions": {
+    "s_26352a90edbfcb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a270533-7e32-47d1-b1fa-fb3870d88d7c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Roman Rakus <roman.rakus@gooddata.com>"
+    }
+  }
+}

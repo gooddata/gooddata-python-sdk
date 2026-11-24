@@ -1,0 +1,33 @@
+packages/gooddata-eval/tests/test_html_report.py
+  s_c9e6b31f85e827::t_eacefc47a8eb4a 178-189
+packages/gooddata-eval/src/gooddata_eval/core/agentic/agent_switcher.py
+  s_c9e6b31f85e827::t_fa22c8f7aba21b 61-62,205-206,211-235,241-242,245-246,250,308,407-423,456-457,476-477,479,489
+packages/gooddata-eval/tests/test_sse_client.py
+  s_c9e6b31f85e827::t_eacefc47a8eb4a 813-814,816,827,833,835,844,846,848,857-859
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_dcf722ffa2e810 923-925,933
+packages/gooddata-eval/src/gooddata_eval/core/reporting/html_report.py
+  s_c9e6b31f85e827::t_eacefc47a8eb4a 61
+  s_c9e6b31f85e827::t_bec99ec66fe519 37-40,57-60,62-63
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_c9e6b31f85e827::t_bec99ec66fe519 585-587
+packages/gooddata-eval/tests/test_agentic_agent_switcher.py
+  s_c9e6b31f85e827::t_07ffff731665bf 16,137-141,260-276,318-320,403-406,467-483
+  s_c9e6b31f85e827::t_3be155fb919f12 484-485
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "445af38accd10d64173e97d759c8b6c8b13f40ac",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

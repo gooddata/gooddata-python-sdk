@@ -1,0 +1,37 @@
+packages/gooddata-eval/AGENTS.md
+  s_3ef2f8f6304b87::t_a84a2ff8d92ed1 165
+packages/gooddata-eval/README.md
+  s_3ef2f8f6304b87::t_3a0e9d606151b3 136,962-986
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_3ef2f8f6304b87::t_c91706f68a86da 20,140-148,322-330,744
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_3ef2f8f6304b87::t_d916e9ca68bb3f 216,318-320,407-414,426-433,517-518,804-806
+packages/gooddata-eval/src/gooddata_eval/core/config.py
+  s_3ef2f8f6304b87::t_0a6296a3d2c80d 20-30
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/visualization.py
+  s_3ef2f8f6304b87::t_3b196e6b62cca9 86-94,465-467,504-510,537,573-575,582-595,662-668,703-705
+packages/gooddata-eval/src/gooddata_eval/core/scoring.py
+  s_3ef2f8f6304b87::t_6ae2b3c87985b4 10,60-69,517-567,569-574,576-585,591-601,603,606
+packages/gooddata-eval/tests/conftest.py
+  s_3ef2f8f6304b87::t_44e00d723c99cb 29
+packages/gooddata-eval/tests/test_cli.py
+  s_3ef2f8f6304b87::t_088c21ddc85c9f 4,12-18,23,25,1207-1253
+packages/gooddata-eval/tests/test_context_date_filter.py
+  s_3ef2f8f6304b87::t_493aad8d89df00 1-413
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57e87cbf560375372bbcde94db9e77a5e5b17221",
+  "prompts": {},
+  "sessions": {
+    "s_3ef2f8f6304b87": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7176d118-52ce-4adf-aa42-2472a3e11634",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

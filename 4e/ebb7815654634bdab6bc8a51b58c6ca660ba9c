@@ -1,0 +1,34 @@
+packages/gooddata-eval/tests/test_agentic_failure_message.py
+  s_d5a90247078f0f::t_245584ca481198 1-245
+  s_d5a90247078f0f::t_0c3cb23a624d6a 246-258
+packages/gooddata-eval/src/gooddata_eval/core/agentic/visualization.py
+  s_d5a90247078f0f::t_3e11c5c91e07be 15
+  s_d5a90247078f0f::t_3f8bd7088a5d05 449-512
+  s_d5a90247078f0f::t_a3df88fbfa66fa 732,736
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_failure_message.py
+  s_d5a90247078f0f::t_7daa2833504f2d 1-120
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_failed_runs.py
+  s_d5a90247078f0f::t_797b2d67f67ba4 21,25-31,37,50-54,62-77
+packages/gooddata-eval/src/gooddata_eval/core/agentic/alert_skill.py
+  s_d5a90247078f0f::t_8b9606fd3032b9 18,1168-1172,1297,1301
+packages/gooddata-eval/src/gooddata_eval/core/agentic/dashboard_skill.py
+  s_d5a90247078f0f::t_91a37774ad549e 14,2182-2183,2188-2192,2377,2381
+packages/gooddata-eval/src/gooddata_eval/core/agentic/metric_skill.py
+  s_d5a90247078f0f::t_68495597c444da 16,635-649,669,673
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4eebb7815654634bdab6bc8a51b58c6ca660ba9c",
+  "prompts": {},
+  "sessions": {
+    "s_d5a90247078f0f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5b3a54a-2a79-4c87-a2c5-1171b675e3b2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "my.nguyen <my.nguyen@gooddata.com>"
+    }
+  }
+}

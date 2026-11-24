@@ -1,0 +1,29 @@
+packages/gooddata-eval/tests/test_catalog_metadata_client.py
+  s_dc2c82805837c9::t_0923fb75b914b4 59-62,114
+packages/gooddata-eval/tests/test_catalog_metadata_evaluator.py
+  s_dc2c82805837c9::t_0923fb75b914b4 56-57,122-129,135-142
+packages/gooddata-eval/src/gooddata_eval/core/catalog/http_client.py
+  s_dc2c82805837c9::t_29cb7ba837d145 32-37,40,89,91
+packages/gooddata-eval/scripts/calibrate_catalog_metadata_judge.py
+  s_dc2c82805837c9::t_29cb7ba837d145 52-54,56-57
+  s_dc2c82805837c9::t_0923fb75b914b4 59-61
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/catalog_metadata.py
+  s_dc2c82805837c9::t_29cb7ba837d145 58-63
+  s_dc2c82805837c9::t_0923fb75b914b4 102-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e166ecb4b377b6665a42a0e912b7e23ca25a5769",
+  "prompts": {},
+  "sessions": {
+    "s_dc2c82805837c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47504938-0276-46f4-8132-e2aaec4f41dd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+packages/gooddata-eval/src/gooddata_eval/core/interaction.py
+  s_bf7263da2341ea::t_ba032637ab3fa4 32,50-51
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_bf7263da2341ea::t_61379ec60e1a60 374
+  s_bf7263da2341ea::t_ba032637ab3fa4 18,22,68-69,94-96,104-105,371-373,375-401
+packages/gooddata-eval/AGENTS.md
+  s_bf7263da2341ea::t_3f1a02b780302c 67-70
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_bf7263da2341ea::t_d5f72a4ccd3180 582-617,621-624
+  s_bf7263da2341ea::t_08550c89f55204 641-642
+  s_bf7263da2341ea::t_ea1286ce83a6f7 618-620
+packages/gooddata-eval/src/gooddata_eval/core/agentic/chat_summary.py
+  s_bf7263da2341ea::t_1c9448921ccc53 283
+  s_bf7263da2341ea::t_61379ec60e1a60 278
+  s_bf7263da2341ea::t_8d9c729176e16e 27-45,48-58,96-149,187,215-218,295,301-345,357-359,361-511
+  s_bf7263da2341ea::t_1ceb460ca8d795 1-26,46-47,59-95,150-186,188-214,219-277,279-282,284-294,296-300
+  s_bf7263da2341ea::t_7877ef0a7f29fc 346-356,360
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_bf7263da2341ea::t_986a1ca9ce547f 21,63-77,195
+packages/gooddata-eval/tests/test_agentic_chat_summary.py
+  s_bf7263da2341ea::t_1c9448921ccc53 13-17
+  s_bf7263da2341ea::t_aa3933c489f347 5,109-111
+  s_bf7263da2341ea::t_48e4c271f37928 1-4,6-12,18-108,112-141
+packages/gooddata-eval/src/gooddata_eval/core/agentic/describe_object.py
+  s_bf7263da2341ea::t_a3ebc56ea79f66 1-212
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary.py
+  s_bf7263da2341ea::t_2d9a5c641687d3 123-126
+  s_bf7263da2341ea::t_37b92e5859a203 19-20
+  s_bf7263da2341ea::t_9524d0314bec3d 1-18,21-73,79-122,127-216
+  s_bf7263da2341ea::t_e37210cde906ff 74-78
+packages/gooddata-eval/tests/test_chat_summary_evaluator.py
+  s_bf7263da2341ea::t_fdc76197b17427 1-65,71-95,97-115,117-141,144-159,164-201
+  s_bf7263da2341ea::t_e37210cde906ff 96,142-143
+  s_bf7263da2341ea::t_3f1a02b780302c 116
+  s_bf7263da2341ea::t_61379ec60e1a60 66-70,160-163
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/describe_object.py
+  s_bf7263da2341ea::t_3ddf9387af148e 1-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d70179e10a688ab70d11339f7785395154d4530",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

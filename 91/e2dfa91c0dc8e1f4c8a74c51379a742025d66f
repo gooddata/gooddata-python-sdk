@@ -1,0 +1,23 @@
+packages/gooddata-eval/tests/test_agentic_document_skill.py
+  s_19dc1795226976::t_d156bde52cd210 1460-1464,1474,1589-1643
+  s_19dc1795226976::t_ba30481af8253f 1644-1645
+packages/gooddata-eval/src/gooddata_eval/core/agentic/document_skill.py
+  s_19dc1795226976::t_fca7216ef71a0f 670-672,684-685,693,699-700
+  s_19dc1795226976::t_c413da580380c0 481,489-491,495-497,510,597,630-631,642,656-669,673-683,686-692,694-698,701-712,896,902-903,977,988,997,1083,1095
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "91e2dfa91c0dc8e1f4c8a74c51379a742025d66f",
+  "prompts": {},
+  "sessions": {
+    "s_19dc1795226976": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "67718588-984f-4fe2-a004-4e343541a2cf",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Chris Bonilla <christopher.bonilla@gooddata.com>"
+    }
+  }
+}

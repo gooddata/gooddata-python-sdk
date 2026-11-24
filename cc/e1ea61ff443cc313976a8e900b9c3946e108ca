@@ -1,0 +1,19 @@
+packages/gooddata-eval/scripts/calibrate_takeaway_judge.py
+  s_c9e6b31f85e827::t_b2dbb85829fb47 58-59,63,71,74-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cce1ea61ff443cc313976a8e900b9c3946e108ca",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

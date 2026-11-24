@@ -1,0 +1,17 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dfba16f7ebe71f92db3bfa4d874adf1f51bb3920",
+  "prompts": {},
+  "sessions": {
+    "s_328fe1dadf98b7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "123e92dd-9274-4415-a3ca-cbd1592d1c5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Tychtl <jan.tychtl@gooddata.com>"
+    }
+  }
+}
