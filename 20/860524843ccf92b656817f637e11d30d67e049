@@ -1,0 +1,60 @@
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_c9e6b31f85e827::t_53f44f07ff319a 21-28,134-154,214-215,225-226,238
+packages/gooddata-eval/src/gooddata_eval/core/interaction.py
+  s_c9e6b31f85e827::t_101b92426829b7 32
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_c9e6b31f85e827::t_101b92426829b7 640-651,654-661,680-681
+  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652-653
+packages/gooddata-eval/tests/test_agentic_memory.py
+  s_c9e6b31f85e827::t_adabceb66ddfe4 4-5,19,256-257,259-262,264-274,276-304,306-323
+  s_c9e6b31f85e827::t_8d69079ec977f5 333-365
+  s_c9e6b31f85e827::t_e8c0da282e946b 225-226,228-235,245
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 84-89
+  s_c9e6b31f85e827::t_ebdf7292b09233 236-237,239-243,247,249-250,254
+  s_c9e6b31f85e827::t_60a4db2bc8d304 24,36,40,51,72,83,93,98,113,117,130,135,147,156,166,173,180,189,197,209,219,227,238,251,258,263,275,305,324-332
+  s_c9e6b31f85e827::t_8c5caa0b1b7430 1-3,6-16,18,20-23,25-35,37-39,41-50,52-71,73-82,90-92,94-97,99-112,114-116,118-129,131-134,136-146,148-155,157-165,167-172,174-179,181-188,190-196,198-208,210-218,220-224,244,246,248,252-253,255
+  s_c9e6b31f85e827::t_8d64fa7cd3101b 17,366-407
+  s_c9e6b31f85e827::t_df93783ce01e44 408
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_c9e6b31f85e827::t_e8c0da282e946b 112,909,953-954
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_c9e6b31f85e827::t_101b92426829b7 28,71,91,101,407-416
+  s_c9e6b31f85e827::t_307a1332585780 417-418
+packages/gooddata-eval/AGENTS.md
+  s_c9e6b31f85e827::t_710fe65a44301d 67
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_c9e6b31f85e827::t_ccaffdf3b34e4f 129
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_2ef21dbbe26e31 323,986-1001,1005-1021
+  s_c9e6b31f85e827::t_adabceb66ddfe4 1002-1004
+  s_c9e6b31f85e827::t_bc1456fc653877 1022
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_c9e6b31f85e827::t_710fe65a44301d 64-70,102-106
+packages/gooddata-eval/src/gooddata_eval/core/agentic/memory.py
+  s_c9e6b31f85e827::t_ea08686d479e4f 1-19,22-34,36-51,53-59,61-65,67-124,129-131,133-137,143,145-155,157-159,161-206,227-233,236-286,288,291-312,314-326,328-333,336-342,354-357,363-430,436-442,444-446,450,457,460-474,476-500,506-511,515-525,528-532,538-545,551
+  s_c9e6b31f85e827::t_60a4db2bc8d304 66,504-505
+  s_c9e6b31f85e827::t_408d5bd813767e 20-21,234-235
+  s_c9e6b31f85e827::t_c50717309d2fff 343-353,358-362,512-514,533-537,546-550
+  s_c9e6b31f85e827::t_8d69079ec977f5 138-142,144,156,160,313,431-435,443,458-459,475
+  s_c9e6b31f85e827::t_61c90891ef9235 35,52,125-128,132,207-226,327,334-335,451-456,526-527
+  s_c9e6b31f85e827::t_adabceb66ddfe4 287,289-290
+  s_c9e6b31f85e827::t_54756091eec51d 552-554
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 447-449,501-503
+  s_c9e6b31f85e827::t_8d64fa7cd3101b 60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "33c0d342ef4b60804cc9669997296e99c1b37592",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": null
+    }
+  }
+}
