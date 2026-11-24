@@ -1,0 +1,28 @@
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_a7699db810c4e2 973-974,977-984
+packages/gooddata-eval/tests/test_agentic_agent_switcher.py
+  s_c9e6b31f85e827::t_d42037e10d1570 296,303,309-348
+  s_c9e6b31f85e827::t_c8c2524f4fb351 113-115
+packages/gooddata-eval/src/gooddata_eval/core/chat/sse_client.py
+  s_c9e6b31f85e827::t_f091b07f42e734 571-574
+packages/gooddata-eval/src/gooddata_eval/core/agentic/agent_switcher.py
+  s_c9e6b31f85e827::t_f091b07f42e734 379-380,393-395,548-558,561-564,571-579,591-599,622-627,767-768,796-797
+packages/gooddata-eval/tests/test_sse_client.py
+  s_c9e6b31f85e827::t_d42037e10d1570 817,824,829-834,856,862,877,883
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d76da68622b70f3cdfce30a963a5fd00e52504f9",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
