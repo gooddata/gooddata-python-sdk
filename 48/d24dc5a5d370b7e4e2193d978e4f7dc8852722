@@ -10,18 +10,18 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/chat_summary.py
   s_bf7263da2341ea::t_8d9c729176e16e 27-45,48-49,51-55,57-59,61,99-104,110-113,115-122,184-195,210-212,214-216,218-224,262,290,293-295,377,385-390,442-457,459-460,463-464,466-471,475-484,498,510-531,549-575,590-679
   s_bf7263da2341ea::t_1fec72c1aeb29b 50,105-109,114,123-183,355-360
 packages/gooddata-eval/src/gooddata_eval/core/interaction.py
-  s_bf7263da2341ea::t_ba032637ab3fa4 32,50-51
+  s_bf7263da2341ea::t_ba032637ab3fa4 32,50-51,52-53
 packages/gooddata-eval/tests/test_agentic_chat_summary.py
   s_bf7263da2341ea::t_48e4c271f37928 1-4,6-12,18-108,112-141
   s_bf7263da2341ea::t_aa3933c489f347 5,109-111
   s_bf7263da2341ea::t_1c9448921ccc53 13-17
 packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_bf7263da2341ea::t_d5f72a4ccd3180 597-609,611-633,637-640
-  s_bf7263da2341ea::t_1fec72c1aeb29b 582-596,610
-  s_bf7263da2341ea::t_08550c89f55204 657-658
-  s_bf7263da2341ea::t_ea1286ce83a6f7 634-636
+  s_bf7263da2341ea::t_d5f72a4ccd3180 597-609,611-633,637-640,646-658,660-682,686-689
+  s_bf7263da2341ea::t_1fec72c1aeb29b 582-596,610,631-645,659
+  s_bf7263da2341ea::t_08550c89f55204 657-658,708-709
+  s_bf7263da2341ea::t_ea1286ce83a6f7 634-636,683-685
 packages/gooddata-eval/tests/test_trace_linker.py
-  s_bf7263da2341ea::t_0583cbfdd2d9ea 127-128
+  s_bf7263da2341ea::t_0583cbfdd2d9ea 127-128,129-130
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary.py
   s_bf7263da2341ea::t_900850001a5088 208-209
   s_bf7263da2341ea::t_9524d0314bec3d 1-18,21,24-26,29-37,39-44,46-77,83-126,131-169,173,175-188,195-202,210-231
@@ -35,12 +35,12 @@ packages/gooddata-eval/src/gooddata_eval/core/agentic/describe_object.py
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/describe_object.py
   s_bf7263da2341ea::t_3ddf9387af148e 1-87
 packages/gooddata-eval/AGENTS.md
-  s_bf7263da2341ea::t_0da51707d00969 71-74
-  s_bf7263da2341ea::t_3f1a02b780302c 67-70
+  s_bf7263da2341ea::t_0da51707d00969 71-74,74-77
+  s_bf7263da2341ea::t_3f1a02b780302c 67-70,70-73
 packages/gooddata-eval/tests/test_agentic_runner.py
-  s_bf7263da2341ea::t_073d373ec300f7 942-949
-  s_bf7263da2341ea::t_0583cbfdd2d9ea 110-111,118-130,148,913-914,937,939-941,950-951,971-973
-  s_bf7263da2341ea::t_bde490cd9e49e1 290,1155,1304,1375
+  s_bf7263da2341ea::t_073d373ec300f7 942-949,952-959
+  s_bf7263da2341ea::t_0583cbfdd2d9ea 110-111,112-113,118-130,123-135,148,153,913-914,923-924,937,939-941,947,949-951,950-951,960-961,971-973,981
+  s_bf7263da2341ea::t_bde490cd9e49e1 290,298,1155,1167,1304,1316,1375,1387
 packages/gooddata-eval/tests/test_chat_summary_evaluator.py
   s_bf7263da2341ea::t_e37210cde906ff 96,144-145
   s_bf7263da2341ea::t_fdc76197b17427 1-65,71-95,97-115,117-126,129-143,146-161,166-169,174-175,183-193,204-224
@@ -61,8 +61,8 @@ packages/gooddata-eval/tests/test_chat_summary_figures.py
   s_bf7263da2341ea::t_11f0abb1c9fdc8 68-69,71-72,243-245
   s_bf7263da2341ea::t_9085a87b39f7ee 126-158
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
-  s_bf7263da2341ea::t_61379ec60e1a60 374
-  s_bf7263da2341ea::t_ba032637ab3fa4 18,22,68-69,94-96,104-105,371-373,375-401
+  s_bf7263da2341ea::t_61379ec60e1a60 374,378
+  s_bf7263da2341ea::t_ba032637ab3fa4 18,19,22,23,68-69,72-73,94-96,98-100,104-105,108-109,371-373,375-401,375-377,379-405
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
   s_bf7263da2341ea::t_b9c25b618ef08f 90
   s_bf7263da2341ea::t_a28284a7bfb52b 1-6,11-12,18-23,29-37,40-48,51-52,89,91-92,94-95,103-106,115-116,122-134,137-143,147-152,154-156,159-195,197-199,202-220,225-229,267-269,277-288,290-291,306-315,318,320,323,325-327,330-332,345,347,351,517-523,528,530-532,552,563-568,573-577,579,586-594,625-658,662-664,666-676,678-682,715-725,728-729,733,737-743,759-761,778,784,788
@@ -83,7 +83,7 @@ packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
   s_bf7263da2341ea::t_9c2b370c585e30 38,112-114,117-121,135-136,145-146,158,272,302,316-317,319,321,333-344,348-350,352,354,357-358,366-368,392,400-424,430-436,460-476,479-494,581,622,683-706,711,714,727,730-732,734-736,745-746,749-758,768-774,777,779-781,785-787
   s_bf7263da2341ea::t_ccda640d942314 88,100-102,110,527,529,533-537,578,610
 packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
-  s_bf7263da2341ea::t_986a1ca9ce547f 21,63-77,195
+  s_bf7263da2341ea::t_986a1ca9ce547f 21,63-77,70-84,195,229
 ---
 {
   "schema_version": "authorship/3.0.0",
