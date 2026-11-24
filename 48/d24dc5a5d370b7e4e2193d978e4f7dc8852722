@@ -41,6 +41,7 @@ packages/gooddata-eval/tests/test_agentic_runner.py
   s_bf7263da2341ea::t_073d373ec300f7 942-949,952-959
   s_bf7263da2341ea::t_0583cbfdd2d9ea 110-111,112-113,118-130,123-135,148,153,913-914,923-924,937,939-941,947,949-951,950-951,960-961,971-973,981
   s_bf7263da2341ea::t_bde490cd9e49e1 290,298,1155,1167,1304,1316,1375,1387
+  s_bf7263da2341ea::t_19a2ff628eb6e8 982-984
 packages/gooddata-eval/tests/test_chat_summary_evaluator.py
   s_bf7263da2341ea::t_e37210cde906ff 96,144-145
   s_bf7263da2341ea::t_fdc76197b17427 1-65,71-95,97-115,117-126,129-143,146-161,166-169,174-175,183-193,204-224
@@ -84,11 +85,12 @@ packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
   s_bf7263da2341ea::t_ccda640d942314 88,100-102,110,527,529,533-537,578,610
 packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
   s_bf7263da2341ea::t_986a1ca9ce547f 21,63-77,70-84,195,229
+  s_bf7263da2341ea::t_19a2ff628eb6e8 22-28
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "372fa1b38eaede920564abffcbcf7c6480c00789",
+  "base_commit_sha": "48d24dc5a5d370b7e4e2193d978e4f7dc8852722",
   "prompts": {},
   "sessions": {
     "s_bf7263da2341ea": {
