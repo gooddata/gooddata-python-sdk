@@ -64,7 +64,7 @@ its own shape. `test_kind` on the item is what labels the result, not the evalua
 which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `dashboard_summary` items additionally need `summary_input`, `document_takeaway` items
 `takeaway_input`, `catalog_metadata` items `catalog_input`, `agentic_agent_switcher` items
-`agent_switcher_input`. `agentic_knowledge` items keep earlier user turns in
+`agent_switcher_input`, `agentic_memory` items `memory_input`. `agentic_knowledge` items keep earlier user turns in
 `expected_output.setup_turns` (`question` is the graded turn); their evaluator lives in
 `core/evaluators/knowledge.py` but is agentic-only, so it is not in the single-shot registry.
 

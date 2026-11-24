@@ -9,7 +9,15 @@ import re
 from enum import Enum
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, SerializerFunctionWrapHandler, field_validator, model_serializer
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    SerializerFunctionWrapHandler,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 
 from gooddata_eval.core.timing import PhaseTimings
 
@@ -629,6 +637,32 @@ class AgentSwitcherInput(BaseModel):
     turns: list[AgentSwitcherTurn] = Field(min_length=1)
 
 
+class MemoryInput(BaseModel):
+    """Structured input for the `agentic_memory` test kind: memory item titles, as gen-ai records them.
+
+    `injected` must all be in the turn's injected memory, `not_injected` none of it. Unknown keys
+    are rejected so a typo in a dataset item fails loudly.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    injected: list[str] = Field(default_factory=list)
+    not_injected: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _check(self) -> "MemoryInput":
+        if not self.injected and not self.not_injected:
+            raise ValueError("memory_input needs at least one title in injected or not_injected")
+        # Titles are compared exactly: a blank or padded one never matches, so its check always passes.
+        padded = sorted(t for t in (*self.injected, *self.not_injected) if not t or t != t.strip())
+        if padded:
+            raise ValueError(f"memory_input titles must not be empty or padded with spaces: {padded}")
+        both = sorted(set(self.injected) & set(self.not_injected))
+        if both:
+            raise ValueError(f"memory_input lists {both} as both injected and not_injected")
+        return self
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -647,6 +681,8 @@ class DatasetItem(BaseModel):
     catalog_input: CatalogInput | None = None
     # Only used by the `agentic_agent_switcher` test kind; ignored by all others.
     agent_switcher_input: AgentSwitcherInput | None = None
+    # Only used by the `agentic_memory` test kind; ignored by all others.
+    memory_input: MemoryInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

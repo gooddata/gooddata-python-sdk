@@ -61,6 +61,13 @@ from gooddata_eval.core.agentic.kda_skill import (
     evaluate_agentic_kda_skill,
     run_agentic_kda_skill,
 )
+from gooddata_eval.core.agentic.memory import (
+    AgenticMemorySummary,
+    MemoryAssertionError,
+    MemoryRunResult,
+    evaluate_agentic_memory,
+    run_agentic_memory,
+)
 from gooddata_eval.core.agentic.metric_skill import (
     AgenticMetricSummary,
     MetricRunResult,
@@ -92,6 +99,11 @@ evaluate_agentic_report_skill = evaluate_agentic_document_skill
 run_agentic_report_skill = run_agentic_document_skill
 
 __all__ = [
+    "run_agentic_memory",
+    "evaluate_agentic_memory",
+    "MemoryRunResult",
+    "MemoryAssertionError",
+    "AgenticMemorySummary",
     "AgentSwitcherAssertionError",
     "AgentSwitcherRunResult",
     "AgenticAgentSwitcherSummary",
