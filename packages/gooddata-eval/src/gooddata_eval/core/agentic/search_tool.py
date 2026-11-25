@@ -91,6 +91,10 @@ SEARCH_CONDITIONAL_SCORES = (
     "search_answer",
     "search_limit",
     "search_no_raw_ids",
+    "search_user_requested",
+    "search_widget_objects",
+    "search_forbidden_parts",
+    "search_no_object_urls",
 )
 # The names a score takes where it does not gate the item: every check of a report_only item, and tool_selection of
 # an item with search_required false. A score name then means the same on every item.

@@ -17,9 +17,11 @@ from gooddata_eval.core.agentic._search_expectation import (
     SEARCH_OPTION_KEYS,
     SearchExpectation,
     deterministic_checks,
+    object_urls,
     parse_expectation,
     raw_ids,
     returned_refs,
+    widget_refs,
 )
 from gooddata_eval.core.agentic.search_tool import (
     SEARCH_CONDITIONAL_SCORES,
@@ -59,9 +61,16 @@ def _turn(
     text: str = "Found 2 results.",
     calls: list[dict] | None = None,
     widgets: list[dict] | None = None,
+    parts: list[dict] | None = None,
 ) -> ChatResult:
     return ChatResult.model_validate(
-        {"textResponse": text, "toolCallEvents": calls or [], "searchResults": widgets or [], "responseId": "resp"}
+        {
+            "textResponse": text,
+            "toolCallEvents": calls or [],
+            "searchResults": widgets or [],
+            "unhandledParts": parts or [],
+            "responseId": "resp",
+        }
     )
 
 
@@ -333,6 +342,162 @@ def test_returned_refs_keep_the_first_spelling_and_order():
 def test_widget(expect: bool, widgets: int, ok: bool):
     result = _turn(widgets=[_widget(("metric", "net_sales"))] * widgets)
     assert deterministic_checks(parse_expectation({"expect_widget": expect}), result)[0] == {"search_widget": ok}
+
+
+_DOC_ID = "9a3c8e7e-2f0b-4c55-a1f1-6b0f6a4f1d20"
+_DOC_SEARCH = _search_call(
+    {"keywords": ["Weekly Sales Brief"], "object_types": ["document"], "limit": 10, "user_requested_search": True},
+    [_obj("document", _DOC_ID)],
+)
+_DOC_LOOKUP = _search_call(
+    {"keywords": ["Weekly Sales Brief"], "object_types": ["document"], "limit": 10, "user_requested_search": False},
+    [_obj("document", _DOC_ID)],
+)
+
+
+@pytest.mark.parametrize(
+    ("calls", "expect", "ok"),
+    [
+        ([_DOC_SEARCH], True, True),
+        ([_DOC_LOOKUP], True, False),
+        ([_DOC_LOOKUP, _DOC_SEARCH], True, True),
+        ([], True, False),
+        ([_DOC_LOOKUP], False, True),
+        ([_DOC_SEARCH], False, False),
+    ],
+)
+def test_user_requested_search_reads_every_search_call(calls: list[dict], expect: bool, ok: bool):
+    spec = parse_expectation({"expect_user_requested_search": expect})
+    checks, details = deterministic_checks(spec, _turn(calls=calls))
+    assert checks == {"search_user_requested": ok}
+    if not ok:
+        assert details["search_user_requested"]["expected"] is expect
+
+
+def test_user_requested_search_is_not_read_from_a_string():
+    call = _search_call({"keywords": ["x"], "user_requested_search": "true"})
+    spec = parse_expectation({"expect_user_requested_search": True})
+    assert deterministic_checks(spec, _turn(calls=[call]))[0] == {"search_user_requested": False}
+
+
+def test_widget_objects_are_read_from_the_widget_only():
+    spec = parse_expectation({"widget_objects": [f"document/{_DOC_ID}"]})
+    internal_only = _turn(calls=[_DOC_SEARCH])
+    checks, details = deterministic_checks(spec, internal_only)
+    assert checks == {"search_widget_objects": False}
+    assert details["search_widget_objects"] == {"missing": [f"document/{_DOC_ID}"], "listed": []}
+    listed = _turn(calls=[_DOC_SEARCH], widgets=[_widget(("dashboard", "sales"), ("document", _DOC_ID))])
+    assert deterministic_checks(spec, listed)[0] == {"search_widget_objects": True}
+
+
+def test_every_widget_object_must_be_listed():
+    spec = parse_expectation({"widget_objects": [f"document/{_DOC_ID}", "dashboard/sales"]})
+    result = _turn(widgets=[_widget(("document", _DOC_ID))])
+    checks, details = deterministic_checks(spec, result)
+    assert checks == {"search_widget_objects": False}
+    assert details["search_widget_objects"]["missing"] == ["dashboard/sales"]
+
+
+def test_a_widget_object_of_another_type_is_not_the_expected_one():
+    spec = parse_expectation({"widget_objects": [f"document/{_DOC_ID}"]})
+    result = _turn(widgets=[_widget(("dashboard", _DOC_ID))])
+    assert deterministic_checks(spec, result)[0] == {"search_widget_objects": False}
+
+
+def test_widget_refs_skip_malformed_objects():
+    widget = {
+        "type": "searchResults",
+        "objects": [{"id": "a"}, {"type": "document"}, "x", {"id": "b", "type": "document"}],
+    }
+    assert widget_refs(_turn(widgets=[widget, {"type": "searchResults", "objects": None}])) == ["document/b"]
+
+
+def test_forbidden_parts_fail_on_a_draft():
+    spec = parse_expectation({"forbidden_parts": ["document", "report", "dashboard"]})
+    clarify = {"type": "clarifyingQuestions", "questions": []}
+    assert deterministic_checks(spec, _turn(parts=[clarify]))[0] == {"search_forbidden_parts": True}
+    draft = {"type": "document", "document": {"title": "Weekly Sales Brief"}}
+    checks, details = deterministic_checks(spec, _turn(parts=[clarify, draft]))
+    assert checks == {"search_forbidden_parts": False}
+    assert details["search_forbidden_parts"] == {
+        "forbidden": ["document"],
+        "parts": ["clarifyingQuestions", "document"],
+    }
+
+
+@pytest.mark.parametrize("value", [["visualization"], ["searchResults"], ["Document"], ["documnet"]])
+def test_forbidden_parts_take_only_part_types_that_reach_the_unhandled_list(value: list[str]):
+    with pytest.raises(ValueError, match="forbidden_parts"):
+        parse_expectation({"forbidden_parts": value})
+
+
+@pytest.mark.parametrize(
+    ("text", "found"),
+    [
+        ("Open it from the Search list below.", []),
+        ("See the help page https://www.gooddata.com/docs/cloud/create-reports/.", []),
+        ("Our site is https://example.com.", []),
+        (
+            "Open https://acme.gooddata.com/workspace/ecommerce_demo/reports/document/abc here.",
+            ["https://acme.gooddata.com/workspace/ecommerce_demo/reports/document/abc"],
+        ),
+        (
+            "[Sales](https://acme.gooddata.com/dashboards/#/workspace/ws/dashboard/bf43)",
+            ["https://acme.gooddata.com/dashboards/#/workspace/ws/dashboard/bf43"],
+        ),
+        ("[Weekly brief](/workspace/ws/reports/document/abc)", ["/workspace/ws/reports/document/abc"]),
+        (
+            "Go to <https://h/api/v1/entities/workspaces/ws/documents/abc>",
+            ["https://h/api/v1/entities/workspaces/ws/documents/abc"],
+        ),
+        ("[Docs](/docs/reports)", []),
+        ("Read https://www.gooddata.com/docs/cloud/workspaces/overview/ first.", []),
+        ("[Workspaces](/docs/cloud/workspaces/manage)", []),
+        ("[Brief](</workspace/ws/reports/document/abc>)", ["/workspace/ws/reports/document/abc"]),
+        ("[Brief]( /workspace/ws/reports/document/abc )", ["/workspace/ws/reports/document/abc"]),
+        (
+            '[Brief](/workspace/ws/reports/document/abc "Weekly brief")',
+            ["/workspace/ws/reports/document/abc"],
+        ),
+        (
+            "https://h/metrics/#/workspace/ws/metric/net_sales",
+            ["https://h/metrics/#/workspace/ws/metric/net_sales"],
+        ),
+        ("https://www.gooddata.com/docs/cloud/reports/overview/", []),
+        ("https://h/analyze/#/ecommerce_demo/viz_1/edit", ["https://h/analyze/#/ecommerce_demo/viz_1/edit"]),
+    ],
+)
+def test_object_urls_catch_links_to_workspace_objects(text: str, found: list[str]):
+    assert object_urls(text) == found
+
+
+def test_no_object_urls_check():
+    spec = parse_expectation({"no_object_urls": True})
+    assert deterministic_checks(spec, _turn(text="Open it from the list."))[0] == {"search_no_object_urls": True}
+    link = "https://h/workspace/ws/reports/document/abc"
+    checks, details = deterministic_checks(spec, _turn(text=f"Here: {link}"))
+    assert checks == {"search_no_object_urls": False}
+    assert details["search_no_object_urls"] == {"object_urls": [link]}
+
+
+@pytest.mark.parametrize(
+    ("expected_output", "message"),
+    [
+        ({"expect_user_requested_search": "yes"}, "expect_user_requested_search"),
+        ({"widget_objects": []}, "widget_objects"),
+        ({"widget_objects": ["doc/abc"]}, "expected_objects entry"),
+        ({"forbidden_parts": "document"}, "forbidden_parts"),
+        ({"no_object_urls": 1}, "no_object_urls"),
+    ],
+)
+def test_malformed_new_options_are_rejected(expected_output: dict, message: str):
+    with pytest.raises(ValueError, match=message):
+        parse_expectation(expected_output)
+
+
+def test_search_required_false_with_a_new_check_is_an_item():
+    spec = parse_expectation({"search_required": False, "forbidden_parts": ["dashboard"]})
+    assert spec.has_turn_checks
 
 
 def test_routing_needs_every_required_tool_and_no_forbidden_one():
@@ -702,9 +867,15 @@ def test_every_check_is_a_published_score_name():
         "answer_rubric": ["Lists net sales"],
         "expected_limit": 20,
         "no_raw_ids": True,
+        "expect_user_requested_search": False,
+        "widget_objects": ["metric/net_sales"],
+        "forbidden_parts": ["document"],
+        "no_object_urls": True,
     }
+    turn = _turn(calls=[_NET_SALES_CALL], widgets=[_widget(("metric", "net_sales"))])
+    expected["expect_widget"] = True
     with patch(f"{_MODULE}.score_run", return_value=JudgeVerdict(passed=True, reasoning="ok")):
-        run, _ = _run(expected, _turn(calls=[_NET_SALES_CALL]), judge=MagicMock())
+        run, _ = _run(expected, turn, judge=MagicMock())
     assert set(run.checks) == set(SEARCH_CONDITIONAL_SCORES)
     assert run.passed
 
@@ -868,6 +1039,10 @@ def test_every_check_of_a_report_only_item_is_a_published_diagnostic_name():
         "answer_rubric": ["Lists net sales"],
         "expected_limit": 20,
         "no_raw_ids": True,
+        "expect_user_requested_search": True,
+        "widget_objects": ["metric/net_sales"],
+        "forbidden_parts": ["document"],
+        "no_object_urls": True,
         "report_only": True,
     }
     ctx = _scored(expected, JudgeVerdict(passed=True, reasoning="ok"))
