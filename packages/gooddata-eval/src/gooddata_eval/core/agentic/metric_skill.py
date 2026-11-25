@@ -7,6 +7,7 @@ import os
 import re
 import time
 from collections.abc import Callable
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -97,7 +98,8 @@ _DELETE_RECHECK_DELAYS_S: tuple[float, ...] = (3.0, 3.0, 6.0)
 # Every check score an options-shape item can publish, beside metric_created and maql_correct. Each is published only
 # for an item that opts into it; metric_scored only when the snapshot or the restore failed. A check the harness could
 # not read reads False with a "harness:" reason; a run left without a verdict by it is labelled ERROR.
-# metric_first_proposal_correct is a diagnostic and never gates.
+# The diagnostics never gate: metric_first_proposal_correct, and metric_write_kept, which reads False when a metric the
+# agent wrote was gone or changed back by scoring time (see _WriteReadback).
 METRIC_CONDITIONAL_SCORES = (
     "metric_not_created",
     "metric_reuse_named",
@@ -113,7 +115,7 @@ METRIC_CONDITIONAL_SCORES = (
     "metric_suggestions",
     "metric_scored",
 )
-METRIC_DIAGNOSTIC_SCORES = ("metric_first_proposal_correct",)
+METRIC_DIAGNOSTIC_SCORES = ("metric_first_proposal_correct", "metric_write_kept")
 
 _RUBRIC_STEPS = [
     "EXPECTED OUTPUT states the criteria the assistant's behaviour must meet.",
@@ -335,6 +337,131 @@ def _successful_writes(tool_call_events: list[ToolCallEvent]) -> list[dict]:
     return out
 
 
+def _metric_state(attributes: dict | None) -> dict | None:
+    """The fields of a stored metric a write sets, to compare two reads of it; None for a missing metric."""
+    if attributes is None:
+        return None
+    content = attributes.get("content") or {}
+    return {
+        "title": attributes.get("title") or "",
+        "description": attributes.get("description") or "",
+        "tags": sorted(attributes.get("tags") or []),
+        "format": content.get("format") or "",
+        "maql": content.get("maql") or "",
+    }
+
+
+def _stored_maql(attributes: dict | None) -> str | None:
+    """The MAQL of a stored metric, or None when there is no metric or no MAQL."""
+    maql = ((attributes or {}).get("content") or {}).get("maql")
+    return maql if isinstance(maql, str) and maql else None
+
+
+@dataclass
+class _WriteReadback:
+    """Each metric as stored right after the agent's latest write to it, read while the turn still streams.
+
+    ``create_metric`` reads the whole analytics model and writes it back, so a concurrent write in the same workspace
+    can undo this one about a second later. Reading at once scores what the agent wrote, not that race. The read at
+    scoring time then only tells whether the write was kept (``metric_write_kept``).
+
+    The reads run on one background thread, in write order, so the stream is never held up and the turn's timings and
+    budgets stay the agent's. Executions of the MAQL that was read run on a second thread, so no read waits behind a
+    slow execution; each runs inline, so a metric removed after the read cannot fail it. ``wait`` joins both before
+    anything reads ``stored`` or ``executions``.
+
+    A metric missing here is read at scoring time instead, as before: the read failed or found no metric, or the chat
+    client did not stream the turn.
+    """
+
+    workspace: MetricWorkspace
+    execute: bool
+    stored: dict[str, dict] = field(default_factory=dict)
+    # The answer of each MAQL executed, by its text: an execution that ends after a later write cannot stand for it.
+    executions: dict[str, str | None] = field(default_factory=dict)
+    _reads: ThreadPoolExecutor | None = None
+    _runs: ThreadPoolExecutor | None = None
+    _pending_reads: list[Future[None]] = field(default_factory=list)
+    _pending_runs: list[Future[None]] = field(default_factory=list)
+
+    def on_tool_result(self, event: dict[str, Any]) -> None:
+        """Queue a read of the metric a successful ``create_metric`` call wrote. Never raises: it runs in the stream."""
+        try:
+            if event.get("functionName") != "create_metric":
+                return
+            writes = _successful_writes([ToolCallEvent.model_validate(event)])
+            metric_id = writes[0].get("metric_id") if writes else None
+            if not isinstance(metric_id, str) or not metric_id:
+                return
+            if self._reads is None:
+                self._reads = ThreadPoolExecutor(max_workers=1, thread_name_prefix="metric-readback")
+            self._pending_reads.append(self._reads.submit(self._read_back, metric_id))
+        except Exception as exc:
+            print(f"[READBACK] Could not queue the read-back of a create_metric result: {type(exc).__name__}: {exc}")
+
+    def _read_back(self, metric_id: str) -> None:
+        # A failed read after a later write must not leave the earlier write's state behind.
+        self.stored.pop(metric_id, None)
+        metric = self.workspace.get_metric(metric_id)
+        if metric is None:
+            return
+        self.stored[metric_id] = metric
+        maql = _stored_maql(metric)
+        if self.execute and maql:
+            if self._runs is None:
+                self._runs = ThreadPoolExecutor(max_workers=1, thread_name_prefix="metric-execute")
+            self._pending_runs.append(self._runs.submit(self._execute, maql))
+
+    def _execute(self, maql: str) -> None:
+        self.executions[maql] = self.workspace.execute_maql(maql)
+
+    def wait(self) -> None:
+        """Let every queued read and execution finish; one that raised leaves its metric to scoring time."""
+        # Reads first: a read queues the execution of what it read.
+        for pending in (self._pending_reads, self._pending_runs):
+            for future in pending:
+                try:
+                    future.result()
+                except Exception as exc:
+                    print(f"[READBACK] A read-back failed; scoring reads it again: {type(exc).__name__}: {exc}")
+            pending.clear()
+
+    def close(self) -> None:
+        self.wait()
+        for pool in (self._reads, self._runs):
+            if pool is not None:
+                pool.shutdown()
+        self._reads = self._runs = None
+
+    def metric(self, metric_id: str) -> dict | None:
+        """The metric as written; read now when no read was taken at write time."""
+        if metric_id in self.stored:
+            return self.stored[metric_id]
+        return self.workspace.get_metric(metric_id)
+
+    def execution_error(self, metric_id: str) -> str | None:
+        """Why the metric did not compute as written, or None; computed now when it was not at write time.
+
+        A metric read at write time whose execution did not finish computes that MAQL again, never the stored metric,
+        which a concurrent writer may have replaced by then.
+        """
+        maql = _stored_maql(self.stored.get(metric_id))
+        if maql is None:
+            return self.workspace.execute_metric(metric_id)
+        if maql in self.executions:
+            return self.executions[maql]
+        return self.workspace.execute_maql(maql)
+
+    def changed_since_write(self) -> dict[str, Any]:
+        """The metrics whose stored state differs from the read taken right after their write, with both states."""
+        changed: dict[str, Any] = {}
+        for metric_id, written in self.stored.items():
+            now = _metric_state(self.workspace.get_metric(metric_id))
+            if now != _metric_state(written):
+                changed[metric_id] = {"after_write": _metric_state(written), "at_scoring": now}
+        return changed
+
+
 class MetricMatchUndecided(RuntimeError):
     """The assignment search ran out of steps before it could tell whether every expected metric was written."""
 
@@ -483,12 +610,16 @@ def _score_options_run(
     before: dict[str, dict],
     judge: LLMJudge | None,
     answered: bool = True,
+    readback: _WriteReadback | None = None,
 ) -> tuple[dict[str, bool], dict[str, bool], dict[str, Any], str | None, list[str]]:
     """The gating checks, diagnostics, failure reasons, harness error and unscored check names of one run.
 
     A check the harness could not evaluate (the workspace or the conversation was unreadable, the judge gave no
     verdict) reads False, is named unscored and sets the harness error; the other checks are still evaluated.
+    The stored fields and the execution of a written metric are graded on ``readback``, taken right after the write.
     """
+    readback = readback or _WriteReadback(workspace, execute=False)
+    readback.wait()
     checks: dict[str, bool] = {}
     diagnostics: dict[str, bool] = {}
     details: dict[str, Any] = {}
@@ -569,7 +700,7 @@ def _score_options_run(
             if target_id is None:
                 _check("metric_fields_correct", False, "no metric was written")
             else:
-                mismatches = field_mismatches(fields, target_id, workspace.get_metric(target_id))
+                mismatches = field_mismatches(fields, target_id, readback.metric(target_id))
                 _check("metric_fields_correct", not mismatches, mismatches)
 
         _read("metric_fields_correct", _fields)
@@ -577,7 +708,7 @@ def _score_options_run(
         update = spec.expected_update
 
         def _update() -> None:
-            mismatches = update_mismatches(update, before.get(update.metric_id), workspace.get_metric(update.metric_id))
+            mismatches = update_mismatches(update, before.get(update.metric_id), readback.metric(update.metric_id))
             _check("metric_updated", not mismatches, mismatches)
 
         _read("metric_updated", _update)
@@ -591,7 +722,7 @@ def _score_options_run(
     if spec.expect_executes:
 
         def _executes() -> None:
-            reason = workspace.execute_metric(target_id) if target_id else "no metric was written"
+            reason = readback.execution_error(target_id) if target_id else "no metric was written"
             _check("metric_executes", reason is None, reason)
 
         _read("metric_executes", _executes)
@@ -633,6 +764,15 @@ def _score_options_run(
         )
         if not diagnostics["metric_first_proposal_correct"]:
             details["metric_first_proposal_correct"] = {"proposed": proposed}
+    if readback.stored:
+        try:
+            changed = readback.changed_since_write()
+        except WorkspaceReadError as exc:
+            print(f"[READBACK] Could not check that the written metrics were kept: {exc}")
+        else:
+            diagnostics["metric_write_kept"] = not changed
+            if changed:
+                details["metric_write_kept"] = changed
     return checks, diagnostics, details, ("; ".join(harness_errors) or None), unscored
 
 
@@ -736,6 +876,9 @@ def _execute_single_metric_run(
     writes: list[dict] = []
     answered_turns = 0
     result: MetricRunResult | None = None
+    readback = _WriteReadback(workspace, execute=spec.expect_executes) if workspace is not None else None
+    # Only an options-shape run reads its writes back; the original shape sends exactly as before.
+    send_options: dict[str, Any] = {"on_tool_result": readback.on_tool_result} if readback is not None else {}
 
     def _record_turn(result: ChatResult, events: list[ToolCallEvent]) -> str:
         """Note the turn's writes and text for the options-shape checks; returns the rendered text."""
@@ -759,7 +902,7 @@ def _execute_single_metric_run(
             turns += 1
             agent_started = time.monotonic()
             try:
-                chat_result = client.send_message(conversation_id, current_question)
+                chat_result = client.send_message(conversation_id, current_question, **send_options)
             except ChatError as exc:
                 # Without this the exception escapes run_agentic_metric_skill entirely,
                 # discarding every K-run already completed along with any exit_reason. A
@@ -876,6 +1019,7 @@ def _execute_single_metric_run(
                 before=before,
                 judge=judge,
                 answered=answered_turns > 0,
+                readback=readback,
             )
         result = MetricRunResult(
             conversation_id=conversation_id,
@@ -901,6 +1045,9 @@ def _execute_single_metric_run(
         )
         return result
     finally:
+        if readback is not None:
+            # Joined before the cleanup, so no read-back runs against the workspace while it is put back.
+            readback.close()
         for metric_id in created_metric_ids:
             _delete_metric(sdk, workspace_id, metric_id)
         if workspace is not None:

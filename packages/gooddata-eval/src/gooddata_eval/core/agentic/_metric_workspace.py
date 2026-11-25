@@ -14,6 +14,7 @@ from collections.abc import Callable
 from typing import Any
 
 import httpx
+import urllib3.exceptions
 from gooddata_api_client.exceptions import ApiException, NotFoundException
 from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.utils import load_all_entities
@@ -69,7 +70,7 @@ class MetricWorkspace:
         list_page = functools.partial(self._entities.get_all_entities_metrics, self._ws, _check_return_type=False)
         try:
             data = load_all_entities(functools.partial(_page_with_retry, list_page)).data
-        except (ApiException, httpx.HTTPError, OSError) as exc:
+        except (ApiException, httpx.HTTPError, urllib3.exceptions.HTTPError, OSError) as exc:
             raise WorkspaceReadError(f"could not list metrics: {exc}") from exc
         out: dict[str, dict] = {}
         for obj in data:
@@ -92,7 +93,7 @@ class MetricWorkspace:
             doc = self._entities.get_entity_metrics(self._ws, metric_id, _check_return_type=False)
         except NotFoundException:
             return None
-        except (ApiException, httpx.HTTPError, OSError) as exc:
+        except (ApiException, httpx.HTTPError, urllib3.exceptions.HTTPError, OSError) as exc:
             raise WorkspaceReadError(f"could not read metric {metric_id}: {exc}") from exc
         # The document is a model even with _check_return_type=False; only its data is a plain dict.
         data = doc.get("data") if isinstance(doc, dict) else getattr(doc, "data", None)
@@ -137,7 +138,7 @@ class MetricWorkspace:
         return resp.is_success
 
     def execute_metric(self, metric_id: str) -> str | None:
-        """Compute the metric alone; None when it computes, else the reason the platform gave.
+        """Compute the stored metric alone; None when it computes, else the reason the platform gave.
 
         Only a 4xx rejection is a reason. A rate limit (429) or a service fault (5xx) is retried, and one that
         outlasts the retries is raised: it says nothing about the metric.
@@ -146,14 +147,23 @@ class MetricWorkspace:
             WorkspaceReadError: The request did not reach the platform, the platform did not serve it, or its
                 answer was unreadable.
         """
+        definition = {"measure": {"item": {"identifier": {"id": metric_id, "type": "metric"}}}}
+        return self._execute(definition, f"metric {metric_id}")
+
+    def execute_maql(self, maql: str) -> str | None:
+        """Compute a MAQL expression as an inline measure, as ``execute_metric`` does a stored metric.
+
+        It needs no stored metric, so a metric removed after it was read cannot change the answer.
+
+        Raises:
+            WorkspaceReadError: As for ``execute_metric``.
+        """
+        return self._execute({"inline": {"maql": maql}}, f"MAQL {maql[:80]!r}")
+
+    def _execute(self, definition: dict[str, Any], subject: str) -> str | None:
         afm = {
             "execution": {
-                "measures": [
-                    {
-                        "localIdentifier": "m",
-                        "definition": {"measure": {"item": {"identifier": {"id": metric_id, "type": "metric"}}}},
-                    }
-                ],
+                "measures": [{"localIdentifier": "m", "definition": definition}],
                 "attributes": [],
                 "filters": [],
             },
@@ -175,7 +185,7 @@ class MetricWorkspace:
             except _TransientStatus as exc:
                 resp = exc.response
             if resp.status_code in RETRYABLE_STATUS_CODES or resp.status_code >= 500:
-                raise WorkspaceReadError(f"could not execute metric {metric_id}: {step} HTTP {resp.status_code}")
+                raise WorkspaceReadError(f"could not execute {subject}: {step} HTTP {resp.status_code}")
             return resp
 
         try:
@@ -190,16 +200,16 @@ class MetricWorkspace:
             links = response.get("links") if isinstance(response, dict) else None
             result_id = links.get("executionResult") if isinstance(links, dict) else None
             if not isinstance(result_id, str) or not result_id:
-                raise WorkspaceReadError(f"could not execute metric {metric_id}: no executionResult in {body!r}"[:400])
+                raise WorkspaceReadError(f"could not execute {subject}: no executionResult in {body!r}"[:400])
             result = _served("result", lambda: self._client.get(f"{url}/result/{result_id}", headers=self._auth))
             if not result.is_success:
                 return f"result: HTTP {result.status_code} {result.text[:300]}"
             computed = result.json()
         except (httpx.HTTPError, ValueError) as exc:
-            raise WorkspaceReadError(f"could not execute metric {metric_id}: {type(exc).__name__}: {exc}") from exc
+            raise WorkspaceReadError(f"could not execute {subject}: {type(exc).__name__}: {exc}") from exc
         if not isinstance(computed, dict) or not isinstance(computed.get("data"), list):
             # A computed result carries its data list, empty or not; a 200 without one proves no computation.
-            raise WorkspaceReadError(f"could not execute metric {metric_id}: no data list in {str(computed)[:200]}")
+            raise WorkspaceReadError(f"could not execute {subject}: no data list in {str(computed)[:200]}")
         return None
 
     def conversation_items(self, conversation_id: str) -> list[dict[str, Any]]:

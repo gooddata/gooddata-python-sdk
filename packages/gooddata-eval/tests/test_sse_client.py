@@ -116,6 +116,41 @@ def test_parse_sse_lines_stamps_call_and_result_receipt_time(monkeypatch):
     assert tc.index == 0
 
 
+def _tool_lines(*calls: tuple[str, str]) -> list[str]:
+    """SSE data lines for each (callId, name): the call, then its result."""
+    lines = []
+    for call_id, name in calls:
+        call = {"item": {"role": "assistant", "content": {"type": "toolCall", "callId": call_id, "name": name}}}
+        result = {"item": {"role": "tool", "content": {"type": "toolResult", "callId": call_id, "result": "{}"}}}
+        lines += [f"data: {json.dumps(call)}", "", f"data: {json.dumps(result)}", ""]
+    return lines
+
+
+def test_the_tool_result_hook_sees_each_call_as_its_result_arrives() -> None:
+    order: list[str] = []
+    result = parse_sse_lines(
+        _tool_lines(("c1", "create_metric"), ("c2", "search_objects")),
+        lambda event: order.append(f"{event['functionName']}:{event['result']}"),
+    )
+    assert order == ["create_metric:{}", "search_objects:{}"]
+    assert [tc.result for tc in result.tool_call_events] == ["{}", "{}"]
+
+
+def test_a_result_for_an_unknown_call_is_ignored_and_not_passed_to_the_hook() -> None:
+    result = {"item": {"role": "tool", "content": {"type": "toolResult", "callId": "nope", "result": "{}"}}}
+    seen: list[dict] = []
+    parsed = parse_sse_lines([f"data: {json.dumps(result)}"], seen.append)
+    assert seen == [] and parsed.tool_call_events == []
+
+
+def test_send_message_passes_the_hook_to_the_stream() -> None:
+    body = "\n".join(_tool_lines(("c1", "create_metric"))).encode()
+    client = _client_with_handler(lambda request: httpx.Response(200, content=body))
+    seen: list[dict] = []
+    client.send_message("conv", "q", on_tool_result=seen.append)
+    assert [event["functionName"] for event in seen] == ["create_metric"]
+
+
 def test_build_latency_breakdown_gives_repeated_tool_calls_separate_entries_in_order():
     # Same tool called twice, back-to-back (no gap between them). A dict keyed by tool
     # name would sum these into one number and lose which call was slower -- each call
