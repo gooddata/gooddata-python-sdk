@@ -28,7 +28,7 @@ def _extract_metric_id(metric_str: str) -> str | None:
 def _extract_automation_id(tool_event) -> str | None:
     """Real server-assigned id of the automation this call created.
 
-    Mirrors ``core/agentic/alert_skill.py``'s ``_extract_alert_call`` — the id
+    Mirrors ``core/agentic/alert_skill.py``'s ``_created_alert_id`` — the id
     lives in the tool *result* (what the server assigned), not the tool call
     *arguments* (what the agent asked for).
     """

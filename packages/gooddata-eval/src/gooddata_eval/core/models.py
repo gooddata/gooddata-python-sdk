@@ -39,7 +39,8 @@ class LoopExit(str, Enum):
     """The agent produced the expected output; the loop broke early."""
 
     AGENT_SILENT = "agent_silent"
-    """The agent returned neither text nor a tool call -- genuinely stuck."""
+    """The agent returned neither text nor a tool call -- genuinely stuck. The alert skill also
+    ends here when the agent writes nothing after every ``create_metric_alert`` call failed."""
 
     BUDGET_EXHAUSTED = "budget_exhausted"
     """The loop hit ``max_iterations`` without the agent producing its output. Says nothing

@@ -1,5 +1,6 @@
 # (C) 2026 GoodData Corporation. All rights reserved.
 # SPDX-License-Identifier: LicenseRef-GoodData-Enterprise
+import json
 from contextlib import ExitStack, contextmanager
 from unittest.mock import MagicMock, patch
 
@@ -7,6 +8,7 @@ import pytest
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity
 from gooddata_eval.core.agentic.alert_skill import (
     AlertEvaluation,
+    AlertRunResult,
     AlertSkillAssertionError,
     _check_attributes,
     _check_comparison,
@@ -820,6 +822,184 @@ def test_render_alert_proposal_drops_afm_when_execution_is_the_only_alert_field(
 
 def test_render_alert_proposal_falls_back_to_default_cta():
     assert render_alert_proposal({}).startswith("Should I create this alert?")
+
+
+def test_render_alert_proposal_shows_filters_but_not_group_bys() -> None:
+    # Rule 3 asks the simulated user to check the filters, which live only in `execution`. It is told
+    # nothing about group-bys, and a date group-by would read as a time window, so they stay out.
+    proposal = {
+        "alert": {
+            "condition": {"comparison": {"operator": "LESS_THAN", "right": {"value": 1000}}},
+            "execution": {
+                "measures": [{"opaque": "afm"}],
+                "attributes": [_AFM_MONTH_GROUPING],
+                "filters": [_DATE_FILTER, _ATTR_FILTER],
+            },
+        }
+    }
+    rendered = render_alert_proposal(proposal)
+    assert "relativeDateFilter" in rendered
+    assert "United States" in rendered
+    assert "customer_created_date.month" not in rendered
+    assert "opaque" not in rendered
+    assert "execution" not in rendered
+
+
+def test_render_alert_proposal_shows_that_there_are_no_filters() -> None:
+    rendered = render_alert_proposal({"alert": {"execution": {"measures": [{"opaque": "afm"}]}}})
+    assert '"filters": []' in rendered
+
+
+def _create_call(result: str | None, threshold: int = 500) -> dict:
+    return {
+        "functionName": "create_metric_alert",
+        "functionArguments": json.dumps({"operator": "GREATER_THAN", "threshold": threshold}),
+        "result": result,
+    }
+
+
+_MCP_ERROR = '{"data": {"isError": true, "error": {"text": "Error calling tool \'create_metric_alert\'"}}}'
+# gen-ai's tool registry reports rejected arguments and a failed execution this way, with no isError.
+_REGISTRY_ERROR = (
+    '{"success": false, "error": "Tool \'create_metric_alert\' execution failed due to an internal error."}'
+)
+
+
+def _turn(*calls: dict, text: str = "Done.") -> ChatResult:
+    return ChatResult.model_validate({"text_response": text, "toolCallEvents": list(calls)})
+
+
+def _run_turns(*turns: ChatResult | ChatError, max_iterations: int = 1) -> tuple[AlertRunResult, list[str]]:
+    """Run one alert conversation over these agent turns; returns the run and the alert ids it deleted.
+
+    A ``ChatError`` among the turns is raised by that turn's send, as a broken stream is.
+    """
+    client = MagicMock()
+    client.send_message.side_effect = list(turns)
+    with (
+        _patched(client, simulated_reply="Please try again."),
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert") as mock_delete,
+    ):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=max_iterations,
+            initial_conversation_id="conv-1",
+        )
+    return summary.best, [c.args[2] for c in mock_delete.call_args_list]
+
+
+@pytest.mark.parametrize("error", [_MCP_ERROR, _REGISTRY_ERROR], ids=["mcp_error", "registry_error"])
+def test_retry_after_failed_create_scores_and_deletes_the_alert_it_created(error: str) -> None:
+    # The first call errored; reading only it leaked the retry's alert and scored failed arguments.
+    run, deleted = _run_turns(_turn(_create_call(error, threshold=1), _create_call('{"id": "alert-2"}')))
+    assert run.eval.alert_created is True
+    assert run.eval.threshold_correct is True
+    assert run.alert_id == "alert-2"
+    assert deleted == ["alert-2"]
+
+
+def test_a_failed_call_after_a_created_alert_does_not_replace_its_arguments() -> None:
+    run, deleted = _run_turns(_turn(_create_call('{"id": "alert-1"}'), _create_call(_REGISTRY_ERROR, threshold=1)))
+    assert run.eval.threshold_correct is True
+    assert run.alert_id == "alert-1"
+    assert deleted == ["alert-1"]
+
+
+def test_the_first_created_alert_is_scored_and_every_one_is_deleted() -> None:
+    # As before QA-29886: when no call failed, the run is scored on the first one.
+    run, deleted = _run_turns(
+        _turn(_create_call('{"id": "alert-1"}'), _create_call('{"data": {"id": "alert-2"}}', threshold=7))
+    )
+    assert run.eval.threshold_correct is True
+    assert run.alert_id == "alert-1"
+    assert deleted == ["alert-1", "alert-2"]
+
+
+def test_the_reported_alert_id_belongs_to_the_scored_call() -> None:
+    # A result without an id still counts as a created alert; the next call's id is not its id.
+    run, deleted = _run_turns(_turn(_create_call('{"status": "ok"}'), _create_call('{"id": "alert-2"}', threshold=7)))
+    assert run.eval.alert_created is True
+    assert run.actual_alert_arguments["threshold"] == 500
+    assert run.alert_id is None
+    assert deleted == ["alert-2"]
+
+
+def test_the_run_ends_when_the_agent_says_nothing_after_every_create_call_failed() -> None:
+    # The rendered turn holds no tool results, so the simulated user would answer an empty message.
+    client = MagicMock()
+    client.send_message.side_effect = [
+        _turn(_create_call(_REGISTRY_ERROR), text=""),
+        _turn(_create_call('{"id": "alert-2"}')),
+    ]
+    with (
+        _patched(client, simulated_reply="Please try again.") as mock_sim,
+        patch("gooddata_eval.core.agentic.alert_skill._delete_alert") as mock_delete,
+    ):
+        summary = run_agentic_alert_skill(
+            host="http://host",
+            token="tok",
+            workspace_id="ws1",
+            question="Notify me whenever the number of orders goes above 500",
+            expected_output={"operator": "GREATER_THAN", "threshold": 500},
+            k=1,
+            max_iterations=2,
+            initial_conversation_id="conv-1",
+        )
+    assert mock_sim is not None
+    mock_sim.assert_not_called()
+    assert client.send_message.call_count == 1
+    assert summary.best.exit_reason == LoopExit.AGENT_SILENT
+    assert summary.best.eval.alert_created is False
+    mock_delete.assert_not_called()
+
+
+@pytest.mark.parametrize("result", [None, "Alert created."], ids=["no_result", "not_json"])
+def test_a_create_call_whose_result_cannot_be_read_still_counts_as_created(result: str | None) -> None:
+    # Kept as before QA-29886: an unusual result shape must not turn into a false failure.
+    # Such a result carries no id, so there is nothing to delete.
+    run, deleted = _run_turns(_turn(_create_call(result)))
+    assert run.eval.alert_created is True
+    assert run.exit_reason == LoopExit.SUCCESS
+    assert run.alert_id is None
+    assert deleted == []
+
+
+def test_a_broken_stream_deletes_only_the_alerts_its_create_calls_created() -> None:
+    # The cleanup of the chat-error path reads every call too, not only the first: a failed call
+    # created nothing to delete, and its retry's alert must not leak.
+    partial = _turn(_create_call(_REGISTRY_ERROR, threshold=1), _create_call('{"id": "alert-2"}'), text="")
+    run, deleted = _run_turns(ChatError("stream died after create", partial_result=partial))
+    assert run.exit_reason == LoopExit.CHAT_ERROR
+    assert run.eval.alert_created is False
+    assert deleted == ["alert-2"]
+
+
+def test_create_calls_that_all_failed_create_no_alert() -> None:
+    run, deleted = _run_turns(_turn(_create_call(_MCP_ERROR), _create_call(_REGISTRY_ERROR, threshold=1)))
+    assert run.eval.alert_created is False
+    assert run.eval.strict_pass is False
+    assert run.exit_reason == LoopExit.BUDGET_EXHAUSTED
+    # Kept for triage, not scored.
+    assert run.actual_alert_arguments["threshold"] == 1
+    assert deleted == []
+
+
+def test_the_agent_gets_a_turn_to_recover_after_every_create_call_failed() -> None:
+    run, deleted = _run_turns(
+        _turn(_create_call(_MCP_ERROR, threshold=1), text="The channel id was rejected. Should I try again?"),
+        _turn(_create_call('{"id": "alert-2"}')),
+        max_iterations=2,
+    )
+    assert run.exit_reason == LoopExit.SUCCESS
+    assert run.total_turns == 2
+    assert run.eval.threshold_correct is True
+    assert run.alert_id == "alert-2"
+    assert deleted == ["alert-2"]
 
 
 _QUESTIONS_PART = {
