@@ -1,21 +1,23 @@
-packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
-  s_e0de51cda3fcba::t_ad24950138e856 20,28-30,37-40,66,68,77-84,112,114,242-247,251-256,326-345,380,382,453-454,460-481,485-487,492-512
-  s_e0de51cda3fcba::t_d9884b0a39241d 513
+packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_permissions.py
+  s_e0de51cda3fcba::t_ad24950138e856 1-9,11-16,18-127,131-134,136-141,154-156,160,162-163,196-197
+  s_e0de51cda3fcba::t_897327adba9f61 10,128,135,142
+  s_e0de51cda3fcba::t_b5bb8934787e5a 157,159,161
+  s_e0de51cda3fcba::t_2c04a26ca16620 17,129-130,143-153,158,164-195,198
 packages/gooddata-sdk/src/gooddata_sdk/__init__.py
   s_e0de51cda3fcba::t_5811ed313a77a5 183-184,187-188,466-467,744-745
   s_e0de51cda3fcba::t_5bf3b10ad9bab9 488-489,766-767
 packages/gooddata-sdk/src/gooddata_sdk/catalog/permission/declarative_model/permission.py
   s_e0de51cda3fcba::t_5811ed313a77a5 12-17,20-25,95-132
   s_e0de51cda3fcba::t_baab7f01918bb6 133-134
-packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_permissions.py
-  s_e0de51cda3fcba::t_b5bb8934787e5a 143,145,147,152-154
-  s_e0de51cda3fcba::t_897327adba9f61 10,127,132,139
-  s_e0de51cda3fcba::t_ad24950138e856 1-9,11-126,128-131,133-138,140-142,144,146,148-151
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_e0de51cda3fcba::t_ad24950138e856 22,30-32,39-42,70,72,81-88,116,118,277,286,358,362,397,399,470-471,477-498,502-504,509-529
+  s_e0de51cda3fcba::t_d9884b0a39241d 530
+  s_e0de51cda3fcba::t_2c04a26ca16620 5,7-8,62-63,214-243,276,281-285,356-357,359-361
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "8ea082c43cd5451513652ba1e369deb6d7316aba",
+  "base_commit_sha": "33309948a0c70e383c7ec937f8666abeaca99ebd",
   "prompts": {},
   "sessions": {
     "s_e0de51cda3fcba": {
@@ -24,7 +26,7 @@ packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_permis
         "id": "26487cbb-5ff3-433e-b0d4-07f3c5e97eae",
         "model": "claude-fable-5-2"
       },
-      "human_author": "Vojtěch Tollar <vojtech.tollar@gooddata.com>"
+      "human_author": null
     }
   }
 }
