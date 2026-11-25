@@ -83,6 +83,10 @@ class CatalogMetricAlert:
     """Date dataset an ANOMALY alert detects on; ``None`` means unasserted."""
     setup_turns: tuple[str, ...] = ()
     """Messages sent in the same conversation before the question, not scored."""
+    alternatives: tuple[CatalogMetricAlert, ...] = ()
+    """Complete expectations any one of which passes (``any_of``); empty means this one alone."""
+    check_first_proposal: tuple[str, ...] = ()
+    """Fields (``filters``, ``recipients``) also scored on the first proposal, before the simulated user replies."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:

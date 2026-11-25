@@ -3,9 +3,11 @@
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import os
 import re
+import string
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -106,7 +108,16 @@ _CONDITIONAL_ALERT_CHECKS = (
     "alert_sensitivity_correct",
     "alert_trigger_interval_correct",
     "alert_date_dataset_correct",
+    "alert_initial_filters_correct",
+    "alert_initial_recipients_correct",
 )
+# Fields `check_first_proposal` may name; each one is scored on the first proposal as well.
+_FIRST_PROPOSAL_FIELDS = ("filters", "recipients")
+# Labels of the `any_of` combinations in the simulated user's rule 9; an item lists at most this many.
+_COMBINATION_LABELS = string.ascii_uppercase
+# The only CatalogMetricAlert fields `any_of` options may differ in. Rule 9 states them per
+# combination and rules 1 and 5 defer to it; rules 1-8 state every other field once.
+_ANY_OF_FIELDS = ("threshold", "threshold_from", "threshold_to", "filters")
 # The only check of an item that expects no alert; it replaces every other check.
 _NO_ALERT_CHECK = "alert_not_proposed"
 # Score names published only by an item that states the matching expectation (gdc-nas combo_report).
@@ -141,6 +152,8 @@ _ALERT_ONLY_KEYS = (
     "trigger interval",
     "date_dataset_id",
     "date dataset",
+    "check_first_proposal",
+    "check first proposal",
 )
 # A no-alert run stops after this many agent turns: the simulated user only declines. Measured on
 # 2026-11-25 with the cap at the default budget of 6 (6 runs, a churn-rate and a website-traffic
@@ -228,9 +241,7 @@ def _check_threshold(expected: CatalogMetricAlert, actual_args: dict) -> bool:
         act_from = _to_number(actual_args.get("from_value", actual_args.get("fromValue")))
         act_to = _to_number(actual_args.get("to_value", actual_args.get("toValue")))
         return exp_from == act_from and exp_to == act_to
-    exp_thr = _to_number(expected.threshold)
-    act_thr = _to_number(actual_args.get("threshold"))
-    return exp_thr == act_thr
+    return _to_number(expected.threshold) == _to_number(actual_args.get("threshold"))
 
 
 def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
@@ -248,9 +259,8 @@ def _check_trigger(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return exp_trigger == act_api
 
 
-def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
-    exp_filters = expected.filters
-    act_filters = actual_args.get("filters", actual_args.get("attribute_filters")) or []
+def _filters_match(exp_filters: list | str | None, act_filters: list) -> bool:
+    """``None`` asserts nothing, ``[]`` asserts no filter, a list must match entry by entry."""
     if exp_filters is None:
         return True
     if not exp_filters:
@@ -258,6 +268,11 @@ def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not act_filters:
         return False
     return _deep_subset(exp_filters, act_filters)
+
+
+def _check_filters(expected: CatalogMetricAlert, actual_args: dict) -> bool:
+    act_filters = actual_args.get("filters", actual_args.get("attribute_filters")) or []
+    return _filters_match(expected.filters, act_filters)
 
 
 def _attribute_label_ids(items: list, *, side: str) -> list[str]:
@@ -482,6 +497,65 @@ def _resolve_internal_recipient_ids(sdk: GoodDataSdk, emails: list[str]) -> set[
     return ids
 
 
+_AUTOMATION_PAGE_SIZE = 500
+
+
+def _automation_ids(host: str, token: str, workspace_id: str) -> set[str] | None:
+    """Ids of every automation of the workspace, page by page, or None when they cannot all be listed.
+
+    A partial list would make an automation that existed before the run look new to the cleanup,
+    so any failure, including a page that adds nothing, returns None.
+    """
+    ids: set[str] = set()
+    page = 0
+    try:
+        while True:
+            resp = httpx.get(
+                f"{host.rstrip('/')}/api/v1/entities/workspaces/{workspace_id}/automations",
+                params={"size": _AUTOMATION_PAGE_SIZE, "page": page},
+                headers={"Authorization": f"Bearer {token}"},
+                timeout=30.0,
+            )
+            resp.raise_for_status()
+            body = resp.json()
+            # A body without a `data` list is not an empty workspace: read as one, it would make
+            # an alert that existed before the run look new to the cleanup.
+            data = body.get("data") if isinstance(body, dict) else None
+            if not isinstance(data, list):
+                raise ValueError(f"page {page} has no data list")
+            page_ids = {item.get("id") for item in data if isinstance(item, dict)}
+            if len(page_ids) != len(data) or not all(isinstance(i, str) and i for i in page_ids):
+                raise ValueError(f"page {page} lists an automation without an id")
+            if len(data) < _AUTOMATION_PAGE_SIZE:
+                return ids | page_ids
+            if page_ids <= ids:
+                raise ValueError(f"page {page} repeats automations already listed")
+            ids |= page_ids
+            page += 1
+    except Exception as exc:
+        print(f"[CLEANUP] Listing automations failed: {exc}")
+        return None
+
+
+def _parsed_arguments(tc: ToolCallEvent) -> dict:
+    """A tool call's arguments, or ``{}`` when they are not a JSON object."""
+    args = tc.parsed_arguments()
+    return args if isinstance(args, dict) else {}
+
+
+def _named_automation_ids(tool_call_events: list[ToolCallEvent]) -> set[str]:
+    """``automation_id`` values the agent passed to the proposal and create tools.
+
+    A create call can succeed on the server while its event is missing from the turn the
+    harness reads, so the id the agent named is the only handle left for cleanup.
+    """
+    names = (_PROPOSAL_TOOL, "create_metric_alert")
+    # Filtered before the set: a rejected call may carry an unhashable value such as a list, and
+    # this runs in the cleanup, where an error would drop the run and the other named ids.
+    ids = (_parsed_arguments(tc).get("automation_id") for tc in tool_call_events if tc.function_name in names)
+    return {i for i in ids if isinstance(i, str) and i}
+
+
 def _resolve_current_user_id(host: str, token: str) -> str | None:
     """Id of the user that owns ``token``, or None if the profile cannot be read.
 
@@ -575,13 +649,18 @@ def generate_simulated_alert_response(
         )
 
     metric = expected.metric_id or "not specified"
+    # Rule 9 lists the values of the `any_of` combinations; rule 1 points there instead of
+    # stating the item's own value, which no combination may share.
+    in_rule_9 = "one of the combinations in rule 9"
     operator = expected.operator
     # BETWEEN / NOT_BETWEEN carry their value in threshold_from/threshold_to, so `threshold` is
     # None for them. Rule 3 asks the sim-user to verify the threshold, and reporting "not
     # specified" made it demand the agent delete both bounds of a BETWEEN condition — an
     # impossible request that burned every iteration without the alert ever being created.
     threshold: str | float | int
-    if expected.operator in ("BETWEEN", "NOT_BETWEEN") and (
+    if any(_states_threshold(a) for a in expected.alternatives):
+        threshold = in_rule_9
+    elif expected.operator in ("BETWEEN", "NOT_BETWEEN") and (
         expected.threshold_from is not None or expected.threshold_to is not None
     ):
         threshold = f"between {expected.threshold_from} and {expected.threshold_to}"
@@ -614,7 +693,9 @@ def generate_simulated_alert_response(
             "   Do not wait for the agent to ask — state it alongside the metric and condition answers.\n"
         )
     trigger = expected.trigger
-    filters = expected.filters
+    alternative_filters = any(a.filters is not None for a in expected.alternatives)
+    # The combinations' filters replace the item's own, so rule 1 must not state those as well.
+    filters = None if alternative_filters else expected.filters
 
     # "not specified" is the normalizer's stand-in for an absent trigger, which the product
     # persists as its ALWAYS default and `_check_trigger` asserts as ALWAYS. Both the cadence to
@@ -630,7 +711,13 @@ def generate_simulated_alert_response(
     # share one: telling the sim-user "you want NO filters" on an unstated expectation makes it
     # refuse filters the request genuinely implies (e.g. "orders from the United States"), which
     # quietly turns that fixture into a weaker test rather than a failing one.
-    if filters:
+    if alternative_filters:
+        filters_rule = (
+            "5. The filters you want depend on the combination in rule 9 you accept. Refuse any filter "
+            "that is not part of that combination. A combination that names no filters wants only the "
+            "filters your original request implies: do not invent a date window it never asked for.\n"
+        )
+    elif filters:
         filters_rule = (
             f"5. Your alert needs exactly these filters and NOTHING else: {filters}. "
             "If the agent offers, proposes or asks about any further date/time window, "
@@ -745,10 +832,43 @@ def generate_simulated_alert_response(
         "   Repeat it if the agent proposes a different cadence.\n"
         + period_rule
         + title_rule
+        + _alternatives_rule(expected)
         + "Reply concisely and directly."
     )
 
     return _ask_simulated_user(openai_client, system_prompt, conversation_history, agent_message)
+
+
+def _states_threshold(option: CatalogMetricAlert) -> bool:
+    return option.threshold is not None or option.threshold_from is not None or option.threshold_to is not None
+
+
+def _alternatives_rule(expected: CatalogMetricAlert) -> str:
+    """Rule 9: the combinations an `any_of` item accepts, by their threshold and filters.
+
+    Options differ in nothing else (``_ANY_OF_FIELDS``), so rules 1-8 state every other field.
+    """
+    if not expected.alternatives:
+        return ""
+    combinations: list[str] = []
+    for letter, option in zip(_COMBINATION_LABELS, expected.alternatives, strict=False):
+        parts: list[str] = []
+        if option.threshold is not None:
+            parts.append(f"threshold={option.threshold}")
+        if option.threshold_from is not None or option.threshold_to is not None:
+            parts.append(f"threshold=between {option.threshold_from} and {option.threshold_to}")
+        if option.filters is not None:
+            parts.append(f"filters={json.dumps(option.filters)}" if option.filters else "filters=no filter at all")
+        # Never empty: options differ only in threshold and filters, and never repeat one another.
+        combinations.append(f"{letter}) " + ", ".join(parts))
+    return (
+        "9. Your goal can be met by any ONE of these combinations: "
+        + " | ".join(combinations)
+        + ". A value a combination names replaces the value rules 1-8 give for that field. "
+        "Accept a proposal only when it matches one combination in full. If it mixes fields of "
+        "different combinations or matches none, do NOT confirm: ask for the combination closest to "
+        "what the agent proposed. Never name a value yourself unless the agent asks for one.\n"
+    )
 
 
 def _ask_simulated_user(openai_client: Any, system_prompt: str, conversation_history: list, agent_message: str) -> str:
@@ -815,6 +935,9 @@ class AlertEvaluation:
     alert_sensitivity_correct: bool | None = None
     alert_trigger_interval_correct: bool | None = None
     alert_date_dataset_correct: bool | None = None
+    # Scored on the first proposal, before the simulated user could correct it.
+    alert_initial_filters_correct: bool | None = None
+    alert_initial_recipients_correct: bool | None = None
     # Set only for an item that expects no alert; then it is the run's one check.
     alert_not_proposed: bool | None = None
 
@@ -1038,8 +1161,118 @@ def _normalize_setup_turns(expected: dict) -> tuple[str, ...]:
     return tuple(turns)
 
 
+def _normalize_check_first_proposal(
+    expected: dict, *, filters_stated: bool, recipients_stated: bool
+) -> tuple[str, ...]:
+    """Fields also scored on the first proposal; each must be one the item states."""
+    value = _case_insensitive_get(expected, *_CHECK_FIRST_PROPOSAL_KEYS)
+    if value is None:
+        return ()
+    if not isinstance(value, list) or not value or any(field not in _FIRST_PROPOSAL_FIELDS for field in value):
+        raise ValueError(
+            f"check_first_proposal must be a non-empty list of {list(_FIRST_PROPOSAL_FIELDS)}, got {value!r}"
+        )
+    if "filters" in value and not filters_stated:
+        raise ValueError("check_first_proposal names filters, but the item states no filter expectation")
+    if "recipients" in value and not recipients_stated:
+        raise ValueError("check_first_proposal names recipients, but the item states no recipients")
+    return tuple(dict.fromkeys(value))
+
+
+_ANY_OF_KEYS = ("any_of", "any of")
+_CHECK_FIRST_PROPOSAL_KEYS = ("check_first_proposal", "check first proposal")
+# Keys that describe the item, not one possible alert, so an `any_of` option may not state them.
+_ITEM_LEVEL_KEYS = (
+    *_ANY_OF_KEYS,
+    *_CHECK_FIRST_PROPOSAL_KEYS,
+    "setup_turns",
+    "setup turns",
+    "expect_alert",
+    "expect alert",
+)
+# Spellings of the filter expectation; an option stating one replaces all of them.
+_FILTER_KEYS = ("filters", "time window/filters", "time_window")
+# Every group of spellings the normalizer reads as one field; an option stating one spelling
+# replaces the whole group, or the item's other spelling would be read instead of the option's.
+_KEY_SPELLINGS = (
+    _FILTER_KEYS,
+    ("recipients", "recipient(s)"),
+    ("metric_id", "metric"),
+    ("dashboard_id", "dashboard"),
+    ("granularity", "detection granularity"),
+    ("trigger_interval", "trigger interval"),
+    ("date_dataset_id", "date dataset"),
+)
+
+
+def _merge_option(base: dict, option: dict) -> dict:
+    """``base`` with ``option``'s keys replacing the same keys, compared case-insensitively."""
+    replaced = {str(k).strip().lower() for k in option}
+    for spellings in _KEY_SPELLINGS:
+        if replaced & set(spellings):
+            replaced |= set(spellings)
+    return {**{k: v for k, v in base.items() if str(k).strip().lower() not in replaced}, **option}
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
-    """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
+    """Parse expected_output into CatalogMetricAlert; ``any_of`` lists complete alternatives.
+
+    Each ``any_of`` option replaces some fields of the item (``Threshold``, ``Filters``, ...) and
+    keeps the rest, so fields that must agree (a threshold and the period it is measured over)
+    are matched together, never one from each option.
+    """
+    options = _case_insensitive_get(expected, *_ANY_OF_KEYS)
+    if options is None:
+        return _normalize_single_expectation(expected)
+    if not isinstance(options, list) or len(options) < 2 or not all(isinstance(o, dict) and o for o in options):
+        raise ValueError(f"any_of must list at least two non-empty objects, got {options!r}")
+    if len(options) > len(_COMBINATION_LABELS):
+        raise ValueError(f"any_of lists {len(options)} options; the simulated user is told at most 26")
+    for option in options:
+        item_level = sorted(k for k in option if str(k).strip().lower() in _ITEM_LEVEL_KEYS)
+        if item_level:
+            raise ValueError(f"an any_of option may not state {item_level}; state them once for the item")
+    base = {k: v for k, v in expected.items() if str(k).strip().lower() not in _ANY_OF_KEYS}
+    if _normalize_expect_alert(base) is False:
+        raise ValueError("expect_alert: false states no alert, so it cannot list alternatives")
+    alternatives = tuple(_normalize_single_expectation(_merge_option(base, option)) for option in options)
+    _validate_alternatives(alternatives)
+    # The item is what the options share, not the base parsed on its own: the base alone may be
+    # incomplete (a trigger interval whose trigger only the options give), and a value every
+    # option replaces is no longer the goal. A field the options disagree on keeps its default;
+    # rule 9 states it per combination.
+    shared = {
+        f.name: getattr(alternatives[0], f.name)
+        for f in dataclasses.fields(CatalogMetricAlert)
+        if all(getattr(a, f.name) == getattr(alternatives[0], f.name) for a in alternatives[1:])
+    }
+    return dataclasses.replace(CatalogMetricAlert(**shared), alternatives=alternatives)
+
+
+def _validate_alternatives(alternatives: tuple[CatalogMetricAlert, ...]) -> None:
+    """Reject `any_of` options the simulated user could not tell apart or that would accept anything."""
+    exempt = (*_ANY_OF_FIELDS, "alternatives")
+    differing = sorted(
+        f.name
+        for f in dataclasses.fields(CatalogMetricAlert)
+        if f.name not in exempt and any(getattr(a, f.name) != getattr(alternatives[0], f.name) for a in alternatives)
+    )
+    if differing:
+        # Rules 1-8 state each other field once; the simulated user never sees a proposal's
+        # group-by at all. A field that differs would be asked for one way and scored another.
+        raise ValueError(f"any_of options may differ only in threshold and filters, not in {differing}")
+    for name, states in (("Threshold", _states_threshold), ("Filters", lambda a: a.filters is not None)):
+        if len({states(a) for a in alternatives}) > 1:
+            # An option without it inherits an unstated base and accepts any value: the mix any_of blocks.
+            raise ValueError(f"every any_of option must state {name}, or none may (Filters: [] means no filter)")
+    for i, option in enumerate(alternatives):
+        # A misspelled key ("Thresold") is ignored, which often leaves two options the same.
+        if option in alternatives[:i]:
+            raise ValueError(f"any_of option {i + 1} repeats an earlier one; is one of its keys misspelled?")
+
+
+def _normalize_single_expectation(expected: dict) -> CatalogMetricAlert:
+    """Parse one expectation, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
     threshold = _case_insensitive_get(expected, "threshold")
     threshold_from = _case_insensitive_get(expected, "threshold_from")
@@ -1076,6 +1309,9 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     trigger_interval = _normalize_expected_enum(expected, _TRIGGER_INTERVALS, "trigger_interval", "trigger interval")
     date_dataset_id = _normalize_expected_text(expected, "date_dataset_id", "date dataset")
     setup_turns = _normalize_setup_turns(expected)
+    check_first_proposal = _normalize_check_first_proposal(
+        expected, filters_stated=filters is not None, recipients_stated=bool(recipients)
+    )
     if trigger_interval is not None and trigger != "ONCE_PER_INTERVAL":
         raise ValueError(f"trigger_interval applies only to the ONCE_PER_INTERVAL trigger, got trigger {trigger!r}")
     # Both are ANOMALY arguments. On any other operator the agent sends neither, so a stated
@@ -1102,6 +1338,7 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         trigger_interval=trigger_interval,
         date_dataset_id=date_dataset_id,
         setup_turns=setup_turns,
+        check_first_proposal=check_first_proposal,
     )
 
 
@@ -1208,18 +1445,99 @@ def render_turn_for_simulated_user(chat_result: ChatResult) -> str:
     return "\n\n".join(chunk for chunk in chunks if chunk)
 
 
+def _first_proposal(turns: list[list[ToolCallEvent]]) -> tuple[dict, dict] | None:
+    """Arguments and result of the first proposal the user was shown, or None when none succeeded.
+
+    ``turns`` holds the tool calls of each scored turn, in order. The user sees only the last
+    proposal of a turn, so a proposal the agent replaced within the same turn is not the answer.
+
+    The result carries the proposal's filters in the AFM form ``create_metric_alert`` receives
+    (``afm_filters``, empty when left out), the same form the expectation is written in.
+    """
+    for events in turns:
+        shown: tuple[dict, dict] | None = None
+        for tc in events:
+            if tc.function_name != _PROPOSAL_TOOL:
+                continue
+            result = tc.parsed_result()
+            # gen-ai's result always names the stored proposal; its filters default to none.
+            if isinstance(result, dict) and result.get("success") is not False and result.get("alert_proposal_ref"):
+                shown = _parsed_arguments(tc), result
+        if shown is not None:
+            return shown
+    return None
+
+
+def _proposal_recipient_args(proposal_args: dict) -> dict:
+    """A proposal's recipient list as the ``create_metric_alert`` arguments `_check_recipients` reads.
+
+    The list may arrive JSON-encoded as a string, as the create tool's recipient lists do.
+    """
+    raw = proposal_args.get("recipients")
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except ValueError:
+            raw = None
+    recipients = [r for r in raw if isinstance(r, dict)] if isinstance(raw, list) else []
+    return {
+        "internal_recipients": [r["id"] for r in recipients if r.get("id")],
+        "external_recipients": [r["email"] for r in recipients if not r.get("id") and r.get("email")],
+    }
+
+
+def _evaluate_first_proposal(
+    expected: CatalogMetricAlert,
+    turns: list[list[ToolCallEvent]],
+    sdk: GoodDataSdk,
+    current_user_id: str | None,
+) -> tuple[bool | None, bool | None]:
+    """(filters, recipients) of the first proposal; ``None`` for a field the item does not name.
+
+    The final alert can be right only because the simulated user corrected the first proposal.
+    These checks keep that first answer visible.
+    """
+    if not expected.check_first_proposal:
+        return None, None
+    proposal = _first_proposal(turns)
+    filters_ok: bool | None = None
+    recipients_ok: bool | None = None
+    if "filters" in expected.check_first_proposal:
+        filters_ok = proposal is not None and _check_filters(
+            expected, {"filters": proposal[1].get("afm_filters") or []}
+        )
+    if "recipients" in expected.check_first_proposal:
+        recipients_ok = proposal is not None and _check_recipients(
+            expected, _proposal_recipient_args(proposal[0]), sdk=sdk, current_user_id=current_user_id
+        )
+    return filters_ok, recipients_ok
+
+
 def _evaluate_alert(
     expected: CatalogMetricAlert,
     actual_args: dict,
     alert_created: bool,
     sdk: GoodDataSdk,
     current_user_id: str | None,
+    proposal_turns: list[list[ToolCallEvent]] | None = None,
 ) -> AlertEvaluation:
-    """Score the created alert's arguments; a conditional check is ``None`` when the item states no value."""
+    """Score the created alert's arguments; a conditional check is ``None`` when the item states no value.
+
+    ``proposal_turns`` holds the tool calls of each scored turn, read for the first-proposal checks.
+    """
+
+    if expected.alternatives:
+        # The option the run comes closest to; a full match on any option passes.
+        evaluations = [
+            _evaluate_alert(option, actual_args, alert_created, sdk, current_user_id, proposal_turns)
+            for option in expected.alternatives
+        ]
+        return max(evaluations, key=lambda ev: (ev.strict_pass, sum(ev.checks().values())))
 
     def conditional(check: bool | None) -> bool | None:
         return None if check is None else alert_created and check
 
+    initial_filters, initial_recipients = _evaluate_first_proposal(expected, proposal_turns or [], sdk, current_user_id)
     return AlertEvaluation(
         alert_created=alert_created,
         operator_correct=alert_created and expected.operator == actual_args.get("operator"),
@@ -1243,6 +1561,8 @@ def _evaluate_alert(
         ),
         alert_trigger_interval_correct=conditional(_check_trigger_interval(expected, actual_args)),
         alert_date_dataset_correct=conditional(_check_date_dataset(expected, actual_args)),
+        alert_initial_filters_correct=initial_filters,
+        alert_initial_recipients_correct=initial_recipients,
     )
 
 
@@ -1265,7 +1585,7 @@ def run_agentic_alert_skill(
         raise ValueError(f"max_iterations must be at least 1, got {max_iterations}")
     expected = _normalize_expected_output(expected_output)
     current_user_id: str | None = None
-    # A no-alert item scores no recipients, so it needs no current user.
+    # A no-alert item scores no recipients, so it needs no current user. `any_of` options share theirs.
     if expected.expect_alert and _CURRENT_USER_RECIPIENT in expected.recipients:
         current_user_id = _resolve_current_user_id(host, token)
         if current_user_id is None:
@@ -1294,6 +1614,13 @@ def run_agentic_alert_skill(
             metric_ids_to_delete.extend(_extract_created_metric_ids(events))
             return calls
 
+        # Taken before the run, so cleanup by a named id never touches an alert the run did not create.
+        existing_ids = _automation_ids(host, token, workspace_id)
+        all_tool_call_events: list[ToolCallEvent] = []
+        # Tool calls of each question and follow-up turn; setup turns are not scored.
+        scored_turns: list[list[ToolCallEvent]] = []
+        # Events of turns that broke mid-stream: not part of the run's record, but they can name an alert.
+        partial_events: list[ToolCallEvent] = []
         run_started = time.monotonic()
         try:
             alert_id: str | None = None
@@ -1301,7 +1628,6 @@ def run_agentic_alert_skill(
             alert_created = False
             reasoning_steps: list[str] = []
             response_id: str | None = None
-            all_tool_call_events: list[ToolCallEvent] = []
             all_reasoning_step_events: list[ReasoningStepEvent] = []
             turn_offset = 0.0  # each turn's call_ts/ts restarts near 0 -- shift by prior turns' wall time
             tool_index_offset = 0
@@ -1337,6 +1663,7 @@ def run_agentic_alert_skill(
                         reasoning_steps.extend(partial.reasoning_steps or [])
                         response_id = partial.response_id or response_id
                         _track_writes(partial.tool_call_events or [])
+                        partial_events.extend(partial.tool_call_events or [])
                     exit_reason = chat_failure_exit(exc)
                     iterations = 0
                     break
@@ -1371,6 +1698,7 @@ def run_agentic_alert_skill(
                         reasoning_steps.extend(partial.reasoning_steps or [])
                         response_id = partial.response_id or response_id
                         _track_writes(partial.tool_call_events or [])
+                        partial_events.extend(partial.tool_call_events or [])
                     exit_reason = chat_failure_exit(exc)
                     break
                 # `turns_used` counts attempts (set above, so a failed send still shows the
@@ -1387,6 +1715,7 @@ def run_agentic_alert_skill(
                     reasoning_index_offset=reasoning_index_offset,
                 )
                 all_tool_call_events.extend(chat_result.tool_call_events or [])
+                scored_turns.append(list(chat_result.tool_call_events or []))
                 all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
                 calls = _track_writes(chat_result.tool_call_events or [])
                 tools_called = {tc.function_name for tc in chat_result.tool_call_events or []}
@@ -1464,7 +1793,7 @@ def run_agentic_alert_skill(
                     alert_not_proposed=declined,
                 )
             else:
-                ev = _evaluate_alert(expected, actual_args, alert_created, sdk, current_user_id)
+                ev = _evaluate_alert(expected, actual_args, alert_created, sdk, current_user_id, scored_turns)
             return AlertRunResult(
                 conversation_id=conv_id,
                 alert_id=alert_id,
@@ -1483,6 +1812,12 @@ def run_agentic_alert_skill(
         finally:
             for created_id in dict.fromkeys(alert_ids_to_delete):
                 _delete_alert(sdk, workspace_id, created_id)
+            unseen = _named_automation_ids(all_tool_call_events + partial_events) - set(alert_ids_to_delete)
+            if unseen and existing_ids is not None:
+                now = _automation_ids(host, token, workspace_id) or set()
+                for leaked_id in sorted((unseen & now) - existing_ids):
+                    print(f"[CLEANUP] Deleting alert {leaked_id}: created, but its create call was not in the turn")
+                    _delete_alert(sdk, workspace_id, leaked_id)
             # After the alerts: an alert on a created metric would keep that metric in use.
             for metric_id in dict.fromkeys(metric_ids_to_delete):
                 _delete_metric(sdk, workspace_id, metric_id)
@@ -1506,9 +1841,11 @@ def run_agentic_alert_skill(
 
     pass_at_k = any(r.eval.strict_pass for r in run_results)
     pass_power_k = all(r.eval.strict_pass for r in run_results)
+    # A passing run first: with `any_of`, a failing run scored against a larger option can have
+    # more true checks than a passing one.
     best = max(
         run_results,
-        key=lambda r: sum(r.eval.checks().values()),
+        key=lambda r: (r.eval.strict_pass, sum(r.eval.checks().values())),
     )
     return AgenticAlertSummary(
         run_results=run_results,
