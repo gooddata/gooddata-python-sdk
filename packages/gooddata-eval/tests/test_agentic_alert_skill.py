@@ -890,12 +890,15 @@ def _run_turns(*turns: ChatResult | ChatError, max_iterations: int = 1) -> tuple
             max_iterations=max_iterations,
             initial_conversation_id="conv-1",
         )
+    sent = [c.args for c in client.send_message.call_args_list]
+    question = "Notify me whenever the number of orders goes above 500"
+    assert sent == [("conv-1", question)] + [("conv-1", "Please try again.")] * (len(sent) - 1)
     return summary.best, [c.args[2] for c in mock_delete.call_args_list]
 
 
 @pytest.mark.parametrize("error", [_MCP_ERROR, _REGISTRY_ERROR], ids=["mcp_error", "registry_error"])
 def test_retry_after_failed_create_scores_and_deletes_the_alert_it_created(error: str) -> None:
-    # The first call errored; reading only it leaked the retry's alert and scored failed arguments.
+    # The first call errored: the retry's alert is the one scored and deleted.
     run, deleted = _run_turns(_turn(_create_call(error, threshold=1), _create_call('{"id": "alert-2"}')))
     assert run.eval.alert_created is True
     assert run.eval.threshold_correct is True
@@ -911,7 +914,7 @@ def test_a_failed_call_after_a_created_alert_does_not_replace_its_arguments() ->
 
 
 def test_the_first_created_alert_is_scored_and_every_one_is_deleted() -> None:
-    # As before QA-29886: when no call failed, the run is scored on the first one.
+    # When no call failed, the run is scored on the first one.
     run, deleted = _run_turns(
         _turn(_create_call('{"id": "alert-1"}'), _create_call('{"data": {"id": "alert-2"}}', threshold=7))
     )
@@ -960,7 +963,7 @@ def test_the_run_ends_when_the_agent_says_nothing_after_every_create_call_failed
 
 @pytest.mark.parametrize("result", [None, "Alert created."], ids=["no_result", "not_json"])
 def test_a_create_call_whose_result_cannot_be_read_still_counts_as_created(result: str | None) -> None:
-    # Kept as before QA-29886: an unusual result shape must not turn into a false failure.
+    # An unusual result shape must not turn into a false failure.
     # Such a result carries no id, so there is nothing to delete.
     run, deleted = _run_turns(_turn(_create_call(result)))
     assert run.eval.alert_created is True
@@ -970,7 +973,7 @@ def test_a_create_call_whose_result_cannot_be_read_still_counts_as_created(resul
 
 
 def test_a_broken_stream_deletes_only_the_alerts_its_create_calls_created() -> None:
-    # The cleanup of the chat-error path reads every call too, not only the first: a failed call
+    # The cleanup of the chat-error path reads every call too: a failed call
     # created nothing to delete, and its retry's alert must not leak.
     partial = _turn(_create_call(_REGISTRY_ERROR, threshold=1), _create_call('{"id": "alert-2"}'), text="")
     run, deleted = _run_turns(ChatError("stream died after create", partial_result=partial))
