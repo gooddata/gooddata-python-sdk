@@ -53,3 +53,10 @@ def _no_metric_delete_recheck(monkeypatch: pytest.MonkeyPatch) -> None:
     """A MagicMock SDK reports every metric as present, so the recheck would sleep and
     delete again. Tests of the recheck itself set the delays they need."""
     monkeypatch.setattr("gooddata_eval.core.agentic.metric_skill._DELETE_RECHECK_DELAYS_S", ())
+
+
+@pytest.fixture(autouse=True)
+def _no_alert_automation_listing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The alert runner lists the workspace's automations over HTTP before and after a run.
+    Tests have no server: an unlistable workspace skips the cleanup by named id."""
+    monkeypatch.setattr("gooddata_eval.core.agentic.alert_skill._automation_ids", lambda *_args: None)
