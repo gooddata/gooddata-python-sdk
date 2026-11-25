@@ -2,25 +2,26 @@ packages/gooddata-sdk/src/gooddata_sdk/catalog/permission/declarative_model/perm
   s_e0de51cda3fcba::t_5811ed313a77a5 12-17,20-25,95-132
   s_e0de51cda3fcba::t_baab7f01918bb6 133-134
 packages/gooddata-sdk/src/gooddata_sdk/__init__.py
-  s_e0de51cda3fcba::t_5811ed313a77a5 183-184,187-188,466-467,744-745
   s_e0de51cda3fcba::t_5bf3b10ad9bab9 488-489,766-767
+  s_e0de51cda3fcba::t_5811ed313a77a5 183-184,187-188,466-467,744-745
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
+  s_e0de51cda3fcba::t_2c04a26ca16620 5,7-8,62-63,215-217,222-224,226-227,230-234,239,272,277-281,352-353,355-357
+  s_e0de51cda3fcba::t_d707318e67b58a 80,218-219,225,228-229,236-238
+  s_e0de51cda3fcba::t_312eaba85b06b6 81
+  s_e0de51cda3fcba::t_d9884b0a39241d 526
+  s_e0de51cda3fcba::t_8c92f45bca80eb 220-221,235,466,498
+  s_e0de51cda3fcba::t_ad24950138e856 22,30-32,39-42,70,72,82-88,117,119,273,282,354,358,393,395,467,473-494,499-500,505-525
 packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_analytics_permissions.py
-  s_e0de51cda3fcba::t_d707318e67b58a 19,148,152,157-158,162-170,173-181,183-184,204
   s_e0de51cda3fcba::t_2c04a26ca16620 17,130-131,144-147,155-156,159-161,171-172,182,185-201
-  s_e0de51cda3fcba::t_b5bb8934787e5a 149,151
   s_e0de51cda3fcba::t_897327adba9f61 10,129,136,143
   s_e0de51cda3fcba::t_ad24950138e856 1-9,11-16,18,20-128,132-135,137-142,150,153-154,202-203
-packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model.py
-  s_e0de51cda3fcba::t_2c04a26ca16620 5,7-8,62-63,215-217,224-226,228-229,232-237,242,246,279,284-288,359-360,362-364
-  s_e0de51cda3fcba::t_ad24950138e856 22,30-32,39-42,70,72,82-88,117,119,280,289,361,365,400,402,473-474,480-501,505-507,512-532
-  s_e0de51cda3fcba::t_d707318e67b58a 80,218-223,227,230-231,238-241,243-245
-  s_e0de51cda3fcba::t_d9884b0a39241d 533
-  s_e0de51cda3fcba::t_312eaba85b06b6 81
+  s_e0de51cda3fcba::t_d707318e67b58a 19,148,152,157-158,162-170,173-181,183-184,204
+  s_e0de51cda3fcba::t_b5bb8934787e5a 149,151
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "03e2105072597d5b9daa7fab92e48faa3cebf709",
+  "base_commit_sha": "79e7a3523f6bb12309e3c0804b817a20603c6f17",
   "prompts": {},
   "sessions": {
     "s_e0de51cda3fcba": {
