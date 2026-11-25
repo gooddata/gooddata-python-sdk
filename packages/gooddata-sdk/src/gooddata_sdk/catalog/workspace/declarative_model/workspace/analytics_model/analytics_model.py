@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import builtins
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Union
+from shutil import rmtree
+from typing import Any, TypeVar, Union
 
 from attrs import define, field
 from cattrs import global_converter, structure
@@ -17,6 +19,7 @@ from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDa
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_memory_item import DeclarativeMemoryItem
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
+from gooddata_api_client.model.declarative_metric_extension import DeclarativeMetricExtension
 from gooddata_api_client.model.declarative_parameter import DeclarativeParameter
 from gooddata_api_client.model.declarative_publisher_document import DeclarativePublisherDocument
 from gooddata_api_client.model.declarative_publisher_document_page_template import (
@@ -24,12 +27,19 @@ from gooddata_api_client.model.declarative_publisher_document_page_template impo
 )
 from gooddata_api_client.model.declarative_publisher_document_template import DeclarativePublisherDocumentTemplate
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+from gooddata_api_client.model.declarative_visualization_object_extension import (
+    DeclarativeVisualizationObjectExtension,
+)
 from gooddata_api_client.model.relative_publisher_document_period import RelativePublisherDocumentPeriod
 
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
+    CatalogDeclarativeMetricPermissionsForAssignee,
+    CatalogDeclarativeMetricPermissionsForAssigneeRule,
+    CatalogDeclarativeVisualizationObjectPermissionsForAssignee,
+    CatalogDeclarativeVisualizationObjectPermissionsForAssigneeRule,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.base import (
     CatalogAnalyticsBase,
@@ -49,13 +59,17 @@ AnalyticsObjects = Union[
     DeclarativeVisualizationObject,
 ]
 
+ExtensionT = TypeVar("ExtensionT", bound=CatalogAnalyticsObjectBase)
+
 LAYOUT_ANALYTICS_MODEL_DIR = "analytics_model"
 LAYOUT_ANALYTICAL_DASHBOARDS_DIR = "analytical_dashboards"
 LAYOUT_ANALYTICAL_DASHBOARD_EXTENSIONS_DIR = "analytical_dashboard_extensions"
 LAYOUT_DASHBOARD_PLUGINS_DIR = "dashboard_plugins"
 LAYOUT_FILTER_CONTEXTS_DIR = "filter_contexts"
 LAYOUT_METRICS_DIR = "metrics"
+LAYOUT_METRIC_EXTENSIONS_DIR = "metric_extensions"
 LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
+LAYOUT_VISUALIZATION_OBJECT_EXTENSIONS_DIR = "visualization_object_extensions"
 ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
 EXPORT_DEFINITION_DIR = "export_definitions"
 MEMORY_ITEMS_DIR = "memory_items"
@@ -63,6 +77,15 @@ PARAMETERS_DIR = "parameters"
 LAYOUT_DOCUMENTS_DIR = "documents"
 LAYOUT_DOCUMENT_TEMPLATES_DIR = "document_templates"
 LAYOUT_PAGE_TEMPLATES_DIR = "page_templates"
+EMPTY_FOLDER_KEEP_FILE = ".gitkeep"
+
+CatalogDeclarativeMetricPermission = Union[
+    CatalogDeclarativeMetricPermissionsForAssignee, CatalogDeclarativeMetricPermissionsForAssigneeRule
+]
+CatalogDeclarativeVisualizationObjectPermission = Union[
+    CatalogDeclarativeVisualizationObjectPermissionsForAssignee,
+    CatalogDeclarativeVisualizationObjectPermissionsForAssigneeRule,
+]
 
 
 @define(kw_only=True)
@@ -91,7 +114,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     dashboard_plugins: list[CatalogDeclarativeDashboardPlugin] = field(factory=list)
     filter_contexts: list[CatalogDeclarativeFilterContext] = field(factory=list)
     metrics: list[CatalogDeclarativeMetric] = field(factory=list)
+    metric_extensions: list[CatalogDeclarativeMetricExtension] | None = None
     visualization_objects: list[CatalogDeclarativeVisualizationObject] = field(factory=list)
+    visualization_object_extensions: list[CatalogDeclarativeVisualizationObjectExtension] | None = None
     export_definitions: list[CatalogDeclarativeExportDefinition] = field(factory=list)
     memory_items: list[CatalogDeclarativeMemoryItem] = field(factory=list)
     parameters: list[CatalogDeclarativeParameter] = field(factory=list)
@@ -187,6 +212,31 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
+    @staticmethod
+    def _store_extensions(folder: Path, extensions: Sequence[CatalogAnalyticsObjectBase] | None, sort: bool) -> None:
+        """
+        Writes the extension list as a folder with one file per extension, replacing whatever the folder held.
+
+        None removes the folder. An empty list leaves it holding only a keep file: git does not track an empty
+        folder, and the list must not come back from a clone as None.
+        """
+        if folder.exists():
+            rmtree(folder)
+        if extensions is None:
+            return
+        create_directory(folder)
+        if not extensions:
+            (folder / EMPTY_FOLDER_KEEP_FILE).touch()
+        for extension in extensions:
+            extension.store_to_disk(folder, sort=sort)
+
+    @staticmethod
+    def _load_extensions(folder: Path, extension_class: type[ExtensionT]) -> list[ExtensionT] | None:
+        """Loads the extension list stored in the folder: None when the folder is missing, a list otherwise."""
+        if not folder.is_dir():
+            return None
+        return [extension_class.load_from_disk(extension_file) for extension_file in get_sorted_yaml_files(folder)]
+
     def store_to_disk(self, workspace_folder: Path, sort: bool = False) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
@@ -219,8 +269,16 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for metric in self.metrics:
             metric.store_to_disk(metrics_folder, sort=sort)
 
+        self._store_extensions(analytics_model_folder / LAYOUT_METRIC_EXTENSIONS_DIR, self.metric_extensions, sort)
+
         for visualization_object in self.visualization_objects:
             visualization_object.store_to_disk(visualization_objects_folder, sort=sort)
+
+        self._store_extensions(
+            analytics_model_folder / LAYOUT_VISUALIZATION_OBJECT_EXTENSIONS_DIR,
+            self.visualization_object_extensions,
+            sort,
+        )
 
         for attribute_hierarchy in self.attribute_hierarchies:
             attribute_hierarchy.store_to_disk(attribute_hierarchy_folder, sort=sort)
@@ -291,6 +349,13 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             for filter_context_file in filter_context_files
         ]
         metrics = [CatalogDeclarativeMetric.load_from_disk(metric_file) for metric_file in metric_files]
+        metric_extensions = cls._load_extensions(
+            analytics_model_folder / LAYOUT_METRIC_EXTENSIONS_DIR, CatalogDeclarativeMetricExtension
+        )
+        visualization_object_extensions = cls._load_extensions(
+            analytics_model_folder / LAYOUT_VISUALIZATION_OBJECT_EXTENSIONS_DIR,
+            CatalogDeclarativeVisualizationObjectExtension,
+        )
         visualization_objects = [
             CatalogDeclarativeVisualizationObject.load_from_disk(visualization_object_file)
             for visualization_object_file in visualization_object_files
@@ -325,7 +390,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             dashboard_plugins=dashboard_plugins,
             filter_contexts=filter_contexts,
             metrics=metrics,
+            metric_extensions=metric_extensions,
             visualization_objects=visualization_objects,
+            visualization_object_extensions=visualization_object_extensions,
             export_definitions=export_definitions,
             memory_items=memory_items,
             parameters=parameters,
@@ -396,17 +463,66 @@ class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
 @define(kw_only=True)
 class CatalogDeclarativeMetric(CatalogAnalyticsBase):
     is_hidden_from_kda: bool | None = None
+    # None and an empty list are different requests; the default must stay None.
+    permissions: list[CatalogDeclarativeMetricPermission] | None = None
 
     @staticmethod
     def client_class() -> type[DeclarativeMetric]:
         return DeclarativeMetric
 
+    @staticmethod
+    def structure_permissions(v: dict[str, Any], _: Any) -> CatalogDeclarativeMetricPermission:
+        if v.get("assignee") is not None:
+            return structure(v, CatalogDeclarativeMetricPermissionsForAssignee)
+        else:
+            return structure(v, CatalogDeclarativeMetricPermissionsForAssigneeRule)
+
+
+global_converter.register_structure_hook(
+    CatalogDeclarativeMetricPermission,
+    CatalogDeclarativeMetric.structure_permissions,
+)
+
+
+@define(kw_only=True)
+class CatalogDeclarativeMetricExtension(CatalogAnalyticsObjectBase):
+    permissions: list[CatalogDeclarativeMetricPermission]
+
+    @staticmethod
+    def client_class() -> type[DeclarativeMetricExtension]:
+        return DeclarativeMetricExtension
+
 
 @define(kw_only=True)
 class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBase):
+    # None and an empty list are different requests; the default must stay None.
+    permissions: list[CatalogDeclarativeVisualizationObjectPermission] | None = None
+
     @staticmethod
     def client_class() -> type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject
+
+    @staticmethod
+    def structure_permissions(v: dict[str, Any], _: Any) -> CatalogDeclarativeVisualizationObjectPermission:
+        if v.get("assignee") is not None:
+            return structure(v, CatalogDeclarativeVisualizationObjectPermissionsForAssignee)
+        else:
+            return structure(v, CatalogDeclarativeVisualizationObjectPermissionsForAssigneeRule)
+
+
+global_converter.register_structure_hook(
+    CatalogDeclarativeVisualizationObjectPermission,
+    CatalogDeclarativeVisualizationObject.structure_permissions,
+)
+
+
+@define(kw_only=True)
+class CatalogDeclarativeVisualizationObjectExtension(CatalogAnalyticsObjectBase):
+    permissions: list[CatalogDeclarativeVisualizationObjectPermission]
+
+    @staticmethod
+    def client_class() -> type[DeclarativeVisualizationObjectExtension]:
+        return DeclarativeVisualizationObjectExtension
 
 
 @define(kw_only=True)
