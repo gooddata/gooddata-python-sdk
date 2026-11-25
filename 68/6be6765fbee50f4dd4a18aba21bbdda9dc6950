@@ -72,10 +72,10 @@ packages/gooddata-eval/tests/test_agentic_chat_summary.py
   s_bf7263da2341ea::t_1c9448921ccc53 13-17
   s_a8f58f26947b83::t_83fc136963e58e 131,141
 packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_bf7263da2341ea::t_d5f72a4ccd3180 646-656,660-682,686-689
-  s_bf7263da2341ea::t_ea1286ce83a6f7 634-636,683-685
-  s_bf7263da2341ea::t_08550c89f55204 657-658,708-709
-  s_bf7263da2341ea::t_1fec72c1aeb29b 631-633,637-645,659
+  s_bf7263da2341ea::t_d5f72a4ccd3180 646-656,647-657,660-682,661-683,686-689,687-690
+  s_bf7263da2341ea::t_ea1286ce83a6f7 634-636,635-637,683-685,684-686
+  s_bf7263da2341ea::t_08550c89f55204 657-658,658-659,708-709,709-710
+  s_bf7263da2341ea::t_1fec72c1aeb29b 631-633,632-634,637-645,638-646,659,660
 packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
   s_bf7263da2341ea::t_803553a7913224 564-565,623
   s_bf7263da2341ea::t_b3bcdea9dedd24 877-878
