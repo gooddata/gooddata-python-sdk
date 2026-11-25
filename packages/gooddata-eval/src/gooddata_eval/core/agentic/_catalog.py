@@ -73,27 +73,21 @@ class CatalogMetricAlert:
     """Alert name the user asked for; ``None`` means unasserted."""
     dashboard_id: str | None = None
     """Dashboard the alert must be bound to; ``None`` means unasserted."""
+    expect_alert: bool = True
+    """``False``: the request names nothing the alert can monitor, so no alert may be proposed or created."""
+    sensitivity: str | None = None
+    """ANOMALY sensitivity (LOW/MEDIUM/HIGH); ``None`` means unasserted."""
+    trigger_interval: str | None = None
+    """Interval of a ONCE_PER_INTERVAL trigger (DAY/WEEK/MONTH/QUARTER/YEAR); ``None`` means unasserted."""
+    date_dataset_id: str | None = None
+    """Date dataset an ANOMALY alert detects on; ``None`` means unasserted."""
+    setup_turns: tuple[str, ...] = ()
+    """Messages sent in the same conversation before the question, not scored."""
 
     @classmethod
     def from_dict(cls, d: dict) -> CatalogMetricAlert:
-        """Build a CatalogMetricAlert from a canonical (lowercase-key) dict."""
-        recipients_raw = d.get("recipients") or []
-        if isinstance(recipients_raw, str):
-            recipients = [r.strip() for r in recipients_raw.replace(";", ",").split(",") if r.strip()]
-        else:
-            recipients = list(recipients_raw)
-        return cls(
-            operator=d.get("operator", "GREATER_THAN"),
-            threshold=d.get("threshold"),
-            threshold_from=d.get("threshold_from"),
-            threshold_to=d.get("threshold_to"),
-            trigger=d.get("trigger", "not specified"),
-            metric_id=d.get("metric_id"),
-            recipients=recipients,
-            filters=d.get("filters"),
-            attributes=d.get("attributes"),
-            granularity=AnomalyDetectionGranularity.parse(d.get("granularity")),
-            comparison=d.get("comparison"),
-            title=d.get("title"),
-            dashboard_id=d.get("dashboard_id"),
-        )
+        """Build a CatalogMetricAlert with the parsing and validation a dataset item's expected_output gets."""
+        # Imported here: alert_skill imports this module.
+        from gooddata_eval.core.agentic.alert_skill import _normalize_expected_output  # noqa: PLC0415
+
+        return _normalize_expected_output(d)

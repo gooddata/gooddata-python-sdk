@@ -41,6 +41,7 @@ from gooddata_eval.core.agentic._trace_linker import (
     submit_trace_scoring,
     utc_now,
 )
+from gooddata_eval.core.agentic.metric_skill import _delete_metric, _extract_created_metric_ids
 from gooddata_eval.core.chat.render import render_answer_text
 from gooddata_eval.core.chat.sse_client import ChatClient, ChatError
 from gooddata_eval.core.config import ReasoningEffort
@@ -75,9 +76,10 @@ _COMPARISON_ARGS = {
     "date_dataset_id": "comparison_date_dataset_id",
     "date_attribute_id": "comparison_date_attribute_id",
     "arithmetic_operator": "arithmetic_operator",
+    "compare_metric_id": "compare_metric_id",
 }
 # Compared verbatim: object ids are case-sensitive, unlike the enum-valued properties.
-_COMPARISON_ID_ARGS = ("comparison_date_dataset_id", "comparison_date_attribute_id")
+_COMPARISON_ID_ARGS = ("comparison_date_dataset_id", "comparison_date_attribute_id", "compare_metric_id")
 # What create_metric_alert applies when the argument is left out, per its own contract. A
 # metric-to-metric comparison has no periods, so periods_ago defaults only for a period kind.
 _COMPARISON_ARG_DEFAULTS: dict[str, object] = {"comparison_periods_ago": 1, "arithmetic_operator": "DIFFERENCE"}
@@ -97,7 +99,55 @@ _ALERT_CHECKS = (
     "attributes_correct",
     "granularity_correct",
 )
-_CONDITIONAL_ALERT_CHECKS = ("comparison_correct", "title_correct", "dashboard_correct")
+_CONDITIONAL_ALERT_CHECKS = (
+    "comparison_correct",
+    "title_correct",
+    "dashboard_correct",
+    "alert_sensitivity_correct",
+    "alert_trigger_interval_correct",
+    "alert_date_dataset_correct",
+)
+# The only check of an item that expects no alert; it replaces every other check.
+_NO_ALERT_CHECK = "alert_not_proposed"
+# Score names published only by an item that states the matching expectation (gdc-nas combo_report).
+ALERT_CONDITIONAL_SCORES = (*_CONDITIONAL_ALERT_CHECKS, _NO_ALERT_CHECK)
+
+_SENSITIVITIES = ("LOW", "MEDIUM", "HIGH")
+# What create_metric_alert applies to an ANOMALY alert when `sensitivity` is left out, per its own contract.
+_DEFAULT_SENSITIVITY = "MEDIUM"
+_TRIGGER_INTERVALS = ("DAY", "WEEK", "MONTH", "QUARTER", "YEAR")
+# The tool whose call is the agent proposing an alert, whether or not the call succeeded.
+_PROPOSAL_TOOL = "prepare_metric_alert_proposal"
+# The metric skill's write tool. The alert prompt lets the agent offer a metric the workspace lacks.
+_CREATE_METRIC_TOOL = "create_metric"
+# A no-alert item asserts nothing about an alert, so stating any of these is a fixture mistake.
+_ALERT_ONLY_KEYS = (
+    "operator",
+    "threshold",
+    "threshold_from",
+    "threshold_to",
+    "filters",
+    "time window/filters",
+    "time_window",
+    "attributes",
+    "granularity",
+    "detection granularity",
+    "comparison",
+    "title",
+    "dashboard",
+    "dashboard_id",
+    "sensitivity",
+    "trigger_interval",
+    "trigger interval",
+    "date_dataset_id",
+    "date dataset",
+)
+# A no-alert run stops after this many agent turns: the simulated user only declines. Measured on
+# 2026-11-25 with the cap at the default budget of 6 (6 runs, a churn-rate and a website-traffic
+# request, gpt-5.6-luna): every agent answered in turn 1, confirmed it would not create the alert
+# in turn 2, and spent turns 3-6 on pleasantries without a tool call. Three turns cover that with
+# one to spare.
+_NO_ALERT_MAX_ITERATIONS = 3
 
 # Expected-recipient spellings that mean the owner of the API token.
 _CURRENT_USER_RECIPIENT = "me"
@@ -358,6 +408,42 @@ def _check_dashboard(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     return isinstance(actual, str) and actual == expected.dashboard_id
 
 
+def _check_enum_arg(expected_value: str | None, actual_args: dict, arg: str, default: str | None = None) -> bool | None:
+    """Case-folded compare of an enum-valued argument; ``None`` when the fixture states no value.
+
+    ``default`` is the value ``create_metric_alert`` applies when the argument is left out, so an
+    omitted argument is compared as that value.
+    """
+    if expected_value is None:
+        return None
+    actual = actual_args.get(arg)
+    if actual is None:
+        actual = default
+    return isinstance(actual, str) and actual.strip().upper() == expected_value
+
+
+def _check_trigger_interval(expected: CatalogMetricAlert, actual_args: dict) -> bool | None:
+    """The stated interval, on an alert that fires once per interval; ``None`` when unasserted.
+
+    The tool applies ``trigger_interval`` only to ONCE_PER_INTERVAL and defaults the trigger to
+    ALWAYS. ``_check_trigger`` skips ANOMALY alerts, so an anomaly alert sent without that trigger
+    would otherwise score an interval it never uses.
+    """
+    if expected.trigger_interval is None:
+        return None
+    actual_trigger = actual_args.get("trigger") or actual_args.get("triggerMode") or "ALWAYS"
+    if _TRIGGER_DISPLAY_TO_API.get(actual_trigger, actual_trigger) != "ONCE_PER_INTERVAL":
+        return False
+    return _check_enum_arg(expected.trigger_interval, actual_args, "trigger_interval")
+
+
+def _check_date_dataset(expected: CatalogMetricAlert, actual_args: dict) -> bool | None:
+    """The ANOMALY detection dataset, compared verbatim; ``None`` when unasserted."""
+    if expected.date_dataset_id is None:
+        return None
+    return actual_args.get("date_dataset_id") == expected.date_dataset_id
+
+
 def _check_metric(expected: CatalogMetricAlert, actual_args: dict) -> bool:
     if not expected.metric_id:
         return True
@@ -483,6 +569,10 @@ def generate_simulated_alert_response(
         raise OSError("OPENAI_API_KEY environment variable is not set")
 
     openai_client = _OpenAI(api_key=api_key)
+    if not expected.expect_alert:
+        return _ask_simulated_user(
+            openai_client, _no_alert_sim_user_prompt(question), conversation_history, agent_message
+        )
 
     metric = expected.metric_id or "not specified"
     operator = expected.operator
@@ -533,6 +623,8 @@ def generate_simulated_alert_response(
     # ONCE/ONCE_PER_INTERVAL proposal that the assertion then failed.
     trigger_key = "ALWAYS" if trigger in _ALWAYS_TRIGGER_VALUES else trigger
     trigger_request = _TRIGGER_INSTRUCTIONS.get(trigger_key, f"set the trigger to {trigger}")
+    if expected.trigger_interval:
+        trigger_request += f", with a trigger interval of {expected.trigger_interval}"
 
     # Three branches, matching the three states of `expected.filters`. `[]` and `None` must not
     # share one: telling the sim-user "you want NO filters" on an unstated expectation makes it
@@ -571,7 +663,10 @@ def generate_simulated_alert_response(
             "7. This is an ANOMALY alert. Anomaly detection REQUIRES a time granularity, and that "
             f"granularity is NOT a date filter. State it in your first reply and repeat it whenever "
             f"asked: use {granularity} granularity. Rule 5 constrains filters on the metric only — it "
-            "never applies to this detection interval, so never refuse to give one.\n"
+            "never applies to this detection interval, so never refuse to give one."
+            + (f" Use {expected.sensitivity} sensitivity." if expected.sensitivity else "")
+            + (f" Detect on the date dataset {expected.date_dataset_id}." if expected.date_dataset_id else "")
+            + "\n"
         )
     elif operator in _RELATIVE_OPERATORS:
         # The item names no comparison date or period; delegating is an answer the agent accepts,
@@ -582,7 +677,9 @@ def generate_simulated_alert_response(
             "year), and those are NOT a date filter. Rule 5 constrains filters on the metric only — "
             "it never applies to the comparison. If the agent asks which date or which period the "
             "comparison should use, do not refuse and do not name one yourself: hand the choice back, "
-            "for example 'Pick whichever date and period fit best.'\n"
+            "for example 'Pick whichever date and period fit best.' A proposal's filters may list one "
+            "relative date filter for that comparison date: it is the comparison period, not a time "
+            "window, so never refuse it.\n"
         )
     else:
         period_rule = (
@@ -591,6 +688,9 @@ def generate_simulated_alert_response(
         )
 
     original_request = f'Your original request to the agent was: "{question}"\n' if question else ""
+    if expected.setup_turns:
+        earlier = " / ".join(f'"{turn}"' for turn in expected.setup_turns)
+        original_request = f"Earlier in this conversation you asked: {earlier}.\n" + original_request
 
     # The agent may offer several metrics and describe one as ignoring filters or counting all
     # time. That reads like rule 5's "no filters ... all time", which made the simulated user
@@ -624,6 +724,9 @@ def generate_simulated_alert_response(
         f"1. Your goal: metric={metric}, operator={operator}, threshold={threshold}, "
         f"recipients={recipients}, trigger={trigger_key}"
         + (f", filters={filters}" if filters else "")
+        + (f", sensitivity={expected.sensitivity}" if expected.sensitivity else "")
+        + (f", trigger interval={expected.trigger_interval}" if expected.trigger_interval else "")
+        + (f", date dataset={expected.date_dataset_id}" if expected.date_dataset_id else "")
         + ".\n"
         + metric_choice_rule
         + "2. Never revert or change a decision that was already confirmed in a previous turn.\n"
@@ -645,6 +748,10 @@ def generate_simulated_alert_response(
         + "Reply concisely and directly."
     )
 
+    return _ask_simulated_user(openai_client, system_prompt, conversation_history, agent_message)
+
+
+def _ask_simulated_user(openai_client: Any, system_prompt: str, conversation_history: list, agent_message: str) -> str:
     messages: list = [{"role": "system", "content": system_prompt}]
     messages.extend(conversation_history)
     messages.append(
@@ -656,6 +763,24 @@ def generate_simulated_alert_response(
         temperature=0,
     )
     return response.choices[0].message.content or ""
+
+
+def _no_alert_sim_user_prompt(question: str) -> str:
+    """The simulated user of an item whose request names nothing the workspace can monitor.
+
+    It never accepts a substitute: the check is whether the agent proposes one anyway.
+    """
+    return (
+        "You are a user who asked an AI agent to create an alert.\n"
+        f'Your original request to the agent was: "{question}"\n'
+        "The workspace may not have what you asked for. Rules you MUST follow:\n"
+        "1. You want an alert only on exactly what you asked for. Never accept a different or similar metric, "
+        "never ask the agent to create a new metric, and never confirm an alert proposal.\n"
+        "2. If the agent offers alternatives or asks which one to use, decline them all and say you only wanted "
+        "what you asked for.\n"
+        "3. If the agent says it cannot create the alert, accept that and end politely.\n"
+        "Reply concisely and directly."
+    )
 
 
 def _delete_alert(sdk: GoodDataSdk, workspace_id: str, alert_id: str) -> None:
@@ -687,6 +812,11 @@ class AlertEvaluation:
     comparison_correct: bool | None = None
     title_correct: bool | None = None
     dashboard_correct: bool | None = None
+    alert_sensitivity_correct: bool | None = None
+    alert_trigger_interval_correct: bool | None = None
+    alert_date_dataset_correct: bool | None = None
+    # Set only for an item that expects no alert; then it is the run's one check.
+    alert_not_proposed: bool | None = None
 
     def checks(self) -> dict[str, bool]:
         """Every check that ran, by name; strict_pass requires all of them.
@@ -695,6 +825,8 @@ class AlertEvaluation:
         not report a ``title_correct`` it was never scored on, and a refusal on it is not counted
         as a title failure.
         """
+        if self.alert_not_proposed is not None:
+            return {_NO_ALERT_CHECK: self.alert_not_proposed}
         ran: dict[str, bool] = {name: getattr(self, name) for name in _ALERT_CHECKS}
         for name in _CONDITIONAL_ALERT_CHECKS:
             value = getattr(self, name)
@@ -829,6 +961,9 @@ def _normalize_expected_comparison(expected: dict) -> dict[str, str | int | floa
         if arg is None:
             # Validated here so a misspelled property fails before the run spends an API call.
             raise ValueError(f"Unrecognised comparison property {key!r}; expected one of {sorted(_COMPARISON_ARGS)}")
+        if arg in _COMPARISON_ID_ARGS and value is not None and not isinstance(value, str):
+            # str() would turn ["net_sales_goal"] into an id no tool argument can ever equal.
+            raise ValueError(f"Comparison {key} must be an object id string, got {value!r}")
         canonical = _canonical_comparison_value(arg, value)
         if canonical is None and arg == "comparison_periods_ago" and str(value or "").strip():
             raise ValueError(f"Comparison periods_ago must be a number, got {value!r}")
@@ -868,6 +1003,41 @@ def _normalize_expected_dashboard(expected: dict) -> str | None:
     return parsed
 
 
+def _normalize_expected_enum(expected: dict, allowed: tuple[str, ...], *keys: str) -> str | None:
+    """A stated enum value, upper-cased; raises on a value outside ``allowed`` so a typo never reads green."""
+    value = _normalize_expected_text(expected, *keys)
+    if value is None:
+        return None
+    canonical = value.upper()
+    if canonical not in allowed:
+        raise ValueError(f"{keys[0]} expectation must be one of {list(allowed)}, got {value!r}")
+    return canonical
+
+
+def _normalize_expect_alert(expected: dict) -> bool:
+    """``Expect alert: false`` marks an item whose request must end without any alert."""
+    value = _case_insensitive_get(expected, "expect_alert", "expect alert")
+    if value is None:
+        return True
+    if not isinstance(value, bool):
+        raise ValueError(f"expect_alert must be true or false, got {value!r}")
+    if not value:
+        stated = sorted(k for k in expected if str(k).strip().lower() in _ALERT_ONLY_KEYS)
+        if stated:
+            raise ValueError(f"expect_alert: false states no alert, but the item also states {stated}")
+    return value
+
+
+def _normalize_setup_turns(expected: dict) -> tuple[str, ...]:
+    """Messages sent before the question; each one a non-empty string."""
+    turns = _case_insensitive_get(expected, "setup_turns", "setup turns")
+    if turns is None:
+        return ()
+    if not isinstance(turns, list) or not all(isinstance(t, str) and t.strip() for t in turns):
+        raise ValueError(f"setup_turns must be a list of non-empty strings, got {turns!r}")
+    return tuple(turns)
+
+
 def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     """Parse expected_output dict into CatalogMetricAlert, accepting display-format or internal-format keys."""
     operator = _case_insensitive_get(expected, "operator") or "GREATER_THAN"
@@ -901,6 +1071,17 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
     comparison = _normalize_expected_comparison(expected)
     title = _normalize_expected_text(expected, "title")
     dashboard_id = _normalize_expected_dashboard(expected)
+    expect_alert = _normalize_expect_alert(expected)
+    sensitivity = _normalize_expected_enum(expected, _SENSITIVITIES, "sensitivity")
+    trigger_interval = _normalize_expected_enum(expected, _TRIGGER_INTERVALS, "trigger_interval", "trigger interval")
+    date_dataset_id = _normalize_expected_text(expected, "date_dataset_id", "date dataset")
+    setup_turns = _normalize_setup_turns(expected)
+    if trigger_interval is not None and trigger != "ONCE_PER_INTERVAL":
+        raise ValueError(f"trigger_interval applies only to the ONCE_PER_INTERVAL trigger, got trigger {trigger!r}")
+    # Both are ANOMALY arguments. On any other operator the agent sends neither, so a stated
+    # MEDIUM would always match the default and only raise the quality score.
+    if (sensitivity is not None or date_dataset_id is not None) and operator != "ANOMALY":
+        raise ValueError(f"sensitivity and date_dataset_id apply only to the ANOMALY operator, got {operator!r}")
 
     return CatalogMetricAlert(
         operator=operator,
@@ -916,6 +1097,11 @@ def _normalize_expected_output(expected: dict) -> CatalogMetricAlert:
         comparison=comparison,
         title=title,
         dashboard_id=dashboard_id,
+        expect_alert=expect_alert,
+        sensitivity=sensitivity,
+        trigger_interval=trigger_interval,
+        date_dataset_id=date_dataset_id,
+        setup_turns=setup_turns,
     )
 
 
@@ -958,12 +1144,11 @@ class _AlertCalls:
 
 
 def _extract_alert_calls(tool_call_events: list[ToolCallEvent]) -> _AlertCalls:
-    """Read every ``create_metric_alert`` call, not only the first.
+    """Read every ``create_metric_alert`` call of a turn.
 
-    The agent may retry after an error. Reading only the first call scored the arguments of a
-    call that failed and missed the id of the retry that succeeded, so that alert leaked into
-    the workspace (QA-29886). The run is scored on the first call that did not fail, which is
-    the first call whenever none failed, as before.
+    The agent may retry after an error. A call that failed created nothing, so the run is scored
+    on the first call that did not fail, and the id of every alert a call created is collected so
+    that alert is deleted after the run.
     """
     calls = _AlertCalls()
     for tc in tool_call_events:
@@ -998,7 +1183,7 @@ def render_alert_proposal(proposal: dict) -> str:
     summary = {k: v for k, v in proposal.items() if k != "cta"}
     alert = dict(summary.get("alert") or {})
     # `execution` is the only place a proposal carries its filters, which rule 3 of the simulated
-    # user checks. Hoisting them keeps them visible (QA-29886). The rest stays out: the measures
+    # user checks. Hoisting them keeps them visible. The rest stays out: the measures
     # repeat `condition`, and the simulated user is told nothing about group-bys, so a date
     # group-by would only read as a time window rule 5 tells it to refuse.
     execution = alert.pop("execution", None)
@@ -1023,6 +1208,44 @@ def render_turn_for_simulated_user(chat_result: ChatResult) -> str:
     return "\n\n".join(chunk for chunk in chunks if chunk)
 
 
+def _evaluate_alert(
+    expected: CatalogMetricAlert,
+    actual_args: dict,
+    alert_created: bool,
+    sdk: GoodDataSdk,
+    current_user_id: str | None,
+) -> AlertEvaluation:
+    """Score the created alert's arguments; a conditional check is ``None`` when the item states no value."""
+
+    def conditional(check: bool | None) -> bool | None:
+        return None if check is None else alert_created and check
+
+    return AlertEvaluation(
+        alert_created=alert_created,
+        operator_correct=alert_created and expected.operator == actual_args.get("operator"),
+        threshold_correct=alert_created and _check_threshold(expected, actual_args),
+        trigger_correct=alert_created and _check_trigger(expected, actual_args),
+        filters_correct=alert_created and _check_filters(expected, actual_args),
+        metric_correct=alert_created and _check_metric(expected, actual_args),
+        recipients_correct=alert_created
+        and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
+        attributes_correct=alert_created and _check_attributes(expected, actual_args),
+        granularity_correct=alert_created and _check_granularity(expected, actual_args),
+        comparison_correct=None
+        if expected.comparison is None
+        else alert_created and _check_comparison(expected, actual_args),
+        title_correct=None if expected.title is None else alert_created and _check_title(expected, actual_args),
+        dashboard_correct=None
+        if expected.dashboard_id is None
+        else alert_created and _check_dashboard(expected, actual_args),
+        alert_sensitivity_correct=conditional(
+            _check_enum_arg(expected.sensitivity, actual_args, "sensitivity", default=_DEFAULT_SENSITIVITY)
+        ),
+        alert_trigger_interval_correct=conditional(_check_trigger_interval(expected, actual_args)),
+        alert_date_dataset_correct=conditional(_check_date_dataset(expected, actual_args)),
+    )
+
+
 def run_agentic_alert_skill(
     host: str,
     token: str,
@@ -1037,9 +1260,13 @@ def run_agentic_alert_skill(
     user_context: dict | None = None,
 ) -> AgenticAlertSummary:
     """Run the alert-skill agentic evaluation K times and return a summary."""
+    if max_iterations < 1:
+        # With no turn the agent never gets the question, and a no-alert item would pass unasked.
+        raise ValueError(f"max_iterations must be at least 1, got {max_iterations}")
     expected = _normalize_expected_output(expected_output)
     current_user_id: str | None = None
-    if _CURRENT_USER_RECIPIENT in expected.recipients:
+    # A no-alert item scores no recipients, so it needs no current user.
+    if expected.expect_alert and _CURRENT_USER_RECIPIENT in expected.recipients:
         current_user_id = _resolve_current_user_id(host, token)
         if current_user_id is None:
             # A harness fault: report it as an item error, not as the agent's recipient mistake.
@@ -1057,6 +1284,16 @@ def run_agentic_alert_skill(
 
     def _run_once(conv_id: str) -> AlertRunResult:
         alert_ids_to_delete: list[str] = []
+        # A metric the agent created stays in the shared workspace, and the item's next run would find it.
+        metric_ids_to_delete: list[str] = []
+
+        def _track_writes(events: list[ToolCallEvent]) -> _AlertCalls:
+            """The turn's alert calls; records every alert and metric it created for cleanup."""
+            calls = _extract_alert_calls(events)
+            alert_ids_to_delete.extend(calls.created_ids)
+            metric_ids_to_delete.extend(_extract_created_metric_ids(events))
+            return calls
+
         run_started = time.monotonic()
         try:
             alert_id: str | None = None
@@ -1080,8 +1317,43 @@ def run_agentic_alert_skill(
             # that simply runs out of range() is correctly labelled without a trailing else.
             exit_reason = LoopExit.BUDGET_EXHAUSTED
             turns_used = 0
+            no_alert = not expected.expect_alert
+            # A no-alert run ends when the agent proposes anything; the simulated user only declines.
+            iterations = min(max_iterations, _NO_ALERT_MAX_ITERATIONS) if no_alert else max_iterations
+            proposed = False
+            # Whether the agent wrote anything in a scored turn; a no-alert run may end quiet after declining.
+            answered = False
             run_started = time.monotonic()
-            for _iteration in range(max_iterations):
+            # Setup turns set the scene (a chart to alert on) and are not scored. A failed one
+            # ends the run as the agent's failure, like a failed question turn.
+            for number, turn in enumerate(expected.setup_turns, start=1):
+                try:
+                    setup = client.send_message(conv_id, turn)
+                except ChatError as exc:
+                    print(f"[CHAT] setup turn {number} failed for conversation {conv_id}: {exc}")
+                    # A broken stream can still have created an alert server-side.
+                    partial = exc.partial_result
+                    if partial is not None:
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                        _track_writes(partial.tool_call_events or [])
+                    exit_reason = chat_failure_exit(exc)
+                    iterations = 0
+                    break
+                steps += setup.reasoning_step_count
+                reasoning_steps.extend(setup.reasoning_steps or [])
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    setup,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
+                all_tool_call_events.extend(setup.tool_call_events or [])
+                all_reasoning_step_events.extend(setup.reasoning_step_events or [])
+                _track_writes(setup.tool_call_events or [])
+                conversation_history.append({"role": "user", "content": turn})
+                conversation_history.append({"role": "assistant", "content": render_answer_text(setup)})
+            for _iteration in range(iterations):
                 turns_used = _iteration + 1
                 try:
                     chat_result = client.send_message(conv_id, current_question)
@@ -1098,7 +1370,7 @@ def run_agentic_alert_skill(
                     if partial is not None:
                         reasoning_steps.extend(partial.reasoning_steps or [])
                         response_id = partial.response_id or response_id
-                        alert_ids_to_delete.extend(_extract_alert_calls(partial.tool_call_events or []).created_ids)
+                        _track_writes(partial.tool_call_events or [])
                     exit_reason = chat_failure_exit(exc)
                     break
                 # `turns_used` counts attempts (set above, so a failed send still shows the
@@ -1116,8 +1388,18 @@ def run_agentic_alert_skill(
                 )
                 all_tool_call_events.extend(chat_result.tool_call_events or [])
                 all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
-                calls = _extract_alert_calls(chat_result.tool_call_events or [])
-                alert_ids_to_delete.extend(calls.created_ids)
+                calls = _track_writes(chat_result.tool_call_events or [])
+                tools_called = {tc.function_name for tc in chat_result.tool_call_events or []}
+                substitute = _PROPOSAL_TOOL in tools_called or _CREATE_METRIC_TOOL in tools_called
+                if no_alert and (calls.called or substitute or chat_result.alert_proposals):
+                    # Nothing in the request can be monitored, so any proposal is a substitute the
+                    # user never agreed to. A proposal call the tool rejected leaves no proposal
+                    # part, but the agent still tried to propose one. A metric the agent creates
+                    # is a substitute too: the simulated user never asks for one.
+                    proposed = True
+                    actual_args = calls.args
+                    exit_reason = LoopExit.SUCCESS
+                    break
                 if calls.created:
                     alert_id, actual_args = calls.alert_id, calls.args
                     alert_created = True
@@ -1136,8 +1418,9 @@ def run_agentic_alert_skill(
                 if not response_text and (calls.called or not chat_result.tool_call_events):
                     exit_reason = LoopExit.AGENT_SILENT
                     break
+                answered = answered or bool(response_text)
                 # Stop before generating a follow-up for the last iteration
-                if _iteration >= max_iterations - 1:
+                if _iteration >= iterations - 1:
                     break
                 # Recorded rather than raised, matching metric_skill and kda_skill. Letting it
                 # propagate did keep a harness fault from being scored as a content failure,
@@ -1161,25 +1444,27 @@ def run_agentic_alert_skill(
                 conversation_history.append({"role": "user", "content": follow_up})
                 current_question = follow_up
 
-            ev = AlertEvaluation(
-                alert_created=alert_created,
-                operator_correct=alert_created and expected.operator == actual_args.get("operator"),
-                threshold_correct=alert_created and _check_threshold(expected, actual_args),
-                trigger_correct=alert_created and _check_trigger(expected, actual_args),
-                filters_correct=alert_created and _check_filters(expected, actual_args),
-                metric_correct=alert_created and _check_metric(expected, actual_args),
-                recipients_correct=alert_created
-                and _check_recipients(expected, actual_args, sdk=sdk, current_user_id=current_user_id),
-                attributes_correct=alert_created and _check_attributes(expected, actual_args),
-                granularity_correct=alert_created and _check_granularity(expected, actual_args),
-                comparison_correct=None
-                if expected.comparison is None
-                else alert_created and _check_comparison(expected, actual_args),
-                title_correct=None if expected.title is None else alert_created and _check_title(expected, actual_args),
-                dashboard_correct=None
-                if expected.dashboard_id is None
-                else alert_created and _check_dashboard(expected, actual_args),
-            )
+            if no_alert:
+                # Only a run that spent its whole budget without a proposal shows the agent
+                # declining. A run cut short by a chat failure or a failed simulated user never
+                # gave the agent the turns to propose one. An agent that declined and then had
+                # nothing to add to the user's "OK, thanks" ends silent, and that is a decline
+                # too; one silent from its first turn never answered the request.
+                declined = not proposed and (
+                    exit_reason == LoopExit.BUDGET_EXHAUSTED or (exit_reason == LoopExit.AGENT_SILENT and answered)
+                )
+                ev = AlertEvaluation(
+                    alert_created=False,
+                    operator_correct=False,
+                    threshold_correct=False,
+                    trigger_correct=False,
+                    filters_correct=False,
+                    metric_correct=False,
+                    recipients_correct=False,
+                    alert_not_proposed=declined,
+                )
+            else:
+                ev = _evaluate_alert(expected, actual_args, alert_created, sdk, current_user_id)
             return AlertRunResult(
                 conversation_id=conv_id,
                 alert_id=alert_id,
@@ -1198,6 +1483,9 @@ def run_agentic_alert_skill(
         finally:
             for created_id in dict.fromkeys(alert_ids_to_delete):
                 _delete_alert(sdk, workspace_id, created_id)
+            # After the alerts: an alert on a created metric would keep that metric in use.
+            for metric_id in dict.fromkeys(metric_ids_to_delete):
+                _delete_metric(sdk, workspace_id, metric_id)
 
     try:
         conv_id_0 = initial_conversation_id if initial_conversation_id is not None else client.create_conversation()
@@ -1364,18 +1652,13 @@ def evaluate_agentic_alert_skill(
 
     best = summary.best
     ev = best.eval
+    # The checks that ran, not a fixed field list: quality_score is the share of true booleans
+    # here, so a no-alert item must not carry the alert checks it was never scored on, and a
+    # stated conditional check must count.
     detail = agentic_detail(
         best.tool_call_events,
         best.reasoning_step_events,
-        alert_created=ev.alert_created,
-        operator_correct=ev.operator_correct,
-        threshold_correct=ev.threshold_correct,
-        trigger_correct=ev.trigger_correct,
-        filters_correct=ev.filters_correct,
-        metric_correct=ev.metric_correct,
-        recipients_correct=ev.recipients_correct,
-        attributes_correct=ev.attributes_correct,
-        granularity_correct=ev.granularity_correct,
+        **ev.checks(),
         actual_alert_arguments=best.actual_alert_arguments,
         # Why the loop stopped. alert_created=False alone cannot tell a refusal from a run
         # that hit max_iterations while still on track -- see LoopExit.
@@ -1397,12 +1680,7 @@ def evaluate_agentic_alert_skill(
         raise_agentic_failure(
             AlertSkillAssertionError,
             f"Alert skill assertion failed. {gate_note} strict_pass={ev.strict_pass}. "
-            f"alert_created={ev.alert_created}, operator_correct={ev.operator_correct}, "
-            f"threshold_correct={ev.threshold_correct}, trigger_correct={ev.trigger_correct}, "
-            f"filters_correct={ev.filters_correct}, metric_correct={ev.metric_correct}, "
-            f"recipients_correct={ev.recipients_correct}, "
-            f"attributes_correct={ev.attributes_correct}, "
-            f"granularity_correct={ev.granularity_correct}. "
+            f"Checks: {ev.checks()}. "
             f"Actual args: {best.actual_alert_arguments}",
             harness_error=run_labels.harness_error_record,
             shadow=run_labels.shadow(gate),
