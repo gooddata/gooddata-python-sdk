@@ -9,8 +9,20 @@ from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_a
     DeclarativeAnalyticalDashboardPermissionForAssigneeRule,
 )
 from gooddata_api_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
+from gooddata_api_client.model.declarative_metric_permission_for_assignee import (
+    DeclarativeMetricPermissionForAssignee,
+)
+from gooddata_api_client.model.declarative_metric_permission_for_assignee_rule import (
+    DeclarativeMetricPermissionForAssigneeRule,
+)
 from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
 from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+from gooddata_api_client.model.declarative_visualization_object_permission_for_assignee import (
+    DeclarativeVisualizationObjectPermissionForAssignee,
+)
+from gooddata_api_client.model.declarative_visualization_object_permission_for_assignee_rule import (
+    DeclarativeVisualizationObjectPermissionForAssigneeRule,
+)
 from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
 from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
@@ -78,6 +90,46 @@ class CatalogDeclarativeDashboardPermissionsForAssigneeRule(Base):
     @staticmethod
     def client_class() -> type[DeclarativeAnalyticalDashboardPermissionForAssigneeRule]:
         return DeclarativeAnalyticalDashboardPermissionForAssigneeRule
+
+
+@define(kw_only=True)
+class CatalogDeclarativeMetricPermissionsForAssignee(Base):
+    name: str = field(validator=value_in_allowed)
+    assignee: CatalogAssigneeIdentifier
+
+    @staticmethod
+    def client_class() -> type[DeclarativeMetricPermissionForAssignee]:
+        return DeclarativeMetricPermissionForAssignee
+
+
+@define(kw_only=True)
+class CatalogDeclarativeMetricPermissionsForAssigneeRule(Base):
+    name: str = field(validator=value_in_allowed)
+    assignee_rule: CatalogAssigneeRule
+
+    @staticmethod
+    def client_class() -> type[DeclarativeMetricPermissionForAssigneeRule]:
+        return DeclarativeMetricPermissionForAssigneeRule
+
+
+@define(kw_only=True)
+class CatalogDeclarativeVisualizationObjectPermissionsForAssignee(Base):
+    name: str = field(validator=value_in_allowed)
+    assignee: CatalogAssigneeIdentifier
+
+    @staticmethod
+    def client_class() -> type[DeclarativeVisualizationObjectPermissionForAssignee]:
+        return DeclarativeVisualizationObjectPermissionForAssignee
+
+
+@define(kw_only=True)
+class CatalogDeclarativeVisualizationObjectPermissionsForAssigneeRule(Base):
+    name: str = field(validator=value_in_allowed)
+    assignee_rule: CatalogAssigneeRule
+
+    @staticmethod
+    def client_class() -> type[DeclarativeVisualizationObjectPermissionForAssigneeRule]:
+        return DeclarativeVisualizationObjectPermissionForAssigneeRule
 
 
 @define(kw_only=True)
