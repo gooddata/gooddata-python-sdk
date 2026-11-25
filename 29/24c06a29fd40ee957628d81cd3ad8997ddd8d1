@@ -1,0 +1,47 @@
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_c9e6b31f85e827::t_ccaffdf3b34e4f 129
+packages/gooddata-eval/src/gooddata_eval/core/agentic/memory.py
+  s_c9e6b31f85e827::t_408d5bd813767e 20-21,202-203
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 371-373,418-420
+  s_c9e6b31f85e827::t_c50717309d2fff 297-307,312-316,421,428-430,448-452,461-465
+  s_c9e6b31f85e827::t_ea08686d479e4f 1-19,22-201,204-296,308-311,317-370,374-417,422-427,431-447,453-460,466
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_c9e6b31f85e827::t_710fe65a44301d 64-70,102-106
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_c9e6b31f85e827::t_101b92426829b7 639-651,653-660,679-680
+  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_c9e6b31f85e827::t_101b92426829b7 28,71,91,101,407-416
+  s_c9e6b31f85e827::t_307a1332585780 417-418
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_c9e6b31f85e827::t_e8c0da282e946b 112,909,953-954
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_2ef21dbbe26e31 323,986-1019
+  s_c9e6b31f85e827::t_bc1456fc653877 1020
+packages/gooddata-eval/tests/test_agentic_memory.py
+  s_c9e6b31f85e827::t_8c5caa0b1b7430 1-79,86-220
+  s_c9e6b31f85e827::t_e8c0da282e946b 221-231
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 80-85
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_c9e6b31f85e827::t_53f44f07ff319a 21-28,134-154,214-215,225-226,238
+packages/gooddata-eval/AGENTS.md
+  s_c9e6b31f85e827::t_710fe65a44301d 67
+packages/gooddata-eval/src/gooddata_eval/core/interaction.py
+  s_c9e6b31f85e827::t_101b92426829b7 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2924c06a29fd40ee957628d81cd3ad8997ddd8d1",
+  "prompts": {},
+  "sessions": {
+    "s_c9e6b31f85e827": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3cc824b4-576f-4e23-840d-38ac20ccdc3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
