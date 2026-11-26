@@ -81,4 +81,4 @@ runs:
         HUGO_ENV: ${{ inputs.hugo-env }}
       shell: bash
       run: |
-        npx --no hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
+        npx --no -- hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
