@@ -20,7 +20,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 from urllib.parse import quote
 
 import httpx
@@ -58,6 +58,10 @@ _TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tok
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.
 ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
+
+# Called with a tool-call event (camelCase, as in ``ChatResult.tool_call_events``) as soon as its result arrives,
+# while the turn still streams. It runs in the read loop, so it must return at once and must not raise.
+ToolResultHook = Callable[[dict[str, Any]], None]
 
 _KNOWN_PART_TYPES: frozenset[str] = frozenset(
     {
@@ -282,12 +286,14 @@ def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
             acc.adhoc_viz_args.append(viz)
 
 
-def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator) -> None:
+def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator, on_tool_result: ToolResultHook | None) -> None:
     call_id = content.get("callId", "")
     idx = acc.call_id_to_event_index.get(call_id)
     if idx is not None:
         acc.tool_call_events[idx]["result"] = content.get("result", "")
         acc.tool_call_events[idx]["result_ts"] = round(time.monotonic() - acc.t0, 3)
+        if on_tool_result is not None:
+            on_tool_result(dict(acc.tool_call_events[idx]))
 
 
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
@@ -373,8 +379,11 @@ def _until_deadline(
         yield line
 
 
-def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
-    """Parse an SSE stream (iterable of decoded lines) into a ChatResult."""
+def parse_sse_lines(lines: Iterable[str], on_tool_result: ToolResultHook | None = None) -> ChatResult:
+    """Parse an SSE stream (iterable of decoded lines) into a ChatResult.
+
+    ``on_tool_result`` is called with each tool call as soon as its result arrives; see ``ToolResultHook``.
+    """
     acc = _SseAccumulator()
     current_event = "message"  # SSE default in the absence of an explicit "event: " line
     it = iter(lines)
@@ -467,7 +476,7 @@ def parse_sse_lines(lines: Iterable[str]) -> ChatResult:
             elif ctype == "toolCall":
                 _handle_tool_call(content, acc)
         elif role == "tool" and ctype == "toolResult":
-            _handle_tool_result(content, acc)
+            _handle_tool_result(content, acc, on_tool_result)
     return _build_chat_result(acc)
 
 
@@ -612,9 +621,24 @@ class ChatClient:
             pass  # best-effort cleanup
 
     def send_message(
-        self, conversation_id: str, question: str, *, user_context: dict[str, Any] | None = None
+        self,
+        conversation_id: str,
+        question: str,
+        *,
+        user_context: dict[str, Any] | None = None,
+        on_tool_result: ToolResultHook | None = None,
     ) -> ChatResult:
-        return self._send(conversation_id, {"type": "text", "text": question}, user_context=user_context)
+        """Send one user message and return the parsed turn.
+
+        ``on_tool_result`` sees each tool call as soon as its result arrives, before the turn ends; a retried attempt
+        calls it again for the calls it repeats. It runs in the read loop: work that takes time belongs elsewhere.
+        """
+        return self._send(
+            conversation_id,
+            {"type": "text", "text": question},
+            user_context=user_context,
+            on_tool_result=on_tool_result,
+        )
 
     def send_clarifying_answers(
         self,
@@ -632,7 +656,12 @@ class ChatClient:
         return self._send(conversation_id, content, user_context=user_context)
 
     def _send(
-        self, conversation_id: str, content: dict[str, Any], *, user_context: dict[str, Any] | None = None
+        self,
+        conversation_id: str,
+        content: dict[str, Any],
+        *,
+        user_context: dict[str, Any] | None = None,
+        on_tool_result: ToolResultHook | None = None,
     ) -> ChatResult:
         url = f"{self._base}/{conversation_id}/messages"
         join_headers, joined = self._join_item_trace(conversation_id)
@@ -662,7 +691,9 @@ class ChatClient:
                 with self._client.stream("POST", url, json=body, headers=headers) as resp:
                     resp.raise_for_status()
                     try:
-                        result = parse_sse_lines(_until_deadline(resp.iter_lines(), deadline, budget, scope))
+                        result = parse_sse_lines(
+                            _until_deadline(resp.iter_lines(), deadline, budget, scope), on_tool_result
+                        )
                     except ChatError as exc:
                         if exc.partial_result is not None:
                             exc.partial_result.turn_wall_clock_sec = time.monotonic() - t0
