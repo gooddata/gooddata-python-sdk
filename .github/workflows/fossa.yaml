@@ -73,7 +73,7 @@ jobs:
           [ -f ./requirements.txt ] || touch ./requirements.txt
 
       - name: Run FOSSA analyze
-        uses: fossas/fossa-action@ff70fe9fe17cbd2040648f1c45e8ec4e4884dcf3 # v1.9.0
+        uses: fossas/fossa-action@29693cc50323968e039056be419b32989fc5880c # v2.0.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
@@ -82,7 +82,7 @@ jobs:
       # --branch flag (only `fossa analyze` does), so the branch input is
       # intentionally omitted here to avoid an "Invalid option `--branch'" error.
       - name: Run FOSSA test (policy gate)
-        uses: fossas/fossa-action@ff70fe9fe17cbd2040648f1c45e8ec4e4884dcf3 # v1.9.0
+        uses: fossas/fossa-action@29693cc50323968e039056be419b32989fc5880c # v2.0.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           run-tests: true
