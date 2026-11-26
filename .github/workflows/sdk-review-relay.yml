@@ -16,6 +16,9 @@ on:
   pull_request_review:
     types: [submitted]
 
+# The dispatch authenticates with the PAT, so GITHUB_TOKEN needs no scope.
+permissions: {}
+
 jobs:
   relay:
     name: "Forward review to gdc-nas"
@@ -32,15 +35,19 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
           REVIEW_BODY: ${{ github.event.review.body }}
+          GITHUB_EVENT_PULL_REQUEST_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GITHUB_EVENT_PULL_REQUEST_USER_LOGIN: ${{ github.event.pull_request.user.login }}
+          GITHUB_EVENT_REVIEW_USER_LOGIN: ${{ github.event.review.user.login }}
+          GITHUB_EVENT_REVIEW_STATE: ${{ github.event.review.state }}
         run: |
           # Build JSON payload safely (review_body may contain quotes/newlines)
           jq -nc \
             --arg pr_number "${{ github.event.pull_request.number }}" \
-            --arg pr_branch "${{ github.event.pull_request.head.ref }}" \
-            --arg pr_author "${{ github.event.pull_request.user.login }}" \
-            --arg reviewer "${{ github.event.review.user.login }}" \
+            --arg pr_branch "${GITHUB_EVENT_PULL_REQUEST_HEAD_REF}" \
+            --arg pr_author "${GITHUB_EVENT_PULL_REQUEST_USER_LOGIN}" \
+            --arg reviewer "${GITHUB_EVENT_REVIEW_USER_LOGIN}" \
             --arg review_id "${{ github.event.review.id }}" \
-            --arg review_state "${{ github.event.review.state }}" \
+            --arg review_state "${GITHUB_EVENT_REVIEW_STATE}" \
             --arg review_body "$REVIEW_BODY" \
             '{
               event_type: "sdk-review-submitted",
@@ -59,5 +66,5 @@ jobs:
 
           echo "## Dispatched to gdc-nas" >> "$GITHUB_STEP_SUMMARY"
           echo "- PR: #${{ github.event.pull_request.number }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Reviewer: ${{ github.event.review.user.login }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- State: ${{ github.event.review.state }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Reviewer: ${GITHUB_EVENT_REVIEW_USER_LOGIN}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- State: ${GITHUB_EVENT_REVIEW_STATE}" >> "$GITHUB_STEP_SUMMARY"

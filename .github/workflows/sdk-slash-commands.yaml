@@ -29,7 +29,9 @@
 # =============================================================================
 name: SDK Slash Commands
 
-on:
+# The commenter's access is checked before anything is dispatched; see SECURITY
+# above.
+on: # zizmor: ignore[dangerous-triggers]
   issue_comment:
     types: [created]
 

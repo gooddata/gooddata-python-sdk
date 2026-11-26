@@ -40,9 +40,10 @@ jobs:
           - { path: gooddata-api-client,             project: gooddata-api-client }
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Scope .fossa.yml to ${{ matrix.package.project }}
         shell: bash
@@ -72,7 +73,7 @@ jobs:
           [ -f ./requirements.txt ] || touch ./requirements.txt
 
       - name: Run FOSSA analyze
-        uses: fossas/fossa-action@v1.9.0
+        uses: fossas/fossa-action@ff70fe9fe17cbd2040648f1c45e8ec4e4884dcf3 # v1.9.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           branch: ${{ inputs.branch != '' && inputs.branch || github.ref_name }}
@@ -81,7 +82,7 @@ jobs:
       # --branch flag (only `fossa analyze` does), so the branch input is
       # intentionally omitted here to avoid an "Invalid option `--branch'" error.
       - name: Run FOSSA test (policy gate)
-        uses: fossas/fossa-action@v1.9.0
+        uses: fossas/fossa-action@ff70fe9fe17cbd2040648f1c45e8ec4e4884dcf3 # v1.9.0
         with:
           api-key: ${{ secrets.FOSSA_API_KEY }}
           run-tests: true

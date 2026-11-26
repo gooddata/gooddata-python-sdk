@@ -5,15 +5,21 @@ name: Netlify Deploy V2 (Draft)
 on:
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   # Job 1: Discover which version branches to build
   discover-versions:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.versions.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Fetch remote refs
         run: git fetch origin
       - name: Discover versions
@@ -29,6 +35,8 @@ jobs:
   generate-version:
     needs: [discover-versions]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         version: ${{ fromJson(needs.discover-versions.outputs.matrix) }}
@@ -44,13 +52,15 @@ jobs:
           echo "Branch ${{ matrix.version.branch }} -> section ${{ matrix.version.section }} (SHA: $SHA)"
       - name: Cache version docs
         id: cache
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: docs/versioned_docs/${{ matrix.version.section }}
           key: version-docs-${{ hashFiles('scripts/docs/*.py', 'scripts/docs/templates/**', 'docs/*_template.md', 'docs/layouts/shortcodes/**') }}-${{ matrix.version.section }}-${{ steps.sha.outputs.sha }}
       - name: Checkout
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Fetch target branch
         if: steps.cache.outputs.cache-hit != 'true'
         run: git fetch origin ${{ matrix.version.branch }}
@@ -60,7 +70,7 @@ jobs:
           git checkout origin/${{ matrix.version.branch }} -- gooddata-api-client/ packages/gooddata-sdk/ packages/gooddata-pandas/
       - name: Setup Python
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version-file: ".python-version"
           cache: 'pip'
@@ -74,7 +84,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: bash scripts/generate-single-version.sh "origin/${{ matrix.version.branch }}" "${{ matrix.version.section }}"
       - name: Upload version artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: version-${{ matrix.version.section }}
           path: docs/versioned_docs/${{ matrix.version.section }}
@@ -84,35 +94,38 @@ jobs:
   build-and-deploy:
     needs: [generate-version]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           submodules: recursive
+          persist-credentials: false
       - name: Setup GO
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
           go-version: '>=1.20.1'
           cache: false
       - name: Cache Go modules
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ~/go/pkg/mod
           key: go-mod-${{ hashFiles('docs/go.sum') }}
           restore-keys: go-mod-
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: docs/package-lock.json
-      - name: Install Hugo
-        run: npm install -g hugo-extended@0.117.0
+      # docs/package-lock.json pins hugo-extended, so npm ci installs the hugo binary that
+      # the build step runs with npx.
       - name: Install Dependencies
         working-directory: ./docs
         run: npm ci
       - name: Download version artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           pattern: version-*
           path: docs/versioned_docs-raw/
@@ -120,7 +133,7 @@ jobs:
         working-directory: ./docs
         run: bash ../scripts/assemble-versions.sh
       - name: Cache Hugo resources
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: docs/resources/_gen
           key: hugo-resources-${{ hashFiles('docs/go.sum', 'docs/config/**') }}
@@ -129,9 +142,9 @@ jobs:
         working-directory: ./docs
         env:
           HUGO_ENV: production
-        run: hugo --minify
+        run: npx --no hugo --minify
       - name: Publish (draft)
-        uses: netlify/actions/cli@master
+        uses: netlify/actions/cli@3185065f4ab2f6df6f2ef41ee013626e1c02a426 # master
         with:
           args: deploy -d docs/public
         env:

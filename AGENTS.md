@@ -64,6 +64,7 @@ result — run the commands and read the output.
 | `packages/<name>/**` | the per-package sequence below, once for each package touched |
 | `scripts/**` or root config | `make format-fix lint-fix` from the workspace root |
 | `scripts/docs/**` | also `make test-docs-scripts` |
+| `.github/**` | `uv run pre-commit run zizmor --all-files` — see "Workflow security" below |
 | `gooddata-api-client/**` | nothing — see the note below |
 
 The generated client is excluded from `make lint`, `make format` and pre-commit, and no
@@ -110,9 +111,25 @@ edited.
 - Do not add a `# type: ignore`, a ruff `noqa`, or an entry to a `ty` allowed-unresolved
   list to get a step to pass. Fix the cause, or say why you cannot.
 
-CI runs `make format`, `make lint`, `make type-check`, `make test-ci` and
-`make test-docs-scripts` — the check-only variants are what gate the merge. Nothing in CI
-validates commit messages; that is local only, via the commit-msg hook.
+CI runs `make format`, `make lint`, `make type-check`, `make test-ci`,
+`make test-docs-scripts` and, when `.github/` changes, zizmor — the check-only variants
+are what gate the merge. Nothing in CI validates commit messages; that is local only, via
+the commit-msg hook.
+
+### Workflow security — zizmor
+
+[zizmor] audits `.github/workflows/**` and `.github/actions/**` with the arguments the
+pre-commit hook and the `rw-workflow-lint.yaml` CI job share:
+`--offline --min-severity low`, configured by `.github/zizmor.yml`. Keep the zizmor version
+in `.pre-commit-config.yaml` and the CI job in step.
+
+- Pin every third-party action to a full commit SHA with the version in a trailing comment:
+  `uses: actions/checkout@<sha> # v6.1.0`. Reference this repository's own actions and
+  reusable workflows as `./.github/...`.
+- Set `permissions: {}` at the workflow level and grant each job only the scopes it uses.
+- Pass reusable workflows the secrets they need by name, never `secrets: inherit`.
+- Fix a finding rather than suppress it. When the flagged pattern is required, suppress
+  that one line with `# zizmor: ignore[<audit>]` and a comment stating what makes it safe.
 
 ## Testing
 
@@ -313,3 +330,4 @@ Each package's `AGENTS.md` states what it owns and, importantly, what it does no
 - `packages/tests-support` — shared VCR, comparison and file helpers for the test suites
 
 [vcrpy]: https://vcrpy.readthedocs.io/
+[zizmor]: https://docs.zizmor.sh/
