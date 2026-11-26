@@ -154,7 +154,7 @@ jobs:
       contents: write
     steps:
       - name: Obtain artifacts
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           path: dist/
       - name: Generate changelog
@@ -167,7 +167,7 @@ jobs:
           includeRefIssues: false
           useGitmojis: false
       - name: Create GitHub release
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
         with:
           body: ${{ steps.changelog.outputs.changes }}
           token: "${{ secrets.GITHUB_TOKEN }}"
@@ -192,7 +192,7 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
@@ -208,7 +208,7 @@ jobs:
     permissions: {}
     steps:
       - name: Notify to slack
-        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
+        uses: slackapi/slack-github-action@0bc3581177d9a0f8d555e07689384b376528e8fa # v4.1.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
