@@ -11,7 +11,7 @@
 """
 
 
-__version__ = "1.80.0"
+__version__ = "1.81.0"
 
 # import ApiClient
 from gooddata_api_client.api_client import ApiClient
