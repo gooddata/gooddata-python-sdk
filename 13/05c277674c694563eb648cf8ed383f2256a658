@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
+  s_bf7263da2341ea::t_ea1192bba4260c 115-116,121
+packages/gooddata-eval/tests/test_chat_summary_figures.py
+  s_bf7263da2341ea::t_c59c896c1aafbf 136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1305c277674c694563eb648cf8ed383f2256a658",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "unknown"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
