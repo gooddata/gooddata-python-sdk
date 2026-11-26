@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 from typing import Literal
+from warnings import warn
 
 from attrs import define
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
 from gooddata_api_client.model.custom_metric import CustomMetric as ApiCustomMetric
 from gooddata_api_client.model.custom_override import CustomOverride as ApiCustomOverride
+from gooddata_api_client.model.image_export_request import ImageExportRequest as ImageExportRequestApi
 from gooddata_api_client.model.settings import Settings as ApiSettings
 from gooddata_api_client.model.slides_export_request import SlidesExportRequest as SlidesExportRequestApi
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
@@ -137,6 +139,8 @@ class SlidesExportRequest(Base):
         dashboard_id (str): Dashboard identifier.
         file_name (str): File name to be used for retrieving the PDF document.
         metadata (Optional[Dict[str, bool]]): Optional dictionary containing settings for the export request.
+        template_id (Optional[str]): Export template identifier.
+        templateId (Optional[str]): Deprecated, use template_id.
     """
 
     file_name: str
@@ -145,7 +149,16 @@ class SlidesExportRequest(Base):
     widget_ids: list[str] | None = None
     visualization_ids: list[str] | None = None
     metadata: dict | None = None
+    template_id: str | None = None
     templateId: str | None = None
+    timezone_id: str | None = None
+
+    def __attrs_post_init__(self) -> None:
+        if self.templateId is not None:
+            warn("templateId is deprecated, use template_id", DeprecationWarning, stacklevel=3)
+            if self.template_id is None:
+                self.template_id = self.templateId
+            self.templateId = None
 
     @staticmethod
     def client_class() -> type[SlidesExportRequestApi]:
@@ -155,3 +168,28 @@ class SlidesExportRequest(Base):
             type[SlidesExportRequestApi]: SlidesExportRequestApi class
         """
         return SlidesExportRequestApi
+
+
+@define(kw_only=True)
+class ImageExportRequest(Base):
+    """
+    ImageExportRequest class is used to export dashboard widgets as images.
+    Attributes:
+        dashboard_id (str): Dashboard identifier.
+        file_name (str): File name of the exported image.
+        widget_ids (list[str]): Widgets to export.
+        format (str): Image format, PNG.
+        metadata (Optional[dict]): Free-form metadata of the request.
+        timezone_id (Optional[str]): Time zone the export evaluates dates in.
+    """
+
+    dashboard_id: str
+    file_name: str
+    widget_ids: list[str]
+    format: Literal["PNG"] = "PNG"
+    metadata: dict | None = None
+    timezone_id: str | None = None
+
+    @staticmethod
+    def client_class() -> type[ImageExportRequestApi]:
+        return ImageExportRequestApi
