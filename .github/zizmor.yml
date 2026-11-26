@@ -1,0 +1,8 @@
+# zizmor audits the workflows and actions for security issues. CI runs it from
+# rw-workflow-lint.yaml and pre-commit runs it locally, both with the same arguments.
+rules:
+  # This audit asks for the `uses: gooddata/gooddata-python-sdk/...` form for the local
+  # actions and reusable workflows too. The `./...` form runs the copy from the same
+  # commit as the calling workflow, so the calls keep it.
+  self-repository:
+    disable: true

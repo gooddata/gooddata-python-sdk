@@ -30,13 +30,14 @@ jobs:
     bump-version:
       runs-on: ubuntu-latest
       steps:
-        - name: Checkout
-          uses: actions/checkout@v5
+        # The job pushes the bump commit and the tag with the persisted credentials.
+        - name: Checkout # zizmor: ignore[artipacked]
+          uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
           with:
             token: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }} # needed to push to the protected branch
 
         - name: Install uv
-          uses: astral-sh/setup-uv@v10.0.1
+          uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
           with:
             prune-cache: true
 
@@ -47,16 +48,22 @@ jobs:
         - name: Bump version
           id: bump
           run: |
-            NEW_VERSION=$(uv run python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
+            NEW_VERSION=$(uv run python ./scripts/bump_version.py ${GITHUB_EVENT_INPUTS_BUMP_TYPE})
             echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          env:
+            GITHUB_EVENT_INPUTS_BUMP_TYPE: ${{ github.event.inputs.bump_type }}
 
         - name: Bump version in documentation
           run: |
-            uv run python ./scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
+            uv run python ./scripts/bump_doc_dependencies.py ${STEPS_BUMP_OUTPUTS_NEW_VERSION}
+          env:
+            STEPS_BUMP_OUTPUTS_NEW_VERSION: ${{ steps.bump.outputs.new_version }}
 
         - name: Bump version in codebase
           run: |
-            make release-ci VERSION=${{ steps.bump.outputs.new_version }}
+            make release-ci VERSION=${STEPS_BUMP_OUTPUTS_NEW_VERSION}
+          env:
+            STEPS_BUMP_OUTPUTS_NEW_VERSION: ${{ steps.bump.outputs.new_version }}
 
         - name: Create and push the new version ${{steps.bump.outputs.new_version}}
           env:

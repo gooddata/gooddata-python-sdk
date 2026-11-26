@@ -10,6 +10,8 @@ concurrency:
   group: ${{ github.event.number }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   collect-changes:
     name: Collect changes
@@ -23,25 +25,38 @@ jobs:
   test-python:
     name: Python tests
     needs: [ collect-changes ]
+    permissions:
+      contents: read
     uses: ./.github/workflows/rw-python-tests.yaml
     with:
       changed-python-modules: ${{ needs.collect-changes.outputs.changed-python-modules }}
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+  lint-workflows:
+    name: GitHub Actions lint
+    needs: [ collect-changes ]
+    permissions:
+      contents: read
+    uses: ./.github/workflows/rw-workflow-lint.yaml
+    with:
+      changed-workflows: ${{ needs.collect-changes.outputs.changed-workflows }}
 
   status-check:
     # do not change the name of this job, it is used by the required status check
     # in GitHub, you WILL break merging if you change it
     name: status-check
+    permissions: {}
     runs-on:
       group: infra1-runners-arc
       labels: runners-small
     if: always()
     needs:
+      - lint-workflows
       - test-python
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
         with:
           allowed-skips: ${{ toJSON(needs) }}
           jobs: ${{ toJSON(needs) }}
