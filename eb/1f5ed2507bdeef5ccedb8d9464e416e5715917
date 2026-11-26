@@ -1,44 +1,47 @@
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_c9e6b31f85e827::t_ccaffdf3b34e4f 129
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_c9e6b31f85e827::t_101b92426829b7 640-651,654-661,680-681
+  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652-653
+packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
+  s_c9e6b31f85e827::t_710fe65a44301d 64-70,102-106
 packages/gooddata-eval/src/gooddata_eval/core/agentic/memory.py
-  s_c9e6b31f85e827::t_408d5bd813767e 20-21,203-204
-  s_c9e6b31f85e827::t_c50717309d2fff 309-319,324-328,467-469,487-491,500-504
-  s_c9e6b31f85e827::t_60a4db2bc8d304 64,459-460
-  s_c9e6b31f85e827::t_ea08686d479e4f 1-19,22-63,65-202,205-255,257,260-308,320-323,329-408,412-455,461-466,470-486,492-499,505
-  s_c9e6b31f85e827::t_adabceb66ddfe4 256,258-259
-  s_c9e6b31f85e827::t_50c8fa68a8c59d 409-411,456-458
+  s_c9e6b31f85e827::t_8d69079ec977f5 132-136,138,150,154,288,403-407,415,424-425,441
+  s_c9e6b31f85e827::t_c50717309d2fff 315-325,330-334,478-480,498-502,511-515
+  s_c9e6b31f85e827::t_adabceb66ddfe4 262,264-265
+  s_c9e6b31f85e827::t_408d5bd813767e 20-21,209-210
+  s_c9e6b31f85e827::t_60a4db2bc8d304 64,470-471
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 419-421,467-469
+  s_c9e6b31f85e827::t_ea08686d479e4f 1-19,22-63,65-131,137,139-149,151-153,155-208,211-261,263,266-287,289-314,326-329,335-402,408-414,416-418,422-423,426-440,442-466,472-477,481-497,503-510,516
+  s_c9e6b31f85e827::t_54756091eec51d 517-519
+packages/gooddata-eval/AGENTS.md
+  s_c9e6b31f85e827::t_710fe65a44301d 67
+packages/gooddata-eval/tests/test_agentic_memory.py
+  s_c9e6b31f85e827::t_8d69079ec977f5 332-364
+  s_c9e6b31f85e827::t_60a4db2bc8d304 23,35,39,50,71,82,92,97,112,116,129,134,146,155,165,172,179,188,196,208,218,226,237,250,257,262,274,304,323-331
+  s_c9e6b31f85e827::t_adabceb66ddfe4 4-5,18,255-256,258-261,263-273,275-303,305-322
+  s_c9e6b31f85e827::t_ebdf7292b09233 235-236,238-242,246,248-249,253
+  s_c9e6b31f85e827::t_e8c0da282e946b 224-225,227-234,244
+  s_c9e6b31f85e827::t_8c5caa0b1b7430 1-3,6-17,19-22,24-34,36-38,40-49,51-70,72-81,89-91,93-96,98-111,113-115,117-128,130-133,135-145,147-154,156-164,166-171,173-178,180-187,189-195,197-207,209-217,219-223,243,245,247,251-252,254
+  s_c9e6b31f85e827::t_50c8fa68a8c59d 83-88
+packages/gooddata-eval/tests/test_agentic_runner.py
+  s_c9e6b31f85e827::t_e8c0da282e946b 112,909,953-954
+packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
+  s_c9e6b31f85e827::t_53f44f07ff319a 21-28,134-154,214-215,225-226,238
+packages/gooddata-eval/src/gooddata_eval/core/interaction.py
+  s_c9e6b31f85e827::t_101b92426829b7 32
+packages/gooddata-eval/README.md
+  s_c9e6b31f85e827::t_2ef21dbbe26e31 323,986-1001,1005-1021
+  s_c9e6b31f85e827::t_adabceb66ddfe4 1002-1004
+  s_c9e6b31f85e827::t_bc1456fc653877 1022
 packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
   s_c9e6b31f85e827::t_307a1332585780 417-418
   s_c9e6b31f85e827::t_101b92426829b7 28,71,91,101,407-416
-packages/gooddata-eval/tests/test_agentic_memory.py
-  s_c9e6b31f85e827::t_8c5caa0b1b7430 1-3,6-17,19-22,24-34,36-38,40-49,51-70,72-81,89-91,93-96,98-111,113-115,117-128,130-133,135-145,147-154,156-164,166-171,173-178,180-187,189-195,197-207,209-217,219-223,243,245,247,251-252,254
-  s_c9e6b31f85e827::t_adabceb66ddfe4 4-5,18,255-256,258-261,263-273,275-303,305-322
-  s_c9e6b31f85e827::t_60a4db2bc8d304 23,35,39,50,71,82,92,97,112,116,129,134,146,155,165,172,179,188,196,208,218,226,237,250,257,262,274,304,323-331
-  s_c9e6b31f85e827::t_50c8fa68a8c59d 83-88
-  s_c9e6b31f85e827::t_ebdf7292b09233 235-236,238-242,246,248-249,253
-  s_c9e6b31f85e827::t_e8c0da282e946b 224-225,227-234,244
-packages/gooddata-eval/README.md
-  s_c9e6b31f85e827::t_2ef21dbbe26e31 323,986-1001,1005-1021
-  s_c9e6b31f85e827::t_bc1456fc653877 1022
-  s_c9e6b31f85e827::t_adabceb66ddfe4 1002-1004
-packages/gooddata-eval/src/gooddata_eval/core/interaction.py
-  s_c9e6b31f85e827::t_101b92426829b7 32
-packages/gooddata-eval/src/gooddata_eval/core/agentic/__init__.py
-  s_c9e6b31f85e827::t_710fe65a44301d 64-70,102-106
-packages/gooddata-eval/tests/test_agentic_runner.py
-  s_c9e6b31f85e827::t_e8c0da282e946b 112,909,953-954
-packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652-653
-  s_c9e6b31f85e827::t_101b92426829b7 640-651,654-661,680-681
-packages/gooddata-eval/AGENTS.md
-  s_c9e6b31f85e827::t_710fe65a44301d 67
-packages/gooddata-eval/src/gooddata_eval/core/dataset/langfuse_source.py
-  s_c9e6b31f85e827::t_53f44f07ff319a 21-28,134-154,214-215,225-226,238
-packages/gooddata-eval/tests/test_trace_linker.py
-  s_c9e6b31f85e827::t_ccaffdf3b34e4f 129
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "afcb51295727e0f523a163e4b21b0a579ca2ca8d",
+  "base_commit_sha": "eb1f5ed2507bdeef5ccedb8d9464e416e5715917",
   "prompts": {},
   "sessions": {
     "s_c9e6b31f85e827": {
