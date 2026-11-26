@@ -4,13 +4,16 @@
 
 import json
 import sys
+import threading
 import types
 from collections.abc import Callable, Iterator, Sequence
+from concurrent.futures import Future
 from contextlib import contextmanager
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
+import urllib3.exceptions
 from gooddata_api_client.exceptions import ApiException, NotFoundException
 from gooddata_eval.core.agentic import _metric_workspace as mw
 from gooddata_eval.core.agentic import metric_skill as metric_skill_mod
@@ -246,6 +249,8 @@ class _FakeWorkspace:
         self.restored: list[tuple[str, bool]] = []
         self.items: list[dict] = []
         self.execute_error: str | None = None
+        self.maql_error: str | None = None
+        self.executed_maql: list[str] = []
         self.read_error: str | None = None
         self.snapshot_error: str | None = None
         self.restore_fails = False
@@ -271,6 +276,10 @@ class _FakeWorkspace:
     def execute_metric(self, metric_id: str) -> str | None:
         return self.execute_error
 
+    def execute_maql(self, maql: str) -> str | None:
+        self.executed_maql.append(maql)
+        return self.maql_error
+
     def conversation_items(self, conversation_id: str) -> list[dict]:
         if self.read_error:
             raise WorkspaceReadError(self.read_error)
@@ -280,21 +289,57 @@ class _FakeWorkspace:
         pass
 
 
+class _InlineExecutor:
+    """Runs each queued read-back at once, so a test decides when it happens relative to the rest of the turn."""
+
+    def __init__(self, *_args: Any, **_kwargs: Any) -> None:
+        pass
+
+    def submit(self, fn: Callable[..., None], *args: Any) -> Future[None]:
+        future: Future[None] = Future()
+        try:
+            future.set_result(fn(*args))
+        except Exception as exc:
+            future.set_exception(exc)
+        return future
+
+    def shutdown(self) -> None:
+        pass
+
+
 @contextmanager
 def _run_env(
-    turns: Sequence[ChatResult | Exception], workspace: _FakeWorkspace, *, on_send: Callable[[str], None] | None = None
+    turns: Sequence[ChatResult | Exception],
+    workspace: _FakeWorkspace,
+    *,
+    on_send: Callable[[str], None] | None = None,
+    after_turn: Callable[[], None] | None = None,
+    real_threads: bool = False,
 ) -> Iterator[tuple[MagicMock, MagicMock]]:
-    """Patch the chat client to answer ``turns`` in order (an exception is raised), and the other collaborators."""
+    """Patch the chat client to answer ``turns`` in order (an exception is raised), and the other collaborators.
+
+    ``after_turn`` runs once the turn's tool results have streamed, as a concurrent writer would. Read-backs run
+    inline as each result streams, unless ``real_threads`` keeps the background thread.
+    """
     client = MagicMock()
     client.create_conversation.return_value = "conv-1"
     answers = iter(turns)
 
-    def _send(_conversation_id: str, message: str) -> ChatResult:
+    def _send(
+        _conversation_id: str, message: str, *, on_tool_result: Callable[[dict], None] | None = None
+    ) -> ChatResult:
         if on_send:
             on_send(message)
         answer = next(answers)
+        streamed = answer.partial_result if isinstance(answer, ChatError) else answer
+        if on_tool_result is not None and isinstance(streamed, ChatResult):
+            # The real client calls the hook as each result streams in, before the turn ends or breaks.
+            for event in streamed.tool_call_events:
+                on_tool_result(event.model_dump(by_alias=True))
         if isinstance(answer, Exception):
             raise answer
+        if after_turn:
+            after_turn()
         return answer
 
     client.send_message.side_effect = _send
@@ -303,6 +348,11 @@ def _run_env(
         patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk"),
         patch("gooddata_eval.core.agentic.metric_skill.MetricWorkspace", return_value=workspace),
         patch("gooddata_eval.core.agentic.metric_skill.generate_simulated_response") as sim,
+        patch.object(
+            metric_skill_mod,
+            "ThreadPoolExecutor",
+            metric_skill_mod.ThreadPoolExecutor if real_threads else _InlineExecutor,
+        ),
     ):
         yield client, sim
 
@@ -534,6 +584,298 @@ def test_a_removed_metric_fails_no_deletion_and_is_recreated() -> None:
     assert ws.restored == [("net_sales", False)]
 
 
+_WRITTEN = {"title": "Return Margin", "content": {"format": "#,##0.00", "maql": "SELECT 1"}}
+
+
+def _write_then(after: Callable[[_FakeWorkspace], None]) -> tuple[AgenticMetricSummary, _FakeWorkspace]:
+    """Run one turn that writes metric ``m``; ``after`` changes the workspace once the turn has streamed."""
+    ws = _FakeWorkspace({})
+
+    def _create(_message: str) -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+
+    turn = _turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})
+    with _run_env([turn], ws, on_send=_create, after_turn=lambda: after(ws)):
+        summary = _run(
+            {"candidates": ["SELECT 1"], "expect_executes": True, "expected_fields": {"title": "Return Margin"}}
+        )
+    return summary, ws
+
+
+def test_a_kept_write_is_graded_and_reported_as_kept() -> None:
+    summary, _ = _write_then(lambda ws: None)
+    assert summary.pass_at_k and all(summary.best.checks.values())
+    assert summary.best.diagnostics == {"metric_write_kept": True}
+
+
+def test_a_write_lost_after_its_turn_is_graded_as_written_and_reported() -> None:
+    # A concurrent create_metric wrote back a model read before this write: the metric is gone and cannot compute.
+    def _lose(ws: _FakeWorkspace) -> None:
+        ws.metrics.pop("m")
+        ws.execute_error = "execute: HTTP 400 metric m not found"
+
+    summary, _ = _write_then(_lose)
+    assert summary.best.checks == {
+        "metric_created": True,
+        "maql_correct": True,
+        "metric_fields_correct": True,
+        "metric_executes": True,
+    }
+    assert summary.pass_at_k and summary.best.harness_error is None
+    assert summary.best.diagnostics == {"metric_write_kept": False}
+    assert summary.best.check_details["metric_write_kept"]["m"]["at_scoring"] is None
+
+
+def test_the_written_maql_is_executed_inline_and_a_failure_fails_the_check() -> None:
+    ws = _FakeWorkspace({})
+    ws.maql_error = "execute: HTTP 400 Objects [Identifier(no_such_fact)] are either inaccessible or not existing."
+
+    def _create(_message: str) -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+
+    with _run_env([_turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})], ws, on_send=_create):
+        summary = _run({"candidates": ["SELECT 1"], "expect_executes": True})
+    assert ws.executed_maql == ["SELECT 1"]
+    assert summary.best.checks["metric_executes"] is False
+    assert "no_such_fact" in summary.best.check_details["metric_executes"]
+
+
+def test_a_metric_not_found_right_after_its_write_is_read_again_at_scoring() -> None:
+    ws = _FakeWorkspace({})
+
+    def _appear() -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+
+    turn = _turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})
+    with _run_env([turn], ws, after_turn=_appear):
+        summary = _run({"candidates": ["SELECT 1"], "expected_fields": {"title": "Return Margin"}})
+    assert summary.best.checks["metric_fields_correct"] is True
+    assert summary.best.diagnostics == {}
+
+
+def test_an_update_undone_after_its_turn_is_graded_as_written_and_reported() -> None:
+    ws = _FakeWorkspace({"average_product_cost": _AVG_COST})
+
+    def _rename(message: str) -> None:
+        if message == "Yes, go ahead.":
+            ws.metrics["average_product_cost"] = {**_AVG_COST, "title": "Avg Unit Cost"}
+
+    def _undo() -> None:
+        ws.metrics["average_product_cost"] = json.loads(json.dumps(_AVG_COST))
+
+    write = {"metric_id": "average_product_cost", "maql": "SELECT AVG({fact/order_unit_cost})", "created_new": False}
+    with _run_env([_turn("Rename it?"), _turn("Renamed.", write)], ws, on_send=_rename, after_turn=_undo):
+        summary = _run(
+            {
+                "expected_update": {"metric_id": "average_product_cost", "title": "Avg Unit Cost"},
+                "user_replies": ["Yes, go ahead."],
+            }
+        )
+    assert summary.best.checks == {"metric_updated": True}
+    lost = summary.best.check_details["metric_write_kept"]["average_product_cost"]
+    assert (lost["after_write"]["title"], lost["at_scoring"]["title"]) == ("Avg Unit Cost", "Average Product Cost")
+
+
+def test_a_write_the_harness_could_not_read_at_once_is_read_at_scoring() -> None:
+    ws = _FakeWorkspace({})
+
+    def _create(_message: str) -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+        ws.read_error = "could not read metric m: timeout"
+
+    def _recover() -> None:
+        ws.read_error = None
+
+    turn = _turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})
+    with _run_env([turn], ws, on_send=_create, after_turn=_recover):
+        summary = _run({"candidates": ["SELECT 1"], "expected_fields": {"title": "Return Margin"}})
+    assert summary.best.checks["metric_fields_correct"] is True
+    assert summary.best.harness_error is None
+    assert summary.best.diagnostics == {}
+
+
+def test_only_create_metric_results_are_read_back_and_an_unstored_write_is_not_compared() -> None:
+    ws = _FakeWorkspace({})
+
+    def _create(_message: str) -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+
+    turn = ChatResult.model_validate(
+        {
+            "textResponse": "Created.",
+            "toolCallEvents": [
+                {"functionName": "search_objects", "functionArguments": "{}", "result": "{}"},
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": json.dumps({"data": {"metric_id": "x", "maql": "SELECT 2"}}),
+                },
+                {
+                    "functionName": "create_metric",
+                    "functionArguments": "{}",
+                    "result": json.dumps({"data": {"metric_id": "m", "maql": "SELECT 1"}}),
+                },
+            ],
+        }
+    )
+    with _run_env([turn], ws, on_send=_create):
+        summary = _run({"candidates": ["SELECT 1"], "expected_fields": {"title": "Return Margin"}})
+    # x was never stored, so there is no written state to compare with.
+    assert summary.best.checks["metric_fields_correct"] is True
+    assert summary.best.diagnostics == {"metric_write_kept": True}
+
+
+def test_an_unreadable_workspace_at_scoring_leaves_out_only_the_kept_diagnostic() -> None:
+    boom = WorkspaceReadError("could not read metric m: timeout")
+    with patch.object(metric_skill_mod._WriteReadback, "changed_since_write", side_effect=boom):
+        summary, _ = _write_then(lambda ws: None)
+    assert summary.pass_at_k and summary.best.harness_error is None
+    assert summary.best.diagnostics == {}
+
+
+class _BrokenExecutionWorkspace(_FakeWorkspace):
+    """The first inline execution fails in transport."""
+
+    def execute_maql(self, maql: str) -> str | None:
+        if not self.executed_maql:
+            self.executed_maql.append(maql)
+            raise WorkspaceReadError("could not execute MAQL: ReadTimeout")
+        return super().execute_maql(maql)
+
+
+def test_an_unfinished_execution_computes_the_written_maql_again_not_the_stored_metric() -> None:
+    ws = _BrokenExecutionWorkspace({})
+    ws.maql_error = "execute: HTTP 400 Objects [Identifier(no_such_fact)] are either inaccessible or not existing."
+
+    def _create(_message: str) -> None:
+        ws.metrics["m"] = json.loads(json.dumps(_WRITTEN))
+
+    def _replace() -> None:
+        # A concurrent writer replaces the metric, and the replacement computes by id.
+        ws.metrics["m"] = {**_WRITTEN, "content": {**_WRITTEN["content"], "maql": "SELECT 2"}}
+
+    turn = _turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})
+    with _run_env([turn], ws, on_send=_create, after_turn=_replace):
+        summary = _run({"candidates": ["SELECT 1"], "expect_executes": True})
+    assert ws.executed_maql == ["SELECT 1", "SELECT 1"]
+    assert summary.best.checks["metric_executes"] is False
+
+
+_GATE_S = 2.0  # Only stops a hung test; every gate below opens as soon as its condition holds.
+
+
+class _GatedWorkspace(_FakeWorkspace):
+    """A metric read waits until ``released`` opens, and notes whether it opened and on which thread the read ran."""
+
+    def __init__(self, metrics: dict[str, dict]) -> None:
+        super().__init__(metrics)
+        self.released = threading.Event()
+        self.reads: list[tuple[str, bool]] = []
+
+    def get_metric(self, metric_id: str) -> dict | None:
+        if threading.current_thread() is not threading.main_thread():
+            self.reads.append((threading.current_thread().name, self.released.wait(_GATE_S)))
+        return super().get_metric(metric_id)
+
+
+def test_read_backs_run_off_the_stream_and_are_joined_before_scoring() -> None:
+    ws = _GatedWorkspace({"m": _WRITTEN})
+    turn = _turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})
+    # The gate opens only after the hook has returned: a read inside the hook would time out first.
+    with _run_env([turn], ws, after_turn=ws.released.set, real_threads=True):
+        summary = _run({"candidates": ["SELECT 1"], "expected_fields": {"title": "Return Margin"}})
+    assert len(ws.reads) == 1
+    thread, opened = ws.reads[0]
+    assert thread.startswith("metric-readback") and opened
+    assert summary.best.checks["metric_fields_correct"] is True
+    assert summary.best.diagnostics == {"metric_write_kept": True}
+
+
+class _SlowExecutionWorkspace(_FakeWorkspace):
+    """The first write's execution holds until ``release`` opens; each read notes when it ran."""
+
+    def __init__(self, metrics: dict[str, dict]) -> None:
+        super().__init__(metrics)
+        self.release = threading.Event()
+        self.second_read = threading.Event()
+        self.read_before_removal = False
+
+    def get_metric(self, metric_id: str) -> dict | None:
+        found = super().get_metric(metric_id)
+        if metric_id == "m2" and threading.current_thread() is not threading.main_thread():
+            self.second_read.set()
+        return found
+
+    def execute_maql(self, maql: str) -> str | None:
+        if maql == "SELECT 1":
+            # Held longer than the test waits for the second read, so a read queued behind it is seen as late.
+            self.release.wait(2 * _GATE_S)
+        return super().execute_maql(maql)
+
+
+def test_a_read_does_not_wait_behind_an_earlier_writes_execution() -> None:
+    m2 = {**_WRITTEN, "title": "Second", "content": {**_WRITTEN["content"], "maql": "SELECT 2"}}
+    ws = _SlowExecutionWorkspace({"m1": _WRITTEN, "m2": m2})
+
+    def _lose_second_then_release() -> None:
+        # m2 is read while m1's execution still holds, then a concurrent writer removes m2.
+        ws.read_before_removal = ws.second_read.wait(_GATE_S)
+        ws.metrics.pop("m2")
+        ws.release.set()
+
+    turn = _turn("Created both.", {"metric_id": "m1", "maql": "SELECT 1"}, {"metric_id": "m2", "maql": "SELECT 2"})
+    with _run_env([turn], ws, after_turn=_lose_second_then_release, real_threads=True):
+        summary = _run({"candidates": ["SELECT 2"], "expect_executes": True, "expected_fields": {"title": "Second"}})
+    assert ws.read_before_removal
+    assert summary.best.checks == {
+        "metric_created": True,
+        "maql_correct": True,
+        "metric_fields_correct": True,
+        "metric_executes": True,
+    }
+    assert summary.best.check_details["metric_write_kept"]["m2"]["at_scoring"] is None
+
+
+class _FlakyWorkspace(_FakeWorkspace):
+    """The first metric read fails the way a connection error from the API client does: not a WorkspaceReadError."""
+
+    def __init__(self, metrics: dict[str, dict]) -> None:
+        super().__init__(metrics)
+        self.failed = False
+
+    def get_metric(self, metric_id: str) -> dict | None:
+        if not self.failed:
+            self.failed = True
+            raise RuntimeError("MaxRetryError: connection refused")
+        return super().get_metric(metric_id)
+
+
+def test_a_read_back_that_raises_any_error_leaves_the_metric_to_the_scoring_read() -> None:
+    ws = _FlakyWorkspace({"m": _WRITTEN})
+    with _run_env([_turn("Created.", {"metric_id": "m", "maql": "SELECT 1"})], ws):
+        summary = _run({"candidates": ["SELECT 1"], "expected_fields": {"title": "Return Margin"}})
+    assert ws.failed and summary.best.checks["metric_fields_correct"] is True
+    assert summary.best.harness_error is None and summary.best.diagnostics == {}
+
+
+def test_the_hook_never_raises_on_an_unreadable_event() -> None:
+    readback = metric_skill_mod._WriteReadback(_FakeWorkspace({}), execute=False)
+    readback.on_tool_result({"functionName": "create_metric"})  # no functionArguments: the event does not validate
+    readback.close()
+    assert readback.stored == {}
+
+
+def test_the_original_shape_sends_no_tool_result_hook() -> None:
+    with (
+        patch("gooddata_eval.core.agentic.metric_skill.ChatClient") as chat_cls,
+        patch("gooddata_eval.core.agentic.metric_skill.GoodDataSdk"),
+    ):
+        send = chat_cls.return_value.send_message
+        send.return_value = _turn("ok", {"maql": "SELECT 1", "metric_id": "m"})
+        run_agentic_metric_skill("http://h", "t", "ws", "q", [{"maql": "SELECT 1"}], k=1, max_iterations=1)
+    assert send.call_args.kwargs == {}
+
+
 def test_every_published_check_name_is_listed_for_the_report() -> None:
     names = {
         "metric_not_created",
@@ -551,7 +893,7 @@ def test_every_published_check_name_is_listed_for_the_report() -> None:
         "metric_scored",
     }
     assert set(METRIC_CONDITIONAL_SCORES) == names
-    assert METRIC_DIAGNOSTIC_SCORES == ("metric_first_proposal_correct",)
+    assert METRIC_DIAGNOSTIC_SCORES == ("metric_first_proposal_correct", "metric_write_kept")
 
 
 def _evaluate(
@@ -1111,6 +1453,19 @@ def test_a_restore_that_keeps_failing_returns_false(_no_backoff: None) -> None:
     assert _http_workspace(_boom).restore_metric("net_sales", _NET_SALES, exists=True) is False
 
 
+def test_a_urllib3_connection_failure_is_a_read_error_for_listing_and_lookup(_no_backoff: None) -> None:
+    # The generated entities API raises urllib3's MaxRetryError once its own retries are spent; listing retries it too.
+    refused = urllib3.exceptions.MaxRetryError(None, "/api/v1/entities", reason="connection refused")
+    sdk = _fake_sdk()
+    sdk._client.entities_api.get_all_entities_metrics.side_effect = refused
+    sdk._client.entities_api.get_entity_metrics.side_effect = refused
+    ws = mw.MetricWorkspace("http://h", "t", "ws", sdk)
+    with pytest.raises(WorkspaceReadError, match="could not list metrics"):
+        ws.list_metrics()
+    with pytest.raises(WorkspaceReadError, match="could not read metric m"):
+        ws.get_metric("m")
+
+
 def test_listing_or_reading_metrics_wraps_api_failures() -> None:
     sdk = _fake_sdk()
     sdk._client.entities_api.get_all_entities_metrics.side_effect = ApiException(status=400)
@@ -1153,6 +1508,18 @@ def _execute_handler(
 
 def test_a_metric_that_computes_has_no_rejection() -> None:
     assert _http_workspace(_execute_handler()).execute_metric("m") is None
+
+
+def test_a_maql_expression_is_executed_as_an_inline_measure() -> None:
+    bodies: list[dict] = []
+
+    def _handler(request: mw.httpx.Request) -> mw.httpx.Response:
+        if request.method == "POST":
+            bodies.append(json.loads(request.content))
+        return _execute_handler()(request)
+
+    assert _http_workspace(_handler).execute_maql("SELECT SUM({fact/x})") is None
+    assert bodies[0]["execution"]["measures"][0]["definition"] == {"inline": {"maql": "SELECT SUM({fact/x})"}}
 
 
 @pytest.mark.parametrize(("execute", "result"), [(400, 200), (200, 422)])
