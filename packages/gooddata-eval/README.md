@@ -1033,6 +1033,72 @@ a fail. The judge steps are calibrated with
 `make calibrate-knowledge` (needs `OPENAI_API_KEY`); the CI entry point is
 `evaluate_agentic_knowledge`.
 
+### `agentic_alert_skill` update items
+
+An alert item with `"mode": "update"` asks the agent to change an alert that exists before the
+question. Each run creates the setup alert through the API, asks `question`, then reads the
+stored alert again and deletes it. A setup alert an earlier run left is deleted first; an alert
+with the same title that no evaluation created stops the item instead, so give each setup alert
+a title unique in the workspace. The simulated user confirms the requested change and declines
+any other change.
+
+```json
+{
+  "question": "Raise the threshold of my \"Net Sales floor u1\" alert to $60,000.",
+  "expected_output": {
+    "mode": "update",
+    "setup_alert": {
+      "attributes": {
+        "title": "Net Sales floor u1",
+        "state": "ACTIVE",
+        "alert": {
+          "execution": {
+            "measures": [
+              {
+                "localIdentifier": "net_sales",
+                "definition": {"measure": {"item": {"identifier": {"id": "net_sales", "type": "metric"}}}}
+              }
+            ],
+            "attributes": [],
+            "filters": []
+          },
+          "condition": {
+            "comparison": {
+              "operator": "LESS_THAN",
+              "left": {"localIdentifier": "net_sales", "title": "Net Sales"},
+              "right": {"value": 50000}
+            }
+          },
+          "trigger": "ALWAYS"
+        }
+      },
+      "relationships": {"analyticalDashboard": {"data": {"id": "<dashboard id>", "type": "analyticalDashboard"}}}
+    },
+    "expected_change": {"threshold": 60000}
+  }
+}
+```
+
+- `setup_alert` — the automation entity as the API returns it: `attributes` (with a unique
+  `title` the agent finds the alert by) and optional `relationships`. Without `recipients` the
+  alert goes to the token owner; without `notificationChannel` it uses the organization's
+  channel with the lowest id.
+- `expected_change` — the new value of each changed field: `threshold` and `operator`
+  (comparison and relative alerts), `sensitivity` and `granularity` (anomaly alerts),
+  `trigger`, `trigger_interval` (with the `ONCE_PER_INTERVAL` trigger), `title`, `state`
+  (`ACTIVE`/`PAUSED`), `filters` (the whole list, in any order) and `dashboard_id`. A
+  `trigger` change may set or clear the interval, unless the alert is `ONCE_PER_INTERVAL`
+  before and after it.
+
+An update item takes no other key, and a change the setup alert cannot take is rejected before
+any request. The run publishes four scores instead of the creation checks:
+`alert_update_called` (an `update_metric_alert` or `update_alert_state` call on the alert
+succeeded, also after a failed one), `alert_update_correct` (the stored alert holds every
+expected value), `alert_update_preserved` (no other stored field changed; the timestamps,
+the editors and the generated `description` are not compared) and `alert_not_recreated`
+(the alert still exists and the agent created none). A failing run reports the update
+arguments and every field that changed unasked.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
