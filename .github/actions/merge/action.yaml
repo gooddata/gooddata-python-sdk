@@ -29,18 +29,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout source branch
-      uses: actions/checkout@v5
+    # The next step pushes the snapshot branch with these credentials.
+    - name: Checkout source branch # zizmor: ignore[artipacked]
+      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         fetch-depth: 0
         ref: "${{ inputs.source }}"
         token: "${{ inputs.token_push }}"
     - name: Checkout and push new branch
       run: |
-        commit=$(git log --until="${{ inputs.cutoff }}" --format="%H" -n 1)
+        commit=$(git log --until="${INPUTS_CUTOFF}" --format="%H" -n 1)
         git checkout $commit
         short=$(git rev-parse --short HEAD)
-        branch="snapshot-${{ inputs.source }}-${short}-to-${{ inputs.target }}"
+        branch="snapshot-${INPUTS_SOURCE}-${short}-to-${INPUTS_TARGET}"
         git checkout -b $branch
         git push origin $branch
         echo "commit=${commit}" >> $GITHUB_OUTPUT
@@ -48,16 +49,24 @@ runs:
         echo "branch=${branch}" >> $GITHUB_OUTPUT
       shell: bash
       id: push
+      env:
+        INPUTS_CUTOFF: ${{ inputs.cutoff }}
+        INPUTS_SOURCE: ${{ inputs.source }}
+        INPUTS_TARGET: ${{ inputs.target }}
     - name: Create the promote/backmerge PR
       run: |
         gh pr create \
-          --title "[bot] Merge ${{ inputs.source }}/${{ steps.push.outputs.short }} into ${{ inputs.target }}" \
-          --body ":rocket: Automated PR to perform merge from **${{ inputs.source }}** into **${{ inputs.target }}** with changes up to ${{ steps.push.outputs.short }} (created by ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
-          --base ${{ inputs.target }} --head ${{ steps.push.outputs.branch }} \
+          --title "[bot] Merge ${INPUTS_SOURCE}/${STEPS_PUSH_OUTPUTS_SHORT} into ${INPUTS_TARGET}" \
+          --body ":rocket: Automated PR to perform merge from **${INPUTS_SOURCE}** into **${INPUTS_TARGET}** with changes up to ${STEPS_PUSH_OUTPUTS_SHORT} (created by ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
+          --base ${INPUTS_TARGET} --head ${STEPS_PUSH_OUTPUTS_BRANCH} \
         | tee -a $GITHUB_STEP_SUMMARY
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.token_pr }}
+        INPUTS_SOURCE: ${{ inputs.source }}
+        STEPS_PUSH_OUTPUTS_SHORT: ${{ steps.push.outputs.short }}
+        INPUTS_TARGET: ${{ inputs.target }}
+        STEPS_PUSH_OUTPUTS_BRANCH: ${{ steps.push.outputs.branch }}
     - name: Merge the created PR
       if: ${{ inputs.merge == 'true' }}
       run: gh pr merge --merge --admin --delete-branch

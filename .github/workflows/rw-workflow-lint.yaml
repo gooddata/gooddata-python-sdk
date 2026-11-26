@@ -1,0 +1,57 @@
+name: GitHub Actions lint Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      changed-workflows:
+        type: string
+        default: 'false'
+
+permissions: {}
+
+jobs:
+  zizmor:
+    runs-on:
+      group: infra1-runners-arc
+      labels: runners-small
+    permissions:
+      contents: read
+    if: inputs.changed-workflows == 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      # The version matches the zizmor hook in .pre-commit-config.yaml, so CI and the
+      # developers' hook audit the workflows the same way; the two should move together.
+      # The release asset matches the runner's architecture, and its checksum is the
+      # digest GitHub records for it.
+      - name: Install zizmor
+        env:
+          ZIZMOR_VERSION: 1.33.1
+        run: |
+          arch=$(uname -m)
+          case "$arch" in
+            x86_64) sha256=3e6a301c7a820a2501915f5a9de8c0486da82bdec7965f068477538a98743d43 ;;
+            aarch64) sha256=aa487c792a7cbbe86e4f8dccd3b66de33b3b51813c090aaa0842d7ea08a3fc35 ;;
+            *) echo "no zizmor release for ${arch}" >&2; exit 1 ;;
+          esac
+
+          archive="${RUNNER_TEMP}/zizmor.tar.gz"
+          curl -fsSL -o "$archive" \
+            "https://github.com/zizmorcore/zizmor/releases/download/v${ZIZMOR_VERSION}/zizmor-${arch}-unknown-linux-gnu.tar.gz"
+          echo "${sha256}  ${archive}" | sha256sum --check --strict -
+          mkdir -p "${RUNNER_TEMP}/zizmor"
+          tar -xzf "$archive" -C "${RUNNER_TEMP}/zizmor" zizmor
+
+          echo "${RUNNER_TEMP}/zizmor" >> "$GITHUB_PATH"
+          "${RUNNER_TEMP}/zizmor/zizmor" --version
+
+      # zizmor reads its configuration from .github/zizmor.yml. Informational findings,
+      # such as template expressions over step and job outputs, are not checked.
+      # zizmor's online audits look up every referenced action on GitHub and fail the run
+      # on a repository they cannot read, so the audit runs offline.
+      - name: Audit workflows
+        run: zizmor --offline --min-severity low --color=always .

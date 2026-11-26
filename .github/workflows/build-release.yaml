@@ -37,6 +37,8 @@ concurrency:
   group: build-release-${{ github.event_name }}
   cancel-in-progress: false
 
+permissions: {}
+
 env:
   COMPONENTS: '["gooddata-api-client","gooddata-pandas","gooddata-fdw","gooddata-sdk","gooddata-dbt","gooddata-flight-server","gooddata-flexconnect","gooddata-pipelines","gooddata-eval"]'
 
@@ -63,7 +65,7 @@ jobs:
       # and the version to start from.
       - name: Checkout the workflow revision
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
       - name: Compute dev version
@@ -91,12 +93,12 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
       with:
         ref: ${{ needs.matrix-components.outputs.ref }}
         persist-credentials: false
     - name: Install uv
-      uses: astral-sh/setup-uv@v10.0.1
+      uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
       with:
         prune-cache: true
     - name: Bump to dev version
@@ -108,14 +110,16 @@ jobs:
         uv run tbump --only-patch --non-interactive "$DEV_VERSION"
     - name: Build ${{ matrix.component }}
       run: |
-          if [ "${{ matrix.component }}" = "gooddata-api-client" ]; then
-            cd ${{ matrix.component }}
+          if [ "${MATRIX_COMPONENT}" = "gooddata-api-client" ]; then
+            cd ${MATRIX_COMPONENT}
           else
-            cd packages/${{ matrix.component }}
+            cd packages/${MATRIX_COMPONENT}
           fi
           uv build --out-dir dist
+      env:
+        MATRIX_COMPONENT: ${{ matrix.component }}
     - name: Persist ${{ matrix.component }} artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
       with:
         name: artifacts_${{ matrix.component }}
         path: |
@@ -132,9 +136,10 @@ jobs:
       is_latest: ${{ steps.check.outputs.is_latest }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0 # the checks need every tag and the default branch
+          persist-credentials: false
       - id: check
         uses: ./.github/actions/release-tag-checks
 
@@ -149,12 +154,12 @@ jobs:
       contents: write
     steps:
       - name: Obtain artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           path: dist/
       - name: Generate changelog
         id: changelog
-        uses: requarks/changelog-action@v1
+        uses: requarks/changelog-action@7ce6be4c4d2233ae2a943694ca34f23aeafa1054 # v1.11.0
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           tag: ${{ github.ref_name }}
@@ -162,7 +167,7 @@ jobs:
           includeRefIssues: false
           useGitmojis: false
       - name: Create GitHub release
-        uses: "softprops/action-gh-release@v2"
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           body: ${{ steps.changelog.outputs.changes }}
           token: "${{ secrets.GITHUB_TOKEN }}"
@@ -187,12 +192,12 @@ jobs:
         component: ${{ fromJSON(needs.matrix-components.outputs.components) }}
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
       - name: Push ${{ matrix.component}} to pypi
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist/${{ matrix.component }}
           verbose: true
@@ -200,9 +205,10 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: publish
+    permissions: {}
     steps:
       - name: Notify to slack
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}

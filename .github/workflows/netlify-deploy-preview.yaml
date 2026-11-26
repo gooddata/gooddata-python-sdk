@@ -1,5 +1,8 @@
 name: Netlify Deploy Preview
-on:
+# pull_request_target gives the job the Netlify token for pull requests from forks too.
+# Nothing from the pull request runs: the job builds this repository's base branch, with
+# only the Markdown under docs/content/en copied from the pull request's head.
+on: # zizmor: ignore[dangerous-triggers]
   pull_request_target:
     branches:
       - 'rel/**'
@@ -10,32 +13,39 @@ on:
 env:
   GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
   NETLIFY_SITE_NAME: ${{ github.event.repository.name }}
+
+permissions: {}
+
 jobs:
   netlify-deploy:
+    permissions:
+      contents: read
     runs-on:
       group: infra1-runners-arc
       labels: runners-rxa-xlarge
     steps:
       - name: "Checkout Recursive"
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           submodules: recursive
+          persist-credentials: false
       - name: "Checkout to PR-tmp"
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
           path: 'PR-tmp'
+          persist-credentials: false
       - name: "Get only changed docs"
         run: |
           rsync --delete -av PR-tmp/docs/content/en/ docs/content/en/
           rm -rf PR-tmp
       - name: "Generate Docs"
-        uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-action@master
+        uses: ./.github/actions/hugo-build-action
         with:
           base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
       - name: "Publish"
-        uses: netlify/actions/cli@master
+        uses: netlify/actions/cli@3185065f4ab2f6df6f2ef41ee013626e1c02a426 # master
         with:
           args: deploy -d docs/public --alias=preview-${{ env.GITHUB_PR_NUMBER }}
         env:

@@ -6,7 +6,9 @@ on:
     branches:
       - master
       - 'rel/**'
-  issue_comment:
+  # The "Authorize comment trigger" step requires write access and an in-repository
+  # branch before anything is checked out.
+  issue_comment: # zizmor: ignore[dangerous-triggers]
     types: [created]
   workflow_dispatch:
     inputs:
@@ -78,13 +80,13 @@ jobs:
           echo "sha=$(echo "$PR_DATA" | jq -r .head.sha)" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           ref: ${{ steps.pr.outputs.sha || github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
       - name: Set up Python
-        uses: astral-sh/setup-uv@v10.0.1
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           prune-cache: true
           python-version: '3.14'

@@ -13,6 +13,9 @@ on:
       changed-python-modules:
         description: "Indicator of whether Python files or related config changed."
         value: ${{ jobs.collect-changes.outputs.python-modules}}
+      changed-workflows:
+        description: "Indicator of whether GitHub Actions workflows, actions or their lint config changed."
+        value: ${{ jobs.collect-changes.outputs.workflows}}
 
 jobs:
   collect-changes:
@@ -22,13 +25,15 @@ jobs:
     outputs:
       docs: "${{ steps.filter.outputs.docs}}"
       python-modules: "${{ steps.filter.outputs.python-modules}}"
+      workflows: "${{ steps.filter.outputs.workflows}}"
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
         id: filter
         with:
           base: ${{ inputs.commit-branch }}
@@ -48,3 +53,10 @@ jobs:
               - Dockerfile
               - pyproject.toml
               - 'gooddata-api-client/**'
+            workflows:
+              - '.github/workflows/**'
+              # zizmor audits the local actions too
+              - '.github/actions/**'
+              - .github/zizmor.yml
+              # sets the zizmor version, and zizmor audits it
+              - .pre-commit-config.yaml

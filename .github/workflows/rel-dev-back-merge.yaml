@@ -16,7 +16,9 @@ jobs:
       group: infra1-runners-arc
       labels: runners-small
     steps:
-      - uses: gooddata/gooddata-python-sdk/.github/actions/merge@master
+      # The job does not check out the repository, so the action cannot be referenced
+      # as ./.github/actions/merge. It always runs from master, the branch being merged.
+      - uses: gooddata/gooddata-python-sdk/.github/actions/merge@master # zizmor: ignore[unpinned-uses]
         with:
           merge: true
           source: "master"

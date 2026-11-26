@@ -5,6 +5,9 @@ on:
       changed-python-modules:
         type: string
         default: 'false'
+    secrets:
+      CODECOV_TOKEN:
+        required: false
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -14,7 +17,9 @@ jobs:
         python_version: [py315, py314, py313, py312, py311]
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Execute tests
         run: |
           make test-ci
@@ -22,7 +27,7 @@ jobs:
           TEST_ENVS: ${{ matrix.python_version }}
       - name: Upload coverage to Codecov
         if: ${{ matrix.python_version == 'py314' }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
         with:
           files: ./packages/gooddata-sdk/coverage.xml,./packages/gooddata-pandas/coverage.xml,./packages/gooddata-fdw/coverage.xml,./packages/gooddata-flight-server/coverage.xml,./packages/gooddata-flexconnect/coverage.xml,./packages/gooddata-dbt/coverage.xml,./packages/gooddata-pipelines/coverage.xml,./packages/gooddata-eval/coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -33,9 +38,11 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Set up python 3.14
-        uses: astral-sh/setup-uv@v10.0.1
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           prune-cache: true
           python-version: 3.14
@@ -53,9 +60,11 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Set up python 3.14
-        uses: astral-sh/setup-uv@v10.0.1
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           prune-cache: true
           python-version: 3.14
@@ -70,9 +79,11 @@ jobs:
     if: ${{inputs.changed-python-modules == 'true'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
       - name: Set up python 3.14
-        uses: astral-sh/setup-uv@v10.0.1
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           prune-cache: true
       - name: Install dependencies
