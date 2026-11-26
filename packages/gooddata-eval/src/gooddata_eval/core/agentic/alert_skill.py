@@ -15,6 +15,20 @@ from typing import Any
 import httpx
 from gooddata_sdk import GoodDataSdk
 
+from gooddata_eval.core.agentic._alert_update import (
+    SETUP_ID_PREFIX,
+    UPDATE_CHECKS,
+    UPDATE_TOOLS,
+    AlertUpdateEvaluation,
+    AlertUpdateExpectation,
+    AutomationApi,
+    evaluate_update,
+    needs_channel,
+    setup_entity,
+    targets_alert,
+    update_expectation,
+    update_sim_user_prompt,
+)
 from gooddata_eval.core.agentic._catalog import AnomalyDetectionGranularity, CatalogMetricAlert
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
 from gooddata_eval.core.agentic._failure_message import failed_checks_from
@@ -121,7 +135,7 @@ _ANY_OF_FIELDS = ("threshold", "threshold_from", "threshold_to", "filters")
 # The only check of an item that expects no alert; it replaces every other check.
 _NO_ALERT_CHECK = "alert_not_proposed"
 # Score names published only by an item that states the matching expectation (gdc-nas combo_report).
-ALERT_CONDITIONAL_SCORES = (*_CONDITIONAL_ALERT_CHECKS, _NO_ALERT_CHECK)
+ALERT_CONDITIONAL_SCORES = (*_CONDITIONAL_ALERT_CHECKS, _NO_ALERT_CHECK, *UPDATE_CHECKS)
 
 _SENSITIVITIES = ("LOW", "MEDIUM", "HIGH")
 # What create_metric_alert applies to an ANOMALY alert when `sensitivity` is left out, per its own contract.
@@ -556,6 +570,21 @@ def _named_automation_ids(tool_call_events: list[ToolCallEvent]) -> set[str]:
     return {i for i in ids if isinstance(i, str) and i}
 
 
+def _unrecorded_alert_ids(
+    host: str, token: str, workspace_id: str, events: list[ToolCallEvent], recorded: set[str], existing: set[str] | None
+) -> list[str]:
+    """Alerts the agent named and the run created, although no create result recorded them.
+
+    ``existing`` is the workspace's automations before the run; without a complete listing before and
+    after it, an alert that existed before could look new, so nothing is returned.
+    """
+    unseen = _named_automation_ids(events) - recorded
+    if not unseen or existing is None:
+        return []
+    now = _automation_ids(host, token, workspace_id) or set()
+    return sorted((unseen & now) - existing)
+
+
 def _resolve_current_user_id(host: str, token: str) -> str | None:
     """Id of the user that owns ``token``, or None if the profile cannot be read.
 
@@ -903,6 +932,22 @@ def _no_alert_sim_user_prompt(question: str) -> str:
     )
 
 
+def generate_simulated_update_response(
+    agent_message: str, expectation: AlertUpdateExpectation, conversation_history: list, question: str
+) -> str:
+    """Simulated-user reply in an update conversation (gpt-4o): it confirms the requested change only."""
+    if _OpenAI is None:
+        raise RuntimeError(
+            "openai package is required for generate_simulated_update_response. "
+            "Install the [llm-judge] extra: pip install 'gooddata-eval[llm-judge]'"
+        )
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        raise OSError("OPENAI_API_KEY environment variable is not set")
+    prompt = update_sim_user_prompt(question, expectation.title)
+    return _ask_simulated_user(_OpenAI(api_key=api_key), prompt, conversation_history, agent_message)
+
+
 def _delete_alert(sdk: GoodDataSdk, workspace_id: str, alert_id: str) -> None:
     """Best-effort delete of an alert (automation) created during evaluation.
 
@@ -968,7 +1013,7 @@ class AlertRunResult:
 
     conversation_id: str
     alert_id: str | None
-    eval: AlertEvaluation
+    eval: AlertEvaluation | AlertUpdateEvaluation
     actual_alert_arguments: dict
     total_turns: int = 0
     total_steps: int = 0
@@ -1583,6 +1628,21 @@ def run_agentic_alert_skill(
     if max_iterations < 1:
         # With no turn the agent never gets the question, and a no-alert item would pass unasked.
         raise ValueError(f"max_iterations must be at least 1, got {max_iterations}")
+    update = update_expectation(expected_output)
+    if update is not None:
+        return _run_agentic_alert_update(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            question=question,
+            expectation=update,
+            k=k,
+            max_iterations=max_iterations,
+            initial_conversation_id=initial_conversation_id,
+            reasoning_effort=reasoning_effort,
+            agent_id=agent_id,
+            user_context=user_context,
+        )
     expected = _normalize_expected_output(expected_output)
     current_user_id: str | None = None
     # A no-alert item scores no recipients, so it needs no current user. `any_of` options share theirs.
@@ -1812,12 +1872,12 @@ def run_agentic_alert_skill(
         finally:
             for created_id in dict.fromkeys(alert_ids_to_delete):
                 _delete_alert(sdk, workspace_id, created_id)
-            unseen = _named_automation_ids(all_tool_call_events + partial_events) - set(alert_ids_to_delete)
-            if unseen and existing_ids is not None:
-                now = _automation_ids(host, token, workspace_id) or set()
-                for leaked_id in sorted((unseen & now) - existing_ids):
-                    print(f"[CLEANUP] Deleting alert {leaked_id}: created, but its create call was not in the turn")
-                    _delete_alert(sdk, workspace_id, leaked_id)
+            events = all_tool_call_events + partial_events
+            for leaked_id in _unrecorded_alert_ids(
+                host, token, workspace_id, events, set(alert_ids_to_delete), existing_ids
+            ):
+                print(f"[CLEANUP] Deleting alert {leaked_id}: created, but its create call was not in the turn")
+                _delete_alert(sdk, workspace_id, leaked_id)
             # After the alerts: an alert on a created metric would keep that metric in use.
             for metric_id in dict.fromkeys(metric_ids_to_delete):
                 _delete_metric(sdk, workspace_id, metric_id)
@@ -1838,9 +1898,10 @@ def run_agentic_alert_skill(
                 client.delete_conversation(conv_id)
     finally:
         client.close()
+    return _summarize(run_results)
 
-    pass_at_k = any(r.eval.strict_pass for r in run_results)
-    pass_power_k = all(r.eval.strict_pass for r in run_results)
+
+def _summarize(run_results: list[AlertRunResult]) -> AgenticAlertSummary:
     # A passing run first: with `any_of`, a failing run scored against a larger option can have
     # more true checks than a passing one.
     best = max(
@@ -1849,10 +1910,214 @@ def run_agentic_alert_skill(
     )
     return AgenticAlertSummary(
         run_results=run_results,
-        pass_at_k=pass_at_k,
-        pass_power_k=pass_power_k,
+        pass_at_k=any(r.eval.strict_pass for r in run_results),
+        pass_power_k=all(r.eval.strict_pass for r in run_results),
         best=best,
     )
+
+
+def _update_calls(tool_call_events: list[ToolCallEvent], alert_id: str) -> tuple[list[dict], bool]:
+    """The arguments of every update call of a turn, and whether one of them changed ``alert_id``.
+
+    The agent may retry after an error, for example after passing ``automation_ids`` as a string where
+    the tool wants a list, so any call that returned a result without an error counts.
+    """
+    args_seen: list[dict] = []
+    updated = False
+    for tc in tool_call_events:
+        if tc.function_name not in UPDATE_TOOLS:
+            continue
+        args = tc.parsed_arguments()
+        if not isinstance(args, dict):
+            # Arguments that decode to a list or a scalar name no alert: the call is a failed attempt.
+            args_seen.append({"tool": tc.function_name, "arguments": args})
+            continue
+        args_seen.append({"tool": tc.function_name, **args})
+        result = tc.parsed_result()
+        # A call cut off by a broken stream has no result, so it is not known to have changed anything.
+        succeeded = isinstance(result, dict) and not _alert_call_failed(result)
+        updated = updated or (targets_alert(args, alert_id) and succeeded)
+    return args_seen, updated
+
+
+def _run_agentic_alert_update(
+    host: str,
+    token: str,
+    workspace_id: str,
+    question: str,
+    expectation: AlertUpdateExpectation,
+    k: int,
+    max_iterations: int,
+    initial_conversation_id: str | None,
+    reasoning_effort: ReasoningEffort | None,
+    agent_id: str | None,
+    user_context: dict | None,
+) -> AgenticAlertSummary:
+    """Run an update item K times: per run, create the setup alert, ask, and compare the stored alert."""
+    current_user_id = _resolve_current_user_id(host, token)
+    if current_user_id is None:
+        raise RuntimeError("Cannot set up the alert to update: the token owner's user id could not be resolved")
+    api = AutomationApi(host, token, workspace_id)
+    client = ChatClient(
+        host=host,
+        token=token,
+        workspace_id=workspace_id,
+        reasoning_effort=reasoning_effort,
+        agent_id=agent_id,
+        user_context=user_context,
+    )
+    sdk = GoodDataSdk.create(host, token)
+    run_results: list[AlertRunResult] = []
+
+    def _run_once(conv_id: str, setup: dict) -> AlertRunResult:
+        # An alert with the same title would make the agent ask which one is meant. One a crashed run left
+        # is removed, and must be gone before the next is created; any other alert is not the run's to delete.
+        same_title = api.ids_titled(expectation.title)
+        foreign = [i for i in same_title if not i.startswith(SETUP_ID_PREFIX)]
+        if foreign:
+            raise RuntimeError(
+                f"Workspace {workspace_id} already has alerts titled {expectation.title!r} that no evaluation "
+                f"created: {foreign}. Rename them or give the item's setup alert a unique title."
+            )
+        for stale_id in same_title:
+            api.delete(stale_id, strict=True)
+        # Taken before the run, so cleanup by a named id never touches an alert the run did not create.
+        existing_ids = _automation_ids(host, token, workspace_id)
+        # Events of a turn that broke mid-stream: not part of the run's record, but they can name an alert.
+        partial_events: list[ToolCallEvent] = []
+        all_tool_call_events: list[ToolCallEvent] = []
+        alert_id = api.create(setup)
+        alert_ids_to_delete: list[str] = [alert_id]
+        metric_ids_to_delete: list[str] = []
+        run_started = time.monotonic()
+        try:
+            before = api.get(alert_id)
+            if before is None:
+                raise RuntimeError(f"The setup alert {alert_id} cannot be read back after it was created")
+            update_args: list[dict] = []
+            update_called = False
+            alert_created = False
+            reasoning_steps: list[str] = []
+            response_id: str | None = None
+            all_reasoning_step_events: list[ReasoningStepEvent] = []
+            turn_offset, tool_index_offset, reasoning_index_offset = 0.0, 0, 0
+            conversation_history: list = []
+            current_question = question
+            turns = steps = turns_used = 0
+            exit_reason = LoopExit.BUDGET_EXHAUSTED
+
+            def _track_writes(events: list[ToolCallEvent]) -> None:
+                nonlocal update_called, alert_created
+                created = _extract_alert_calls(events)
+                alert_created = alert_created or created.created
+                alert_ids_to_delete.extend(created.created_ids)
+                metric_ids_to_delete.extend(_extract_created_metric_ids(events))
+                args, updated = _update_calls(events, alert_id)
+                update_args.extend(args)
+                update_called = update_called or updated
+
+            for iteration in range(max_iterations):
+                turns_used = iteration + 1
+                try:
+                    chat_result = client.send_message(conv_id, current_question)
+                except ChatError as exc:
+                    print(f"[CHAT] send_message failed for conversation {conv_id}: {exc}")
+                    # The stream can break after a tool call already changed or created an alert.
+                    partial = exc.partial_result
+                    if partial is not None:
+                        reasoning_steps.extend(partial.reasoning_steps or [])
+                        response_id = partial.response_id or response_id
+                        partial_events.extend(partial.tool_call_events or [])
+                        _track_writes(partial.tool_call_events or [])
+                    exit_reason = chat_failure_exit(exc)
+                    break
+                turns += 1
+                steps += chat_result.reasoning_step_count
+                reasoning_steps.extend(chat_result.reasoning_steps or [])
+                response_id = chat_result.response_id or response_id
+                turn_offset, tool_index_offset, reasoning_index_offset = shift_and_index_events(
+                    chat_result,
+                    turn_offset=turn_offset,
+                    tool_index_offset=tool_index_offset,
+                    reasoning_index_offset=reasoning_index_offset,
+                )
+                all_tool_call_events.extend(chat_result.tool_call_events or [])
+                all_reasoning_step_events.extend(chat_result.reasoning_step_events or [])
+                _track_writes(chat_result.tool_call_events or [])
+                if update_called:
+                    exit_reason = LoopExit.SUCCESS
+                    break
+                response_text = render_turn_for_simulated_user(chat_result)
+                if not response_text:
+                    exit_reason = LoopExit.AGENT_SILENT
+                    break
+                if iteration >= max_iterations - 1:
+                    break
+                try:
+                    follow_up = generate_simulated_update_response(
+                        response_text, expectation, conversation_history, question
+                    )
+                except Exception as exc:  # noqa: BLE001 -- harness-side fault; end only this run
+                    print(f"[SIM-USER] Simulated reply failed for conversation {conv_id}: {exc}")
+                    exit_reason = LoopExit.SIMULATED_USER_FAILED
+                    break
+                conversation_history.append({"role": "assistant", "content": response_text})
+                conversation_history.append({"role": "user", "content": follow_up})
+                current_question = follow_up
+
+            ev, changes = evaluate_update(
+                expectation,
+                before=before,
+                after=api.get(alert_id),
+                update_called=update_called,
+                alert_created=alert_created,
+            )
+            return AlertRunResult(
+                conversation_id=conv_id,
+                alert_id=alert_id,
+                eval=ev,
+                # The update arguments and the fields that changed unasked: what a failing run is triaged on.
+                actual_alert_arguments={"update_calls": update_args, "unexpected_changes": changes},
+                total_turns=turns,
+                total_steps=steps,
+                reasoning_steps=reasoning_steps,
+                response_id=response_id,
+                tool_call_events=all_tool_call_events,
+                reasoning_step_events=all_reasoning_step_events,
+                exit_reason=exit_reason,
+                turns_used=turns_used,
+                run_latency_s=time.monotonic() - run_started,
+            )
+        finally:
+            for created_id in dict.fromkeys(alert_ids_to_delete):
+                api.delete(created_id)
+            events = all_tool_call_events + partial_events
+            for leaked_id in _unrecorded_alert_ids(
+                host, token, workspace_id, events, set(alert_ids_to_delete), existing_ids
+            ):
+                print(f"[CLEANUP] Deleting alert {leaked_id}: created, but its create call was not in the turn")
+                api.delete(leaked_id)
+            for metric_id in dict.fromkeys(metric_ids_to_delete):
+                _delete_metric(sdk, workspace_id, metric_id)
+
+    try:
+        channel_id = api.first_channel_id() if needs_channel(expectation) else None
+        setup = setup_entity(expectation, current_user_id=current_user_id, channel_id=channel_id)
+        for run in range(k):
+            # The first run may continue the caller's conversation, which the caller keeps.
+            if run == 0 and initial_conversation_id is not None:
+                conv_id, owned = initial_conversation_id, False
+            else:
+                conv_id, owned = client.create_conversation(), True
+            try:
+                run_results.append(_run_once(conv_id, setup))
+            finally:
+                if owned:
+                    client.delete_conversation(conv_id)
+    finally:
+        client.close()
+        api.close()
+    return _summarize(run_results)
 
 
 class AlertSkillAssertionError(AgenticAssertionError):
@@ -1880,9 +2145,11 @@ def _run_detail(run: AlertRunResult) -> dict:
 def _failed_checks(run: AlertRunResult) -> list[dict]:
     """The checks this run failed, by name. The arguments the run sent are in its detail.
 
-    Every other check reads False when no alert was created, so then only that one is named.
+    Every other check reads False when no alert was created, or for an update item when no update
+    call succeeded, so then only that one is named.
     """
-    return failed_checks_from(run.eval.checks(), prerequisite="alert_created")
+    prerequisite = run.eval.prerequisite if isinstance(run.eval, AlertUpdateEvaluation) else "alert_created"
+    return failed_checks_from(run.eval.checks(), prerequisite=prerequisite)
 
 
 def evaluate_agentic_alert_skill(
