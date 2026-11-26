@@ -1,18 +1,20 @@
 packages/gooddata-sdk/tests/catalog/unit_tests/test_declarative_automations.py
-  s_c8e8d5582b6b42::t_daee096a778ae9 1-52
+  s_c8e8d5582b6b42::t_daee096a778ae9 1-55
+  s_c8e8d5582b6b42::t_314735a65f422a 56-63
 packages/gooddata-sdk/src/gooddata_sdk/__init__.py
   s_c8e8d5582b6b42::t_1f6c88256e9909 93,601,880
-packages/gooddata-sdk/src/gooddata_sdk/catalog/export/request.py
-  s_c8e8d5582b6b42::t_d136b23faee962 10,150,160-184
-packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/automation.py
-  s_c8e8d5582b6b42::t_61784e0151e6c3 6-7,9,17-18,22,60-86,101-105
 packages/gooddata-sdk/tests/catalog/test_catalog_workspace.py
   s_c8e8d5582b6b42::t_382fc17eeb85d4 9,1085-1086
+packages/gooddata-sdk/src/gooddata_sdk/catalog/export/request.py
+  s_c8e8d5582b6b42::t_d136b23faee962 11,142-143,152,154-161,171-195
+  s_c8e8d5582b6b42::t_b6cb768d335b1b 5
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/automation.py
+  s_c8e8d5582b6b42::t_61784e0151e6c3 6-7,9,17-18,22,60-86,101-105
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.7.5",
-  "base_commit_sha": "54b9e8de0dcd96e648392d83faa1c1d2f669c91a",
+  "base_commit_sha": "7ea1e6c23bab38e025a94924d3f7cc33d131acfa",
   "prompts": {},
   "sessions": {
     "s_c8e8d5582b6b42": {
