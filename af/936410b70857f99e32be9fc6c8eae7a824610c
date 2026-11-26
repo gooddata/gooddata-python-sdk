@@ -5,8 +5,8 @@ packages/gooddata-eval/README.md
 packages/gooddata-eval/src/gooddata_eval/core/interaction.py
   s_c9e6b31f85e827::t_101b92426829b7 32
 packages/gooddata-eval/src/gooddata_eval/core/models.py
-  s_c9e6b31f85e827::t_101b92426829b7 639-651,653-660,679-680
-  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652
+  s_c9e6b31f85e827::t_101b92426829b7 639-651,640-652,653-660,654-661,679-680,680-681
+  s_c9e6b31f85e827::t_53f44f07ff319a 12-20,652,653
 packages/gooddata-eval/src/gooddata_eval/core/agentic/memory.py
   s_c9e6b31f85e827::t_408d5bd813767e 20-21,203-204
   s_c9e6b31f85e827::t_c50717309d2fff 309-319,324-328,459,466-468,486-490,499-503
