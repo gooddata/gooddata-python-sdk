@@ -44,4 +44,4 @@ runs:
         BASE_URL: ${{ inputs.base-url }}
       shell: bash
       run: |
-        npx --no hugo --minify ${BASE_URL:+--baseURL $BASE_URL} -e _default
+        npx --no -- hugo --minify ${BASE_URL:+--baseURL $BASE_URL} -e _default
