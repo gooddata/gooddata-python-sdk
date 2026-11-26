@@ -1,0 +1,19 @@
+.python-version
+  s_56b55c5e938e80::t_972bbd3757b22e 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "49464471bc0f4165d2f762392a6d906e0b4b6fb0",
+  "prompts": {},
+  "sessions": {
+    "s_56b55c5e938e80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01ab84a0-4bf7-4a3e-b929-71daff3902b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
