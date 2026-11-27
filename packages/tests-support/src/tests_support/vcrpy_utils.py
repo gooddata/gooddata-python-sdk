@@ -62,15 +62,14 @@ _normalization_configured: bool = False
 
 # --- Timestamp normalization ---
 # Entity timestamps change on every recording, so canonicalize them: otherwise a
-# re-recorded cassette differs from its predecessor by timestamps alone. Every key
-# needs three variants - stdlib JSON ("key": "val"), orjson ("key":"val") and YAML.
-_TIMESTAMP_KEYS = ("createdAt", "modifiedAt")
-_TIMESTAMP_VALUE = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}"
+# re-recorded cassette differs from its predecessor by timestamps alone. The key is
+# matched only as a whole key: in JSON it must be quoted on both sides (stdlib
+# "key": "val" or orjson "key":"val"), in YAML it must open a line, optionally as a
+# list item. A string value merely containing "modifiedAt: <timestamp>" stays as is.
+_TIMESTAMP_KEYS = "createdAt|modifiedAt"
 _TIMESTAMP_RE = re.compile(
-    "|".join(
-        rf'(?<={key}": "){_TIMESTAMP_VALUE}|(?<={key}":"){_TIMESTAMP_VALUE}|(?<={key}: ){_TIMESTAMP_VALUE}'
-        for key in _TIMESTAMP_KEYS
-    )
+    rf'(?P<key>"(?:{_TIMESTAMP_KEYS})": ?"|^[ \t]*(?:- )?(?:{_TIMESTAMP_KEYS}): )\d{{4}}-\d{{2}}-\d{{2}} \d{{2}}:\d{{2}}',
+    re.MULTILINE,
 )
 _CANONICAL_TIMESTAMP = "2000-01-01 00:00"
 
@@ -284,7 +283,7 @@ def _normalize_hashes_in_text(text: str) -> str:
     """Replace transient server values with deterministic placeholders."""
     text = _EXEC_HASH_BODY_RE.sub(_exec_hash_replacer, text)
     text = _EXPORT_HASH_BODY_RE.sub(_export_hash_replacer, text)
-    text = _TIMESTAMP_RE.sub(_CANONICAL_TIMESTAMP, text)
+    text = _TIMESTAMP_RE.sub(lambda m: m.group("key") + _CANONICAL_TIMESTAMP, text)
     text = _TRACE_ID_RE.sub(_CANONICAL_TRACE_ID, text)
     text = _AUTH_ID_RE.sub(_CANONICAL_AUTH_ID, text)
     text = _BEARER_TOKEN_RE.sub(_CANONICAL_BEARER_TOKEN, text)

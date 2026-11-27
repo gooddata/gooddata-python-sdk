@@ -8,6 +8,7 @@ from typing import Any, Literal
 from gooddata_code_convertors import (
     ConversionError,
     declarative_attribute_hierarchy_to_yaml,
+    declarative_computed_attribute_to_yaml,
     declarative_dashboard_to_yaml,
     declarative_dataset_to_yaml,
     declarative_date_instance_to_yaml,
@@ -19,6 +20,7 @@ from gooddata_code_convertors import (
     declarative_publisher_page_template_to_yaml_v2,
     declarative_visualisation_to_yaml,
     yaml_attribute_hierarchy_to_declarative,
+    yaml_computed_attribute_to_declarative,
     yaml_dashboard_to_declarative,
     yaml_dataset_to_declarative,
     yaml_date_dataset_to_declarative,
@@ -73,6 +75,7 @@ _ALL_AAC_TYPES = (
             "plugin",
             "attribute_hierarchy",
             "parameter",
+            "computed_attribute",
             "document",
             "document_template",
             "page_template",
@@ -214,6 +217,11 @@ def aac_attribute_hierarchy_to_declarative(aac: dict[str, Any]) -> dict[str, Any
     return yaml_attribute_hierarchy_to_declarative(aac)
 
 
+def aac_computed_attribute_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
+    """Convert an AAC computed attribute dict to declarative format."""
+    return yaml_computed_attribute_to_declarative(aac)
+
+
 def aac_document_to_declarative(aac: dict[str, Any]) -> dict[str, Any]:
     """Convert an AAC document dict to declarative format.
 
@@ -317,6 +325,11 @@ def declarative_attribute_hierarchy_to_aac(declarative: dict[str, Any]) -> dict[
     return declarative_attribute_hierarchy_to_yaml(declarative)
 
 
+def declarative_computed_attribute_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
+    """Convert a declarative computed attribute dict to AAC format."""
+    return declarative_computed_attribute_to_yaml(declarative)
+
+
 def declarative_document_to_aac(declarative: dict[str, Any]) -> dict[str, Any]:
     """Convert a declarative document dict to AAC format.
 
@@ -373,6 +386,7 @@ def detect_yaml_format(path: Path) -> Literal["aac", "declarative"]:
         "plugins",
         "attributeHierarchies",
         "parameters",
+        "computedAttributes",
         "documents",
         "documentTemplates",
         "pageTemplates",
@@ -451,6 +465,7 @@ def load_aac_workspace_from_disk(
     dashboard_plugins: list[dict[str, Any]] = []
     attribute_hierarchies: list[dict[str, Any]] = []
     parameters: list[dict[str, Any]] = []
+    computed_attributes: list[dict[str, Any]] = []
     documents: list[dict[str, Any]] = []
     document_templates: list[dict[str, Any]] = []
     page_templates: list[dict[str, Any]] = []
@@ -478,6 +493,8 @@ def load_aac_workspace_from_disk(
                 attribute_hierarchies.append(aac_attribute_hierarchy_to_declarative(aac))
             case "parameter":
                 parameters.append(aac_parameter_to_declarative(aac))
+            case "computed_attribute":
+                computed_attributes.append(aac_computed_attribute_to_declarative(aac))
             case "document":
                 documents.append(aac_document_to_declarative(aac))
             case "document_template":
@@ -510,6 +527,8 @@ def load_aac_workspace_from_disk(
         analytics["attributeHierarchyObjects"] = attribute_hierarchies
     if parameters:
         analytics["parameters"] = parameters
+    if computed_attributes:
+        analytics["computedAttributes"] = computed_attributes
     if documents:
         analytics["documents"] = documents
     if document_templates:
@@ -539,7 +558,7 @@ def store_aac_workspace_to_disk(model: CatalogDeclarativeWorkspaceModel, source_
     """Convert a declarative workspace model to AAC YAML files and write to disk.
 
     Creates typed subdirectories (datasets/, metrics/, visualisations/, dashboards/,
-    plugins/, attributeHierarchies/, parameters/, documents/, documentTemplates/, pageTemplates/)
+    plugins/, attributeHierarchies/, parameters/, computedAttributes/, documents/, documentTemplates/, pageTemplates/)
     under source_dir.
 
     Raises:
@@ -590,6 +609,11 @@ def store_aac_workspace_to_disk(model: CatalogDeclarativeWorkspaceModel, source_
     for parameter in analytics.get("parameters", []):
         result = declarative_parameter_to_aac(parameter)
         _write_aac_file(source_dir, "parameters", parameter["id"], result["content"])
+
+    # The layout omits computedAttributes when a workspace has none, so the key may be missing.
+    for computed_attribute in analytics.get("computedAttributes") or []:
+        result = declarative_computed_attribute_to_aac(computed_attribute)
+        _write_aac_file(source_dir, "computedAttributes", computed_attribute["id"], result["content"])
 
     for document_id, result in documents:
         _write_aac_file(source_dir, "documents", document_id, result["content"])

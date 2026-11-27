@@ -29,7 +29,7 @@
         "createdBy": {"id": "admin", "type": "user"},
         "createdAt": "2000-01-01 00:00",
         "modifiedBy": {"id": "admin", "type": "user"},
-        "modifiedAt": "2026-11-02 11:00"
+        "modifiedAt": "2000-01-01 00:00"
       }
     ],
     "documentTemplates": [
@@ -42,7 +42,7 @@
         "createdBy": {"id": "demo", "type": "user"},
         "createdAt": "2000-01-01 00:00",
         "modifiedBy": {"id": "demo", "type": "user"},
-        "modifiedAt": "2026-11-03 09:30",
+        "modifiedAt": "2000-01-01 00:00",
         "content": {
           "locale": "en-US",
           "pages": [
@@ -65,7 +65,7 @@
         "createdBy": {"id": "demo", "type": "user"},
         "createdAt": "2000-01-01 00:00",
         "modifiedBy": {"id": "demo", "type": "user"},
-        "modifiedAt": "2026-11-03 09:30",
+        "modifiedAt": "2000-01-01 00:00",
         "content": {"layout": {"type": "text", "id": "t1", "markdown": "Hello"}}
       }
     ]
