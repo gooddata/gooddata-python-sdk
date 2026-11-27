@@ -1,0 +1,30 @@
+packages/gooddata-eval/tests/test_chat_summary_evaluator.py
+  s_bf7263da2341ea::t_33a41732f25c9b 153-154,159,176,181
+  s_bf7263da2341ea::t_f1b99e421bbce8 211-213,217,225-237
+packages/gooddata-eval/tests/test_agentic_chat_summary.py
+  s_bf7263da2341ea::t_f1b99e421bbce8 210-215,217,224-226
+packages/gooddata-eval/src/gooddata_eval/cli/agentic_runner.py
+  s_bf7263da2341ea::t_bf0180b6f4c9a4 98-101,140,146
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary.py
+  s_bf7263da2341ea::t_bf0180b6f4c9a4 28-29,45,47,95,99-100,147-148,238-240,243
+packages/gooddata-eval/AGENTS.md
+  s_bf7263da2341ea::t_bf0180b6f4c9a4 70-72,204-205
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
+  s_bf7263da2341ea::t_9fd3e73afaf07c 40-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ba2255374b17663a3e17ee358f396515cecc0cc8",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
