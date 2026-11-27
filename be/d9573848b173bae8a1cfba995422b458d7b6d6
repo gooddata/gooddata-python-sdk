@@ -1,0 +1,39 @@
+packages/gooddata-eval/tests/test_agentic_chat_summary.py
+  s_bf7263da2341ea::t_396c6d428ac9e5 225-282
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary.py
+  s_bf7263da2341ea::t_b21e03cafccddb 168-196
+packages/gooddata-eval/tests/test_chat_summary_figures.py
+  s_bf7263da2341ea::t_396c6d428ac9e5 252-271
+packages/gooddata-eval/tests/test_outcome.py
+  s_bf7263da2341ea::t_396c6d428ac9e5 542-544,546-551
+  s_bf7263da2341ea::t_f5c6351d2f4eda 545
+  s_bf7263da2341ea::t_242fea0bb995d7 39,44
+packages/gooddata-eval/src/gooddata_eval/core/agentic/chat_summary.py
+  s_bf7263da2341ea::t_f6094c5ed03e19 61-67,106-107
+  s_bf7263da2341ea::t_b21e03cafccddb 78,672-674
+  s_bf7263da2341ea::t_b926367370ee90 207-211,218-247,445-447,628-629,631,635-636,642,688-689
+packages/gooddata-eval/tests/test_chat_summary_evaluator.py
+  s_bf7263da2341ea::t_396c6d428ac9e5 222-256
+packages/gooddata-eval/AGENTS.md
+  s_bf7263da2341ea::t_228bcd61bf3b4b 76-78
+packages/gooddata-eval/src/gooddata_eval/core/evaluators/chat_summary_figures.py
+  s_bf7263da2341ea::t_eba6fc05afaa5f 24-26,124,611,613-615,628-630,844-847
+packages/gooddata-eval/src/gooddata_eval/core/outcome.py
+  s_bf7263da2341ea::t_b6340d88e31dbe 19-22,42,47,96-105,146-156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bed9573848b173bae8a1cfba995422b458d7b6d6",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
