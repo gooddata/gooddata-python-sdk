@@ -1,0 +1,39 @@
+packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py
+  s_f6bd3cbb7fac88::t_644f9774ab1347 251-252
+packages/gooddata-sdk/tests/catalog/expected/declarative_analytics_model_documents.json
+  s_f6bd3cbb7fac88::t_6edc7c12680d7d 32,45,68
+packages/tests-support/src/tests_support/vcrpy_utils.py
+  s_f6bd3cbb7fac88::t_553624969fe5bb 65-69,71-72,286
+packages/gooddata-sdk/tests/catalog/fixtures/workspace_content/demo_documents_store_load_and_put.yaml
+  s_f6bd3cbb7fac88::t_491d56ef087e3f 939,975,1000,1073,1109,1138,1282,1318,1347,1477,1513,1542,1617,1653,1682,1747,1783,1812
+packages/gooddata-sdk/tests/catalog/unit_tests/test_aac_computed_attributes.py
+  s_f6bd3cbb7fac88::t_2d44d6341cc377 1-103
+packages/gooddata-sdk/tests/catalog/test_catalog_workspace.py
+  s_f6bd3cbb7fac88::t_c0b1ed92bd93ef 1052-1060,1066,1073
+packages/gooddata-sdk/tests/support/test_vcr_timestamp_normalization.py
+  s_f6bd3cbb7fac88::t_246626765e8c2d 1-43
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/aac.py
+  s_f6bd3cbb7fac88::t_128769e72582c7 561
+  s_f6bd3cbb7fac88::t_826c031195bbb3 617
+  s_f6bd3cbb7fac88::t_770e771516b229 11,23,78,220-224,328-332,389,468,496-497,530-531,613-616
+packages/gooddata-sdk/tests/catalog/fixtures/workspaces/computed_attribute_generated_id.yaml
+  s_f6bd3cbb7fac88::t_ead5405ee88f2a 74,81,125,127-181,220
+packages/gooddata-sdk/src/gooddata_sdk/__init__.py
+  s_f6bd3cbb7fac88::t_660eaafc612f85 218,226,670,678,958,966
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0146eff2926a90234462a872cc3377e6c0949474",
+  "prompts": {},
+  "sessions": {
+    "s_f6bd3cbb7fac88": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c4f0132f-d973-42af-b8a0-f8413f681aad",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
