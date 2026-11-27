@@ -248,8 +248,8 @@ def test_documents_survive_store_load_and_put(test_config):
     identifier = test_documents_survive_store_load_and_put.__name__
     path = _current_dir / "store" / "documents"
     recreate_directory(path)
-    # The seed's createdAt is the cassette normalizer's canonical value, so a replayed read returns
-    # the same author fields a recording run sees.
+    # The seed's createdAt and modifiedAt are the cassette normalizer's canonical value, so a replayed
+    # read returns the same author fields a recording run sees.
     with open(_current_dir / "expected" / "declarative_analytics_model_documents.json") as f:
         seed = json.load(f)
     seed_document = seed["analytics"]["documents"][0]
