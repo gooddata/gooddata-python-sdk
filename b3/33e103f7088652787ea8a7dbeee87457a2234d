@@ -1,0 +1,23 @@
+docs/content/en/latest/workspace/workspaces/create_or_update_custom_application_setting.md
+  s_1c53290bdc8128::t_1dd78105253864 13-15
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/service.py
+  s_1c53290bdc8128::t_9269e3a2010ef6 220-221
+docs/content/en/latest/workspace/workspaces/create_or_update_workspace_setting.md
+  s_1c53290bdc8128::t_4bf02ce81bdba1 15-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b333e103f7088652787ea8a7dbeee87457a2234d",
+  "prompts": {},
+  "sessions": {
+    "s_1c53290bdc8128": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "92e53e08-1cc3-414e-9b63-0eba2f6f6efe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

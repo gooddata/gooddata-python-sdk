@@ -1,0 +1,29 @@
+packages/gooddata-pandas/pyproject.toml
+  s_1d4010ed2063e2::t_fbcf2d0149a1e3 33
+packages/gooddata-pandas/src/gooddata_pandas/arrow_convertor.py
+  s_1d4010ed2063e2::t_e91300c016edd2 119
+  s_1d4010ed2063e2::t_ab51db281c99f5 13
+packages/gooddata-pandas/src/gooddata_pandas/utils.py
+  s_1d4010ed2063e2::t_1ae4f85f3ea10f 53-54
+  s_1d4010ed2063e2::t_8efa530237e44b 34-45
+packages/gooddata-pandas/tests/dataframe/test_dataframe_for_exec_def_arrow.py
+  s_1d4010ed2063e2::t_e53d94ba840063 109-114
+uv.lock
+  s_1d4010ed2063e2::t_25ff19caf36fa1 2,5-13,1233-1234,1262,1335,2018-2020,2102-2107,2330-2332,2334,2390-2471,3142-3150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d5b07a1965dc4f539dbf092c55c36d47042c9f7e",
+  "prompts": {},
+  "sessions": {
+    "s_1d4010ed2063e2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e027275-02e1-4ed2-aa72-fa5485fb2522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

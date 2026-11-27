@@ -1,0 +1,27 @@
+.github/workflows/dev-release.yaml
+  s_b47d9d72d37be2::t_8636defa516362 41-42
+.github/workflows/rw-python-tests.yaml
+  s_b47d9d72d37be2::t_8636defa516362 40,60,76-77
+.github/workflows/bump-version.yaml
+  s_b47d9d72d37be2::t_8636defa516362 40-41
+.github/workflows/staging-tests.yaml
+  s_b47d9d72d37be2::t_8636defa516362 55
+.github/workflows/build-release.yaml
+  s_b47d9d72d37be2::t_8636defa516362 52-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "2bc0dab1ce8ba9b3f18ef777ebbbdfed3c8beb52",
+  "prompts": {},
+  "sessions": {
+    "s_b47d9d72d37be2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "961ed508-c17f-47e5-9adc-f43a3025984d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

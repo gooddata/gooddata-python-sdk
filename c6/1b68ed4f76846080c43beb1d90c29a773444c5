@@ -1,0 +1,29 @@
+packages/gooddata-pandas/pyproject.toml
+  s_1d4010ed2063e2::t_272bd3b820ddec 33
+packages/gooddata-pandas/src/gooddata_pandas/utils.py
+  s_1d4010ed2063e2::t_e8d213a5adbf41 39-40
+  s_1d4010ed2063e2::t_272bd3b820ddec 34-38,41-44,52-53
+packages/gooddata-pandas/src/gooddata_pandas/arrow_convertor.py
+  s_1d4010ed2063e2::t_272bd3b820ddec 13,119
+packages/gooddata-pandas/tests/dataframe/test_dataframe_for_exec_def_arrow.py
+  s_1d4010ed2063e2::t_272bd3b820ddec 109-111
+  s_1d4010ed2063e2::t_6c74e0426d36c7 112-114
+uv.lock
+  s_1d4010ed2063e2::t_23c0cc8a30cf25 5-13,1217,1883-1885,1967-1972,2184,2190-2250
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c61b68ed4f76846080c43beb1d90c29a773444c5",
+  "prompts": {},
+  "sessions": {
+    "s_1d4010ed2063e2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e027275-02e1-4ed2-aa72-fa5485fb2522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

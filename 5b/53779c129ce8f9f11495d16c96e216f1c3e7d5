@@ -1,0 +1,38 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/data_source/declarative_model/data_source.py
+  s_fbdfea3fc53dce::t_8fc2ff764c5401 21,211-212
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/organization.py
+  s_fbdfea3fc53dce::t_8fc2ff764c5401 17,32-33
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/user_data_filter.py
+  s_fbdfea3fc53dce::t_8fc2ff764c5401 17,39-43
+packages/gooddata-sdk/src/gooddata_sdk/catalog/entity.py
+  s_fbdfea3fc53dce::t_854e51e17f7538 12,14
+packages/gooddata-sdk/tests/catalog/test_catalog_permission.py
+  s_fbdfea3fc53dce::t_ce8f30d9f60d67 23
+packages/gooddata-sdk/src/gooddata_sdk/catalog/base.py
+  s_fbdfea3fc53dce::t_ff5b9686ac5c75 82-83
+  s_fbdfea3fc53dce::t_aca47a394acdb9 10
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/workspace.py
+  s_fbdfea3fc53dce::t_8fc2ff764c5401 39,111
+packages/gooddata-sdk/tests/catalog/test_catalog_data_source.py
+  s_fbdfea3fc53dce::t_854e51e17f7538 48
+packages/gooddata-sdk/src/gooddata_sdk/utils.py
+  s_fbdfea3fc53dce::t_6f4d392b07c8dc 4,394-432
+  s_fbdfea3fc53dce::t_ff5b9686ac5c75 13,433-493
+  s_fbdfea3fc53dce::t_a5096c1dfbb4bf 494-495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a2ec23904367e7065c68960d03246dfa96042c5c",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

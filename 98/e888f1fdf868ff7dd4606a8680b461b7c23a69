@@ -1,0 +1,30 @@
+.github/workflows/build-release.yaml
+  s_25e7bfdbe08015::t_539357844216d9 31,41,43-44,47-52,57-71,85,92-93,96
+scripts/next_dev_version.py
+  s_25e7bfdbe08015::t_ad43999d7b27cd 1-79
+scripts/tests/test_next_dev_version.py
+  s_25e7bfdbe08015::t_9651aa20b619f4 1-4,6-43
+  s_25e7bfdbe08015::t_a9b6d7371f5797 5
+Makefile
+  s_25e7bfdbe08015::t_539357844216d9 156
+.github/workflows/rw-collect-changes.yaml
+  s_25e7bfdbe08015::t_539357844216d9 44-45
+scripts/tests/conftest.py
+  s_25e7bfdbe08015::t_e0f44f53e33f05 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "98e888f1fdf868ff7dd4606a8680b461b7c23a69",
+  "prompts": {},
+  "sessions": {
+    "s_25e7bfdbe08015": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aca8c884-d170-4a58-968d-1b6351e632f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

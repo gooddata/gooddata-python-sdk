@@ -1,0 +1,19 @@
+uv.lock
+  s_4ebf5b0db0c571::t_11f60c4224219e 1624,1626-1732,1806-1929,2480,2488,2490,2495,2500-2627
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "00cf5980360b1ab1a76deab65c518a34a993ba54",
+  "prompts": {},
+  "sessions": {
+    "s_4ebf5b0db0c571": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "66e59b9c-c606-46d2-ade5-83db5d3b3e9d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

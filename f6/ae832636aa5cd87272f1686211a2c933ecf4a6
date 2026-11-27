@@ -1,0 +1,14 @@
+ci_tests.mk
+  h_4a925d05b9a6b7 56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f6ae832636aa5cd87272f1686211a2c933ecf4a6",
+  "prompts": {},
+  "humans": {
+    "h_4a925d05b9a6b7": {
+      "author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

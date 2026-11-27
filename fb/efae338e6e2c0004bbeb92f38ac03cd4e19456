@@ -1,0 +1,23 @@
+.github/actions/hugo-build-versioned-action/action.yaml
+  s_56b55c5e938e80::t_23c4f1622863e6 84
+.github/actions/hugo-build-action/action.yaml
+  s_56b55c5e938e80::t_23c4f1622863e6 47
+.github/workflows/netlify-deploy-v2.yaml
+  s_56b55c5e938e80::t_23c4f1622863e6 145
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fbefae338e6e2c0004bbeb92f38ac03cd4e19456",
+  "prompts": {},
+  "sessions": {
+    "s_56b55c5e938e80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01ab84a0-4bf7-4a3e-b929-71daff3902b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
