@@ -320,7 +320,7 @@ linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogethe
 their eval kind, and states latency for each:
 
 - **Single-shot** — kinds that send exactly one chat message per run: every non-agentic kind, plus
-  `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
+  `agentic_general_question`, `agentic_guardrail`, `agentic_search` and `agentic_memory`.
 - **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
   `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
   `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if`,
@@ -982,6 +982,47 @@ A switch to the agent already bound changes nothing and expects no marker. A run
 first message when the new conversation is bound to another agent (`agent_bound`). Per-turn checks
 are reported as `turn<N>_<check>`, e.g. `turn2_skills_used`, `turn2_include_0`. The CI entry point
 is `evaluate_agentic_agent_switcher`, which takes the whole item; `--agent-id` does not apply.
+
+### `agentic_memory` items
+
+Memory items check AI memory (organization- and workspace-level memory items). Each run sends
+`question` in a new conversation and is graded twice; it passes only when both pass:
+
+- `memory_injected` (code) — the memory items gen-ai injected into the turn's prompt, read from the
+  `applyMemory` detail of the turn's conversation items (`/items`), hold every title in
+  `memory_input.injected` and none in `memory_input.not_injected`. A turn with other details and
+  no `applyMemory` injected nothing, so an item with only `not_injected` titles passes there.
+  gen-ai records the details only while the `enableGenAiInteractionIntelligence` feature flag is on
+  for the organization. A turn with no detail at all, or items that cannot be read, leave the
+  injected memory unknown: the run fails with the check `memory_read` (also the name of its
+  Langfuse score) and the exit `chat_error`. The message of a turn without details names the flag.
+- `memory_answer_pass` (judge) — the answer against `expected_output`, with the
+  `agentic_general_question` judge steps. The judge reads text only, so a chart the turn created
+  is given to it as one line with the chart's title and type.
+
+Titles are compared exactly. Injected means "in the prompt", not "followed": gen-ai presents memory
+as defaults, so whether the answer applies an item is the judge's part. In a Langfuse dataset the
+block goes in the item's `metadata` or its `input` object; an item carrying it is an `agentic_memory`
+item unless it declares another `test_kind` or its `expectedOutput` has a `visualization` key (that
+infers `vis_agentic`), as for the other structured inputs; `metadata.test_kind: "agentic_memory"`
+forces the memory kind.
+
+```json
+{
+  "id": "om-auto-returns",
+  "dataset_name": "org_memory",
+  "test_kind": "agentic_memory",
+  "question": "Which product categories had the most returned orders in 2024? Anything I should keep in mind?",
+  "expected_output": "The answer mentions that orders can be returned within 30 days of delivery.",
+  "memory_input": {
+    "injected": ["help-line", "returns-30-days"],
+    "not_injected": ["returns-14-days-disabled"]
+  }
+}
+```
+
+At least one title is required, and a title cannot be in both lists. The CI entry point is
+`evaluate_agentic_memory`, which takes the whole item.
 
 ### `agentic_knowledge` items
 

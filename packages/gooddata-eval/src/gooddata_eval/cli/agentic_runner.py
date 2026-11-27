@@ -25,6 +25,7 @@ from gooddata_eval.core.agentic.general_question import evaluate_agentic_general
 from gooddata_eval.core.agentic.guardrail import evaluate_agentic_guardrail
 from gooddata_eval.core.agentic.kda_skill import evaluate_agentic_kda_skill
 from gooddata_eval.core.agentic.knowledge import evaluate_agentic_knowledge
+from gooddata_eval.core.agentic.memory import evaluate_agentic_memory
 from gooddata_eval.core.agentic.metric_skill import evaluate_agentic_metric_skill
 from gooddata_eval.core.agentic.search_tool import evaluate_agentic_search_tool
 from gooddata_eval.core.agentic.visualization import evaluate_agentic_visualization
@@ -67,6 +68,7 @@ AGENTIC_TEST_KINDS = frozenset(
         "agentic_what_if",
         "agentic_agent_switcher",
         "agentic_knowledge",
+        "agentic_memory",
     }
 )
 
@@ -86,6 +88,7 @@ UNGATED_AGENTIC_TEST_KINDS = frozenset({"agentic_conversation"})
 # reads like a model regression.
 #
 #   agentic_general_question, agentic_guardrail  answer questions only, no tool writes
+#   agentic_memory                               same as agentic_general_question, plus a read of /items
 #   agentic_search                               search_objects, read-only by definition; an item
 #                                                with setup_turns runs serially (item_runs_in_parallel)
 #   vis_agentic, agentic_visualization           visualizations come back as AAC proposals
@@ -95,6 +98,7 @@ PARALLEL_SAFE_TEST_KINDS = frozenset(
     {
         "agentic_general_question",
         "agentic_guardrail",
+        "agentic_memory",
         "agentic_search",
         "vis_agentic",
         "agentic_visualization",
@@ -398,6 +402,18 @@ def _dispatch_agentic(
             dataset_item=item,
             k=k,
             gate=gate,
+            **lf_kw,
+        )
+    elif kind == "agentic_memory":
+        # The item carries its own memory_input and user_context.
+        return evaluate_agentic_memory(
+            host=host,
+            token=token,
+            workspace_id=workspace_id,
+            dataset_item=item,
+            k=k,
+            gate=gate,
+            agent_id=agent_id,
             **lf_kw,
         )
     elif kind == "agentic_knowledge":

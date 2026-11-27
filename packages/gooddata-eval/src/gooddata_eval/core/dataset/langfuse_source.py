@@ -18,7 +18,14 @@ import httpx
 from pydantic import ValidationError
 
 from gooddata_eval.core.langfuse._env import make_http_client
-from gooddata_eval.core.models import AgentSwitcherInput, CatalogInput, DatasetItem, SummaryInput, TakeawayInput
+from gooddata_eval.core.models import (
+    AgentSwitcherInput,
+    CatalogInput,
+    DatasetItem,
+    MemoryInput,
+    SummaryInput,
+    TakeawayInput,
+)
 
 _PAGE_SIZE = 100
 
@@ -124,6 +131,27 @@ def _agent_switcher_input_from_raw(raw: dict, expected_output: Any) -> AgentSwit
     return None
 
 
+def _memory_input_from_raw(raw: dict, expected_output: Any) -> MemoryInput | None:
+    """Locate an agentic_memory item's `memory_input`, the same way as `agent_switcher_input`.
+
+    Raises:
+        ValueError: The value found is not a valid `memory_input` object.
+    """
+    for source in (raw.get("input"), raw.get("metadata"), expected_output):
+        if not isinstance(source, dict) or source.get("memory_input") is None:
+            continue
+        found = source["memory_input"]
+        if not isinstance(found, dict):
+            raise ValueError(
+                f"Langfuse item {raw.get('id')!r}: memory_input must be a JSON object, got {type(found).__name__}"
+            )
+        try:
+            return MemoryInput.model_validate(found)
+        except ValidationError as e:
+            raise ValueError(f"Langfuse item {raw.get('id')!r}: invalid memory_input: {e}") from e
+    return None
+
+
 def _user_context_from_raw(raw: dict) -> dict[str, Any] | None:
     """Locate an item's `user_context` -- relayed verbatim as the chat request's `userContext`.
 
@@ -183,7 +211,8 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
     takeaway_input = _takeaway_input_from_raw(raw, expected_output)
     catalog_input = _catalog_input_from_raw(raw, expected_output)
     agent_switcher_input = _agent_switcher_input_from_raw(raw, expected_output)
-    # An item carrying `takeaway_input`, `catalog_input` or `agent_switcher_input` can only be of
+    memory_input = _memory_input_from_raw(raw, expected_output)
+    # An item carrying `takeaway_input`, `catalog_input`, `agent_switcher_input` or `memory_input` can only be of
     # that kind, so it stands in for the CLI default; an explicit test_kind or a structural match
     # still wins.
     default_kind = test_kind
@@ -193,6 +222,8 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         default_kind = "document_takeaway"
     if agent_switcher_input is not None:
         default_kind = "agentic_agent_switcher"
+    if memory_input is not None:
+        default_kind = "agentic_memory"
     resolved_kind = _infer_test_kind(expected_output, default_kind, raw.get("metadata"))
     return DatasetItem(
         id=str(raw["id"]),
@@ -204,6 +235,7 @@ def _item_from_raw(raw: dict, *, dataset_name: str, test_kind: str) -> DatasetIt
         takeaway_input=takeaway_input,
         catalog_input=catalog_input,
         agent_switcher_input=agent_switcher_input,
+        memory_input=memory_input,
         user_context=_user_context_from_raw(raw),
     )
 
