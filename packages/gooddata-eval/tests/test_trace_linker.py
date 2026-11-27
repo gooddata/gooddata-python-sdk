@@ -126,6 +126,7 @@ _EVALUATE_FUNCS = [
     ("anomaly_detection", "evaluate_agentic_anomaly_detection"),
     ("what_if", "evaluate_agentic_what_if"),
     ("agent_switcher", "evaluate_agentic_agent_switcher"),
+    ("memory", "evaluate_agentic_memory"),
 ]
 
 

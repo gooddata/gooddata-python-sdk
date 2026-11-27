@@ -109,6 +109,7 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
     ("agentic_agent_switcher", {}, "evaluate_agentic_agent_switcher"),
     ("agentic_knowledge", {"expected_documents": ["Discount Policy"]}, "evaluate_agentic_knowledge"),
+    ("agentic_memory", "Ends with the help line.", "evaluate_agentic_memory"),
 ]
 
 # Kinds whose item names its own agents, so the CLI's --agent-id does not reach them.
@@ -905,6 +906,7 @@ _KIND_EVALUATORS = [
     ("agentic_knowledge", "evaluate_agentic_knowledge", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
     ("agentic_agent_switcher", "evaluate_agentic_agent_switcher", {}),
+    ("agentic_memory", "evaluate_agentic_memory", "Ends with the help line."),
 ]
 
 
@@ -948,8 +950,8 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
 # agentic_dashboard_summary builds its own context from the dashboard it summarises and
 # takes its scope from summary_input, so relaying the item's context would override the
 # thing under test rather than add to it. Excluded on purpose, not by omission.
-# agentic_agent_switcher gets the whole item and reads user_context off it.
-_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary", "agentic_agent_switcher"}
+# agentic_agent_switcher and agentic_memory get the whole item and read user_context off it.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary", "agentic_agent_switcher", "agentic_memory"}
 
 
 class _Stop(Exception):
