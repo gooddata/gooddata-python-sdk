@@ -3,6 +3,7 @@ packages/gooddata-sdk/tests/catalog/test_catalog_workspace_content.py
 packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/aac.py
   s_f6bd3cbb7fac88::t_770e771516b229 11,23,78,220-224,328-332,389,468,496-497,530-531,613-616
   s_f6bd3cbb7fac88::t_826c031195bbb3 617
+  s_f6bd3cbb7fac88::t_128769e72582c7 561
 packages/gooddata-sdk/tests/catalog/test_catalog_workspace.py
   s_f6bd3cbb7fac88::t_c0b1ed92bd93ef 1052-1060,1066,1073
 packages/gooddata-sdk/tests/support/test_vcr_timestamp_normalization.py
