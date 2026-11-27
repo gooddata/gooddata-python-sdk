@@ -629,6 +629,65 @@ class AgentSwitcherInput(BaseModel):
     turns: list[AgentSwitcherTurn] = Field(min_length=1)
 
 
+class WidgetBaseline(BaseModel):
+    """What a widget's data was when the item was made, checked before every run.
+
+    Only what a verdict rests on: whether it has data, how many rows, and the sum of its
+    values. A difference means the data under the item changed (fixture, execution or a
+    relative date), so the run says nothing about the agent.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    has_data: bool
+    row_count: int
+    value_sum: float
+
+
+class WidgetExecution(BaseModel):
+    """The execution a dashboard widget renders with, as the UI sent it.
+
+    `afm` and `result_spec` are the body of `POST .../execution/afm/execute`, filters
+    included: captured from the result the UI computed, so measures (a KPI's comparison),
+    dimensions and sorting match what the user sees. Executed again on every run, because
+    a result id expires.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    afm: dict[str, Any]
+    result_spec: dict[str, Any] = Field(default_factory=dict)
+    baseline: WidgetBaseline | None = None
+
+
+class SummaryFollowUp(BaseModel):
+    """A question sent after the summary, in the same conversation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    question: str = Field(min_length=1)
+    expected_output: Any = None
+
+
+class AgenticSummaryInput(BaseModel):
+    """Structured input for the `agentic_summary` test kind.
+
+    The chat summary of a widget or a dashboard as the UI asks for it. The item's
+    `user_context` is the UI's `userContext` without result ids; `executions` holds one
+    execution per widget id, run before each conversation to put fresh result ids back.
+    Every widget in the context needs an execution: the kind refuses an item that misses one.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    scope: Literal["widget", "dashboard"]
+    # The message sent to the agent. The item's `question` is a readable scenario line the
+    # judge reads as INPUT, so the sent text lives here; None sends the UI's pre-filled one.
+    question: str | None = None
+    executions: dict[str, WidgetExecution] = Field(default_factory=dict)
+    follow_ups: list[SummaryFollowUp] = Field(default_factory=list)
+
+
 class DatasetItem(BaseModel):
     """Common dataset envelope. `expected_output` stays raw; each evaluator parses its own shape."""
 
@@ -647,6 +706,8 @@ class DatasetItem(BaseModel):
     catalog_input: CatalogInput | None = None
     # Only used by the `agentic_agent_switcher` test kind; ignored by all others.
     agent_switcher_input: AgentSwitcherInput | None = None
+    # Only used by the `agentic_summary` test kind; ignored by all others.
+    agentic_summary_input: AgenticSummaryInput | None = None
     # Relayed verbatim as the chat request's `userContext`. Deliberately opaque: gen-ai owns
     # that schema (a discriminated union of view/widget descriptors), so re-modelling it here
     # would only create a second copy to keep in sync.

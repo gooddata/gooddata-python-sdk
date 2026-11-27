@@ -67,6 +67,19 @@ which is why `knowledge_question` can reuse `GeneralQuestionEvaluator` verbatim.
 `agent_switcher_input`. `agentic_knowledge` items keep earlier user turns in
 `expected_output.setup_turns` (`question` is the graded turn); their evaluator lives in
 `core/evaluators/knowledge.py` but is agentic-only, so it is not in the single-shot registry.
+`agentic_summary` is not `agentic_dashboard_summary`: that kind builds the context itself from a
+dashboard id and grades a rubric; this one sends the context the UI sent (any widget, tab and filter
+state), re-executes the stored widget executions, asks follow-ups and checks the figures.
+`agentic_summary` items need `agentic_summary_input` (scope, one stored execution per widget,
+follow-ups) plus `user_context`: the UI's context without result ids, which expire, so the kind
+re-executes the stored executions on every run. Their `question` is a readable scenario line the
+judge reads; the text sent to the agent is `agentic_summary_input.question` or the UI's own.
+An execution may carry a `baseline` (has data, rows, value sum): data that differs stops the item
+before the chat as an ERROR (`data_baseline_changed`), because the run would say nothing about the
+agent; an execution that fails or whose result cannot be read stops it as `widget_execution_failed`.
+Both causes are on `SETUP_ERRORS` in `core/outcome.py`. An unknown key in an `expected_output` or its
+`format` is rejected before any execution. Every turn's figures are checked against the tables the agent read in the conversation
+(`core/evaluators/chat_summary_figures.py`); an invented or miscomputed figure fails the run.
 
 ## Running the pipeline
 
@@ -188,7 +201,8 @@ That default is correct: agent tool calls create real server-side objects (metri
 Adding a kind to `PARALLEL_SAFE_TEST_KINDS` is a deliberate assertion that it is read-only,
 which nothing in the package can prove for you. An item can still be held back:
 `item_runs_in_parallel` runs an `agentic_search` item with `setup_turns` serially, because
-the clearance covers the search and not free-text turns sent before it.
+the clearance covers the search and not free-text turns sent before it. An `agentic_summary`
+item with a `question` of its own or with `follow_ups` runs serially for the same reason.
 
 **The SSE client's retry predicate is load-bearing.** The backoff loop and the retryable
 status set (429/500/502/503/504) live in `core/_retry.py`, shared by the chat, takeaway and

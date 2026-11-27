@@ -109,6 +109,8 @@ _ALL_AGENTIC_KIND_CASES = [
     ("agentic_what_if", {"metric_id": "spend"}, "evaluate_agentic_what_if"),
     ("agentic_agent_switcher", {}, "evaluate_agentic_agent_switcher"),
     ("agentic_knowledge", {"expected_documents": ["Discount Policy"]}, "evaluate_agentic_knowledge"),
+    ("agentic_summary", {"must_include": ["Names the period."]}, "evaluate_agentic_summary"),
+    ("agentic_describe_object", {"must_include": ["Names the chart type."]}, "evaluate_agentic_describe_object"),
 ]
 
 # Kinds whose item names its own agents, so the CLI's --agent-id does not reach them.
@@ -117,6 +119,19 @@ _KINDS_WITH_OWN_AGENT = {"agentic_agent_switcher"}
 # The one kind whose dispatch needs more than question/expected_output: the dashboard to
 # summarize is named in summary_input, exactly as for the single-shot dashboard_summary.
 _SUMMARY_INPUT_KINDS = {"agentic_dashboard_summary"}
+
+# agentic_summary needs its stored executions and the UI's context: without either the item
+# cannot be sent the way the UI sends it.
+_AGENTIC_SUMMARY_FIELDS: dict[str, Any] = {
+    "agentic_summary_input": {"scope": "widget"},
+    "user_context": {"view": {"dashboard": {"widgets": []}}},
+}
+
+
+def _kind_fields(kind: str) -> dict[str, Any]:
+    if kind in _SUMMARY_INPUT_KINDS:
+        return {"summary_input": {"dashboard_id": "dash-1"}}
+    return _AGENTIC_SUMMARY_FIELDS if kind == "agentic_summary" else {}
 
 
 def test_all_agentic_kind_cases_covers_every_registered_kind():
@@ -135,7 +150,7 @@ def test_dispatch_agentic_passes_agent_id_through_for_every_kind(kind, expected_
         test_kind=kind,
         question="q",
         expected_output=expected_output,
-        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        **_kind_fields(kind),
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}") as mock_eval:
         _dispatch_agentic(
@@ -280,7 +295,7 @@ def test_dispatch_agentic_returns_a_real_outcome_for_every_kind(kind, expected_o
         test_kind=kind,
         question="q",
         expected_output=expected_output,
-        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        **_kind_fields(kind),
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], conversation_id="c1", response_id="r1", detail={"k": "v"})
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned) as mock_eval:
@@ -905,6 +920,8 @@ _KIND_EVALUATORS = [
     ("agentic_knowledge", "evaluate_agentic_knowledge", {}),
     ("agentic_conversation", "evaluate_agentic_conversation", {"id": "c1", "expected_skills": [], "turns": []}),
     ("agentic_agent_switcher", "evaluate_agentic_agent_switcher", {}),
+    ("agentic_summary", "evaluate_agentic_summary", {}),
+    ("agentic_describe_object", "evaluate_agentic_describe_object", {}),
 ]
 
 
@@ -927,7 +944,21 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
         expected_output=expected_output,
         user_context=user_context,
         summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        agentic_summary_input={"scope": "widget"} if kind == "agentic_summary" else None,
     )
+    if kind == "agentic_summary" and user_context is None:
+        with pytest.raises(ValueError, match="needs both"):
+            _dispatch_agentic(
+                item,
+                host="https://h",
+                token="tok",
+                workspace_id="ws1",
+                k=1,
+                langfuse=None,
+                run_ts="2026-01-01",
+                model_version_override=None,
+            )
+        return
     with patch(f"gooddata_eval.cli.agentic_runner.{evaluator}") as mock_eval:
         _dispatch_agentic(
             item,
@@ -947,9 +978,10 @@ def test_dispatch_agentic_passes_user_context_through_to_every_kind(
 
 # agentic_dashboard_summary builds its own context from the dashboard it summarises and
 # takes its scope from summary_input, so relaying the item's context would override the
-# thing under test rather than add to it. Excluded on purpose, not by omission.
-# agentic_agent_switcher gets the whole item and reads user_context off it.
-_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary", "agentic_agent_switcher"}
+# thing under test rather than add to it. agentic_describe_object asks with no context, as
+# the Analyze-page chat does; agentic_agent_switcher gets the whole item and reads user_context
+# off it. Excluded on purpose, not by omission.
+_KINDS_WITHOUT_USER_CONTEXT = {"agentic_dashboard_summary", "agentic_agent_switcher", "agentic_describe_object"}
 
 
 class _Stop(Exception):
@@ -1132,7 +1164,7 @@ def test_failed_runs_reaches_the_report_for_every_kind(kind, expected_output, ta
         test_kind=kind,
         question="q",
         expected_output=expected_output,
-        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        **_kind_fields(kind),
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, failed_runs=[_A_FAILED_RUN])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
@@ -1281,7 +1313,7 @@ def test_run_latencies_reach_the_report_for_every_kind(kind, expected_output, ta
         test_kind=kind,
         question="q",
         expected_output=expected_output,
-        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        **_kind_fields(kind),
     )
     canned = AgenticEvalOutcome(reasoning_steps=["x"], detail={"k": "v"}, run_latencies_s=[4.5, 6.0])
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", return_value=canned):
@@ -1352,7 +1384,7 @@ def test_every_kind_gets_its_chat_turns_recorded_as_trace_latencies(kind, expect
         test_kind=kind,
         question="q",
         expected_output=expected_output,
-        summary_input={"dashboard_id": "dash-1"} if kind in _SUMMARY_INPUT_KINDS else None,
+        **_kind_fields(kind),
     )
     with patch(f"gooddata_eval.cli.agentic_runner.{target}", side_effect=_noting(1.5, 2.5, 0.5)):
         report = run_agentic_items([item], host="http://host", token="tok", workspace_id="ws1", run_ts="2026-01-01")
