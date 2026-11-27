@@ -14,6 +14,18 @@ from gooddata_sdk._version import __version__
 
 if TYPE_CHECKING:
     # Re-stated eagerly so that type checkers and IDEs resolve the lazy re-exports below.
+    from gooddata_sdk.catalog.ai_knowledge.declarative_model import (
+        CatalogDeclarativeAIKnowledge,
+        CatalogDeclarativeKnowledgeDocument,
+        CatalogDeclarativeKnowledgeExtraction,
+        CatalogDeclarativeKnowledgeField,
+        CatalogDeclarativeKnowledgeFolder,
+    )
+    from gooddata_sdk.catalog.ai_knowledge.service import (
+        AIKnowledgeApiError,
+        CatalogAIKnowledgeService,
+        CatalogAIKnowledgeSyncResult,
+    )
     from gooddata_sdk.catalog.ai_lake.service import (
         CatalogAILakeOperation,
         CatalogAILakeOperationError,
@@ -389,6 +401,7 @@ if TYPE_CHECKING:
 # declarative model and generated API model) even when the caller wants a single class, so they
 # are resolved on first access instead (PEP 562). Do not edit by hand -- see the script.
 _LAZY_IMPORTS: dict[str, str] = {
+    "AIKnowledgeApiError": "gooddata_sdk.catalog.ai_knowledge.service",
     "AbsoluteDateFilter": "gooddata_sdk.compute.model.filter",
     "AllMetricValueFilter": "gooddata_sdk.compute.model.filter",
     "AllTimeDateFilter": "gooddata_sdk.compute.model.filter",
@@ -399,6 +412,8 @@ _LAZY_IMPORTS: dict[str, str] = {
     "BareExecutionResponse": "gooddata_sdk.compute.model.execution",
     "BasicCredentials": "gooddata_sdk.catalog.entity",
     "BoundedFilter": "gooddata_sdk.compute.model.filter",
+    "CatalogAIKnowledgeService": "gooddata_sdk.catalog.ai_knowledge.service",
+    "CatalogAIKnowledgeSyncResult": "gooddata_sdk.catalog.ai_knowledge.service",
     "CatalogAILakeOperation": "gooddata_sdk.catalog.ai_lake.service",
     "CatalogAILakeOperationError": "gooddata_sdk.catalog.ai_lake.service",
     "CatalogAILakeService": "gooddata_sdk.catalog.ai_lake.service",
@@ -439,6 +454,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "CatalogDataSourceVertica": "gooddata_sdk.catalog.data_source.entity_model.data_source",
     "CatalogDataset": "gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset",
     "CatalogDatasetWorkspaceDataFilterIdentifier": "gooddata_sdk.catalog.identifier",
+    "CatalogDeclarativeAIKnowledge": "gooddata_sdk.catalog.ai_knowledge.declarative_model",
     "CatalogDeclarativeAggregatedFact": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
     "CatalogDeclarativeAnalyticalDashboardIdentifier": "gooddata_sdk.catalog.identifier",
     "CatalogDeclarativeAnalytics": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
@@ -459,6 +475,10 @@ _LAZY_IMPORTS: dict[str, str] = {
     "CatalogDeclarativeExportTemplate": "gooddata_sdk.catalog.organization.layout.export_template",
     "CatalogDeclarativeFact": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
     "CatalogDeclarativeFilterView": "gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace",
+    "CatalogDeclarativeKnowledgeDocument": "gooddata_sdk.catalog.ai_knowledge.declarative_model",
+    "CatalogDeclarativeKnowledgeExtraction": "gooddata_sdk.catalog.ai_knowledge.declarative_model",
+    "CatalogDeclarativeKnowledgeField": "gooddata_sdk.catalog.ai_knowledge.declarative_model",
+    "CatalogDeclarativeKnowledgeFolder": "gooddata_sdk.catalog.ai_knowledge.declarative_model",
     "CatalogDeclarativeLabel": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset",
     "CatalogDeclarativeLdm": "gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm",
     "CatalogDeclarativeMemoryItem": "gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model",
@@ -667,6 +687,7 @@ _LAZY_IMPORTS: dict[str, str] = {
 
 __all__ = [
     "__version__",
+    "AIKnowledgeApiError",
     "AbsoluteDateFilter",
     "AllMetricValueFilter",
     "AllTimeDateFilter",
@@ -677,6 +698,8 @@ __all__ = [
     "BareExecutionResponse",
     "BasicCredentials",
     "BoundedFilter",
+    "CatalogAIKnowledgeService",
+    "CatalogAIKnowledgeSyncResult",
     "CatalogAILakeOperation",
     "CatalogAILakeOperationError",
     "CatalogAILakeService",
@@ -717,6 +740,7 @@ __all__ = [
     "CatalogDataSourceVertica",
     "CatalogDataset",
     "CatalogDatasetWorkspaceDataFilterIdentifier",
+    "CatalogDeclarativeAIKnowledge",
     "CatalogDeclarativeAggregatedFact",
     "CatalogDeclarativeAnalyticalDashboardIdentifier",
     "CatalogDeclarativeAnalytics",
@@ -737,6 +761,10 @@ __all__ = [
     "CatalogDeclarativeExportTemplate",
     "CatalogDeclarativeFact",
     "CatalogDeclarativeFilterView",
+    "CatalogDeclarativeKnowledgeDocument",
+    "CatalogDeclarativeKnowledgeExtraction",
+    "CatalogDeclarativeKnowledgeField",
+    "CatalogDeclarativeKnowledgeFolder",
     "CatalogDeclarativeLabel",
     "CatalogDeclarativeLdm",
     "CatalogDeclarativeMemoryItem",
