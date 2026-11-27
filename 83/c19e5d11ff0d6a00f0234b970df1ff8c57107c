@@ -1,0 +1,19 @@
+packages/gooddata-eval/README.md
+  s_bf7263da2341ea::t_b695d26e258d9a 323,327
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83c19e5d11ff0d6a00f0234b970df1ff8c57107c",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "unknown"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+packages/gooddata-eval/tests/test_agentic_chat_summary.py
+  s_bf7263da2341ea::t_151bfde8754357 9,13,180-222
+  s_bf7263da2341ea::t_66e4a450eda6ca 223-224
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bcdbacc8a9abf5992ff509a15f9bb187e9a80de8",
+  "prompts": {},
+  "sessions": {
+    "s_bf7263da2341ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12b4c312-405b-4db7-b6b4-04f9c76dc0f8",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
