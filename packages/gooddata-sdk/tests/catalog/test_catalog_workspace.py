@@ -1049,23 +1049,28 @@ def test_create_computed_attribute_with_generated_id(test_config):
     workspace_id = test_config["workspace"]
     computed_attribute = CatalogComputedAttribute.init(maql="SELECT 1", title="Generated id")
 
+    def _created_ids() -> set[str | None]:
+        return {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)} - existing_ids
+
+    def _delete_created() -> None:
+        # The SDK does not return the generated id, so the cleanup finds what this test created
+        # on its own instead of relying on the assertions below having run - and deletes only that.
+        for created_id in _created_ids():
+            sdk.catalog_workspace.delete_computed_attribute(workspace_id, created_id)
+
     existing_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)}
-    created_ids: set[str] = set()
     try:
         outcome = sdk.catalog_workspace.create_or_update_computed_attribute(workspace_id, computed_attribute)
         assert outcome == UpsertOutcome.CREATED
 
-        created_ids = {ca.id for ca in sdk.catalog_workspace.list_computed_attributes(workspace_id)} - existing_ids
+        created_ids = _created_ids()
         assert len(created_ids) == 1
         # The backend generated the id; the SDK must not have sent a literal "None".
         generated_id = created_ids.pop()
-        created_ids = {generated_id}
         assert generated_id
         assert generated_id != "None"
     finally:
-        # Only ever delete what this test created.
-        for created_id in created_ids:
-            safe_delete(sdk.catalog_workspace.delete_computed_attribute, workspace_id, created_id)
+        safe_delete(_delete_created)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_metadata_localization.yaml"))
