@@ -553,7 +553,12 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
         return compute_model_to_api_model(attributes=attributes, metrics=metrics, filters=filters)
 
-    def compute_valid_objects(self, workspace_id: str, ctx: ValidObjectsInputType) -> ValidObjects:
+    def compute_valid_objects(
+        self,
+        workspace_id: str,
+        ctx: ValidObjectsInputType,
+        types: list[str] | None = None,
+    ) -> ValidObjects:
         """
         Returns attributes, facts, and metrics which are valid to add to a context that already
         contains some entities from the semantic model. The entities are typically used to compute analytics and
@@ -565,6 +570,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             ctx (ValidObjectsInputType):
                 items already in context. you can specify context in one of the following ways:
+            types (Optional[list[str]]):
+                object types to ask for. Defaults to facts, attributes and measures.
+                Pass "computedAttributes" as well to include computed attributes.
 
         Returns:
             ValidObjects:
@@ -578,7 +586,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         else:
             afm = self._prepare_afm_for_availability([ctx])
 
-        query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
+        query = afm_models.AfmValidObjectsQuery(
+            afm=afm, types=types if types is not None else ["facts", "attributes", "measures"]
+        )
         response = self._actions_api.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
 
         by_type: dict[str, set[str]] = dict()

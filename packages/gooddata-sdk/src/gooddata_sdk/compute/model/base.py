@@ -27,8 +27,13 @@ class ObjId:
         )
 
     def as_afm_id_label(self) -> afm_models.AfmObjectIdentifierLabel:
+        # A computed attribute occupies the label slot of an AFM attribute, so its type is passed
+        # through. Every other type is coerced to "label", as it always was: callers pass ObjIds of
+        # other types here - a visualization ref carries whatever type it was stored with - and
+        # forwarding those would turn them into ApiValueError.
+        label_type = self._type if self._type == "computedAttribute" else "label"
         return afm_models.AfmObjectIdentifierLabel(
-            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id, type="label")
+            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id, type=label_type)
         )
 
     def as_afm_id_dataset(self) -> afm_models.AfmObjectIdentifierDataset:
