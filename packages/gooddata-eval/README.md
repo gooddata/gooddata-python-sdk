@@ -1099,6 +1099,58 @@ the editors and the generated `description` are not compared) and `alert_not_rec
 (the alert still exists and the agent created none). A failing run reports the update
 arguments and every field that changed unasked.
 
+### `agentic_kda_skill` field checks
+
+A KDA item is scored on completion: `kda_triggered`, `kda_executed`, `kda_success` and
+`kda_turn_completed`. With `"check_fields": true` the run must also match every field of the
+`create_key_driver_analysis` call and the summary its execution returns:
+
+```json
+{
+  "question": "What drove the change in Total Sales Amount in Q4 2024 versus Q3 2024, excluding the United States East region?",
+  "expected_output": {
+    "check_fields": true,
+    "Measure": {"id": "total_sales_amount_daily_store", "type": "metric"},
+    "Date Attribute": "transaction_date.quarter",
+    "Analyzed Period": "2024-4",
+    "Reference Period": "2024-3",
+    "Filters": [
+      {"type": "attribute_filter", "using": "label/dim_geography_region.region_name", "state": {"exclude": ["United States East"]}}
+    ],
+    "Summary": {"analyzed_value": 13868253.55, "reference_value": 15142121.31, "change": -1273867.76, "absolute_tolerance": 0.01}
+  }
+}
+```
+
+| Score | Passes when |
+|---|---|
+| `kda_measure_correct` | the measure has the id and type of a `Measure` candidate (one object or a list), and its aggregation when the candidate states one |
+| `kda_date_attribute_correct` | `date_attribute_id` equals `Date Attribute` |
+| `kda_analyzed_period_correct`, `kda_reference_period_correct` | the period has the expected parts, numbers compared as numbers (`2024-1` is `2024-01`, `2024-Q3` is not `2024-3`) |
+| `kda_filters_correct` | the non-date filters equal `Filters` in any order (`[]` for none). Date filters are not compared: the periods set the scope, and a date filter that changes the numbers fails the summary |
+| `kda_summary_correct` | the execution succeeded and each of `analyzed_value`, `reference_value` and `change` the item states is within `absolute_tolerance` (default 0.01) |
+
+`any_of` lists complete alternatives for a question two answers fit. Each option replaces some
+of the fields, and a run passes when one option matches all six. The summary depends on the
+date attribute, so an option that changes one states both:
+
+```json
+"any_of": [
+  {"Date Attribute": "transaction_date.quarter", "Summary": {"analyzed_value": 184, "reference_value": 163}},
+  {"Date Attribute": "return_date.quarter", "Summary": {"analyzed_value": 191, "reference_value": 156}}
+]
+```
+
+A missing field, an unknown key, `check fields` or `any of` spelled with a space or capitals, a
+measure type or aggregation the tool does not take, an attribute filter without one non-empty
+`include` or `exclude` list of strings, a date filter in `Filters` or `any_of` without
+`check_fields` is rejected before any request. The execute call is paired with the create whose
+`kda_ref` it names; an execute naming a ref no create of the turn returned is not counted, and a
+create the tool rejected after an analysis ran does not replace it. `filters` that are not a list
+fail `kda_filters_correct`; omitted ones are no filters. The six names are `KDA_FIELD_SCORES`; a run that never called
+create publishes none of them. A failing run reports the expected and the actual value of each
+field it failed.
+
 ### Items asked in a dashboard context (`user_context`)
 
 An item can be asked the way a user asks from an open dashboard or an attached widget.
