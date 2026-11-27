@@ -1,0 +1,27 @@
+.github/workflows/rw-python-tests.yaml
+  s_56b55c5e938e80::t_1d3d8e6dda2114 30
+.github/workflows/fossa.yaml
+  s_56b55c5e938e80::t_1d3d8e6dda2114 76,85
+.github/workflows/build-release.yaml
+  s_56b55c5e938e80::t_1d3d8e6dda2114 157,170,195,211
+.github/workflows/netlify-deploy-v2.yaml
+  s_56b55c5e938e80::t_1d3d8e6dda2114 128
+.github/workflows/rw-collect-changes.yaml
+  s_56b55c5e938e80::t_1d3d8e6dda2114 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a3d6410c5d79eada89e3c37429cc591efa6f102",
+  "prompts": {},
+  "sessions": {
+    "s_56b55c5e938e80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01ab84a0-4bf7-4a3e-b929-71daff3902b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

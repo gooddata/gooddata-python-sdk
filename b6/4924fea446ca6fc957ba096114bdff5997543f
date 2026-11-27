@@ -1,0 +1,21 @@
+pyproject.toml
+  s_1d4010ed2063e2::t_48de345653a7c3 27-29
+uv.lock
+  s_1d4010ed2063e2::t_7ed8883c2a7dfc 2,24,225,227,229-378,1368
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b64924fea446ca6fc957ba096114bdff5997543f",
+  "prompts": {},
+  "sessions": {
+    "s_1d4010ed2063e2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e027275-02e1-4ed2-aa72-fa5485fb2522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+scripts/next_dev_version.py
+  s_25e7bfdbe08015::t_0182a0a7a12fbc 2,4-7,20,65,70-87,89,94
+scripts/tests/test_next_dev_version.py
+  s_25e7bfdbe08015::t_b9d84c7f935cd6 7
+  s_25e7bfdbe08015::t_49418b4248e6f0 49-76
+  s_25e7bfdbe08015::t_2f136d4ccc2360 4-6,8,10
+.github/workflows/build-release.yaml
+  s_25e7bfdbe08015::t_2328958fdad79d 97
+  s_25e7bfdbe08015::t_df7d1a8a441156 61-64,68,72-73,75-77,79
+  s_25e7bfdbe08015::t_4f4b747ff807f4 27-35,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21b2dc983118f59b6c559276bf08ddf4cd8fe373",
+  "prompts": {},
+  "sessions": {
+    "s_25e7bfdbe08015": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aca8c884-d170-4a58-968d-1b6351e632f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

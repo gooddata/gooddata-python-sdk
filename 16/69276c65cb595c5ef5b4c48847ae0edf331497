@@ -1,0 +1,113 @@
+packages/gooddata-sdk/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 27
+packages/gooddata-fdw/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 27
+packages/gooddata-flexconnect/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 29
+packages/gooddata-pipelines/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 9
+packages/gooddata-pandas/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 30
+packages/gooddata-eval/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 12
+packages/gooddata-flight-server/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 29
+pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 6
+  s_1d4010ed2063e2::t_b1a41ec08d16c6 143-144
+  s_1d4010ed2063e2::t_9f1ef74ef2c1bf 146
+AGENTS.md
+  s_1d4010ed2063e2::t_8005b75a181d1e 8,89
+packages/tests-support/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 5
+ci_tests.mk
+  s_1d4010ed2063e2::t_ef1102fda23add 2
+packages/gooddata-dbt/pyproject.toml
+  s_1d4010ed2063e2::t_6e56aa836c15c6 11
+.github/workflows/rw-python-tests.yaml
+  s_1d4010ed2063e2::t_e652557981caeb 14
+.sonar.settings
+  s_1d4010ed2063e2::t_0031e2fc082f36 4
+.sonarcloud.properties
+  s_1d4010ed2063e2::t_804363816f0ca1 4
+CONTRIBUTING.md
+  s_1d4010ed2063e2::t_9fe327cbb61591 5,175,188,387,389
+packages/gooddata-dbt/tox.ini
+  s_1d4010ed2063e2::t_9da1af804b19cf 3
+packages/gooddata-eval/src/gooddata_eval/cli/main.py
+  s_1d4010ed2063e2::t_9f5e67c47421f4 8,501
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_langfuse.py
+  s_1d4010ed2063e2::t_c61709508c8fd8 12,233,285
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_trace_linker.py
+  s_1d4010ed2063e2::t_c18c95069c71c6 20,96
+packages/gooddata-eval/src/gooddata_eval/core/dataset/from_insights.py
+  s_1d4010ed2063e2::t_867ddaf95c5a43 23,294
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/client.py
+  s_1d4010ed2063e2::t_84544c115f6c6f 12,105
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/observations.py
+  s_1d4010ed2063e2::t_a2fb96aa586bef 6,26
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/otlp.py
+  s_1d4010ed2063e2::t_b346bfde5f6737 10,46,60
+packages/gooddata-eval/src/gooddata_eval/core/langfuse/sink.py
+  s_1d4010ed2063e2::t_78f440b58c898a 8,111
+packages/gooddata-eval/src/gooddata_eval/core/reporting/html_report.py
+  s_1d4010ed2063e2::t_81b3e3e5fe86f2 16,110
+packages/gooddata-eval/tests/_fake_langfuse.py
+  s_1d4010ed2063e2::t_b864373d7cd298 16,39
+packages/gooddata-eval/tests/test_agentic_general_question.py
+  s_1d4010ed2063e2::t_e9ae375ff4f460 6,453
+packages/gooddata-eval/tests/test_agentic_langfuse_trace.py
+  s_1d4010ed2063e2::t_51830a598a7a66 4,54,72,90,96,132,155,171,192,207,221,252,306,327,342,459,530
+packages/gooddata-eval/tests/test_agentic_observe_experiment.py
+  s_1d4010ed2063e2::t_c56e8a885f7e6e 9,24
+packages/gooddata-eval/tests/test_langfuse_client.py
+  s_1d4010ed2063e2::t_94670de00975d7 7,47,280
+packages/gooddata-eval/tests/test_langfuse_experiment.py
+  s_1d4010ed2063e2::t_4c92b240c4ca32 5,37-38,50-51,60-61,72-73,88-89,104-105,119-120,127-128,141-142,162-163
+packages/gooddata-eval/tests/test_langfuse_observations.py
+  s_1d4010ed2063e2::t_d8de5db9725fbf 4,75-76,110-111,136,150,166,180,198,215,236,251,262
+packages/gooddata-eval/tests/test_langfuse_otlp.py
+  s_1d4010ed2063e2::t_db733a212b0747 6,41,47,52,120-121,152-153
+packages/gooddata-eval/tests/test_trace_linker.py
+  s_1d4010ed2063e2::t_4ebcf36d8f3a8e 10,477,512
+packages/gooddata-eval/tox.ini
+  s_1d4010ed2063e2::t_f22f8c28662f73 3
+packages/gooddata-fdw/README.md
+  s_1d4010ed2063e2::t_38e2d692727e72 14
+packages/gooddata-fdw/tox.ini
+  s_1d4010ed2063e2::t_3f2aa5b9c55fd1 3
+packages/gooddata-flexconnect/tox.ini
+  s_1d4010ed2063e2::t_b51d3a81bbaeb9 3
+packages/gooddata-flight-server/tox.ini
+  s_1d4010ed2063e2::t_afb0dbac81ce55 3
+packages/gooddata-pandas/README.md
+  s_1d4010ed2063e2::t_b63a8c8f990b77 13
+packages/gooddata-pandas/tox.ini
+  s_1d4010ed2063e2::t_7232c7c912bc1a 3
+packages/gooddata-pipelines/tox.ini
+  s_1d4010ed2063e2::t_a3b71d02fca212 3
+packages/gooddata-sdk/README.md
+  s_1d4010ed2063e2::t_3a5d0f9666624f 22
+packages/gooddata-sdk/tox.ini
+  s_1d4010ed2063e2::t_0b2d86eb675a20 3
+scripts/bump_version.py
+  s_1d4010ed2063e2::t_8a841d7cf5cc34 4
+uv.lock
+  s_1d4010ed2063e2::t_0db6e1c1c85cd5 3,9,11,13,1189,1711,1883-1885,2697
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1669276c65cb595c5ef5b4c48847ae0edf331497",
+  "prompts": {},
+  "sessions": {
+    "s_1d4010ed2063e2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e027275-02e1-4ed2-aa72-fa5485fb2522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

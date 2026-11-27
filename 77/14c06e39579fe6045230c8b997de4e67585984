@@ -1,0 +1,23 @@
+packages/gooddata-sdk/tests/catalog/test_catalog_llm_provider.py
+  s_fbdfea3fc53dce::t_860c7f9ea37b2f 19,79,111
+packages/gooddata-sdk/src/gooddata_sdk/catalog/export/service.py
+  s_fbdfea3fc53dce::t_d97522cdeb8593 18,127
+packages/gooddata-sdk/tests/catalog/test_catalog_permission.py
+  s_fbdfea3fc53dce::t_860c7f9ea37b2f 23,156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "e4f428ec1d0f2bfa081061d798059f0b6efed764",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

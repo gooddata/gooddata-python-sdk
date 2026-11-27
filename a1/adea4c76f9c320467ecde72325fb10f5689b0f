@@ -1,0 +1,57 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/content_service.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 41,136,155,171,187,203
+  s_fbdfea3fc53dce::t_b8b15606da9b80 133-135
+packages/gooddata-sdk/src/gooddata_sdk/utils.py
+  s_fbdfea3fc53dce::t_3c9d0cef42a57e 444-447
+  s_fbdfea3fc53dce::t_d45fab84ac46bc 448,451-467
+  s_fbdfea3fc53dce::t_388dfff1ade65f 435-443,449-450,468
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/model_container.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 21,175-176,179
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/content_objects/workspace_setting.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 20,64-66
+packages/gooddata-sdk/src/gooddata_sdk/catalog/user/service.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 23,158
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/organization.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 17,48-50
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/layout/notification_channel.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 16,128-130
+packages/gooddata-sdk/src/gooddata_sdk/catalog/appearance/service.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 14,33,112
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/identity_provider.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 14,70-72
+packages/gooddata-sdk/src/gooddata_sdk/catalog/base.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 10,39-41,111-113
+packages/gooddata-sdk/src/gooddata_sdk/catalog/data_source/entity_model/data_source.py
+  s_fbdfea3fc53dce::t_e3edce6d918010 25
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 88-90,311-313
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/workspace.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 17,30-32
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/llm_provider.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 26,258-260
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 48,176,311,567,602,617,632,727,736,744,751
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/ip_allowlist_policy.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 24,44-46
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/service.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 47,151
+packages/gooddata-sdk/src/gooddata_sdk/catalog/entity.py
+  s_fbdfea3fc53dce::t_df1a5606bbed6a 14,72-74,166-168,190-192,233-235,271-273,295-297,318-320,349-351
+packages/gooddata-sdk/src/gooddata_sdk/catalog/catalog_service_base.py
+  s_fbdfea3fc53dce::t_a30c5d0ae5f9e5 12,36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "c4a74a5464bab2e93818bfab0e6ad3be73c5b415",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

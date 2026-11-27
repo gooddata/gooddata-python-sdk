@@ -1,0 +1,22 @@
+packages/gooddata-sdk/tests/catalog/unit_tests/test_put_declarative_ldm_agg_aware.py
+  s_fbdfea3fc53dce::t_6219e29940fc61 24
+  s_fbdfea3fc53dce::t_dea28a9d713d9d 45
+packages/gooddata-sdk/src/gooddata_sdk/utils.py
+  s_fbdfea3fc53dce::t_ab7d04b9f2e588 542-545,547-548,553-558
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "0909e6d583fb25d7fd06b3e0fe6c08bc576e295b",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

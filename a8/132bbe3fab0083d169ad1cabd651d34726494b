@@ -1,0 +1,21 @@
+packages/gooddata-sdk/pyproject.toml
+  s_560f993d1e4d9c::t_dcd135b0ffba1d 37
+uv.lock
+  s_560f993d1e4d9c::t_5563d18eac9fc1 805,808,813,1210,2889-2903
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8132bbe3fab0083d169ad1cabd651d34726494b",
+  "prompts": {},
+  "sessions": {
+    "s_560f993d1e4d9c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "561e8a59-d247-4b51-ac80-dfe0493e0b2f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
