@@ -1,0 +1,21 @@
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_search_expectation.py
+  s_6acd205c58f1b6::t_a32008c8552779 84-93
+packages/gooddata-eval/tests/test_agentic_search_tool_checks.py
+  s_6acd205c58f1b6::t_a32008c8552779 454-463
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db6ad0848bb8cec02969fbfdd761ccd4cb81e172",
+  "prompts": {},
+  "sessions": {
+    "s_6acd205c58f1b6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9d1d902-270a-44eb-84d7-fa115c4deb01",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "duongthimy <my.duong@gooddata.com>"
+    }
+  }
+}
