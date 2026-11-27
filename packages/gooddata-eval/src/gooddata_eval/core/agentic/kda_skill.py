@@ -7,17 +7,25 @@ import logging
 import os
 import time
 from dataclasses import dataclass, field
+from typing import Any
 
 import httpx
 
 from gooddata_eval.core.agentic._failed_runs import build_failed_runs
-from gooddata_eval.core.agentic._failure_message import failed_checks_from
+from gooddata_eval.core.agentic._failure_message import FailedCheck, failed_check_records, failed_checks_from
 from gooddata_eval.core.agentic._gate import (
     DEFAULT_GATE,
     EvalGate,
     gate_passed,
     log_gate_scores,
     stamp_gate_metadata,
+)
+from gooddata_eval.core.agentic._kda_expectation import (
+    KDA_FIELD_SCORES,
+    KdaExpectation,
+    KdaFieldResult,
+    check_kda_fields,
+    parse_kda_expectation,
 )
 from gooddata_eval.core.agentic._outcome import (
     agentic_detail,
@@ -54,11 +62,33 @@ from gooddata_eval.core.models import (
 
 _log = logging.getLogger(__name__)
 
+__all__ = [
+    "KDA_FIELD_SCORES",
+    "AgenticKdaSummary",
+    "KdaEvaluation",
+    "KdaRunResult",
+    "KdaSkillAssertionError",
+    "evaluate_agentic_kda_skill",
+    "run_agentic_kda_skill",
+]
+
 _DEFAULT_K = 1
 # Disambiguation safety net only (create+execute always run together in the same turn) --
 # 3 real questions' worth (metric, period, +1 slack) since a simulated reply is now sent on
 # every non-final turn (see run_agentic_kda_skill), not just ones classified as a question.
 _DEFAULT_MAX_ITERATIONS = 4
+
+
+def _hint_source(expected_output: dict) -> dict:
+    """The fields the simulated user answers from: the item's own, or with ``any_of`` its first option.
+
+    One whole option, so the measure, date attribute and periods it names form an answer the
+    field checks accept. Values mixed from two options might match neither.
+    """
+    options = expected_output.get("any_of")
+    if isinstance(options, list) and options and isinstance(options[0], dict):
+        return {**expected_output, **options[0]}
+    return expected_output
 
 
 def _build_period_hint(expected_output: dict) -> str | None:
@@ -74,7 +104,7 @@ def _build_period_hint(expected_output: dict) -> str | None:
         return None
     parts = []
     if date_attr:
-        parts.append(date_attr)
+        parts.append(str(date_attr))
     if analyzed and reference_period:
         parts.append(f"comparing {analyzed} to {reference_period}")
     elif analyzed:
@@ -155,27 +185,60 @@ def _extract_kda_calls(tool_call_events: list[ToolCallEvent]) -> tuple[dict | No
     tool calls -- not the last create and last execute picked independently. A new create
     call clears any earlier execute_result -- it belongs to the create it followed, not to
     this one.
+
+    An execute names the spec it runs by ``kda_ref``, so it is paired with the create that
+    returned that ref, even when another create came between them. Once the turn's creates
+    returned refs, an execute naming any other ref, or no string ref, is ignored: its result
+    belongs to no arguments the run can score. Only a create that carried no result at all
+    lets the next execute pair without a ref. A create the tool rejected does not replace an
+    analysis that already ran. Create arguments that are not a JSON object count as empty
+    arguments; an execute whose arguments or result are not a JSON object is no execution.
     """
+    created: dict[str, dict] = {}
     create_args: dict | None = None
     execute_result: dict | None = None
+    pairs_without_ref = False
     for tc in tool_call_events:
         if tc.function_name == "create_key_driver_analysis":
-            create_args = tc.parsed_arguments()
+            args = _json_object(tc.parsed_arguments()) or {}
+            result = _json_object(tc.parsed_result())
+            if result is not None and result.get("success") is True and isinstance(result.get("kda_ref"), str):
+                created[result["kda_ref"]] = args
+            if result is not None and result.get("success") is False and execute_result is not None:
+                continue
+            create_args = args
             execute_result = None
+            pairs_without_ref = not tc.result
         elif tc.function_name == "execute_key_driver_analysis" and tc.result:
-            execute_result = tc.parsed_result()
+            execute_args = _json_object(tc.parsed_arguments())
+            ref = execute_args.get("kda_ref") if execute_args is not None else None
+            if created:
+                if not isinstance(ref, str) or ref not in created:
+                    continue
+                create_args = created[ref]
+            elif not pairs_without_ref or execute_args is None:
+                continue
+            execute_result = _json_object(tc.parsed_result())
     return create_args, execute_result
+
+
+def _json_object(value: Any) -> dict | None:
+    """``value`` when the tool call carried a JSON object, else None. A model can send any JSON."""
+    return value if isinstance(value, dict) else None
 
 
 @dataclass
 class KdaEvaluation:
     """Evaluation scores for a single KDA-skill run.
 
-    Scope: asserts only that the KDA process runs to completion -- the tool chain
-    triggers, executes successfully, and the chat turn ends cleanly with a non-empty
-    response (``turn_completed`` requires both gen-ai's stream-ended signal and a
-    non-empty ``text_response`` -- a stream that ends cleanly but delivers nothing to the
-    user isn't a completed turn either).
+    Every run is checked for completion: the tool chain triggers, executes successfully, and
+    the chat turn ends cleanly with a non-empty response (``turn_completed`` requires both
+    gen-ai's stream-ended signal and a non-empty ``text_response`` -- a stream that ends
+    cleanly but delivers nothing to the user isn't a completed turn either).
+
+    An item with ``check_fields: true`` also gates on ``fields``: the measure, date attribute,
+    periods, non-date filters and summary of the create call and its execution. ``fields`` is
+    None when the item does not opt in or the run never called create.
     """
 
     triggered: bool
@@ -183,16 +246,20 @@ class KdaEvaluation:
     success: bool
     turn_completed: bool
     disambiguated: bool = False
+    fields: KdaFieldResult | None = None
 
     @property
     def strict_checks(self) -> dict[str, bool]:
         """Every check strict_pass requires, by name."""
-        return {
+        checks = {
             "triggered": self.triggered,
             "executed": self.executed,
             "success": self.success,
             "turn_completed": self.turn_completed,
         }
+        if self.fields is not None:
+            checks.update({f"{name}_correct": ok for name, ok in self.fields.checks.items()})
+        return checks
 
     @property
     def strict_pass(self) -> bool:
@@ -241,6 +308,7 @@ def _evaluate_run(
     execute_result: dict | None,
     turn_completed: bool,
     disambiguated: bool = False,
+    spec: KdaExpectation | None = None,
 ) -> KdaEvaluation:
     triggered = create_args is not None
     executed = execute_result is not None
@@ -251,6 +319,7 @@ def _evaluate_run(
         success=success,
         turn_completed=turn_completed,
         disambiguated=disambiguated,
+        fields=check_kda_fields(spec, create_args, execute_result) if spec is not None else None,
     )
 
 
@@ -281,6 +350,7 @@ def run_agentic_kda_skill(
     if k < 1:
         # k=0 or negative would otherwise silently run once, indistinguishable from k=1.
         raise ValueError(f"k must be >= 1, got {k}")
+    spec = parse_kda_expectation(expected_output)
     run_results: list[KdaRunResult] = []
     client = ChatClient(
         host=host,
@@ -376,8 +446,9 @@ def run_agentic_kda_skill(
             # simulated reply. A false positive (agent had already given a final answer) costs
             # one harmless extra turn; a false negative (missing a genuine clarifying question)
             # would hard-fail the run, so the asymmetry favors never trying to tell them apart.
-            measure_candidates = expected_output.get("Measure") if isinstance(expected_output, dict) else None
-            period_hint = _build_period_hint(expected_output) if isinstance(expected_output, dict) else None
+            hint_source = _hint_source(expected_output) if isinstance(expected_output, dict) else None
+            measure_candidates = hint_source.get("Measure") if hint_source is not None else None
+            period_hint = _build_period_hint(hint_source) if hint_source is not None else None
             try:
                 current_question = generate_simulated_kda_response(response_text, measure_candidates, period_hint)
                 disambiguated = True
@@ -386,7 +457,7 @@ def run_agentic_kda_skill(
                 exit_reason = LoopExit.SIMULATED_USER_FAILED
                 break
 
-        ev = _evaluate_run(create_args, execute_result, turn_completed, disambiguated)
+        ev = _evaluate_run(create_args, execute_result, turn_completed, disambiguated, spec)
         return KdaRunResult(
             conversation_id=conv_id,
             evaluation=ev,
@@ -423,12 +494,7 @@ def run_agentic_kda_skill(
 
     pass_at_k = any(r.evaluation.strict_pass for r in run_results)
     pass_power_k = all(r.evaluation.strict_pass for r in run_results)
-    best = max(
-        run_results,
-        key=lambda r: sum(
-            [r.evaluation.triggered, r.evaluation.executed, r.evaluation.success, r.evaluation.turn_completed]
-        ),
-    )
+    best = max(run_results, key=lambda r: sum(r.evaluation.strict_checks.values()))
     return AgenticKdaSummary(
         run_results=run_results,
         pass_at_k=pass_at_k,
@@ -456,6 +522,7 @@ def _run_detail(run: KdaRunResult) -> dict:
         "disambiguated": ev.disambiguated,
         "actual_create_args": run.actual_create_args,
         "actual_execute_result": run.actual_execute_result,
+        **_field_detail(ev),
         # Why the loop stopped -- see LoopExit. Per-run rather than best-only: on a failing
         # run it is the first thing worth reading.
         "exit_reason": run.exit_reason.value,
@@ -464,9 +531,29 @@ def _run_detail(run: KdaRunResult) -> dict:
     }
 
 
+def _field_detail(ev: KdaEvaluation) -> dict:
+    """The field verdicts as top-level booleans, which the report's quality score counts, plus what they compared."""
+    if ev.fields is None:
+        return {}
+    return {
+        **{f"{name}_correct": ok for name, ok in ev.fields.checks.items()},
+        "field_option": ev.fields.option_index,
+        "expected_fields": ev.fields.expected,
+    }
+
+
 def _failed_checks(run: KdaRunResult) -> list[dict]:
-    """The checks this run failed, by name. What the agent sent is in the run's detail."""
-    return failed_checks_from(run.evaluation.strict_checks)
+    """The checks this run failed, by name, a field check with its expected and actual value."""
+    ev = run.evaluation
+    completion = {name: ok for name, ok in ev.strict_checks.items() if not name.endswith("_correct")}
+    records = failed_checks_from(completion)
+    if ev.fields is not None:
+        records += failed_check_records(
+            FailedCheck(f"{name}_correct", expected=ev.fields.expected[name], actual=ev.fields.actual[name])
+            for name, ok in ev.fields.checks.items()
+            if not ok
+        )
+    return records
 
 
 def evaluate_agentic_kda_skill(
@@ -496,6 +583,8 @@ def evaluate_agentic_kda_skill(
     AgenticEvalOutcome on success; on failure the same three values are attached to the
     raised exception as ``.reasoning_steps``/``.conversation_id``/``.response_id``.
     """
+    # Before the trace opens: a malformed item must fail without a request or an empty trace.
+    parse_kda_expectation(expected_output)
     identity = RunIdentity(
         host,
         token,
@@ -538,13 +627,8 @@ def evaluate_agentic_kda_skill(
                 pt = ctx.trace(run.conversation_id)
                 run_name = ctx.run_name(run_idx)
                 ev = run.evaluation
-                # Gates strict_pass -- current scope is completion only (see KdaEvaluation docstring).
-                strict_checks = {
-                    "kda_triggered": ev.triggered,
-                    "kda_executed": ev.executed,
-                    "kda_success": ev.success,
-                    "kda_turn_completed": ev.turn_completed,
-                }
+                # Gates strict_pass: completion, plus the kda_*_correct field checks of an item that opts in.
+                strict_checks = {f"kda_{name}": ok for name, ok in ev.strict_checks.items()}
                 # Not pt.latency: pt can be any trace of the conversation, not necessarily the KDA turn.
                 turn_wall_clock_sec = run.turn_wall_clock_sec
                 _log.info(
@@ -604,6 +688,7 @@ def evaluate_agentic_kda_skill(
         disambiguated=ev.disambiguated,
         actual_create_args=best.actual_create_args,
         actual_execute_result=best.actual_execute_result,
+        **_field_detail(ev),
         # Why the loop stopped -- see LoopExit.
         exit_reason=best.exit_reason.value,
         turns_used=best.turns_used,
@@ -623,7 +708,9 @@ def evaluate_agentic_kda_skill(
         message = (
             f"KDA skill assertion failed. {gate_note} strict_pass={ev.strict_pass} "
             f"(triggered={ev.triggered}, executed={ev.executed}, "
-            f"success={ev.success}, turn_completed={ev.turn_completed}). "
+            f"success={ev.success}, turn_completed={ev.turn_completed}"
+            + (f", fields={ev.fields.checks}" if ev.fields is not None else "")
+            + "). "
             f"Actual create args: {best.actual_create_args}. "
             f"Actual execute result: {best.actual_execute_result}."
         )
