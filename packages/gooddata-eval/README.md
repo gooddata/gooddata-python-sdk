@@ -320,11 +320,11 @@ linking ran. Pass `TAVERN_E2E_SKIP_TRACE_LINK=1` to opt out of linking altogethe
 their eval kind, and states latency for each:
 
 - **Single-shot** — kinds that send exactly one chat message per run: every non-agentic kind, plus
-  `agentic_general_question`, `agentic_guardrail` and `agentic_search`.
+  `agentic_general_question`, `agentic_guardrail`, `agentic_search` and `agentic_describe_object`.
 - **Multi-turn** — kinds that drive a simulated user or fixture turns: `agentic_visualization` (and
   `vis_agentic`), `agentic_metric_skill`, `agentic_alert_skill`, `agentic_dashboard_skill`,
   `agentic_document_skill`, `agentic_kda_skill`, `agentic_anomaly_detection`, `agentic_what_if`,
-  `agentic_agent_switcher`, `agentic_knowledge` and `agentic_conversation`.
+  `agentic_agent_switcher`, `agentic_knowledge`, `agentic_summary` and `agentic_conversation`.
 
 ```json
 "summary": {

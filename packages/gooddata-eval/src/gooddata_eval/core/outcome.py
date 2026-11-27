@@ -16,6 +16,10 @@ failure that left the run without a verdict, causes a customer would not hit. Th
 proof the agent was blameless: the simulated user is also asked after an answer that was
 already final, so an ERROR run still lists the checks it failed. Anything else, including a
 chat API error and an unknown exit, is FAIL.
+
+An item can also be ERROR before its first run: a kind that prepares its own input (it runs the
+stored executions of a dashboard's widgets) could not prepare it, for a cause on ``SETUP_ERRORS``.
+No chat is sent then, so there is no run to label; ``setup_error`` is that item's outcome.
 """
 
 from __future__ import annotations
@@ -35,10 +39,12 @@ __all__ = [
     "JUDGE_FAILED",
     "Outcome",
     "OutcomeStatus",
+    "SETUP_ERRORS",
     "SHADOW_MIN_SCORED_SHARE",
     "UNKNOWN_REASON",
     "classify_run",
     "item_outcome",
+    "setup_error",
     "shadow_verdict",
 ]
 
@@ -87,6 +93,16 @@ run's other scores are written as always."""
 JUDGE_FAILED = "judge_failed"
 """The reason of a run the judge or scorer could not grade."""
 
+DATA_BASELINE_CHANGED = "data_baseline_changed"
+"""The data under the item differs from the baseline the item stores."""
+
+WIDGET_EXECUTION_FAILED = "widget_execution_failed"
+"""A stored widget execution of the item could not be run, or its result could not be read."""
+
+SETUP_ERRORS: frozenset[str] = frozenset({DATA_BASELINE_CHANGED, WIDGET_EXECUTION_FAILED})
+"""The only causes that make an item an ERROR before any run. Like ``_ERROR_EXITS`` they are on the
+harness path: the agent was never asked."""
+
 UNKNOWN_REASON = "unknown"
 """The reason shown for an ERROR that carries none."""
 
@@ -125,6 +141,17 @@ def classify_run(exit_reason: LoopExit | str | None, *, passed: bool, judge_erro
     if loop_exit in _ERROR_EXITS:
         return Outcome.error(loop_exit.value)
     return Outcome.failed(loop_exit.value if loop_exit is not None else None)
+
+
+def setup_error(reason: str) -> Outcome:
+    """The outcome of an item whose input could not be prepared, so that no run happened.
+
+    Raises:
+        ValueError: ``reason`` is not on ``SETUP_ERRORS``: a new cause is added there on purpose.
+    """
+    if reason not in SETUP_ERRORS:
+        raise ValueError(f"{reason!r} is not a setup error; known: {sorted(SETUP_ERRORS)}")
+    return Outcome.error(reason)
 
 
 def item_outcome(outcomes: Sequence[Outcome]) -> Outcome | None:

@@ -36,10 +36,12 @@ from gooddata_eval.core.models import (
 )
 from gooddata_eval.core.outcome import (
     JUDGE_FAILED,
+    SETUP_ERRORS,
     Outcome,
     OutcomeStatus,
     classify_run,
     item_outcome,
+    setup_error,
     shadow_verdict,
 )
 
@@ -537,3 +539,13 @@ def test_the_agentic_message_is_the_gate_note_the_failing_runs_and_the_best_run(
     # so the item is still unstable.
     assert head == "Gate pass^3 failed: 1/3 runs passed, 1 harness error(s) — unstable, not a clean failure."
     assert message.replace(gate_line, head, 1) == _MESSAGE_WITHOUT_FAILING_RUNS
+
+
+def test_a_setup_error_is_an_error_only_for_a_known_cause() -> None:
+    assert sorted(SETUP_ERRORS) == ["data_baseline_changed", "widget_execution_failed"]
+    assert setup_error("widget_execution_failed").as_record() == {
+        "status": "error",
+        "reason": "widget_execution_failed",
+    }
+    with pytest.raises(ValueError, match="not a setup error"):
+        setup_error("chat_error")

@@ -29,6 +29,7 @@ SINGLE_TURN_AGENTIC_KINDS = frozenset(
         "agentic_guardrail",
         "agentic_search",
         "agentic_dashboard_summary",
+        "agentic_describe_object",
     }
 )
 
@@ -48,6 +49,8 @@ MULTI_TURN_KINDS = frozenset(
         "agentic_forecasting",
         "agentic_agent_switcher",
         "agentic_knowledge",
+        # One summary turn plus the item's follow-ups, in one conversation.
+        "agentic_summary",
     }
 )
 
