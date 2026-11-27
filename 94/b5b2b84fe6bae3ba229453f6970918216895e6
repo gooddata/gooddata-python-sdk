@@ -1,0 +1,25 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/content_objects/dataset.py
+  s_b47d9d72d37be2::t_3f3d8a62947ca9 93-98
+packages/gooddata-sdk/src/gooddata_sdk/compute/model/execution.py
+  s_b47d9d72d37be2::t_3f3d8a62947ca9 23
+pyproject.toml
+  s_b47d9d72d37be2::t_3f3d8a62947ca9 66
+uv.lock
+  s_b47d9d72d37be2::t_788631b9f79f79 1325,3123-3143
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "94b5b2b84fe6bae3ba229453f6970918216895e6",
+  "prompts": {},
+  "sessions": {
+    "s_b47d9d72d37be2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "961ed508-c17f-47e5-9adc-f43a3025984d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/types.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 4,10
+packages/gooddata-eval/src/gooddata_eval/core/agentic/_catalog.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 5,8
+  s_1d4010ed2063e2::t_02651646dfb862 11-12
+packages/gooddata-eval/src/gooddata_eval/core/models.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 9,17
+packages/gooddata-sdk/tests/catalog/test_upsert_outcome.py
+  s_1d4010ed2063e2::t_fee7dc6a635f66 139
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/models/permissions.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 3,19
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/generic/config.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 3,49,54
+packages/gooddata-pipelines/src/gooddata_pipelines/ldm_extension/models/custom_data_object.py
+  s_1d4010ed2063e2::t_53148dad5cfa7c 8,13,21
+packages/gooddata-sdk/src/gooddata_sdk/visualization.py
+  s_1d4010ed2063e2::t_eea7e6bba5e1e6 6,145,154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0b54e1234f0353fb82a5ec9b76697ff40fbc69c3",
+  "prompts": {},
+  "sessions": {
+    "s_1d4010ed2063e2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e027275-02e1-4ed2-aa72-fa5485fb2522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

@@ -1,0 +1,137 @@
+packages/gooddata-pipelines/tests/backup_and_restore/test_backup.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 26-27,85,91,130,212-214,279,302-303,323-324,350,354-355
+packages/gooddata-pipelines/src/gooddata_pipelines/utils/file_utils.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 38,57
+packages/gooddata-pipelines/tests/provisioning/entities/workspaces/test_workspace_data_filters.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 18-20,42,47,49,52,70,73,109-110,128-129,140-141,147,153,157
+packages/gooddata-pipelines/src/gooddata_pipelines/api/gooddata_api_wrapper.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 50
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/storage/s3_storage.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 34,42,48,53,65,77,79,95
+packages/gooddata-pipelines/tests/backup_and_restore/test_backup_input_processor.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 24,67,72-73,124,143,154
+packages/gooddata-pipelines/src/gooddata_pipelines/utils/rate_limiter.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 4-6,56
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/workspaces/workspace_data_filters.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 38,42,48,52,54,67,77,95-96,104-106,128,158,201-203,219,248,250,252
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/users.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 58,73,76,105,136,164-165,174,177,180,194
+packages/gooddata-pipelines/tests/test_ldm_extension/test_ldm_extension_manager.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 18-25,48,52,57,62,80-83,90,103-106,112,117,123,136-139,205,207,218,231,233,251,253,263,283
+packages/gooddata-pipelines/tests/test_ldm_extension/test_models/test_custom_data_object.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 11,67,74,81,84,175,182,189
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/base_manager.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 5,14-16,55,59,69
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/storage/base_storage.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 24-25
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/backup_manager.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 98,103,120,128,132,170,181,185,187,191,195,197,228,255,346,348
+packages/gooddata-pipelines/tests/test_ldm_extension/test_merge_ldm.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 10-16,21-22,35,37,50
+packages/gooddata-pipelines/tests/provisioning/entities/users/test_permissions.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 18-24,37,40,42,64,102-105,144,162,261,278,384,386-392,394-395,427-428,431,436,446,450,465-466,476
+packages/gooddata-pipelines/tests/provisioning/entities/workspaces/test_workspace.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 8-9
+  s_b47d9d72d37be2::t_a43646b73c7a71 10
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/user_groups.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 18,31,34,54-55,58,67,99,101,107,110,114,119,125,132,138,151,157,160,163,181
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/backup_input_processor.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 46-48,64,77-78,96,114,125,140
+packages/gooddata-pipelines/src/gooddata_pipelines/ldm_extension/ldm_extension_manager.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 46,68,70,75,88,90,93,106,147,165,188,190,205,207,211-212,214,221,234-238,308-309
+packages/gooddata-pipelines/src/gooddata_pipelines/api/gooddata_api.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 41,53,65,116,148,159,162,167,169,184,213,248,270
+packages/gooddata-pipelines/tests/test_ldm_extension/test_input_processor.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 8,11,16,37,43,65,71,84,94
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/models/storage.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 79,111,205,230,237-242
+packages/gooddata-pipelines/tests/provisioning/entities/workspaces/test_workspace_data_validator.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 61,104,122,143,191,195
+packages/gooddata-pipelines/src/gooddata_pipelines/ldm_extension/input_processor.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 47,154,193,237,262,265,274,278,281,286,288-289,291,303,337,359,362,371,377
+.pre-commit-config.yaml
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 18
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/generic/config.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 4,46,67-68
+packages/gooddata-pipelines/src/gooddata_pipelines/utils/decorators.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 24
+packages/gooddata-pipelines/tests/conftest.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 16-17
+packages/gooddata-pipelines/tests/utils/test_decorators.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 37
+packages/gooddata-pipelines/tests/provisioning/entities/users/test_user_groups.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 11,19,37,55
+pyproject.toml
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 63,154-155
+packages/gooddata-pipelines/src/gooddata_pipelines/ldm_extension/input_validator.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 41-42,62,72,74-76,80,92,94,113,152,160,168-170
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/constants.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 36
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/workspaces/workspace.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 31,36,48,64,87,98,101,141,150,156,164,178,180,183,186,190,200,203,206,212,222,235,241,246,251,254,282
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/models/user_groups.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 21
+packages/gooddata-pipelines/tests/test_ldm_extension/test_input_validator.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 87
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/storage/azure_storage.py
+  s_b47d9d72d37be2::t_b2ef772208cf9b 7,12,27-28,32,37,39,48,50,54,56,85,88,92,101
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/storage/local_storage.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 26,33,36
+packages/gooddata-pipelines/src/gooddata_pipelines/ldm_extension/models/custom_data_object.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 95,99,103,124,126,161
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/utils/utils.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 16,37-38,42,57
+packages/gooddata-pipelines/tests/utils/test_rate_limiter.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 4,174-175
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/workspaces/workspace_data_parser.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 25-26,36,48,72,87-90,101-102
+packages/gooddata-pipelines/tests/panther/test_sdk_wrapper.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 8,17,42,69
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/workspaces/workspace_data_validator.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 56,67,84,101-105,113,132,134,147,165,167,172
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/user_data_filters/user_data_filters.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 28,77,83,85,94,98,101,107-108,127,131,136-137,146,158,162-165,171,173,175
+packages/gooddata-pipelines/tests/test_ldm_extension/test_models/test_analytical_object.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 8,21,26
+packages/gooddata-pipelines/tests/provisioning/entities/users/test_users.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 2,8-14,35-38,71,78,93,108,123,140,150-161,163-164,209,213,217,232,288,299
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/restore_manager.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 56,63,76-78,81,93,102,104,110,112,115,123-124,128,130,133,150-151,162-165,179,181,188,191,194,197
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/provisioning.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 6,38,45,64,89,92,95,119,127,142,144
+packages/gooddata-pipelines/tests/provisioning/test_provisioning.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 21-22,99
+packages/gooddata-pipelines/src/gooddata_pipelines/backup_and_restore/csv_reader.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 17,24
+packages/gooddata-pipelines/tests/backup_and_restore/test_restore.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 22,98,117,127,129-130,136-137,139,149,151,158,160,166,170,178,180,199-202,259-260
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/workspaces/models.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 15
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/permissions.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 20,23,35,41,48,58,60,63,96,109,115,142,157,167,174
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/utils/exceptions.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 11,21,38,41,44,48,53,56,60,64,66,68-69
+packages/gooddata-pipelines/src/gooddata_pipelines/provisioning/entities/users/models/permissions.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 50,64,80,94,104,107-108,111-116,122,151
+packages/gooddata-pipelines/tests/provisioning/entities/workspaces/test_workspace_data_parser.py
+  s_b47d9d72d37be2::t_caac7ab8a3b9ef 9-10
+  s_b47d9d72d37be2::t_861fa8f6a97c8a 11
+uv.lock
+  s_b47d9d72d37be2::t_ff6ffd4e8506e6 1393,3143-3163
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "5e249e7a1c4c0b2d14869e7fc00e795404c51f23",
+  "prompts": {},
+  "sessions": {
+    "s_b47d9d72d37be2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "961ed508-c17f-47e5-9adc-f43a3025984d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

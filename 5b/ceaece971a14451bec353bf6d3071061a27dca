@@ -1,0 +1,29 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/workspace.py
+  s_fbdfea3fc53dce::t_6a0c439d1c1e51 103
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/entity_model/user_data_filter.py
+  s_fbdfea3fc53dce::t_6a0c439d1c1e51 38
+packages/gooddata-sdk/src/gooddata_sdk/utils.py
+  s_fbdfea3fc53dce::t_bd46667b8660b1 120-124
+  s_fbdfea3fc53dce::t_e3daedc1e8cb00 115-118,125
+  s_fbdfea3fc53dce::t_75da409d2bd8ee 119
+packages/gooddata-sdk/src/gooddata_sdk/catalog/catalog_service_base.py
+  s_fbdfea3fc53dce::t_85cfa2997d89f7 4,25-35
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/entity_model/organization.py
+  s_fbdfea3fc53dce::t_6a0c439d1c1e51 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d2851276a1e501a75236375b0a2453b30a7450be",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

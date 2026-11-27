@@ -1,0 +1,21 @@
+.github/workflows/staging-tests.yaml
+  s_363ca43356056d::t_8d283f13a204be 22-24
+  s_363ca43356056d::t_92fd5030ca56a9 32-36,40,44-46,48-54,57-61,63-77,84
+  s_363ca43356056d::t_87fef5a1f9db93 109-110,112,115-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3ca84364801b36abcb3cbf3498d085047275c2f4",
+  "prompts": {},
+  "sessions": {
+    "s_363ca43356056d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c3d66aa2-1d52-4a09-be22-bc2a707c056a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

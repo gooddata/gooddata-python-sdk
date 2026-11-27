@@ -1,0 +1,55 @@
+.github/workflows/bump-version.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 33,39
+packages/gooddata-flexconnect/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 59-60
+packages/gooddata-pipelines/pyproject.toml
+  s_b47d9d72d37be2::t_8e7940f0edcec1 35
+  s_b47d9d72d37be2::t_8699c08fda5386 36
+packages/gooddata-pandas/docs/requirements.txt
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 1
+.github/workflows/build-release.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 43,51
+pyproject.toml
+  s_b47d9d72d37be2::t_fe08fc33608137 53-55
+  s_b47d9d72d37be2::t_8699c08fda5386 50,58,66,70
+.pre-commit-config.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 10
+packages/gooddata-fdw/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 52-53
+packages/gooddata-flight-server/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 63-64
+packages/gooddata-sdk/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 65-66,73
+.github/workflows/staging-tests.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 53
+packages/gooddata-pandas/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 58-59
+packages/gooddata-dbt/pyproject.toml
+  s_b47d9d72d37be2::t_8699c08fda5386 39-40
+packages/gooddata-fdw/docs/requirements.txt
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 1
+.github/workflows/rw-python-tests.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 38,54,57,70,73
+.github/workflows/dev-release.yaml
+  s_b47d9d72d37be2::t_3ff1dcfb978d58 40
+uv.lock
+  s_b47d9d72d37be2::t_4d2423baa1db4b 207-325,222-340,867,870,873,875,882,885,888,890,1025-1026,1049-1050,1054-1055,1097-1098,1126-1127,1138-1139,1169-1170,1185-1186,1210-1211,1240-1241,1257-1258,1278,1313,1324,1327,1330-1331,1351,1400,1402-1403,1402,1406,1476,1478-1479,1493-1504,1606-1617,2329-2337,2370,2378,2381,2383,2388,2392,2395,2397,2581-2589,2622,2630,2633,2635,2640,2644,2647,2649
+packages/gooddata-eval/pyproject.toml
+  s_b47d9d72d37be2::t_5ff5510ef6b7bd 46-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "b2451f8b78e249ba6405a357b3bfa15589cab39f",
+  "prompts": {},
+  "sessions": {
+    "s_b47d9d72d37be2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "961ed508-c17f-47e5-9adc-f43a3025984d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

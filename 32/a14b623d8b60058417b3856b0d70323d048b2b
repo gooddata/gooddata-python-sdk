@@ -1,0 +1,52 @@
+packages/gooddata-sdk/src/gooddata_sdk/catalog/organization/service.py
+  s_fbdfea3fc53dce::t_8720fa43636be3 48
+  s_fbdfea3fc53dce::t_89a2dcdc5706ae 697-699
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 656,658,680
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset.py
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 79
+  s_fbdfea3fc53dce::t_8720fa43636be3 34
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/logical_model/date_dataset/date_dataset.py
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 31
+  s_fbdfea3fc53dce::t_8720fa43636be3 11
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/workspace.py
+  s_fbdfea3fc53dce::t_87ed3d1a7af986 40
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 117,216,279,318
+packages/gooddata-sdk/src/gooddata_sdk/utils.py
+  s_fbdfea3fc53dce::t_bec65d06080ef0 395,410
+  s_fbdfea3fc53dce::t_2aa18c59d0eafa 393-394,396-397,411
+  s_fbdfea3fc53dce::t_85a7e33423465d 406-409
+  s_fbdfea3fc53dce::t_d78a8750e4d94c 402-404
+  s_fbdfea3fc53dce::t_7e20e24f9f6e25 398-401,405,412-419
+  s_fbdfea3fc53dce::t_c41f200302d7d8 420-421
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/analytics_model/base.py
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 20
+  s_fbdfea3fc53dce::t_8720fa43636be3 9
+packages/gooddata-sdk/src/gooddata_sdk/catalog/base.py
+  s_fbdfea3fc53dce::t_c8fe93998671da 105-107
+  s_fbdfea3fc53dce::t_85a7e33423465d 12,91-94,108
+packages/gooddata-sdk/src/gooddata_sdk/catalog/data_source/declarative_model/physical_model/table.py
+  s_fbdfea3fc53dce::t_8720fa43636be3 12
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 28
+packages/gooddata-sdk/src/gooddata_sdk/catalog/data_source/declarative_model/data_source.py
+  s_fbdfea3fc53dce::t_89a2dcdc5706ae 22
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 215
+packages/gooddata-sdk/src/gooddata_sdk/catalog/workspace/declarative_model/workspace/logical_model/dataset_extensions/dataset_extension.py
+  s_fbdfea3fc53dce::t_8720fa43636be3 11
+  s_fbdfea3fc53dce::t_9c4605ea9cdcf6 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "32a14b623d8b60058417b3856b0d70323d048b2b",
+  "prompts": {},
+  "sessions": {
+    "s_fbdfea3fc53dce": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e63f5ff-44df-4f00-a9e0-1acc58af1c42",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

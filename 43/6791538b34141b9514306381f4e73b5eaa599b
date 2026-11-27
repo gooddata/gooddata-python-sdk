@@ -1,0 +1,28 @@
+packages/gooddata-sdk/pyproject.toml
+  s_b47d9d72d37be2::t_3ae81ae124f228 32-33
+packages/gooddata-flight-server/pyproject.toml
+  s_b47d9d72d37be2::t_cebcad66bcaf2d 35,38
+packages/gooddata-dbt/pyproject.toml
+  s_b47d9d72d37be2::t_3ae81ae124f228 15-16
+  s_b47d9d72d37be2::t_b84c5397f63cb9 18
+packages/gooddata-flexconnect/pyproject.toml
+  s_b47d9d72d37be2::t_cebcad66bcaf2d 36
+uv.lock
+  s_b47d9d72d37be2::t_bd283dbdb1f063 47,49,51,218,223,225,227,523,530,532,895-896,900,971,1010,1013,1263,1265,1998,2000,2002,2794,2796-2799,2801,2806,2808,2810
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "436791538b34141b9514306381f4e73b5eaa599b",
+  "prompts": {},
+  "sessions": {
+    "s_b47d9d72d37be2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "961ed508-c17f-47e5-9adc-f43a3025984d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}

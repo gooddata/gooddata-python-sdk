@@ -1,0 +1,26 @@
+MAINTENANCE.md
+  s_25e7bfdbe08015::t_1e37004427965a 112-117
+CONTRIBUTING.md
+  s_25e7bfdbe08015::t_1e37004427965a 47,49
+.github/workflows/build-release.yaml
+  s_25e7bfdbe08015::t_8aef15af883847 2-12,20-25,30-31,61-63,68-71,91,107,164
+  s_25e7bfdbe08015::t_8b255c05d24e42 72
+AGENTS.md
+  s_25e7bfdbe08015::t_1e37004427965a 290-291
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dd0418bfb059e4e81c1c14a94398d4987edb5a70",
+  "prompts": {},
+  "sessions": {
+    "s_25e7bfdbe08015": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aca8c884-d170-4a58-968d-1b6351e632f1",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Jan Kadlec <jan.kadlec@gooddata.com>"
+    }
+  }
+}
