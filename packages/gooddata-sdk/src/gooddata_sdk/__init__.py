@@ -90,6 +90,7 @@ if TYPE_CHECKING:
         ExportRequest,
         ExportSettings,
         GrandTotalsPosition,
+        ImageExportRequest,
         SlidesExportRequest,
         VisualExportRequest,
     )
@@ -597,6 +598,7 @@ _LAZY_IMPORTS: dict[str, str] = {
     "HLLType": "gooddata_sdk.catalog.organization.service",
     "HLL_TYPE_SETTING_ID": "gooddata_sdk.catalog.organization.service",
     "HLL_TYPE_SETTING_TYPE": "gooddata_sdk.catalog.organization.service",
+    "ImageExportRequest": "gooddata_sdk.catalog.export.request",
     "InlineFilter": "gooddata_sdk.compute.model.filter",
     "InlineMetric": "gooddata_sdk.compute.model.metric",
     "KeyPairCredentials": "gooddata_sdk.catalog.entity",
@@ -875,6 +877,7 @@ __all__ = [
     "HLLType",
     "HLL_TYPE_SETTING_ID",
     "HLL_TYPE_SETTING_TYPE",
+    "ImageExportRequest",
     "InlineFilter",
     "InlineMetric",
     "KeyPairCredentials",

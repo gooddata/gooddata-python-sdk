@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
+import attrs
 import yaml
 from gooddata_sdk import (
     BasicCredentials,
@@ -1081,7 +1082,8 @@ def test_layout_automations(test_config):
         ]
         sdk.catalog_workspace.put_declarative_automations(workspace_id, automations_expected)
         automations_o = sdk.catalog_workspace.get_declarative_automations(workspace_id)
-        assert automations_expected == automations_o
+        # The server fills in the default evaluation mode.
+        assert [attrs.evolve(a, evaluation_mode="PER_RECIPIENT") for a in automations_expected] == automations_o
     finally:
         safe_delete(sdk.catalog_workspace.put_declarative_automations, workspace_id, [])
         safe_delete(sdk.catalog_organization.put_declarative_notification_channels, [])
