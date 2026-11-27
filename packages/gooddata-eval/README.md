@@ -752,7 +752,10 @@ Item-level keys, all optional except the candidates:
 - `format_intents` — per metric uri, how the metric's numbers must read, for example
   `{"metric/net_sales": {"divide_by": 1000000, "decimals": 1, "suffix": "M"}}`.
 - `requires_visualization_part` — the chart must come back as a part of the answer, not only as
-  the arguments of the chart tool call.
+  the arguments of the chart tool call. Without it, an answer with no chart part is scored on the
+  arguments of the last chart tool call, unless the backend rejected that definition as
+  unbuildable (not comparable to the dimensionality, or no witness) or the call was a lookup
+  (`show_to_user: false`): then the answer has no chart.
 - `date_filter_from_context` — `true` or `{"dataset": "<date dataset>"}`: a candidate without a
   date filter also accepts the chart carrying a date filter of the dashboard in the item's
   `user_context`. See *Date filter carried over from the dashboard* below.

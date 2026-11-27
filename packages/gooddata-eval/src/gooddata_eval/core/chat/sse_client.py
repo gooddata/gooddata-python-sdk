@@ -33,7 +33,7 @@ from gooddata_eval.core.config import (
     normalize_reasoning_effort,
 )
 from gooddata_eval.core.langfuse.item_scope import JoinedRun, baggage_entries, current_scope, mark_joined, trace_ids_for
-from gooddata_eval.core.models import ChatResult, DatasetItem
+from gooddata_eval.core.models import ChatResult, DatasetItem, ToolCallEvent
 from gooddata_eval.core.timing import note_trace_latency
 
 _log = logging.getLogger(__name__)
@@ -58,6 +58,12 @@ _TURN_INCOMPLETE_REASONS: frozenset[str] = frozenset({"max_iterations", "max_tok
 # Stands in for the `id` a persisted visualization would carry, on the fallback path
 # where the agent's create_adhoc_visualization call failed and only its arguments survive.
 ADHOC_VIZ_ID = "adhoc-visualization-not-persisted"
+# Messages of a create_adhoc_visualization error that reject the chart itself, not the
+# environment: the backend found the definition unbuildable against the workspace's model.
+# Kept equal to gen-ai's `_COMPATIBILITY_REJECTIONS` in
+# app/infrastructure/services/tools/create_adhoc_visualization_tool.py, which raises them.
+# A rejected call's arguments are no answer, so the fallback below never scores them.
+_UNBUILDABLE_VIZ_MARKERS: tuple[str, ...] = ("is not comparable to the dimensionality", "has no witness")
 
 # Called with a tool-call event (camelCase, as in ``ChatResult.tool_call_events``) as soon as its result arrives,
 # while the turn still streams. It runs in the read loop, so it must return at once and must not raise.
@@ -214,7 +220,9 @@ class _SseAccumulator:
     tool_call_events: list[dict[str, Any]] = field(default_factory=list)
     call_id_to_event_index: dict[str, int] = field(default_factory=dict)
     reasoning_steps: list[dict[str, Any]] = field(default_factory=list)
-    adhoc_viz_args: list[dict[str, Any]] = field(default_factory=list)
+    # (tool_call_events index, visualization argument, lookup) of each create_adhoc_visualization
+    # call; lookup is `show_to_user: false`, a chart the agent built only to read a value itself.
+    adhoc_viz_args: list[tuple[int, dict[str, Any], bool]] = field(default_factory=list)
     response_id: str | None = None
     trace_id: str | None = None
     stream_ended: bool = False
@@ -281,9 +289,10 @@ def _handle_tool_call(content: dict[str, Any], acc: _SseAccumulator) -> None:
     # Stash visualization definition from create_adhoc_visualization so we can
     # evaluate the agent's intended answer even when the data source call fails.
     if content.get("name") == "create_adhoc_visualization":
-        viz = (content.get("arguments") or {}).get("visualization")
+        arguments = content.get("arguments") or {}
+        viz = arguments.get("visualization")
         if viz and isinstance(viz, dict):
-            acc.adhoc_viz_args.append(viz)
+            acc.adhoc_viz_args.append((idx, viz, arguments.get("show_to_user") is False))
 
 
 def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator, on_tool_result: ToolResultHook | None) -> None:
@@ -294,6 +303,15 @@ def _handle_tool_result(content: dict[str, Any], acc: _SseAccumulator, on_tool_r
         acc.tool_call_events[idx]["result_ts"] = round(time.monotonic() - acc.t0, 3)
         if on_tool_result is not None:
             on_tool_result(dict(acc.tool_call_events[idx]))
+
+
+def _rejected_as_unbuildable(event: dict[str, Any]) -> bool:
+    """Whether a create_adhoc_visualization result is an error rejecting the chart's definition."""
+    result = ToolCallEvent.model_validate(event).parsed_result()
+    if not isinstance(result, dict) or result.get("status") != "error":
+        return False
+    message = str(result.get("message") or "")
+    return any(marker in message for marker in _UNBUILDABLE_VIZ_MARKERS)
 
 
 def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
@@ -321,24 +339,43 @@ def _build_chat_result(acc: _SseAccumulator) -> ChatResult:
             "reasoning": "\n".join(acc.viz_reasoning_parts),
         }
     elif acc.adhoc_viz_args:
-        # Fallback: the agent produced a correct visualization definition via
-        # create_adhoc_visualization but the call failed (e.g. data source not
-        # accessible). The last attempt is the agent's best answer.
+        # Fallback: the agent produced a visualization definition via
+        # create_adhoc_visualization but the answer carries no chart part, e.g. because the
+        # call failed for an environment reason (data source not accessible). The LAST call is
+        # the agent's answer; an earlier one may be a lookup it never meant to show. If the
+        # backend rejected that last definition as unbuildable, the turn has no chart at all --
+        # never fall back to an earlier call. Nor when that last call is itself a lookup
+        # (`show_to_user: false`, gen-ai's flag for a chart built only to read a value): the user
+        # never saw it, so it is no answer either.
         #
         # These are raw tool-call arguments, so they carry no `id` -- the server
         # mints it. The sentinel marks the chart as never persisted, and goes last so
         # that an `id` in the arguments cannot hide that. Logged because
         # a turn that called the tool and answered without a chart is otherwise
         # invisible: the user saw no chart either.
-        _log.warning(
-            "create_adhoc_visualization was called %d time(s) but the answer has no visualization part; "
-            "scoring the last call's arguments",
-            len(acc.adhoc_viz_args),
-        )
-        payload["createdVisualizations"] = {
-            "objects": [{**acc.adhoc_viz_args[-1], "id": ADHOC_VIZ_ID}],
-            "reasoning": "\n".join(acc.viz_reasoning_parts),
-        }
+        last_index, last_viz, last_is_lookup = acc.adhoc_viz_args[-1]
+        if last_is_lookup:
+            _log.warning(
+                "create_adhoc_visualization was called %d time(s) and the last call was a lookup "
+                "(show_to_user: false); scoring no chart",
+                len(acc.adhoc_viz_args),
+            )
+        elif _rejected_as_unbuildable(acc.tool_call_events[last_index]):
+            _log.warning(
+                "create_adhoc_visualization was called %d time(s) and the backend rejected the last definition "
+                "as unbuildable; scoring no chart",
+                len(acc.adhoc_viz_args),
+            )
+        else:
+            _log.warning(
+                "create_adhoc_visualization was called %d time(s) but the answer has no visualization part; "
+                "scoring the last call's arguments",
+                len(acc.adhoc_viz_args),
+            )
+            payload["createdVisualizations"] = {
+                "objects": [{**last_viz, "id": ADHOC_VIZ_ID}],
+                "reasoning": "\n".join(acc.viz_reasoning_parts),
+            }
     result = ChatResult.model_validate(payload)
     result.response_id = acc.response_id
     result.trace_id = acc.trace_id

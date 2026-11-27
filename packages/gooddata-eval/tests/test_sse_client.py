@@ -408,7 +408,7 @@ def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
         # agent calls create_adhoc_visualization — stash the viz
         f'data: {{"item": {{"role": "assistant", "content": {{"type": "toolCall", "callId": "c1", "name": "create_adhoc_visualization", "arguments": {{"visualization": {json.dumps(viz_def)}}}}}}}}}',
         # data source fails
-        'data: {"item": {"role": "tool", "content": {"type": "toolResult", "callId": "c1", "result": "{"status": "error", "message": "Data source does not exist"}"}}}',
+        'data: {"item": {"role": "tool", "content": {"type": "toolResult", "callId": "c1", "result": "{\\"status\\": \\"error\\", \\"message\\": \\"Data source does not exist\\"}"}}}',
         # final multipart — visualization is null
         'data: {"item": {"role": "assistant", "content": {"type": "multipart", "parts": [{"type": "text", "text": "Could not create"}, {"type": "visualization", "visualization": null}]}}}',
     ]
@@ -416,6 +416,121 @@ def test_parse_sse_lines_falls_back_to_adhoc_viz_when_multipart_viz_is_null():
     assert result.created_visualizations is not None
     assert result.created_visualizations.objects[0].type == "line_chart"
     assert result.created_visualizations.objects[0].metrics == ["m"]
+
+
+def _sse_item(role: str, content: dict[str, Any]) -> str:
+    return "data: " + json.dumps({"item": {"role": role, "content": content}})
+
+
+def _adhoc_call(call_id: str, viz: dict[str, Any]) -> str:
+    return _sse_item(
+        "assistant",
+        {
+            "type": "toolCall",
+            "callId": call_id,
+            "name": "create_adhoc_visualization",
+            "arguments": {"visualization": viz},
+        },
+    )
+
+
+def _adhoc_result(call_id: str, result: dict[str, Any]) -> str:
+    return _sse_item("tool", {"type": "toolResult", "callId": call_id, "result": json.dumps(result)})
+
+
+_NOT_COMPARABLE = {
+    "status": "error",
+    "message": "Aggregation dimension='[attribute/industry_name]' is not comparable to the "
+    "dimensionality='[dataset/fact_cuta_daily_summable_metrics]' of the subtree",
+}
+_NO_WITNESS = {"status": "error", "message": "Attribute 'label/merchant_name' has no witness in the subtree"}
+_TEXT_ONLY_ANSWER = _sse_item(
+    "assistant", {"type": "multipart", "parts": [{"type": "text", "text": "Here is the data."}]}
+)
+
+
+def _viz(metric: str) -> dict[str, Any]:
+    return {
+        "type": "bar_chart",
+        "query": {"fields": {"m": {"using": metric}, "d": {"using": "label/industry_name"}}, "filter_by": {}},
+        "metrics": ["m"],
+        "view_by": ["d"],
+    }
+
+
+@pytest.mark.parametrize("rejection", [_NOT_COMPARABLE, _NO_WITNESS], ids=["not-comparable", "no-witness"])
+def test_parse_sse_lines_adhoc_fallback_scores_no_chart_for_a_rejected_definition(rejection):
+    """A definition the backend refused as unbuildable is no answer, so the turn has no chart."""
+    lines = [_adhoc_call("c1", _viz("metric/cnp_share_-_cuta")), _adhoc_result("c1", rejection), _TEXT_ONLY_ANSWER]
+
+    assert parse_sse_lines(lines).created_visualizations is None
+
+
+def test_parse_sse_lines_adhoc_fallback_scores_no_chart_after_two_rejections():
+    lines = [
+        _adhoc_call("c1", _viz("metric/cnp_share_-_cuta")),
+        _adhoc_result("c1", _NOT_COMPARABLE),
+        _adhoc_call("c2", _viz("metric/cnp_share_-_cutcgco")),
+        _adhoc_result("c2", _NO_WITNESS),
+        _TEXT_ONLY_ANSWER,
+    ]
+
+    assert parse_sse_lines(lines).created_visualizations is None
+
+
+def test_parse_sse_lines_adhoc_fallback_never_scores_an_earlier_accepted_lookup():
+    """Only the last call is the agent's answer: an accepted lookup before a rejected chart is not."""
+    lines = [
+        _adhoc_call("c1", _viz("metric/transaction_count_-_txn_-_cuta")),
+        _adhoc_result("c1", {"status": "success", "ref": "viz-lookup"}),
+        _adhoc_call("c2", _viz("metric/cnp_share_-_cuta")),
+        _adhoc_result("c2", _NOT_COMPARABLE),
+        _TEXT_ONLY_ANSWER,
+    ]
+
+    assert parse_sse_lines(lines).created_visualizations is None
+
+
+def test_parse_sse_lines_adhoc_fallback_still_scores_a_definition_an_environment_error_stopped():
+    """An error about the environment, not the definition, leaves the arguments as the answer."""
+    lines = [
+        _adhoc_call("c1", _viz("metric/cnp_share_-_cuta")),
+        _adhoc_result("c1", {"status": "error", "message": "Data source does not exist"}),
+        _TEXT_ONLY_ANSWER,
+    ]
+    result = parse_sse_lines(lines)
+
+    assert result.created_visualizations is not None
+    assert result.created_visualizations.objects[0].query.fields["m"].using == "metric/cnp_share_-_cuta"
+
+
+def test_parse_sse_lines_adhoc_fallback_scores_no_chart_when_the_last_call_is_a_lookup():
+    """A last call with `show_to_user: false` is a chart the agent built for itself, not an answer."""
+    lookup = _sse_item(
+        "assistant",
+        {
+            "type": "toolCall",
+            "callId": "c1",
+            "name": "create_adhoc_visualization",
+            "arguments": {"visualization": _viz("metric/latest_date"), "show_to_user": False},
+        },
+    )
+    lines = [lookup, _adhoc_result("c1", {"status": "success", "ref": "viz-lookup"}), _TEXT_ONLY_ANSWER]
+
+    assert parse_sse_lines(lines).created_visualizations is None
+
+
+def test_parse_sse_lines_adhoc_fallback_matches_out_of_order_results_by_call_id():
+    """Parallel calls whose results arrive in reverse order: the last call's own result decides."""
+    lines = [
+        _adhoc_call("c1", _viz("metric/transaction_count_-_txn_-_cuta")),
+        _adhoc_call("c2", _viz("metric/cnp_share_-_cuta")),
+        _adhoc_result("c2", _NOT_COMPARABLE),
+        _adhoc_result("c1", {"status": "success", "ref": "viz-1"}),
+        _TEXT_ONLY_ANSWER,
+    ]
+
+    assert parse_sse_lines(lines).created_visualizations is None
 
 
 def test_parse_sse_lines_adhoc_fallback_synthesizes_id_when_args_have_none(caplog):
