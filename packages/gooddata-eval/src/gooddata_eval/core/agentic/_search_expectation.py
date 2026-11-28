@@ -30,6 +30,10 @@ SEARCH_OPTION_KEYS = frozenset(
         "no_raw_ids",
         "setup_turns",
         "report_only",
+        "expect_user_requested_search",
+        "widget_objects",
+        "forbidden_parts",
+        "no_object_urls",
     }
 )
 _KNOWN_KEYS = SEARCH_OPTION_KEYS | {"tool_call"}
@@ -69,6 +73,25 @@ _TYPED_ID = re.compile(rf"\b(?:{'|'.join(sorted(_OBJECT_TYPES))})/([A-Za-z0-9_](
 # a dot or a digit, as the workspace ids have, counts. A one-word id such as metric/revenue is not caught.
 _ID_MARK = re.compile(r"[_.0-9]")
 
+# The part types gen-ai streams that land in ``ChatResult.unhandled_parts``. A draft the agent builds
+# (document, report, dashboard) is one of them; ``forbidden_parts`` may only name these, so a misspelt
+# type cannot read as a pass.
+_UNHANDLED_PART_TYPES = frozenset(
+    {"document", "report", "dashboard", "dashboardPatch", "kda", "whatIf", "clarifyingQuestions"}
+)
+# A link to a workspace object: an absolute URL, or a markdown link to an app path. The UI opens an object
+# from the Search list, so an object URL in the text is one the model wrote itself.
+_LINK = re.compile(r"https?://[^\s<>()\[\]\"'`]+|\]\(\s*<?(/[^\s)>]+)")
+# The routes that open an object: an app route (``/workspace/<ws>/reports/document/<id>``,
+# ``/dashboards/#/workspace/<ws>/dashboard/<id>``), the entity API and Analytical Designer
+# (``/analyze/#/<ws>/<id>``). A help page with a ``workspaces`` segment is none of them.
+_OBJECT_PATH = re.compile(
+    r"/workspace/[^/\s#?]+/(?:reports?|dashboards?|documents?|visualizations?|metrics?|analyze)\b"
+    r"|/entities/workspaces/[^/\s]+/"
+    r"|/analyze/#/[^/\s]+/",
+    re.IGNORECASE,
+)
+
 
 @dataclass(frozen=True)
 class SearchExpectation:
@@ -89,6 +112,10 @@ class SearchExpectation:
     no_raw_ids: bool = False
     setup_turns: tuple[str, ...] = ()
     report_only: bool = False
+    expect_user_requested_search: bool | None = None
+    widget_objects: tuple[str, ...] = ()
+    forbidden_parts: tuple[str, ...] = ()
+    no_object_urls: bool = False
 
     @property
     def has_turn_checks(self) -> bool:
@@ -101,6 +128,10 @@ class SearchExpectation:
             or self.answer_rubric
             or self.expected_limit is not None
             or self.no_raw_ids
+            or self.expect_user_requested_search is not None
+            or self.widget_objects
+            or self.forbidden_parts
+            or self.no_object_urls
         )
 
     @property
@@ -184,6 +215,15 @@ def parse_expectation(expected_output: Any) -> SearchExpectation:
     both = sorted(set(required) & set(forbidden))
     if both:
         raise ValueError(f"tools {both} are both required and forbidden")
+    widget_objects: tuple[str, ...] = ()
+    if "widget_objects" in raw:
+        widget_objects = _string_list("widget_objects", raw["widget_objects"])
+        for ref in widget_objects:
+            _object_ref(ref)
+    forbidden_parts = _string_list("forbidden_parts", raw["forbidden_parts"]) if "forbidden_parts" in raw else ()
+    unknown_parts = sorted(set(forbidden_parts) - _UNHANDLED_PART_TYPES)
+    if unknown_parts:
+        raise ValueError(f"forbidden_parts {unknown_parts} are not among {sorted(_UNHANDLED_PART_TYPES)}")
     limit = raw.get("expected_limit")
     if "expected_limit" in raw and (not isinstance(limit, int) or isinstance(limit, bool) or limit < 1):
         raise ValueError(f"expected_limit must be a positive integer, got {limit!r}")
@@ -200,6 +240,14 @@ def parse_expectation(expected_output: Any) -> SearchExpectation:
         no_raw_ids=_flag("no_raw_ids", raw["no_raw_ids"]) if "no_raw_ids" in raw else False,
         setup_turns=_string_list("setup_turns", raw["setup_turns"]) if "setup_turns" in raw else (),
         report_only=_flag("report_only", raw["report_only"]) if "report_only" in raw else False,
+        expect_user_requested_search=(
+            _flag("expect_user_requested_search", raw["expect_user_requested_search"])
+            if "expect_user_requested_search" in raw
+            else None
+        ),
+        widget_objects=widget_objects,
+        forbidden_parts=forbidden_parts,
+        no_object_urls=_flag("no_object_urls", raw["no_object_urls"]) if "no_object_urls" in raw else False,
     )
     if "tool_call" not in raw and not spec.has_checks:
         raise ValueError("expected_output asserts nothing: give tool_call or at least one check")
@@ -274,6 +322,27 @@ def raw_ids(text: str) -> list[str]:
     return _UUID.findall(outside) + typed
 
 
+def widget_refs(result: ChatResult) -> list[str]:
+    """Every object the turn's ``searchResults`` parts list, as ``type/id``, first sighting first."""
+    refs: dict[tuple[str, str], str] = {}
+    for part in result.search_results:
+        for obj in _objects(part):
+            object_type, object_id = obj.get("type"), obj.get("id")
+            if isinstance(object_type, str) and isinstance(object_id, str) and object_type and object_id:
+                refs.setdefault(_ref_key(object_type, object_id), f"{object_type}/{object_id}")
+    return list(refs.values())
+
+
+def object_urls(text: str) -> list[str]:
+    """The links in ``text`` that point at a workspace object: absolute URLs and markdown links to app paths."""
+    found: list[str] = []
+    for match in _LINK.finditer(text):
+        link = match.group(1) or match.group(0)
+        if _OBJECT_PATH.search(link):
+            found.append(link)
+    return found
+
+
 def deterministic_checks(spec: SearchExpectation, result: ChatResult) -> tuple[dict[str, bool], dict[str, Any]]:
     """The checks of one scored turn that need no judge, with the evidence of each failure."""
     checks: dict[str, bool] = {}
@@ -307,4 +376,23 @@ def deterministic_checks(spec: SearchExpectation, result: ChatResult) -> tuple[d
     if spec.no_raw_ids:
         found = raw_ids(result.text_response or "")
         _check("search_no_raw_ids", not found, {"raw_ids": found})
+    if spec.expect_user_requested_search is not None:
+        flags = [call_args(tc).get("user_requested_search") for tc in search_calls(events)]
+        asked = any(flag is True for flag in flags)
+        _check(
+            "search_user_requested",
+            asked == spec.expect_user_requested_search,
+            {"expected": spec.expect_user_requested_search, "user_requested_search": flags},
+        )
+    if spec.widget_objects:
+        listed = widget_refs(result)
+        missing = missing_objects(spec.widget_objects, listed)
+        _check("search_widget_objects", not missing, {"missing": missing, "listed": listed[:30]})
+    if spec.forbidden_parts:
+        streamed = [part.get("type") for part in result.unhandled_parts]
+        forbidden = [ptype for ptype in streamed if ptype in spec.forbidden_parts]
+        _check("search_forbidden_parts", not forbidden, {"forbidden": forbidden, "parts": streamed})
+    if spec.no_object_urls:
+        urls = object_urls(result.text_response or "")
+        _check("search_no_object_urls", not urls, {"object_urls": urls})
     return checks, details
